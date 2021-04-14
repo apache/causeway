@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 
 /**
@@ -28,6 +27,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  */
 public interface ObjectSpecIdFacet extends Facet {
 
-    ObjectSpecId value();
+    String value();
 
 }

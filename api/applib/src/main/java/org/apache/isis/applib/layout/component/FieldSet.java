@@ -28,13 +28,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
  * related {@link PropertyLayoutData properties} and associated
  * {@link ActionLayoutData actions}.
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "fieldSet"
@@ -62,8 +64,8 @@ Serializable {
         setName(name);
     }
 
-
-
+    
+    
     private String id;
 
     /**
@@ -122,7 +124,7 @@ Serializable {
     private String name;
 
     /**
-     * Corresponds to the {@link MemberOrder#name()} (when applied to properties).
+     * Corresponds to the {@link PropertyLayout#fieldSetName()} (when applied to properties).
      */
     @XmlAttribute(required = false)
     public String getName() {

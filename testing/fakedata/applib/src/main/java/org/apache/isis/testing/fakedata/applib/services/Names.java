@@ -20,6 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Names extends AbstractRandomValueGenerator {
     com.github.javafaker.Name javaFakerName;
 

@@ -21,40 +21,40 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
+@Collection
+@CollectionLayout(named = "foo", describedAs = "bar")
+@RequiredArgsConstructor
 public class ProperMemberSupport_collection2 {
     
     private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-    @Collection
-    @CollectionLayout(named = "foo", describedAs = "bar")
-    public List<String> $$() {
+    
+    public List<String> coll() {
         return Collections.singletonList(holder.toString());
     }
     
     // -- PROPERLY DECLARED SUPPORTING METHODS 
     
-    @Model
-    public boolean hide$$() {
+    @MemberSupport
+    public boolean hideColl() {
         return false;
     }
     
-    @Model
-    public String disable$$() {
+    @MemberSupport
+    public String disableColl() {
         return null;
     }
     
-    @Model //TODO not documented with the support-matrix, what to do here?
-    public String validate$$() {
+    @MemberSupport //TODO not documented with the support-matrix, what to do here?
+    public String validateColl() {
         return null;
     }
 

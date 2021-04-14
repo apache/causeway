@@ -30,6 +30,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.
+ *
+ * @since 1.x {@index}
  */
 @XmlType(
         name = "tabGroup"

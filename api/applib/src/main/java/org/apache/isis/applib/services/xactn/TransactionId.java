@@ -20,29 +20,77 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.mixins.system.HasTransactionId;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data(staticConstructor = "of")
-// tag::refguide[]
-public final class TransactionId implements HasUniqueId {
-    private final UUID uniqueId;
-    // end::refguide[]
+/**
+ * Value type used to identify a transaction within the context of an
+ * outer {@link org.apache.isis.applib.services.iactn.Interaction}.
+ *
+ * <p>
+ *     The transaction and
+ *     {@link org.apache.isis.applib.services.iactn.Interaction} are associated
+ *     by the {@link #getInteractionId() uniqueId}.
+ * </p>
+ *
+ * <p>
+ *     Obtainable from {@link TransactionService#currentTransactionId()}.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
+@Value(staticConstructor = "of")
+public class TransactionId implements HasTransactionId {
+
     /**
-     * The {@link HasUniqueId#getUniqueId()} is actually an identifier for the request/
-     * interaction, and there can actually be multiple transactions within such a request/interaction.
-     * The sequence (0-based) is used to distinguish such.
+     * The unique identifier of the outer
+     * {@link org.apache.isis.applib.services.iactn.Interaction}.
+     *
+     * <p>
+     *     Together with {@link #getSequence()}, this makes up the
+     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     * </p>
      */
-    // tag::refguide[]
-    private final int sequence;
-    // end::refguide[]
-    private static final TransactionId EMPTY = TransactionId.of(UUID.fromString("0000-00-00-00-000000"), 0);
+    UUID interactionId;
 
+    /**
+     * Identifies the transaction (there could be multiple) within the
+     * {@link org.apache.isis.applib.services.iactn.Interaction}.
+     *
+     * <p>
+     *     Together with {@link #getInteractionId()}, this makes up the
+     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     * </p>
+     */
+    int sequence;
+
+    /**
+     * Identifies the persistence context that this {@link TransactionId} was
+     * created for.
+     *
+     * <p>
+     * Useful when there are multiple persistence contexts configured.
+     * There are no constraints to format of this String, it is  left for the
+     * implementation to ensure that the string is a uniqie identifier to
+     * the context.
+     * </p>
+     */
+    String context;
+
+    // -- EMPTY
+
+    private static final TransactionId EMPTY =
+            TransactionId
+            .of(UUID.fromString("0000-00-00-00-000000"), 0, "");
+
+    /**
+     * Factory method that returns a nominally &quot;empty&quot; transaction
+     * identifier, used as a placeholder.
+     */
     public static TransactionId empty() {
         return EMPTY;
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

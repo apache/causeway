@@ -32,7 +32,7 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
-@Named("isisMetaModel.ValueTypeProviderBuiltIn")
+@Named("isis.metamodel.ValueTypeProviderBuiltIn")
 @Order(OrderPrecedence.MIDPOINT)
 public class ValueTypeProviderDefault implements ValueTypeProvider {
 

@@ -19,75 +19,52 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.function.Supplier;
+import java.util.Optional;
 
 /**
- * @since 2.0
+ * Provides utilities to access active transactions associated with the
+ * current thread.
+ *
+ * <p>
+ *     This is a low-level service that domain objects will typically have
+ *     little need to leverage; there will normally be a transaction started
+ *     already by the framework at the beginning of an
+ *     {@link org.apache.isis.applib.services.iactn.Interaction} and committed
+ *     at the end. On occasion though it can be useful to take
+ *     explicit control over transaction boundaries, which is where the
+ *     methods provided by this domain service can be useful.
+ * </p>
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
-public interface TransactionService {
+public interface TransactionService extends TransactionalProcessor {
 
-    // end::refguide[]
     /**
-     * When called within an existing transactional boundary returns the unique identifier to the transaction,
-     * {@code null} otherwise.
-     *
-     * @return nullable
+     * Optionally returns the unique identifier of the current thread's transaction,
+     * based on whether there is an active transaction associated with the current thread.
      */
-    // tag::refguide[]
-    TransactionId currentTransactionId();                   // <.>
+    Optional<TransactionId> currentTransactionId();
 
-    // end::refguide[]
     /**
-     * @return - the state of the current transaction.  If there is no current transaction, then returns {@link TransactionState#NONE}.
+     * Returns the state of the current thread's transaction., or returns
+     * {@link TransactionState#NONE}, if there is no active transaction associated with the
+     * current thread.
      */
-    // tag::refguide[]
-    TransactionState currentTransactionState();             // <.>
+    TransactionState currentTransactionState();
 
-    // end::refguide[]
     /**
-     * Flush all changes to the object store.
-     *
+     * Flushes all changes to the object store.
      * <p>
      * Occasionally useful to ensure that newly persisted domain objects
      * are flushed to the database prior to a subsequent repository query.
-     * </p>
+     * <p>
+     * If there is no active transaction associated with the current thread, then does nothing.
      */
-    // tag::refguide[]
-    void flushTransaction();                                // <.>
-
-    // end::refguide[]
+    void flushTransaction();
 
     /**
-     * Commits the current transaction (if there is one), and begins a new one.
-     *
-     * If there is no current transaction, then is a no-op.
+     * Commits the current thread's transaction (if there is one), and in any case begins a new one.
      */
-    // tag::refguide[]
-    void nextTransaction();                                 // <.>
+    void nextTransaction();
 
-    // end::refguide[]
-    /**
-     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
-     * boundary creates a new one.
-     *
-     * @param task
-     */
-    // tag::refguide[]
-    void executeWithinTransaction(Runnable task);           // <.>
-
-    // end::refguide[]
-    /**
-     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
-     * boundary creates a new one.
-     *
-     * @param task
-     */
-    // tag::refguide[]
-    <T> T executeWithinTransaction(Supplier<T> task);       // <.>
-    // end::refguide[]
-
-
-    // tag::refguide[]
 }
-// end::refguide[]

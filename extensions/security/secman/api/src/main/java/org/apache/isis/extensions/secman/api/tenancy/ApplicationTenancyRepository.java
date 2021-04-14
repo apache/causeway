@@ -22,18 +22,21 @@ import java.util.Collection;
 
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationTenancyRepository<T extends ApplicationTenancy> {
 
     /**
-     * 
+     *
      * @return detached entity
      */
     T newApplicationTenancy();
-    
+
     Collection<T> allTenancies();
     Collection<T> getChildren(ApplicationTenancy tenancy);
     Collection<T> findByNameOrPathMatchingCached(String partialNameOrPath);
-    
+
     /**
      * auto-complete support
      * @param search

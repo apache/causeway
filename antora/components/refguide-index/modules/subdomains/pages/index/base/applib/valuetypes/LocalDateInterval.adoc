@@ -1,0 +1,46 @@
+= LocalDateInterval
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.LocalDateInterval.java
+----
+class LocalDateInterval {
+  LocalDateInterval()
+  LocalDateInterval(final Interval interval)
+  LocalDateInterval(final LocalDate startDate, final LocalDate endDate)
+  LocalDateInterval(final LocalDate startDate, final LocalDate endDate, final IntervalEnding ending)
+  LocalDateInterval excluding(final LocalDate startDate, final LocalDate endDate)
+  LocalDateInterval including(final LocalDate startDate, final LocalDate endDate)
+  boolean equals(final Object obj)
+  int hashCode()
+  String toString()
+  String toString(String format)
+  LocalDateInterval parseString(final String input)     // <.>
+  LocalDate endDateFromStartDate(LocalDate date)     // <.>
+}
+----
+
+<.> xref:#parseString__String[parseString(String)]
++
+--
+Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
+--
+<.> xref:#endDateFromStartDate__LocalDate[endDateFromStartDate(LocalDate)]
++
+--
+Returns an end date given the start date of the next adjoining interval
+--
+
+== Members
+
+[#parseString__String]
+=== parseString(String)
+
+Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
+
+[#endDateFromStartDate__LocalDate]
+=== endDateFromStartDate(LocalDate)
+
+Returns an end date given the start date of the next adjoining interval

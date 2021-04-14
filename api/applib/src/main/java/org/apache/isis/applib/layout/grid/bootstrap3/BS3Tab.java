@@ -40,6 +40,8 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
  * <p>
  *     They simply contain one or more {@link BS3Row row}s.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlType(
         name = "tab"

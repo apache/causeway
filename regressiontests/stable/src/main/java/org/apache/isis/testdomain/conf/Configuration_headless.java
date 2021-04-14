@@ -18,10 +18,7 @@
  */
 package org.apache.isis.testdomain.conf;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -29,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -38,27 +34,21 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.metamodel.services.command.CommandServiceInternal;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Configuration
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleExtModelAnnotation.class, // @Model support
     Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
@@ -67,117 +57,75 @@ import lombok.val;
 })
 public class Configuration_headless {
 
-//    @Bean @Singleton
-//    public TransactionService transactionService() {
-//        return new TransactionService() {
-//
-//            @Override
-//            public TransactionId currentTransactionId() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void flushTransaction() {
-//            }
-//
-//            @Override
-//            public TransactionState currentTransactionState() {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void executeWithinNewTransaction(Runnable task) {
-//            }
-//
-//            @Override
-//            public <T> T executeWithinNewTransaction(Supplier<T> task) {
-//                return null;
-//            }
-//
-//        };
-//    }
-    
     @Service
     @Order(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class HeadlessCommandSupport {
+    public static class HeadlessCommandSupport
+    implements InteractionScopeAware {
 
-        private final Provider<InteractionContext> interactionContextProvider;
-        private final CommandServiceInternal commandService;
+//      private final Provider<InteractionContext> interactionContextProvider;
+//      private final CommandDispatcher commandDispatcher;
 
-
-        @EventListener(IsisInteractionLifecycleEvent.class)
-        public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
-            switch(event.getEventType()) {
-            case HAS_STARTED:
-                _Probe.errOut("Interaction HAS_STARTED conversationId=%s", event.getConversationId());
-                setupCommandCreateIfMissing();
-                break;
-            case IS_ENDING:
-                _Probe.errOut("Interaction IS_ENDING conversationId=%s", event.getConversationId());
-                break;
-            default:
-                break;
-            }
+        @Override
+        public void beforeEnteringTransactionalBoundary(Interaction interaction) {
+            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
+            setupCommandCreateIfMissing();
         }
-        
+
+        @Override
+        public void afterLeavingTransactionalBoundary(Interaction interaction) {
+            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
+        }
+
         public void setupCommandCreateIfMissing() {
-            
-            val interactionContext = interactionContextProvider.get();
-            @SuppressWarnings("unused")
-            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
-                    .orElseGet(()->{
-                        val newCommand = new Command();
-                        val newInteraction = new Interaction(newCommand);
-                        interactionContext.setInteraction(newInteraction);
-                        return newInteraction;
-                    });
+
+//            val interactionContext = interactionContextProvider.get();
+//            @SuppressWarnings("unused")
+//            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
+//                    .orElseGet(()->{
+//                        val newCommand = new Command();
+//                        val newInteraction = new Interaction(newCommand);
+//                        interactionContext.setInteraction(newInteraction);
+//                        return newInteraction;
+//                    });
         }
-        
+
     }
-    
+
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {
         return new PlatformTransactionManager() {
-            
+
             @Override
             public void rollback(TransactionStatus status) throws TransactionException {
             }
-            
+
             @Override
             public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
                 return null;
             }
-            
+
             @Override
             public void commit(TransactionStatus status) throws TransactionException {
             }
         };
     }
-    
-    
+
+
     @Bean @Singleton
     public MetricsService metricsService() {
         return new MetricsService() {
-            
+
             @Override
-            public int numberObjectsLoaded() {
+            public int numberEntitiesLoaded() {
                 return 0;
             }
-            
+
             @Override
-            public int numberObjectsDirtied() {
+            public int numberEntitiesDirtied() {
                 return 0;
             }
+
         };
     }
 

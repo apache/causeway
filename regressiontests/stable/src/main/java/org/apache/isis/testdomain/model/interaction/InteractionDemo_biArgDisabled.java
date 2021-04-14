@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,12 +30,12 @@ public class InteractionDemo_biArgDisabled {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
-    @Model
+    @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
     
-    @Model
+    @MemberSupport
     public String disable() {
         return "Disabled for demonstration.";
     }

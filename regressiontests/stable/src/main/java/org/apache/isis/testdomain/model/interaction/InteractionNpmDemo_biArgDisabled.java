@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -38,22 +38,22 @@ public class InteractionNpmDemo_biArgDisabled {
         int b;
     }
     
-    @Model
+    @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
     
-    @Model
+    @MemberSupport
     public boolean hide() {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String disable() {
         return "Disabled for demonstration.";
     }
     
-    @Model
+    @MemberSupport
     public String validate(Parameters params) {
         return "Never valid for demonstration.";
     }
@@ -62,18 +62,18 @@ public class InteractionNpmDemo_biArgDisabled {
     
     // testing whether all of these get picked up by the meta-model
     
-    @Model public boolean hideA(Parameters params) { return false; }         
-    @Model public String disableA(Parameters params) { return null; }                           
-    @Model public String validateA(Parameters params) { return null; }
-    @Model public int[] choicesA(Parameters params) { return null; }          
-    @Model public int[] autoCompleteA(Parameters params, String search) { return null; }
-    @Model public int defaultA(Parameters params) { return 0; }
+    @MemberSupport public boolean hideA(Parameters params) { return false; }         
+    @MemberSupport public String disableA(Parameters params) { return null; }                           
+    @MemberSupport public String validateA(Parameters params) { return null; }
+    @MemberSupport public int[] choicesA(Parameters params) { return null; }          
+    @MemberSupport public int[] autoCompleteA(Parameters params, String search) { return null; }
+    @MemberSupport public int defaultA(Parameters params) { return 0; }
     
-    @Model public boolean hideB(Parameters params) { return false; }         
-    @Model public String disableB(Parameters params) { return null; }                           
-    @Model public String validateB(Parameters params) { return null; }
-    @Model public int[] choicesB(Parameters params) { return null; }          
-    @Model public int[] autoCompleteB(Parameters params, String search) { return null; }
-    @Model public int defaultB(Parameters params) { return 0; }
+    @MemberSupport public boolean hideB(Parameters params) { return false; }         
+    @MemberSupport public String disableB(Parameters params) { return null; }                           
+    @MemberSupport public String validateB(Parameters params) { return null; }
+    @MemberSupport public int[] choicesB(Parameters params) { return null; }          
+    @MemberSupport public int[] autoCompleteB(Parameters params, String search) { return null; }
+    @MemberSupport public int defaultB(Parameters params) { return 0; }
     
 }

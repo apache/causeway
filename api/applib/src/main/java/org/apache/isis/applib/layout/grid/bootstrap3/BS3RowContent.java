@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     {@link BS3ClearFix clearfix} classes.
  * </p>
  *
+ * @since 1.x {@index}
  */
 public abstract class BS3RowContent extends BS3ElementAbstract {
 

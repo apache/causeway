@@ -18,36 +18,39 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
-// tag::refguide[]
+/**
+ * Broadcast when an entity is about to be saved (inserted) into the database
+ * either explicitly using the
+ * {@link org.apache.isis.applib.services.repository.RepositoryService}, or
+ * implicitly, for example due to persistence-by-reachability or similar
+ * persistence mechanisms.
+ *
+ * @see ObjectPersistedEvent
+ *
+ * @since 1.x {@index}
+ */
 public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.persisting-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
-     // tag::refguide[]
     public static class Default extends ObjectPersistingEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-     // tag::refguide[]
     public static class Noop extends ObjectPersistingEvent<Object> {}
 
-    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-     // tag::refguide[]
     public static class Doop extends ObjectPersistingEvent<Object> {}
 
-    // end::refguide[]
 
     public ObjectPersistingEvent() {
     }
@@ -55,7 +58,5 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
         super(source);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

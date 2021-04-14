@@ -1,0 +1,504 @@
+= JDO Spring Integration
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:sectnums:
+
+This is a fork of the _Spring ORM JDO_ sources at _github_,
+for which support had been dropped back in 2016
+footnote:[https://github.com/spring-projects/spring-framework/issues/18702[Spring Issue 18702]].
+
+Credits to the original authors!
+
+The following is an adoption of the original
+footnote:[https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html[docs.spring.io]]
+documentation.
+
+WARNING: With the XML examples, former package names `org.springframework.orm.jdo` have not been corrected to their forked
+correspondents in `org.apache.isis.persistence.jdo.spring`. Likewise with the descriptive text, some references pointing 
+to _Spring_ have not been corrected to point to _Apache Isis_.
+
+== JDO
+
+_Spring_ supports the standard JDO 2.0 and 2.1 APIs as data access strategy, following the same
+style as the _Hibernate_ support. The corresponding integration classes reside in the
+`org.apache.isis.persistence.jdo.spring` package. (former `org.springframework.orm.jdo`)
+
+=== PersistenceManagerFactory setup
+
+_Spring_ provides a `LocalPersistenceManagerFactoryBean` class that allows you to define a
+local JDO `PersistenceManagerFactory` within a _Spring_ application context:
+
+.Option 1a - Beans Configuration (XML)
+[%collapsible]
+====
+[source,xml]
+----
+<beans>
+
+  <bean id="myPmf" class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">
+    <property name="configLocation" value="classpath:kodo.properties"/>
+  </bean>
+
+</beans>
+----
+====
+
+.Option 1b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+@Configuration
+@ConfigurationProperties(prefix = "")
+@Named("jdo-settings")
+public class JdoSettingsBean {
+
+    @Getter @Setter 
+    private Map<String, String> datanucleus; //mapped by "datanucleus"
+    @Getter @Setter 
+    private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
+    
+    private final Object lock = new Object();
+    private Map<String, Object> properties;
+
+    public Map<String, Object> getAsProperties() {
+        synchronized(lock) {
+            if(properties==null) {
+                properties = new HashMap<>();
+                
+                datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
+                
+                javax.entrySet().stream()
+                .filter(e->e.getKey().startsWith("jdo."))
+                .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
+                
+                amendProperties(properties);
+            }
+        }
+        return properties;
+    }
+    
+    private void amendProperties(final Map<String, Object> properties) {
+        // add optional defaults if needed
+    }
+
+}
+
+@Configuration
+@EnableConfigurationProperties(JdoSettingsBean.class)
+public class ConfigurationExample {
+    
+    @Bean
+    public LocalPersistenceManagerFactoryBean myPmf(JdoSettingsBean jdoSettings) {
+        var myPmf = new LocalPersistenceManagerFactoryBean();
+        myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
+        return myPmf;
+    }
+
+}
+
+----
+====
+
+
+Alternatively, you can set up a `PersistenceManagerFactory` through direct instantiation of a
+`PersistenceManagerFactory` implementation class. A JDO `PersistenceManagerFactory` implementation
+class follows the JavaBeans pattern, just like a JDBC `DataSource` implementation class, which is a
+natural fit for a configuration that uses _Spring_. This setup style usually supports a _Spring_-defined
+JDBC `DataSource`, passed into the connectionFactory property. For example, for the open source
+JDO implementation https://www.datanucleus.org/[DataNucleus],
+this is the XML configuration of the PersistenceManagerFactory implementation:
+
+.Option 2a - Beans Configuration (XML)
+[%collapsible]
+====
+[source,xml]
+----
+<beans>
+
+ <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+   <property name="driverClassName" value="${jdbc.driverClassName}"/>
+   <property name="url" value="${jdbc.url}"/>
+   <property name="username" value="${jdbc.username}"/>
+   <property name="password" value="${jdbc.password}"/>
+ </bean>
+
+ <bean id="myPmf" class="org.datanucleus.jdo.JDOPersistenceManagerFactory" destroy-method="close">
+   <property name="connectionFactory" ref="dataSource"/>
+   <property name="nontransactionalRead" value="true"/>
+ </bean>
+
+</beans>
+----
+====
+
+.Option 2b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+import javax.jdo.PersistenceManagerFactory;
+import javax.sql.DataSource;
+
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+@Configuration
+@Import({
+})
+public class ConfigurationExample {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close")
+    public PersistenceManagerFactory myPmf(DataSource dataSource) {
+        var myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+
+}
+----
+====
+
+You can also set up JDO `PersistenceManagerFactory` in the JNDI environment of a Java EE application server,
+usually through the JCA connector provided by the particular JDO implementation. _Spring_'s standard
+`JndiObjectFactoryBean / <jee:jndi-lookup>` can be used to retrieve and expose such a
+`PersistenceManagerFactory`.
+However, outside an EJB context, no real benefit exists in holding the `PersistenceManagerFactory` in
+JNDI: only choose such a setup for a good reason. See 
+_Spring Transactions Section 13.3.6_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/orm.html#orm-hibernate-resources[Comparing container-managed and locally defined resources]
+
+“Comparing container-managed and locally defined resources” for a discussion; the arguments there
+apply to JDO as well.
+
+=== Implementing DAOs based on the plain JDO API
+
+DAOs can also be written directly against plain JDO API, without any _Spring_ dependencies, by using
+an injected `PersistenceManagerFactory`. The following is an example of a corresponding DAO implementation:
+
+[source,java]
+----
+public class ProductDaoImpl implements ProductDao {
+
+    private PersistenceManagerFactory persistenceManagerFactory;
+
+    public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
+        this.persistenceManagerFactory = pmf;
+    }
+
+    public Collection loadProductsByCategory(String category) {
+        PersistenceManager pm = this.persistenceManagerFactory.getPersistenceManager();
+        try {
+            Query query = pm.newQuery(Product.class, "category = pCategory");
+            query.declareParameters("String pCategory");
+            return query.execute(category);
+        }
+        finally {
+          pm.close();
+        }
+    }
+}
+----
+
+Because the above DAO follows the dependency injection pattern, it fits nicely into a _Spring_ container,
+just as it would if coded against _Spring's_ `JdoTemplate`:
+
+[source,xml]
+----
+<beans>
+
+  <bean id="myProductDao" class="product.ProductDaoImpl">
+    <property name="persistenceManagerFactory" ref="myPmf"/>
+  </bean>
+
+</beans>
+----
+
+The main problem with such DAOs is that they always get a new `PersistenceManager` from the factory.
+To access a _Spring_-managed transactional `PersistenceManager`, define a
+`TransactionAwarePersistenceManagerFactoryProxy` (as included in _Spring_) in front of your target
+`PersistenceManagerFactory`, then passing a reference to that proxy into your DAOs as in the
+following example:
+
+.Option 3a - Beans Configuration (XML)
+[%collapsible]
+====
+[source,xml]
+----
+<beans>
+
+  <bean id="myPmfProxy"
+      class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">
+    <property name="targetPersistenceManagerFactory" ref="myPmf"/>
+  </bean>
+
+  <bean id="myProductDao" class="product.ProductDaoImpl">
+    <property name="persistenceManagerFactory" ref="myPmfProxy"/>
+  </bean>
+
+</beans>
+----
+====
+
+.Option 3b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+@Configuration
+@Import({
+})
+public class ConfigurationExample {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close") @Named("myPmf")
+    public PersistenceManagerFactory myPmf(DataSource dataSource) {
+        var myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+    
+    @Bean @Named("myPmfProxy")
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(PersistenceManagerFactory myPmf) {
+        var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        return myPmfProxy;
+    }
+    
+    @Component
+    public static class ExampleDao {
+
+        @Inject
+        @Named("myPmfProxy")
+        @Getter 
+        private PersistenceManagerFactory persistenceManagerFactory;
+        
+    }
+
+}
+----
+====
+
+Your data access code will receive a transactional `PersistenceManager` (if any) from the
+`PersistenceManagerFactory.getPersistenceManager()` method that it calls. The latter method
+call goes through the proxy, which first checks for a current transactional `PersistenceManager`
+before getting a new one from the factory. Any close() calls on the `PersistenceManager` are
+ignored in case of a transactional `PersistenceManager`.
+
+If your data access code always runs within an active transaction (or at least within active
+transaction synchronization), it is safe to omit the `PersistenceManager.close()` call and thus
+the entire finally block, which you might do to keep your DAO implementations concise:
+
+[source,java]
+----
+public class ProductDaoImpl implements ProductDao {
+
+    private PersistenceManagerFactory persistenceManagerFactory;
+
+    public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
+        this.persistenceManagerFactory = pmf;
+    }
+
+    public Collection loadProductsByCategory(String category) {
+        PersistenceManager pm = this.persistenceManagerFactory.getPersistenceManager();
+        Query query = pm.newQuery(Product.class, "category = pCategory");
+        query.declareParameters("String pCategory");
+        return query.execute(category);
+    }
+}
+----
+
+With such DAOs that rely on active transactions, it is recommended that you enforce active
+transactions through turning off `TransactionAwarePersistenceManagerFactoryProxy`'s allowCreate flag:
+
+.Option 4a - Beans Configuration (XML)
+[%collapsible]
+====
+[source,xml]
+----
+<beans>
+
+  <bean id="myPmfProxy"
+      class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">
+    <property name="targetPersistenceManagerFactory" ref="myPmf"/>
+    <property name="allowCreate" value="false"/>
+  </bean>
+
+  <bean id="myProductDao" class="product.ProductDaoImpl">
+    <property name="persistenceManagerFactory" ref="myPmfProxy"/>
+  </bean>
+
+</beans>
+----
+====
+
+.Option 4b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+@Configuration
+@Import({
+})
+public class ConfigurationExample {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close") @Named("myPmf")
+    public PersistenceManagerFactory myPmf(DataSource dataSource) {
+        var myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+    
+    @Bean @Named("myPmfProxy")
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(PersistenceManagerFactory myPmf) {
+        var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        myPmfProxy.setAllowCreate(false); // <.>
+        return myPmfProxy;
+    }
+    
+    @Component
+    public static class ExampleDao {
+
+        @Inject
+        @Named("myPmfProxy")
+        @Getter 
+        private PersistenceManagerFactory persistenceManagerFactory;
+        
+    }
+
+}
+----
+<.> enforce active transactions
+====
+
+The main advantage of this DAO style is that it depends on JDO API only; no import of any _Spring_ class
+is required. This is of course appealing from a non-invasiveness perspective, and might feel more
+natural to JDO developers.
+
+However, the DAO throws plain `JDOException` (which is unchecked, so does not have to be declared or caught),
+which means that callers can only treat exceptions as fatal, unless you want to depend on JDO's own
+exception structure. Catching specific causes such as an optimistic locking failure is not possible
+without tying the caller to the implementation strategy. This trade off might be acceptable to
+applications that are strongly JDO-based and/or do not need any special exception treatment.
+
+In summary, you can DAOs based on the plain JDO API, and they can still participate in _Spring_-managed
+transactions. This strategy might appeal to you if you are already familiar with JDO. However, such
+DAOs throw plain JDOException, and you would have to convert explicitly to _Spring_'s `DataAccessException`
+(if desired).
+
+=== Transaction management
+
+[NOTE]
+====
+You are strongly encouraged to read _Spring Transactions Section 10.5_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/transaction.html#transaction-declarative[Declarative transaction management] 
+if you have not
+done so, to get a more detailed coverage of _Spring_'s declarative transaction support.
+====
+
+To execute service operations within transactions, you can use _Spring_'s common declarative transaction
+facilities. For example:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="
+   http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+   http://www.springframework.org/schema/aop
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+  <bean id="myTxManager" class="org.springframework.orm.jdo.JdoTransactionManager">
+    <property name="persistenceManagerFactory" ref="myPmf"/>
+  </bean>
+
+  <bean id="myProductService" class="product.ProductServiceImpl">
+    <property name="productDao" ref="myProductDao"/>
+  </bean>
+
+  <tx:advice id="txAdvice" transaction-manager="txManager">
+    <tx:attributes>
+      <tx:method name="increasePrice*" propagation="REQUIRED"/>
+      <tx:method name="someOtherBusinessMethod" propagation="REQUIRES_NEW"/>
+      <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <aop:config>
+    <aop:pointcut id="productServiceMethods" expression="execution(* product.ProductService.*(..))"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"/>
+  </aop:config>
+
+</beans>
+----
+
+JDO requires an active transaction to modify a persistent object. The non-transactional flush concept
+does not exist in JDO, in contrast to _Hibernate_. For this reason, you need to set up the chosen JDO
+implementation for a specific environment. Specifically, you need to set it up explicitly for JTA
+synchronization, to detect an active JTA transaction itself. This is not necessary for local
+transactions as performed by _Spring_'s `JdoTransactionManager`, but it is necessary to participate in
+JTA transactions, whether driven by _Spring_'s `JtaTransactionManager` or by EJB CMT and plain JTA.
+
+`JdoTransactionManager` is capable of exposing a JDO transaction to JDBC access code that accesses
+the same JDBC `DataSource`, provided that the registered `JdoDialect` supports retrieval of the
+underlying JDBC Connection. This is the case for JDBC-based JDO 2.0 implementations by default.
+
+=== JdoDialect
+
+As an advanced feature, both `JdoTemplate` and `JdoTransactionManager` support a custom `JdoDialect` that
+can be passed into the jdoDialect bean property. In this scenario, the DAOs will not receive a
+`PersistenceManagerFactory` reference but rather a full `JdoTemplate` instance (for example, passed
+into the jdoTemplate property of `JdoDaoSupport`). Using a `JdoDialect` implementation, you can enable
+advanced features supported by _Spring_, usually in a vendor-specific manner:
+
+* Applying specific transaction semantics such as custom isolation level or transaction timeout
+* Retrieving the transactional JDBC Connection for exposure to JDBC-based DAOs
+* Applying query timeouts, which are automatically calculated from Spring-managed transaction timeouts
+* Eagerly flushing a `PersistenceManager`, to make transactional changes visible to JDBC-based data
+access code
+* Advanced translation of `JDOExceptions` to _Spring_ `DataAccessExceptions`
+
+See the `JdoDialect` _Javadoc_ for more details on its operations and how to use them within _Spring_'s JDO
+support.
+

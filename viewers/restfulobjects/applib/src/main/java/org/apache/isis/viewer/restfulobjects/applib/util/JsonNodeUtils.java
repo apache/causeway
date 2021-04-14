@@ -29,6 +29,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class JsonNodeUtils {
 
     private JsonNodeUtils() {

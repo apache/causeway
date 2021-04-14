@@ -30,6 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -38,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -63,7 +66,7 @@ import lombok.val;
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
                 //IsisPresets.DebugPersistence,
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
+                //"datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
 
@@ -76,13 +79,16 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
+@PropertySources({
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)
+})
 class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    @Inject SecurityModuleConfig securityConfig;
+    @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach

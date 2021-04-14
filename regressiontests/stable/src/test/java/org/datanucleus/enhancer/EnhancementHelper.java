@@ -42,6 +42,7 @@ import org.datanucleus.exceptions.NucleusUserException;
  * 
  * TODO Provide a mechanism to automatically deregister classes when their class loader exits? or register against the NucleusContext?
  */
+@SuppressWarnings("rawtypes")
 public class EnhancementHelper extends java.lang.Object
 {
     private static EnhancementHelper singletonHelper = new EnhancementHelper();
@@ -50,6 +51,7 @@ public class EnhancementHelper extends java.lang.Object
      * Static mapping of <code>Persistable</code> class to an instance of that class.
      * New entries are added by the static method in each <code>Persistable</code> class initialisation. Entries are never removed.
      */
+    
     private static Map<Class, Meta> registeredClasses = new ConcurrentHashMap<>();
 
     /**
@@ -251,6 +253,7 @@ public class EnhancementHelper extends java.lang.Object
      * @param pcClass the <code>Class</code>.
      * @return the Persistable instance for the <code>Class</code>.
      */
+    @SuppressWarnings("deprecation")
     private static Persistable getPersistableForClass(Class pcClass)
     {
         Meta ret = registeredClasses.get(pcClass);

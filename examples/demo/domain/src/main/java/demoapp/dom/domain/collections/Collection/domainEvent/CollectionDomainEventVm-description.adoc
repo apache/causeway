@@ -1,0 +1,83 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Usually a domain event is emitted by the framework to emit whenever the user interacts with a collection.
+Domain service subscribers can influence these interaction by subscribing to these events, allowing them to:
+
+* hide the collection
+
+(In contrast to properties), because collections can only be modified indirectly (eg through an action), there are no other interactions that can be influenced.
+
+The `domainEvent` element specifies the class to be emitted; this must be a subclass of the abstract `org.apache.isis.applib.events.domain.CollectionDomainEvent` class.
+
+If no `domainEvent` is specified on the property itself, then the domain event class can be specified at the class level using `@DomainObject#collectionDomainEvent`.
+
+And if not specified at the class level, then an instance of `org.apache.isis.applib.events.domain.CollectionDomainEvent.Default` is emitted as the fallback.
+
+[TIP]
+====
+The fallback domain event can be suppressed using the `isis.applib.annotation.collection.domain-event.post-for-default` configuration property.
+====
+
+
+== Annotated Collection
+
+In the demo, the `CollectionDomainEventVm` class defines a collection, "children", annotated with `domainEvent`:
+
+[source,java]
+----
+include::CollectionDomainEventVm.java[tags=class]
+----
+<.> the event class to emit; genericised by the target type and the property type
+<.> indicates that the framework should emit this type
+
+
+== Subscriber
+
+The `CollectionDomainEventControlService` is the subscriber:
+
+[source,java]
+----
+include::subscribers/CollectionDomainEventControlService.java[tags=class]
+----
+<.> holds which "strategy" should be used to modify the interactions with the text field
+<.> subscribes using the Spring event bus
+
+
+== Influencing the Interaction
+
+The mechanisms to influence the interactions are implemented as an enum.
+The `DO_NOTHING` enum, unsurprisingly, does nothing:
+
+[source,java]
+----
+include::subscribers/CollectionDomainEventControlStrategy.java[tags=class]
+----
+
+There is one further option:
+
+* hide
++
+[source,java,indent=0]
+----
+include::subscribers/CollectionDomainEventControlStrategy.java[tags=hide]
+----
+
+=== Selecting the Strategy
+
+Selecting which strategy is in force is implemented using two mixins which work together:
+
+* the `controlChildren` mixin property just surfaces the selected strategy as a read-only value:
++
+[source,java]
+----
+include::subscribers/CollectionDomainEventVm_controlChildren.java[tags=class]
+----
+
+* while the `controlChildrenEditing` mixin action allows the strategy to be changed:
++
+[source,java]
+----
+include::subscribers/CollectionDomainEventVm_controlChildrenVisibility.java[tags=class]
+----
+<.> forces the page to redraw.
+Necessary because the text property's state change

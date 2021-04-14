@@ -23,6 +23,9 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface WithStartDate {
 
     @Property(editing = Editing.DISABLED)

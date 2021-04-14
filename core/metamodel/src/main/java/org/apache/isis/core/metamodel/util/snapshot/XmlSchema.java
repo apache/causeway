@@ -88,23 +88,24 @@ public final class XmlSchema {
             throw new IllegalArgumentException("Namespace prefix reserved for w3.org XML schema-instance namespace.");
         }
         if (IsisSchema.NS_URI.equals(base)) {
-            throw new IllegalArgumentException("Namespace URI reserved for NOF metamodel namespace.");
+            throw new IllegalArgumentException("Namespace URI reserved for Apache Isis metamodel namespace.");
         }
         if (IsisSchema.NS_PREFIX.equals(prefix)) {
-            throw new IllegalArgumentException("Namespace prefix reserved for NOF metamodel namespace.");
+            throw new IllegalArgumentException("Namespace prefix reserved for Apache Isis metamodel namespace.");
         }
         this.uriBase = base;
         this.prefix = prefix;
     }
 
     /**
-     * The base of the Uri in use. All namespaces are concatenated with this.
+     * The base of the URI in use. All namespaces are concatenated with this.
      *
      * The namespace string will be the concatenation of the plus the package
      * name of the class of the object being referenced.
      *
-     * If not specified in the constructor, then {@link #DEFAULT_URI_PREFIX} is
-     * used.
+     * If not specified in the constructor, then 
+     * {@link IsisSchema#DEFAULT_URI_BASE} 
+     * is used.
      */
     public String getUriBase() {
         return uriBase;

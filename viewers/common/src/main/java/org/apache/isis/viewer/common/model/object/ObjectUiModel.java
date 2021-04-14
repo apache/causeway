@@ -90,11 +90,8 @@ public interface ObjectUiModel {
     public interface HasRenderingHints {
 
         /**
-         * Similar to {@link #mustBeEditable()}, though not called from the same locations.
-         *
+         * @apiNote Similar to {@code #mustBeEditable()}, though not called from the same locations.
          * My suspicion is that it amounts to more or less the same set of conditions.
-         *
-         * @return
          */
         boolean isInlinePrompt();
         

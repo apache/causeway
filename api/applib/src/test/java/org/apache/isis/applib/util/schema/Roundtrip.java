@@ -16,6 +16,9 @@
  */
 package org.apache.isis.applib.util.schema;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.math.BigDecimal;
@@ -31,16 +34,18 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
@@ -55,7 +60,7 @@ import lombok.val;
 public class Roundtrip {
 
     private static InteractionDto newInteractionDtoWithActionInvocation(
-            final String transactionId,
+            final String interactionId,
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
@@ -73,7 +78,7 @@ public class Roundtrip {
         interactionDto.setMajorVersion("1");
         interactionDto.setMinorVersion("0");
 
-        interactionDto.setTransactionId(transactionId);
+        interactionDto.setInteractionId(interactionId);
         interactionDto.setExecution(executionDto);
 
         executionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
@@ -87,63 +92,71 @@ public class Roundtrip {
         InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, null);
         InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), null);
     }
-    
+
     private static void testArg(
-            ActionInvocationDto invocationDto, 
-            LongAdder paramIndex, 
-            ValueType valueType, 
+            ActionInvocationDto invocationDto,
+            LongAdder paramIndex,
+            ValueType valueType,
             Object expectedValue) {
         testArg(invocationDto, paramIndex, valueType, expectedValue, null);
     }
-    
+
     private static void testArg(
-            ActionInvocationDto invocationDto, 
-            LongAdder paramIndex, 
-            ValueType valueType, 
+            ActionInvocationDto invocationDto,
+            LongAdder paramIndex,
+            ValueType valueType,
             Object expectedValue,
             String nameOverride) {
-        
+
         paramIndex.increment();
         int param = paramIndex.intValue();
-        
+
         val type = expectedValue.getClass();
         val name = nameOverride!=null ? nameOverride : type.getSimpleName();
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("a"+name));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(valueType));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        
-        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param, type);
-        
+
+        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param);
+
         // equals test, some types need special checks ...
         if(expectedValue instanceof OidDto) {
-            
+
             assertThat( ((OidDto)actualValue).getId(), is(((OidDto)expectedValue).getId()) );
             assertThat( ((OidDto)actualValue).getType(), is(((OidDto)expectedValue).getType()) );
-            
+
         } else if(expectedValue instanceof org.joda.time.DateTime) {
-            
+
             assertThat( actualValue.toString(), is(expectedValue.toString()) );
-            
+
+        } else if(expectedValue instanceof Iterable
+                || expectedValue.getClass().isArray()) {
+
+            val actualAsCan = Can.ofStream(_NullSafe.streamAutodetect(actualValue));
+            val expectedAsCan = Can.ofStream(_NullSafe.streamAutodetect(expectedValue));
+
+            assertThat(actualAsCan, is(expectedAsCan));
+
         } else {
-            assertThat(actualValue, is(expectedValue));    
+            assertThat(actualValue, is(expectedValue));
         }
-        
+
         paramIndex.increment();
         param = paramIndex.intValue();
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("null"+name));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(valueType));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
     }
-    
+
     private static class SampleValues {
-        
+
         final Bookmark bookmark = Bookmark.of("ORD", "12345");
         final OidDto reference = new OidDto();
         {
             reference.setId("12345");
             reference.setType("ORD");
         }
-        
+
         final String string = "Fred";
         final byte primitiveByte = (byte)123;
         final short primitiveShort= (short) 32123;
@@ -153,10 +166,10 @@ public class Roundtrip {
         final double primitiveDouble = 12345678.90123d;
         final boolean primitiveBoolean = true;
         final char primitiveCharacter = 'x';
-        
+
         final BigInteger bigInteger = new java.math.BigInteger("12345678901234567890");
         final BigDecimal bigDecimal = new java.math.BigDecimal("12345678901234567890");
-                
+
         // java.time
         final LocalTime localTime = LocalTime.of(9, 54, 1);
         final OffsetTime offsetTime = OffsetTime.of(9, 54, 1, 123_000_000, ZoneOffset.ofTotalSeconds(-120));
@@ -164,18 +177,24 @@ public class Roundtrip {
         final LocalDateTime localDateTime = LocalDateTime.of(2015, 5, 23, 9, 54, 1);
         final OffsetDateTime offsetDateTime = OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
-        
+
         // joda.time
         final org.joda.time.DateTime jodaDateTime = new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1);
         final org.joda.time.LocalDate jodaLocalDate = new org.joda.time.LocalDate(2015, 5, 23);
         final org.joda.time.LocalDateTime jodaLocalDateTime = new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1);
         final org.joda.time.LocalTime jodaLocalTime = new org.joda.time.LocalTime(9, 54, 1);
 
+        // iterables
+        final List<Long> list = _Lists.of(1L, 2L, 3L);
+        final Set<Long> set = _Sets.of(1L, 2L, 3L);
+        final Can<Long> can = Can.of(1L, 2L, 3L);
+        final long[] array = {1L, 2L, 3L};
+
     }
-    
+
     private final SampleValues sampleValues = new SampleValues();
-    
-    
+
+
     @Test
     public void happyCase() throws Exception {
 
@@ -195,7 +214,7 @@ public class Roundtrip {
                 Bookmark.of("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(),
                 "freddyUser"
                 );
-        
+
         addArg(interactionDto, sampleValues.bookmark);
         addArg(interactionDto, sampleValues.string);
         addArg(interactionDto, sampleValues.primitiveByte);
@@ -206,10 +225,10 @@ public class Roundtrip {
         addArg(interactionDto, sampleValues.primitiveDouble);
         addArg(interactionDto, sampleValues.primitiveBoolean);
         addArg(interactionDto, sampleValues.primitiveCharacter);
-        
+
         addArg(interactionDto, sampleValues.bigInteger);
         addArg(interactionDto, sampleValues.bigDecimal);
-        
+
         // java.time
         addArg(interactionDto, sampleValues.localTime);
         addArg(interactionDto, sampleValues.localDate);
@@ -217,12 +236,18 @@ public class Roundtrip {
         addArg(interactionDto, sampleValues.offsetTime);
         addArg(interactionDto, sampleValues.offsetDateTime);
         addArg(interactionDto, sampleValues.zonedDateTime);
-        
+
         // joda.time
         addArg(interactionDto, sampleValues.jodaDateTime);
         addArg(interactionDto, sampleValues.jodaLocalDate);
         addArg(interactionDto, sampleValues.jodaLocalDateTime);
         addArg(interactionDto, sampleValues.jodaLocalTime);
+
+        // iterables
+        addArg(interactionDto, sampleValues.list);
+        addArg(interactionDto, sampleValues.set);
+        addArg(interactionDto, sampleValues.can);
+        addArg(interactionDto, sampleValues.array);
 
         // when
         final CharArrayWriter caw = new CharArrayWriter();
@@ -240,7 +265,7 @@ public class Roundtrip {
         assertThat(recreated.getExecution().getTarget().getId(), Matchers.is(interactionDto.getExecution().getTarget().getId()));
 
         final ActionInvocationDto invocationDto = (ActionInvocationDto) recreated.getExecution();
-        val paramIndex = new LongAdder(); 
+        val paramIndex = new LongAdder();
         paramIndex.decrement();
 
         testArg(invocationDto, paramIndex, ValueType.REFERENCE, sampleValues.reference, "Bookmark");
@@ -253,10 +278,10 @@ public class Roundtrip {
         testArg(invocationDto, paramIndex, ValueType.DOUBLE, sampleValues.primitiveDouble);
         testArg(invocationDto, paramIndex, ValueType.BOOLEAN, sampleValues.primitiveBoolean);
         testArg(invocationDto, paramIndex, ValueType.CHAR, sampleValues.primitiveCharacter);
-        
+
         testArg(invocationDto, paramIndex, ValueType.BIG_INTEGER, sampleValues.bigInteger);
         testArg(invocationDto, paramIndex, ValueType.BIG_DECIMAL, sampleValues.bigDecimal);
-        
+
         // java.time
         testArg(invocationDto, paramIndex, ValueType.LOCAL_TIME, sampleValues.localTime);
         testArg(invocationDto, paramIndex, ValueType.LOCAL_DATE, sampleValues.localDate);
@@ -264,16 +289,19 @@ public class Roundtrip {
         testArg(invocationDto, paramIndex, ValueType.OFFSET_TIME, sampleValues.offsetTime);
         testArg(invocationDto, paramIndex, ValueType.OFFSET_DATE_TIME, sampleValues.offsetDateTime);
         testArg(invocationDto, paramIndex, ValueType.ZONED_DATE_TIME, sampleValues.zonedDateTime);
-        
+
         // joda.time
         testArg(invocationDto, paramIndex, ValueType.JODA_DATE_TIME, sampleValues.jodaDateTime);
         testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_DATE, sampleValues.jodaLocalDate);
         testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_DATE_TIME, sampleValues.jodaLocalDateTime);
         testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_TIME, sampleValues.jodaLocalTime);
-        
 
+        // iterables
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.list);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.set);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.can);
+        testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.array);
     }
-
 
 
 }

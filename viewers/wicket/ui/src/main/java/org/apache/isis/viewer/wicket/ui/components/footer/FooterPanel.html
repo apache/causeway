@@ -37,19 +37,24 @@
                     <form class="nav navbar-nav navbar-form navbar-left">
                         <span wicket:id="breadcrumbs"></span>
                     </form>
-
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <p class="navbar-text powered-by"><span  wicket:id="creditsLabel">Credits:</span></p>
-                        
+
                         <li wicket:id="creditItems">
                             <a tabindex="-1" wicket:id="creditLink" >
                                 <img wicket:id="creditImage" class="footer-image"/>
                                 <span wicket:id="creditName" class="creditName"></span>
                             </a>
                         </li>
-                        
+                        <li>
+                            <a wicket:id="aboutLink" tabindex="-1" id="aboutLink" class="navbar-right">
+                                <span  class="aboutMessage" wicket:id="aboutMessage">About</span>
+                                <i wicket:id="devModeWarning" class="fa fa-lg fa-warning text-danger" title="Running in Prototype (Development) mode!"/>
+                            </a>
+                        </li>
+
                         <li wicket:id="themePicker"></li>
                     </ul>
                 </div>

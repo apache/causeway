@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value.chars;
 
 import java.text.DecimalFormat;
 
+import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
@@ -42,19 +43,20 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -86,16 +88,18 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private IsisConfiguration configuration = newIsisConfiguration();
     
     private ObjectManager objectManager;
+    
+    private WrapperFactory wrapperFactory;
 
     private SpecificationLoader specificationLoader;
     
     private ProgrammingModel programmingModel;
 
-    private AuthenticationSessionTracker authenticationSessionTracker;
+    private AuthenticationContext authenticationContext;
 
     private TranslationService translationService;
 
-    private AuthenticationSession authenticationSession;
+    private Authentication authentication;
 
     private AuthorizationManager authorizationManager;
 
@@ -106,6 +110,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private RepositoryService repositoryService;
 
     private FactoryService factoryService;
+    
+    private MemberExecutorService memberExecutor;
 
     private TransactionService transactionService;
 
@@ -149,6 +155,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         val fields = _Lists.of(
                 getConfiguration(),
                 getObjectManager(),
+                getWrapperFactory(),
                 getIsisBeanTypeClassifier(),
                 getIsisBeanTypeRegistry(),
                 systemEnvironment,
@@ -156,9 +163,9 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 serviceRegistry,
                 metamodelEventService,
                 specificationLoader,
-                authenticationSessionTracker,
+                authenticationContext,
                 getTranslationService(),
-                authenticationSession,
+                authentication,
                 authorizationManager,
                 authenticationManager,
                 titleService,
@@ -277,6 +284,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             objectManager = ObjectManagerDefault.forTesting((MetaModelContext)this);
         }
         return objectManager;
+    }
+    
+    @Override
+    public WrapperFactory getWrapperFactory() {
+        if(wrapperFactory==null) {
+            wrapperFactory = new WrapperFactory_forTesting();
+        }
+        return wrapperFactory;
     }
 
     public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {

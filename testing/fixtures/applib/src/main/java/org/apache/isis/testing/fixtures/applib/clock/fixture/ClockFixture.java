@@ -24,10 +24,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 
 @Programmatic

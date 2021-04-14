@@ -28,7 +28,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.resources._Xml;
@@ -37,91 +36,109 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-// tag::refguide[]
+/**
+ * Allows instances of JAXB-annotated classes to be marshalled to XML and
+ * unmarshalled from XML back into domain objects.
+ *
+ * <p>
+ *     The default implementation automatically caches the JAXB marshallers
+ *     by target class.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 public interface JaxbService {
 
-    default Object fromXml(                             // <.>
+    /**
+     * unmarshalls the XML into an instance of the class, using
+     * the provided {@link JAXBContext}.
+     *
+     * @param jaxbContext  - configured for the expected target class
+     * @param xml
+     * @return
+     */
+    default Object fromXml(
             JAXBContext jaxbContext,
             String xml) {
         return fromXml(jaxbContext, xml, null);
     }
 
-    Object fromXml(                                     // <.>
+    /**
+     * unmarshalls the XML into an instance of the class, using the
+     * provided {@link JAXBContext} and the additional properties.
+     *
+     * @param jaxbContext - configured for the expected target class
+     * @param xml
+     * @param unmarshallerProperties
+     * @return
+     */
+    Object fromXml(
             JAXBContext jaxbContext,
             String xml,
             @Nullable Map<String,Object> unmarshallerProperties);
 
-    // end::refguide[]
     /**
-     * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
+     * Unmarshalls the XML to the specified domain class.
      */
-    // tag::refguide[]
-    default <T> T fromXml(Class<T> domainClass, String xml) { // <.>
+    default <T> T fromXml(Class<T> domainClass, String xml) {
         return fromXml(domainClass, xml, null);
     }
 
-    // end::refguide[]
     /**
-     * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
+     * Unmarshalls the XML to the specified domain class, with additional
+     * properties passed through to the {@link JAXBContext} used to performed
+     * the unmarshalling.
      */
-    // tag::refguide[]
-    <T> T fromXml(                                      // <.>
+    <T> T fromXml(
             Class<T> domainClass,
             String xml,
             @Nullable Map<String,Object> unmarshallerProperties);
 
-    default String toXml(Object domainObject) {         // <.>
+    /**
+     * Marshalls the object into XML (using a {@link JAXBContext} for the
+     * object's class).
+     */
+    default String toXml(Object domainObject) {
         return toXml(domainObject, null);
     }
-        
-    String toXml(                                       // <.>
+
+    /**
+     * Marshalls the object into XML specifying additional properties (passed
+     * to the {@link JAXBContext} used for the object's class).
+     */
+    String toXml(
             Object domainObject,
             @Nullable Map<String,Object> marshallerProperties);
 
-    // end::refguide[]
     /**
-     * Controls whether, when generating {@link #toXsd(Object, IsisSchemas) XML schemas},
-     * any of the common Isis schemas (in the namespace <code>http://org.apache.isis.schema</code>) should be included
-     * or just ignored (and therefore don't appear in the returned map).
+     * Generates a map of each of the schemas referenced; the key is the
+     * schema namespace, the value is the XML of the schema itself.
      *
      * <p>
-     *     The practical benefit of this is that for many DTOs there will only be one other
-     *     schema, that of the DTO itself.  The {@link Dto_downloadXsd} mixin uses this to return that single XSD,
-     *     rather than generating a ZIP of two schemas (the Isis schema and the one for the DTO), as it would otherwise;
-     *     far more convenient when debugging and so on.  The Isis schemas can always be
-     *     <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
+     *     A JAXB-annotated domain object will live in its own XSD namespace
+     *     and may reference multiple other XSD schemas.
+     *     In particular, many JAXB domain objects will reference the common
+     *     isis schemas.  The {@link IsisSchemas} paramter indicates whether
+     *     these schemas should be included or excluded from the map.
      * </p>
+     *
+     * @param domainObject
+     * @param isisSchemas
+     * @return
      */
-    // tag::refguide[]
-    enum IsisSchemas {
-        INCLUDE,
-        IGNORE;
-        // end::refguide[]
-
-        /**
-         * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
-         */
-        public boolean shouldIgnore(final String namespaceUri) {
-            if(this == INCLUDE) {
-                return false;
-            } else {
-                return namespaceUri.matches(".*isis\\.apache\\.org.*");
-            }
-        }
-        // tag::refguide[]
-    }
-
-    Map<String, String> toXsd(                 // <.>
-            Object domainObject, 
+    Map<String, String> toXsd(
+            Object domainObject,
             IsisSchemas isisSchemas);
 
-    // end::refguide[]
+
     class Simple implements JaxbService {
 
-        @Override @SneakyThrows @Nullable
+        @Override
+        @SneakyThrows
+        @Nullable
         public Object fromXml(
-                final @NonNull JAXBContext jaxbContext, 
-                final @Nullable String xml, 
+                final @NonNull JAXBContext jaxbContext,
+                final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
             try {
                 return internalFromXml(jaxbContext, xml, unmarshallerProperties);
@@ -130,12 +147,14 @@ public interface JaxbService {
             }
         }
 
-        @Override @SneakyThrows @Nullable
+        @Override
+        @SneakyThrows
+        @Nullable
         public <T> T fromXml(
-                final @NonNull Class<T> domainClass, 
-                final @Nullable String xml, 
+                final @NonNull Class<T> domainClass,
+                final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
-            
+
             try {
                 val jaxbContext = jaxbContextForClass(domainClass);
                 return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
@@ -144,17 +163,18 @@ public interface JaxbService {
             }
         }
 
-        @Override @SneakyThrows
+        @Override
+        @SneakyThrows
         public String toXml(
-                final @NonNull Object domainObject, 
-                final @Nullable Map<String, Object> marshallerProperties)  {
+                final @NonNull Object domainObject,
+                final @Nullable Map<String, Object> marshallerProperties) {
 
             val domainClass = domainObject.getClass();
             val jaxbContext = jaxbContextForObject(domainObject);
             try {
                 val marshaller = jaxbContext.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                
+
                 for (val entry : _NullSafe.entrySet(marshallerProperties)) {
                     marshaller.setProperty(entry.getKey(), entry.getValue());
                 }
@@ -179,7 +199,7 @@ public interface JaxbService {
             val useCache = true;
             return _Xml.jaxbContextFor(domainObject.getClass(), useCache);
         }
-        
+
         /**
          * Optional hook
          */
@@ -205,26 +225,27 @@ public interface JaxbService {
                 final @NonNull JAXBContext jaxbContext,
                 final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) throws JAXBException {
-            
-            if(xml==null) {
+
+            if (xml == null) {
                 return null;
             }
-            
+
             val unmarshaller = jaxbContext.createUnmarshaller();
-            
+
             for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
                 unmarshaller.setProperty(entry.getKey(), entry.getValue());
             }
-            
+
             configure(unmarshaller);
 
             val pojo = unmarshaller.unmarshal(new StringReader(xml));
             return pojo;
         }
-        
-        @Override @SneakyThrows
-        public Map<String,String> toXsd(
-                final @NonNull Object domainObject, 
+
+        @Override
+        @SneakyThrows
+        public Map<String, String> toXsd(
+                final @NonNull Object domainObject,
                 final @NonNull IsisSchemas isisSchemas) {
 
             val jaxbContext = jaxbContextForObject(domainObject);
@@ -234,9 +255,6 @@ public interface JaxbService {
 
             return outputResolver.asMap();
         }
-        
-    }
 
-    // tag::refguide[]
+    }
 }
-// end::refguide[]

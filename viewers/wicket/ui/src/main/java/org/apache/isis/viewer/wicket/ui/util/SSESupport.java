@@ -24,7 +24,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 /**
  * Server-sent events.
  *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * @see <a href="https://www.w3schools.com/html/html5_serversentevents.asp">www.w3schools.com</a> 
+ * 
  * 
  * @since 2.0
  */

@@ -21,6 +21,9 @@ package org.apache.isis.extensions.quartz;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @Configuration's

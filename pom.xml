@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	you under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,7 +22,7 @@
 
 	<name>Apache Isis (Aggregator)</name>
 	<description>
-        Convenience aggregator POM that references all modules, some explicitely, 
+        Convenience aggregator POM that references all modules, some explicitely,
         others via profiles, that are not activiated per default.
         The parent POM of the core framework is isis-parent/pom.xml.
     </description>
@@ -39,34 +39,43 @@
 		<tag>HEAD</tag>
 	</scm>
 
-	<!-- ESSENTIAL MODULES -->
-
-	<modules>
-		<!-- 
-		essential modules required to run web applications and tests;
-		non-essential modules can be added to the build via profiles
-		(as defined below);
-		
-		keep module declarations in alphabetical order!
-		
-		also keep profiles in sync with the site documentation
-		https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc 
-			-->
-		<module>core</module>
-		<module>extensions</module>
-		<module>isis-parent</module>
-		<module>mappings</module>
-		<module>mavendeps</module>
-		<module>starters</module>
-		<module>subdomains</module>
-		<module>testing</module>
-		<module>valuetypes</module>
-	</modules>
-
 	<profiles>
 
+		<!-- ESSENTIAL MODULES -->
+
+		<profile>
+			<id>essential</id>
+			<activation>
+				<property>
+					<name>!skip.essential</name>
+				</property>
+			</activation>
+			<modules>
+				<!--
+                essential modules required to run web applications and tests;
+                non-essential modules can be added to the build via profiles
+                (as defined below);
+
+                keep module declarations in alphabetical order!
+
+                also keep profiles in sync with the site documentation
+                https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
+                    -->
+				<module>core</module>
+				<module>extensions</module>
+				<module>isis-parent</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>valuetypes</module>
+			</modules>
+
+		</profile>
+
 		<!-- ALL MODULES -->
-		
+
 		<profile>
 			<id>module-all</id>
 			<activation>
@@ -78,12 +87,11 @@
 				<module>antora</module>
 				<module>examples/demo</module>
 				<module>incubator</module>
-				<module>legacy</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
 		</profile>
-		
+
 		<!-- NON-ESSENTIAL MODULES -->
 
 		<profile>
@@ -111,7 +119,7 @@
 				<module>incubator/viewers/javafx</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>module-examples-demo-wicket</id>
 			<activation>
@@ -125,8 +133,8 @@
 				<module>examples/demo/web</module>
 			</modules>
 		</profile>
-		
-		
+
+
 		<profile>
 			<id>module-examples-demo-vaadin</id>
 			<activation>
@@ -157,7 +165,7 @@
 				<module>incubator/viewers/vaadin</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>module-incubator-javafx</id>
 			<activation>
@@ -169,7 +177,7 @@
 				<module>incubator/viewers/javafx</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>module-incubator-kroviz</id>
 			<activation>
@@ -181,7 +189,7 @@
 				<module>incubator/clients/kroviz</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>module-incubator-vaadin</id>
 			<activation>
@@ -192,18 +200,6 @@
 			<modules>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/viewers/vaadin</module>
-			</modules>
-		</profile>
-		
-		<profile>
-			<id>module-legacy</id>
-			<activation>
-				<property>
-					<name>module-legacy</name>
-				</property>
-			</activation>
-			<modules>
-				<module>legacy</module>
 			</modules>
 		</profile>
 
@@ -220,7 +216,7 @@
 				<module>tooling</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>module-tooling</id>
 			<activation>

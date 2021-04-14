@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.testing.fixtures.applib.clock;
 
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.apache.isis.applib.clock.Clock;
 
 /**
  * This clock, for use by fixtures, can be set to specific time.
@@ -93,7 +91,7 @@ public class FixtureClock extends Clock {
     // //////////////////////////////////////////////////
 
     /**
-     * Access via {@link Clock#getTime()}.
+     * Access via {@link Clock#getInstance()}.
      *
      * <p>
      * Will just return the system time until {@link #setDate(int, int, int)} or

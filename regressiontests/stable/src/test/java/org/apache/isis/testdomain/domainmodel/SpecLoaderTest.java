@@ -32,14 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_headless.class,
                 Configuration_usingValidDomain.class,
                 
         }, 
@@ -64,12 +64,12 @@ class SpecLoaderTest {
         val spec1 = specificationLoader.loadSpecification(type);
         assertNotNull(spec1);
         
-        val specId = spec1.getSpecId();
+        val logicalType = spec1.getLogicalType();
         
-        val spec2 = specificationLoader.loadSpecification(specId);
+        val spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
         assertNotNull(spec2);
         
-        assertEquals(spec1.getSpecId(), spec2.getSpecId());
+        assertEquals(spec1.getLogicalType(), spec2.getLogicalType());
     }
     
     private static Stream<Class<?>> providePrimitiveTypes() {

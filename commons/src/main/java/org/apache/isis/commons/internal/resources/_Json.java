@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.apache.isis.commons.internal.base._Result;
+import org.apache.isis.commons.functional.Result;
 
 import lombok.val;
 
@@ -48,18 +48,7 @@ public class _Json {
 
     // -- STREAM CONTENT
 
-    /**
-     * Deserialize JSON content from given JSON content InputStream into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> T readJson(final Class<T> clazz, InputStream content) 
+    private static <T> T _readJson(final Class<T> clazz, final InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -71,24 +60,12 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<T> tryReadJson(final Class<T> clazz, InputStream content) {
-        return _Result.of(()->readJson(clazz, content));
+    public static <T> Result<T> readJson(final Class<T> clazz, final InputStream content) {
+        return Result.of(()->_readJson(clazz, content));
     }
 
-    /**
-     * Deserialize JSON content from given JSON content InputStream into an instance of List 
-     * with given {@code elementType}.
-     * @param <T>
-     * @param elementType
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> List<T> readJsonList(final Class<T> elementType, InputStream content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -100,29 +77,17 @@ public class _Json {
      * Either deserialize JSON content from given JSON content InputStream into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, InputStream content) {
-        return _Result.of(()->readJsonList(clazz, content));
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
+        return Result.of(()->_readJsonList(clazz, content));
     }
 
 
     // -- STRING CONTENT
 
-    /**
-     * Deserialize JSON content from given JSON content String into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> T readJson(final Class<T> clazz, String content) 
+    private static <T> T _readJson(final Class<T> clazz, final String content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -134,24 +99,12 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<T> tryReadJson(final Class<T> clazz, String content) {
-        return _Result.of(()->readJson(clazz, content));
+    public static <T> Result<T> readJson(final Class<T> clazz, final String content) {
+        return Result.of(()->_readJson(clazz, content));
     }
 
-    /**
-     * Deserialize JSON content from given JSON content String into an instance of List 
-     * with given {@code elementType}.
-     * @param <T>
-     * @param elementType
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> List<T> readJsonList(final Class<T> elementType, String content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final String content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -163,29 +116,17 @@ public class _Json {
      * Either deserialize JSON content from given JSON content String into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, String content) {
-        return _Result.of(()->readJsonList(clazz, content));
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final String content) {
+        return Result.of(()->_readJsonList(clazz, content));
     }
 
 
     // -- FILE CONTENT
 
-    /**
-     * Deserialize JSON content from given JSON content File into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> T readJson(final Class<T> clazz, File content) 
+    private static <T> T _readJson(final Class<T> clazz, final File content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -197,24 +138,12 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<T> tryReadJson(final Class<T> clazz, File content) {
-        return _Result.of(()->readJson(clazz, content));
+    public static <T> Result<T> readJson(final Class<T> clazz, final File content) {
+        return Result.of(()->_readJson(clazz, content));
     }
 
-    /**
-     * Deserialize JSON content from given JSON content File into an instance of List 
-     * with given {@code elementType}.
-     * @param <T>
-     * @param elementType
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> List<T> readJsonList(final Class<T> elementType, File content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, File content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -226,28 +155,16 @@ public class _Json {
      * Either deserialize JSON content from given JSON content File into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, File content) {
-        return _Result.of(()->readJsonList(clazz, content));
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final File content) {
+        return Result.of(()->_readJsonList(clazz, content));
     }
 
     // -- BYTE CONTENT
 
-    /**
-     * Deserialize JSON content from given JSON content byte[] into an instance of 
-     * given {@code clazz} type.
-     * @param <T>
-     * @param clazz
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> T readJson(final Class<T> clazz, byte[] content) 
+    private static <T> T _readJson(final Class<T> clazz, final byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
@@ -259,24 +176,12 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<T> tryReadJson(final Class<T> clazz, byte[] content) {
-        return _Result.of(()->readJson(clazz, content));
+    public static <T> Result<T> readJson(final Class<T> clazz, final byte[] content) {
+        return Result.of(()->_readJson(clazz, content));
     }
 
-    /**
-     * Deserialize JSON content from given JSON content byte[] into an instance of List 
-     * with given {@code elementType}.
-     * @param <T>
-     * @param elementType
-     * @param content
-     * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static <T> List<T> readJsonList(final Class<T> elementType, byte[] content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -288,33 +193,31 @@ public class _Json {
      * Either deserialize JSON content from given JSON content byte[] into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
-     * @return
      */
-    public static <T> _Result<List<T>> tryReadJsonList(final Class<T> clazz, byte[] content) {
-        return _Result.of(()->readJsonList(clazz, content));
+    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
+        return Result.of(()->_readJsonList(clazz, content));
     }
     
     // -- WRITING
 
-    public static String toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
+    private static String _toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
         return objectMapper.writeValueAsString(pojo);
     }
     
+    public static Result<String> toString(ObjectMapper objectMapper, Object pojo) {
+        return Result.of(()->_toString(objectMapper, pojo));
+    }
     
-    public static String toString(Object pojo) throws JsonProcessingException {
+    private static String _toString(Object pojo) throws JsonProcessingException {
         val objectMapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT);
-        return toString(objectMapper, pojo);
+        return _toString(objectMapper, pojo);
     }
-    
-    public static <T> _Result<String> tryToString(ObjectMapper objectMapper, Object pojo) {
-        return _Result.of(()->toString(objectMapper, pojo));
-    }
-    
-    public static <T> _Result<String> tryToString(Object pojo) {
-        return _Result.of(()->toString(pojo));
+        
+    public static Result<String> toString(Object pojo) {
+        return Result.of(()->_toString(pojo));
     }
 
 }

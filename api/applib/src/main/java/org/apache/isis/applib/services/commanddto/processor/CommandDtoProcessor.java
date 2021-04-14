@@ -23,11 +23,11 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 /**
  * Refine (or possibly ignore) a command when replicating from primary
  * to secondary.
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface CommandDtoProcessor {
 
-    // end::refguide[]
     /**
      * The implementation can if necessary refine or alter the
      * {@link CommandDto} to be replicated from primary to secondary.
@@ -41,10 +41,8 @@ public interface CommandDtoProcessor {
      * @return <tt>null</tt> means that the command's DTO is effectively
      *         excluded.
      */
-    // tag::refguide[]
-    CommandDto process(CommandDto commandDto);   // <.>
+    CommandDto process(CommandDto commandDto);
 
-    // end::refguide[]
     /**
      * Convenience implementation to simply indicate that no DTO should be
      * returned for a command, effectively ignoring it for replication purposes.
@@ -56,6 +54,4 @@ public interface CommandDtoProcessor {
         }
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

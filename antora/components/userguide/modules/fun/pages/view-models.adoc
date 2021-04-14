@@ -1,0 +1,355 @@
+[#view-models]
+= View Models
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+As described in the xref:userguide:fun:overview.adoc#view-models[overview], view models are generally domain objects concerned with facilitating or optimising a particular business process.
+As such, they bring together the domain entities involved in that process and provide actions to be performed against or on those domain entities.
+
+Such view models are generally considered to reside in the application layer, and -- unlike domain entities -- their state is _not_ persisted to a database.
+Instead, it is serialized into its identifier (in effect, its URL).
+The framework unpacks this URL to infer/recreate the view model's state with each interaction.
+
+
+The framework provides three ways to implement a view model:
+
+* Annotating the class using JAXB annotations; this allows the state of the object's properties and also its collections.
++
+The serialized form of these view models is therefore XML, which also enables these view models to act as DTO (useful for various integration scenarios).
+
+* Using Apache Isis specific annotations.
++
+This is more concise, but less powerful: only the state of the object's properties is serialized -- collections are ignored -- and not every datatype is recognized.
++
+On the other hand, they are more likely to perform better.
+
+* Implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface.
++
+With this option you take full control of the marshalling and unmarshalling of the object's state to/from a string.
+
+
+These options are discussed in more detail in the sections below.
+
+[[jaxb]]
+== JAXB View Models
+
+Here's a typical example of a JAXB view model, to allow (certain properties of) two ``Customer``s to be compared:
+
+[source,java]
+.CompareCustomers.java, using JAXB
+----
+@XmlRootElement(name = "compareCustomers")          // <.>
+@XmlType(
+        propOrder = {                               // <.>
+            "customer1",
+            "customer2"
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)               // <.>
+public class CompareCustomers {
+
+    @XmlElement(required = true)                    // <.>
+    @Getter @Setter
+    Customer customer1;
+
+    @XmlElement(required = true)                    // <.>
+    @Getter @Setter
+    Customer customer2;
+
+    @XmlTransient                                   // <.>
+    public String getCustomer1Name() {
+        return getCustomer1().getName();
+    }
+
+    @XmlTransient                                   // <.>
+    public String getCustomer2Name() {
+        return getCustomer2().getName();
+    }
+
+    ...
+}
+----
+
+<.> The JAXB xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement] annotation indicates this is a view model to Apache Isis, which then uses JAXB to serialize the state of the view model between interactions
+
+<.> Optionally, the properties of the view model can be listed using the `XmlType#propOrder` attribute. +
+This is an all-or-nothing affair: either all properties must be listed, or else the annotation omitted.
+
+<.> Specifying field accessor type allows the Lombok `@Getter` and `@Setter` annotations to be used.
+
+<.> The `@XmlElement` indicates the property is part of the view model's state.
+For collections, the `@XmlElementWrapper` would also typically be used.
+
+<.> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB. +
+The derived properties could also have been implemented using xref:userguide:fun:overview.adoc#mixins[mixins].
+
+[IMPORTANT]
+====
+Be aware that all the state will ultimately converted into a URL-safe form (by way of the xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]).
+
+There are limits to the lengths of URLs, however.
+If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
+====
+
+
+
+[#referencing-domain-entities]
+=== Referencing Domain Entities
+
+It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.
+For example, the `CompareCustomers` view model described xref:userguide:fun:view-models.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
+
+It wouldn't make sense to serialize out the state of a persistent entity.
+However, the identity of the underlying entity is well defined; Apache Isis defines the xref:refguide:schema:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
+This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
+
+There is only one requirement to make this work: every referenced domain entity must be annotated with xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter], specifying the framework-provided `PersistentEntityAdapter`.
+And this class is similar to the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService]: it knows how to create an `OidDto` from an object reference.
+
+Thus, in our view model we can legitimately write:
+
+[source,java]
+----
+public class CompareCustomers {
+
+    @XmlElement(required = true)
+    @Getter @Setter
+    Customer customer1;
+    ...
+}
+----
+
+All we need to do is remember to add that `@XmlJavaTypeAdapter` annotation to the referenced entity:
+
+[source,java]
+----
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+public class Customer ...  {
+    ...
+}
+----
+
+It's also possible for a DTO view models to hold collections of objects.
+These can be of any type, either simple properties, or references to other objects.
+The only bit of boilerplate that is required is the `@XmlElementWrapper` annotation.
+This instructs JAXB to create an XML element (based on the field name) to contain each of the elements.
+(If this is omitted then the contents of the collection are at the same level as the properties; almost certainly not what is required).
+
+For example, we could perhaps generalize the view model to hold a set of ``Customer``s to be compared:
+
+[source,java]
+----
+public class CompareCustomers {
+    ...
+    @XmlElementWrapper
+    @XmlElement(name = "customers")
+    @Getter @Setter
+    protected List<Customer> customersToCompare = Lists.newArrayList();
+}
+----
+
+
+[[joda-datatypes]]
+=== JODA Time Datatypes
+
+If your JAXB view model contains fields using the JODA datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
+
+The Apache Isis applib provides a number of adapters to use out-of-the-box.
+For example:
+
+[source,java]
+----
+@XmlRootElement(name = "categorizeIncomingInvoice")
+@XmlType(
+        propOrder = {
+                ...
+                "dateReceived",
+                ...
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class IncomingInvoiceViewModel extends IncomingOrderAndInvoiceViewModel {
+
+    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    private LocalDate dateReceived;
+
+    ...
+}
+----
+
+The full list of adapter classes are:
+
+.JAXB adapters
+[cols="1a,2a",options="header"]
+|===
+
+| JODA datatype
+| Adapter
+
+.2+| `org.joda.time.DateTime`
+| `JodaDateTimeStringAdapter.ForJaxb`
+| `JodaDateTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+.2+| `org.joda.time.LocalDate`
+| `JodaLocalDateStringAdapter.ForJaxb`
+| `JodaLocalDateXMLGregorianCalendarAdapter.ForJaxb`
+
+.2+| `org.joda.time.LocalDateTime`
+| `JodaLocalDateTimeStringAdapter.ForJaxb`
+| `JodaLocalDateTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+
+.2+| `org.joda.time.LocalTime`
+| `JodaLocalTimeStringAdapter.ForJaxb`
+| `JodaLocalTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+| `java.sql.Timestamp`
+| `JavaSqlTimestampXmlGregorianCalendarAdapter.ForJaxb`
+
+
+|===
+
+[TIP]
+====
+If you want use other Joda data types, check out link:http://blog.bdoughan.com/2011/05/jaxb-and-joda-time-dates-and-times.html[this blog post].
+====
+
+
+
+[[non-jaxb]]
+== Non-JAXB View Models
+
+Instead of using JAXB to specify a view model, it is also possible to use the xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] with a xref:refguide:applib:index/annotation/DomainObject.adoc#nature[nature] of xref:refguide:applib:index/annotation/Nature.adoc#VIEW_MODEL[VIEW_MODEL].
+
+This approach is not as powerful as using the JAXB-style of view models, because only the state of properties -- not collections -- is serialized, and moreover only certain data types are recognised.
+On the plus side, it takes less effort.
+
+For example:
+
+[source,java]
+.CompareCustomers.java, using @DomainObject(nature = VIEW_MODEL)
+----
+@DomainObject(nature = Nature.VIEW_MODEL)           // <.>
+public class CompareCustomers {
+
+    @Property                                       // <.>
+    @Getter @Setter
+    Customer customer1;
+
+    @Property                                       // <2>
+    @Getter @Setter
+    Customer customer2;
+
+    public String getCustomer1Name() {
+        return getCustomer1().getName();
+    }
+
+    public String getCustomer2Name() {
+        return getCustomer2().getName();
+    }
+
+    ...
+}
+----
+
+<.> declares the domain object as a view model
+<.> fields must be annotated with `@Property` so that they are part of the metamodel.
++
+Note that they do _not_ need to be visible, however.
+
+
+
+[[view-model-interface]]
+== `ViewModel` interface
+
+The most flexible approach to implement a view model is to implement the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface.
+
+For example:
+
+[source,java]
+.CompareCustomers.java, using ViewModel interface
+----
+@DomainObject
+public class CompareCustomers implements ViewModel {    // <.>
+
+    public String viewModelMemento() {                  // <.>
+        return getCustomer1().getRef() + ":"
+             + getCustomer2().getRef();
+    }
+    public void viewModelInit(String memento) {         // <.>
+        val ref1 = memento.split[":"](0);
+        customer1 = customerRepository.findByRef(ref1));
+        val ref2 = memento.split[":"](1);
+        customer2 = customerRepository.findByRef(ref2);
+    }
+
+    @Getter @Setter
+    Customer customer1;
+
+    @Getter @Setter
+    Customer customer2;
+
+    public String getCustomer1Name() {
+        return getCustomer1().getName();
+    }
+
+    public String getCustomer2Name() {
+        return getCustomer2().getName();
+    }
+
+    @Inject
+    CustomerRepository customerRepository;
+
+    ...
+}
+----
+
+
+
+== Self-persisting Domain entities
+
+Sometimes we may have domain entities whose persistence is _not_ managed by JDO or JPA mechanism, in other words they take responsibility for their own persistence.
+
+We can characterise these as:
+
+* external entities
++
+For example the application may interact synchronously with state exposed on another system through a REST or SOAP API.
+In this case the entity with your Apache Isis application is a proxy or a facade for the state on the external system
+
+* internal entities
++
+For example the entity might include a data structure that is best persisted in a custom datastore, for example a graph database such as neo4j.
+
+Because such entities are responsible for their own state management, the framework provides the xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject].
+This is almost identical to xref:refguide:applib:index/ViewModel.adoc[ViewModel]
+
+For example:
+
+[source,java]
+.Gravatar.java
+----
+@DomainObject
+public class Gravatar implements RecreatableDomainObject {  // <.>
+
+    public String __isis_memento() {                        // <.>
+        return this.emailAddress;
+    }
+
+    public void __isis_recreate(String memento) {           // <.>
+        this.emailAddress = memento;
+        GravatarData gd =
+            gravatarService.lookupGravatar(emailAddress);
+        this.image = gd.image();
+    }
+
+    @Inject GravatarService gravatarService;
+}
+----
+
+<.> implements `RecreatableDomainObject`
+<.> returns a memento of the state of this object.
+
+Of course, you could also implement this as a JAXB view model or any of the other techniques described above.

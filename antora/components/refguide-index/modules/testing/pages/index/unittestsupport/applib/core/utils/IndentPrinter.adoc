@@ -1,0 +1,120 @@
+= IndentPrinter
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Adapted from `groovy.util.IndentPrinter` (published under ASL 2.0).
+
+== API
+
+[source,java]
+.IndentPrinter.java
+----
+class IndentPrinter {
+  IndentPrinter()     // <.>
+  IndentPrinter(Writer out)     // <.>
+  IndentPrinter(Writer out, String indent)     // <.>
+  IndentPrinter(Writer out, String indent, boolean addNewlines)     // <.>
+  void println(String text)     // <.>
+  void print(String text)     // <.>
+  void print(char c)     // <.>
+  void printIndent()     // <.>
+  void println()     // <.>
+  void incrementIndent()
+  void decrementIndent()
+  int getIndentLevel()
+  void setIndentLevel(int indentLevel)
+  void flush()
+}
+----
+
+<.> xref:#IndentPrinter__[IndentPrinter()]
++
+--
+Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
+--
+<.> xref:#IndentPrinter__Writer[IndentPrinter(Writer)]
++
+--
+Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
+--
+<.> xref:#IndentPrinter__Writer_String[IndentPrinter(Writer, String)]
++
+--
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
+--
+<.> xref:#IndentPrinter__Writer_String_boolean[IndentPrinter(Writer, String, boolean)]
++
+--
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
+--
+<.> xref:#println__String[println(String)]
++
+--
+Prints a string followed by an end of line character.
+--
+<.> xref:#print__String[print(String)]
++
+--
+Prints a string.
+--
+<.> xref:#print__char[print(char)]
++
+--
+Prints a character.
+--
+<.> xref:#printIndent__[printIndent()]
++
+--
+Prints the current indent level.
+--
+<.> xref:#println__[println()]
++
+--
+Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.
+--
+
+== Members
+
+[#IndentPrinter__]
+=== IndentPrinter()
+
+Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
+
+[#IndentPrinter__Writer]
+=== IndentPrinter(Writer)
+
+Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
+
+[#IndentPrinter__Writer_String]
+=== IndentPrinter(Writer, String)
+
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
+
+[#IndentPrinter__Writer_String_boolean]
+=== IndentPrinter(Writer, String, boolean)
+
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
+
+[#println__String]
+=== println(String)
+
+Prints a string followed by an end of line character.
+
+[#print__String]
+=== print(String)
+
+Prints a string.
+
+[#print__char]
+=== print(char)
+
+Prints a character.
+
+[#printIndent__]
+=== printIndent()
+
+Prints the current indent level.
+
+[#println__]
+=== println()
+
+Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.

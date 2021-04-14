@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	you under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,7 +26,7 @@
 
 	<name>Apache Isis - Tooling</name>
 	<description>
-        Libraries and tools not depending on the _Apache Isis Core_ ecosystem, 
+        Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
         eg. code mining, automated documentation.
         (Targeted for JVM 11+)
     </description>
@@ -34,17 +34,20 @@
 	<packaging>pom</packaging>
 
 	<properties>
-	
+
 		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
 
-		<asciidoctorj.version>2.4.2</asciidoctorj.version>
-		<gradle-tooling.version>6.6.1</gradle-tooling.version>
-		<maven-model-builder.version>3.6.3</maven-model-builder.version>
-		<picocli.version>4.5.2</picocli.version>
-		<structurizr.version>1.5.0</structurizr.version>
+		<asciidoctorj.version>2.4.3</asciidoctorj.version>
+		<gradle-tooling.version>7.0</gradle-tooling.version>
+		<maven-model-builder.version>3.8.1</maven-model-builder.version>
+		<picocli.version>4.6.1</picocli.version>
+		<jsoup.version>1.13.1</jsoup.version>
+		<structurizr.version>1.6.2</structurizr.version>
 
 	</properties>
 
@@ -87,7 +90,7 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				
+
 				<!-- APACHE ISIS customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
@@ -136,7 +139,7 @@
 					</excludes>
 					<licenses>
 						<license
-								implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+							implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 							<licenseFamilyCategory>AL2  </licenseFamilyCategory>
 							<licenseFamilyName>Apache License 2.0</licenseFamilyName>
 							<notes />
@@ -148,7 +151,7 @@
 					</licenses>
 					<licenseFamilies>
 						<licenseFamily
-								implementation="org.apache.rat.license.SimpleLicenseFamily">
+							implementation="org.apache.rat.license.SimpleLicenseFamily">
 							<familyName>Apache License 2.0</familyName>
 						</licenseFamily>
 					</licenseFamilies>
@@ -193,6 +196,12 @@
 				<version>${project.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.tooling</groupId>
+				<artifactId>isis-tooling-java2adoc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<!-- EXTERNAL -->
 
 			<dependency>
@@ -217,6 +226,12 @@
 				<groupId>info.picocli</groupId>
 				<artifactId>picocli</artifactId>
 				<version>${picocli.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>${jsoup.version}</version>
 			</dependency>
 
 			<dependency>
@@ -254,7 +269,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
-			<version>1.3.1.Final</version>
+			<version>1.4.2.Final</version>
 		</dependency>
 
 		<!-- @Nullable -->
@@ -267,8 +282,8 @@
 
 		<!-- LOGGING -->
 
-		<!-- Add Log4j2 Dependency, as a replacement for Spring's default 'logback'. 
-			This requires for the 'spring-boot-starter' to exclude the default logging 
+		<!-- Add Log4j2 Dependency, as a replacement for Spring's default 'logback'.
+			This requires for the 'spring-boot-starter' to exclude the default logging
 			artifact 'org.springframework.boot:spring-boot-starter-logging' see https://www.callicoder.com/spring-boot-log4j-2-example/ -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -313,6 +328,7 @@
 		<module>model4adoc</module>
 		<module>javamodel</module>
 		<module>projectmodel</module>
+		<module>java2adoc</module>
 
 		<!-- depends on all the others -->
 		<module>cli</module>

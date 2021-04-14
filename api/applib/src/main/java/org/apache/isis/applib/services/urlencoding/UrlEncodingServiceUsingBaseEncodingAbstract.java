@@ -24,10 +24,10 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * to use, subclass and annotated with:
- * <pre>
- * &#064;DomainService(nature=DOMAIN, menuOrder="100")
- * </pre>
+ * Provided as a convenient base class for providing alternative
+ * implementations of {@link UrlEncodingService}.
+ *
+ * @since 1.x {@index}
  */
 public abstract class UrlEncodingServiceUsingBaseEncodingAbstract implements UrlEncodingService {
 

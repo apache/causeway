@@ -34,17 +34,20 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.subdomains.base.applib.Chained;
 
-public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>> 
+/**
+ * @since 2.0 {@index}
+ */
+public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
         extends WithIntervalMutable<T>, Comparable<T> {
 
-    
+
     /**
      * The interval that immediately precedes this one, if any.
-     * 
+     *
      * <p>
      * The predecessor's {@link #getEndDate() end date} is the day before this interval's
      * {@link #getStartDate() start date}.
-     * 
+     *
      * <p>
      * Implementations where successive intervals are NOT contiguous should instead implement {@link Chained}.
      */
@@ -53,43 +56,43 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
 
     /**
      * The interval that immediately succeeds this one, if any.
-     * 
+     *
      * <p>
      * The successor's {@link #getStartDate() start date} is the day after this interval's
      * {@link #getEndDate() end date}.
-     * 
+     *
      * <p>
      * Implementations where successive intervals are NOT contiguous should instead implement {@link Chained}.
      */
     @Property(editing = Editing.DISABLED, hidden=Where.ALL_TABLES, optionality = Optionality.OPTIONAL)
     public T getSuccessor();
-    
-    
+
+
 
     /**
      * Show this {@link WithIntervalContiguous} in context with its
      * predecessors and successors.
-     * 
+     *
      * <p>
      * This will typically (always) be a derived collection obtained
      * by filtering a collection of the "parent".
      */
     @Property(editing = Editing.DISABLED)
     public SortedSet<T> getTimeline();
-    
+
 
     // //////////////////////////////////////
 
-    
+
     public interface Factory<T extends WithIntervalContiguous<T>> {
         T newRole(LocalDate startDate, LocalDate endDate);
     }
-    
+
     /**
      * Helper class for implementations to delegate to.
      */
     public static class Helper<T extends WithIntervalContiguous<T>> {
-        
+
         private final T withInterval;
         public Helper(final T withInterval) {
             this.withInterval = withInterval;
@@ -98,7 +101,7 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
         // //////////////////////////////////////
 
         public T succeededBy(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate,
                 final WithIntervalContiguous.Factory<T> factory) {
             final WithInterval<?> successor = withInterval.getSuccessor();
@@ -114,7 +117,7 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
         }
 
         public String validateSucceededBy(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate) {
             if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
                 return "End date cannot be earlier than start date";
@@ -133,15 +136,15 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
             }
             return null;
         }
-        
+
         // //////////////////////////////////////
 
 
         public T precededBy(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate,
                 final WithIntervalContiguous.Factory<T> factory) {
-            
+
             final WithInterval<?> predecessor = withInterval.getPredecessor();
             if(predecessor != null) {
                 predecessor.setEndDate(dayBeforeElseNull(startDate));
@@ -149,13 +152,13 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
             withInterval.setStartDate(dayAfterElseNull(endDate));
             return factory.newRole(startDate, endDate);
         }
-         
+
         public LocalDate default2PrecededBy() {
             return dayBeforeElseNull(withInterval.getStartDate());
         }
 
         public String validatePrecededBy(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate) {
             if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
                 return "End date cannot be earlier than start date";
@@ -213,13 +216,13 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
             .filter(filter)
             .collect(Collectors.toCollection(TreeSet::new));
         }
-        
+
         // //////////////////////////////////////
 
         public T changeDates(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate) {
-            
+
             final T predecessor = withInterval.getPredecessor();
             if(predecessor != null) {
                 predecessor.setEndDate(dayBeforeElseNull(startDate));
@@ -236,13 +239,13 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
         public LocalDate default0ChangeDates() {
             return withInterval.getEffectiveInterval().startDate();
         }
-        
+
         public LocalDate default1ChangeDates() {
             return withInterval.getEffectiveInterval().endDate();
         }
 
         public String validateChangeDates(
-                final LocalDate startDate, 
+                final LocalDate startDate,
                 final LocalDate endDate) {
 
             if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
@@ -268,7 +271,7 @@ public interface WithIntervalContiguous<T extends WithIntervalContiguous<T>>
             }
             return null;
         }
-        
+
         // //////////////////////////////////////
 
         private static LocalDate dayBeforeElseNull(final LocalDate date) {

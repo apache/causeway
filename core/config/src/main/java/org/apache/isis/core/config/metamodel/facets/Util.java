@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.config.metamodel.facets;
 
-public final class Util {
+final class Util {
 
     private Util(){}
 

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.function.Function;
 
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -30,14 +31,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to
- * applying either {@link org.apache.isis.applib.annotation.ViewModel} annotation or
+ * applying either {@link org.apache.isis.applib.annotation.DomainObject} annotation with 
+ * {@link Nature} = {@link Nature#VIEW_MODEL}  or
  * {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
  *
  * <p>
- *     Note: this facet is called &quot;ViewModelFacet&quot; for historical reasons; a better name would be
- *     &quot;RecreatableObjectFacet&quot;.  The old name has been retained only to avoid unnecessarily breaking
- *     some add-ons (eg Isis Addons Excel Module) that use this facet.
- * </p>
+ * Note: this facet is called &quot;ViewModelFacet&quot; for historical reasons; a better name would be
+ * &quot;RecreatableObjectFacet&quot;.  The old name has been retained only to avoid unnecessarily breaking
+ * some add-ons (eg Isis Addons Excel Module) that use this facet.
  */
 public interface ViewModelFacet extends Facet {
 

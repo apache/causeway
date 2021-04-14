@@ -20,6 +20,9 @@ package org.apache.isis.extensions.commandreplay.secondary.analyser;
 
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface CommandReplayAnalyser {
 
     /**

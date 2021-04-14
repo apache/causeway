@@ -34,7 +34,7 @@ import lombok.val;
 public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
-        final String domainType = objectSpecification.getSpecId().asString();
+        final String domainType = objectSpecification.getLogicalTypeName();
         final String actionId = objectAction.getId();
         final String url = "domain-types/" + domainType + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);

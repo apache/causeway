@@ -22,65 +22,61 @@ package org.apache.isis.viewer.wicket.model.isis;
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.core.config.IsisConfiguration;
 
 public interface WicketViewerSettings extends Serializable {
 
     /**
-     * as per {@link IsisConfiguration.Viewer.Wicket#setMaxTitleLengthInStandaloneTables(int)}
+     * as per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setMaxTitleLengthInStandaloneTables(int)}
      */
     int getMaxTitleLengthInStandaloneTables();
 
     /**
-     * as per {@link IsisConfiguration.Viewer.Wicket#setMaxTitleLengthInParentedTables(int)}
-     * @return
+     * as per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setMaxTitleLengthInParentedTables(int)}
      */
     int getMaxTitleLengthInParentedTables();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setDatePattern(String)}
-     * @return
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setDatePattern(String)}
      */
     String getDatePattern();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setDateTimePattern(String)}
-     * @return
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setDateTimePattern(String)}
      */
     String getDateTimePattern();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setReplaceDisabledTagWithReadonlyTag(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setReplaceDisabledTagWithReadonlyTag(boolean)}
      */
     boolean isReplaceDisabledTagWithReadonlyTag();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setPreventDoubleClickForFormSubmit(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setPreventDoubleClickForFormSubmit(boolean)}
      */
     boolean isPreventDoubleClickForFormSubmit();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setPreventDoubleClickForNoArgAction(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setPreventDoubleClickForNoArgAction(boolean)}
      */
     boolean isPreventDoubleClickForNoArgAction();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setUseIndicatorForFormSubmit(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setUseIndicatorForFormSubmit(boolean)}
      */
     boolean isUseIndicatorForFormSubmit();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setUseIndicatorForNoArgAction(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setUseIndicatorForNoArgAction(boolean)}
      */
     boolean isUseIndicatorForNoArgAction();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setPromptStyle(PromptStyle)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setPromptStyle(PromptStyle)}
      */
     PromptStyle getPromptStyle();
 
     /**
-     * As per {@link IsisConfiguration.Viewer.Wicket#setRedirectEvenIfSameObject(boolean)}
+     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setRedirectEvenIfSameObject(boolean)}
      */
     boolean isRedirectEvenIfSameObject();
 

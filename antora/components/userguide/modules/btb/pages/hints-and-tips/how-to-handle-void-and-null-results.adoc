@@ -1,0 +1,80 @@
+[[how-to-handle-void-and-null-results]]
+= How to handle void/null results
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+From this link:http://isis.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Isis users mailing list:
+
+* _When using a `void` action, let's say a remove action, the user is redirected to a
+page "no results".
+When clicking the back button in the browser the user sees "Object not found" (since you've just deleted this object)._
+
+* _You can return a list for example to prevent the user from being redirect to a
+  "No results" page, but I think it's not the responsibility of the controllers in
+  the domain model._
+
+* _A solution could be that wicket viewer goes back one page when
+  encountering a deleted object.
+And refresh the current page when receiving a null response or invoking a void action.
+But how to implement this?_
+
+One way to implement this idea is to provide a custom implementation of the xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService] SPI domain service.
+The default implementation will either return the current object (if not null), else the home page (as defined by xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]) if one exists.
+
+The following custom implementation refines this to use the breadcrumbs (available in the Wicket viewer) to return the first non-deleted domain object found in the list of breadcrumbs:
+
+[source,java]
+----
+import org.springframework.stereotype.Service;
+import lombok.val;
+
+@Service
+@Order(OrderPrecedence.HIGH)                                              // <.>
+public class RoutingServiceUsingBreadcrumbs
+                  extends RoutingServiceDefault {
+    @Override
+    public Object route(final Object original) {
+        if(original != null) {                                            // <.>
+            return original;
+        }
+        repositoryService.flush();                                        // <.>
+
+        val breadcrumbModelProvider =                                     // <.>
+            (BreadcrumbModelProvider) AuthenticatedWebSession.get();
+        val breadcrumbModel = breadcrumbModelProvider.getBreadcrumbModel();
+        final List<EntityModel> breadcrumbs = breadcrumbModel.getList();
+
+        val firstViewModelOrNonDeletedPojoIfAny =
+                breadcrumbs.stream()                                      // <.>
+                .filter(entityModel -> entityModel != null)
+                .map(EntityModel::getObject)                              // <.>
+                .filter(Objects::nonNull)
+                .map(ManagedObject::getObject)                            // <.>
+                .filter(pojo ->
+                  metamodelService.sortOf(pojo, RELAXED) == VIEW_MODEL)   // <.>
+                .findFirst();
+
+        return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());    // <.>
+    }
+    private Object homePage() {
+        return homePageResolverService.homePage();
+    }
+
+    @Inject HomePageResolverService homePageResolverService;
+    @Inject MetaModelService metaModelService;
+    @Inject RepositoryService repositoryService;
+}
+----
+<.> override the default imlpementation
+<.> if a non-null object was returned, then return this
+<.> ensure that any persisted objects have been deleted.
+<.> reach inside the Wicket viewer's internals to obtain the list of breadcrumbs.
+<.> loop over all breadcrumbs
+<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's representation (`ManagedObject`)
+<.> unwrap the Isis runtime's representation of each domain object (`ManagedObject`) to the domain object pojo itself
+<.> if object is persistable (not a view model) then make sure it is not deleted
+<.> return the first object if any, otherwise the home page object (if any).
+

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -47,7 +48,7 @@ implements ActionDomainEventFacet {
 
     @Getter @Setter private Class<? extends ActionDomainEvent<?>> eventType;
     private final TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
     private final DomainEventHelper domainEventHelper;
 
     public ActionDomainEventFacetAbstract(
@@ -59,7 +60,8 @@ implements ActionDomainEventFacet {
 
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+        this.translationContext = TranslationContext.forTranslationContextHolder(
+                ((IdentifiedHolder)holder).getIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

@@ -1,7 +1,0 @@
-include::refguide:ROOT:partial$module-nav.adoc[]
-include::refguide:applib-ant:partial$module-nav.adoc[]
-include::refguide:applib-methods:partial$module-nav.adoc[]
-include::refguide:applib-classes:partial$module-nav.adoc[]
-include::refguide:applib-svc:partial$module-nav.adoc[]
-include::refguide:config:partial$module-nav.adoc[]
-include::refguide:schema:partial$module-nav.adoc[]

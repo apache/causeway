@@ -20,6 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.util.List;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Lorem extends AbstractRandomValueGenerator {
 
     com.github.javafaker.Lorem javaFakerLorem;

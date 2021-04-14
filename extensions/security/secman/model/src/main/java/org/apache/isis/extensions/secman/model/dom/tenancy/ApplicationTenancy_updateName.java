@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
@@ -28,24 +28,26 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.UpdateNa
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateNameDomainEvent.class, associateWith = "name", 
-associateWithSequence = "1")
+@Action(
+        domainEvent = UpdateNameDomainEvent.class, 
+        associateWith = "name")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateName {
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(
             @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
             @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
             final String name) {
-        holder.setName(name);
-        return holder;
+        target.setName(name);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
-        return holder.getName();
+        return target.getName();
     }
 }

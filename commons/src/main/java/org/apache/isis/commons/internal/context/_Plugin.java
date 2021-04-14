@@ -82,7 +82,6 @@ public final class _Plugin {
      * @param pluginClass
      * @param onAmbiguity what to do if more than one matching plugin is found
      * @param onNotFound what to do if no matching plugin is found
-     * @return
      */
     public static <S> S getOrElse(Class<S> pluginClass, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
 
@@ -150,12 +149,14 @@ public final class _Plugin {
 
     /**
      * Loads a plugin by name and class-path. (Most likely used by JUnit Tests.)
-     * @param pluginClass
+     * @param pluginInterfaceClass
      * @param classPath
      * @param pluginFullyQualifiedClassName
-     * @return
      */
-    public static <S> S load(Class<S> pluginInterfaceClass, File classPath, String pluginFullyQualifiedClassName) {
+    public static <S> S load(
+            Class<S> pluginInterfaceClass, 
+            File classPath, 
+            String pluginFullyQualifiedClassName) {
 
         try {
 

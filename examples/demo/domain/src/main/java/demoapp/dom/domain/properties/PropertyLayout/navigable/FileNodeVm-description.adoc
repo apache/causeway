@@ -1,0 +1,100 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `navigable` element allows the viewer to construct a breadcrumb trail.
+It is commonly used with objects forming a hierarchy, and so often is used in conjunction with the `TreeNode` value type.
+
+This app uses the filesystem of the host computer to illustrate the idea:
+
+* The view model object you are viewing -- `FileNode` -- represents either a directory or a file within that filesystem.
+
+* Every instance of `FileNode` shows the same `TreeNode` instance, on the left hand side.
+This allows the user to drill into the tree and inspect the individual files, without "losing their place".
+
+The mechanics of creating the tree are shown below.
+But first, let's discuss the `navigable` element as a means to construct breadcrumbs.
+
+== Navigable (Breadcrumbs)
+
+For all ``FileNode``s a breadcrumb trail is rendered.
+The one node where this is not visible is the initial root node (see the `path` property), because it has no parent.
+
+The framework constructs the breadcrumbs using the value returned by the property with the `navigable` element.
+This hint should be used on no more than one property of the object, and points back to the logical parent of the domain object:
+
+[source,java,indent=0]
+----
+include::FileNodeVm.java[tags=navigable]
+----
+
+In the case of this demo app, the parent also happens to be a `FileNode`.
+However, in general, any type of the parent can be different from the type of the child.
+The returned parent is itself queried recursively, until eventually an object is returned that has no parent.
+The framework renders the breadcrumbs from this sequence of parents.
+
+TIP: For a domain entity, the implementation above would be a lookup of the parent entity from a repository.
+For a view model, we can simply instantiate the parent (view models have value semantics in this respect).
+
+
+
+It's common for hierarchical objects to indicate their nature using an icon:
+
+[source,java,indent=0]
+----
+include::FileNodeVm.java[tags=iconName]
+----
+
+where `FileNodeType` is:
+
+[source,java,indent=0]
+----
+include::FileNodeType.java[tags=class]
+----
+
+Note that there are SVG files for each of the instances of this enum, namely `FileNodeVm-FILE_SYSTEM_ROOT.svg`, `FileNodeVm-DIRECTORY.svg` and `FileNodeVm-FILE.svg`.
+
+
+== Tree
+
+As described above, every `FileNode` renders the same tree:
+
+[source,java,indent=0]
+----
+include::FileNodeVm.java[tags=tree]
+----
+
+The tree instance itself is cached by a `FileTreeNodeService`, so that there is no need to track the state of the tree (which nodes are expanded etc).
+The `FileTreeNodeService` in turn uses `HttpSession` as the actual in-memory cache:
+
+[source,java,indent=0]
+----
+include::FileTreeNodeService.java[tags=sessionTree]
+----
+
+The `TreeNode` value type itself is created using:
+
+[source,java,indent=0]
+----
+include::FileTreeNodeService.java[tags=newTree]
+----
+
+This requires an implementation of the `TreeAdapter<T>` SPI, discussed next.
+
+=== TreeAdapter SPI
+
+To render a `TreeNode`, the application must provide an implementation of the `TreeAdapter<T>` SPI:
+
+[source,java]
+----
+public interface TreeAdapter<T> {
+    public Optional<T> parentOf(T value);
+    public int childCountOf(T value);
+    public Stream<T> childrenOf(T value);
+}
+----
+
+In the case of the demo app, the implementation is `FileSystemTreeAdapter`, which navigate the host computer's filesystem:
+
+[source,java,indent=0]
+----
+include::FileSystemTreeAdapter.java[tags=class]
+----

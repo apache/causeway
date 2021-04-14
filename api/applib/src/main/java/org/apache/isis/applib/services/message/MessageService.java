@@ -19,137 +19,164 @@
 
 package org.apache.isis.applib.services.message;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 
-// tag::refguide[]
+/**
+ * Allows domain objects to raise information, warning or error messages.
+ *
+ * <p>
+ * These messages can either be simple strings, or can be translated.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface MessageService {
 
-    // end::refguide[]
+
     /**
-     * Make the specified message available to the user. Note this will probably
-     * be displayed in transitory fashion, so is only suitable for useful but
-     * optional information.
+     * Make the specified message available to the user, intended to be useful
+     * but optional information, for a viewer to display typically in a
+     * transitory manner.
+     *
+     * <p>
+     *     In the Wicket viewer this is implemented as a &quot;toast&quot;
+     *     message that automatically disappears after a period of time.
+     * </p>
      *
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #warnUser(String)
      * @see #raiseError(String)
      */
-    // tag::refguide[]
-    void informUser(String message);            // <.>
+    void informUser(String message);
 
-    // end::refguide[]
     /**
-     * Make the specified message available to the user, translated (if possible) to user's locale.
+     * As {@link #informUser(String)}, but with the message translated (if
+     * possible) to user's {@link java.util.Locale}.
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     This should be the {@link java.util.Locale} of the user making the
+     *     current request.
      * </p>
      *
      * @see #informUser(java.lang.String)
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     *
      */
-    // tag::refguide[]
-    String informUser(                          // <.>
+    String informUser(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
-     * Override of {@link MessageService#informUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
+     * Override of
+     * {@link MessageService#informUser(TranslatableString, Class, String)},
+     * but with an arbitrary translation context (rather than inferred from the
+     * context class and method).
      */
-    // tag::refguide[]
-    String informUser(                          // <.>
+    String informUser(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
-    // end::refguide[]
     /**
-     * Warn the user about a situation with the specified message. The container
-     * should guarantee to display this warning to the user, and will typically
-     * require acknowledgement.
+     * Warn the user about a situation with the specified message.
+     *
+     * <p>
+     * The viewer should guarantee to display this warning to the user, and
+     * will typically require acknowledgement.
+     * </p>
+     *
+     * <p>
+     *     In the Wicket viewer this is implemented as a &quot;toast&quot;
+     *     message that must be explicitly closed by the user.
+     * </p>
      *
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(String)
      * @see #informUser(String)
      */
-    // tag::refguide[]
-    void warnUser(String message);              // <.>
+    void warnUser(String message);
 
-    // end::refguide[]
     /**
-     * Warn the user about a situation with the specified message, translated (if possible) to user's locale.
+     * As {@link #warnUser(String)}, but with the message translated (if
+     *  possible) to user's {@link java.util.Locale}.
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     This should be the {@link java.util.Locale} of the user making the
+     *     current request.
      * </p>
      *
      * @see #warnUser(String)
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    // tag::refguide[]
-    String warnUser(                            // <.>
+    String warnUser(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
-     * Override of {@link MessageService#warnUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
+     * Override of
+     * {@link MessageService#warnUser(TranslatableString, Class, String)},
+     * but with an arbitrary translation context (rather than inferred from the
+     * context class and method).
      */
-    // tag::refguide[]
-    String warnUser(                            // <.>
+    String warnUser(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
-    // end::refguide[]
     /**
-     * Notify the user of an application error with the specified message. Note
-     * this will probably be displayed in an alarming fashion, so is only
+     * Notify the user of an application error with the specified message.
+     *
+     * <p>
+     * Note this will probably be displayed in an prominent fashion, so is only
      * suitable for errors. The user will typically be required to perform
-     * additional steps after the error (eg to inform the helpdesk).
+     * additional steps after the error..
+     * </p>
+     *
+     * <p>
+     *     In the Wicket viewer this is implemented as a toast (with a
+     *     different colour) that must be closed by the end-user.
+     * </p>
      *
      * @see #warnUser(String)
      * @see #informUser(String)
      */
-    // tag::refguide[]
-    void raiseError(String message);            // <.>
+    void raiseError(String message);
 
-    // end::refguide[]
     /**
-     * Notify the user of an application error with the specified message, translated (if possible) to user's locale.
+     * As {@link #raiseError(String)}, but with the message translated (if
+     * possible) to user's {@link java.util.Locale}.
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     This should be the {@link java.util.Locale} of the user making the
+     *     current request.
      * </p>
      *
      * @see #raiseError(String)
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    // tag::refguide[]
-    String raiseError(                          // <.>
+    String raiseError(
             TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod);
 
-    // end::refguide[]
     /**
-     * Override of {@link MessageService#raiseError(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
+     * Override of
+     * {@link MessageService#raiseError(TranslatableString, Class, String)},
+     * but with an arbitrary translation context (rather than inferred from the
+     * context class and method).
      */
-    // tag::refguide[]
-    String raiseError(                          // <.>
+    String raiseError(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
 }
-// end::refguide[]

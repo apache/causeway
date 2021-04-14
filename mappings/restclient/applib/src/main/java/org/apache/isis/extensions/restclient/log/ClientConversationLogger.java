@@ -28,16 +28,15 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class ClientConversationLogger implements ClientConversationFilter {
-    
+
     @Override
     public void onRequest(String endpoint, String method, String acceptHeaderParsing,
             Map<String, List<String>> headers, String body) {
-        
+
         val headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
@@ -63,7 +62,7 @@ public class ClientConversationLogger implements ClientConversationFilter {
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
-        
+
         val sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
@@ -78,12 +77,12 @@ public class ClientConversationLogger implements ClientConversationFilter {
 
     // -- HELPER
 
-    private final String basicAuthMagic = "Authorization: [Basic "; 
+    private final String basicAuthMagic = "Authorization: [Basic ";
 
     private String toKeyValueString(Map.Entry<?, ?> entry) {
         return "" + entry.getKey() + ": " + entry.getValue();
     }
-    
+
     private String obscureAuthHeader(String keyValueLiteral) {
         if(_Strings.isEmpty(keyValueLiteral)) {
             return keyValueLiteral;

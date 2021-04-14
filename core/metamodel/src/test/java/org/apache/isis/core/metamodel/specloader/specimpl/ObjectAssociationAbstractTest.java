@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -147,25 +146,6 @@ public class ObjectAssociationAbstractTest {
 
 
         };
-    }
-
-    @Test
-    public void notPersistedWhenDerived() throws Exception {
-        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
-    }
-
-    @Test
-    public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
-    }
-
-    @Test
-    public void persisted() throws Exception {
-        assertFalse(objectAssociation.isNotPersisted());
     }
 
     @Test

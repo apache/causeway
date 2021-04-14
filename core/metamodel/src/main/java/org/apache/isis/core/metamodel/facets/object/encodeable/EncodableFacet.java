@@ -20,13 +20,13 @@
 package org.apache.isis.core.metamodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Indicates that this class can be encoded/decoded as a string.
  */
-public interface EncodableFacet extends MultipleValueFacet {
+public interface EncodableFacet extends Facet {
 
     /**
      * Equivalent to {@link EncoderDecoder#fromEncodedString(String)}, though

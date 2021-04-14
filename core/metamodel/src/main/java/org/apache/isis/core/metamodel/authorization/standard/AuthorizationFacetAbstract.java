@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.val;
@@ -38,13 +38,13 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     private final AuthorizationManager authorizationManager;
-    private final AuthenticationSessionTracker authenticationSessionTracker;
+    private final AuthenticationContext authenticationContext;
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.authorizationManager = getAuthorizationManager();
-        this.authenticationSessionTracker = getAuthenticationSessionTracker();
+        this.authenticationContext = getAuthenticationContext();
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
         
         val hides = authorizationManager
                 .isVisible(
-                        authenticationSessionTracker.getAuthenticationSessionElseFail(), 
+                        authenticationContext.currentAuthenticationElseFail(), 
                         ic.getIdentifier()) 
                 ? null 
                 : "Not authorized to view";
@@ -69,7 +69,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
         
         val disables = authorizationManager
                 .isUsable(
-                        authenticationSessionTracker.getAuthenticationSessionElseFail(), 
+                        authenticationContext.currentAuthenticationElseFail(), 
                         ic.getIdentifier()) 
                 ? null 
                 : "Not authorized to edit";

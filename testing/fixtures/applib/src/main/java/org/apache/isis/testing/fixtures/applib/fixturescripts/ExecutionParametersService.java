@@ -33,13 +33,13 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  * instantiating the {@link FixtureScript.ExecutionContext}.
  *
  * <p>
- *     Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
- *     insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
- *     need refinement in the future).
+ * Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
+ * insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
+ * need refinement in the future).
  * </p>
  */
 @Service
-@Named("isisTstFixtures.ExecutionParametersService")
+@Named("isis.test.FixtureExecutionParametersService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

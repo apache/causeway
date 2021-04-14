@@ -25,7 +25,6 @@ import javax.validation.constraints.Pattern;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
@@ -35,16 +34,12 @@ import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFac
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 
 import lombok.val;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract
-implements MetaModelRefiner {
-
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
-            new MetaModelValidatorForConflictingOptionality();
+public class ParameterAnnotationFacetFactory 
+extends FacetFactoryAbstract {
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -53,7 +48,6 @@ implements MetaModelRefiner {
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        conflictingOptionalityValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -105,14 +99,14 @@ implements MetaModelRefiner {
         final MandatoryFacet facet =
                 MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullableIfAny, parameterType, holder);
         super.addFacet(facet);
-        conflictingOptionalityValidator.flagIfConflict(
+        MetaModelValidatorForConflictingOptionality.flagIfConflict(
                 facet, "Conflicting @Nullable with other optionality annotation");
 
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
         final MandatoryFacet mandatoryFacet =
                 MandatoryFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder);
         super.addFacet(mandatoryFacet);
-        conflictingOptionalityValidator.flagIfConflict(
+        MetaModelValidatorForConflictingOptionality.flagIfConflict(
                 mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation");
 
     }
@@ -123,11 +117,6 @@ implements MetaModelRefiner {
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         super.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
-    }
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(conflictingOptionalityValidator);
     }
 
 

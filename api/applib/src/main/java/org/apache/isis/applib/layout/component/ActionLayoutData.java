@@ -33,12 +33,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
+ * Describes the layout of a single action, broadly corresponding to 
+ * {@link org.apache.isis.applib.annotation.ActionLayout}.
  *
- * <p>
- *  Note that {@link org.apache.isis.applib.annotation.ActionLayout#contributed()} is omitted because this only applies
- *  to domain services.
- * </p>
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "action"

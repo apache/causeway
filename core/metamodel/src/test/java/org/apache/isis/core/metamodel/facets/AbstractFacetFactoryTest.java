@@ -26,8 +26,10 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
@@ -36,10 +38,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import junit.framework.TestCase;
 
@@ -62,8 +67,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
-    protected AuthenticationSession mockAuthenticationSession;
+    protected AuthenticationContext mockAuthenticationContext;
+    protected Authentication mockAuthentication;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
 
@@ -93,7 +98,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         // PRODUCTION
 
         facetHolder = new IdentifiedHolderImpl(
-                Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
@@ -101,23 +106,23 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemoverForTesting();
 
-        mockAuthenticationSessionTracker = context.mock(AuthenticationSessionTracker.class);
+        mockAuthenticationContext = context.mock(AuthenticationContext.class);
 
         mockTranslationService = context.mock(TranslationService.class);
-        mockAuthenticationSession = context.mock(AuthenticationSession.class);
+        mockAuthentication = context.mock(Authentication.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .authenticationSessionTracker(mockAuthenticationSessionTracker)
+                .authenticationContext(mockAuthenticationContext)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
-            will(returnValue(Optional.of(mockAuthenticationSession)));
+            allowing(mockAuthenticationContext).currentAuthentication();
+            will(returnValue(Optional.of(mockAuthentication)));
         }});
         
         ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
@@ -163,4 +168,34 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
+    // -- FACTORIES
+    
+    protected static PropertyLayoutFacetFactory createPropertyLayoutFacetFactory() { 
+        return new PropertyLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
+    protected static CollectionLayoutFacetFactory createCollectionLayoutFacetFactory() { 
+        return new CollectionLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
+    protected static ActionLayoutFacetFactory createActionLayoutFacetFactory() { 
+        return new ActionLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
+    
 }

@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -51,12 +51,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
-@Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV2")
+@Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
 @Order(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {
@@ -180,9 +182,9 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
      * (ie invocations returning void or scalar value are not supported).
      *
      * Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a
-     * '$$ro' property within (same as {@link #buildResponse(RepresentationService.Context2, ManagedObject)}), while
+     * '$$ro' property within (same as {@link #buildResponse(IResourceContext, ManagedObject)}), while
      * action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object
-     * with a single '$$ro' property (similar to {@link #buildResponse(RepresentationService.Context2, ObjectAndCollection)})
+     * with a single '$$ro' property (similar to {@link #buildResponse(IResourceContext, ManagedCollection)})
      */
     @Override
     public Response.ResponseBuilder buildResponse(
@@ -206,22 +208,22 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
-        final RepresentationTypeSimplifiedV2 headerContentType; 
-        
+        final RepresentationTypeSimplifiedV2 headerContentType;
+
         switch (resultType) {
         case DOMAIN_OBJECT:
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             } else {
                 rootRepresentation = JsonRepresentation.newMap();
                 appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
             }
 
             headerContentType = RepresentationTypeSimplifiedV2.OBJECT;
-            
+
             break;
 
         case LIST:
@@ -229,11 +231,11 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             }
-            
+
             rootRepresentation = JsonRepresentation.newArray();
-            
+
             objectAndActionInvocation.streamElementAdapters()
             .forEach(elementAdapter->
                 appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
@@ -244,21 +246,21 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 rootRepresentation.arrayAdd($$roContainerRepresentation);
                 $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
             }
-            
+
             headerContentType = RepresentationTypeSimplifiedV2.LIST;
 
             break;
 
         case SCALAR_VALUES:
-            
+
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             }
-            
+
             rootRepresentation = JsonRepresentation.newArray();
-            
+
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
                 val pojo = elementAdapter.getPojo();
@@ -267,26 +269,26 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                     : ScalarValueDtoV2.forValue(pojo);
             })
             .forEach(rootRepresentation::arrayAdd);
-            
+
             headerContentType = RepresentationTypeSimplifiedV2.VALUES;
-            
+
             break;
-            
+
         case SCALAR_VALUE:
-            
+
             val pojo = returnedAdapter.getPojo();
             if(pojo==null) {
                 // 404 not found
                 return Responses.ofNotFound();
             }
-            
+
             val dto = ScalarValueDtoV2.forValue(pojo);
-                
+
             rootRepresentation = new JsonRepresentation(new POJONode(dto));
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
-            
+
             break;
-            
+
         case VOID:
             // represented as empty array
             rootRepresentation = JsonRepresentation.newArray();
@@ -330,11 +332,11 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
         val where = resourceContext.getWhere();
-        
+
         owner.getSpecification()
-        .streamCollections(Contributed.INCLUDED)
+        .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
-            
+
             val collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPut(collection.getId(), collectionRepresentation);
 
@@ -343,7 +345,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             if (!visibilityConsent.isAllowed()) {
                 return;
             }
-            
+
             val managedCollection = ManagedCollection.of(owner, collection, where);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
@@ -356,11 +358,11 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             final ManagedObject objectAdapter,
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
-        
+
         val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
         val where = resourceContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
-                .streamProperties(Contributed.INCLUDED);
+                .streamProperties(MixedIn.INCLUDED);
 
         properties.forEach(property->{
             final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);
@@ -410,7 +412,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
     private void appendCollectionTo(
             final IResourceContext resourceContext,
             final ManagedCollection managedCollection,
-            final JsonRepresentation representation, 
+            final JsonRepresentation representation,
             final EnumSet<SuppressionType> suppression) {
 
         managedCollection.streamElements(resourceContext.getInteractionInitiatedBy())
@@ -421,7 +423,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
     private void appendElementTo(
             final IResourceContext resourceContext,
             final ManagedObject elementAdapter,
-            final JsonRepresentation collectionRepresentation, 
+            final JsonRepresentation collectionRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
         val elementRepresentation = JsonRepresentation.newMap();

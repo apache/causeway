@@ -73,15 +73,6 @@ A typical value is ``css``. This will result in this file being read from the ``
 
 
 |
-[[isis.viewer.wicket.application.favicon-content-type]]
-isis.viewer.wicket.application. +
-favicon-content-type
-
-| 
-| Specifies the content type of the favIcon, if any.
-
-
-|
 [[isis.viewer.wicket.application.favicon-url]]
 isis.viewer.wicket.application. +
 favicon-url
@@ -97,7 +88,7 @@ This is expected to be a local resource.
 isis.viewer.wicket.application.js
 
 | 
-| URL of file to read any custom Javascript, relative to ``static`` package on the class path.
+| URL of file to read any custom JavaScript, relative to ``static`` package on the class path.
 
 A typical value is ``js``. This will result in this file being read from the ``static/js`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
 

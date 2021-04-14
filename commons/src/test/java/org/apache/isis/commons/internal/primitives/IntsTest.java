@@ -25,8 +25,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.isis.commons.internal.primitives._Ints;
-
 import lombok.val;
 
 class IntsTest {

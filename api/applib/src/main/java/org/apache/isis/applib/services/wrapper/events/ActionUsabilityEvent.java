@@ -27,7 +27,7 @@ import org.apache.isis.applib.Identifier;
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * action is disabled; otherwise action is enabled.
- *
+ * @since 1.x {@index}
  */
 public class ActionUsabilityEvent extends UsabilityEvent {
 

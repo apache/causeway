@@ -36,9 +36,7 @@ import static org.junit.Assume.assumeThat;
  * {@link #hashCode() hashCode}), and also {@link Comparable#compareTo(Object) compareTo} for
  * any value types that also are {@link Comparable}
  *
- * <p>
- *     Used by core and domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 

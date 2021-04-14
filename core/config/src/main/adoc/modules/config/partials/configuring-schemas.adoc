@@ -1,0 +1,24 @@
+= Configuring Schemas
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+While it is good practice to place tables in schemas, the ORMs do not by default actually create those schema (as per link:https://crate.io/docs/sql-99/en/latest/chapters/17.html#create-schema-statement[CREATE SCHEMA] statement).
+
+The framework therefore allows this to be configured:
+
+* xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.auto-create-schemas[isis.persistence.schema.auto-create-schemas]
++
+whether to automatically create the schemas
+
+* xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.create-schema-sql-template[isis.persistence.schema.create-schema-sql-template]
++
+the SQL text used to create the schema.
+This should be an idempotent command, with the default being SQL-99 compliant:
++
+[source,sql]
+----
+CREATE SCHEMA IF NOT EXISTS %S
+----
++
+The string is interpolated using `String.format()`, passing in the schema name (for all discovered schema names).

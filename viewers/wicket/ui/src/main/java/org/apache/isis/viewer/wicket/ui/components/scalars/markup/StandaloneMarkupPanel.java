@@ -19,12 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
+public class StandaloneMarkupPanel 
+extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_STANDALONE_VALUE = "standaloneValue";

@@ -30,7 +30,7 @@ org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts
 ServiceRegistryDefault
 UserServiceDefault$SudoServiceSpi
 org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceForJdo
-org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault
+CommandDtoFactoryDefault
 org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 org.apache.isis.core.runtimeservices.email.EmailServiceDefault
 org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu

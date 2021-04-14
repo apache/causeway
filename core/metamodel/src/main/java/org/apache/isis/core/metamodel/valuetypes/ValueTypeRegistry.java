@@ -39,7 +39,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("isisMetaModel.ValueTypeRegistry")
+@Named("isis.metamodel.ValueTypeRegistry")
 @Order(OrderPrecedence.MIDPOINT)
 public class ValueTypeRegistry {
 

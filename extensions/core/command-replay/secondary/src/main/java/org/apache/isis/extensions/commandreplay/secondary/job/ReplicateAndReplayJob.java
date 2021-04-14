@@ -25,19 +25,21 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
-
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
 @Log4j2
@@ -45,7 +47,7 @@ public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;
 
-    AuthenticationSession authSession;
+    Authentication authentication;
 
     public void execute(final JobExecutionContext quartzContext) {
 
@@ -53,12 +55,16 @@ public class ReplicateAndReplayJob implements Job {
         new SecondaryStatusData(quartzContext);
 
         if(secondaryConfig.isConfigured()) {
-            authSession = new SimpleSession(secondaryConfig.getPrimaryUser(), secondaryConfig.getQuartzRoles());
+            val user = UserMemento.ofNameAndRoleNames(
+                    secondaryConfig.getPrimaryUser(),
+                    secondaryConfig.getQuartzRoles().stream());
+
+            authentication = SimpleAuthentication.validOf(user);
             exec(quartzContext);
         }
     }
 
-    @Inject protected IsisInteractionFactory isisInteractionFactory;
+    @Inject protected InteractionFactory isisInteractionFactory;
 
     private void exec(final JobExecutionContext quartzContext) {
         val ssh = new SecondaryStatusData(quartzContext);
@@ -69,7 +75,7 @@ public class ReplicateAndReplayJob implements Job {
             case TICKING_CLOCK_STATUS_UNKNOWN:
             case TICKING_CLOCK_NOT_YET_INITIALIZED:
                 ssh.setSecondaryStatus(
-                        isTickingClockInitialized(authSession)
+                        isTickingClockInitialized(authentication)
                             ? SecondaryStatus.OK
                             : SecondaryStatus.TICKING_CLOCK_NOT_YET_INITIALIZED);
                 if(ssh.getSecondaryStatus() == SecondaryStatus.OK) {
@@ -81,7 +87,7 @@ public class ReplicateAndReplayJob implements Job {
 
             case OK:
                 val newStatus =
-                        isisInteractionFactory.callAuthenticated(authSession, new ReplicateAndRunCommands());
+                        isisInteractionFactory.callAuthenticated(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {
                     ssh.setSecondaryStatus(newStatus);
@@ -98,8 +104,8 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    private boolean isTickingClockInitialized(final AuthenticationSession authSession) {
-        return isisInteractionFactory.callAuthenticated(authSession, new IsTickingClockInitialized());
+    private boolean isTickingClockInitialized(final Authentication authentication) {
+        return isisInteractionFactory.callAuthenticated(authentication, new IsTickingClockInitialized());
     }
 
 }

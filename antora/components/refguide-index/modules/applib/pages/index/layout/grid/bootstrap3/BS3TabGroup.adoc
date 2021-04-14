@@ -1,0 +1,71 @@
+= BS3TabGroup
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Represents a tab group containing one or more xref:refguide:applib:index/layout/grid/bootstrap3/BS3Tab.adoc[BS3Tab] s.
+
+== API
+
+[source,java]
+.BS3TabGroup.java
+----
+class BS3TabGroup {
+  Boolean isUnreferencedCollections()     // <.>
+  void setUnreferencedCollections(final Boolean unreferencedCollections)
+  Boolean isCollapseIfOne()     // <.>
+  void setCollapseIfOne(final Boolean collapseIfOne)
+  List<BS3Tab> getTabs()
+  void setTabs(final List<BS3Tab> tabs)
+  BS3TabGroupOwner getOwner()     // <.>
+  void setOwner(final BS3TabGroupOwner owner)
+  String getMetadataError()     // <.>
+  void setMetadataError(final String metadataError)
+  BS3Grid getGrid()
+}
+----
+
+<.> xref:#isUnreferencedCollections__[isUnreferencedCollections()]
++
+--
+Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
+--
+<.> xref:#isCollapseIfOne__[isCollapseIfOne()]
++
+--
+If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
+--
+<.> xref:#getOwner__[getOwner()]
++
+--
+Owner.
+--
+<.> xref:#getMetadataError__[getMetadataError()]
++
+--
+For diagnostics; populated by the framework if and only if a metadata error.
+--
+
+== Members
+
+[#isUnreferencedCollections__]
+=== isUnreferencedCollections()
+
+Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
+
+Any layout must have precisely one tab group or xref:refguide:applib:index/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] that has this attribute set.
+
+[#isCollapseIfOne__]
+=== isCollapseIfOne()
+
+If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
+
+[#getOwner__]
+=== getOwner()
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError__]
+=== getMetadataError()
+
+For diagnostics; populated by the framework if and only if a metadata error.

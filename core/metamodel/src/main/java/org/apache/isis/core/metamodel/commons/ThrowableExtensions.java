@@ -23,10 +23,9 @@ import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.commons.exceptions.IsisApplicationException;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.ReflectiveActionException;
 
 public final class ThrowableExtensions {
 
@@ -74,9 +73,7 @@ public final class ThrowableExtensions {
             recovery.accept(e);
 
         // an application exception from the domain code is re-thrown as an
-        // IsisException with same semantics
-        // TODO: should probably be using ApplicationException here
-        throw new IsisApplicationException("Exception invoking " + memberName, e);
+        throw new RecoverableException("Exception invoking " + memberName, e);
     }
 
 }

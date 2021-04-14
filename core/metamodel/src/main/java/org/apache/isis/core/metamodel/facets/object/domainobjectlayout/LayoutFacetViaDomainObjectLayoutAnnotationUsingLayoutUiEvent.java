@@ -22,9 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -103,11 +104,12 @@ implements LayoutFacet {
 
     private LayoutUiEvent<Object> newLayoutUiEvent(final Object domainObject) {
         try {
-            final LayoutUiEvent<Object> layoutUiEvent = (LayoutUiEvent<Object>) layoutUiEventClass.newInstance();
+            final LayoutUiEvent<Object> layoutUiEvent = 
+                    _Casts.uncheckedCast(layoutUiEventClass.newInstance());
             layoutUiEvent.initSource(domainObject);
             return layoutUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
-            throw new NonRecoverableException(ex);
+            throw new UnrecoverableException(ex);
         }
     }
 

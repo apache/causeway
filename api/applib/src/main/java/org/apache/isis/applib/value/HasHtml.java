@@ -19,8 +19,9 @@
 
 package org.apache.isis.applib.value;
 
-// tag::refguide[]
-// end::refguide[]
+/**
+ * @since 2.0 {@index}
+ */
 public interface HasHtml {
 
     String asHtml();

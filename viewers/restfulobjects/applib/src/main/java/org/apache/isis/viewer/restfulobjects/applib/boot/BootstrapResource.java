@@ -23,6 +23,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+/**
+ * @since 1.x {@index}
+ */
 @Path("/boot")
 public interface BootstrapResource {
 

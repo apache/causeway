@@ -47,10 +47,9 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.isPublic;
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
@@ -170,49 +169,35 @@ implements MetaModelRefiner {
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
 
-        programmingModel.addValidator(
-                new MetaModelValidatorVisiting.Visitor() {
-                    @Override
-                    public boolean visit(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
 
-                        validate(objectSpec, validator);
-                        return true;
-                    }
+            final boolean viewModel = objectSpec.isViewModel();
+            if(!viewModel) {
+                return;
+            }
 
-                    private void validate(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
+            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+            if (!(facet instanceof RecreatableObjectFacetForXmlRootElementAnnotation)) {
+                return;
+            }
 
-                        final boolean viewModel = objectSpec.isViewModel();
-                        if(!viewModel) {
-                            return;
-                        }
+            for (final TypeValidator typeValidator : typeValidators) {
+                typeValidator.validate(objectSpec);
+            }
 
-                        final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-                        if (!(facet instanceof RecreatableObjectFacetForXmlRootElementAnnotation)) {
-                            return;
-                        }
+            final Stream<OneToOneAssociation> properties = objectSpec
+                    .streamProperties(MixedIn.EXCLUDED);
 
-                        for (final TypeValidator typeValidator : typeValidators) {
-                            typeValidator.validate(objectSpec, validator);
-                        }
+            properties
+            // ignore derived
+            .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
+            .forEach(property->{
+                for (final PropertyValidator adapterValidator : propertyValidators) {
+                    adapterValidator.validate(objectSpec, property);
+                }
+            });
 
-                        final Stream<OneToOneAssociation> properties = objectSpec
-                                .streamProperties(Contributed.EXCLUDED);
-
-                        properties
-                        // ignore derived
-                        .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
-                        .forEach(property->{
-                            for (final PropertyValidator adapterValidator : propertyValidators) {
-                                adapterValidator.validate(objectSpec, property, validator);
-                            }
-                        });
-
-                    }
-                });
+        });
         
     }
 
@@ -252,17 +237,14 @@ implements MetaModelRefiner {
     }
 
     private static abstract class TypeValidator {
-        abstract void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator);
+        abstract void validate(ObjectSpecification objectSpec);
 
     }
 
     private static abstract class PropertyValidator {
         abstract void validate(
-                final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator);
+                ObjectSpecification objectSpec,
+                OneToOneAssociation property);
 
     }
 
@@ -271,8 +253,7 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator) {
+                final OneToOneAssociation property) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             if (!propertyTypeSpec.isEntity()) {
@@ -285,9 +266,8 @@ implements MetaModelRefiner {
                 return;
             }
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            validator.onFailure(
+            ValidationFailure.raiseFormatted(
                     property,
-                    property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
@@ -306,8 +286,7 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator) {
+                final OneToOneAssociation property) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
@@ -328,9 +307,8 @@ implements MetaModelRefiner {
             }
 
             // else
-            validator.onFailure(
+            ValidationFailure.raiseFormatted(
                     property,
-                    property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
@@ -341,15 +319,13 @@ implements MetaModelRefiner {
     private static class JaxbViewModelNotAbstractValidator extends TypeValidator {
         @Override
         void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+                final ObjectSpecification objectSpec) {
 
             if(objectSpec.isAbstract()) {
-                validator.onFailure(
+                ValidationFailure.raise(
                         objectSpec,
-                        objectSpec.getIdentifier(),
-                        "JAXB view model '%s' is abstract", 
-                        objectSpec.getFullIdentifier());
+                        String.format("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier())
+                        );
             }
         }
     }
@@ -357,26 +333,22 @@ implements MetaModelRefiner {
     private static class JaxbViewModelNotInnerClassValidator extends TypeValidator {
         @Override
         void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+                final ObjectSpecification objectSpec) {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
-                validator.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an anonymous class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
-                validator.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is a local class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
-                validator.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an non-static inner class", 
                         objectSpec.getFullIdentifier());
             }
@@ -385,9 +357,7 @@ implements MetaModelRefiner {
 
     private static class JaxbViewModelPublicNoArgConstructorValidator extends TypeValidator {
         @Override
-        void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+        void validate(final ObjectSpecification objectSpec) {
 
             val correspondingClass = objectSpec.getCorrespondingClass();
             
@@ -404,15 +374,13 @@ implements MetaModelRefiner {
                     .filter(paramCount(0).and(isPublic().negate()));
             
             if(privateNoArgConstructors.isNotEmpty()) {
-                validator.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' has a no-arg constructor, however it is not public",
                         objectSpec.getFullIdentifier());
             } else {
-                validator.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' does not have a public no-arg constructor", 
                         objectSpec.getFullIdentifier());
             }

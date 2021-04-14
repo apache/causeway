@@ -22,32 +22,35 @@ package org.apache.isis.viewer.common.model.mementos;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.val;
+import lombok.Getter;
 
 /**
- * {@link Serializable} represention of a {@link ObjectAction}
+ * {@link Serializable} representation of a {@link ObjectAction}
  */
 public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final ObjectSpecId owningType;
+    @Getter private final LogicalType owningType;
     private final ActionType actionType;
     private final String nameParmsId;
 
     private transient ObjectAction action;
 
     public ActionMemento(final ObjectAction action) {
-        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString(), action);
+        this(action.getOnType().getLogicalType(), 
+                action.getType(), 
+                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(), 
+                action);
     }
 
     public ActionMemento(
-            final ObjectSpecId owningType,
+            final LogicalType owningType,
             final ActionType actionType,
             final String nameParmsId,
             final SpecificationLoader specificationLoader) {
@@ -55,18 +58,14 @@ public class ActionMemento implements Serializable {
     }
 
     private ActionMemento(
-            final ObjectSpecId owningSpecId,
+            final LogicalType owningType,
             final ActionType actionType,
             final String nameParmsId,
             final ObjectAction action) {
-        this.owningType = owningSpecId;
+        this.owningType = owningType;
         this.actionType = actionType;
         this.nameParmsId = nameParmsId;
         this.action = action;
-    }
-
-    public ObjectSpecId getOwningType() {
-        return owningType;
     }
 
     public ActionType getActionType() {
@@ -85,13 +84,14 @@ public class ActionMemento implements Serializable {
     }
 
     private static ObjectAction actionFor(
-            ObjectSpecId owningType,
+            LogicalType owningType,
             ActionType actionType,
             String nameParmsId,
             SpecificationLoader specificationLoader) {
         
-        val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
-        return objectSpec.getObjectActionElseFail(actionType, nameParmsId);
+        return specificationLoader
+                .specForLogicalTypeElseFail(owningType)
+                .getActionElseFail(nameParmsId, actionType);
     }
 
 }

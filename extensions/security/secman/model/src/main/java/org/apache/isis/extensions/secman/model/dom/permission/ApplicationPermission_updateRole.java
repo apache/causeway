@@ -20,10 +20,10 @@ package org.apache.isis.extensions.secman.model.dom.permission;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.UpdateRoleDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -31,26 +31,28 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateRoleDomainEvent.class, associateWith = "role")
+@Action(
+        domainEvent = UpdateRoleDomainEvent.class, 
+        associateWith = "role")
 @RequiredArgsConstructor
 public class ApplicationPermission_updateRole {
 
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
     
-    @Model
+    @MemberSupport
     public ApplicationPermission act(final ApplicationRole applicationRole) {
-        holder.setRole(applicationRole);
-        return holder;
+        target.setRole(applicationRole);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public ApplicationRole default0Act() {
-        return holder.getRole();
+        return target.getRole();
     }
 
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationRole> choices0Act() {
         return applicationRoleRepository.allRoles();
     }

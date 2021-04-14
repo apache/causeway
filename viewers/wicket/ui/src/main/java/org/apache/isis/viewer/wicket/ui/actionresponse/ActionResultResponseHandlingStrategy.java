@@ -18,12 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
-import java.net.URL;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -31,7 +30,9 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
@@ -79,31 +80,62 @@ public enum ActionResultResponseHandlingStrategy {
             } else {
                 // otherwise,
                 // Ajax request => respond with a redirect to be able to stream the Lob to the client
-                ResourceStreamRequestHandler scheduledHandler = (ResourceStreamRequestHandler) resultResponse.getHandler();
-                StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
-                final Page page = target.getPage();
-                page.add(streamingBehavior);
-                CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
-                target.appendJavaScript("setTimeout(\"window.location.href='" + callbackUrl + "'\", 10);");
-            }
+                final IRequestHandler requestHandler = resultResponse.getHandler();
+                if(requestHandler instanceof ResourceStreamRequestHandler) {
+                    ResourceStreamRequestHandler scheduledHandler = (ResourceStreamRequestHandler) requestHandler;
+                    StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
+                    final Page page = target.getPage();
+                    page.add(streamingBehavior);
+                    CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
+                    scheduleJs(target, javascriptFor_sameWindow(callbackUrl), 10);    
+                } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy) {
+                    final RedirectRequestHandlerWithOpenUrlStrategy redirectHandler = 
+                            (RedirectRequestHandlerWithOpenUrlStrategy) requestHandler;
 
+                    final String url = redirectHandler.getRedirectUrl();
+                    final String fullUrl = expanded(requestCycle, url);
+                    
+                    if(redirectHandler.getOpenUrlStrategy().isNewWindow()) {
+                        scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);                        
+                    } else {
+                        scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
+                    }
+                } else {
+                    throw _Exceptions.unrecoverableFormatted(
+                            "no logic implemented to handle IRequestHandler of type %s",
+                            requestHandler.getClass().getName());
+                }
+                
+            }
         }
     },
-    OPEN_URL_IN_BROWSER {
+    OPEN_URL_IN_NEW_BROWSER_WINDOW {
         @Override
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
             
             final AjaxRequestTarget target = resultResponse.getTarget();
-            final URL url = resultResponse.getUrl();
-
+            final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
-
             final String fullUrl = expanded(requestCycle, url);
-            target.appendJavaScript("setTimeout(function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + fullUrl + "');}, 100);");
+            
+            scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);
         }
-
+    },
+    OPEN_URL_IN_SAME_BROWSER_WINDOW {
+        @Override
+        public void handleResults(
+                IsisAppCommonContext commonContext,
+                ActionResultResponse resultResponse) {
+            
+            final AjaxRequestTarget target = resultResponse.getTarget();
+            final String url = resultResponse.getUrl();
+            final RequestCycle requestCycle = RequestCycle.get();
+            final String fullUrl = expanded(requestCycle, url);
+            
+            scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
+        }
     };
 
     public abstract void handleResults(
@@ -113,16 +145,9 @@ public enum ActionResultResponseHandlingStrategy {
     /**
      * @see #expanded(String)
      */
-    public static String expanded(RequestCycle requestCycle, final URL url) {
+    public static String expanded(RequestCycle requestCycle, final String url) {
         String urlStr = expanded(url);
         return requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlStr));
-    }
-
-    /**
-     * @see #expanded(String)
-     */
-    public static String expanded(final URL url) {
-        return expanded(url.toString());
     }
 
     /**
@@ -136,6 +161,20 @@ public enum ActionResultResponseHandlingStrategy {
         return urlStr;
     }
 
+    private static String javascriptFor_newWindow(CharSequence url) {
+        return "function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
+    }
+    
+    private static String javascriptFor_sameWindow(CharSequence url) {
+        return "\"window.location.href='" + url + "'\"";
+    }
+    
+    private static void scheduleJs(AjaxRequestTarget target, String js, int millis) {
+        // the timeout is needed to let Wicket release the channel
+        target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));        
+    }
+    
+    
     /**
      * A special Ajax behavior that is used to stream the contents of a Lob after
      * an Ajax request.

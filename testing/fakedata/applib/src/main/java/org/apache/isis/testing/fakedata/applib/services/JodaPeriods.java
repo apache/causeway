@@ -18,10 +18,12 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-
 import org.joda.time.Period;
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class JodaPeriods extends AbstractRandomValueGenerator{
 
     public JodaPeriods(final FakeDataService fakeDataService) {

@@ -27,13 +27,13 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.val;
 
 /**
- * This service enables a serializable 'bookmark' to be created for an entity.
+ * This service provides a serializable 'bookmark' for any entity, and
+ * conversely to lookup an entity from a bookmark.
  *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface BookmarkService {
 
-    // end::refguide[]
     /**
      * Returns the {@link Bookmark} for the given domain object.
      *
@@ -44,19 +44,15 @@ public interface BookmarkService {
      * @param domainObject - domain object (if any) to return a bookmark for
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
-    // tag::refguide[]
     Bookmark bookmarkFor(@Nullable Object domainObject);
 
-    // end::refguide[]
     /**
      * As per {@link #bookmarkFor(Object)}, but requires that a non-null {@link Bookmark} is returned.
      *
      * @param domainObject - that can be bookmarked
      * @return a (non-null) {@link Bookmark} for the provided domain object.
      */
-    // tag::refguide[]
     default Bookmark bookmarkForElseThrow(Object domainObject) {
-        // end::refguide[]
 
         requires(domainObject, "domainObject");
         val bookmark = bookmarkFor(domainObject);
@@ -65,47 +61,36 @@ public interface BookmarkService {
         }
         throw _Exceptions.illegalArgument(
                 "cannot create bookmark for type %s", domainObject.getClass().getName());
-        // tag::refguide[]
-        // ...
     }
 
-    // end::refguide[]
     /**
      * Utility method that creates a {@link Bookmark} from the constituent parts.
      *
      * @return - {@link Bookmark} for provided class and identifier
      */
-    // tag::refguide[]
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
-    // end::refguide[]
     /**
      * @see #lookup(Bookmark)
      *
      * @param bookmarkHolder - from which the {@link Bookmark} is obtained
      * @return - corresponding domain object
      */
-    // tag::refguide[]
     Object lookup(BookmarkHolder bookmarkHolder);
 
-    // end::refguide[]
     /**
      * Reciprocal of {@link #bookmarkFor(Object)}
      *
      * @param bookmark - representing a domain object
      * @return - the corresponding domain object
      */
-    // tag::refguide[]
     Object lookup(Bookmark bookmark);
 
-    // end::refguide[]
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    // tag::refguide[]
     default <T> T lookup(Bookmark bookmark, Class<T> cls) {
         return cls.cast(lookup(bookmark));
     }
 
 }
-// end::refguide[]

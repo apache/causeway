@@ -22,6 +22,8 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
  * Whether the user's account is enabled or disabled.
+ *
+ * @since 2.0 {@index}
  */
 public enum ApplicationUserStatus {
     ENABLED,

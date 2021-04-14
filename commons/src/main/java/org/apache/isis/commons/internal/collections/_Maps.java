@@ -29,8 +29,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -75,7 +77,6 @@ public final class _Maps {
          * @param key
          * @param aliases
          * @param value
-         * @return
          * @throws IllegalArgumentException if there is an alias-key collision
          */
         public V put(K key, Can<K> aliases, V value);
@@ -85,7 +86,6 @@ public final class _Maps {
          * @param key
          * @param aliases
          * @param value
-         * @return
          */
         public V remap(K key, Can<K> aliases, V value);
         
@@ -142,6 +142,20 @@ public final class _Maps {
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
 
+    // -- TO STRING
+    
+    public static String toString(
+            final @Nullable Map<?, ?> map, 
+            final @NonNull  CharSequence delimiter) {
+        
+        return map==null
+            ? ""
+            : map.entrySet()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(delimiter));
+        }
+    
     // -- MODIFICATIONS
 
     /**
@@ -150,7 +164,7 @@ public final class _Maps {
      * If this is an add operation, then given {@code value} is associated with the {@code key}. 
      * @param <K>
      * @param <V>
-     * @param input
+     * @param map
      * @param key
      * @param value
      * @return whether given map contains the {@code key} after the operation
@@ -165,6 +179,23 @@ public final class _Maps {
     }
     
     // -- TRANSFORMATIONS
+    
+    public static <K, V0, V1> Map<K, V1> mapValues(
+            @Nullable Map<K, V0> input,
+            @NonNull Supplier<Map<K, V1>> mapFactory,
+            @NonNull Function<V0, V1> valueMapper) {
+        
+        val resultMap = mapFactory.get();
+        
+        if(input==null
+                || input.isEmpty()) {
+            return resultMap;
+        }
+        
+        input.forEach((k, v)->resultMap.put(k, valueMapper.apply(v)));
+        return resultMap;
+    }
+            
     
     public static <K, V> Map<K, V> filterKeys(
             @Nullable Map<K, V> input,
@@ -198,6 +229,8 @@ public final class _Maps {
         return result;
     }
 
+    // -- FACTORIES ...
+    
     // -- HASH MAP
 
     public static <K, V> HashMap<K, V> newHashMap() {

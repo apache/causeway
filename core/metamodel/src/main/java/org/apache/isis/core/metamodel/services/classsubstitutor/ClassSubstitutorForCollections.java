@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import lombok.NonNull;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorForCollections")
+@Named("isis.metamodel.ClassSubstitutorForCollections")
 @Order(OrderPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 

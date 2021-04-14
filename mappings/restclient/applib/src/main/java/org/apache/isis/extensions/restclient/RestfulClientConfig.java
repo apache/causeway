@@ -32,18 +32,17 @@ import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import lombok.Data;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @XmlRootElement(name="restful-client-config")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
 public class RestfulClientConfig {
 
-    @XmlElement(name="restfulBase") 
+    @XmlElement(name="restfulBase")
     private String restfulBase;
 
-    @XmlElement(name="useBasicAuth") 
+    @XmlElement(name="useBasicAuth")
     private boolean useBasicAuth;
 
     @XmlElement(name="restfulAuthUser")
@@ -52,9 +51,9 @@ public class RestfulClientConfig {
     @XmlElement(name="restfulAuthPassword")
     private String restfulAuthPassword;
 
-    @XmlElement(name="useRequestDebugLogging") 
+    @XmlElement(name="useRequestDebugLogging")
     private boolean useRequestDebugLogging;
-    
+
     @XmlTransient
     private List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
 

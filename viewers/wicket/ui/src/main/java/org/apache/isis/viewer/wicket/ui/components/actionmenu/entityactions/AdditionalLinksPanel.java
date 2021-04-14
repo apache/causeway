@@ -42,7 +42,8 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
+public class AdditionalLinksPanel 
+extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
     private static final long serialVersionUID = 1L;
 

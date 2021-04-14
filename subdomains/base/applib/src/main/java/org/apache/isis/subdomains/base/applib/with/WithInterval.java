@@ -32,11 +32,14 @@ import org.apache.isis.subdomains.base.applib.valuetypes.LocalDateInterval;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
 
     /**
      * The start date of the interval.
-     * 
+     *
      * <p>
      * A value of <tt>null</tt> implies that the parent's start date should be used. If
      * that is <tt>null</tt>, then implies 'the beginning of time'.
@@ -48,7 +51,7 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
 
     /**
      * The end date of the interval.
-     * 
+     *
      * <p>
      * A value of <tt>null</tt> implies that the parent's end date should be used. If
      * that is <tt>null</tt>, then implies 'the end of time'.
@@ -125,7 +128,7 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
         // }
 
         public static <T extends WithInterval<T>> T firstElseNull(
-                final SortedSet<T> roles, 
+                final SortedSet<T> roles,
                 final Predicate<T> predicate) {
             return _NullSafe.stream(roles)
             .filter(predicate)
@@ -136,7 +139,7 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
 
     @UtilityClass
     public static final class Predicates {
-        
+
         /**
          * A {@link Predicate} that tests whether the role's {@link WithInterval#isCurrent() current}
          * status is the specified value.
@@ -148,5 +151,5 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
         }
 
     }
-    
+
 }

@@ -20,11 +20,6 @@ package org.apache.isis.core.runtimeservices.xml;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 import javax.inject.Named;
 import javax.xml.transform.OutputKeys;
@@ -46,21 +41,22 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xml.XmlService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import lombok.extern.log4j.Log4j2;
-
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisRuntimeServices.XmlService")
+@Named("isis.runtimeservice.XmlService")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@Log4j2
+//@Log4j2
 public class XmlServiceDefault implements XmlService {
 
     @Override
@@ -81,7 +77,7 @@ public class XmlServiceDefault implements XmlService {
             final Node node = result.getNode();
             return (Document) node;
         } catch (TransformerException e) {
-            throw new Exception(e);
+            throw _Exceptions.unrecoverable(e);
         }
     }
 
@@ -102,9 +98,9 @@ public class XmlServiceDefault implements XmlService {
 
             return writer.toString();
         } catch (TransformerConfigurationException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (TransformerException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
     }
 

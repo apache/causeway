@@ -25,16 +25,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.ints.holder.PrimitiveIntHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -56,12 +55,12 @@ public class PrimitiveIntVm
 
 //tag::class[]
     @Title(prepend = "int (primitive) view model: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
     private int readOnlyProperty;                                   // <.>
 
     @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private int readWriteProperty;
 

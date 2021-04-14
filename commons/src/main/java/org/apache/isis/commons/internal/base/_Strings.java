@@ -23,12 +23,15 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -76,7 +79,7 @@ public final class _Strings {
 
     /**
      * Convenient e.g. for toArray conversions
-     * (a duplicate of in {@link _Constants.emptyStringArray} )
+     * (a duplicate of in {@link _Constants#emptyStringArray} )
      */
     public static final String[] emptyArray = new String[0];
 
@@ -108,6 +111,58 @@ public final class _Strings {
         final char[] chars = new char[length];
         Arrays.fill(chars, c);
         return String.valueOf(chars);
+    }
+    
+    // -- COMPARE
+    
+    /**
+     * Compares two strings lexicographically (and nulls-frist).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
+     * {@link Comparator#nullsFirst(Comparator)}. 
+     * @implNote this utility method does not produce objects on the heap   
+     * @param a
+     * @param b
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see String#compareTo(String) 
+     */
+    public static int compareNullsFirst(final @Nullable String a, final @Nullable String b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins 
+        if(a==null) {
+            return -1;
+        }
+        if(b==null) {
+            return 1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
+    }
+    
+    /**
+     * Compares two strings lexicographically (and nulls-last).
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
+     * {@link Comparator#nullsFirst(Comparator)}. 
+     * @implNote this utility method does not produce objects on the heap   
+     * @param a
+     * @param b
+     * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
+     * @see String#compareTo(String) 
+     */
+    public static int compareNullsLast(final @Nullable String a, final @Nullable String b) {
+        if(Objects.equals(a, b)) {
+            return 0;
+        }
+        // at this point not both can be null, so which ever is null wins 
+        if(a==null) {
+            return 1;
+        }
+        if(b==null) {
+            return -1;
+        }
+        // at this point neither can be null
+        return a.compareTo(b);
     }
 
     // -- BASIC PREDICATES
@@ -321,7 +376,6 @@ public final class _Strings {
      * @param str
      * @param minLength
      * @param c
-     * @return
      */
     public static String padStart(@Nullable String str, int minLength, char c) {
         if(minLength<=0) {
@@ -341,9 +395,8 @@ public final class _Strings {
      * Returns a string, of length at least minLength, consisting of string appended with as many copies
      * of padChar as are necessary to reach that length.
      * @param str
-     * @param padTo
+     * @param minLength
      * @param c
-     * @return
      */
     public static String padEnd(@Nullable String str, int minLength, char c) {
         if(minLength<=0) {
@@ -374,7 +427,7 @@ public final class _Strings {
      * @param input
      * @param separator non-empty string
      * @return empty stream if {@code input} is null
-     * @throws {@link IllegalArgumentException} if {@code separator} is empty
+     * @throws IllegalArgumentException if {@code separator} is empty
      */
     public static Stream<String> splitThenStream(@Nullable final String input, final String separator) {
         if(isEmpty(separator)) {
@@ -396,7 +449,6 @@ public final class _Strings {
      * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
      * @param input
      * @param delimiterPattern
-     * @return
      */
     public static Stream<String> splitThenStream(@Nullable final CharSequence input, Pattern delimiterPattern) {
         if(isEmpty(input)) {
@@ -405,7 +457,37 @@ public final class _Strings {
         requires(delimiterPattern, "delimiterPattern");
         return delimiterPattern.splitAsStream(input);
     }
-    
+
+    /**
+     * Optionally applies {@code onNonEmptySplit} function, based on whether both split parts 
+     * <i>lhs</i> and <i>rhs</i> are non empty Strings. 
+     * @param <T>
+     * @param input
+     * @param separator
+     * @param onNonEmptySplit
+     */
+    public static <T> Optional<T> splitThenApplyRequireNonEmpty(
+            @Nullable final String input, 
+            final String separator, 
+            final BiFunction<String, String, T> onNonEmptySplit) {
+        
+        if(isEmpty(input)) {
+            return Optional.empty();
+        }
+        // we have a non-empty string
+        final int p = input.indexOf(separator);
+        if(p<1){
+            // separator not found or
+            // empty lhs in string
+            return Optional.empty();
+        }
+        final int q = p + separator.length();
+        if(q==input.length()) {
+            // empty rhs
+            return Optional.empty();
+        }
+        return Optional.ofNullable(onNonEmptySplit.apply(input.substring(0, p), input.substring(q)));
+    }
 
     public static void splitThenAccept(
             @Nullable final String input, 
@@ -589,8 +671,7 @@ public final class _Strings {
     }
 
     /**
-     * Returns a monadic StringOperator that allows composition of unary string operators
-     * @return
+     * Returns a StringOperator that allows composition of unary string operators
      */
     public static StringOperator operator() {
         return new StringOperator(UnaryOperator.identity());

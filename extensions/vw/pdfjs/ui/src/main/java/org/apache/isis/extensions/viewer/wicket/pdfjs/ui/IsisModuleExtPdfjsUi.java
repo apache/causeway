@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.IsisModuleExtPdfjsMetaModel;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components.PdfJsViewerPanelComponentFactory;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // modules

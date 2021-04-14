@@ -22,37 +22,33 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  *
  */
-@Log4j2
-public class IsisAppCommonContext implements MetaModelContext.Delegating {
+public class IsisAppCommonContext implements HasMetaModelContext {
 
     /**
      * Can be bootstrapped from a {@link MetaModelContext}
@@ -73,7 +69,7 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true)
-    private final IsisInteractionTracker isisInteractionTracker = lookupServiceElseFail(IsisInteractionTracker.class);
+    private final InteractionTracker interactionTracker = lookupServiceElseFail(InteractionTracker.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
@@ -82,11 +78,7 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public Optional<MessageBroker> getMessageBroker() {
-        val messageBroker = getAuthenticationSessionTracker().currentMessageBroker();
-        if(!messageBroker.isPresent()) {
-            log.warn("failed to locate a MessageBroker on current AuthenticationSession");
-        }
-        return messageBroker;
+        return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
     }
     
     // -- SHORTCUTS
@@ -106,11 +98,6 @@ public class IsisAppCommonContext implements MetaModelContext.Delegating {
     
     public <T> T injectServicesInto(T pojo) {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
-    }
-    
-    public TransactionTemplate createTransactionTemplate() {
-        val txMan = lookupServiceElseFail(PlatformTransactionManager.class);
-        return new TransactionTemplate(txMan);
     }
     
     public ObjectMemento mementoFor(ManagedObject adapter) {

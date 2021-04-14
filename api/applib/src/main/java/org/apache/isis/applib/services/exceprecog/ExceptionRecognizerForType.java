@@ -18,18 +18,11 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
-
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.exceptions._Exceptions.containsAnyOfTheseMessages;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.getCausalChain;
-
-import lombok.val;
 
 /**
  * A specific implementation of {@link ExceptionRecognizer} that looks for an
@@ -40,44 +33,19 @@ import lombok.val;
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
+ *
+ * @since 1.x {@index}
  */
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
-    /**
-     * Introduced in support of eg. <code>JDODataStoreException</code>
-     * @since 2.0
-     */
-    @FunctionalInterface
-    public static interface NestedExceptionResolver {
-        Stream<Throwable> streamNestedExceptionsOf(Throwable throwable); 
-        
-        public static final NestedExceptionResolver NOOP = __->Stream.empty();
-    }
-    
-    protected static final Predicate<Throwable> ofTypeExcluding(
-            final Class<? extends Throwable> exceptionType, 
-            final NestedExceptionResolver nestedExceptionResolver,
-            final String... messages) {
-        
-        return ofType(exceptionType).and(excluding(nestedExceptionResolver, messages));
-    }
-
-    protected static final Predicate<Throwable> ofTypeIncluding(
-            final Class<? extends Throwable> exceptionType,
-            final NestedExceptionResolver nestedExceptionResolver,
-            final String... messages) {
-        
-        return ofType(exceptionType).and(including(nestedExceptionResolver, messages));
-    }
-
     protected static final Predicate<Throwable> ofType(
             final Class<? extends Throwable> exceptionType) {
-        
-        return input->exceptionType.isAssignableFrom(input.getClass());
+
+        return ex->exceptionType.isAssignableFrom(ex.getClass());
     }
 
     /**
-     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if the message(s)
+     * A {@link Predicate} that {@link Predicate#test(Object) applies} only if the message(s)
      * supplied do <i>NOT</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
      *
@@ -85,35 +53,23 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * Intended to prevent too eager matching of an overly general exception type.
      */
     protected static final Predicate<Throwable> excluding(
-            final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
-        
-        return input->{
-            final List<Throwable> causalChain = getCausalChain(input);
-            
-            for (Throwable throwable : causalChain) {
-                
+
+        return ex->{
+
+            for (final Throwable throwable : getCausalChain(ex)) {
                 if(containsAnyOfTheseMessages(throwable, messages)) {
-                    return false; 
-                }
-                
-                val isAnyNestedRecognized = nestedExceptionResolver.streamNestedExceptionsOf(throwable)
-                .anyMatch(nested->_Exceptions.containsAnyOfTheseMessages(throwable, messages));
-                
-                if(isAnyNestedRecognized) {
                     return false;
                 }
-
             }
-            
+
             return true;
         };
-
     }
-    
+
 
     /**
-     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
+     * A {@link Predicate} that {@link Predicate#test(Object) applies} only if at least one of the message(s)
      * supplied <i>DO</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
      *
@@ -121,58 +77,50 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * Intended to prevent more precise matching of a specific general exception type.
      */
     protected static final Predicate<Throwable> including(
-            final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
-        
-        return input->{
-            final List<Throwable> causalChain = getCausalChain(input);
-           
-            for (Throwable throwable : causalChain) {
+
+        return ex->{
+
+            for (final Throwable throwable : getCausalChain(ex)) {
                 if(containsAnyOfTheseMessages(throwable, messages)) {
-                    return true; 
-                }
-                
-                val isAnyNestedRecognized = nestedExceptionResolver.streamNestedExceptionsOf(throwable)
-                        .anyMatch(nested->_Exceptions.containsAnyOfTheseMessages(throwable, messages));
-                        
-                if(isAnyNestedRecognized) {
                     return true;
                 }
-                
             }
-            
+
             return false;
         };
     }
 
     public ExceptionRecognizerForType(
-            Category category,
+            final Category category,
             final Class<? extends Exception> exceptionType,
-            final UnaryOperator<String> messageParser) {
-        this(category, ofType(exceptionType), messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(category, ofType(exceptionType), rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(
-            Category category,
+            final Category category,
             final Predicate<Throwable> predicate,
-            final UnaryOperator<String> messageParser) {
-        super(category, predicate, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        super(category, predicate, rootCauseMessageFormatter);
     }
 
-    public ExceptionRecognizerForType(Category category, Class<? extends Exception> exceptionType) {
+    public ExceptionRecognizerForType(
+            final Category category,
+            final Class<? extends Exception> exceptionType) {
         this(category, exceptionType, null);
     }
 
     public ExceptionRecognizerForType(
             final Class<? extends Exception> exceptionType,
-            final UnaryOperator<String> messageParser) {
-        this(Category.OTHER, exceptionType, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(Category.OTHER, exceptionType, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(
             final Predicate<Throwable> predicate,
-            final UnaryOperator<String> messageParser) {
-        this(Category.OTHER, predicate, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(Category.OTHER, predicate, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {

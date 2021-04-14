@@ -21,88 +21,88 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin @RequiredArgsConstructor
+@Action(executionPublishing = Publishing.ENABLED)
+@RequiredArgsConstructor
 public class ProperMemberSupport_action2 {
     
     private final ProperMemberSupport holder;
 
     // proper mix-in action
-    @Action(publishing = Publishing.ENABLED) 
-    public ProperMemberSupport $$(String p0, String p1) {
+     
+    public ProperMemberSupport act(String p0, String p1) {
         return holder;
     }
     
-    @Model
-    public String disable$$() {
+    @MemberSupport
+    public String disableAct() {
         return null;
     }
     
-    @Model
-    public boolean hide$$() {
+    @MemberSupport
+    public boolean hideAct() {
         return false;
     }
 
-    @Model
-    public String validate$$(String p0, String p1) {
+    @MemberSupport
+    public String validateAct(String p0, String p1) {
         return null;
     }
     
-    @Model
-    public Set<String> autoComplete0$$(@MinLength(3) String search) {
+    @MemberSupport
+    public Set<String> autoComplete0Act(@MinLength(3) String search) {
         return null;
     }
 
-    @Model
-    public Set<String> autoComplete1$$(@MinLength(3) String search) {
+    @MemberSupport
+    public Set<String> autoComplete1Act(@MinLength(3) String search) {
         return null;
     }
 
 // variant with dependent arg
-//    @Model
+//    @MemberSupport
 //    public Set<String> autoComplete1$$(String p0, @MinLength(3) String search) {
 //        return null;
 //    }
     
-    @Model
-    public Set<String> choices0$$() {
+    @MemberSupport
+    public Set<String> choices0Act() {
         return null;
     }
 
-    @Model
-    public Set<String> choices1$$() {
+    @MemberSupport
+    public Set<String> choices1Act() {
         return null;
     }
 
 // variant with dependent arg    
-//    @Model 
+//    @MemberSupport 
 //    public Set<String> choices1$$(String p0) {
 //        return null;
 //    }
     
-    @Model
-    public String default0$$() {
+    @MemberSupport
+    public String default0Act() {
         return null;
     }
 
-    @Model
-    public String default1$$() {
+    @MemberSupport
+    public String default1Act() {
         return null;
     }
 
-    @Model
-    public String validate0$$(String p0) {
+    @MemberSupport
+    public String validate0Act(String p0) {
         return null;
     }
 
-    @Model
-    public String validate1$$(String p1) {
+    @MemberSupport
+    public String validate1Act(String p1) {
         return null;
     }
 

@@ -22,26 +22,80 @@ import java.util.Set;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-// tag::refguide[]
+/**
+ * Defines a mechanism for viewers to store arbitrary UI hints on a per-object
+ * basis.
+ *
+ * <p>
+ * This store <i>is</i> used by the Wicket viewer.   For example, the viewer
+ * remembers which tabs are selected, and for collections which view is
+ * selected (eg table or hidden), which page of a table to render, or whether
+ * "show all" (rows) is toggled.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface HintStore {
 
-    // end::refguide[]
-    // tag::refguide-1[]
-    interface HintIdProvider {
-        String hintId();
-    }
-    // end::refguide-1[]
-    // tag::refguide[]
+    /**
+     * Obtain a hint (eg which tab to open) for a particular object.
+     *
+     * <p>
+     * Object identity is represented by {@link Bookmark} so that alternative
+     * implementations can easily serialize this state to a string.
+     * </p>
+     *
+     * @apiNote Object identity is represented by {@link Bookmark} so that
+     *          alternative implementations can easily serialize this state to a string.
+     *
+     * @param bookmark - representing the domain object
+     * @param hintKey - the key of the hint
+     *
+     * @return - the value of the hint, or null.
+     */
+    String get(final Bookmark bookmark, String hintKey);
 
-    String get(final Bookmark bookmark, String hintKey);                // <.>
+    /**
+     * Set the state of a hint for the domain object
+     *
+     * @apiNote Object identity is represented by {@link Bookmark} so that
+     *          alternative implementations can easily serialize this state to a string.
+     *
+     * @param bookmark - representing the domain object
+     * @param hintKey - the key of the hint
+     * @param value - the value of the hint
+     */
+    void set(final Bookmark bookmark, String hintKey, String value);
 
-    void set(final Bookmark bookmark, String hintKey, String value);    // <.>
+    /**
+     * Removes hint for the domain object.
+     *
+     * @apiNote Object identity is represented by {@link Bookmark} so that
+     *          alternative implementations can easily serialize this state to a string.
+     *
+     * @param bookmark - representing the domain object
+     * @param hintKey - the key of the hint
+     */
+    void remove(final Bookmark bookmark, String hintKey);
 
-    void remove(final Bookmark bookmark, String hintKey);               // <.>
+    /**
+     * Remotes all hints for the domain object.
+     *
+     * @apiNote Object identity is represented by {@link Bookmark} so that
+     *          alternative implementations can easily serialize this state to a string.
+     *
+     * @param bookmark - representing the domain object
+     */
+    void removeAll(Bookmark bookmark);
 
-    void removeAll(Bookmark bookmark);                                  // <.>
-
-    Set<String> findHintKeys(Bookmark bookmark);                        // <.>
+    /**
+     * The keys of all available hints for the domain object.
+     *
+     * @apiNote Object identity is represented by {@link Bookmark} so that
+     *          alternative implementations can easily serialize this state to a string.
+     *
+     * @param bookmark - representing the domain object
+     */
+    Set<String> findHintKeys(Bookmark bookmark);
 
 }
-// end::refguide[]

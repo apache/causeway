@@ -21,31 +21,27 @@ package org.apache.isis.extensions.secman.jdo.dom.permission;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -56,12 +52,12 @@ import lombok.NonNull;
 import lombok.val;
 
 @Repository
-@Named("isisExtSecman.applicationPermissionRepository")
+@Named("isis.ext.secman.ApplicationPermissionRepository")
 public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {
 
     @Inject private RepositoryService repository;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
     
@@ -69,7 +65,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     @Override
     public ApplicationPermission newApplicationPermission() {
-        return factory.detachedEntity(ApplicationPermission.class);
+        return factory.detachedEntity(new ApplicationPermission());
     }
 
     // -- findByRole (programmatic)
@@ -80,9 +76,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     public List<ApplicationPermission> findByRole(@NonNull final ApplicationRole role) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByRole",
-                        "role", role));
+                Query.named(ApplicationPermission.class, "findByRole")
+                    .withParameter("role", role));
     }
 
 
@@ -98,9 +93,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     private List<ApplicationPermission> findByUser(final String username) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByUser",
-                        "username", username));
+                Query.named(ApplicationPermission.class, "findByUser")
+                    .withParameter("username", username));
     }
 
 
@@ -152,7 +146,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
             org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type) {
+            ApplicationFeatureSort type) {
         return queryResultsCacheProvider.get().execute(this::findByRoleAndRuleAndFeatureType, 
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureTypeCached", 
                 role, rule, type);
@@ -161,13 +155,12 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(
             org.apache.isis.extensions.secman.api.role.ApplicationRole role, 
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type) {
-        return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType",
-                        "role", role,
-                        "rule", rule,
-                        "featureType", type))
+            final ApplicationFeatureSort type) {
+        return repository.allMatches(Query.named(
+                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType")
+                    .withParameter("role", role)
+                    .withParameter("rule", rule)
+                    .withParameter("featureSort", type))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -177,29 +170,28 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
         return queryResultsCacheProvider.get().execute(
                 this::findByRoleAndRuleAndFeature,
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureCached",
-                role, rule, type, featureFqn);
+                role, rule, featureSort, featureFqn);
     }
 
     @Override
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeature(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
         return repository
-                .uniqueMatch(
-                        new QueryDefault<>(
-                                ApplicationPermission.class, "findByRoleAndRuleAndFeature",
-                                "role", role,
-                                "rule", rule,
-                                "featureType", type,
-                                "featureFqn", featureFqn ));
+                .uniqueMatch(Query.named(
+                                ApplicationPermission.class, "findByRoleAndRuleAndFeature")
+                        .withParameter("role", role)
+                        .withParameter("rule", rule)
+                        .withParameter("featureSort", featureSort)
+                        .withParameter("featureFqn", featureFqn ));
     }
 
 
@@ -214,10 +206,10 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     public Collection<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByFeature",
-                        "featureType", featureId.getType(),
-                        "featureFqn", featureId.getFullyQualifiedName()))
+                Query.named(
+                        ApplicationPermission.class, "findByFeature")
+                .withParameter("featureSort", featureId.getSort())
+                .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -229,28 +221,28 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 
-        final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureType, featureFqn);
-        final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
+        final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureSort, featureFqn);
+        final ApplicationFeature feature = featureRepository.findFeature(featureId);
         if(feature == null) {
-            messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
+            messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
-        return newPermissionNoCheck(role, rule, mode, featureType, featureFqn);
+        return newPermissionNoCheck(role, rule, mode, featureSort, featureFqn);
     }
 
     public ApplicationPermission newPermissionNoCheck(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
-        ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureType, featureFqn)
+        ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureSort, featureFqn)
                 .orElse(null);
         if (permission != null) {
             return permission;
@@ -259,7 +251,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
-        permission.setFeatureType(featureType);
+        permission.setFeatureSort(featureSort);
         permission.setFeatureFqn(featureFqn);
         repository.persist(permission);
         return permission;
@@ -274,29 +266,38 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final String featureClassName,
             final String featureMemberName) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-
         val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
-        val featureType = featureId.getType();
+        return newPermission(genericRole, rule, mode, featureId);
+    }
+
+    @Override
+    public ApplicationPermission newPermission(
+            final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
+            final ApplicationPermissionRule rule, 
+            final ApplicationPermissionMode mode, 
+            final ApplicationFeatureId featureId) {
+
+        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        val featureSort = featureId.getSort();
         val featureFqn = featureId.getFullyQualifiedName();
 
-        val feature = applicationFeatureRepository.findFeature(featureId);
+        val feature = featureRepository.findFeature(featureId);
         if(feature == null) {
-            messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
+            messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
-        val permission = factory.detachedEntity(ApplicationPermission.class);
+        val permission = factory.detachedEntity(new ApplicationPermission());
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
-        permission.setFeatureType(featureType);
+        permission.setFeatureSort(featureSort);
         permission.setFeatureFqn(featureFqn);
         repository.persist(permission);
 
         return permission;
     }
-
+    
 
     // -- allPermission (programmatic)
     @Override
@@ -311,81 +312,25 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        final Collection<String> packageNames = applicationFeatureRepository.packageNames();
-        final Set<String> availableClasses = _Sets.newTreeSet();
-        for (String packageName : packageNames) {
-            appendClasses(packageName, ApplicationMemberType.PROPERTY, availableClasses);
-            appendClasses(packageName, ApplicationMemberType.COLLECTION, availableClasses);
-            appendClasses(packageName, ApplicationMemberType.ACTION, availableClasses);
-        }
+        val featureNamesKnownToTheMetamodel =  
+                featureRepository.getFeatureIdentifiersByName().keySet();
 
         val orphaned = _Lists.<ApplicationPermission>newArrayList();
 
-        val permissions = allPermissions();
-        for (val permission : permissions) {
-            final ApplicationFeatureType featureType = permission.getFeatureType();
-            final String featureFqn = permission.getFeatureFqn();
-
-            switch (featureType) {
-
-            case PACKAGE:
-                if(!packageNames.contains(featureFqn)) {
-                    orphaned.add(permission);
-                }
-                break;
-            case CLASS:
-                if(!availableClasses.contains(featureFqn)) {
-                    orphaned.add(permission);
-                }
-                break;
-            case MEMBER:
-
-                final List<String> split = _Strings.splitThenStream(featureFqn, "#")
-                .collect(Collectors.toList());
-
-                final String fqClassName = split.get(0);
-                final String memberName = split.get(1);
-
-                final int lastDot = fqClassName.lastIndexOf('.');
-                final String packageName = fqClassName.substring(0, lastDot);
-                final String className = fqClassName.substring(lastDot + 1);
-
-                final List<String> memberNames = memberNamesOf(packageName, className);
-
-                if(!memberNames.contains(memberName)) {
-                    orphaned.add(permission);
-                }
-                break;
+        for (val permission : allPermissions()) {
+            
+            val featId = permission.asFeatureId().orElse(null);
+            if(featId==null) {
+                orphaned.add(permission);
+                continue;
+            }
+            
+            if(!featureNamesKnownToTheMetamodel.contains(featId.getFullyQualifiedName())) {
+                orphaned.add(permission);
             }
         }
 
         return orphaned;
-    }
-
-    private void appendClasses(
-            final String packageName, final ApplicationMemberType memberType, final Set<String> availableClasses) {
-        final Collection<String> classNames = applicationFeatureRepository.classNamesContainedIn(packageName, memberType);
-        for (String className : classNames) {
-            availableClasses.add(packageName + "." + className);
-        }
-    }
-
-    private List<String> memberNamesOf(final String packageName, final String className) {
-        final List<String> memberNames = _Lists.newArrayList();
-        appendMembers(packageName, className, ApplicationMemberType.PROPERTY, memberNames);
-        appendMembers(packageName, className, ApplicationMemberType.COLLECTION, memberNames);
-        appendMembers(packageName, className, ApplicationMemberType.ACTION, memberNames);
-        return memberNames;
-    }
-
-    private void appendMembers(
-            final String packageName,
-            final String className,
-            final ApplicationMemberType applicationMemberType,
-            final List<String> memberNames) {
-        final Collection<String> memberNamesOf =
-                applicationFeatureRepository.memberNamesOf(packageName, className, applicationMemberType);
-        memberNames.addAll(memberNamesOf);
     }
 
 

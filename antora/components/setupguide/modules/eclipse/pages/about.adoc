@@ -75,6 +75,7 @@ Use File > Import, then Maven > Existing Maven Projects.
 
 However, you will have some compile errors until you enable annotation processing, discussed below.
 
+[#enable-annotation-processing]
 === Enable Annotation Processing
 
 Both DataNucleus and Project Lombok use annotation processors that must be enabled in Eclipse.
@@ -90,7 +91,7 @@ Then under _Java Compiler > Annotation Processing > Factory Path_ add the follow
 * `datanucleus-jdo-query-5.0.9.jar` (under `.m2/repository/org/datanucleus/datanucleus-jdo-query/5.0.9`)
 * `javax.jdo-3.2.0-m13.jar` (under `.m2/repository/org/datanucleus/javax.jdo/3.2.0-m13`)
 
-The specific versions depend on the DataNucleus version used in your project. You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
+The specific versions depend on the DataNucleus version used in your project.You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
 
 Eclipse should automatically add these directories as a source path; at this point all remaining compiler errors should disappear.
 
@@ -116,7 +117,13 @@ java.lang.Exception: java.lang.NoClassDefFoundError: javax/jdo/query/Persistable
 
 If you see this specific error message then check that you added the `javax.jdo` JAR that matches the version of DataNucleus used in your project (see _Factory Path_ configuration above).
 
-== Configure DataNucleus
+
+
+== JPA: Configure Eclipselink Weaving
+
+CAUTION: TODO - to document
+
+== JDO: Configure DataNucleus Enhancer
 
 [TIP]
 ====
@@ -148,6 +155,7 @@ When the enhancer runs, it will print out to the console:
 
 image::eclipse-120-console.png[width="500px"]
 
+[#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml]
 === Workaround for path limits (the DN plugin to use the persistence.xml)
 
 If running on Windows then the DataNucleus plugin is very likely to hit the Windows path limit.

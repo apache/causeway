@@ -39,10 +39,14 @@ import org.apache.isis.schema.common.v2.PeriodDto;
 import lombok.val;
 
 /**
+ * @since 2.0 {@index}
+ */
+
+/**
  * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
  */
 @Service
-@Named("isisExtensionsCommandReplayPrimary.CaptureResultOfCommand")
+@Named("isis.ext.commandReplayPrimary.CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
 @Order(OrderPrecedence.EARLY)

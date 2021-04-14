@@ -15,9 +15,9 @@ Other new groups have been introduced: "value-types", "subdomains", (bounded con
 
 This milestone also introduces a number of new features:
 
-* new xref:refguide:applib-ant:Property.adoc#projecting[`@Property#projecting`] allows view model summaries to be returned as "projections" of underlying entities.
-* new xref:refguide:applib-methods:reserved.adoc#layout[`layout()`] method (or xref:refguide:applib-classes:events.adoc#ui-event-classes[UI event]) allows a domain object to specify which layout file should be used to render it.
-* no longer any need to specify xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
+* new xref:refguide:applib:index/annotation/Property.adoc#projecting[@Property#projecting] allows view model summaries to be returned as "projections" of underlying entities.
+* new xref:refguide:applib-methods:ui-hints.adoc#layout[layout()] method (or xref:refguide:applib-classes:events.adoc#ui-event-classes[UI event]) allows a domain object to specify which layout file should be used to render it.
+* no longer any need to specify xref:refguide:applib:index/annotation/ParameterLayout.adoc#named[@ParameterLayout#named()]
 * security integration with xref:security:keycloak:about.adoc[Keycloak]
 
 * New value types:
@@ -27,10 +27,10 @@ This milestone also introduces a number of new features:
 
 * New extensions:
 ** xref:userguide:flyway:about.adoc[Flyway] (integrating with Spring Boot's support)
-** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[Restful Objects viewer])
-** xref:vw:pdfjs:about.adoc[pdf.js] (for xref:vw:ROOT:about.adoc[Wicket viewer])
-** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Wicket viewer])
-** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Wicket viewer])
+** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)])
+** xref:vw:pdfjs:about.adoc[pdf.js] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
+** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
+** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
 
 Improvements:
 

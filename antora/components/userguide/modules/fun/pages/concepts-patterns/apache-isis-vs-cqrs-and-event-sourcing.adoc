@@ -1,0 +1,94 @@
+= Apache Isis vs CQRS/ES
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+CQRS and Event Sourcing (ES) are two architectural patterns often used (and often used together) to implement domain driven design systems.
+This section explores the similarities and differences that Apache Isis has with these other architectural approaches.
+
+== CQRS
+
+The link:https://martinfowler.com/bliki/CQRS.html[CQRS architectural pattern] (it stands for "Command Query Responsibility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).
+The former are sometimes called the "write (domain) model", the latter the "read model".
+
+In CQRS the commands correspond to the business logic that mutates the system.
+Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
+
+Most CQRS implementations have separate datastores.
+The commands act upon a command/write datastore.
+The data in this datastore is then replicated in some way into the query/read datastore, usually denormalized into a projection such that it is easy to query.
+
+CQRS advocates recommend using very simple (almost naive) technology for the query/read model; it should be a simple projection of the query datastore.
+Complexity instead lives elsewhere: business logic in the command/write model, and in the transformation logic betweeen the command/write and read/query datastores.
+In particular, there is no requirement for the two datastores to use the same technology: one might be an RDBMS while the other a NoSQL datastore or even datawarehouse.
+
+In most implementations the command and query datastores are _not_ updated in the same transaction; instead there is some sort of replication mechanism.
+This also means that the query datastore is eventually consistent rather than always consistent; there could be a lag of a few seconds before it is updated.
+This means in turn that CQRS implementations require mechanisms to cater for offline query datastores; usually some sort of event bus.
+
+The CQRS architecture's extreme separation of responsibilities can result in a lot of boilerplate.
+Any given domain concept, eg `Customer`, must be represented both in the command/write model and also in the query/read model.
+Each business operation upon the command model is reified as a command object, for example `PlaceOrderCommand`.
+When invoked, this emits a corresponding `OrderPlacedEvent`.
+It is this event that is used to maintain the read model projection.
+
+
+Comparing CQRS to Apache Isis, the most obvious difference is that Apache Isis does not require that the command/write model is separated from the query/read model; there is usually just a single datastore.
+But then again, having a separate read model just so that the querying is very straightforward is pointless with Apache Isis because, of course, Isis provides the UI "for free".
+
+It is possible though to use Apache Isis in a CQRS style.
+The entities would have no behaviour in and of themselves to modify their state, they would just be data structures.
+The behaviour (commands) would instead be implemented as xref:userguide:fun:mixins.adoc[mixins] that act upon those commands.
+In the UI (surfaced by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]) or in the REST API (surfaced by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait), only at runtime.
+However, this wouldn't be true CQRS because those mixins would modify those entities which would then be flushed back to the single database.
+
+Apache Isis' cross-cutting design does allow for denormalized data stores to be implemented.
+For example, there are community implementations of link:https://github.com/erikdehair/isis-module-elasticsearch[Elastic Search database] to enable a free-text search (this is likely to be incorporated into the Apache Isis framework in the future, if it hasn't already).
+
+There are other reasons why a separate read model might make sense, such as to precompute particular queries, or against denormalized data.
+In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.
+In such cases there is still only a single physical datastore, and so transactional integrity is retained.
+
+If you want to go all-in with CQRS with separate databases for the write and read model, then this could still be implemented with Apache Isis without pulling the framework apart too much.
+Here, Apache Isis would be used to provide the UI for the _read_ model, with the entities being truly immutable.
+Mixins would decorate these entities, but would act upon a write model whose persistence is handled outside of Apache Isis, probably using Spring Boot directly to provide a datasource.
+To synchronise the write- and read- model, the events emitted by xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] could be used.
+
+With respect to commands, Apache Isis provides the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] which allows each business action to be reified into a `Command`.
+However, names are misleading here: Apache Isis' commands are relatively passive, merely recording the intent of the user to invoke some operation.
+In a CQRS architecture, commands take a more active role, locating and acting upon the domain objects.
+More significantly, in CQRS each command has its own class, such as `PlaceOrderCommand`, instantiated by the client and then executed.
+With Apache Isis, though, the end-user merely invokes the `placeOrder(...)` action upon the domain object; the framework itself creates the `Command` as a side-effect of this.
+
+== Event Sourcing
+
+The xref:userguide:fun:concepts-patterns.adoc#cqrs[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+
+With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
+For example, if a customer places an order then this might emit the `OrderPlacedEvent`.
+Most significantly, the subscribers to these events can include the datastore itself; the state of the system is in effect a transaction log of every event that has occurred since "the beginning of time": it is sometimes called an event store.
+With CQRS, this event datastore corresponds to the command/write datastore (the query/read datastore is of course derived from the command datastore).
+
+Although it might seem counter-intuitive to be able store persistent state in this way (as some kind of souped-up "transaction log"), the reality is that with modern compute capabilities make it quite feasible to replay many 10s or 100s of thousands of events in a second.
+And the architecture supports some interesting use cases; for example it becomes quite trivial to rewind the system back to some previous point in time.
+
+When combined with CQRS we see a command that triggers a business operation, and an event that results from it.
+So, a `PlaceOrderCommand` command can result in an `OrderPlacedEvent` event.
+A subscriber to this event might then generate a further command to act upon some other system (eg to dispatch the system).
+Note that the event might be dispatched and consumed in-process or alternatively this might occur out-of-process.
+If the latter, then the subscriber will operate within a separate transaction, meaning the usual eventual consistency concerns and also compensating actions if a rollback is required.
+CQRS/event sourcing advocates point out -- correctly -- that this is just how things are in the "real world" too.
+
+Comparing event sourcing with Apache Isis, in many ways they are orthogonal and so could in theory be combined.
+An event sourced entity "rehydrate" the domain object from persistence differently than an ORM, but once that is done, the domain object is in memory to be interacted with.
+To use Apache Isis with event sourcing would require disregarding the inbuild support for persistence though an ORM, but instead implement some other event sourced persistence mechanism to rehydrate the object.
+Because Apache Isis runs on top of Spring Boot, such an integration ought to be comparatively easy to do.
+But in any case the roadmap is to support JPA as well as JDO, indeed as you read this the framework may already support this, and so in the future there are likely be additional SPIs to enable this trivially).
+
+As with a CQRS architecture, Apache xref:userguide:fun:mixins.adoc[mixins] would be the obvious way to associate behaviour with an event sourced entity.
+These mixins would most likely delegate to an event sourcing framework such as link:https://axoniq.io/[Axon] to do the work.
+Also, in Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and can optionally also be published through the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+These features could also have a role to play in an event sourced system.
+
+
+

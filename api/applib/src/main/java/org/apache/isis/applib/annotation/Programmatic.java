@@ -38,8 +38,8 @@ import java.lang.annotation.Target;
  * It can also be added to a type, meaning that the type is ignored from the metamodel.
  * This is intended as a &quot;get out of jail&quot; for any classes from unit tests, say,
  * that end up on the classpath of integration tests but should otherwise be ignored.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -49,4 +49,3 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Programmatic {
 }
-// end::refguide[]

@@ -26,7 +26,9 @@ package org.apache.isis.viewer.restfulobjects.applib;
  * Because these values are used in the <tt>@Produces</tt> annotation on the jax-rs
  * resources, they must be constants and must be strings.
  *
- * @see http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html
+ * @see <a href="http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html">buzzword.org.uk</a>
+ *
+ * @since 1.x {@index}
  */
 public final class RestfulMediaType {
 
@@ -34,9 +36,9 @@ public final class RestfulMediaType {
     }
 
     private static final String DQ = "\""; // double quotes, using abbreviation to reduce clutter
-    
+
     private static final String PROFILE_PARAM_PREFIX = "urn:org.restfulobjects:repr-types/";
-    
+
     private static final String JSON_BASE = "application/json" + ";profile=" + DQ + PROFILE_PARAM_PREFIX;
 
     public static final String APPLICATION_JSON_HOME_PAGE = JSON_BASE + "homepage" + DQ;

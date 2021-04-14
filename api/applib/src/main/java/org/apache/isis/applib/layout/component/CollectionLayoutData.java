@@ -32,12 +32,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
+ * Describes the layout of a single collection, broadly corresponds to the 
+ * {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
  *
- * <p>
- *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
- *     {@link #defaultView} is its replacement.
- * </p>
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "collection"

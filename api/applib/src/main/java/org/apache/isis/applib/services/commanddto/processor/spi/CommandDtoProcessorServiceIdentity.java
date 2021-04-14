@@ -28,9 +28,11 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
  * At least one implementation is required.
+ *
+ * @since 1.x {@index}
  */
 @Service
-@Named("isisApplib.CommandDtoProcessorServiceIdentity")
+@Named("isis.applib.CommandDtoProcessorServiceIdentity")
 @Order(OrderPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
 

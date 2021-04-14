@@ -23,21 +23,24 @@ import java.util.Optional;
 
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationRoleRepository<R extends ApplicationRole> {
 
     /**
-     * 
+     *
      * @return detached entity
      */
     R newApplicationRole();
-    
+
     Collection<R> allRoles();
 
     R newRole(String name, String description);
 
     Collection<R> findNameContaining(String search);
     Collection<R> getRoles(ApplicationUser user);
-    
+
     /**
      * auto-complete support
      * @param search
@@ -54,6 +57,6 @@ public interface ApplicationRoleRepository<R extends ApplicationRole> {
 
     void deleteRole(ApplicationRole holder);
 
-    
+
 
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -29,7 +30,6 @@ import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -59,73 +59,73 @@ public class ProperMemberSupport {
 
     }
 
-    @Model
+    @MemberSupport
     public String disableMyAction() {
         return null;
     }
     
-    @Model // variant with dependent args
+    @MemberSupport // variant with dependent args
     public String disable1MyAction(String p0) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hideMyAction() {
         return false;
     }
 
-    @Model // variant with dependent args
+    @MemberSupport // variant with dependent args
     public boolean hide1MyAction(String p0) {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String validateMyAction(String p0, String p1) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Set<String> autoComplete0MyAction(@MinLength(3) String search) {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public Set<String> autoComplete1MyAction(@MinLength(3) String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Set<String> choices0MyAction() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public Set<String> choices1MyAction() {
         return null;
     }
     
 // variant with dependent args
-//    @Model
+//    @MemberSupport
 //    public Set<String> choices1MyAction(String p0) {
 //        return null;
 //    }
     
-    @Model
+    @MemberSupport
     public String default0MyAction() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String default1MyAction() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validate0MyAction(String p0) {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validate1MyAction(String p1) {
         return null;
     }
@@ -136,27 +136,27 @@ public class ProperMemberSupport {
     @PropertyLayout(named = "foo", describedAs = "bar")
     @Getter @Setter private String myProp;
 
-    @Model
+    @MemberSupport
     public Set<String> autoCompleteMyProp(@MinLength(3) String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Set<String> choicesMyProp() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public String defaultMyProp() {
         return "";
     }
 
-    @Model
+    @MemberSupport
     public String disableMyProp() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hideMyProp() {
         return false;
     }
@@ -167,12 +167,12 @@ public class ProperMemberSupport {
     @CollectionLayout(named = "foo", describedAs = "bar")
     @Getter @Setter private List<String> myColl;
 
-    @Model
+    @MemberSupport
     public String disableMyColl() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hideMyColl() {
         return false;
     }

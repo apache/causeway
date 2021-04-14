@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javautil.uuids.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class JavaUtilUuidHolder_mixinProperty {
 
     private final JavaUtilUuidHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public java.util.UUID prop() {
         return holder.getReadOnlyProperty();
     }

@@ -20,7 +20,9 @@
 package org.apache.isis.applib.util;
 
 /**
- * An alternative to {@link ReasonBuffer}.
+ * Very simple alternative to {@link ReasonBuffer} and {@link ReasonBuffer2}.
+ *
+ * @since 1.x {@index}
  */
 public class Reasons {
     private Reasons() {

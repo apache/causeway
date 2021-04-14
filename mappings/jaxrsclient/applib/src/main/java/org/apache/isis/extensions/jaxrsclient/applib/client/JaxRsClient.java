@@ -22,6 +22,9 @@ import java.net.URI;
 
 import lombok.Getter;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface JaxRsClient {
 
     public enum ReprType {

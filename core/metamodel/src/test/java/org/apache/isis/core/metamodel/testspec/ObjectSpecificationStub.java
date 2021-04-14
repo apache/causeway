@@ -19,15 +19,18 @@
 
 package org.apache.isis.core.metamodel.testspec;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,37 +43,36 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
+import lombok.Synchronized;
 import lombok.val;
 
-public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
+public class ObjectSpecificationStub 
+extends FacetHolderImpl
+implements ObjectSpecification {
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
-    private final String name;
     private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
-     * lazily derived, see {@link #getSpecId()} 
+     * lazily derived, see {@link #getLogicalType()} 
      */
-    private ObjectSpecId specId;
+    private LogicalType logicalType;
 
     private ObjectSpecification elementSpecification;
-
-    public ObjectSpecificationStub(final Class<?> type) {
-        this(type.getName());
-    }
+    private final Class<?> correspondingClass;
+    private final String name;
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
@@ -83,16 +85,13 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Class<?> getCorrespondingClass() {
-        try {
-            return Class.forName(name);
-        } catch (final ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return correspondingClass;
     }
 
-    public ObjectSpecificationStub(final String name) {
-        this.name = name;
+    public ObjectSpecificationStub(final Class<?> correspondingClass) {
+        this.correspondingClass = correspondingClass;
         title = "";
+        name = correspondingClass.getCanonicalName();
     }
 
     @Override
@@ -111,7 +110,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String name) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String name) {
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getId().equals(name)) {
                 return Optional.ofNullable(fields.get(i));
@@ -121,7 +120,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
         return fields.stream();
     }
 
@@ -130,12 +129,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return name;
     }
 
+    @Synchronized
     @Override
-    public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            specId = getFacet(ObjectSpecIdFacet.class).value();
+    public LogicalType getLogicalType() {
+        if(logicalType == null) {
+            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value();
+            logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
         }
-        return specId;
+        return logicalType;
     }
 
     @Override
@@ -153,12 +154,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
-    @Override
-    public Optional<ObjectAction> getObjectAction(
-            final ActionType type,
-            final String name, 
-            final Can<ObjectSpecification> parameters) {
-        
+    private Optional<ObjectAction> lookupObjectAction(final String name) {
         if (action != null && action.getId().equals(name)) {
             return Optional.of(action);
         }
@@ -166,20 +162,20 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
-        final int openBracket = id.indexOf('(');
-        return getObjectAction(type, id.substring(0, openBracket), null);
-    }
-
-    @Override
-    public Optional<ObjectAction> getObjectAction(final String nameParmsIdentityString) {
-        for (final ActionType type : ActionType.values()) {
-            val action = getObjectAction(type, nameParmsIdentityString);
-            if (action.isPresent()) {
-                return action;
-            }
+    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
+        val nameParmsIdentityString = id.substring(0, id.indexOf('('));
+        val action = lookupObjectAction(nameParmsIdentityString);
+        
+        if(type==null) {
+            return action;
+        }
+        
+        if (action.isPresent()
+                && action.get().getType() == type) {
+            return action;
         }
         return Optional.empty();
+        
     }
 
     @Override
@@ -266,7 +262,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Identifier getIdentifier() {
-        return Identifier.classIdentifier(name);
+        return Identifier.classIdentifier(LogicalType.fqcn(correspondingClass));
     }
 
     @Override
@@ -302,15 +298,15 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final Contributed contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(final MixedIn contributed) {
         return null;
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return null;
     }
-
+    
     // /////////////////////////////////////////////////////////
     // view models and wizards
     // /////////////////////////////////////////////////////////
@@ -349,6 +345,38 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public String getManagedBeanName() {
         // [2158] not implemented yet
         return null;
+    }
+
+    @Override
+    public Optional<? extends ObjectMember> getMember(Method method) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ObjectAction> getAction(String id, ActionType type) {
+        // poorly implemented, inheritance not supported
+        return getDeclaredAction(id, type);
+    }
+    
+    @Override
+    public Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed,
+            final Consumer<ObjectAction> onActionOverloaded) {
+        // poorly implemented, inheritance not supported
+        return streamDeclaredActions(contributed);
+    }
+    
+    @Override
+    public Optional<ObjectAssociation> getAssociation(String id) {
+        // poorly implemented, inheritance not supported
+        return getDeclaredAssociation(id);
+    }
+
+    @Override
+    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
+        // poorly implemented, inheritance not supported
+        return streamDeclaredAssociations(contributed);
     }
 
 }

@@ -28,13 +28,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -66,7 +67,7 @@ implements HasCommonContext {
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
     private transient IsisAppCommonContext commonContext;
-    private transient IsisInteractionFactory isisInteractionFactory;
+    private transient InteractionFactory isisInteractionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
@@ -112,8 +113,8 @@ implements HasCommonContext {
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
     
-    public IsisInteractionFactory getIsisInteractionFactory() {
-        return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
+    public InteractionFactory getIsisInteractionFactory() {
+        return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
     
     public TranslationService getTranslationService() {
@@ -141,7 +142,9 @@ implements HasCommonContext {
     }
     
     protected MessageBroker getMessageBroker() {
-        return commonContext.getAuthenticationSessionTracker().getMessageBrokerElseFail();
+        return getCommonContext().getMessageBroker()
+        .orElseThrow(()->_Exceptions.illegalState(
+                "no MessageBroker available on current session"));
     }
     
     protected HeaderUiModel getHeaderModel() {

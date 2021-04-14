@@ -37,7 +37,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /**
- * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> and <tt>BackgroundServiceDefault</tt>.
+ * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> 
+ * and <tt>BackgroundServiceDefault</tt>.
  */
 public class CommandUtil {
 
@@ -56,7 +57,7 @@ public class CommandUtil {
     }
 
     public static String memberIdentifierFor(final ObjectMember objectMember) {
-        return objectMember.getIdentifier().toClassAndNameIdentityString();
+        return objectMember.getIdentifier().getFullIdentityString();
     }
 
     public static String logicalMemberIdentifierFor(final ObjectMember objectMember) {
@@ -79,8 +80,8 @@ public class CommandUtil {
 
     private static String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
-        final String objectType = onType.getSpecId().asString();
-        final String localId = objectMember.getIdentifier().toNameIdentityString();
+        final String objectType = onType.getLogicalTypeName();
+        final String localId = objectMember.getIdentifier().getMemberName();
         return objectType + "#" + localId;
     }
 

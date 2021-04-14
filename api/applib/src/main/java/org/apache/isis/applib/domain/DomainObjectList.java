@@ -37,6 +37,21 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 
+/**
+ * The initial idea of {@link DomainObjectList} was to simplify restful clients.
+ * <p>
+ * In the original Restful Objects specification, invoking an action that returned 
+ * a list meant that the RO client needed to handle this collection, which didn't 
+ * have any identity. That made for special case logic in the client.  
+ * <p>
+ * Instead, if the RO client invokes the action but uses the <i>Accept Header</i> to 
+ * request an object, then the RO viewer would automatically wrap the returned list 
+ * in this {@link DomainObjectList} view model.
+ * <p>
+ * Thus, the RO client then only ever needs to know how to render an object, in all cases.
+ *  
+ * @since 1.x {@index}
+ */
 @XmlRootElement(name = "list")
 @XmlType(
         propOrder = {
@@ -50,7 +65,7 @@ import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        objectType = "isisApplib.DomainObjectList",
+        objectType = "isis.applib.DomainObjectList",
         editing = Editing.DISABLED,
         nature = Nature.VIEW_MODEL
         )
@@ -164,8 +179,7 @@ public class DomainObjectList {
     private List<Object> objects = new ArrayList<>();
 
     @Collection(
-            domainEvent = ObjectsDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = ObjectsDomainEvent.class
             )
     public List<Object> getObjects() {
         return objects;

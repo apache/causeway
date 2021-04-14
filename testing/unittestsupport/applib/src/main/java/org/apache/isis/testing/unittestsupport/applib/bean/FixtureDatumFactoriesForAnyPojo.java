@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.bean;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class FixtureDatumFactoriesForAnyPojo {
 
     @SuppressWarnings("unchecked")

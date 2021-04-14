@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -33,6 +34,7 @@ import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifest;
+import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
 
 /**
  * Bootstrap the application.
@@ -51,27 +53,31 @@ import demoapp.web.DemoAppManifest;
     IsisModuleValMarkdownUiWkt.class,
     IsisModuleExtPdfjsUi.class,
 
+    // Custom Demo UI (Wicket Viewer)
+    WhereInTheWorldPanelFactory.class,
+
     // Persistence (JDO/DN5)
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
-
+    
+    //XrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {
 
     /**
-     * 
+     *
      * @param args
-     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
-        //DebugLoggingPreset.PERSISTENCE.apply();
-        //DebugLoggingPreset.ISIS_SESSION.apply();
         
+        //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
+
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
-        
+
     }
 
 

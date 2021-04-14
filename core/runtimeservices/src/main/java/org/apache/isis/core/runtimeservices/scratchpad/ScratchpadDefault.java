@@ -27,30 +27,18 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisInteractionScope;
+import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.commons.internal.collections._Maps;
 
-import lombok.extern.log4j.Log4j2;
-
-/**
- * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
- * interaction.  Most commonly this will be as the result of invoking a {@link org.apache.isis.applib.annotation.Bulk}
- * action.
- *
- * <p>
- * This implementation has only one implementation (this class) in applib, so it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
- */
 @Service
-@Named("isisRuntimeServices.Scratchpad")
+@Named("isis.runtimeservices.Scratchpad")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisInteractionScope
-@Log4j2
+@InteractionScope
+//@Log4j2
 public class ScratchpadDefault implements Scratchpad {
 
     /**

@@ -23,12 +23,11 @@ import org.apache.logging.log4j.Logger;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @Log4j2
 public abstract class ExceptionHandlerAbstract implements ExceptionHandler {
     public static Logger getLog() {
         return log;
     }
 }
-// end::refguide[]

@@ -18,12 +18,10 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import java.util.function.Consumer;
-
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Primary;
@@ -33,39 +31,35 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 
  * @since 2.0
  *
  */
 @Service
-@Named("isisMetaModel.ServiceInjectorDefault")
+@Named("isis.metamodel.ServiceInjectorDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServiceInjectorDefault implements ServiceInjector {
 
     private final AutowireCapableBeanFactory autowireCapableBeanFactory;
 
-    @Inject
-    public ServiceInjectorDefault(AutowireCapableBeanFactory autowireCapableBeanFactory) {
-        this.autowireCapableBeanFactory = autowireCapableBeanFactory;
-    }
-
     @Override
-    public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
-        injectServices(domainObject, onNotResolvable);
-        return domainObject;
-    }
-
-    // -- HELPERS
-
-    private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
-
-        autowireCapableBeanFactory.autowireBeanProperties(
-                targetPojo,
-                AutowireCapableBeanFactory.AUTOWIRE_NO, false);
+    public <T> @Nullable T injectServicesInto(final @Nullable T domainObject) {
         
+        if(domainObject!=null) {
+            
+            autowireCapableBeanFactory.autowireBeanProperties(
+                    domainObject,
+                    AutowireCapableBeanFactory.AUTOWIRE_NO, 
+                    /*dependencyCheck*/ false);    
+        }
+        
+        return domainObject;
     }
 
 

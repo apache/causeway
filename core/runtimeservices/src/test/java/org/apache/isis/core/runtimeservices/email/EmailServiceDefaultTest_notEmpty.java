@@ -18,26 +18,26 @@
  */
 package org.apache.isis.core.runtimeservices.email;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class EmailServiceDefaultTest_notEmpty {
+class EmailServiceDefaultTest_notEmpty {
 
     @Test
-    public void when_not_empty() throws Exception {
+    void when_not_empty() throws Exception {
         assertThat(EmailServiceDefault.notEmpty(new String[] { "joey@tribiani.com", "rachel@green.com" }), is(true));
         assertThat(EmailServiceDefault.notEmpty(new String[] { "rachel@green.com" }), is(true));
     }
 
     @Test
-    public void when_null() throws Exception {
+    void when_null() throws Exception {
         assertThat(EmailServiceDefault.notEmpty(null), is(false));
     }
 
     @Test
-    public void when_empty() throws Exception {
+    void when_empty() throws Exception {
         assertThat(EmailServiceDefault.notEmpty(new String[]{}), is(false));
     }
 

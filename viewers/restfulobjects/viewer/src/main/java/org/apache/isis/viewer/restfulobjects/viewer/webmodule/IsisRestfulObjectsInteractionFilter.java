@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,15 +47,13 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
-
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyDefault;
 
 import lombok.val;
 
@@ -69,8 +69,8 @@ import lombok.val;
 //            // executed for the request pipeline, and if so will do nothing
 //        initParams={
 //        @WebInitParam(
-//                name="authenticationSessionStrategy", 
-//                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth"), // authentication required for REST
+//                name="authenticationStrategy", 
+//                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth"), // authentication required for REST
 //        @WebInitParam(
 //                name="whenNoSession", // what to do if no session was found ...
 //                value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser
@@ -80,14 +80,14 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
     /**
      * Recommended standard init parameter key for filters and servlets to
-     * lookup an implementation of {@link AuthenticationSessionStrategy}.
+     * lookup an implementation of {@link AuthenticationStrategy}.
      */
-    public static final String AUTHENTICATION_SESSION_STRATEGY_KEY = "authenticationSessionStrategy";
+    public static final String AUTHENTICATION_SESSION_STRATEGY_KEY = "authenticationStrategy";
 
     /**
      * Default value for {@link #AUTHENTICATION_SESSION_STRATEGY_KEY} if not specified.
      */
-    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationSessionStrategyDefault.class.getName();
+    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationStrategyDefault.class.getName();
 
     /**
      * Init parameter key for backward compatibility; if logonPage set then
@@ -156,7 +156,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Autowired private IsisInteractionFactory isisInteractionFactory;
+    @Autowired private InteractionFactory isisInteractionFactory;
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
     
@@ -237,7 +237,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     }
 
 
-    private AuthenticationSessionStrategy authSessionStrategy;
+    private AuthenticationStrategy authStrategy;
     private List<String> restrictedPaths;
     private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
@@ -252,7 +252,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
     @Override
     public void init(final FilterConfig config) throws ServletException {
-        authSessionStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
+        authStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
         lookupWhenNoSession(config);
         lookupPassThru(config);
         lookupRedirectToOnException(config);
@@ -262,11 +262,11 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     /**
      * Public visibility so can also be used by servlets.
      */
-    public static AuthenticationSessionStrategy lookup(String authLookupStrategyClassName) {
+    public static AuthenticationStrategy lookup(String authLookupStrategyClassName) {
         if (authLookupStrategyClassName == null) {
             authLookupStrategyClassName = AUTHENTICATION_SESSION_STRATEGY_DEFAULT;
         }
-        return (AuthenticationSessionStrategy) _InstanceUtil.createInstance(authLookupStrategyClassName);
+        return (AuthenticationStrategy) _InstanceUtil.createInstance(authLookupStrategyClassName);
     }
 
     private void lookupWhenNoSession(final FilterConfig config) {
@@ -356,7 +356,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             if (queryString != null && queryString
                     .contains(ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
-                authSessionStrategy.invalidate(httpServletRequest, httpServletResponse);
+                authStrategy.invalidate(httpServletRequest, httpServletResponse);
                 return;
             }
 
@@ -372,23 +372,20 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             }
             
             // authenticate
-            val authenticationSession =
-                    authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
-            if (authenticationSession != null) {
+            val authentication =
+                    authStrategy.lookupValid(httpServletRequest, httpServletResponse);
+            if (authentication != null) {
                 
-                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authenticationSession);
+                authStrategy.bind(httpServletRequest, httpServletResponse, authentication);
                 
                 isisInteractionFactory.runAuthenticated(
-                        authenticationSession,
+                        authentication,
                         ()->{
                             
-                            transactionService.executeWithinTransaction(()->{
-                                try {
-                                    chain.doFilter(request, response);
-                                } catch (IOException | ServletException e) {
-                                    throw new TransactionalException("", e);
-                                }
-                            });
+                            transactionService.runWithinCurrentTransactionElseCreateNew(()->
+                                chain.doFilter(request, response))
+                            .mapFailure(e->new TransactionalException("", e))
+                            .optionalElseFail();
                             
                         });
                                 

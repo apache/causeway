@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.choices;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -34,7 +35,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     @Override
     public Can<ManagedObject> getChoices(
             final ObjectSpecification requiredSpec,
-            final ManagedObject adapter,
+            final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         

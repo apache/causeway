@@ -35,6 +35,9 @@ import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class ChangesDtoUtils {
 
     public static void init() {

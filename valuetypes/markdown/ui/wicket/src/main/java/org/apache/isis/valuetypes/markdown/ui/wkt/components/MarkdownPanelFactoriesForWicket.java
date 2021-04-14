@@ -19,6 +19,7 @@
 
 package org.apache.isis.valuetypes.markdown.ui.wkt.components;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -35,6 +36,7 @@ public class MarkdownPanelFactoriesForWicket {
 
     // -- PARENTED
 
+    @Programmatic
     public static class Parented extends MarkupPanelFactories.ParentedAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -56,6 +58,7 @@ public class MarkdownPanelFactoriesForWicket {
 
     // -- STANDALONE
 
+    @Programmatic
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract {
         private static final long serialVersionUID = 1L;
 

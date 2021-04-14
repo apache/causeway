@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.email;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,10 +28,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
-public class EmailServiceDefaultTest_actually {
+class EmailServiceDefaultTest_actually {
 
     @Test
-    public void when_null() throws Exception {
+    void when_null() throws Exception {
 
         final String[] actually = EmailServiceDefault.originalUnlessOverridden(null, null);
 
@@ -40,7 +40,7 @@ public class EmailServiceDefaultTest_actually {
     }
 
     @Test
-    public void when_not_null_but_no_override() throws Exception {
+    void when_not_null_but_no_override() throws Exception {
 
         final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), null);
 
@@ -49,7 +49,7 @@ public class EmailServiceDefaultTest_actually {
     }
 
     @Test
-    public void when_not_null_but_with_override() throws Exception {
+    void when_not_null_but_with_override() throws Exception {
 
         final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
 

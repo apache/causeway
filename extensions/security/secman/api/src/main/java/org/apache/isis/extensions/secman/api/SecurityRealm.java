@@ -20,6 +20,9 @@ package org.apache.isis.extensions.secman.api;
 
 import java.util.EnumSet;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface SecurityRealm {
 
     EnumSet<SecurityRealmCharacteristic> getCharacteristics();

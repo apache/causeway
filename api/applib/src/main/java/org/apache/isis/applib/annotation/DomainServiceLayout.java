@@ -31,8 +31,12 @@ import java.lang.annotation.Target;
  * <p>
  * Also indicates the name, and menu ordering UI hints.
  * </p>
+ *
+ * @see DomainService
+ * @see DomainObjectLayout
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.TYPE,
@@ -41,33 +45,40 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainServiceLayout {
 
-    // end::refguide[]
     /**
      * The menubar in which the menu that holds this service's actions should reside.
      */
-    // tag::refguide[]
-    MenuBar menuBar()                           // <.>
+    MenuBar menuBar()
             default MenuBar.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
-     * Name of this class (overriding the name derived from its name in code).
+     * Enumerates the available menu bars for positioning a domain service's
+     * actions as menu items.
+     *
+     * @since 1.x {@index}
      */
-    // tag::refguide[]
-    String named()                              // <.>
-            default "";
-
-    // end::refguide[]
-
-    // tag::refguide-menu-bar[]
     public enum MenuBar {
         PRIMARY,
         SECONDARY,
         TERTIARY,
         NOT_SPECIFIED
     }
-    // end::refguide-menu-bar[]
 
-    // tag::refguide[]
+    /**
+     * Name of this class (overriding the name derived from its name in code).
+     *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
+     * @see ActionLayout#named()
+     * @see ParameterLayout#named()
+     * @see PropertyLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#named()
+     */
+    String named()
+            default "";
+
+
 }
-// end::refguide[]

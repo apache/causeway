@@ -27,18 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Title;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,36 +46,52 @@ import demoapp.dom.types.javaawt.images.holder.JavaAwtImageHolder2;
 )
 @lombok.NoArgsConstructor                                               // <.>
 public class JavaAwtImageVm
-        implements HasAsciiDocDescription, JavaAwtImageHolder2 {
+        implements HasAsciiDocDescription
+//end::class[]
+// label positions not yet supported
+//        , JavaAwtImageHolder2
+//tag::class[]
+{
 
 //end::class[]
     public JavaAwtImageVm(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+//        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
 
+    // @Title not yet supported
+    public String title() {
+        return "Image view model";
+    }
+
+//    @Title(prepend = "Image view model: ")  // not yet supported
 //tag::class[]
-    @Title(prepend = "Image view model: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                        // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                // <.>
-    @MemberOrder(name = "editable-properties", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private BufferedImage readWriteProperty;
+//end::class[]
+// editable properties not yet supported:
+//    @Property(editing = Editing.ENABLED)                                // <.>
+//    @PropertyLayout(group = "editable-properties", sequence = "1")
+//    @XmlElement(required = true)
+//    @Getter @Setter
+//    private BufferedImage readWriteProperty;
 
+//tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                       // <.>
-    @MemberOrder(name = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "optional-properties", sequence = "2")
-    @Getter @Setter
-    private BufferedImage readWriteOptionalProperty;
+//end::class[]
+// editable properties not yet supported:
+//    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+//    @PropertyLayout(group = "optional-properties", sequence = "2")
+//    @Getter @Setter
+//    private BufferedImage readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

@@ -57,17 +57,35 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-applib</artifactId>
+	    	<groupId>org.apache.isis.testing</groupId>
+        	<artifactId>isis-testing-fixtures-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtimeservices</artifactId>
+        </dependency>
+
+        <!-- PERSISTENCE -->
+
+		<dependency>
+            <groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdo</artifactId>
+			<type>pom</type>
+        </dependency>
+
+        <!-- Testing -->
+
+        <dependency>
+	    	<groupId>org.apache.isis.testing</groupId>
+        	<artifactId>isis-testing-unittestsupport-applib</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
 	    	<groupId>org.apache.isis.testing</groupId>
-        	<artifactId>isis-testing-fixtures-applib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtimeservices</artifactId>
+        	<artifactId>isis-testing-integtestsupport-applib</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

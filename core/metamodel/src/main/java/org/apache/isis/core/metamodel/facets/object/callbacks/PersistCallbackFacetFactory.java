@@ -27,9 +27,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 

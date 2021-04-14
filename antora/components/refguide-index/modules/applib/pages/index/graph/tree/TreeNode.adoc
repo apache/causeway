@@ -1,0 +1,76 @@
+= TreeNode _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Fundamental building block of Tree structures.
+
+== API
+
+[source,java]
+.TreeNode.java
+----
+interface TreeNode<T> {
+  int getIncomingCount()
+  int getOutgoingCount()
+  Stream<Edge<T>> streamIncoming()
+  Stream<Edge<T>> streamOutgoing()
+  TreeNode<T> getParentIfAny()
+  int getChildCount()
+  Stream<TreeNode<T>> streamChildren()
+  boolean isRoot()
+  boolean isLeaf()
+  TreePath getPositionAsPath()
+  TreeState getTreeState()     // <.>
+  boolean isExpanded(TreePath treePath)
+  void expand(TreePath... treePaths)     // <.>
+  void collapse(TreePath... treePaths)     // <.>
+  TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
+  Iterator<TreeNode<T>> iteratorHierarchyUp()
+  Stream<TreeNode<T>> streamHierarchyUp()
+  Iterator<TreeNode<T>> iteratorDepthFirst()
+  Iterator<TreeNode<T>> iteratorBreadthFirst()
+  Stream<TreeNode<T>> streamDepthFirst()
+  Stream<TreeNode<T>> streamBreadthFirst()
+  Class<? extends TreeAdapter<T>> getTreeAdapterClass()     // <.>
+}
+----
+
+<.> xref:#getTreeState__[getTreeState()]
+<.> xref:#expand__TreePath[expand(TreePath)]
++
+--
+Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
+--
+<.> xref:#collapse__TreePath[collapse(TreePath)]
++
+--
+Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
+--
+<.> xref:#lazy__T_Class[lazy(T, Class)]
++
+--
+Convenient shortcut.
+--
+<.> xref:#getTreeAdapterClass__[getTreeAdapterClass()]
+
+== Members
+
+[#getTreeState__]
+=== getTreeState()
+
+[#expand__TreePath]
+=== expand(TreePath)
+
+Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
+
+[#collapse__TreePath]
+=== collapse(TreePath)
+
+Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
+
+[#lazy__T_Class]
+=== lazy(T, Class)
+
+Convenient shortcut.
+
+[#getTreeAdapterClass__]
+=== getTreeAdapterClass()

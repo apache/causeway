@@ -19,11 +19,13 @@
 package org.apache.isis.security.shiro.webmodule;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -59,15 +61,16 @@ import lombok.extern.log4j.Log4j2;
  * WebModule to enable support for Shiro.
  * <p>
  * Can be customized via static {@link WebModuleShiro#setShiroEnvironmentClass(Class)}
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  */
 @Service
-@Named("isisSecurityKeycloak.WebModuleKeycloak")
+@Named("isis.security.WebModuleShiro")
 @Order(OrderPrecedence.FIRST + 200)
 @Qualifier("Shiro")
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
-    
+
 
     private static final String SHIRO_FILTER_NAME = "ShiroFilter";
 
@@ -82,7 +85,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         if(shiroEnvironmentClass==null) {
             System.setProperty("shiroEnvironmentClass", null);
             return;
-        } 
+        }
         System.setProperty("shiroEnvironmentClass", shiroEnvironmentClass.getName());
     }
 
@@ -93,8 +96,8 @@ public class WebModuleShiro extends WebModuleAbstract {
             if(_Strings.isNotEmpty(customShiroIniResource)) {
                 val ini = new Ini();
                 ini.loadFromPath(customShiroIniResource);
-                return ini;	
-            } 
+                return ini;
+            }
             return null;
         }
         // see https://issues.apache.org/jira/browse/SHIRO-610
@@ -115,7 +118,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         System.setProperty("shiroIniResource", resourcePath);
         setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
     }
-    
+
     /**
      * Adds support for dependency injection into security realms
      * @since 2.0
@@ -135,16 +138,16 @@ public class WebModuleShiro extends WebModuleAbstract {
             super.contextInitialized(sce);
         }
 
-        @Override 
+        @Override
         protected WebEnvironment createEnvironment(ServletContext servletContext) {
             val shiroEnvironment = super.createEnvironment(servletContext);
             val securityManager = shiroEnvironment.getSecurityManager();
 
             injectServicesIntoRealms(securityManager);
-            
+
             return shiroEnvironment;
         }
-        
+
         @SuppressWarnings("unchecked")
         @SneakyThrows
         public void injectServicesIntoRealms(
@@ -158,16 +161,16 @@ public class WebModuleShiro extends WebModuleAbstract {
                         + "As a consequence cannot enumerate realms.");
                 return;
             }
-            
+
             val realms = (Collection<Realm>) realmsGetter
                     .invoke(securityManager, _Constants.emptyObjects);
 
             realms.stream().forEach(serviceInjector::injectServicesInto);
         }
-        
+
     }
 
-    // -- 
+    // --
 
     @Getter
     private final String name = "Shiro";
@@ -187,7 +190,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(
-                        null,
+                        EnumSet.of(DispatcherType.REQUEST, DispatcherType.ASYNC),
                         false, // filter is forced first
                         "/*");
             });

@@ -18,13 +18,11 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -49,12 +47,11 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -137,9 +134,9 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      *     Basically just calls (the helper methods also called by) first
-     *     {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy)}
      *     and then
-     *     {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy)}
      *     Those methods are
      *     separated out so that viewers have more fine-grained control.
      * </p>
@@ -151,10 +148,10 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Normally action validation is all performed by
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValid(InteractionHead, Can, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy) this method} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) validate argument set}
+     * {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy) validate argument set}
      * afterwards.
      *
      * <p>
@@ -169,10 +166,10 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Normally action validation is all performed by
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)} to
+     * {@link #isArgumentSetValid(InteractionHead, Can, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy)} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy) this method} to
      * validate the entire argument set afterwards.
      *
      * <p>
@@ -203,8 +200,6 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      * Implementations may build this array lazily or eagerly as required.
-     *
-     * @return
      */
     Can<ObjectActionParameter> getParameters();
 
@@ -215,8 +210,6 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Returns set of parameter information matching the supplied filter.
-     *
-     * @return
      */
     Can<ObjectActionParameter> getParameters(Predicate<ObjectActionParameter> predicate);
 
@@ -258,14 +251,13 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(String prefix) {
-        final String ownerId = getOnType().getSpecId().asString().replace(".", "-");
+        final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
-
-    // -- Util
+    
+    // -- UTIL
+    
     public static final class Util {
-
-        static final MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
 
         private Util() {
         }
@@ -318,7 +310,7 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getIdentifier();
 
-            final String className = action.getOnType().getSpecId().asString().replace(".","-");
+            final String className = action.getOnType().getLogicalTypeName().replace(".","-");
             final String actionId = action.getId();
             return className + "-" + actionId;
         }
@@ -359,18 +351,13 @@ public interface ObjectAction extends ObjectMember {
                 final ActionType actionType,
                 final List<ObjectAction> topLevelActions) {
 
-            final ObjectSpecification adapterSpec = adapter.getSpecification();
+            val spec = adapter.getSpecification();
 
-            Predicate<ObjectAction> predicate =
-                    ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec)
-                    .and(ObjectAction.Predicates.dynamicallyVisible(adapter, 
-                            InteractionInitiatedBy.USER, Where.ANYWHERE))
-                    .and(ObjectAction.Predicates.excludeWizardActions(adapterSpec));
-
-            final Stream<ObjectAction> userActions = 
-                    adapterSpec.streamObjectActions(actionType, Contributed.INCLUDED)
-                    .filter(predicate);
-            userActions
+            spec.streamDeclaredActions(actionType, MixedIn.INCLUDED)
+            .filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec))
+            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter, 
+                    InteractionInitiatedBy.USER, Where.ANYWHERE))
+            .filter(ObjectAction.Predicates.excludeWizardActions(spec))
             .forEach(topLevelActions::add);
 
         }
@@ -386,15 +373,7 @@ public interface ObjectAction extends ObjectMember {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 
-            Collections.sort(associatedActions, new Comparator<ObjectAction>() {
-
-                @Override
-                public int compare(ObjectAction o1, ObjectAction o2) {
-                    final MemberOrderFacet m1 = o1.getFacet(MemberOrderFacet.class);
-                    final MemberOrderFacet m2 = o2.getFacet(MemberOrderFacet.class);
-                    return memberOrderFacetComparator.compare(m1, m2);
-                }
-            });
+            Collections.sort(associatedActions, Comparators.byMemberOrderSequence(false));
             return associatedActions;
         }
 
@@ -402,16 +381,12 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject adapter,
                 final ActionType type,
                 final ObjectAssociation association, final List<ObjectAction> associatedActions) {
-            final ObjectSpecification objectSpecification = adapter.getSpecification();
+            
+            val objectSpecification = adapter.getSpecification();
 
-            Predicate<ObjectAction> predicate = 
-                    ObjectAction.Predicates.memberOrderOf(association)
-                    .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
-
-            final Stream<ObjectAction> userActions = 
-                    objectSpecification.streamObjectActions(type, Contributed.INCLUDED)
-                    .filter(predicate);
-            userActions
+            objectSpecification.streamDeclaredActions(type, MixedIn.INCLUDED)
+            .filter(ObjectAction.Predicates.actionIsAssociatedWith(association))
+            .filter(ObjectAction.Predicates.excludeWizardActions(objectSpecification))
             .forEach(associatedActions::add);
         }
 
@@ -515,34 +490,6 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        //        public static Predicate<ObjectAction> bulk() {
-        //            return new Predicate<ObjectAction>() {
-        //
-        //                @Override
-        //                public boolean test(ObjectAction oa) {
-        //
-        //                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
-        //                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
-        //                        return false;
-        //                    }
-        //                    if (oa.getParameterCount() != 0) {
-        //                        return false;
-        //                    }
-        //
-        //                    // currently don't support returning Blobs or Clobs
-        //                    // (because haven't figured out how to rerender the current page, but also to do a download)
-        //                    ObjectSpecification returnSpec = oa.getReturnType();
-        //                    if (returnSpec != null) {
-        //                        Class<?> returnType = returnSpec.getCorrespondingClass();
-        //                        if (returnType == Blob.class || returnType == Clob.class) {
-        //                            return false;
-        //                        }
-        //                    }
-        //                    return true;
-        //                }
-        //            };
-        //        }
-
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
@@ -554,13 +501,6 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        //        public static Predicate<ObjectAction> notBulkOnly() {
-        //            return (ObjectAction t) -> {
-        //                    BulkFacet facet = t.getFacet(BulkFacet.class);
-        //                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
-        //            };
-        //        }
-
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return wizardActions(objectSpecification).negate();
         }
@@ -570,24 +510,26 @@ public interface ObjectAction extends ObjectMember {
                 if (objectSpecification == null) {
                     return false;
                 }
-                final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
+                val wizardFacet = objectSpecification.getFacet(WizardFacet.class);
                 return wizardFacet != null && wizardFacet.isWizardAction(input);
             };
         }
 
-        public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
+        public static Predicate<ObjectAction> actionIsAssociatedWith(ObjectAssociation association) {
             final String assocName = association.getName();
             final String assocId = association.getId();
-            return (ObjectAction t) -> {
-                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
+            return (ObjectAction objectAction) -> {
+                
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
                     return false;
                 }
-                final String memberOrderName = memberOrderFacet.name().toLowerCase();
-                if (_Strings.isNullOrEmpty(memberOrderName)) {
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(fieldSetId)) {
                     return false;
                 }
-                return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
+                return fieldSetId.equalsIgnoreCase(assocName) 
+                        || fieldSetId.equalsIgnoreCase(assocId);
             };
         }
 
@@ -595,22 +537,23 @@ public interface ObjectAction extends ObjectMember {
 
             final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
 
-            adapterSpec.streamAssociations(Contributed.INCLUDED)
+            adapterSpec.streamAssociations(MixedIn.INCLUDED)
             .forEach(ass->{
                 associationNamesAndIds.add(_Strings.lower(ass.getName()));
                 associationNamesAndIds.add(_Strings.lower(ass.getId()));
             });
 
-            return (ObjectAction t) -> {
-                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
+            return (ObjectAction objectAction) -> {
+                
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
                     return true;
                 }
-                final String memberOrderName = memberOrderFacet.name().toLowerCase();
-                if (_Strings.isNullOrEmpty(memberOrderName)) {
-                    return false;
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(fieldSetId)) {
+                    return true;
                 }
-                return !associationNamesAndIds.contains(memberOrderName);
+                return !associationNamesAndIds.contains(fieldSetId.toLowerCase());
             };
         }
     }

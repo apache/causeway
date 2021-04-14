@@ -20,14 +20,14 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.pc
+import pl.treksoft.kvision.utils.perc
 
 object RoApp : SimplePanel() {
     init {
         this.add(RoMenuBar.navbar)
 
         val view = HPanel(classes = setOf("main")) {
-            width = 100.pc
+            width = 100.perc
         }
         view.add(RoIconBar.panel)
         view.add(RoView.tabPanel)

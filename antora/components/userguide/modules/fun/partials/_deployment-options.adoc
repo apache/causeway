@@ -1,0 +1,90 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+== Prototyping
+
+Apache Isis is great for rapid prototyping, because all you need to write in order to get an application up-and-running is the domain model objects.
+
+By focusing just on the domain, you'll also find that you start to develop a ubiquitous language - a set of terms and concepts that the entire team (business and technologists alike) have a shared understanding.
+
+If you wish, you could combine this with BDD - the framework integrates with xref:testing:specsupport:about.adoc[Cucumber].
+
+Once you've sketched out your domain model, you can then either start-over and deploy with one of the deployment options listed below.
+
+
+== Deploy with a generic UI
+
+One of the original motivations for Apache Isis was to be able automatically generate a user interface for a domain object model.
+The framework's architecture allows for different user interface technologies.
+The principal implementation is the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], which as well as providing an appealing default user interface also has the ability to be customized the user interface by writing new link:http://wicket.apache.org[Apache Wicket] components.
+The framework provides a xref:extensions:ROOT:about.adoc[number of these].
+
+Deploying on Apache Isis means that the framework also manages object persistence.
+Again this is pluggable.
+There are two implementations, either xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)] or xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)].
+These are normally used with an RDBMS, though in principle could be used with NoSQL databases.
+JDO/DataNucleus historically has link:https://www.datanucleus.org/products/accessplatform/datastores/datastores.html[extensive support] for NoSQL, though JPA/EclipseLink also has link:https://wiki.eclipse.org/EclipseLink/FAQ/NoSQL[some support] also.
+
+
+== Deploy with custom controllers
+
+If the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s extensions are too restrictive, another option is to deploy custom controllers/views for specific use cases _alongside_ the generic viewer.
+This way you can use the generic viewer to deliver the majority of the app's functionality, but you can justify the additional effort of writing a custom controller for those specialised/high volume use cases where a different flow is needed.
+
+Because Apache Isis runs on top of link:https://spring.io/projects/spring-boot[Spring Boot], you can easily integrate any of the UI technologies supported by Spring, or of course use Apache Wicket for a similar look-n-feel.
+
+
+== Deploy as a REST API
+
+REST (Representation State Transfer) is an architectural style for building highly scalable distributed systems, using the same principles as the World Wide Web.
+Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
+
+The http://restfulobjects.org[Restful Objects specification] defines a means by which a domain object model can be exposed as RESTful resources using JSON representations over HTTP.
+
+Apache Isis' xref:vro:ROOT:about.adoc[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
+The set of domain objects can also be optionally restricted to exclude domain entities (thereby avoiding leaking implementation details).
+
+There are three main use cases for deploying Apache Isis as a RESTful web service are:
+
+* to allow a custom UI to be built against the RESTful API
++
+For example, using a JavaScript framework such as Angular/Ionic/ReactJs/Vue etc, or JavaFX
+
+* to enable integration between systems
++
+REST is designed to be machine-readable, and so is an excellent choice for synchronous data interchange scenarios.
++
+The framework provides xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[SPI]s to allow custom repreentations to be returned as required.
+
+* as the basis for a generic UI.
++
+At the time of writing there are a couple being developed, link:https://github.com/joerg-rade/kroviz[Kroviz] (using Kotlin/JS), and link:https://github.com/sebastianslutzky/rob[Rob] (using link:https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor[Microsoft's Blazor]).
+
+Another framework that implements the RO spec is the link:https://github.com/NakedObjectsGroup/NakedObjectsFramework[Naked Objects Framework] (on .NET).
+It provides a complete generic UI tested against its own RO implementation.
+
+As for the human-usable generic UI discussed  xref:#deploy-with-a-generic-ui[above], the framework manages object persistence, for example using the JDO/DataNucleus objectstore.
+It is perfectly possible to deploy the RESTful API alongside an auto-generated webapp; both work from the same domain object model.
+
+
+
+== Deploy on your own platform
+
+You may be happy to use Apache Isis for prototyping, but have your own proprietary application framework to actually build production apps.
+
+Apache Isis supports this, because the programming model defined by Apache Isis deliberately minimizes the dependencies on the rest of the framework.
+In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as xref:refguide:applib:index/annotation/Action.adoc[@Action] and xref:refguide:applib:index/annotation/Property.adoc[@Property].
+It's therefore relatively easy to take a domain object prototyped and/or tested using Apache Isis, but to deploy on some other framework's runtime.
+
+If you are interested in taking this approach, then you will need to provide your own implementations of any framework-provided services used by your code.
+
+If your own application framework is based on link:https://spring.io/projects/spring-boot[Spring Boot] and with JPA or JDO, then there is another option.
+As noted above, Apache Isis itself runs on top of Spring Boot.
+You could therefore develop a complete custom UI using one of the regular Spring technologies and run that alongside Apache Isis - in effect the option described <<deploy-with-custom-controllers,earlier>> but for every use case, not just selected ones.
+Apache Isis continues to manage the object lifecycle and persistence as a thin layer on top of Spring, but your custom UI renders the domain objects exactly as you require.
+
+
+
+

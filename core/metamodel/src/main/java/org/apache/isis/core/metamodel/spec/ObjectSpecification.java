@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
@@ -30,9 +31,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -50,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -61,15 +61,14 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -82,8 +81,14 @@ import lombok.val;
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface ObjectSpecification extends Specification, ObjectActionContainer,
-        ObjectAssociationContainer, Hierarchical, DefaultProvider {
+public interface ObjectSpecification 
+extends 
+    Specification, 
+    ObjectActionContainer,
+    ObjectAssociationContainer, 
+    Hierarchical, 
+    DefaultProvider,
+    HasLogicalType {
 
     final class Comparators{
         private Comparators(){}
@@ -96,16 +101,36 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 (final ObjectSpecification s1, final ObjectSpecification s2) -> 
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-
+    
+    /**
+     * @param memberId
+     * @return optionally the ObjectMember associated with given {@code memberId}, 
+     * based on whether given memberId exists
+     */
     Optional<? extends ObjectMember> getMember(String memberId);
+    
+    /**
+     * @param method
+     * @return optionally the ObjectMember associated with given {@code method}, 
+     * based on whether such an association exists
+     */
+    Optional<? extends ObjectMember> getMember(Method method);
+    
+    default ObjectMember getMemberElseFail(final @NonNull Method method) {
+        return getMember(method).orElseThrow(()->{
+            val methodName = method.getName();
+            val msg = "Method '" + methodName + "' does not correspond "
+                    + "to any of the object's fields or actions.";
+            return new UnsupportedOperationException(msg);
+        });
+    }
 
     /**
      * @param onType
-     * @return
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
-        return streamObjectActions(Contributed.INCLUDED)
+        return streamActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
@@ -113,22 +138,9 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     }
 
     /**
-     * @return
+     * @return Java class this specification is associated with
      */
     Class<?> getCorrespondingClass();
-
-    /**
-     * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
-     *
-     * <p>
-     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
-     * If none has been specified then will default to the fully qualified class name (with
-     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime bytecode enhancement.
-     *
-     * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecIdElseLoad(ObjectSpecId)}}.
-     */
-    ObjectSpecId getSpecId();
 
     /**
      * Returns an (immutable) "full" identifier for this specification.
@@ -170,7 +182,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the description, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link DescribedAsFacet#value()) value} of
+     * Corresponds to the {@link DescribedAsFacet#value() value} of
      * {@link DescribedAsFacet}; is not necessarily immutable.
      */
     @Override
@@ -180,7 +192,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns a help string or lookup reference, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet};
+     * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
      * is not necessarily immutable.
      */
     String getHelp();
@@ -198,7 +210,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the name of an icon to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link IconFacet#iconName(Instance)) icon name}
+     * Corresponds to the {@link IconFacet#iconName(ManagedObject) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ManagedObject object);
@@ -206,7 +218,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     /**
      * Returns this object's navigable parent, if any.
      * @param object
-     * @return
      * @since 2.0
      */
     Object getNavigableParent(Object object);
@@ -215,7 +226,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the CSS class name to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link CssClassFacet#cssClass(org.apache.isis.core.metamodel.spec.Instance)} value}
+     * Corresponds to the {@link CssClassFacet#cssClass(ManagedObject)} value}
      * returned by the {@link CssClassFacet}.
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
@@ -285,7 +296,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
      * therefore will return NOT {@link #isParentedOrFreeCollection()}
      *
-     * @see #isParentedOrFreeCollection().
+     * @see #isParentedOrFreeCollection()
      */
     default boolean isNotCollection() {
         return !isParentedOrFreeCollection();
@@ -371,7 +382,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * If this specification represents a bean, that is a managed bean, then
      * returns the bean's name/id as recognized by the IoC container.
      * <p>Otherwise returns {@code null}. 
-     * @return
      */
     String getManagedBeanName();
 
@@ -405,33 +415,33 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
         final Class<?> cls = correspondingClass;
         if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+            throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
         }
 
         final Object newInstance;
         try {
             newInstance = cls.newInstance();
         } catch (final IllegalAccessException | InstantiationException e) {
-            throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
+            throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
         }
 
         return newInstance; 
     }
 
     /**
-     * Streams all FacetHolders associated with this spec. 
+     * Streams all FacetHolders associated with this spec. (including inherited)
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
         
         val self = Stream.of(this);
-        val actions = streamObjectActions(Contributed.EXCLUDED);
-        val actionParameters = streamObjectActions(Contributed.EXCLUDED)
+        val actions = streamActions(MixedIn.EXCLUDED);
+        val actionParameters = streamActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
-                                : Stream.empty());
-        val properties = streamProperties(Contributed.EXCLUDED);
-        val collections = streamCollections(Contributed.EXCLUDED);
+                        : Stream.empty());
+        val properties = streamProperties(MixedIn.EXCLUDED);
+        val collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
         
@@ -439,7 +449,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Introspecting up to the level required.
-     * @return whether it's necessary to re-run validations.
      * @since 2.0
      */
     void introspectUpTo(IntrospectionState upTo);
@@ -516,8 +525,5 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 Serializable.class.isAssignableFrom(getCorrespondingClass())
                 || Externalizable.class.isAssignableFrom(getCorrespondingClass());
     }
-
-    
-    
 
 }

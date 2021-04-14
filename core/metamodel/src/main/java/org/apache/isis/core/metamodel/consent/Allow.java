@@ -41,8 +41,6 @@ public class Allow extends ConsentAbstract {
      *
      * @see Veto
      * @deprecated
-     * @param reasonVeteod
-     * @param advisorClass
      */
     @Deprecated
     public Allow(final String description) {

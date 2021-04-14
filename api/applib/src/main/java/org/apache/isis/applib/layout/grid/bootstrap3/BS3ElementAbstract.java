@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
+ *
+ * @since 1.x {@index}
  */
 public abstract class BS3ElementAbstract implements BS3Element {
 

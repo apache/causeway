@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.update.clear;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * Mechanism for clearing a property of an object (that is, setting it to
@@ -34,10 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * fallback the standard model also supports invoking the <tt>setXxx</tt> method
  * with <tt>null</tt>.
  */
-public interface PropertyClearFacet extends Facet {
+public interface PropertyClearFacet extends PropertyClearingAccessor, Facet {
 
-    ManagedObject clearProperty(
-            final OneToOneAssociation owningProperty,
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    
 }

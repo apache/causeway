@@ -1,0 +1,74 @@
+= CollectionMethodEvent
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an interaction with a collection object itself.
+
+== API
+
+[source,java]
+.CollectionMethodEvent.java
+----
+class CollectionMethodEvent {
+  CollectionMethodEvent(final Object source, final Identifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue)
+  Object getSource()     // <.>
+  Object getDomainObject()     // <.>
+  String getMethodName()     // <.>
+  Object[] getArgs()     // <.>
+  Object getReturnValue()     // <.>
+}
+----
+
+<.> xref:#getSource__[getSource()]
++
+--
+The collection object (an instance of a `List` or a `Set` etc) that is the originator of this event.
+--
+<.> xref:#getDomainObject__[getDomainObject()]
++
+--
+The owner of the collection (an instance of `Customer/tt> or `Order` , say).` 
+--
+<.> xref:#getMethodName__[getMethodName()]
++
+--
+The name of the method invoked on this collection, for example `isEmpty` .
+--
+<.> xref:#getArgs__[getArgs()]
++
+--
+The arguments with which the collection's _#getMethodName() method_ was invoked.
+--
+<.> xref:#getReturnValue__[getReturnValue()]
++
+--
+The return value from the _#getMethodName() method_ invocation.
+--
+
+== Members
+
+[#getSource__]
+=== getSource()
+
+The collection object (an instance of a `List` or a `Set` etc) that is the originator of this event.
+
+The owning domain object is available using _#getDomainObject()_ .
+
+[#getDomainObject__]
+=== getDomainObject()
+
+The owner of the collection (an instance of `Customer/tt> or `Order` , say).` 
+
+[#getMethodName__]
+=== getMethodName()
+
+The name of the method invoked on this collection, for example `isEmpty` .
+
+[#getArgs__]
+=== getArgs()
+
+The arguments with which the collection's _#getMethodName() method_ was invoked.
+
+[#getReturnValue__]
+=== getReturnValue()
+
+The return value from the _#getMethodName() method_ invocation.

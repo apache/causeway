@@ -1,0 +1,55 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Usage
+
+Suppose that there's a `TaxService` that calculates tax on `Taxable` items, with respect to some `TaxType`, and for a given `LocalDate`.
+To calculate tax it must run a database query and then perform some additional calculations.
+
+Our original implementation is:
+
+[source,java]
+----
+@DomainService
+public class TaxService {
+    public BigDecimal calculateTax(
+            final Taxable t, final TaxType tt, final LocalDate d) {
+        // query against DB using t, tt, d
+        // further expensive calculations
+    }
+}
+----
+
+Suppose now that this service is called in a loop, for example iterating over a bunch of orders, where several of those orders are for the same taxable products, say.
+In this case the result of the calculation would always be the same for any given product.
+
+We can therefore refactor the method to use the query cache as follows:
+
+[source,java]
+----
+public class TaxService {
+    public BigDecimal calculateTax(
+            final Taxable t, final TaxType tt, final LocalDate d) {
+        return queryResultsCache.execute(
+            new Callable<BigDecimal>(){                         // <1>
+                public BigDecimal call() throws Exception {
+                     // query against DB using t, tt, d
+                     // further expensive calculations
+                }
+            },
+            TaxService.class,                                   // <2>
+            "calculateTax",
+            t, tt, d);
+        }
+}
+----
+<1> the `Callable` is the original code
+<2> the remaining parameters in essence uniquely identify the method call.
+
+This refactoring will be worthwhile provided that enough of the orders being processed reference the same taxable products.
+If however every order is for a different product, then no benefit will be gained from the refactoring.
+
+
+== Related Services
+
+The xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them.

@@ -55,7 +55,8 @@ import lombok.val;
  * </p>
  *
  * TODO: this should probably implement java.security.Principal so that it doesn't get wrapped in a
- * ShiroHttpServletRequest.ObjectPrincipal.  Such a change would need some testing to avoid regressions, though.
+ * ShiroHttpServletRequest.ObjectPrincipal. 
+ * Such a change would need some testing to avoid regressions, though.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class PrincipalForApplicationUser implements AuthorizationInfo {

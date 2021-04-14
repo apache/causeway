@@ -18,17 +18,19 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
+import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 
 public class TranslationService_forTesting implements TranslationService {
 
     @Override
-    public String translate(String context, String text) {
+    public String translate(TranslationContext context, String text) {
         return text;
     }
 
     @Override
-    public String translate(String context, String singularText, String pluralText, int num) {
+    public String translate(TranslationContext context, String singularText, String pluralText, int num) {
         return num==1 ? singularText : pluralText;
     }
 

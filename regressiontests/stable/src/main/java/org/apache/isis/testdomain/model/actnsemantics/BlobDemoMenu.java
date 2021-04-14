@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "smoketests.BlobDemoMenu")
+@DomainService(nature=NatureOfService.VIEW, objectType = "regressiontests.BlobDemoMenu")
 @DomainObjectLayout(named="Blob Demo Menu")
 public class BlobDemoMenu {
 
@@ -38,7 +38,7 @@ public class BlobDemoMenu {
     @Action
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
-        val demo = factoryService.viewModel(BlobDemo.class);
+        val demo = factoryService.viewModel(new BlobDemo());
         demo.initDefaults();  
         return demo;
     }

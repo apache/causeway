@@ -20,25 +20,27 @@ package org.apache.isis.extensions.secman.jdo.seed;
 
 import javax.inject.Inject;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.GlobalTenancy;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityFixtureRoleAndPermissions;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegularUserRoleAndPermissions;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtSecmanAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtSecmanAdminUser;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtSecmanFixtureRoleAndPermissions;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtSecmanRegularUserRoleAndPermissions;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * This fixture script will be run automatically on start-up by virtue of the fact that the
  * {@link org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService} is a
  * {@link org.apache.isis.applib.annotation.DomainService} and calls the setup during its
- * {@link org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService#init() init} 
+ * {@link org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService#onMetamodelEvent(org.apache.isis.core.metamodel.events.MetamodelEvent) init}
  * ({@link javax.annotation.PostConstruct}) method.
+ *
+ * @since 2.0 {@index}
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
 
     @Override
     protected void execute(ExecutionContext executionContext) {
@@ -47,12 +49,12 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new GlobalTenancy());
 
         // security module
-        executionContext.executeChild(this, new IsisModuleSecurityAdminRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanAdminRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityFixtureRoleAndPermissions(configBean));
-        executionContext.executeChild(this, new IsisModuleSecurityRegularUserRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanFixtureRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityAdminUser(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanAdminUser(configBean));
 
         // isis applib
         executionContext.executeChild(this, new IsisExtFixturesFixtureResultsRoleAndPermissions());

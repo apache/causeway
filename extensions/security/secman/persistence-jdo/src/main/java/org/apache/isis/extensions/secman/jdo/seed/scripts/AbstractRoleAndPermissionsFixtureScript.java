@@ -18,14 +18,10 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -51,62 +47,22 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     }
 
     /**
-     * Subclasses should override and call any of
-     * {@link #newPackagePermissions(org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule, org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode, String...)},
-     * {@link #newClassPermissions(org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule, org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode, Class[])} or
-     * {@link #newMemberPermissions(org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule, org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode, Class, String...)}.
+     * Subclasses should override and call
+     * {@link #newPermissions(ApplicationPermissionRule, ApplicationPermissionMode, Can)}
      */
     @Override
     protected abstract void execute(ExecutionContext executionContext);
 
-    // -- newPackagePermissions, newClassPermissions, newMemberPermissions
-
     /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     * For subclasses to call in {@link #execute(FixtureScript.ExecutionContext)}.
      */
-    protected void newPackagePermissions(
+    protected void newPermissions(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final String... featureFqns) {
+            final Can<ApplicationFeatureId> featureIds) {
 
-        newPermissions(rule, mode, ApplicationFeatureType.PACKAGE, Arrays.asList(featureFqns));
-    }
-
-    /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
-     */
-    protected void newClassPermissions(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final Class<?>... classes) {
-
-        newPermissions(rule, mode, ApplicationFeatureType.CLASS, asFeatureFqns(classes));
-    }
-
-
-    /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
-     */
-    protected void newMemberPermissions(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final Class<?> cls,
-            final String... members) {
-        newPermissions(rule, mode, ApplicationFeatureType.MEMBER, asFeatureFqns(cls, members));
-    }
-
-
-
-
-    // -- helpers
-
-    private void newPermissions(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
-            final Iterable<String> featureFqns) {
-
-        if(featureFqns == null) {
+        if(featureIds == null
+                || featureIds.isEmpty()) {
             return;
         }
 
@@ -114,39 +70,22 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         if(securityRole == null) {
             securityRole = applicationRoleRepository.newRole(roleName, roleDescription);
         }
-        for (String featureFqn : featureFqns) {
+        
+        for(ApplicationFeatureId featureId : featureIds) {
+            val featureFqn = featureId.getFullyQualifiedName();
+
             // can't use role#addPackage because that does a check for existence of the package, which is
             // not guaranteed to exist yet (the SecurityFeatures#init() may not have run).
-
             ((org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository)
                     applicationPermissionRepository)
             .newPermissionNoCheck(
                     (org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
-                    featureType, featureFqn);
+                    featureId.getSort(), 
+                    featureFqn);
         }
     }
-
-    private static List<String> asFeatureFqns(Class<?>[] classes) {
-        return _NullSafe.stream(classes)
-                .map(Class::getName)
-                .collect(Collectors.toList());
-    }
-
-    private static Iterable<String> asFeatureFqns(final Class<?> cls, final String[] members) {
-        return _NullSafe.stream(members)
-                .map(memberName->{
-                    val buf = new StringBuilder(cls.getName());
-                    if(!memberName.startsWith("#")) {
-                        buf.append("#");
-                    }
-                    buf.append(memberName);
-                    return buf.toString();
-                })
-                .collect(Collectors.toList());
-    }
-
 
 
 }

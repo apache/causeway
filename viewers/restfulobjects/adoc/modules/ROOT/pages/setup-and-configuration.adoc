@@ -1,0 +1,80 @@
+= Setup and Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+This section describes how to include the Restful Objects viewer's module and set its configuration properties.
+
+
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleViewerRestfulObjectsViewer.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Configuration Properties
+
+The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/isis.viewer.restfulobjects.adoc[section] for the Restful Objects viewer.
+
+
+=== Standard
+
+Standard configuration properties:
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.base-uri[isis.viewer.restfulobjects.base-uri]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.authentication.strategy-class-name[isis.viewer.restfulobjects.authentication.strategy-class-name]
++
+Security is discussed in more detail xref:security.adoc[here].
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.strict-accept-checking[isis.viewer.restfulobjects.strict-accept-checking]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.honor-ui-hints[isis.viewer.restfulobjects.honor-ui-hints]
+
+
+
+=== Deprecated
+
+These configuration properties that can be used to suppress or simplify the default RO-spec representations.
+
+These configuration properties pre-date the support for the link:content-negotiation/simplified-representations/[Apache Isis profile], and are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request basis (as is the case with the `Accept` header used for the Apache Isis profile).
+They have therefore been deprecated, and may be removed in the future.
+
+Nevertheless, those configuration properties are:
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-described-by-links[isis.viewer.restfulobjects.suppress-described-by-links]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-update-link[isis.viewer.restfulobjects.suppress-update-link]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-member-id[isis.viewer.restfulobjects.suppress-member-id]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-member-links[isis.viewer.restfulobjects.suppress-member-links]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-member-extensions[isis.viewer.restfulobjects.suppress-member-extensions]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.suppress-member-disabled-reason[isis.viewer.restfulobjects.suppress-member-disabled-reason]
+
+* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.object-property-values-only[isis.viewer.restfulobjects.object-property-values-only]
+
+
+[NOTE]
+====
+If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
+====
+
+

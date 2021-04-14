@@ -22,10 +22,26 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * This service simply exposes the HTTP `Accept` header to the domain.
+ *
+ * <p>
+ * Its intended use is to support multiple versions of a REST API, where the
+ * responsibility for content negotiation (determining which version of the
+ * REST API is to be used) is managed by logic in the domain objects themselves.
+ *
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface AcceptHeaderService {
-    List<MediaType> getAcceptableMediaTypes();  // <1>
+    /**
+     * The intention is that this service only returns a list when the request
+     * is initiated through the _Restful Objects viewer_.
+     *
+     * <p>
+     * Otherwise the service will likely return `null`.
+     * </p>
+     */
+    List<MediaType> getAcceptableMediaTypes();
 }
-// end::refguide[]

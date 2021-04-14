@@ -23,11 +23,13 @@ import java.math.MathContext;
 
 /**
  * General-purpose math utilities.
+ *
+ * @since 2.0 {@index}
  */
 public final class MathUtils {
-    
+
     private MathUtils() {}
-    
+
     public static BigDecimal round(final BigDecimal input, final int precision) {
         final MathContext mc = new MathContext(precision+1);
         return input.round(mc);

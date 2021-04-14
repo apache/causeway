@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -43,11 +44,11 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingValidDomain.class,
                 Configuration_usingInvalidDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL"
         })
@@ -77,11 +78,11 @@ class AnnotationSyntesizerTest {
 
     }
 
-    //@Test 
+    //@Test
     void debug() {
 
 
-        val config = new MetaModelService.Config()
+        val config = new Config()
                 //            .withIgnoreNoop()
                 //            .withIgnoreAbstractClasses()
                 //            .withIgnoreBuiltInValueTypes()

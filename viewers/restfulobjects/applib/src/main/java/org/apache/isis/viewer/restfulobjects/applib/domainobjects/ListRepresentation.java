@@ -25,6 +25,9 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkTo
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ListRepresentation extends DomainRepresentation implements HasLinkToUp {
 
     public ListRepresentation(final JsonNode jsonNode) {

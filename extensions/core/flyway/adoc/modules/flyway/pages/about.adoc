@@ -30,56 +30,56 @@ public static class AppManifest {
 }
 ----
 
-Also configure Flyway connection parameters to use those of JDO JDO/DataNucleus object store:
-
-[source,properties]
-.application.properties
-----
-spring.flyway.url=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL}
-spring.flyway.user=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName}
-spring.flyway.password=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword}
-----
-
-If Flyway is enabled, then `autoCreateAll` should also be disabled:
+Configure Flyway connection parameters:
 
 [source,properties]
 .application.properties
 ----
 spring.flyway.enabled=true
-isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll=false
+spring.flyway.default-schema=SIMPLE             // <.>
+spring.flyway.schemas=SIMPLE                    // <.>
+spring.flyway.create-schemas=true               // <.>
+
+isis.persistence.schema.auto-create-schemas=    // <.>
+----
+<.> the default schema managed by Flyway (containing the `schema_version` table); see link:https://flywaydb.org/documentation/configuration/parameters/defaultSchema[flyway.defaultSchema] config property (Flyway docs) for more info
+<.> all of the schemas managed by Flyway; see link:https://flywaydb.org/documentation/configuration/parameters/schemas[flyway.schemas] config property (Flyway docs) for more info
+<.> whether Flyway should automatically create schemas ; see link:https://flywaydb.org/documentation/configuration/parameters/createSchemas[flyway.createSchemas] for more info
+<.> instruct Apache Isis to _not_ attempt to create schemas
+
+The ORM should also be configured to _not_ automatically create tables:
+
+* if using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], then:
++
+[source,properties]
+.application.properties
+----
+eclipselink.ddl-generation=none
+----
+
+* if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], then:
++
+[source,properties]
+.application.properties
+----
+datanucleus.schema.autoCreateAll=false
 ----
 
 
-== Using in-memory object stores
+== Managing different variants
 
 When running with an in-memory object store - either for prototyping or integration tests - you will need the database tables to be created first.
 
-In normal circumstances this is most easily peformed using with `autoCreateAll` enabled (and Flyway disabled).
-If you want your tests to check your Flyway scripts beforehand, there is nothing to prevent you from using Flyway all the time, even for integration tests.
+In normal circumstances this is most easily accomplished with the ORM automatically creating the tables (and Flyway disabled).
 
+However, if you want your tests to check your Flyway scripts beforehand, there is nothing to prevent you from using Flyway all the time, even for integration tests.
 One point to be aware of though is that the DDL syntax may vary between an in-memory database (such as H2) and a typical production database (such as PostgreSQL or SQL Server).
+
 Luckily, Spring Boot's Flyway integration allows different variants of scripts for different vendors to be stored, in `+db.migration.{vendor}+` package (where `+{vendor}+` is as defined by the https://github.com/spring-projects/spring-boot/blob/v2.2.3.RELEASE/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/jdbc/DatabaseDriver.java[DatabaseDriver] class).
 The xref:docs:starters:simpleapp.adoc[simpleapp starter app] also provides an example of this.
 
-
-=== Custom schemas
-
-In some circumstances DataNucleus -- when running with `autoCreateAll` enabled -- has been known to not create the prerequisite schema objects.
-
-If this occurs, consider enabling Flyway for in-memory tests, and then use a custom value of `spring.flyway.locations` property to pick up the custom schema files:
-
-[source,properties]
-----
-spring.flyway.locations=classpath:db/migration/custom-schema
-----
-
-This property could be configured for example using `@TestPropertySource`, or `@ActiveProfile`.
 
 
 == Reference
 
 * https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-execute-flyway-database-migrations-on-startup[Spring Boot docs] for Flyway integration
-* https://www.baeldung.com/spring-boot-configure-data-source-programmatic[www.baeldung.com] docs on how to programmatically build a `DataSource`

@@ -25,8 +25,9 @@ import lombok.Setter;
 
 /**
  * A model object for the signup page
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public class UserDetails
                 implements Serializable {
 
@@ -42,4 +43,3 @@ public class UserDetails
     private String emailAddress;
 
 }
-// end::refguide[]

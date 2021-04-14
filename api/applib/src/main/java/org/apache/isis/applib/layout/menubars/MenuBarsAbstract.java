@@ -28,6 +28,9 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @XmlTransient // ignore this class
 public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
@@ -53,7 +56,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
     @XmlTransient
     public LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId() {
 
-        val serviceActionsByObjectTypeAndId = 
+        val serviceActionsByObjectTypeAndId =
                 new LinkedHashMap<String, ServiceActionLayoutData>();
 
         visit(serviceActionLayoutData -> {

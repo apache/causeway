@@ -28,19 +28,21 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 
 /**
  * Value type representing an event on a calendar.
+ *
+ * @since 2.0 {@index}
  */
 @Value(semanticsProviderClass=CalendarEventSemanticsProvider.class)
 public class CalendarEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
 	static final CalendarEvent DEFAULT_VALUE = null; // no default
-	
+
     private final DateTime dateTime;
     private final String calendarName;
     private final String title;
     private final String notes;
-	
+
 	public CalendarEvent(final DateTime dateTime, final String calendarName, final String title) {
         this(dateTime, calendarName, title, null);
 	}
@@ -55,41 +57,41 @@ public class CalendarEvent implements Serializable {
     public DateTime getDateTime() {
         return dateTime;
     }
-    
+
     public String getCalendarName() {
         return calendarName;
     }
-    
+
     public String getTitle() {
         return title;
     }
-    
+
     public String getNotes() {
         return notes;
     }
-   
+
 	public CalendarEvent withDateTime(final DateTime date) {
 		return new CalendarEvent(date, this.calendarName, this.title, this.notes);
 	}
-	
+
 	public CalendarEvent withCalendarName(final String calendarName) {
 	    return new CalendarEvent(this.dateTime, calendarName, this.title, this.notes);
 	}
-	
+
 	public CalendarEvent withTitle(final String title) {
 	    return new CalendarEvent(this.dateTime, this.calendarName, title, this.notes);
 	}
-	
+
 	public CalendarEvent withNotes(final String notes) {
 	    return new CalendarEvent(this.dateTime, this.calendarName, this.title, notes);
 	}
 
-	private static final ObjectContract<CalendarEvent> objectContract = 
+	private static final ObjectContract<CalendarEvent> objectContract =
 	    ObjectContracts.contract(CalendarEvent.class)
 	    .thenUse("dateTime", CalendarEvent::getDateTime)
 	    .thenUse("calendarName", CalendarEvent::getCalendarName);
-	
-	
+
+
 	@Override
     public int hashCode() {
 	    return objectContract.hashCode(this);
@@ -104,7 +106,7 @@ public class CalendarEvent implements Serializable {
     public String toString() {
         return objectContract.toString(this);
     }
-    
+
     public static int typicalLength() {
 		return 30;
 	}

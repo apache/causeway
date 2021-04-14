@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 
@@ -36,17 +36,38 @@ public class ProxyContextHandler {
 
     @NonNull private final ProxyCreator proxyCreator;
 
-    public <T> T proxy(MetaModelContext metaModelContext, T domainObject, SyncControl syncControl) {
+    public <T> T proxy(
+            T domainObject, 
+            ManagedObject adapter, 
+            SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
-                metaModelContext, 
                 domainObject,
+                null, // mixeeAdapter ignored
+                adapter,
                 syncControl,
                 this);
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }
 
+    public <T> T mixinProxy(
+            T mixin, 
+            ManagedObject mixeeAdapter, 
+            ManagedObject mixinAdapter,
+            SyncControl syncControl) {
+
+        val invocationHandler = new DomainObjectInvocationHandler<T>(
+                mixin,
+                mixeeAdapter,
+                mixinAdapter,
+                syncControl,
+                this);
+
+        return proxyCreator.instantiateProxy(invocationHandler);
+    }
+    
+    
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
@@ -81,5 +102,7 @@ public class ProxyContextHandler {
 
         return proxyCreator.instantiateProxy(mapInvocationHandler);
     }
+
+
 
 }

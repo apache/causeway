@@ -1,0 +1,53 @@
+= ReasonBuffer
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Helper class to create properly concatenated reason string for use in method that return _String_ s with reasons.
+
+If no reasons are specified _#getReason()_ will return `null` , otherwise it will return a _String_ with all the valid reasons concatenated with a semi-colon separating each one.
+
+An alternative is to use the (very simple) xref:refguide:applib:index/util/Reasons.adoc[Reasons] class or the (much more sophisticated) xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2] .
+
+== API
+
+[source,java]
+.ReasonBuffer.java
+----
+class ReasonBuffer {
+  void append(final String reason)     // <.>
+  void appendOnCondition(final boolean condition, final String reason)     // <.>
+  String getReason()     // <.>
+}
+----
+
+<.> xref:#append__String[append(String)]
++
+--
+Append a reason to the list of existing reasons.
+--
+<.> xref:#appendOnCondition__boolean_String[appendOnCondition(boolean, String)]
++
+--
+Append a reason to the list of existing reasons if the condition flag is true.
+--
+<.> xref:#getReason__[getReason()]
++
+--
+Return the combined set of reasons, or `null` if there are none.
+--
+
+== Members
+
+[#append__String]
+=== append(String)
+
+Append a reason to the list of existing reasons.
+
+[#appendOnCondition__boolean_String]
+=== appendOnCondition(boolean, String)
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#getReason__]
+=== getReason()
+
+Return the combined set of reasons, or `null` if there are none.

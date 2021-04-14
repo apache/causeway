@@ -23,6 +23,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.NonNull;
@@ -74,12 +76,63 @@ public class _Longs {
             }
             return true;
         }
+        /**
+         * @param value
+         * @return the value or if not within range, the nearest integer to the value, that is within range   
+         */
+        public long bounded(long value) {
+            //if(empty) return value; // noop
+            if(contains(value)) {
+                return value;
+            }
+            final long nearestToLower = nearestToLower();
+            final long nearestToUpper = nearestToUpper();
+            final long distanceToLower = value - nearestToLower; 
+            final long distanceToUpper = value - nearestToUpper;
+            return (distanceToLower <= distanceToUpper)
+                    ? nearestToLower
+                    : nearestToUpper;
+        }
+        private long nearestToLower() {
+            //if(empty) throw _Exceptions.unsupportedOperation();
+            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;  
+        }
+        private long nearestToUpper() {
+            //if(empty) throw _Exceptions.unsupportedOperation();
+            return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
+        }
         @Override
         public String toString() {
             return String.format("%s%d,%d%S", 
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
         }
+    }
+    
+    // -- RANGE FACTORIES
+    
+    /**
+     * Range includes a and b.
+     */
+    public static Range rangeClosed(long a, long b) {
+        if(a>b) {
+            throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
+        }
+        return Range.of(Bound.inclusive(a), Bound.inclusive(b));
+    }
+    
+    /**
+     * Range includes a but not b.
+     */
+    public static Range rangeOpenEnded(long a, long b) {
+        if(a==b) {
+            throw _Exceptions.unsupportedOperation("empty range not implemented");
+            //return Range.empty();
+        }
+        if(a>=b) {
+            throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
+        }
+        return Range.of(Bound.inclusive(a), Bound.exclusive(b));
     }
     
     // -- PARSING

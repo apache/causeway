@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -35,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -46,12 +48,14 @@ import lombok.val;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with {@link org.apache.isis.applib.annotation.Bounded Bounded} annotation
- * or implementing the {@link Bounded} marker interface.
+ * member with {@link org.apache.isis.applib.annotation.Bounding Bounding} annotation.
  */
 public abstract class ChoicesFacetFromBoundedAbstract
 extends FacetAbstract
-implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+implements 
+    ChoicesFacet, 
+    DisablingInteractionAdvisor, 
+    ValidatingInteractionAdvisor {
 
     public static Class<? extends Facet> type() {
         return ChoicesFacet.class;
@@ -99,21 +103,19 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         return "Bounded";
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SneakyThrows
     @Override
     public Can<ManagedObject> getChoices(
-            ManagedObject adapter,
+            final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val query = new QueryFindAllChoices(
-                getObjectSpecification().getFullIdentifier(), 
-                ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy), 
-                0L, 
-                Long.MAX_VALUE);
+        val resulType = getObjectSpecification().getCorrespondingClass();
+        val query = Query.allInstances(resulType);
         
-        val resultTypeSpec = getObjectManager().loadSpecification(query.getResultType());
+        val resultTypeSpec = getObjectManager().loadSpecification(resulType);
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest);
+        val allMatching = getObjectManager().queryObjects(queryRequest)
+                .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy));
         
         return allMatching;
     }

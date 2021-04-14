@@ -30,8 +30,6 @@ import org.w3c.dom.Element;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
 

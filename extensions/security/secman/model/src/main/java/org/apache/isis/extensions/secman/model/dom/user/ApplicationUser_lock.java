@@ -18,12 +18,12 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.LockDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -33,28 +33,27 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = LockDomainEvent.class, 
-        associateWith = "status",
-        associateWithSequence = "2")
-@ActionLayout(named="Disable")
+        associateWith = "status")
+@ActionLayout(named="Disable", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act() {
-        holder.setStatus(ApplicationUserStatus.DISABLED);
-        return holder;
+        target.setStatus(ApplicationUserStatus.DISABLED);
+        return target;
     }
     
-    @Model
+    @MemberSupport
     public String disableAct() {
-        if(applicationUserRepository.isAdminUser(holder)) {
+        if(applicationUserRepository.isAdminUser(target)) {
             return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
         }
-        return holder.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
+        return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
 }

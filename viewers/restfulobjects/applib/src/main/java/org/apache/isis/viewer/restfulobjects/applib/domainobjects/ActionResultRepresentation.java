@@ -26,6 +26,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
 
     @RequiredArgsConstructor
@@ -33,15 +36,15 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
         DOMAIN_OBJECT("domainobject"),
         LIST("list"),
         SCALAR_VALUE("scalarvalue"),
-        
-        /** 
-         * Variant of 'list' representing a list of scalar values. 
-         * NOT supported by the RO spec v1.0, but allows for custom representations to 
+
+        /**
+         * Variant of 'list' representing a list of scalar values.
+         * NOT supported by the RO spec v1.0, but allows for custom representations to
          * support this particular data structure.
-         * @since 2.0 
+         * @since 2.0
          */
         SCALAR_VALUES("scalarvalues"),
-        
+
         VOID("void");
 
         @Getter private final String value;

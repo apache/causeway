@@ -1,0 +1,81 @@
+= SuppressionType _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.SuppressionType.java
+----
+enum SuppressionType {
+  RO     // <.>
+  HREF     // <.>
+  ID     // <.>
+  DOMAIN_TYPE     // <.>
+  TITLE     // <.>
+  ALL     // <.>
+  EnumSet<SuppressionType> setOf(SuppressionType... types)
+}
+----
+
+<.> xref:#RO[RO]
++
+--
+suppress '$$RO', RO Spec representation
+--
+<.> xref:#HREF[HREF]
++
+--
+suppress '$$href', hyperlink to the representation
+--
+<.> xref:#ID[ID]
++
+--
+suppress '$$instanceId', instance id of the domain object
+--
+<.> xref:#DOMAIN_TYPE[DOMAIN_TYPE]
++
+--
+suppress '$$domainType', object spec of the domain object
+--
+<.> xref:#TITLE[TITLE]
++
+--
+suppress '$$title', title of the domain object
+--
+<.> xref:#ALL[ALL]
++
+--
+suppress all '$$...' entries
+--
+
+== Members
+
+[#RO]
+=== RO
+
+suppress '$$RO', RO Spec representation
+
+[#HREF]
+=== HREF
+
+suppress '$$href', hyperlink to the representation
+
+[#ID]
+=== ID
+
+suppress '$$instanceId', instance id of the domain object
+
+[#DOMAIN_TYPE]
+=== DOMAIN_TYPE
+
+suppress '$$domainType', object spec of the domain object
+
+[#TITLE]
+=== TITLE
+
+suppress '$$title', title of the domain object
+
+[#ALL]
+=== ALL
+
+suppress all '$$...' entries

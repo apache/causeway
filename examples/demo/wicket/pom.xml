@@ -70,6 +70,20 @@
 			<type>pom</type>
 		</dependency>
 
+		<!-- Wicket viewer components -->
+
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-wicket-viewer</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
 		<!-- EXTENSIONS -->
 
 		<dependency>
@@ -120,6 +134,12 @@
 									<artifactId>asciidoctorj</artifactId>
 								</dependency>
 							</requiresUnpack>
+							<excludes>
+								<exclude>
+									<groupId>org.springframework.boot</groupId>
+									<artifactId>spring-boot-configuration-processor</artifactId>
+								</exclude>
+							</excludes>
 						</configuration>
 						<executions>
 							<execution>

@@ -33,9 +33,7 @@ import static org.apache.isis.commons.internal.collections._Collections.toHashSe
 import static org.apache.isis.commons.internal.reflection._Reflect.withTypeAssignableTo;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllContractTest {
 

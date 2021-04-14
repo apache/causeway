@@ -18,52 +18,68 @@
  */
 package org.apache.isis.applib.services.grid;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.grid.Grid;
+import javax.annotation.Nullable;
 
-// tag::refguide[]
+import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
+
+/**
+ * Provides the ability to load the XML layout (grid) for a domain class.
+ *
+ * @since 1.x {@index}
+ */
 public interface GridLoaderService {
 
-    // end::refguide[]
     /**
      * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p>
+     *     The default implementation enables reloading for prototyping mode,
+     *     disables in production
+     * </p>
      */
-    // tag::refguide[]
-    boolean supportsReloading();                    // <.>
+    boolean supportsReloading();
 
-    // end::refguide[]
     /**
      * To support metamodel invalidation/rebuilding of spec.
+     *
+     * <p>
+     *     This is called by the {@link Object_rebuildMetamodel} mixin action.
+     * </p>
      */
-    // tag::refguide[]
-    void remove(Class<?> domainClass);              // <.>
+    void remove(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
+     *
+     * <p>
+     *     If none exists, will return null (and the calling {@link GridService}  will use {@link GridSystemService}
+     *     to obtain a default grid for the domain class).
+     * </p>
      */
-    // tag::refguide[]
-    boolean existsFor(Class<?> domainClass);        // <.>
+    boolean existsFor(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    // tag::refguide[]
-    default Grid load(final Class<?> domainClass) { // <.>
+    default Grid load(Class<?> domainClass) {
         return load(domainClass, null);
     }
 
-    // end::refguide[]
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>layout.xml</code> file, else <code>null</code>.
+     * Loads a specic alternative {@link Grid} layout for the specified domain
+     * class.
+     *
+     * <p>
+     *     The layout alternative will typically be specified through a
+     *     `layout()` method on the domain object, the value of which is used
+     *     for the suffix of the layout file (eg "Customer-layout.archived.xml"
+     *     to use a different layout for customers that have been archived).
+     * </p>
      */
-    // tag::refguide[]
-    Grid load(                                      // <.>
-            final Class<?> domainClass,
-            String layout);
+    Grid load(
+            Class<?> domainClass,
+            @Nullable String layout);
 
 }
-// end::refguide[]

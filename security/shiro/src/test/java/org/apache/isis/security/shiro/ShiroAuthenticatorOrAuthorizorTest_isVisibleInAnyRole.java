@@ -34,12 +34,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 
@@ -81,14 +82,14 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
+        assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
     }
-
 
     @Test
     public void vetoingOverridden() throws Exception {
@@ -98,11 +99,12 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authorizor.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
+        Identifier removeCustomerIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "remove");
+        assertThat(authorizor.isVisible(authentication, removeCustomerIdentifier), is(true));
     }
 
 

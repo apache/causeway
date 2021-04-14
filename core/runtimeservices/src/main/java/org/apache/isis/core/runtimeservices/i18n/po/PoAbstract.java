@@ -18,23 +18,24 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 
 abstract class PoAbstract {
 
     protected final TranslationServicePo translationServicePo;
 
-    private final TranslationService.Mode mode;
+    private final Mode mode;
 
-    PoAbstract(final TranslationServicePo translationServicePo, final TranslationService.Mode mode) {
+    PoAbstract(final TranslationServicePo translationServicePo, final Mode mode) {
         this.translationServicePo = translationServicePo;
         this.mode = mode;
     }
 
-    abstract String translate(final String context, final String msgId);
-    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num);
+    abstract String translate(final TranslationContext context, final String msgId);
+    abstract String translate(final TranslationContext context, final String msgId, final String msgIdPlural, int num);
 
-    TranslationService.Mode getMode() {
+    Mode getMode() {
         return mode;
     }
 

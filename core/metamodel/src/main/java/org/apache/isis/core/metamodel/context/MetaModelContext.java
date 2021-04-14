@@ -26,15 +26,16 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -58,6 +59,8 @@ public interface MetaModelContext {
 
     ObjectManager getObjectManager();
     
+    WrapperFactory getWrapperFactory();
+    
     ServiceInjector getServiceInjector();
 
     ServiceRegistry getServiceRegistry();
@@ -74,17 +77,17 @@ public interface MetaModelContext {
 
     AuthenticationManager getAuthenticationManager();
     
-    AuthenticationSessionTracker getAuthenticationSessionTracker();
+    AuthenticationContext getAuthenticationContext();
 
     TitleService getTitleService();
 
     RepositoryService getRepositoryService();
 
     FactoryService getFactoryService();
+    
+    MemberExecutorService getMemberExecutor();
 
     TransactionService getTransactionService();
-
-    TransactionState getTransactionState();
 
     ManagedObject getHomePageAdapter();
 
@@ -99,116 +102,6 @@ public interface MetaModelContext {
     public static MetaModelContext from(ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
-
-    // -- DELEGATION - FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
-
-    public static interface Delegating extends MetaModelContext {
-
-        public MetaModelContext getMetaModelContext();
-
-        @Override
-        default IsisSystemEnvironment getSystemEnvironment() {
-            return getMetaModelContext().getSystemEnvironment();
-        }
-        
-        @Override
-        public default IsisConfiguration getConfiguration() {
-            return getMetaModelContext().getConfiguration();
-        }
-
-        @Override
-        public default ServiceInjector getServiceInjector() {
-            return getMetaModelContext().getServiceInjector();
-        }
-
-        @Override
-        public default ServiceRegistry getServiceRegistry() {
-            return getMetaModelContext().getServiceRegistry();
-        }
-
-        @Override
-        public default FactoryService getFactoryService() {
-            return getMetaModelContext().getFactoryService();
-        }
-
-        @Override
-        public default SpecificationLoader getSpecificationLoader() {
-            return getMetaModelContext().getSpecificationLoader();
-        }
-
-        @Override
-        public default TranslationService getTranslationService() {
-            return getMetaModelContext().getTranslationService();
-        }
-
-        @Override
-        public default AuthorizationManager getAuthorizationManager() {
-            return getMetaModelContext().getAuthorizationManager();
-        }
-
-        @Override
-        public default AuthenticationManager getAuthenticationManager() {
-            return getMetaModelContext().getAuthenticationManager();
-        }
-        
-        @Override
-        public default AuthenticationSessionTracker getAuthenticationSessionTracker() {
-            return getMetaModelContext().getAuthenticationSessionTracker();
-        }
-
-        @Override
-        public default TitleService getTitleService() {
-            return getMetaModelContext().getTitleService();
-        }
-
-        @Override
-        public default ObjectSpecification getSpecification(Class<?> type) {
-            return getMetaModelContext().getSpecification(type);
-        }
-
-        @Override
-        public default RepositoryService getRepositoryService() {
-            return getMetaModelContext().getRepositoryService();
-        }
-
-        @Override
-        public default TransactionState getTransactionState() {
-            return getMetaModelContext().getTransactionState();
-        }
-
-        @Override
-        public default ManagedObject getHomePageAdapter() {
-            return getMetaModelContext().getHomePageAdapter();
-        }
-
-        @Override
-        public default TransactionService getTransactionService() {
-            return getMetaModelContext().getTransactionService();
-        }
-
-        @Override
-        public default Stream<ManagedObject> streamServiceAdapters() {
-            return getMetaModelContext().streamServiceAdapters();
-        }
-
-        @Override
-        default ManagedObject lookupServiceAdapterById(String serviceId) {
-            return getMetaModelContext().lookupServiceAdapterById(serviceId);
-        }
-        
-        @Override
-        default <T> T getSingletonElseFail(Class<T> type) {
-            return getMetaModelContext().getSingletonElseFail(type);
-        }
-        
-        @Override
-        default ObjectManager getObjectManager() {
-            return getMetaModelContext().getObjectManager();
-        }
-
-    }
-
-    
     
 
 }

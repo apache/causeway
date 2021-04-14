@@ -27,30 +27,45 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 
+import lombok.extern.log4j.Log4j2;
+
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisExtHsqldbMgr.HsqlDbManagerMenu"
+        objectType = "isis.ext.hsqldbMgr.HsqlDbManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
+@Log4j2
 public class HsqlDbManagerMenu {
 
     private final String url;
 
     @Inject
-    public HsqlDbManagerMenu(IsisConfiguration isisConfiguration) {
-        this.url = isisConfiguration
-                .getPersistence().getJdoDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
+    public HsqlDbManagerMenu(DataSourceIntrospectionService datasourceIntrospector) {
+        this.url = datasourceIntrospector.streamDataSourceInfos()
+        .map(DataSourceInfo::getJdbcUrl)
+        .filter(jdbcUrl->{
+            if(jdbcUrl.contains("hsqldb:mem")) {
+                log.info("found hsqldb in-memory data-source: {}", jdbcUrl);
+                return true;
+            }
+            return false;
+        })
+        .findFirst()
+        .orElse(null);
     }
 
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }
@@ -62,9 +77,8 @@ public class HsqlDbManagerMenu {
             )
     @ActionLayout(
             named = "HSQL DB Manager",
-            cssClassFa = "database"
-            )
-    @MemberOrder(sequence = "500.800")
+            cssClassFa = "database",
+            sequence = "500.800")
     public void hsqlDbManager() {
         String[] args = {"--url", url, "--noexit" };
         DatabaseManagerSwing.main(args);

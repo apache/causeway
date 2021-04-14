@@ -20,6 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.util.UUID;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Uuids extends AbstractRandomValueGenerator {
 
     public Uuids(final FakeDataService fakeDataService) {

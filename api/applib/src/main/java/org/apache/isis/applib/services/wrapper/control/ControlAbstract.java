@@ -30,10 +30,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 public class ControlAbstract<T extends ControlAbstract<T>> {
 
-    // end::refguide[]
     protected ControlAbstract() {
     }
 
@@ -49,38 +51,30 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     @Getter(AccessLevel.PACKAGE) @Setter
     private Bookmark bookmark;
 
-    // tag::refguide[]
-    private boolean checkRules = true;                          // <.>
+    private boolean checkRules = true;
     public T withCheckRules() {
-        // end::refguide[]
         checkRules = true;
         return _Casts.uncheckedCast(this);
-        // tag::refguide[]
         // ...
     }
     public T withSkipRules() {
-        // end::refguide[]
         checkRules = false;
         return _Casts.uncheckedCast(this);
-        // tag::refguide[]
         // ...
     }
     
     private ExceptionHandler exceptionHandler;
    
-    public Optional<ExceptionHandler> getExceptionHandler() { // <.>
+    public Optional<ExceptionHandler> getExceptionHandler() {
         return Optional.ofNullable(exceptionHandler);
     }
                       
     public T with(ExceptionHandler exceptionHandler) {
-        // end::refguide[]
         this.exceptionHandler = exceptionHandler;
         return _Casts.uncheckedCast(this);
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
      * Not API.
      */
@@ -92,6 +86,4 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
         return ImmutableEnumSet.from(modes);
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

@@ -1,0 +1,86 @@
+= Ticket _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Response from the xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService] , containing information to show to the end-user.
+
+Implementation notes:
+
+* a class has been used here so that additional fields might be added in the future.
+* the class is _Serializable_
+
+so that it can be stored by the Wicket viewer as a Wicket model.
+
+== API
+
+[source,java]
+.Ticket.java
+----
+interface Ticket {
+  String getReference()     // <.>
+  String getUserMessage()     // <.>
+  String getDetails()     // <.>
+  StackTracePolicy getStackTracePolicy()     // <.>
+  String getMarkup()     // <.>
+}
+----
+
+<.> xref:#getReference__[getReference()]
++
+--
+A unique identifier that the end-user can use to track any follow-up from this error.
+--
+<.> xref:#getUserMessage__[getUserMessage()]
++
+--
+A short, jargon-free message to display to the user.
+--
+<.> xref:#getDetails__[getDetails()]
++
+--
+Optional additional details to show to the end-user.
+--
+<.> xref:#getStackTracePolicy__[getStackTracePolicy()]
++
+--
+Whether the stack trace for the exception should be displayed or be hidden.
+--
+<.> xref:#getMarkup__[getMarkup()]
++
+--
+Returns a Html representation of this ticket.
+--
+
+== Members
+
+[#getReference__]
+=== getReference()
+
+A unique identifier that the end-user can use to track any follow-up from this error.
+
+For example, an implementation might automatically log an issue in a bug tracking system such as JIRA, in which case the _#getReference() reference_ would be the JIRA issue number `XXX-1234` .
+
+[#getUserMessage__]
+=== getUserMessage()
+
+A short, jargon-free message to display to the user.
+
+Typically this message should be short, one line long.
+
+[#getDetails__]
+=== getDetails()
+
+Optional additional details to show to the end-user.
+
+For example, these might include text on how to recover from the error, or workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate attention.
+
+[#getStackTracePolicy__]
+=== getStackTracePolicy()
+
+Whether the stack trace for the exception should be displayed or be hidden.
+
+The default is to hide it on the basis that the reporting service will have reported the stack trace to the support team, meaning there's no need to expose this info to the end-user.
+
+[#getMarkup__]
+=== getMarkup()
+
+Returns a Html representation of this ticket.

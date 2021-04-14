@@ -40,9 +40,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.resources._Resources;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public class JaxbMatchers {
 

@@ -21,30 +21,36 @@ package org.apache.isis.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.mixins.layout.Object_openRestApi;
-import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
+import org.apache.isis.applib.mixins.rest.Object_openRestApi;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
-import org.apache.isis.applib.services.audit.AuditerServiceLogging;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.spi.CommandServiceListener;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
-import org.apache.isis.applib.services.publish.PublisherServiceLogging;
+import org.apache.isis.applib.services.publishing.log.CommandLogger;
+import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
+import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
+import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.schema.IsisModuleSchema;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // modules
@@ -62,20 +68,25 @@ import org.apache.isis.schema.IsisModuleSchema;
         Object_openRestApi.class,
         Object_rebuildMetamodel.class,
 
-        // @DomainService's
+        // @DomainObject(s)
+        ConfigurationProperty.class,
+        DomainObjectList.class,
+        RoleMemento.class,
+        UserMemento.class,
+
+        // @DomainService(s)
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
         MetaModelServiceMenu.class,
 
-        // @Service's
-        AuditerServiceLogging.class,
-        ClockService.class,
+        // @Service(s)
         CommandDtoProcessorServiceIdentity.class,
-        CommandServiceListener.Null.class,
+        CommandLogger.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        InteractionContext.class,
-        PublisherServiceLogging.class,
+        EntityChangesLogger.class,
+        EntityPropertyChangeLogger.class,
+        ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
 
 })

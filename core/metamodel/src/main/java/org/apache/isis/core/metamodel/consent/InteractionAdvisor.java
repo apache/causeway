@@ -26,7 +26,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can

@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.Programmatic;
  * <p>
  *     Objects that are part of the domain object layer should instead implement {@link RecreatableDomainObject}.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public interface ViewModel {
 
     /**

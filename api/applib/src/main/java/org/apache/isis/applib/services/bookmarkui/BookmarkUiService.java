@@ -19,10 +19,15 @@
 
 package org.apache.isis.applib.services.bookmarkui;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * Provides the ability to programmatically interact with bookmarked pages
+ * and breadcrumbs, as rendered by the Wicket viewer.
+ *
+ * @since 1.x {@index}
+ */
 public interface BookmarkUiService {
-    void clear();                       // <.>
+    /**
+     * Simply clears the current list of breadcrumbs and bookmarks.
+     */
+    void clear();
 }
-// end::refguide[]

@@ -30,6 +30,9 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 @UtilityClass
 public final class JodaTimeJaxbAdapters {
 

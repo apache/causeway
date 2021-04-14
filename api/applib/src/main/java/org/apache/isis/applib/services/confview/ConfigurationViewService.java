@@ -21,16 +21,25 @@ package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
-// tag::refguide[]
+/**
+ * Returns the configuration properties (as view models) such that they can
+ * be rendered into the UI (in the Wicket Viewer, under the "Configuration"
+ * menu).
+ *
+ * <p>
+ *     This is the backing service used by {@link ConfigurationMenu}.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 public interface ConfigurationViewService {
 
-    // end::refguide[]
     /**
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
      * Mask sensitive values if required.
      */
-    // tag::refguide[]
-    Set<ConfigurationProperty> allProperties();
+    Set<ConfigurationProperty> getVisibleConfigurationProperties();
 
+    Set<ConfigurationProperty> getEnvironmentProperties();
+    
 }
-// end::refguide[]

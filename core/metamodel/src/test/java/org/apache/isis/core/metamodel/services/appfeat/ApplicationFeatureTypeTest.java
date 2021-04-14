@@ -26,14 +26,19 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+
+import lombok.val;
+
 public class ApplicationFeatureTypeTest {
 
     public static class HideClassName extends ApplicationFeatureTypeTest {
         @Test
         public void all() throws Exception {
-            assertThat(ApplicationFeatureType.PACKAGE.hideClassName(), is(true));
-            assertThat(ApplicationFeatureType.CLASS.hideClassName(), is(false));
-            assertThat(ApplicationFeatureType.MEMBER.hideClassName(), is(false));
+            assertThat(ApplicationFeatureSort.NAMESPACE.isNamespace(), is(true));
+            assertThat(ApplicationFeatureSort.TYPE.isNamespace(), is(false));
+            assertThat(ApplicationFeatureSort.MEMBER.isNamespace(), is(false));
         }
     }
 
@@ -41,9 +46,9 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void all() throws Exception {
-            assertThat(ApplicationFeatureType.PACKAGE.hideMember(), is(true));
-            assertThat(ApplicationFeatureType.CLASS.hideMember(), is(true));
-            assertThat(ApplicationFeatureType.MEMBER.hideMember(), is(false));
+            assertThat(!ApplicationFeatureSort.NAMESPACE.isMember(), is(true));
+            assertThat(!ApplicationFeatureSort.TYPE.isMember(), is(true));
+            assertThat(!ApplicationFeatureSort.MEMBER.isMember(), is(false));
         }
     }
 
@@ -55,45 +60,38 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void givenPackage() throws Exception {
 
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE);
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany"); 
 
-            ApplicationFeatureType.PACKAGE.init(applicationFeatureId, "com.mycompany");
-
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is(nullValue()));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
 
         }
         @Test
         public void givenClass() throws Exception {
 
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.CLASS);
+            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
-            ApplicationFeatureType.CLASS.init(applicationFeatureId, "com.mycompany.Bar");
-
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
 
         }
         @Test
         public void givenMember() throws Exception {
 
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-
-            ApplicationFeatureType.MEMBER.init(applicationFeatureId, "com.mycompany.Bar#foo");
-
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
+            
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
         @Test
         public void givenMemberMalformed() throws Exception {
 
             expectedException.expect(IllegalArgumentException.class);
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-
-            ApplicationFeatureType.MEMBER.init(applicationFeatureId, "com.mycompany.BarISMISSINGTHEHASHSYMBOL");
+            ApplicationFeatureId
+                    .newMember("com.mycompany.BarISMISSINGTHEHASHSYMBOL");
         }
     }
 
@@ -104,17 +102,17 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.PACKAGE));
+            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.CLASS));
+            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.MEMBER));
+            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
     }
 
@@ -125,16 +123,16 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.PACKAGE));
+            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.CLASS));
+            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.MEMBER));
+            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
 
     }
@@ -146,16 +144,16 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.PACKAGE));
+            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.CLASS));
+            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.MEMBER));
+            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
 
     }
@@ -167,16 +165,16 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.PACKAGE));
+            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.CLASS));
+            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.MEMBER));
+            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
     }
 
@@ -184,7 +182,7 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void happyCase() throws Exception {
-            assertThat(ApplicationFeatureType.PACKAGE.toString(), is("PACKAGE"));
+            assertThat(ApplicationFeatureSort.NAMESPACE.toString(), is("NAMESPACE"));
         }
     }
 

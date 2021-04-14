@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javaawt.images.JavaAwtImages;
+import demoapp.dom.types.javaawt.images.JavaAwtBufferedImages;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaAwtTypesMenu")
 @DomainObjectLayout(named="JavaAwtTypes")
@@ -34,8 +34,8 @@ public class JavaAwtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-image")
-    public JavaAwtImages images(){
-        return new JavaAwtImages();
+    public JavaAwtBufferedImages bufferedImages(){
+        return new JavaAwtBufferedImages();
     }
 
 

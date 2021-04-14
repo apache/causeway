@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -29,7 +30,8 @@ import lombok.val;
 /**
  * Renders a panel providing summary information about an action.
  */
-public class ActionInfoPanel extends PanelAbstract<ActionModel> {
+public class ActionInfoPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 

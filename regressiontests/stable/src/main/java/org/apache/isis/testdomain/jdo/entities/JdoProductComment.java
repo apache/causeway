@@ -27,7 +27,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.mixins.timestamp.Timestampable;
+import org.apache.isis.applib.mixins.updates.OnUpdatedByAndAt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +36,8 @@ import lombok.Setter;
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
 @DomainObject(
         objectType = "testdomain.jdo.ProductComment")
-public class JdoProductComment implements Timestampable {
-    
+public class JdoProductComment implements OnUpdatedByAndAt {
+
     @Property @Column(allowsNull = "false")
     @Getter @Setter private JdoProduct product;
 
@@ -45,12 +45,12 @@ public class JdoProductComment implements Timestampable {
     @Getter @Setter private String comment;
 
     // -- TIMESTAMPABLE
-    
+
     @Property
     @Getter @Setter private String updatedBy;
-    
+
     @Property
     @Getter @Setter private Timestamp updatedAt;
 
-    
+
 }

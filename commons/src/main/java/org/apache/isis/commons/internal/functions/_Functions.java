@@ -53,7 +53,6 @@ public final class _Functions {
      * Converts an IndexAwareFunction into a Function, having its index start at 0,
      * and incremented after each function call.
      * @param indexAwareFunction
-     * @return
      */
     public static <T, R> Function<T, R> indexAwareToFunction(IndexAwareFunction<T, R> indexAwareFunction){
         return new _Functions_IndexAwareFunctionAdapter<T, R>(indexAwareFunction);
@@ -203,8 +202,6 @@ public final class _Functions {
             }
         };
     }
-
-    // --
 
 
 }

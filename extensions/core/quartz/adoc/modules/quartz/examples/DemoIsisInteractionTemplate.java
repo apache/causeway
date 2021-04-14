@@ -29,8 +29,6 @@ import org.quartz.JobExecutionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import lombok.extern.log4j.Log4j2;
 

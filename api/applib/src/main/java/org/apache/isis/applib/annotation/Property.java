@@ -26,17 +26,28 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object property.
+ * Collects together all the domain semantics for the property of a domain
+ * object.
+ *
+ * @see Action
+ * @see Collection
+ * @see DomainObject
+ * @see PropertyLayout
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -45,19 +56,9 @@ import org.apache.isis.applib.value.Clob;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "prop")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 public @interface Property {
 
-    // end::refguide[]
-    /**
-     * Whether the property edit should be reified into a
-     * {@link org.apache.isis.applib.services.command.Command} object.
-     */
-    // tag::refguide[]
-    CommandReification command()                                // <.>
-            default CommandReification.NOT_SPECIFIED;
-
-    // end::refguide[]
     /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
@@ -65,16 +66,33 @@ public @interface Property {
      *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
+     *
+     * @see Action#commandDtoProcessor()
+     * @see Property#commandPublishing()
      */
-    // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor()  // <.>
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()
             default CommandDtoProcessor.class;
 
-    // end::refguide[]
+    /**
+     * Whether property edits, captured as {@link Command}s,
+     * should be published to {@link CommandSubscriber}s.
+     *
+     * @see Action#commandPublishing()
+     * @see Property#commandDtoProcessor()
+     */
+    Publishing commandPublishing()
+            default Publishing.NOT_SPECIFIED;
+
     /**
      * Indicates that changes to the property that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.PropertyDomainEvent}.
+     *
+     * <p>
+     *     Subscribers of this event can interact with the business rule
+     *     checking (hide, disable, validate) and its modification (before and
+     *     after).
+     * </p>
      *
      * <p>For example:
      * </p>
@@ -89,33 +107,47 @@ public @interface Property {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see Action#domainEvent()
+     * @see Collection#domainEvent()
+     * @see DomainObject#propertyDomainEvent()
      */
-    // tag::refguide[]
-    Class<? extends PropertyDomainEvent<?,?>> domainEvent()     // <.>
+    Class<? extends PropertyDomainEvent<?,?>> domainEvent()
             default PropertyDomainEvent.Default.class;
 
-    // end::refguide[]
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
      *
      * <p>
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
+     *
+     * @see Property#editingDisabledReason()
+     * @see DomainObject#editing()
      */
-    // tag::refguide[]
-    Editing editing()                                           // <.>
+    Editing editing()
             default Editing.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
+     *
+     * @see Property#editing()
      */
-    // tag::refguide[]
-    String editingDisabledReason()                              // <.>
+    String editingDisabledReason()
             default "";
 
-    // end::refguide[]
+    /**
+     * Whether
+     * {@link Execution}s
+     * (triggered property edits), should be dispatched to
+     * {@link ExecutionSubscriber}s.
+     *
+     * @see Action#executionPublishing()
+     */
+    Publishing executionPublishing()
+            default Publishing.NOT_SPECIFIED;
+
     /**
      * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
      *
@@ -123,33 +155,45 @@ public @interface Property {
      * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
      * </p>
      *
+     * <p>
+     *     Note that this does not prevent the user from uploading some other
+     *     file type; rather it merely defaults the file type in the file open dialog.
+     * </p>
+     *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     * @see Parameter#fileAccept()
+     * @see Action#fileAccept()
      */
-    // tag::refguide[]
-    String fileAccept()                                         // <.>
+    String fileAccept()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates where the property is not visible to the user.
+     *
+     * @see Action#hidden()
+     * @see Collection#hidden()
      */
-    // tag::refguide[]
-    Where hidden()                                              // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The maximum entry length of a field.
      *
      * <p>
      *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
      * </p>
+     *
+     * <p>
+     *     NOTE: this will usually be supplemented by a JDO or JPA-specific
+     *     annotation to indicate length of the column in the table to whic
+     *     the entity is mapped.
+     * </p>
+     *
+     * @see Parameter#maxLength()
      */
-    // tag::refguide[]
-    int maxLength()                                             // <.>
+    int maxLength()
             default -1;
 
-    // end::refguide[]
     /**
      * Indicates whether the property should be included or excluded from mementos.
      *
@@ -158,37 +202,35 @@ public @interface Property {
      *     <code>javax.jdo.annotations.NotPersistent</code>
      * </p>
      */
-    // tag::refguide[]
-    MementoSerialization mementoSerialization()                 // <.>
-            default MementoSerialization.NOT_SPECIFIED;
+    Snapshot snapshot()
+            default Snapshot.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this property.
      *
      * <p>
      * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
      * </p>
+     *
+     * @see Parameter#mustSatisfy()
      */
-    // tag::refguide[]
-    Class<? extends Specification>[] mustSatisfy()              // <.>
+    Class<? extends Specification>[] mustSatisfy()
             default {};
 
-    // end::refguide[]
     /**
      * Whether this property is optional or is mandatory (ie required).
      *
      * <p>
-     *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
-     *     means that the property is required unless it has been overridden by <code>javax.jdo.annotations.Column</code>
-     *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
+     *     NOTE: this will usually be supplmented by a JDO or JPA-specific
+     *     annotation to specify the nullability of the corresponding column in
+     *     the table to which the owning entity is mapped.
      * </p>
+     *
+     * @see Parameter#optionality()
      */
-    // tag::refguide[]
-    Optionality optionality()                                   // <.>
+    Optionality optionality()
             default Optionality.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * If set to {@link Projecting#PROJECTED projected}, then indicates that the owner of this property is a view model
      * which is a projection of some other entity, and that the property holds a reference to that
@@ -203,50 +245,37 @@ public @interface Property {
      *     Only one such property should be marked as being a projection with a view model.
      * </p>
      */
-    // tag::refguide[]
-    Projecting projecting()                                     // <.>
+    Projecting projecting()
             default Projecting.NOT_SPECIFIED;
 
-    // end::refguide[]
-    /**
-     * Whether the property edit should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
-     * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
-     * </p>
-     */
-    // tag::refguide[]
-    Publishing publishing()                                     // <.>
-            default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
+     *
+     * @see Parameter#regexPattern()
+     * @see Property#regexPatternReplacement()
+     * @see Property#regexPatternFlags()
      */
-    // tag::refguide[]
-    String regexPattern()                                       // <.>
+    String regexPattern()
             default "";
 
-    // end::refguide[]
     /**
      * Pattern flags, as per {@link java.util.regex.Pattern#compile(String, int)} .
      *
      * <p>
      *     The default value, <code>0</code>, means that no flags have been specified.
      * </p>
+     *
+     * @see Property#regexPattern()
      */
-    // tag::refguide[]
-    int regexPatternFlags()                                     // <.>
+    int regexPatternFlags()
             default 0;
 
-    // end::refguide[]
     /**
      * Replacement text for the pattern in generated error message.
+     *
+     * @see Property#regexPattern()
      */
-    // tag::refguide[]
-    String regexPatternReplacement()                            // <.>
+    String regexPatternReplacement()
             default "Doesn't match pattern";
 
 }
-// end::refguide[]

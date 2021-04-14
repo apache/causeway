@@ -33,19 +33,20 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
 import lombok.Getter;
 import lombok.val;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
- * 
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  *
  * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter
  * we register programmatically on the ServletContext.
@@ -55,14 +56,14 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRoViewer.WebModuleJaxrsRestEasy4")
+@Named("isis.viewer.ro.WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "IsisRestfulObjectsInteractionFilter";
-    //private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
 
+    private final IsisConfiguration isisConfiguration;
     private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
@@ -70,9 +71,11 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     @Inject
     public WebModuleJaxrsResteasy4(
+            final IsisConfiguration isisConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
+        this.isisConfiguration = isisConfiguration;
         this.restEasyConfiguration = restEasyConfiguration;
         this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
         this.urlPattern = this.restfulPath + "*";
@@ -100,9 +103,10 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        val authenticationSessionStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
-                .orElse(AuthenticationSessionStrategyBasicAuth.class.getName());
-        
+        val authenticationStrategyClassName = isisConfiguration.getViewer()
+                .getRestfulobjects().getAuthentication().getStrategyClassName()
+                .orElse(AuthenticationStrategyBasicAuth.class.getName());
+
         registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {
             // this is mapped to the entire application;
@@ -113,10 +117,10 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                     null,
                     true,
                     this.urlPattern);
-            
+
             filterReg.setInitParameter(
-                    "authenticationSessionStrategy",
-                    authenticationSessionStrategyClassName);
+                    "authenticationStrategy",
+                    authenticationStrategyClassName);
             filterReg.setInitParameter(
                     "whenNoSession", // what to do if no session was found ...
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser

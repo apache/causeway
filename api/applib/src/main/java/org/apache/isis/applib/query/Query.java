@@ -24,6 +24,8 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import lombok.NonNull;
+
 
 /**
  * For use by repository implementations, representing the values of a query.
@@ -32,53 +34,65 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  * The implementations of these objects are be provided by the underlying
  * persistor/object store; consult its documentation.
  * <p>
- * Implementations are expected to implement the {@link #getStart()} and
- * {@link #getCount()} methods, which are used to support range / paging
+ * Implementations are expected to implement the {@link #getRange()}
+ * method, which is used to support range / paging
  * the data. Returned result sets are expected to start from index "start",
  * and no more than "count" items are expected.
  * <p>
- * <b>Note:</b> that not every object store will necessarily support this
+ * <b>Note:</b> not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
  * can use the {@link Predicate} interface to similar effect, for example in
  * {@link RepositoryService#allMatches(Class, Predicate, long, long)}).
  *
- * Note that the predicate is applied within the {@link RepositoryService}
+ * <b>Note:</b> that the predicate is applied within the {@link RepositoryService}
  * (ie client-side) rather than being pushed back to the object store.
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface Query<T> extends Serializable {
 
-    // end::refguide[]
     /**
      * The {@link Class} of the objects returned by this query.
      */
-    // tag::refguide[]
     Class<T> getResultType();
 
-    // end::refguide[]
     /**
      * A human-readable representation of this query and its values.
      */
-    // tag::refguide[]
     String getDescription();
 
-    // end::refguide[]
     /**
-     * The start index into the set table
-     *
-     * @return
+     * Returns a model with start index into the set table and maximal number of items to return.
      */
-    // tag::refguide[]
-    long getStart();
+    QueryRange getRange();
 
-    // end::refguide[]
-    /**
-     * The number of items to return, starting at {@link #getStart()}
-     *
-     * @return
-     */
-    // tag::refguide[]
-    long getCount();
+    // -- WITHERS
+
+    Query<T> withRange(@NonNull QueryRange range);
+
+    default Query<T> withRange(long ...range) {
+        return withRange(QueryRange.of(range));
+    }
+
+    default Query<T> withStart(long start) {
+        return withRange(start);
+    }
+
+    default Query<T> withLimit(long limit) {
+        return withRange(0L, limit);
+    }
+
+    // -- FACTORIES
+
+    static <T> Query<T> allInstances(
+            final @NonNull Class<T> resultType) {
+        return new _AllInstancesQueryDefault<>(resultType, QueryRange.unconstrained());
+    }
+
+    static <T> NamedQuery<T> named(
+            final @NonNull Class<T> resultType,
+            final @NonNull String queryName) {
+        return new _NamedQueryDefault<>(resultType, queryName, QueryRange.unconstrained(), null);
+    }
 
 }
-// end::refguide[]

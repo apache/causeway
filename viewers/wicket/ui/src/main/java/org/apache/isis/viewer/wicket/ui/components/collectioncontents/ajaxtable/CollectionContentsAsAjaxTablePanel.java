@@ -32,7 +32,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -45,11 +44,10 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
@@ -67,7 +65,7 @@ import lombok.val;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<EntityCollectionModel> 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -144,25 +142,21 @@ implements CollectionCountProvider {
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
-
-
         final Comparator<String> propertyIdComparator;
 
         // same code also appears in EntityPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via EntityPage.
-        final GridFacet gridFacet = typeOfSpec.getFacet(GridFacet.class);
-        if(gridFacet != null) {
+        val elementTypeGridFacet = typeOfSpec.getFacet(GridFacet.class);
+        if(elementTypeGridFacet != null) {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
-            // This will cause the current ObjectSpec to be updated as a side effect.
-            final EntityModel entityModel = getModel().getEntityModel();
-            final ManagedObject objectAdapterIfAny = entityModel != null ? entityModel.getObject() : null;
-            final Grid grid = gridFacet.getGrid(objectAdapterIfAny);
-
+            
+            // don't pass in any object, just need the meta-data
+            val elementTypeGrid = elementTypeGridFacet.getGrid(null);  
 
             final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
-            grid.getAllPropertiesById().forEach((propertyId, __)->{
+            elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
                 propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
             });
 
@@ -204,7 +198,7 @@ implements CollectionCountProvider {
                 .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
         final Stream<? extends ObjectAssociation> propertyList = 
-                typeOfSpec.streamAssociations(Contributed.INCLUDED)
+                typeOfSpec.streamAssociations(MixedIn.INCLUDED)
                 .filter(predicate);
 
         final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
@@ -283,7 +277,7 @@ implements CollectionCountProvider {
         final NamedFacet facet = property.getFacet(NamedFacet.class);
         final boolean escaped = facet == null || facet.escaped();
 
-        final String parentTypeName = property.getOnType().getSpecId().asString();
+        final String parentTypeName = property.getOnType().getLogicalTypeName();
         final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class), 
                 DescribedAsFacet::value, null);
 

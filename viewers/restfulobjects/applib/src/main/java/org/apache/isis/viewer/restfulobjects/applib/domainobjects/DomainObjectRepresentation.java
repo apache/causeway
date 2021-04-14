@@ -28,6 +28,9 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 
+/**
+ * @since 1.x {@index}
+ */
 public class DomainObjectRepresentation extends DomainRepresentation  {
 
     public DomainObjectRepresentation(final JsonNode jsonNode) {

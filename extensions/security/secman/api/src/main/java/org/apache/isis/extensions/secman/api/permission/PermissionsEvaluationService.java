@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 /**
  * Strategy for determining which permission should apply when there are multiple that apply for a particular target
@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
  *     All implementations of this interface must be {@link java.io.Serializable}, because
  *     an instance is serialized into {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet}.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public interface PermissionsEvaluationService extends Serializable {
 

@@ -26,9 +26,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
  * In the standard Apache Isis Programming Model, this is represented by a
  * <tt>deleting</tt> method.
  *
- * @see RemovedCallbackFacet
  */
-
 public interface RemovingCallbackFacet extends CallbackFacet {
 
 }

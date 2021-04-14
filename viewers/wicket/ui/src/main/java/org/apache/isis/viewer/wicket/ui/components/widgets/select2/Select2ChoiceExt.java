@@ -21,12 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2Choice;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
-public class Select2ChoiceExt extends Select2Choice<ObjectMemento> implements ChoiceExt {
+import lombok.Getter;
+
+public class Select2ChoiceExt 
+extends Select2Choice<ObjectMemento> 
+implements ChoiceExt {
     
     private static final long serialVersionUID = 1L;
 
@@ -37,22 +41,18 @@ public class Select2ChoiceExt extends Select2Choice<ObjectMemento> implements Ch
         return new Select2ChoiceExt(id, modelObject, scalarModel);
     }
 
-    private final ObjectSpecId specId;
+    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
 
     private Select2ChoiceExt(
             final String id,
             final IModel<ObjectMemento> model,
             final ScalarModel scalarModel) {
         super(id, model, EmptyChoiceProvider.INSTANCE);
-        specId = scalarModel.getTypeOfSpecification().getSpecId();
+        logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
 
         setOutputMarkupPlaceholderTag(true);
     }
 
-    @Override
-    public ObjectSpecId getSpecId() {
-        return specId;
-    }
 }

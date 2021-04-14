@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 
 @Component

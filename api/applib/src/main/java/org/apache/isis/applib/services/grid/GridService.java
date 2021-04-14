@@ -21,58 +21,98 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
 
-// tag::refguide[]
+/**
+ * Provides the ability to load the XML layout (grid) for a domain class.
+ *
+ * @since 1.x {@index}
+ */
 public interface GridService {
 
-    // end::refguide[]
+
     /**
      * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}; the default implementation of <i>that</i>
+     *     service enables reloading wihle prototyping, disables in production.
+     * </p>
      */
-    // tag::refguide[]
-    boolean supportsReloading();                    // <.>
+    boolean supportsReloading();
 
-    // end::refguide[]
     /**
      * To support metamodel invalidation/rebuilding of spec.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
-    // tag::refguide[]
-    void remove(Class<?> domainClass);              // <.>
+    void remove(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
-    // tag::refguide[]
-    boolean existsFor(Class<?> domainClass);        // <.>
+    boolean existsFor(Class<?> domainClass);
 
-    // end::refguide[]
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>layout.xml</code> file, else <code>null</code>.
+     * Returns a new instance of a {@link Grid} for the specified domain class,
+     * for example as loaded from a <code>layout.xml</code> file.
+     *
+     * <p>
+     *     If non exists, returns <code>null</code>.  (The caller can then
+     *     use {@link GridService#defaultGridFor(Class)} to obtain a
+     *     default grid if necessary).
+     * </p>
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
-    // tag::refguide[]
-    Grid load(final Class<?> domainClass);          // <.>
+    Grid load(final Class<?> domainClass);
 
-    // end::refguide[]
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.
+     * Returns an alternative layout for the domain class.
+     *
+     * <p>
+     *     The alternative layout name can for example be returned by the
+     *     domain object's <code>layout()</code> method, whereby - based on the
+     *     state of the domain object - it requests a different layout be used.
+     * </p>
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}; the default implementation of <i>that</i>
+     *     service uses the layout name to search for a differently
+     *      named layout file, <code>[domainClass].layout.[layout].xml</code>.
+     * </p>
      */
-    // tag::refguide[]
-    Grid load(Class<?> domainClass, String layout); // <.>
+    Grid load(Class<?> domainClass, String layout);
 
-    // end::refguide[]
     /**
      * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.
+     *
+     * <p>
+     * Used when no existing grid layout exists for a domain class.
+     * </p>
+     *
+     * <p>
+     *     The default implementation searches through all available
+     *     {@link GridSystemService}s and asks each in turn for a
+     *     {@link GridSystemService#defaultGrid(Class) default grid}.
+     * </p>
      */
-    // tag::refguide[]
-    Grid defaultGridFor(Class<?> domainClass);      // <.>
+    Grid defaultGridFor(Class<?> domainClass);
 
-    // end::refguide[]
     /**
      * Returns a normalized grid for the domain class obtained previously using {@link #load(Class)}.
      *
@@ -87,10 +127,8 @@ public interface GridService {
      *     <code>layout.xml</code> file takes precedence over any annotations.
      * </p>
      */
-    // tag::refguide[]
-    Grid normalize(final Grid grid);                // <.>
+    Grid normalize(final Grid grid);
 
-    // end::refguide[]
     /**
      * Modifies the provided {@link Grid} with additional metadata, broadly speaking corresponding to the
      * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
@@ -101,10 +139,8 @@ public interface GridService {
      *     to be required in the domain class itself.
      * </p>
      */
-    // tag::refguide[]
-    Grid complete(Grid grid);                       // <.>
+    Grid complete(Grid grid);
 
-    // end::refguide[]
     /**
      * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
      *
@@ -115,10 +151,7 @@ public interface GridService {
      * </p>
      *
      * @param grid
-     * @return
      */
-    // tag::refguide[]
-    Grid minimal(Grid grid);                        // <.>
+    Grid minimal(Grid grid);
 
 }
-// end::refguide[]

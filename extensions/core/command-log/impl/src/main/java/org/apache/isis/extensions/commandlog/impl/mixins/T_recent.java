@@ -60,8 +60,7 @@ public abstract class T_recent<T> {
                 , domainObject);
     }
 
-    @Inject
-    CommandJdoRepository commandJdoRepository;
+    @Inject CommandJdoRepository commandJdoRepository;
     @Inject BookmarkService bookmarkService;
     @Inject QueryResultsCache queryResultsCache;
 

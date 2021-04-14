@@ -18,10 +18,9 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -31,10 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -57,7 +54,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     /**
      * The domain object type being mixed in to (being supplemented).
      */
-    private final ObjectSpecification mixedInType;
+    private final ObjectSpecification mixeeSpec;
 
 
     /**
@@ -71,7 +68,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
@@ -79,15 +76,13 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+        this.mixeeSpec = mixeeSpec;
 
         //
         // ensure the contributed property cannot be modified
         //
-        final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
 
-        FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
 
         //
@@ -96,9 +91,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         // These could include everything under @Property(...) because the
         // PropertyAnnotationFacetFactory is also run against actions.
         //
-        
+
         FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
-        
+
 
         // adjust name if necessary
         final String name = getName();
@@ -111,11 +106,16 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
+        val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
 
-        identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
+        identifier = Identifier.actionIdentifier(
+                LogicalType.eager(
+                        mixeeSpec.getCorrespondingClass(), 
+                        mixeeSpec.getLogicalTypeName()),
+                getId(), 
+                memberParameterClassNames);
     }
-    
+
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
@@ -138,7 +138,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val head = headFor(mixedInAdapter);
-        
+
         return getPublisherDispatchService().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );
@@ -161,7 +161,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     @Override
     public ObjectSpecification getOnType() {
-        return mixedInType;
+        return mixeeSpec;
     }
 
     @Override
@@ -174,8 +174,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return this.mixinAction == mixinAction;
     }
 
-    private PublisherDispatchService getPublisherDispatchService() {
-        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
+    private ExecutionPublisher getPublisherDispatchService() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
 

@@ -60,7 +60,7 @@ public class TaggerTest {
 
         @Test
         public void applib() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("isisApplib.ConfigurationServiceMenu", null);
+            String tag = new TaggerDefault().tagForObjectType("isis.applib.ConfigurationServiceMenu", null);
             assertThat(tag, is(equalTo(". apache isis applib")));
         }
 

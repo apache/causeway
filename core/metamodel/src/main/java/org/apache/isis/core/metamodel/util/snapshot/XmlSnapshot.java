@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
@@ -38,9 +39,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -52,7 +53,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -68,20 +69,33 @@ import lombok.extern.log4j.Log4j2;
  * Initially designed to allow snapshots to be easily created.
  *
  * <p>
- * Typical use:
+ * Typical use, returning customer's fields, titles of simple references,
+ * number of items in collections:
  *
  * <pre>
- * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a
- * // reference to an
- * // ObjectAdapter
- * Element customerAsXml = snapshot.toXml(); // returns customer's fields, titles
- * // of simple references, number of
- * // items in collections
- * snapshot.include(&quot;placeOfBirth&quot;); // navigates to another object represented by
- * // simple reference &quot;placeOfBirth&quot;
- * snapshot.include(&quot;orders/product&quot;); // navigates to all &lt;tt&gt;Order&lt;/tt&gt;s of
- * // &lt;tt&gt;Customer&lt;/tt&gt;, and from them for
- * // their &lt;tt&gt;Product&lt;/tt&gt;s
+ *      XmlSnapshot snapshot = new XmlSnapshot(customer);
+ *      Element customerAsXml = snapshot.toXml();
+ * </pre>
+ *
+ * <p>
+ * More complex use, navigates to another object represented by a simple
+ * reference:
+ *
+ * <pre>
+ *      XmlSnapshot snapshot = new XmlSnapshot(customer);
+ *      snapshot.include(&quot;placeOfBirth&quot;);
+ *      Element customerAsXml = snapshot.toXml();
+ * </pre>
+ *
+ * <p>
+ * More complex still, navigating to all <code>Order</code>s of
+ *  <code>Customer</code>, and from them for
+ *  their <code>Product</code>s
+ *
+ * <pre>
+ *      XmlSnapshot snapshot = new XmlSnapshot(customer);
+ *      snapshot.include(&quot;orders/product&quot;);
+ *      Element customerAsXml = snapshot.toXml();
  * </pre>
  */
 @Log4j2
@@ -150,7 +164,7 @@ public class XmlSnapshot implements Snapshot {
 
         } catch (final ParserConfigurationException e) {
             log.error("unable to build snapshot", e);
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
 
         for (final String path : getPathsFor(rootAdapter.getPojo())) {
@@ -196,12 +210,7 @@ public class XmlSnapshot implements Snapshot {
 
         final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
 
-        schema.setUri(fullyQualifiedClassName); // derive
-        // URI
-        // from
-        // fully
-        // qualified
-        // name
+        schema.setUri(fullyQualifiedClassName); // derive URI from fully qualified name
 
         final Place place = objectToElement(object);
 
@@ -475,7 +484,7 @@ public class XmlSnapshot implements Snapshot {
 
         if (field instanceof OneToOneAssociation) {
 
-            if (field.getSpecification().streamAssociations(Contributed.INCLUDED).limit(1).count() == 0L) {
+            if (field.getSpecification().streamAssociations(MixedIn.INCLUDED).limit(1).count() == 0L) {
                 if (log.isDebugEnabled()) {
                     log.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -487,6 +496,10 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+
+            if(oneToOneAssociation.isNotPersisted()) {
+                return false;
+            }
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.FRAMEWORK);
 
@@ -640,7 +653,7 @@ public class XmlSnapshot implements Snapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
-        final List<ObjectAssociation> fields = nos.streamAssociations(Contributed.INCLUDED)
+        final List<ObjectAssociation> fields = nos.streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): processing fields");
@@ -654,30 +667,16 @@ public class XmlSnapshot implements Snapshot {
             }
 
             // Skip field if we have seen the name already
-            // This is a workaround for getLastActivity(). This method exists
-            // in AbstractObjectAdapter, but is not (at some level) being picked
-            // up
-            // by the dot-net reflector as a property. On the other hand it does
-            // exist as a field in the meta model (ObjectSpecification).
-            //
-            // Now, to re-expose the lastactivity field for .Net, a
-            // deriveLastActivity()
-            // has been added to BusinessObject. This caused another field of
-            // the
-            // same name, ultimately breaking the XSD.
             for (int j = 0; j < i; j++) {
-                if (fieldName.equals(fields.get(i).getName())) {
+                if (Objects.equals(fieldName, fields.get(i).getName())) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }
             }
 
-            Element xmlFieldElement = getXmlDocument().createElementNS(schema.getUri(), // scoped
-                    // by
-                    // namespace
-                    // of class of
-                    // containing object
-                    schema.getPrefix() + ":" + fieldName);
+            Element xmlFieldElement = getXmlDocument().createElementNS(
+                    schema.getUri(), // scoped by namespace of class
+                    /* of containing object*/ schema.getPrefix() + ":" + fieldName);
 
             Element xsdFieldElement = null;
 
@@ -696,10 +695,10 @@ public class XmlSnapshot implements Snapshot {
                 }
 
                 final OneToOneAssociation valueAssociation = ((OneToOneAssociation) field);
-                final Element xmlValueElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped name
+                if(valueAssociation.isNotPersisted()) {
+                    continue eachField;
+                }
+                final Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject value;
                 try {
@@ -746,11 +745,7 @@ public class XmlSnapshot implements Snapshot {
 
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
                 final String fullyQualifiedClassName = nos.getFullIdentifier();
-                final Element xmlReferenceElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped
-                // name
+                final Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject referencedObjectAdapter;
 
@@ -784,11 +779,7 @@ public class XmlSnapshot implements Snapshot {
                 }
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-                final Element xmlCollectionElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped
-                // name
+                final Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject collection;
                 try {
@@ -816,9 +807,7 @@ public class XmlSnapshot implements Snapshot {
                 continue;
             }
 
-            if (xsdFieldElement != null) {
-                Place.setXsdElement(xmlFieldElement, xsdFieldElement);
-            }
+            Place.setXsdElement(xmlFieldElement, xsdFieldElement);
 
             // XML
             if (log.isDebugEnabled()) {
@@ -827,12 +816,10 @@ public class XmlSnapshot implements Snapshot {
             xmlFieldElement = mergeTree(element, xmlFieldElement);
 
             // XSD
-            if (xsdFieldElement != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("objectToElement(NO): adding XS element for field to schema");
-                }
-                schema.addFieldXsElement(xsElement, xsdFieldElement);
+            if (log.isDebugEnabled()) {
+                log.debug("objectToElement(NO): adding XS element for field to schema");
             }
+            schema.addFieldXsElement(xsElement, xsdFieldElement);
         }
 
         return place;

@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -34,28 +33,24 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
+import org.apache.isis.applib.services.exceprecog.Category;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -93,7 +88,8 @@ implements FormExecutor {
      * @param feedbackFormIfAny
      * @param withinPrompt
      *
-     * @return <tt>false</tt> - if invalid args; if concurrency exception; <tt>true</tt> if redirecting to new page, or repainting all components
+     * @return <tt>false</tt> - if invalid args;
+     * <tt>true</tt> if redirecting to new page, or repainting all components
      */
     @Override
     public boolean executeAndProcessResults(
@@ -122,6 +118,7 @@ implements FormExecutor {
                 return false;
             }
 
+            val commonContext = targetEntityModel.getCommonContext();
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -131,42 +128,37 @@ implements FormExecutor {
             // 2. return a null result (from a successful action returning void)
             //
             // 3. throws a RuntimeException, either:
-            //    a) as result of application throwing RecoverableException/ApplicationException (DN xactn still intact)
-            //    b) as result of DB exception, eg uniqueness constraint violation (DN xactn marked to abort)
-            //    Either way, as a side-effect the Isis transaction will be set to MUST_ABORT (IsisTransactionManager does this)
+            //    a) as result of application throwing RecoverableException (DN transaction still intact)
+            //    b) as result of DB exception, eg uniqueness constraint violation (DN transaction marked to abort)
             //
             // (The DB exception might actually be thrown by the flush() that follows.
             //
             val resultAdapter = obtainResultAdapter();
+            
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
-            {
-                val commonContext = targetEntityModel.getCommonContext();
-                commonContext.getIsisInteractionTracker().currentInteractionSession()
-                .ifPresent(interaction->{
-                    commonContext.lookupServiceElseFail(RuntimeEventService.class)
-                    .fireInteractionFlushRequest(interaction);
-                });
-            }
+            if(commonContext.getInteractionTracker().isInInteraction()) {
+                commonContext.getTransactionService().flushTransaction();
 
-            // update target, since version updated (concurrency checks)
-            targetAdapter = targetEntityModel.getManagedObject();
-            if(!EntityUtil.isDestroyed(targetAdapter)) {
-                targetEntityModel.resetPropertyModels();
+                if(EntityUtil.isDestroyed(targetAdapter)) {
+                    // if this was an entity delete action
+                    // then we don't re-fetch / re-create the targetAdapter  
+                    targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
+                } else {
+                    // update target, since version updated
+                    targetAdapter = targetEntityModel.getManagedObject();
+                    targetEntityModel.resetPropertyModels();
+                }
             }
-
 
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
 
-            final M model = this.model;
-            RedirectFacet redirectFacet = null;
-            if(model instanceof ActionModel) {
-                final ActionModel actionModel = (ActionModel) model;
-                redirectFacet = actionModel.getMetaModel().getFacet(RedirectFacet.class);
-            }
+            val redirectFacet =  model instanceof ActionModel
+                ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
+                : null;
 
-            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) 
-                    || hasBlobsOrClobs(page)                                       
+            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
+                    || hasBlobsOrClobs(page)
                     || targetIfAny == null) {
 
                 redirectTo(resultAdapter, targetIfAny);
@@ -186,51 +178,31 @@ implements FormExecutor {
                 // also in this branch we also know that there *is* an ajax target to use
                 addComponentsToRedraw(targetIfAny);
 
-                final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
-                targetIfAny.appendJavaScript(jGrowlCalls);
+                currentMessageBroker().ifPresent(messageBorker->{
+                    final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker);
+                    targetIfAny.appendJavaScript(jGrowlCalls);
+                });
+
             }
 
             return true;
 
-//        } catch (ConcurrencyException ex) {
-//
-//            // second attempt should succeed, because the Oid would have
-//            // been updated in the attempt
-//            if (targetAdapter == null) {
-//                targetAdapter = obtainTargetAdapter();
-//            }
-//
-//            forwardOnConcurrencyException(targetAdapter, ex);
-//
-//            getMessageService().warnUser(ex.getMessage());
-//
-//            return false;
-
-        } catch (RuntimeException ex) {
+        } catch (Throwable ex) {
 
             // there's no need to set the abort cause on the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
 
-
-            // see if is an application-defined exception. If so, convert to an application error,
-            final RecoverableException appEx = RecoverableException.Util.getRecoverableExceptionIfAny(ex);
-            String message = null;
-            if (appEx != null) {
-                message = appEx.getMessage();
-            }
-
-            // otherwise, attempt to recognize this exception using the ExceptionRecognizers
-            if(message == null) {
-                message = recognizeException(ex, targetIfAny, feedbackFormIfAny)
-                        .map($->$.toMessage(getTranslationService()))
-                        .orElse(null);
-            }
+            // attempt to recognize this exception using the ExceptionRecognizers
+            val messageWhenRecognized = recognizeException(ex, targetIfAny, feedbackFormIfAny)
+                        .map(recog->recog.toMessage(getTranslationService()));
 
             // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
-            if (message != null && !withinPrompt) {
+            if (messageWhenRecognized.isPresent() && !withinPrompt) {
                 // ... display as growl pop-up
-                final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
-                messageBroker.setApplicationError(message);
+
+                currentMessageBroker().ifPresent(messageBroker->{
+                    messageBroker.setApplicationError(messageWhenRecognized.get());
+                });
 
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
                 // previous behavior was to fall through and re-throw, which lead to the error never shown
@@ -240,9 +212,12 @@ implements FormExecutor {
 
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
-                
-                command.updater().setException(ex);
-                
+
+                //TODO (dead code) should happen at a more fundamental level
+                // should not be a responsibility of the viewer
+
+                command.updater().setResult(Result.failure(ex));
+
                 //XXX legacy of
                 //command.internal().setException(Throwables.getStackTraceAsString(ex));
             }
@@ -329,7 +304,7 @@ implements FormExecutor {
 //        // this will not preserve the URL (because pageParameters are not copied over)
 //        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
 //        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
-//        
+//
 //        // force any changes in state etc to happen now prior to the redirect;
 //        // in the case of an object being returned, this should cause our page mementos
 //        // (eg EntityModel) to hold the correct state.  I hope.
@@ -340,9 +315,9 @@ implements FormExecutor {
 //        requestCycle.setResponsePage(entityPage);
 //    }
 
-    
+
     private static boolean shouldRedraw(final Component component) {
-        
+
         // hmm... this doesn't work, because I think that the components
         // get removed after they've been added to target.
         // so.. still getting WARN log messages from XmlPartialPageUpdate
@@ -384,7 +359,7 @@ implements FormExecutor {
             component.visitParents(MarkupContainer.class, (parent, visit) -> {
                 componentsToRedraw.remove(parent); // no-op if not in that list
             });
-            
+
             if(component instanceof MarkupContainer) {
                 val containerNotToRedraw = (MarkupContainer) component;
                 containerNotToRedraw.visitChildren((child, visit) -> {
@@ -409,7 +384,9 @@ implements FormExecutor {
         debug("Redrawing", componentsToRedraw);
     }
 
-    private void debug(final String title, final Collection<Component> list) {
+    private void debug(
+            final String title,
+            final Collection<Component> list) {
         log.debug(">>> {}:", title);
         for (Component component : list) {
             log.debug(
@@ -420,22 +397,24 @@ implements FormExecutor {
         }
     }
 
-    private Optional<Recognition> recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
-        val exceptionRecognizerService = getExceptionRecognizerService();
+    private Optional<Recognition> recognizeException(
+            final Throwable ex,
+            final AjaxRequestTarget target,
+            final Form<?> feedbackForm) {
 
-        val recognition = exceptionRecognizerService.recognize(ex);
-        recognition.ifPresent($->raiseWarning(target, feedbackForm, $));
+        val recognition = getExceptionRecognizerService().recognize(ex);
+        recognition.ifPresent(recog->raiseWarning(target, feedbackForm, recog));
         return recognition;
     }
 
     private void raiseWarning(
-            @Nullable final AjaxRequestTarget targetIfAny,
-            @Nullable final Form<?> feedbackFormIfAny,
-            @NonNull final Recognition recognition) {
+            final @Nullable AjaxRequestTarget targetIfAny,
+            final @Nullable Form<?> feedbackFormIfAny,
+            final @NonNull  Recognition recognition) {
 
         if(targetIfAny != null && feedbackFormIfAny != null) {
             //[ISIS-2419] for a consistent user experience with action dialog validation messages,
-            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION. 
+            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
             val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
                     ? recognition.toMessageNoCategory(getTranslationService())
                     : recognition.toMessage(getTranslationService());
@@ -447,7 +426,7 @@ implements FormExecutor {
         }
     }
 
-    // -- DEPENDENCIES 
+    // -- DEPENDENCIES
 
     private IsisAppCommonContext getCommonContext() {
         return model.getCommonContext();
@@ -456,15 +435,15 @@ implements FormExecutor {
     protected ExceptionRecognizerService getExceptionRecognizerService() {
         return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
-    
+
     protected TranslationService getTranslationService() {
         return getServiceRegistry().lookupServiceElseFail(TranslationService.class);
     }
-    
+
     protected MessageService getMessageService() {
         return getServiceRegistry().lookupServiceElseFail(MessageService.class);
     }
-    
+
     protected ServiceRegistry getServiceRegistry() {
         return getCommonContext().getServiceRegistry();
     }
@@ -473,13 +452,12 @@ implements FormExecutor {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisInteractionFactory getIsisInteractionFactory() {
-        return getCommonContext().lookupServiceElseFail(IsisInteractionFactory.class);
+    protected InteractionFactory getIsisInteractionFactory() {
+        return getCommonContext().lookupServiceElseFail(InteractionFactory.class);
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return getCommonContext().getAuthenticationSessionTracker()
-                .getAuthenticationSessionElseFail();
+    protected Optional<MessageBroker> currentMessageBroker() {
+        return getCommonContext().getMessageBroker();
     }
 
     protected WicketViewerSettings getSettings() {
@@ -493,9 +471,9 @@ implements FormExecutor {
     }
 
     private Optional<Recognition> getReasonInvalidIfAny() {
-        val reason = formExecutorStrategy.getReasonInvalidIfAny(); 
+        val reason = formExecutorStrategy.getReasonInvalidIfAny();
         val category = Category.CONSTRAINT_VIOLATION;
-        return ExceptionRecognizer.Recognition.of(category, reason);
+        return Recognition.of(category, reason);
     }
 
     private void onExecuteAndProcessResults(final AjaxRequestTarget target) {

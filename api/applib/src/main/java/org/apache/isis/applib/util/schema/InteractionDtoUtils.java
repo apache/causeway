@@ -36,6 +36,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -53,6 +54,9 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class InteractionDtoUtils {
 
 
@@ -112,29 +116,30 @@ public final class InteractionDtoUtils {
     // -- newInteractionDto
 
     /**
-     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento) of the provided
-     * in-memory {@link Interaction.Execution}.
+     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento)
+     * of the provided in-memory
+     * {@link Execution}.
      */
     public enum Strategy {
         FLAT {
 
             @Override
-            public MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution) {
+            public MemberExecutionDto dtoFor(final Execution<?, ?> execution) {
                 return execution.getDto();
             }
         },
         DEEP {
             @Override
-            public MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution) {
+            public MemberExecutionDto dtoFor(final Execution<?, ?> execution) {
                 return traverse(execution);
             }
 
-            private MemberExecutionDto traverse(final Interaction.Execution<?, ?> parentExecution) {
+            private MemberExecutionDto traverse(final Execution<?, ?> parentExecution) {
 
                 final MemberExecutionDto parentDto = clone(parentExecution.getDto());
 
-                final List<Interaction.Execution<?, ?>> children = parentExecution.getChildren();
-                for (Interaction.Execution<?, ?> childExecution : children) {
+                final List<Execution<?, ?>> children = parentExecution.getChildren();
+                for (Execution<?, ?> childExecution : children) {
                     final MemberExecutionDto childDto = clone(childExecution.getDto());
                     final MemberExecutionDto.ChildExecutions childExecutions =
                             InteractionDtoUtils.childExecutionsOf(parentDto);
@@ -154,7 +159,7 @@ public final class InteractionDtoUtils {
         };
 
 
-        public abstract MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution);
+        public abstract MemberExecutionDto dtoFor(final Execution<?, ?> execution);
 
     }
 
@@ -169,18 +174,20 @@ public final class InteractionDtoUtils {
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link Interaction.Execution} (the applib object).
+     * {@link Execution}
+     * (the applib object).
      */
-    public static InteractionDto newInteractionDto(final Interaction.Execution<?, ?> execution) {
+    public static InteractionDto newInteractionDto(final Execution<?, ?> execution) {
         return newInteractionDto(execution, Strategy.FLAT);
     }
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link Interaction.Execution} (the applib object).
+     * {@link Execution}
+     * (the applib object).
      */
     public static InteractionDto newInteractionDto(
-            final Interaction.Execution<?, ?> execution,
+            final Execution<?, ?> execution,
             final Strategy strategy) {
 
         final MemberExecutionDto memberExecutionDto = strategy.dtoFor(execution);
@@ -188,23 +195,23 @@ public final class InteractionDtoUtils {
     }
 
     private static InteractionDto newInteractionDto(
-            final Interaction.Execution<?, ?> execution,
+            final Execution<?, ?> execution,
             final MemberExecutionDto executionDto) {
         final Interaction interaction = execution.getInteraction();
-        final String transactionId = interaction.getUniqueId().toString();
+        final String interactionId = interaction.getInteractionId().toString();
 
-        return InteractionDtoUtils.newInteractionDto(transactionId, executionDto);
+        return InteractionDtoUtils.newInteractionDto(interactionId, executionDto);
     }
 
     private static InteractionDto newInteractionDto(
-            final String transactionId,
+            final String interactionId,
             final MemberExecutionDto executionDto) {
         final InteractionDto interactionDto = new InteractionDto();
 
         interactionDto.setMajorVersion("1");
         interactionDto.setMinorVersion("0");
 
-        interactionDto.setTransactionId(transactionId);
+        interactionDto.setInteractionId(interactionId);
         interactionDto.setExecution(executionDto);
 
         executionDto.setInteractionType(
@@ -356,9 +363,9 @@ public final class InteractionDtoUtils {
     public static void addReturn(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
-            final Object result, 
+            final Object result,
             final BookmarkService bookmarkService) {
-        
+
         final ValueWithTypeDto returned = CommonDtoUtils
                 .newValueWithTypeDto(returnType, result, bookmarkService);
         invocationDto.setReturned(returned);
@@ -429,16 +436,11 @@ public final class InteractionDtoUtils {
 
 
     // -- getParameterArgValue
-    public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum, Class<T> inferClass) {
-        final ParamDto paramDto = getParameter(ai, paramNum);
-        return CommonDtoUtils.getValue(paramDto);
-    }
+
     public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return CommonDtoUtils.getValue(paramDto);
     }
-
-
 
     // -- debugging (dump)
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {

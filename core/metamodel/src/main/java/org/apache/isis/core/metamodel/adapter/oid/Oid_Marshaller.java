@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
 
@@ -109,7 +108,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                             WORD_GROUP + SEPARATOR + WORD_GROUP +
                             ")" +
                             "(" +
-                            "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*" + // nesting of aggregates
+                            "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*+" + // nesting of aggregates
                             ")" +
                             ")" +
                             "(" + "[" + SEPARATOR_PARENTED + "]" + WORD + ")?"  + // optional collection name
@@ -142,9 +141,13 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             throw _Exceptions.illegalArgument("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
 
-        final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
+        //final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
 
         final String rootObjectType = getGroup(matcher, 4);
+        if(_Strings.isEmpty(rootObjectType)) {
+            throw _Exceptions.illegalArgument("cannot parse OID, must have an 'ObjectType'");
+        }
+        
         final String rootIdentifier = getGroup(matcher, 5);
 
         final String aggregateOidPart = getGroup(matcher, 6);
@@ -171,22 +174,14 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
                 return _Casts.uncheckedCast(
-                        Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier));
+                        Oid_Root.of(rootObjectType, rootIdentifier));
             } else {
-                throw _Exceptions.illegalArgument("Aggregated Oids are no longer supported");
+                throw _Exceptions.illegalArgument("Aggregated OIDs are no longer supported");
             }
         } else {
-            final String oidStrWithoutCollectionName = getGroup(matcher, 1);
-
-            final String parentOidStr = oidStrWithoutCollectionName;
-
-            RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
-            ensureCorrectType(oidStr, requestedType, ParentedOid.class);
-            return _Casts.uncheckedCast( Oid_Parented.ofOneToManyId(parentOid, oneToManyId) );
+            throw _Exceptions.illegalArgument("Parented OIDs are no longer supported.");
         }
     }
-
-
 
     private static class AggregateOidPart {
         AggregateOidPart(String objectType, String localId) {
@@ -227,13 +222,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     @Override
     public final String marshal(RootOid rootOid) {
         _Assert.assertFalse(rootOid.isValue(), "cannot marshal values");
-        return rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
+        return rootOid.getLogicalTypeName() + SEPARATOR + rootOid.getIdentifier();
     }
-
-    @Override
-    public String marshal(ParentedOid parentedOid) {
-        return parentedOid.getParentOid().enString() + SEPARATOR_PARENTED + parentedOid.getName();
-    }
-
 
 }

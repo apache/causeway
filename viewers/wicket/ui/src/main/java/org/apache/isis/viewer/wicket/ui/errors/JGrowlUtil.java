@@ -20,10 +20,11 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.interaction.session.MessageBroker;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 public class JGrowlUtil {
 
@@ -44,19 +45,20 @@ public class JGrowlUtil {
     }
 
     public static String asJGrowlCalls(final MessageBroker messageBroker) {
-        final StringBuilder buf = new StringBuilder();
+        val buf = new StringBuilder();
 
-        for (String info : messageBroker.getMessages()) {
+        for (String info : messageBroker.drainMessages()) {
             addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, buf);
         }
-        for (String warning : messageBroker.getWarnings()) {
+        
+        for (String warning : messageBroker.drainWarnings()) {
             addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, buf);
         }
 
-        final String error =  messageBroker.getApplicationError();
-        if(error!=null) {
-            addJGrowlCall(error, MessageSeverity.DANGER, buf);
-        }
+        messageBroker.drainApplicationError()
+        .ifPresent(error->
+            addJGrowlCall(error, MessageSeverity.DANGER, buf));
+        
         return buf.toString();
     }
 

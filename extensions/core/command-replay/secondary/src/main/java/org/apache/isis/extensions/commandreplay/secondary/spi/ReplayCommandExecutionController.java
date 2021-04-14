@@ -26,6 +26,8 @@ package org.apache.isis.extensions.commandreplay.secondary.spi;
  * If no implementation is configured, then replication/replay will continue
  * without interruption.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public interface ReplayCommandExecutionController {
 
@@ -36,7 +38,6 @@ public interface ReplayCommandExecutionController {
 
     /**
      * The current state, or <tt>null</tt> if the service implementing this SPI has not yet been initialized.
-     * @return
      */
     State getState();
 

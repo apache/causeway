@@ -1,0 +1,149 @@
+= TransactionState _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Represents the state of the current transaction.
+
+Obtainable from _TransactionService#currentTransactionState()_ .
+
+== API
+
+[source,java]
+.TransactionState.java
+----
+enum TransactionState {
+  NONE     // <.>
+  IN_PROGRESS     // <.>
+  MUST_ABORT     // <.>
+  COMMITTED     // <.>
+  ABORTED     // <.>
+  boolean canFlush()     // <.>
+  boolean canCommit()     // <.>
+  boolean canAbort()     // <.>
+  boolean isComplete()     // <.>
+  boolean isInProgress()     // <.>
+  boolean mustAbort()     // <.>
+}
+----
+
+<.> xref:#NONE[NONE]
++
+--
+No transaction exists.
+--
+<.> xref:#IN_PROGRESS[IN_PROGRESS]
++
+--
+Started, still in progress.
+--
+<.> xref:#MUST_ABORT[MUST_ABORT]
++
+--
+Started, but has hit an exception.
+--
+<.> xref:#COMMITTED[COMMITTED]
++
+--
+Completed, having successfully committed.
+--
+<.> xref:#ABORTED[ABORTED]
++
+--
+Completed, having aborted.
+--
+<.> xref:#canFlush__[canFlush()]
++
+--
+Whether it is valid to flush the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
+--
+<.> xref:#canCommit__[canCommit()]
++
+--
+Whether it is valid to commit the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
+--
+<.> xref:#canAbort__[canAbort()]
++
+--
+Whether it is valid to mark as aborted this transaction.
+--
+<.> xref:#isComplete__[isComplete()]
++
+--
+Whether the transaction is complete (that is, is either _#COMMITTED committed_ or _#ABORTED aborted_ ), and so a new transaction can be started.
+--
+<.> xref:#isInProgress__[isInProgress()]
++
+--
+Whether the transaction is _#IN_PROGRESS in progress_ .
+--
+<.> xref:#mustAbort__[mustAbort()]
++
+--
+Whether the transaction _#MUST_ABORT must abort_ .
+--
+
+== Members
+
+[#NONE]
+=== NONE
+
+No transaction exists.
+
+[#IN_PROGRESS]
+=== IN_PROGRESS
+
+Started, still in progress.
+
+May flush, commit or abort.
+
+[#MUST_ABORT]
+=== MUST_ABORT
+
+Started, but has hit an exception.
+
+May not flush or commit (will throw an _IllegalStateException_ ), can only abort.
+
+[#COMMITTED]
+=== COMMITTED
+
+Completed, having successfully committed.
+
+May not flush or abort or commit (will throw _IllegalStateException_ ).
+
+[#ABORTED]
+=== ABORTED
+
+Completed, having aborted.
+
+May not flush, commit or abort (will throw _IllegalStateException_ ).
+
+[#canFlush__]
+=== canFlush()
+
+Whether it is valid to flush the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
+
+[#canCommit__]
+=== canCommit()
+
+Whether it is valid to commit the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
+
+[#canAbort__]
+=== canAbort()
+
+Whether it is valid to mark as aborted this transaction.
+
+This is the case if the transaction is either currently _#IN_PROGRESS in progress_ or has already been marked as _#MUST_ABORT must abort_ .
+
+[#isComplete__]
+=== isComplete()
+
+Whether the transaction is complete (that is, is either _#COMMITTED committed_ or _#ABORTED aborted_ ), and so a new transaction can be started.
+
+[#isInProgress__]
+=== isInProgress()
+
+Whether the transaction is _#IN_PROGRESS in progress_ .
+
+[#mustAbort__]
+=== mustAbort()
+
+Whether the transaction _#MUST_ABORT must abort_ .

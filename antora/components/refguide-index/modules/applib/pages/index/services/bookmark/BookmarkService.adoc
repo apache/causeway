@@ -1,0 +1,82 @@
+= BookmarkService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This service provides a serializable 'bookmark' for any entity, and conversely to lookup an entity from a bookmark.
+
+== API
+
+[source,java]
+.BookmarkService.java
+----
+interface BookmarkService {
+  Bookmark bookmarkFor(Object domainObject)     // <.>
+  Bookmark bookmarkForElseThrow(Object domainObject)     // <.>
+  Bookmark bookmarkFor(Class<?> cls, String identifier)     // <.>
+  Object lookup(BookmarkHolder bookmarkHolder)     // <.>
+  Object lookup(Bookmark bookmark)     // <.>
+  T lookup(Bookmark bookmark, Class<T> cls)     // <.>
+}
+----
+
+<.> xref:#bookmarkFor__Object[bookmarkFor(Object)]
++
+--
+Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
+--
+<.> xref:#bookmarkForElseThrow__Object[bookmarkForElseThrow(Object)]
++
+--
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+--
+<.> xref:#bookmarkFor__Class_String[bookmarkFor(Class, String)]
++
+--
+Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+--
+<.> xref:#lookup__BookmarkHolder[lookup(BookmarkHolder)]
+<.> xref:#lookup__Bookmark[lookup(Bookmark)]
++
+--
+Reciprocal of _#bookmarkFor(Object)_
+--
+<.> xref:#lookup__Bookmark_Class[lookup(Bookmark, Class)]
++
+--
+As _#lookup(Bookmark)_ , but down-casting to the specified type.
+--
+
+== Members
+
+[#bookmarkFor__Object]
+=== bookmarkFor(Object)
+
+Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
+
+ *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
+
+[#bookmarkForElseThrow__Object]
+=== bookmarkForElseThrow(Object)
+
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+
+[#bookmarkFor__Class_String]
+=== bookmarkFor(Class, String)
+
+Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+
+[#lookup__BookmarkHolder]
+=== lookup(BookmarkHolder)
+
+[#lookup__Bookmark]
+=== lookup(Bookmark)
+
+Reciprocal of _#bookmarkFor(Object)_
+
+[#lookup__Bookmark_Class]
+=== lookup(Bookmark, Class)
+
+As _#lookup(Bookmark)_ , but down-casting to the specified type.
+
+include::hooks/BookmarkService_010-implementation.adoc[]
+
+include::hooks/BookmarkService_020-examples-and-usage.adoc[]

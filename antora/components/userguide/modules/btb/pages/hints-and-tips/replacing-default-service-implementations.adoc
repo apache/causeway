@@ -1,0 +1,70 @@
+[[replacing-default-service-implementations]]
+= Overriding Default Service Implns
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+The framework provides default implementations for many of the xref:refguide:applib-svc:about.adoc[domain services].
+This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
+
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider].
+The trick is to use the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation or equivalent mechanism.
+
+Here's how:
+
+[source,java]
+----
+import org.springframework.stereotype.Service;
+import org.springframework.core.Ordered;
+
+@Service
+@Order(OrderPrecedence.HIGH)                                // <.>
+public class MyLocaleProvider implements LocaleProvider {
+    @Override
+    public Locale getLocale() {
+        // ...
+    }
+}
+----
+<.> `OrderPrecedence` (in the Apache Isis applib) provides some standard values.
+
+
+== Decorating existing implementations
+
+It's sometimes useful to decorate the existing implementation (ie have your own implementation delegate to the default); this is quite easy to imlpement:
+
+[source,java]
+----
+import org.springframework.stereotype.Service;
+import org.springframework.core.Ordered;
+
+@Service
+@Order(OrderPrecedence.HIGHEST)                             // <.>
+public class MyLocaleProvider implements LocaleProvider {
+
+    @Inject List<LocaleProvider> localeProviders;           // <.>
+
+    @Override
+    public Locale getLocale() {
+        return localeProviders.stream()                     // <.>
+                .filter(x -> x != this)                     // <.>
+                .findFirst()                                // <.>
+                .map(LocaleProvider::getLocale)             // <.>
+                .orElseThrow(RuntimeException::new);        // <.>
+    }
+}
+----
+<.> takes precedence over the default implementation when injected elsewhere.
+<.> injects all implementations, including this implementation
+<.> streams over all implementations...
+<.> \...ignoring this one...
+<.> \...uses the next one...
+<.> \...and delegate to it.
+<.> Fails fast if no other implementations available (should not happen if framework provides a default implementation).
+
+[TIP]
+====
+None of the default implementations provided by the framework use `Ordered(OrderPrecedence.HIGHEST)`, so all can be overridden if required.
+====

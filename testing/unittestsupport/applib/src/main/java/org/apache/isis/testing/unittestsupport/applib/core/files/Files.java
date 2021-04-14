@@ -28,9 +28,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public final class Files {

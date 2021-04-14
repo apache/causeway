@@ -21,11 +21,12 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -37,13 +38,12 @@ public class CollectionMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
-        
         val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
-        val specId = ObjectSpecId.of(association.getIdentifier().toClassIdentityString());
-        return specificationLoader.lookupBySpecIdElseLoad(specId);
+        val logicalType = association.getIdentifier().getLogicalTypeName();
+        return specificationLoader.specForLogicalTypeNameElseFail(logicalType);
     }
 
-    private final ObjectSpecId owningType;
+    @Getter private final LogicalType owningType;
     private final String id;
     private final String collectionId;
     private final String collectionName;
@@ -51,19 +51,15 @@ public class CollectionMemento implements Serializable {
     private transient OneToManyAssociation collection;
 
     public CollectionMemento(final OneToManyAssociation collection) {
-        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
+        this(owningSpecFor(collection).getLogicalType(), collection.getIdentifier().getMemberName(), collection);
     }
 
-    private CollectionMemento(final ObjectSpecId owningType, final String id, final OneToManyAssociation collection) {
+    private CollectionMemento(final LogicalType owningType, final String id, final OneToManyAssociation collection) {
         this.owningType = owningType;
         this.id = id;
         this.collection = collection;
         this.collectionId = collection.getId();
         this.collectionName = collection.getName();
-    }
-
-    public ObjectSpecId getOwningType() {
-        return owningType;
     }
 
     /**
@@ -100,10 +96,10 @@ public class CollectionMemento implements Serializable {
     }
 
     private static OneToManyAssociation collectionFor(
-            ObjectSpecId owningType,
+            LogicalType owningType,
             String id,
             final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+        return (OneToManyAssociation) specificationLoader.specForLogicalTypeElseFail(owningType)
                 .getAssociationElseFail(id);
     }
 

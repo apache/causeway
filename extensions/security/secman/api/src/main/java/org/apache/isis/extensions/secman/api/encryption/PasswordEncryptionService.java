@@ -20,6 +20,9 @@ package org.apache.isis.extensions.secman.api.encryption;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface PasswordEncryptionService {
 
     @Programmatic

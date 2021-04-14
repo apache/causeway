@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.AbstractResourceStream;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -61,6 +62,7 @@ import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
+import lombok.NonNull;
 import lombok.val;
 
 public final class ActionModel 
@@ -226,7 +228,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
 
     /** Resets arguments to their fixed point default values
-     * @see {@link PendingParameterModelHead#defaults()}
+     * @see ActionInteractionHead#defaults()
      */
     public void clearArguments() {
 
@@ -265,25 +267,30 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // //////////////////////////////////////
 
-    public static IRequestHandler redirectHandler(final Object value) {
+    public static IRequestHandler redirectHandler(
+            final Object value, 
+            final @NonNull OpenUrlStrategy openUrlStrategy) {
+        
         if(value instanceof java.net.URL) {
-            final java.net.URL url = (java.net.URL) value;
-            return new RedirectRequestHandler(url.toString());
+            val url = (java.net.URL) value;
+            return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
         }
         if(value instanceof LocalResourcePath) {
-            final LocalResourcePath localResourcePath = (LocalResourcePath) value;
-            return new RedirectRequestHandler(localResourcePath.getPath());
+            val localResourcePath = (LocalResourcePath) value;
+            return new RedirectRequestHandlerWithOpenUrlStrategy(
+                    localResourcePath.getPath(), 
+                    localResourcePath.getOpenUrlStrategy());
         }
         return null;
     }
 
-    public static IRequestHandler downloadHandler(final Object value) {
+    public IRequestHandler downloadHandler(final Object value) {
         if(value instanceof Clob) {
-            final Clob clob = (Clob)value;
+            val clob = (Clob)value;
             return handlerFor(resourceStreamFor(clob), clob);
         }
         if(value instanceof Blob) {
-            final Blob blob = (Blob)value;
+            val blob = (Blob)value;
             return handlerFor(resourceStreamFor(blob), blob);
         }
         return null;
@@ -312,15 +319,20 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     private static IResourceStream resourceStreamFor(final Clob clob) {
-        final IResourceStream resourceStream = new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
-        return resourceStream;
+        return new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
     }
 
-    private static IRequestHandler handlerFor(final IResourceStream resourceStream, final NamedWithMimeType namedWithMimeType) {
-        final ResourceStreamRequestHandler handler =
+    private IRequestHandler handlerFor(
+            final IResourceStream resourceStream, 
+            final NamedWithMimeType namedWithMimeType) {
+        val handler =
                 new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-        return handler;
+        
+        //ISIS-1619, prevent clients from caching the response content
+        return isIdempotentOrCachable()
+                ? handler
+                : enforceNoCacheOnClientSide(handler);
     }
 
     //////////////////////////////////////////////////
@@ -475,6 +487,12 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         });
 
     }
+    
+    // -- HELPER
+    
+    private boolean isIdempotentOrCachable() {
+        return ObjectAction.Util.isIdempotentOrCachable(getMetaModel());
+    }
 
 //    private boolean isPartOfChoicesConsideringDependentArgs(
 //            ManagedObject paramValue, 
@@ -486,5 +504,17 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 //                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
 //    }
 
+    // -- CLIENT SIDE CACHING ASPECTS ...
+
+    private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
+        if(downloadHandler==null) {
+            return downloadHandler;
+        }
+        if(downloadHandler instanceof ResourceStreamRequestHandler)
+            ((ResourceStreamRequestHandler) downloadHandler)
+            .setCacheDuration(org.apache.wicket.util.time.Duration.seconds(0));
+
+        return downloadHandler;
+    }
 
 }

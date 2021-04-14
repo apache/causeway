@@ -26,6 +26,8 @@ package org.apache.isis.applib.layout.component;
  *     of properties and their actions), and a <code>CollectionLayoutData</code>
  *     (containing a single collection and associated actions)
  * </p>
+ *
+ * @since 1.x {@index}
  */
 public interface MemberRegion<T extends MemberRegionOwner> extends Owned<T> {
 

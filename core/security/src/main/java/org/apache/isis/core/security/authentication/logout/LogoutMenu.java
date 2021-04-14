@@ -30,28 +30,29 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
-@Named("isisSecurityApi.LogoutMenu")
-@DomainService(objectType = "isisSecurityApi.LogoutMenu")
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@Named(LogoutMenu.OBJECT_TYPE)
+@DomainService(objectType = LogoutMenu.OBJECT_TYPE)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
+    public static final String OBJECT_TYPE = "isis.security.LogoutMenu"; // referenced by secman seeding
+    
     private final List<LogoutHandler> logoutHandler;
-    private final AuthenticationSessionTracker authenticationSessionTracker;
-
-    @Inject
-    public LogoutMenu(
-            final List<LogoutHandler> logoutHandler,
-            final AuthenticationSessionTracker authenticationSessionTracker) {
-        this.logoutHandler = logoutHandler;
-        this.authenticationSessionTracker = authenticationSessionTracker;
-    }
+    private final AuthenticationContext authenticationTracker;
+    private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
@@ -61,33 +62,48 @@ public class LogoutMenu {
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
-            cssClassFa = "fa-sign-out-alt"
-            )
-    @MemberOrder(sequence = "999")
-    public LoginRedirect logout(){
+            cssClassFa = "fa-sign-out-alt",
+            sequence = "999")
+    public Object logout(){
         _NullSafe.stream(logoutHandler)
             .filter(LogoutHandler::isHandlingCurrentThread)
             .forEach(LogoutHandler::logout);
-        return new LoginRedirect();
+        
+        return getRedirect();
     }
 
-    public String disableLogout() {
-        return authenticationSessionTracker.currentAuthenticationSession()
-        .map(authenticationSession->
-            authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL
-            ? "External"
-            : null
+    private Object getRedirect() {
+        val redirect =  authenticationTracker.currentAuthentication()
+        .map(authentication->
+            authentication.getType() == Authentication.Type.EXTERNAL
+            ? "logout"
+            : "login"
         )
-        .orElse(null);
+        .orElse("login");
+        switch(redirect) {
+        case "login": return new LoginRedirect();
+        case "logout": return createLogoutRedirect();
+        default: return null; // redirects to the homepage
+        }
     }
     
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
-            nature = Nature.INMEMORY_ENTITY, 
+            nature = Nature.VIEW_MODEL, 
             objectType = LoginRedirect.OBJECT_TYPE)  
     public static class LoginRedirect {
-        public final static String OBJECT_TYPE = "isisSecurityApi.LoginRedirect";
+        public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
-
+    
+    private LocalResourcePath createLogoutRedirect() {
+        val logoutRedirect = "/logout"; 
+        
+        //TODO make this a config option (or use the spring option, if there is any)
+        //configuration.getSecurity().getSpring().getLogoutRedirect(); 
+        
+        return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
+    }
+    
+    
 }
 

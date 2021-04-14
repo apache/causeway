@@ -22,10 +22,12 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
+public class StandaloneTreePanel 
+extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TREE = "tree";

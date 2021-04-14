@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -34,11 +33,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -63,27 +61,24 @@ public class IsisMarkdownVm
         return "Markdown view model";
     }
     
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Markdown readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.EVERYWHERE, fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Markdown readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "optional-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
     private Markdown readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
     private Markdown readWriteOptionalProperty;
 

@@ -44,12 +44,12 @@ import org.springframework.context.annotation.Import;
  * Also, a {@link Module @Module} also declares the Spring {@link ComponentScan @ComponentScan} (with no parameters),
  * which means that any domain services in the same package or subpackages are automatically found and registered.
  * </p>
- *
+ * 
+ * @since 1.x {@index}
  * @implNote - there are possible performance implications from using this annotation, because it may result in
  *             scanning more classes than are needed.  It is therefore not used within the framework code, but is
  *             provided as a convenience by domain applications.
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -58,4 +58,3 @@ import org.springframework.context.annotation.Import;
 @ComponentScan
 public @interface Module {
 }
-// end::refguide[]

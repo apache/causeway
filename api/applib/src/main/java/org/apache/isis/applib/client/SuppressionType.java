@@ -26,55 +26,40 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public enum SuppressionType {
 
-    // end::refguide[]
     /**
      * suppress '$$RO', RO Spec representation
      */
-    // tag::refguide[]
     RO,
 
-    // end::refguide[]
     /**
      * suppress '$$href', hyperlink to the representation
      */
-    // tag::refguide[]
     HREF,
 
-    // end::refguide[]
     /**
      suppress '$$instanceId', instance id of the domain object
      */
-    // tag::refguide[]
     ID,
 
-    // end::refguide[]
     /**
      * suppress '$$domainType', object spec of the domain object
      */
-    // tag::refguide[]
     DOMAIN_TYPE,
 
-    // end::refguide[]
     /**
      * suppress '$$title', title of the domain object
      */
-    // tag::refguide[]
     TITLE,
 
-    // end::refguide[]
     /**
      * suppress all '$$...' entries
      */
-    // tag::refguide[]
     ALL
 
-    // end::refguide[]
     ;
 
     public static EnumSet<SuppressionType> setOf(SuppressionType ... types){
@@ -111,7 +96,5 @@ public enum SuppressionType {
             }
         }
     }
-    // tag::refguide[]
 
 }
-// end::refguide[]

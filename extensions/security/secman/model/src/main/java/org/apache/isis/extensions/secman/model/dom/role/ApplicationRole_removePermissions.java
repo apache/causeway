@@ -21,15 +21,15 @@ package org.apache.isis.extensions.secman.model.dom.role;
 import java.util.Collection;
 import java.util.Objects;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.RemovePermissionDomainEvent;
@@ -39,38 +39,36 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemovePermissionDomainEvent.class, 
-        associateWith = "permissions",
-        associateWithSequence = "10"
-        )
-@ActionLayout(named="Remove")
+        associateWith = "permissions")
+@ActionLayout(named="Remove", sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {
 
     @Inject private MessageService messageService;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
-    @Model
+    @MemberSupport
     public ApplicationRole act(Collection<ApplicationPermission> permissions) {
         
         _NullSafe.stream(permissions)
         .filter(this::canRemove)
         .forEach(repository::remove);
         
-        return holder;
+        return target;
     }
 
     private boolean canRemove(ApplicationPermission permission) {
-        if(!Objects.equals(permission.getRole(), holder)) {
+        if(!Objects.equals(permission.getRole(), target)) {
             return false;
         }
-        if(applicationRoleRepository.isAdminRole(holder) 
-                && configBean.isStickyAdminPackage(permission.getFeatureFqn())) {
+        if(applicationRoleRepository.isAdminRole(target) 
+                && configBean.isStickyAdminNamespace(permission.getFeatureFqn())) {
             
-            messageService.warnUser("Cannot remove top-level package permissions for the admin role.");
+            messageService.warnUser("Cannot remove top-level namespace permissions for the admin role.");
             return false;
         }
         return true;

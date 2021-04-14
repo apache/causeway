@@ -46,8 +46,8 @@ import javax.annotation.Nullable;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -98,7 +98,6 @@ public final class _Reflect {
     /**
      * Whether member name equals given {@code memberName}
      * @param memberName
-     * @return
      */
     public static <T extends Member> Predicate<T> withName(final String memberName) {
         _With.requires(memberName, "memberName");
@@ -108,7 +107,6 @@ public final class _Reflect {
     /**
      * Whether member name starts with given {@code prefix}
      * @param prefix
-     * @return
      */
     public static <T extends Member> Predicate<T> withPrefix(final String prefix) {
         _With.requires(prefix, "prefix");
@@ -118,7 +116,6 @@ public final class _Reflect {
     /**
      * Whether method parameters count equal to given {@code count}
      * @param count
-     * @return
      */
     public static Predicate<Method> withMethodParametersCount(final int count) {
         return (Method m) -> m != null && m.getParameterTypes().length == count;
@@ -127,7 +124,6 @@ public final class _Reflect {
     /**
      * Whether field type is assignable to given {@code type}
      * @param type
-     * @return
      */
     public static <T> Predicate<Field> withTypeAssignableTo(final Class<T> type) {
         _With.requires(type, "type");
@@ -139,8 +135,7 @@ public final class _Reflect {
     /**
      * Stream fields of given {@code type}
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
-     * @return
+     * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamFields(
             @Nullable Class<?> type,
@@ -158,15 +153,14 @@ public final class _Reflect {
     /**
      * Stream all fields of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
-     * @return
+     * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamAllFields(
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.EXCLUDE) // interfaces don't have fields
-                .filter(Object.class::equals) // do not process Object class.
+        return streamTypeHierarchy(type, InterfacePolicy.EXCLUDE) // interfaces don't have fields
+                .filter(t->!Object.class.equals(t)) // do not process Object class.
                 .flatMap(t->streamFields(t, ignoreAccess));
     }
 
@@ -174,7 +168,7 @@ public final class _Reflect {
     /**
      * Stream methods of given {@code type}.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
     public static Stream<Method> streamMethods(
@@ -193,7 +187,7 @@ public final class _Reflect {
     /**
      * Stream all methods of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
     public static Stream<Method> streamAllMethods(
@@ -201,7 +195,7 @@ public final class _Reflect {
             final boolean ignoreAccess
             ) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.INCLUDE)
+        return streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(t->streamMethods(t, ignoreAccess));
     }
@@ -470,13 +464,13 @@ public final class _Reflect {
     }
     
     
-    public static _Result<Object> invokeMethodOn(
+    public static Result<Object> invokeMethodOn(
             @NonNull final Method method, 
             @NonNull final Object target, 
             final Object... args) {
         
         /*sonar-ignore-on*/
-        return _Result.ofNullable(()->{
+        return Result.of(()->{
             if(method.isAccessible()) {
                 return method.invoke(target, args);
             }
@@ -490,12 +484,12 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
     
-    public static <T> _Result<T> invokeConstructor(
+    public static <T> Result<T> invokeConstructor(
             @NonNull final Constructor<T> constructor, 
             final Object... args) {
         
         /*sonar-ignore-on*/
-        return _Result.of(()->{
+        return Result.of(()->{
             if(constructor.isAccessible()) {
                 return constructor.newInstance(args);
             }

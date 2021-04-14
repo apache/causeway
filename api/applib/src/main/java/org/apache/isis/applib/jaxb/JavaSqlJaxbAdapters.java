@@ -35,7 +35,7 @@ import lombok.experimental.UtilityClass;
  * &#64;Getter &#64;Setter private java.sql.Date date;
  * </pre>
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public final class JavaSqlJaxbAdapters {

@@ -22,29 +22,33 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.interaction.session.MessageBroker;
 
 @Service
-@Named("isisRuntimeServices.MessageServiceDefault")
+@Named("isis.runtimeservices.MessageServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {
     
     @Inject private TranslationService translationService;
-    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
+    
+    @Autowired(required = false) 
+    private Provider<MessageBroker> sessionScopedMessageBroker;
 
     @Override
     public void informUser(final String message) {
@@ -63,7 +67,7 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String informUser(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         String translatedMessage = message.translate(translationService, translationContext);
         informUser(translatedMessage);
         return translatedMessage;
@@ -86,7 +90,7 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String warnUser(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         String translatedMessage = message.translate(translationService, translationContext);
         warnUser(translatedMessage);
         return translatedMessage;
@@ -108,20 +112,21 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String raiseError(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         final String translatedMessage = message.translate(translationService, translationContext);
         raiseError(translatedMessage);
         return translatedMessage;
     }
 
-    private static String context(final Class<?> contextClass, final String contextMethod) {
-        return contextClass.getName()+"#"+contextMethod;
+    // -- HELPER
+    
+    private static TranslationContext context(final Class<?> contextClass, final String contextMethodName) {
+        return TranslationContext.forMethod(contextClass, contextMethodName);
     }
 
     private Optional<MessageBroker> currentMessageBroker() {
-        return authenticationSessionTracker.currentMessageBroker();
+        return Optional.ofNullable(sessionScopedMessageBroker) // only available with web contexts (Spring)
+        .map(Provider::get);
     }
-
-    
 
 }

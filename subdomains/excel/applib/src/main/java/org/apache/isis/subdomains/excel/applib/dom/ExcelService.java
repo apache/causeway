@@ -34,16 +34,19 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisSubExcel.ExcelService")
+@Named("isis.sub.excel.ExcelService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -97,7 +100,7 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName);
     }
-    
+
     public <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -112,7 +115,7 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContent, fileName);
     }
-    
+
     public <T> Blob toExcel(
             final WorksheetContent worksheetContent,
             final String fileName,
@@ -125,13 +128,13 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContents, fileName);
     }
-    
+
     public Blob toExcel(
             final List<WorksheetContent> worksheetContents,
             final String fileName,
             final InputStream in) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContents, fileName, in);
-    }    
+    }
 
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,

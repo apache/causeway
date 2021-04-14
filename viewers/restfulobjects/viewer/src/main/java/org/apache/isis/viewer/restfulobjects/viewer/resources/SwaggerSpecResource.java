@@ -33,8 +33,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.applib.services.swagger.Visibility;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,7 +46,7 @@ import lombok.val;
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
 
     @Context HttpHeaders httpHeaders;
     @Context HttpServletRequest httpServletRequest;
@@ -52,7 +54,7 @@ public class SwaggerSpecResource {
     @Inject
     public SwaggerSpecResource(
             final SwaggerService swaggerService,
-            final IsisInteractionFactory isisInteractionFactory) {
+            final InteractionFactory isisInteractionFactory) {
         this.swaggerService = swaggerService;
         this.isisInteractionFactory = isisInteractionFactory;
     }
@@ -64,7 +66,7 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrivate() {
-        return swagger(SwaggerService.Visibility.PRIVATE);
+        return swagger(Visibility.PRIVATE);
     }
 
     @Path("/prototyping")
@@ -74,7 +76,7 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrototyping() {
-        return swagger(SwaggerService.Visibility.PRIVATE_WITH_PROTOTYPING);
+        return swagger(Visibility.PRIVATE_WITH_PROTOTYPING);
     }
 
     @Path("/public")
@@ -84,23 +86,23 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPublic() {
-        return swagger(SwaggerService.Visibility.PUBLIC);
+        return swagger(Visibility.PUBLIC);
     }
 
-    private String swagger(final SwaggerService.Visibility visibility) {
-        
+    private String swagger(final Visibility visibility) {
+
         val format = deriveFrom(httpHeaders);
         val callable = new MyCallable(swaggerService, visibility, format);
-        
+
         val spec = isisInteractionFactory.callAnonymous(callable);
         return spec;
     }
 
-    private SwaggerService.Format deriveFrom(final HttpHeaders httpHeaders) {
+    private Format deriveFrom(final HttpHeaders httpHeaders) {
         final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
-                return SwaggerService.Format.JSON;
+                return Format.JSON;
             }
         }
         final MediaType applYaml = new MediaType("application", "yaml");
@@ -108,18 +110,18 @@ public class SwaggerSpecResource {
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             if (acceptableMediaType.isCompatible(applYaml) ||
                     acceptableMediaType.isCompatible(textYaml)) {
-                return SwaggerService.Format.YAML;
+                return Format.YAML;
             }
         }
-        return SwaggerService.Format.JSON;
+        return Format.JSON;
     }
 
     @RequiredArgsConstructor
     static class MyCallable implements Callable<String> {
 
         private final SwaggerService swaggerService;
-        private final SwaggerService.Visibility visibility;
-        private final SwaggerService.Format format;
+        private final Visibility visibility;
+        private final Format format;
 
         @Override
         public String call() throws Exception {

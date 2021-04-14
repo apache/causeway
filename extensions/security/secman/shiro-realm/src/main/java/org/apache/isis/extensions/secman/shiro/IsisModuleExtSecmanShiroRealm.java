@@ -43,9 +43,9 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.security.authorization.Authorizor;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
@@ -58,15 +58,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
-    private static final String SECMAN_ENABLE_DELEGATED_USERS = "secman.enableDelegatedUsers";
+    private static final String SECMAN_ENABLE_DELEGATED_USERS = "isis.ext.secman.enableDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
-    @Inject protected IsisInteractionFactory isisInteractionFactory;
+    @Inject protected InteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
 	@Inject protected IsisConfiguration isisConfiguration;
-    
+
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;
 
@@ -94,11 +97,11 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
         val usernamePasswordToken = (UsernamePasswordToken) token;
         val username = usernamePasswordToken.getUsername();
         val password = usernamePasswordToken.getPassword();
-        
+
 
         // this code block is just an optimization, entirely optional
         {
-            val alreadyAuthenticatedPrincipal = 
+            val alreadyAuthenticatedPrincipal =
                     getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(token);
             if(alreadyAuthenticatedPrincipal!=null) {
                 val credentials = token.getCredentials();
@@ -106,20 +109,20 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 return AuthInfoForApplicationUser.of(alreadyAuthenticatedPrincipal, realmName, credentials);
             }
         }
-        
+
         // lookup from database, for roles/perms
         PrincipalForApplicationUser principal = lookupPrincipal_inApplicationUserRepository(username);
 
         val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
         if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
-            // When using delegated authentication, desired behavior is to auto-create user accounts in the 
+            // When using delegated authentication, desired behavior is to auto-create user accounts in the
             // DB only if these do successfully authenticate with the delegated authentication mechanism
             // while the newly created user will be disabled by default
             authenticateElseThrow_usingDelegatedMechanism(token);
             val newPrincipal = createPrincipal_inApplicationUserRepository(username);
 
             _Assert.assertNotNull(newPrincipal);
-            
+
             if(configBean.isAutoEnableIfDelegatedAndAuthenticated()) {
                 principal = newPrincipal;
             } else {
@@ -171,24 +174,24 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
     }
 
     // -- HELPER
-    
+
     /**
      * @implNote
      * This is just an optimization, entirely optional.
      * <p>
-     * We reuse principal information on subjects that are already authenticated, 
+     * We reuse principal information on subjects that are already authenticated,
      * provided we are in a single realm authentication scenario.
      * @param token
      * @return {@code null} if not applicable
      */
     private PrincipalForApplicationUser getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(
             AuthenticationToken token) {
-        
+
         // this optimization is only implemented for the simple case of a single realm setup
         if(!ShiroUtils.isSingleRealm()) {
-            return null;   
+            return null;
         }
-        
+
         val currentSubject = SecurityUtils.getSubject();
         if(currentSubject!=null && currentSubject.isAuthenticated()) {
             val authenticatedPrincipalObject = currentSubject.getPrincipal();
@@ -219,7 +222,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 return _NullSafe.size(fullStackTrace)>1
                         ? _Arrays.subArray(super.getStackTrace(), 0, 1)
                         : fullStackTrace;
-            }            
+            }
         };
     }
 

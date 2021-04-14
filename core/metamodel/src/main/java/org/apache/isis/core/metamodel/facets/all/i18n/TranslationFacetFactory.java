@@ -19,17 +19,19 @@
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
-public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+import lombok.val;
+
+public class TranslationFacetFactory
+extends FacetFactoryAbstract {
 
     public TranslationFacetFactory() {
         super(FeatureType.EVERYTHING);
@@ -37,45 +39,36 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
         if(facetHolder instanceof IdentifiedHolder) {
-            final IdentifiedHolder holder = (IdentifiedHolder) facetHolder;
-            final String context = holder.getIdentifier().toClassIdentityString();
-            translateName(holder, context);
-            translateDescription(holder, context);
+            val identifiedHolder = (IdentifiedHolder) facetHolder;
+            val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
+            translateName(identifiedHolder, translationContext);
+            translateDescription(identifiedHolder, translationContext);
         }
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final IdentifiedHolder holder = processMethodContext.getFacetHolder();
+        val identifiedHolder = processMethodContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().toClassAndNameIdentityString();
-        translateName(holder, context);
-        translateDescription(holder, context);
+        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
+        translateName(identifiedHolder, translationContext);
+        translateDescription(identifiedHolder, translationContext);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final IdentifiedHolder holder = processParameterContext.getFacetHolder();
+        val identifiedHolder = processParameterContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().toFullIdentityString();
-        translateName(holder, context);
-        translateDescription(holder, context);
+        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
+        translateName(identifiedHolder, translationContext);
+        translateDescription(identifiedHolder, translationContext);
     }
 
-    @Override
-    public void process(final ProcessContributeeMemberContext processMemberContext) {
-        final IdentifiedHolder holder = processMemberContext.getFacetHolder();
+    // -- HELPER
 
-        final String context = holder.getIdentifier().toClassAndNameIdentityString();
-        translateName(holder, context);
-        translateDescription(holder, context);
-    }
-
-    // //////////////////////////////////////
-
-    void translateName(final IdentifiedHolder facetHolder, final String context) {
+    void translateName(final IdentifiedHolder facetHolder, final TranslationContext translationContext) {
         final NamedFacet facet = facetHolder.getFacet(NamedFacet.class);
         if(facet == null) {
             // not expected...
@@ -87,26 +80,28 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
             return;
         }
 
-        final TranslationService translationService = getTranslationService();
-        NamedFacetTranslated facetTranslated = new NamedFacetTranslated(context, originalText, translationService, facetHolder);
-        facetTranslated.setUnderlyingFacet(facet);
-        super.addFacet(facetTranslated);
+        val translationService = getTranslationService();
+        val namedFacetTranslated 
+            = new NamedFacetTranslated(translationContext, originalText, translationService, facetHolder);
+        namedFacetTranslated.setUnderlyingFacet(facet);
+        super.addFacet(namedFacetTranslated);
     }
 
-    void translateDescription(final FacetHolder facetHolder, final String context) {
+    void translateDescription(final FacetHolder facetHolder, final TranslationContext translationContext) {
 
-        final IdentifiedHolder holder = (IdentifiedHolder) facetHolder;
-        final DescribedAsFacet facet = facetHolder.getFacet(DescribedAsFacet.class);
-        if(facet == null) {
+        val identifiedHolder = (IdentifiedHolder) facetHolder;
+        val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
+        if(describedAsFacet == null) {
             return;
         }
-        final String originalText = facet.value();
+        final String originalText = describedAsFacet.value();
         if (isNullOrEmptyWhenTrimmed(originalText)) {
             return;
         }
 
-        final TranslationService translationService = getTranslationService();
-        super.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
+        val translationService = getTranslationService();
+        super.addFacet(new DescribedAsFacetTranslated(
+                translationContext, originalText, translationService, identifiedHolder));
 
     }
 

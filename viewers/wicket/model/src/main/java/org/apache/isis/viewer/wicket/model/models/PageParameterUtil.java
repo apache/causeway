@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -140,10 +139,13 @@ public class PageParameterUtil {
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
-        final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
+        val specLoader = commonContext.getSpecificationLoader();
+        val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
+        val owningLogicalType = specLoader.lookupLogicalType(owningLogicalTypeName);
+        
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningSpec, actionType, actionNameParms, commonContext.getSpecificationLoader());
+        return new ActionMemento(owningLogicalType, actionType, actionNameParms, specLoader);
     }
     
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
@@ -176,7 +178,7 @@ public class PageParameterUtil {
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
-            return identifier.toNameParmsIdentityString();
+            return identifier.getMemberNameAndParameterClassNamesIdentityString();
         }
         // fallback (used for action sets)
         return objectAction.getId();

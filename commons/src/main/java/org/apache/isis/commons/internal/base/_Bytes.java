@@ -237,8 +237,7 @@ public final class _Bytes {
     }
 
     /**
-     * Returns a monadic BytesOperator that allows composition of unary byte[] operators
-     * @return
+     * Returns a BytesOperator that allows composition of unary byte[] operators
      */
     public static BytesOperator operator() {
         return new BytesOperator(UnaryOperator.identity());

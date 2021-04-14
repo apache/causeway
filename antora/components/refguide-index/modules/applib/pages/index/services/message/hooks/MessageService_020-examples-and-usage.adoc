@@ -1,0 +1,37 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+== Example Usage
+
+For example:
+
+[source,java]
+----
+public Order addItem(Product product, @ParameterLayout(named="Quantity") int quantity) {
+    if(productRepository.stockLevel(product) == 0) {
+        messageService.warnUser(
+            product.getDescription() + " out of stock; order fulfillment may be delayed");
+    }
+    ...
+}
+----
+
+
+
+== i18n
+
+Messages and warnings can optionally be translated according to the locale of the current user.
+
+The `contextClass` and `contextMethod` parameters provided by the framework are used to create a context string for translation, eg "com.mycompany.Customer#placeOrder".
+
+For the "big picture" and further details on the framework's i18n support, can be found in a chapter in the xref:userguide:btb:i18n.adoc[user guide].
+
+
+
+== See also
+
+* xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider]
+* xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
+

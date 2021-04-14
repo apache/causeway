@@ -1,0 +1,50 @@
+= Core/Domain API
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+The core/domain APIs provide general-purpose services to the domain objects, for example obtaining the current time or user, or instantiating domain objects.
+
+.Core/Domain Layer API
+[cols="2m,4a",options="header"]
+|===
+
+|API
+|Description
+
+
+|xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService]
+|Access the current time (and for testing, allow the time to be changed)
+
+
+|xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService] & xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu]
+|Backing service which creates the list of configuration properties for xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu].
+
+
+|xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]
+|Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
+
+
+|xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]
+|Methods to instantiate and initialize domain objects
+
+
+|xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad]
+|Request-scoped service for interchanging information between and aggregating over multiple method calls.
+
+
+|xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector]
+|Programmatically inject services into arbitrary objects.
+
+
+|xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
+|Registry of all domain services, for service locator pattern.
+
+
+|xref:refguide:applib:index/services/user/UserService.adoc[UserService]
+|Methods to access the currently-logged on user.
+
+
+
+|===
+

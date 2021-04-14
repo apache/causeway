@@ -30,36 +30,42 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.Authenticator;
+import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
+
+import lombok.val;
 
 /**
  * If Shiro is configured for both authentication and authorization (as recommended), then this class is
  * in the role of {@link Authorizor}.
  *
  * <p>
- * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
+ * However, although there are two objects, they are set up to share the same
+ * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
-@Named("isisSecurityShiro.AuthorizorShiro")
+@Named("isis.security.AuthorizorShiro")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
 
     @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return isPermitted(identifier, "r");
+    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUserName(), identifier, "r");
     }
 
     @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
-        return isPermitted(identifier, "w");
+    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUserName(), identifier, "w");
     }
 
-    private boolean isPermitted(Identifier identifier, String qualifier) {
+    private boolean isPermitted(String userName, Identifier identifier, String qualifier) {
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
@@ -68,49 +74,23 @@ public class AuthorizorShiro implements Authorizor {
             return true;
         }
 
-        String permission = asPermissionsString(identifier) + ":" + qualifier;
-
-        Subject subject = SecurityUtils.getSubject();
+        final Subject subject = SecurityUtils.getSubject();
+        final String permission = asPermissionsString(identifier) + ":" + qualifier;
 
         try {
+            //_Assert.assertEquals(userName, subject.getPrincipal().toString()); ... does not work
             return subject.isPermitted(permission);
         } finally {
             IsisPermission.resetVetoedPermissions();
         }
     }
 
-    private static String asPermissionsString(Identifier identifier) {
-        String fullyQualifiedClassName = identifier.getClassName();
-        int lastDot = fullyQualifiedClassName.lastIndexOf('.');
-        String packageName;
-        String className;
-        if(lastDot > 0) {
-            packageName =fullyQualifiedClassName.substring(0, lastDot);
-            className = fullyQualifiedClassName.substring(lastDot+1);
-        } else {
-            packageName = "";
-            className = fullyQualifiedClassName;
-        }
-        return packageName + ":" + className + ":" + identifier.getMemberName();
+    private String asPermissionsString(Identifier identifier) {
+        val logicalTypeName = identifier.getLogicalType().getLogicalTypeNameFormatted(":", ":");
+        return logicalTypeName + ":" + identifier.getMemberName();
     }
 
-    /**
-     * Returns <tt>false</tt> because the checking across all roles is done in
-     * {@link #isVisibleInAnyRole(Identifier)}, which is always called prior to this.
-     */
-    @Override
-    public boolean isVisibleInRole(String role, Identifier identifier) {
-        return false;
-    }
-
-    /**
-     * Returns <tt>false</tt> because the checking across all roles is done in
-     * {@link #isUsableInAnyRole(Identifier)}, which is always called prior to this.
-     */
-    @Override
-    public boolean isUsableInRole(String role, Identifier identifier) {
-        return false;
-    }
+    // -- DEPS
 
     /**
      * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
@@ -119,5 +99,6 @@ public class AuthorizorShiro implements Authorizor {
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
     }
+
 
 }

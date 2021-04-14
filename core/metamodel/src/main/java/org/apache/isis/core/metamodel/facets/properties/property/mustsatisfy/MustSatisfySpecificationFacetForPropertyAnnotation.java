@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.factory.FactoryService;

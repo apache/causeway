@@ -20,20 +20,20 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._Strings;
 
 @Component
-@Named("isisMetaModel.TaggerDefault")
+@Named("isis.metamodel.TaggerDefault")
 public class TaggerDefault implements Tagger {
 
-    static Pattern tagSpringFramework = Pattern.compile("^org\\.springframework\\.([^\\.]+)\\.(.+)$");
-    static Pattern tagPatternIsisExtensions2 = Pattern.compile("^isisExt(.+)$");
-    static Pattern tagPatternIsisExtensions = Pattern.compile("^org\\.apache\\.isis\\.extensions\\.([^\\.]+)\\.(.+)$");
     static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");
     static Pattern tagPatternForTwoParts = Pattern.compile("^([^\\.]+)\\.([^\\.]+)$");
     static Pattern tagPatternForJaxbDto = Pattern.compile("^.*\\.([^\\.]+)\\.(v[0-9][^\\.]*)\\.([^\\.]+)$");
@@ -45,16 +45,26 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("org.apache.isis.")) {
             return ". apache isis internals";
         }
+        if (objType.startsWith("isis.applib.")) {
+            return ". apache isis applib";
+        }
+        if (objType.startsWith("isis.persistence.")) {
+            return ". apache isis persistence - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        }
+        if (objType.startsWith("isis.security.")) {
+            return ". apache isis security";
+        }
+        if (objType.startsWith("isis.ext.")) {
+            return ". apache isis extensions - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        }
+        if (objType.startsWith("isis.sub.")) {
+            return ". apache isis subdomains - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        }
+        if (objType.startsWith("org.springframework.")) {
+            return "> spring framework " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        }
         
         Matcher matcher;
-        matcher = tagSpringFramework.matcher(objType);
-        if (matcher.matches()) {
-            return "> spring framework " + matcher.group(1);
-        }
-        matcher = tagPatternIsisExtensions.matcher(objType);
-        if (matcher.matches()) {
-            return ". apache isis extensions - " + matcher.group(1);
-        }
         matcher = tagPatternForJaxbDto.matcher(objType);
         if (matcher.matches()) {
             return matcher.group(1);
@@ -65,18 +75,15 @@ public class TaggerDefault implements Tagger {
         }
         matcher = tagPatternForTwoParts.matcher(objType);
         if (matcher.matches()) {
-            if (objType.startsWith("isisApplib")) {
-                return ". apache isis applib";
-            }
-
-            if (objType.startsWith("isisExt")) {
-                return ". apache isis extensions - " + matcher.group(1);
-            }
-
             return matcher.group(1);
         }
         
         return fallback != null? fallback: objType;
     }
 
+    
+    private static Stream<String> partsOf(final String objType) {
+        return _Strings.splitThenStream(objType, ".");
+    }
+    
 }

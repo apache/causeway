@@ -1,0 +1,38 @@
+=== Smoother UI
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The xref:refguide:applib:index/annotation/PropertyLayout.adoc#repainting[repainting()] element is used to indicate that the value held by the property never changes over time, even when other properties of the object do change.
+
+Setting this attribute to `true` is used as a hint to the viewer to not redraw the property after an AJAX update of some other property/ies of the object have changed.
+This is primarily for performance, eg can improve the user experience when rendering PDFs/blobs.
+
+Note that for this to work, the viewer will also ensure that none of the property's parent component (such as a tab group panel) are re-rendered.
+
+[NOTE]
+====
+Design note: we considered implementing this an "immutable" flag on the xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object).
+However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
+====
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Document {
+
+    @PropertyLayout(
+        repainting=Repainting.NO_REPAINT
+    )
+    @Getter @Setter
+    private Blob blob;
+
+    // ...
+}
+----
+

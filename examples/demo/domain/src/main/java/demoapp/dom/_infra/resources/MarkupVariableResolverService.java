@@ -19,12 +19,12 @@
 package demoapp.dom._infra.resources;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
@@ -44,14 +44,13 @@ public class MarkupVariableResolverService {
     /**
      * For the given {@code input} replaces '${var-name}' with the variable's value.
      * @param input
-     * @return
      */
     public String resolveVariables(String input) {
-        val ref = new AtomicReference<String>(input);
+        val stringRef = _Refs.objectRef(input);
         constants.forEach((k, v)->{
-            ref.set(ref.get().replace(var(k), v));
+            stringRef.update(string->string.replace(var(k), v));
         });
-        return ref.get();
+        return stringRef.getValueElseDefault(input);
     }
 
     private String var(String name) {

@@ -1,0 +1,372 @@
+= RepositoryService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Collects together methods for creating, persisting and searching for entities from the underlying persistence store.
+
+Typically it's good practice to define a domain-specific service (eg `CustomerRepository` ) which then delegates to this service. This domain-specific service can use some xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] 's "naive" methods that use client-side predicates for filtering; these can then be replaced by more sophisticated implementations that use proper server-side filtering later on without impacting the rest of the application.
+
+== API
+
+[source,java]
+.RepositoryService.java
+----
+interface RepositoryService {
+  EntityState getEntityState(Object object)     // <.>
+  T detachedEntity(T entity)     // <.>
+  T persist(T domainObject)     // <.>
+  T persistAndFlush(T domainObject)     // <.>
+  void remove(Object domainObject)     // <.>
+  void removeAndFlush(Object domainObject)     // <.>
+  void removeAll(Class<T> cls)     // <.>
+  List<T> allInstances(Class<T> ofType)     // <.>
+  List<T> allInstances(Class<T> ofType, long start, long count)     // <.>
+  List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate)     // <.>
+  List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long start, long count)     // <.>
+  List<T> allMatches(Query<T> query)     // <.>
+  Optional<T> uniqueMatch(Class<T> ofType, Predicate<T> predicate)     // <.>
+  Optional<T> uniqueMatch(Query<T> query)     // <.>
+  Optional<T> firstMatch(Class<T> ofType, Predicate<T> predicate)     // <.>
+  Optional<T> firstMatch(Query<T> query)     // <.>
+  T refresh(T pojo)     // <.>
+  T detach(T entity)     // <.>
+  T detachedEntity(Class<T> ofType)     // <.>
+  T instantiate(Class<T> ofType)     // <.>
+  boolean isPersistent(Object domainObject)     // <.>
+  boolean isDeleted(Object domainObject)     // <.>
+}
+----
+
+<.> xref:#getEntityState__Object[getEntityState(Object)]
++
+--
+Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
+--
+<.> xref:#detachedEntity__T[detachedEntity(T)]
++
+--
+Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
+--
+<.> xref:#persist__T[persist(T)]
++
+--
+Persist the specified object (or do nothing if already persistent).
+--
+<.> xref:#persistAndFlush__T[persistAndFlush(T)]
++
+--
+Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
+--
+<.> xref:#remove__Object[remove(Object)]
++
+--
+Remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+--
+<.> xref:#removeAndFlush__Object[removeAndFlush(Object)]
++
+--
+Deletes the domain object but only if is persistent, and flushes changes to the database (meaning the object is deleted immediately).
+--
+<.> xref:#removeAll__Class[removeAll(Class)]
++
+--
+Removes all instances of the domain object.
+--
+<.> xref:#allInstances__Class[allInstances(Class)]
++
+--
+Returns all persisted instances of specified type (including subtypes).
+--
+<.> xref:#allInstances__Class_long_long[allInstances(Class, long, long)]
++
+--
+Overload of _#allInstances(Class)_ , returns a _page_ of persisted instances of specified type (including subtypes).
+--
+<.> xref:#allMatches__Class_Predicate[allMatches(Class, Predicate)]
++
+--
+Returns all the instances of the specified type (including subtypes) that the predicate object accepts.
+--
+<.> xref:#allMatches__Class_Predicate_long_long[allMatches(Class, Predicate, long, long)]
++
+--
+Overload of _#allMatches(Class, Predicate)_ , returns a _page_ of persisted instances of specified type (including subtypes).
+--
+<.> xref:#allMatches__Query[allMatches(Query)]
++
+--
+Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
+--
+<.> xref:#uniqueMatch__Class_Predicate[uniqueMatch(Class, Predicate)]
++
+--
+Finds the only instance of the specified type (including subtypes) that satifies the (client-side) predicate.
+--
+<.> xref:#uniqueMatch__Query[uniqueMatch(Query)]
++
+--
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
+--
+<.> xref:#firstMatch__Class_Predicate[firstMatch(Class, Predicate)]
++
+--
+Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
+--
+<.> xref:#firstMatch__Query[firstMatch(Query)]
++
+--
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
+--
+<.> xref:#refresh__T[refresh(T)]
++
+--
+Reloads the domain entity from the database.
+--
+<.> xref:#detach__T[detach(T)]
++
+--
+Explicitly detaches the entity from the current persistence session.
+--
+<.> xref:#detachedEntity__Class[detachedEntity(Class)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
+====
+
+Overload of _#detachedEntity(Object)_ , but will also instantiate the domain class first.
+--
+<.> xref:#instantiate__Class[instantiate(Class)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
+====
+
+Equivalent to _#detachedEntity(Class)_ .
+--
+<.> xref:#isPersistent__Object[isPersistent(Object)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
+
+Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine in the object store).
+--
+<.> xref:#isDeleted__Object[isDeleted(Object)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
+
+Determines if the specified object has been deleted from the object store.
+--
+
+== Members
+
+[#getEntityState__Object]
+=== getEntityState(Object)
+
+Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
+
+[#detachedEntity__T]
+=== detachedEntity(T)
+
+Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
+
+This approach allows the domain entity to have regular constructor (with parameters) to set up the initial state of the domain object. This is preferred over _#detachedEntity(Class)_ , which also instantiates the class and then injects into it - but requires that the domain object has a no-arg constructor to do so.
+
+This is the same functionality as exposed by _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)_ . It is provided in this service as a convenience because instantiating and _#persist(Object) persisting_ an object are often done together.
+
+[#persist__T]
+=== persist(T)
+
+Persist the specified object (or do nothing if already persistent).
+
+The persist isn't necessarily performed immediately; by default all pending changes are flushed to the database when the transaction completes.
+
+[#persistAndFlush__T]
+=== persistAndFlush(T)
+
+Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
+
+Flushing will also result in ORM-maintained bidirectional relationships being updated.
+
+[#remove__Object]
+=== remove(Object)
+
+Remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+
+The delete isn't necessarily performed immediately; by default all pending changes are flushed to the database when the transaction completes.
+
+Note that this method is also a no-op if the domain object is not attached.
+
+[#removeAndFlush__Object]
+=== removeAndFlush(Object)
+
+Deletes the domain object but only if is persistent, and flushes changes to the database (meaning the object is deleted immediately).
+
+Flushing will also result in ORM-maintained bidirectional relationships being updated.
+
+[#removeAll__Class]
+=== removeAll(Class)
+
+Removes all instances of the domain object.
+
+Intended primarily for testing purposes.
+
+[#allInstances__Class]
+=== allInstances(Class)
+
+Returns all persisted instances of specified type (including subtypes).
+
+Intended primarily for prototyping purposes, though is safe to use in production applications to obtain all instances of domain entities if the number is known to be small (for example, reference/lookup data).
+
+If there are no instances the list will be empty.
+
+[#allInstances__Class_long_long]
+=== allInstances(Class, long, long)
+
+Overload of _#allInstances(Class)_ , returns a _page_ of persisted instances of specified type (including subtypes).
+
+If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
+
+[#allMatches__Class_Predicate]
+=== allMatches(Class, Predicate)
+
+Returns all the instances of the specified type (including subtypes) that the predicate object accepts.
+
+If there are no instances the list will be empty. This method creates a new _List_ object each time it is called so the caller is free to use or modify the returned _List_ , but the changes will not be reflected back to the repository.
+
+This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#allMatches(Query)_ for production code.
+
+[#allMatches__Class_Predicate_long_long]
+=== allMatches(Class, Predicate, long, long)
+
+Overload of _#allMatches(Class, Predicate)_ , returns a _page_ of persisted instances of specified type (including subtypes).
+
+If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
+
+[#allMatches__Query]
+=== allMatches(Query)
+
+Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
+
+This is the main API for server-side (performant) queries returning multiple instances, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+
+It is also possible to specify an _org.apache.isis.applib.query.AllInstancesQuery_ . This is equivalent to using _#allInstances(Class, long, long)_ ; a range can also be specified.
+
+[#uniqueMatch__Class_Predicate]
+=== uniqueMatch(Class, Predicate)
+
+Finds the only instance of the specified type (including subtypes) that satifies the (client-side) predicate.
+
+This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#uniqueMatch(Query)_ for production code.
+
+If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances a run-time exception will be thrown.
+
+[#uniqueMatch__Query]
+=== uniqueMatch(Query)
+
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
+
+This is the main API for server-side (performant) queries returning no more than one instance, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+
+If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances a run-time exception will be thrown.
+
+[#firstMatch__Class_Predicate]
+=== firstMatch(Class, Predicate)
+
+Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
+
+This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#firstMatch(Query)_ for production code.
+
+If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
+
+[#firstMatch__Query]
+=== firstMatch(Query)
+
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
+
+This is the main API for server-side (performant) queries returning the first matching instance, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+
+If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
+
+[#refresh__T]
+=== refresh(T)
+
+Reloads the domain entity from the database.
+
+[#detach__T]
+=== detach(T)
+
+Explicitly detaches the entity from the current persistence session.
+
+This allows the entity to be read from even after the PersistenceSession that obtained it has been closed.
+
+[#detachedEntity__Class]
+=== detachedEntity(Class)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
+====
+
+Overload of _#detachedEntity(Object)_ , but will also instantiate the domain class first.
+
+[#instantiate__Class]
+=== instantiate(Class)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
+====
+
+Equivalent to _#detachedEntity(Class)_ .
+
+[#isPersistent__Object]
+=== isPersistent(Object)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
+
+Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine in the object store).
+
+This method can also return `true` if the object has been _#isDeleted(Object) deleted_ from the object store.
+
+[#isDeleted__Object]
+=== isDeleted(Object)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+due to ambiguous semantic, use _#getEntityState(Object)_ instead
+====
+
+Determines if the specified object has been deleted from the object store.
+
+include::hooks/RepositoryService_010-implementation.adoc[]
+
+include::hooks/RepositoryService_020-examples-and-usage.adoc[]

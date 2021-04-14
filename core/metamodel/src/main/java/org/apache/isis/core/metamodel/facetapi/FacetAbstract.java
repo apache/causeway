@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -34,7 +35,7 @@ import lombok.Setter;
 import lombok.val;
 
 
-public abstract class FacetAbstract implements Facet, MetaModelContext.Delegating {
+public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 
     public enum Derivation {
         DERIVED,

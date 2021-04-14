@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -52,7 +51,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
@@ -66,7 +65,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisExtFixtures.FixtureScripts"
+        objectType = "isis.ext.fixtures.FixtureScripts"
 )
 @DomainServiceLayout(
         named="Prototyping",
@@ -83,7 +82,7 @@ public class FixtureScripts {
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
     @Inject private ExecutionParametersService executionParametersService;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private InteractionFactory isisInteractionFactory;
 
     @Inject private EventBusService eventBusService;
 
@@ -242,9 +241,8 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-chevron-right"
-    )
-    @MemberOrder(sequence="10")
+            cssClassFa="fa fa-chevron-right", 
+            sequence="10")
     public List<FixtureResult> runFixtureScript(
             @ParameterLayout(named = "Fixture script")
             final String fixtureScriptName,
@@ -319,9 +317,8 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh"
-    )
-    @MemberOrder(sequence="20")
+            cssClassFa="fa fa-refresh", 
+            sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
         val recreateScript = findFixtureScriptNameFor(recreateScriptClass);
@@ -351,7 +348,7 @@ public class FixtureScripts {
     	String parameters = null;
     	
     	isisInteractionFactory.runAnonymous(()->{
-    	    transactionService.executeWithinTransaction(()->{
+    	    transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 runScript(singleScript, parameters);
             });    
     	});
@@ -380,16 +377,17 @@ public class FixtureScripts {
      * Runs the builderScript within its own transactional boundary.
      * @param <T>
      * @param builderScript
-     * @return
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
         
         return isisInteractionFactory.callAnonymous(()->
-            transactionService.executeWithinTransaction(()->
+            transactionService.callWithinCurrentTransactionElseCreateNew(()->
                 runBuilderScriptNonTransactional(builderScript)
             )
-        );
+        )
+        .optionalElseFail()
+        .orElse(null);
     }
 
     /**
@@ -397,7 +395,6 @@ public class FixtureScripts {
      * The caller is responsible to provide a transactional context/boundary.
      * @param <T>
      * @param builderScript
-     * @return
      */
     @Programmatic
     public <T> T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript) {

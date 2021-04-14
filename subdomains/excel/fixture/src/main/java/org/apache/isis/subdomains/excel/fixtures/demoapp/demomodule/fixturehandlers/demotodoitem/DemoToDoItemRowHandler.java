@@ -20,12 +20,14 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
@@ -39,7 +41,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import lombok.Getter;
 import lombok.Setter;
 
-@ViewModel
+@DomainObject(nature = Nature.VIEW_MODEL)
 public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
     @Getter @Setter
@@ -72,7 +74,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
         final LocalDate dueBy = daysFromToday(daysFromToday);
         final String user = executionContext.getParameter("user");
-        final String username = user != null && user.length() > 0 ? user : userService.getUser().getName();
+        final String username = user != null && user.length() > 0 ? user : userService.currentUserNameElseNobody();
         ExcelDemoToDoItem toDoItem = toDoItemRepository.findToDoItemsByDescription(description);
         if(toDoItem != null) {
             toDoItem.setCategory(category);
@@ -91,7 +93,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         if(i == null) {
             return null;
         }
-        final LocalDate date = clockService.now();
+        final LocalDate date = clockService.getClock().localDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
 

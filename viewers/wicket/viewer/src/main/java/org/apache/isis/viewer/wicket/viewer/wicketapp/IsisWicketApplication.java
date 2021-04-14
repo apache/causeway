@@ -71,7 +71,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -122,18 +122,18 @@ import net.ftlines.wicketsource.WicketSource;
  *
  * <p>
  * New {@link ComponentFactory}s can be specified in two ways. The preferred
- * approach is to use the have the IoC container discover the ComponentFactory.
+ * approach is to have the IoC container discover the ComponentFactory.
  * See <tt>asciidoc</tt> extension for an example of this.
  *
- * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
- * This mechanism allows a number of other aspects to be customized.
  */
 @Log4j2
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
-implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor,
-IsisAppCommonContext.Provider {
+implements 
+    ComponentFactoryRegistryAccessor, 
+    PageClassRegistryAccessor, 
+    WicketViewerSettingsAccessor,
+    IsisAppCommonContext.Provider {
 
     private static final long serialVersionUID = 1L;
 
@@ -155,7 +155,7 @@ IsisAppCommonContext.Provider {
     private IsisSystemEnvironment systemEnvironment;
     private IsisConfiguration configuration;
 
-    private final IsisWicketApplication_Experimental experimental;
+    private final IsisWicketApplication_experimental experimental;
     private final IsisWicketApplication_newSession newSessionMixin;
     private final IsisWicketApplication_newPageFactory newPageFactoryMixin;
 
@@ -164,7 +164,7 @@ IsisAppCommonContext.Provider {
     // /////////////////////////////////////////////////
 
     public IsisWicketApplication() {
-        experimental = new IsisWicketApplication_Experimental(this);
+        experimental = new IsisWicketApplication_experimental(this);
         newSessionMixin = new IsisWicketApplication_newSession(this);
         newPageFactoryMixin = new IsisWicketApplication_newPageFactory(this);
     }
@@ -227,6 +227,9 @@ IsisAppCommonContext.Provider {
             settings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
             systemEnvironment = commonContext.lookupServiceElseFail(IsisSystemEnvironment.class);
         }
+        
+        //spent 2 hours on that one, does not work
+        //experimental.enableCsrfTokensForAjaxRequests(configuration);
 
         val backgroundInitializationTasks = 
                 _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
@@ -317,6 +320,9 @@ IsisAppCommonContext.Provider {
             settings.setThemeProvider(themeSupport.getThemeProvider());
         });
 
+        //XXX ISIS-2530, don't recreate expired pages
+        getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
+        
     }
     
     /*
@@ -360,7 +366,7 @@ IsisAppCommonContext.Provider {
     String defaultEncryptionKey() {
         return systemEnvironment.isPrototyping()
                 ? "PrototypingEncryptionKey"
-                        : UUID.randomUUID().toString();
+                : UUID.randomUUID().toString();
     }
 
     private void configureWicketSelect2() {
@@ -470,7 +476,7 @@ IsisAppCommonContext.Provider {
     // //////////////////////////////////////
 
     /**
-     * filters Javascript header contributions so rendered to bottom of page.
+     * filters JavaScript header contributions so rendered to bottom of page.
      *
      * <p>
      * Factored out for easy (informal) pluggability.
@@ -540,7 +546,7 @@ IsisAppCommonContext.Provider {
         
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
-                        : RuntimeConfigurationType.DEPLOYMENT;
+                : RuntimeConfigurationType.DEPLOYMENT;
     }
 
     // /////////////////////////////////////////////////

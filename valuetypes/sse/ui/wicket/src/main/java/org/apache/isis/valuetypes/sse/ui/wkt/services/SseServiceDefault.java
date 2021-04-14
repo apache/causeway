@@ -40,9 +40,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
@@ -55,22 +55,21 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
  *
+ * @see <a href="https://www.w3schools.com/html/html5_serversentevents.asp">www.w3schools.com</a>
+ *
+ * @since 2.0 {@index}
  */
 @Service
-@Named("isisValSse.SseServiceDefault")
+@Named("isis.val.SseServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
 public class SseServiceDefault implements SseService {
 
-    //@Inject private TransactionService transactionService;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private TransactionService transactionService;
+    @Inject private InteractionFactory isisInteractionFactory;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
@@ -84,7 +83,7 @@ public class SseServiceDefault implements SseService {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
-        
+
         val executor = ForkJoinPool.commonPool();
 
         switch(executionBehavior) {
@@ -95,15 +94,12 @@ public class SseServiceDefault implements SseService {
             break; // fall through
         }
 
-        val callingThread_TransactionLatch = IsisTransactionAspectSupport.transactionLatch();
-
         // spawn a new thread that gets its own session
         CompletableFuture.runAsync(()->{
 
-            // wait for calling thread to commit its current transaction 
-            callingThread_TransactionLatch.await();
-
-            isisInteractionFactory.runAnonymous(()->run(task));
+            isisInteractionFactory.runAnonymous(()->{
+                transactionService.runWithinCurrentTransactionElseCreateNew(()->run(task));
+            });
 
         }, executor);
 
@@ -147,7 +143,7 @@ public class SseServiceDefault implements SseService {
         }
 
         public synchronized EventStreamLifecycle acquireLifecycleForType(Class<?> sourceType) {
-            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType, 
+            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
                     __->EventStreamLifecycle.of(
                             new EventStreamDefault(UUID.randomUUID(), sourceType),
                             this));
@@ -181,11 +177,11 @@ public class SseServiceDefault implements SseService {
             synchronized ($LOCK) {
                 remaining = --runningTasksCounter;
                 if(remaining<1) {
-                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());    
+                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());
                 }
             }
 
-            // to keep the synchronized block concise, we run this outside the block, 
+            // to keep the synchronized block concise, we run this outside the block,
             // because it does not require synchronization
             if(remaining<1) {
                 eventStream.close();
@@ -247,7 +243,7 @@ public class SseServiceDefault implements SseService {
         public void listenWhile(Predicate<SseSource> listener) {
             synchronized ($LOCK) {
                 if(isActive()) {
-                    listeners.add(listener);   
+                    listeners.add(listener);
                 }
             }
         }

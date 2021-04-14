@@ -42,16 +42,11 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                     switch (nature) {
                     case NOT_SPECIFIED:
                     case BEAN:
-                    case JDO_ENTITY:
-                    case JPA_ENTITY:
+                    case ENTITY:
                     case MIXIN:
                         // not a recreatable object, so no facet
                         return null;
-
                     case VIEW_MODEL:
-                    case EXTERNAL_ENTITY:
-                    case INMEMORY_ENTITY:
-
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
                                 holder, postConstructMethodCache);
                     }

@@ -23,8 +23,6 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.apache.isis.applib.clock.Clock;
-
 public class TickingFixtureClock extends Clock {
     private static final TimeZone UTC_TIME_ZONE;
 

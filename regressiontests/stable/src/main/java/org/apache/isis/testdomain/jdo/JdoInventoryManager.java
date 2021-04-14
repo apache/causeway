@@ -23,13 +23,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
-@ViewModel
+@DomainObject(nature = Nature.VIEW_MODEL)
 public class JdoInventoryManager {
 
     @Inject private RepositoryService repository;
@@ -38,7 +39,7 @@ public class JdoInventoryManager {
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
-    @Action(domainEvent = UpdateProductPriceEvent.class, publishing = Publishing.ENABLED)
+    @Action(domainEvent = UpdateProductPriceEvent.class, executionPublishing = Publishing.ENABLED)
     public JdoProduct updateProductPrice(JdoProduct product, double newPrice) {
         product.setPrice(newPrice);
         return product;

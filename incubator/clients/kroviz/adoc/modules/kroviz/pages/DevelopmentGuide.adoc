@@ -36,7 +36,7 @@ Alternatively you can eg. in IntelliJ a Run/Debug Configuration:
 image::kroviz_Run_Debug_Configuration.png[Preview]
 
 ----
- npm --verbose 
+ npm --verbose
 ----
 
 If task npm-install hangs, try
@@ -61,7 +61,7 @@ gradlew.bat -t run
 
 == Design
 
-In the following section you'll find information that likely helps understanding the implementation. 
+In the following section you'll find information that likely helps understanding the implementation.
 
 === Overview
 
@@ -132,7 +132,7 @@ The Restful Objects API.
 
 Thanks to Kotlin, code is very compact and readable.
 And, since Kotlin is a typed language and IDE's can infer a lot about the code, there are only few surprises.
-Nevertheless Kotlin/JS allows to use Javascript features along side the typed part, what effectively makes it a dynamic language.
+Nevertheless Kotlin/JS allows to use JavaScript features along side the typed part, what effectively makes it a dynamic language.
 
 === Hot Spots
 
@@ -281,8 +281,8 @@ mvn archetype:generate \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
     -D archetypeVersion=2.0.0-M3 \
-    -D groupId=org.my \ 
-    -D artifactId=myapp-2.0.0-M3 \ 
+    -D groupId=org.my \
+    -D artifactId=myapp-2.0.0-M3 \
     -D version=1.0.0 -B
 ----
 
@@ -298,7 +298,7 @@ mvn clean install -DskipTests
 [source,bash]
 ----
 cd webapp
-mvn -Djetty.port=8080 jetty:run -DPROTOTYPING   
+mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
 ----
 
 == Appendix
@@ -308,19 +308,19 @@ mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
 See: elp.kapowsoftware.com/9.4/index.jsp?topic=/doc/rm/JSONTerminology.html
 
 |===
-| | 
+| |
 
-|JSON Text |JSON Object &vert; JSON Array 
-|JSON&nbsp;Object |{} &vert; { Properties } 
-|JSON Array |[] &vert; [ Items ] 
-|Properties |Property, Properties 
-|Property |String : JSON Value 
-|Items |JSON Value, Items 
-|JSON Value |JSON Text &vert; String &vert; Number &vert; false &vert; null &vert; true 
+|JSON Text |JSON Object &vert; JSON Array
+|JSON&nbsp;Object |{} &vert; { Properties }
+|JSON Array |[] &vert; [ Items ]
+|Properties |Property, Properties
+|Property |String : JSON Value
+|Items |JSON Value, Items
+|JSON Value |JSON Text &vert; String &vert; Number &vert; false &vert; null &vert; true
 |String |&quot;" &vert; " Characters " |
 | Characters | Character Characters |
-| Character | any Unicode character except ", \ or control character &vert; &quot; &vert; \ &vert; \/ &vert; \b &vert; \f &vert; \n &vert; \r &vert; \t &vert; \u 4 hex digits 
-|Number |a number very much like a C or Java number, see RFC 4627 for details. 
+| Character | any Unicode character except ", \ or control character &vert; &quot; &vert; \ &vert; \/ &vert; \b &vert; \f &vert; \n &vert; \r &vert; \t &vert; \u 4 hex digits
+|Number |a number very much like a C or Java number, see RFC 4627 for details.
 |===
 
 === CORS
@@ -381,7 +381,7 @@ Put into webapp/src/main/webapp/WEB-INF/lib:
 
 ==== Solution 3:
 
- Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
+ Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend.
 
 == Extensions
 

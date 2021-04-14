@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;

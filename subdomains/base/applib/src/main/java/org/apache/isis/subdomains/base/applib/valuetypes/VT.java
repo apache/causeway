@@ -26,12 +26,14 @@ import org.joda.time.LocalDate;
 
 /**
  * Factory methods for value types
+ *
+ * @since 2.0 {@index}
  */
 public final class VT {
 
     private VT(){}
 
-    // //////////////////////////////////////
+
 
     public static LocalDateInterval ldi(String intervalStr) {
         return intervalStr != null? LocalDateInterval.parseString(intervalStr) : null;
@@ -45,7 +47,7 @@ public final class VT {
         return ldi(st, endDate, AbstractInterval.IntervalEnding.EXCLUDING_END_DATE);
     }
 
-    // //////////////////////////////////////
+
 
     /**
      *
@@ -59,7 +61,8 @@ public final class VT {
         return new LocalDate(yyyy,mm,dd);
     }
 
-    // //////////////////////////////////////
+
+
 
     public static BigInteger bi(int val) {
         return BigInteger.valueOf(val);
@@ -68,7 +71,8 @@ public final class VT {
         return val != null ? bi(val): null;
     }
 
-    // //////////////////////////////////////
+
+
 
     public static BigDecimal bd(String str) {
         return new BigDecimal(str);

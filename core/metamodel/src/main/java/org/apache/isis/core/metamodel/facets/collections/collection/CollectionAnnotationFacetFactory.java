@@ -25,7 +25,6 @@ import java.lang.reflect.TypeVariable;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -35,47 +34,42 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
-
+public class CollectionAnnotationFacetFactory
+extends FacetFactoryAbstract {
+    
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
-        val collectionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Collection.class);
-        
+
+        val collectionIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Collection.class, 
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
+
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
-        
+
         processModify(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
-        processEditing(processMethodContext, collectionIfAny);
-        processNotPersisted(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -86,14 +80,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
         //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return; 
+        //          if(isPropertyMethodLevel) return;
 
-        //[1998] if @Collection detected on method or type level infer:    
+        //[1998] if @Collection detected on method or type level infer:
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ASSOCIATION, facetedMethod) {});
+        FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
 
     }
 
@@ -108,28 +102,24 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-
-
         // following only runs for regular collections, not for mixins.
         // those are tackled in the post-processing, when more of the metamodel is available to us
 
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        
 
         // search for @Collection(domainEvent=...)
         val collectionDomainEventFacet = collectionIfAny
-                .map(Collection::domainEvent)
-                .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-                .map(domainEvent ->
+        .map(Collection::domainEvent)
+        .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
+        .map(domainEvent ->
                 (CollectionDomainEventFacetAbstract)
                 new CollectionDomainEventFacetForCollectionAnnotation(
                         defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
-                .orElse(
-                        new CollectionDomainEventFacetDefault(
-                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder)
-                        );
+        .orElse(
+                new CollectionDomainEventFacetDefault(
+                        defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             super.addFacet(collectionDomainEventFacet);
         }
@@ -141,48 +131,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
                 )) {
             super.addFacet(collectionDomainEventFacet);
-        }
-
-
-        //
-        // if the collection is mutable, then replace the existing addTo and removeFrom facets with equivalents that
-        // also post to the event bus.
-        //
-        // here we support the deprecated annotations
-        //
-        final CollectionAddToFacet collectionAddToFacet = holder.getFacet(CollectionAddToFacet.class);
-        if (collectionAddToFacet != null) {
-            // the current collectionAddToFacet will end up as the underlying facet of
-            // one of these facets to be created.
-            final CollectionAddToFacetForDomainEventFromAbstract replacementFacet;
-
-            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
-                replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
-                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, 
-                        collectionDomainEventFacet, holder, getServiceRegistry());
-            } else
-                // default
-            {
-                replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
-                        collectionDomainEventFacet.getEventType(), getterFacet, 
-                        collectionAddToFacet, collectionDomainEventFacet, holder, getServiceRegistry());
-            }
-            super.addFacet(replacementFacet);
-        }
-
-        final CollectionRemoveFromFacet collectionRemoveFromFacet = holder.getFacet(CollectionRemoveFromFacet.class);
-        if (collectionRemoveFromFacet != null) {
-            // the current collectionRemoveFromFacet will end up as the underlying facet of the PostsCollectionRemovedFromEventFacetAnnotation
-
-            final CollectionRemoveFromFacetForDomainEventFromAbstract replacementFacet;
-
-            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
-            } else {
-                // default
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
-            }
-            super.addFacet(replacementFacet);
         }
 
     }
@@ -206,24 +154,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // check for @Collection(hidden=...)
         val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
-    }
-
-    void processEditing(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // check for @Collection(editing=...)
-        val facet = DisabledFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
-    }
-
-    void processNotPersisted(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // search for @Collection(notPersisted=...)
-        val facet = NotPersistedFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
         super.addFacet(facet);
     }
@@ -290,6 +220,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         return null;
     }
+
 
 
 }

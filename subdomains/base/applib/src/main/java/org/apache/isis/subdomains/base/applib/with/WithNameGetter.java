@@ -22,13 +22,15 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 /**
  * Indicates that the implementing class has a {@link #getName() name}.
+ *
+ * @since 2.0 {@index}
  */
 public interface WithNameGetter {
 
     public String getName();
-    
+
     /**
-     * Utility class for obtaining the string value of an object that implements {@link WithNameGetter}. 
+     * Utility class for obtaining the string value of an object that implements {@link WithNameGetter}.
      */
     public static final class ToString {
         private ToString() {}
@@ -38,7 +40,7 @@ public interface WithNameGetter {
                 public boolean canEvaluate(final Object o) {
                     return o instanceof WithNameGetter;
                 }
-                
+
                 @Override
                 public String evaluate(final Object o) {
                     return ((WithNameGetter)o).getName();

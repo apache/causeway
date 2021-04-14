@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
 @Service
-@Named("isisWicketViewer.BookmarkUiServiceWicket")
+@Named("isis.viewer.wicket.BookmarkUiServiceWicket")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {

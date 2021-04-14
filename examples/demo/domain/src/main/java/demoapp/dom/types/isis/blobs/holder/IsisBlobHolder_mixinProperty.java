@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.isis.blobs.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -29,13 +28,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class IsisBlobHolder_mixinProperty {
 
     private final IsisBlobHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public Blob prop() {
         return holder.getReadOnlyProperty();
     }

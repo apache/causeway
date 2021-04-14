@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.message;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.message.MessageService;
 
 @Vetoed // can be used via producer (optional) 
@@ -40,7 +41,7 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String informUser(TranslatableString message, String translationContext) {
+    public String informUser(TranslatableString message, TranslationContext translationContext) {
         throw notSupported();
     }
 
@@ -57,7 +58,7 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String warnUser(TranslatableString message, String translationContext) {
+    public String warnUser(TranslatableString message, TranslationContext translationContext) {
         throw notSupported();
     }
 
@@ -74,7 +75,7 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String raiseError(TranslatableString message, String translationContext) {
+    public String raiseError(TranslatableString message, TranslationContext translationContext) {
         throw notSupported();
     }
 

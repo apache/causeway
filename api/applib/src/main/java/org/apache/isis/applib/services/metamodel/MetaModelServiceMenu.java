@@ -34,7 +34,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -47,16 +46,21 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
-@Named("isisApplib.MetaModelServiceMenu")
-@DomainService(objectType = "isisApplib.MetaModelServiceMenu")
+/**
+ *
+ * Provides a UI to allow domain model metadata (obtained from
+ * {@link MetaModelService} to be downloaded within the UI.
+ *
+ * @since 2.0 {@index}
+ */
+@Named("isis.applib.MetaModelServiceMenu")
+@DomainService(objectType = "isis.applib.MetaModelServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-// tag::refguide[]
 public class MetaModelServiceMenu {
 
-    // end::refguide[]
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 
     final MimeType mimeTypeTextCsv;
@@ -80,15 +84,11 @@ public class MetaModelServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Meta Model (CSV)"
-            )
-    @MemberOrder(sequence="500.500.2")
-    // tag::refguide[]
-    // ...
+            named = "Download Meta Model (CSV)",
+            sequence="500.500.2")
     public Clob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
-        // end::refguide[]
 
         final DomainModel domainMembers =  metaModelService.getDomainModel();
         final List<String> list = asList(domainMembers);
@@ -98,11 +98,9 @@ public class MetaModelServiceMenu {
                 withSuffix(csvFileName, "csv"),
                 mimeTypeTextCsv, buf.toString().toCharArray());
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
 
     public String default0DownloadMetaModelCsv() {
         return "metamodel.csv";
@@ -116,11 +114,8 @@ public class MetaModelServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Meta Model (XML)"
-            )
-    @MemberOrder(sequence="500.500.2")
-    // tag::refguide[]
-    // ...
+            named = "Download Meta Model (XML)",
+            sequence="500.500.2")
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,
@@ -131,10 +126,9 @@ public class MetaModelServiceMenu {
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
             ) {
-        // end::refguide[]
 
-        MetaModelService.Config config =
-                new MetaModelService.Config()
+        Config config =
+                new Config()
                 .withIgnoreNoop()
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
@@ -152,10 +146,8 @@ public class MetaModelServiceMenu {
         final String xml = jaxbService.toXml(metamodelDto);
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     public String validateDownloadMetaModelXml(
             final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
@@ -210,7 +202,7 @@ public class MetaModelServiceMenu {
     }
 
     private static String header() {
-        return "classType,packageName,className,memberType,memberName,numParams,contributed?,contributedBy,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
+        return "classType,packageName,className,memberType,memberName,numParams,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
     }
 
     private static String asTextCsv(final DomainMember row) {
@@ -221,16 +213,14 @@ public class MetaModelServiceMenu {
                 row.getType(),
                 row.getMemberName(),
                 row.getNumParams(),
-                row.isContributed() ? "Y" : "",
-                        row.getContributedBy(),
-                        row.isMixedIn() ? "Y" : "",
-                                row.getMixin(),
-                                row.getHidden(),
-                                row.getDisabled(),
-                                row.getChoices(),
-                                row.getAutoComplete(),
-                                row.getDefault(),
-                                row.getValidate())
+                row.isMixedIn() ? "Y" : "",
+                row.getMixin(),
+                row.getHidden(),
+                row.getDisabled(),
+                row.getChoices(),
+                row.getAutoComplete(),
+                row.getDefault(),
+                row.getValidate())
                 .collect(Collectors.joining(","));
     }
 
@@ -245,7 +235,6 @@ public class MetaModelServiceMenu {
         return fileName;
     }
 
-    // tag::refguide[]
 
     // ...
 
@@ -255,4 +244,3 @@ public class MetaModelServiceMenu {
     JaxbService jaxbService;
 
 }
-// end::refguide[]

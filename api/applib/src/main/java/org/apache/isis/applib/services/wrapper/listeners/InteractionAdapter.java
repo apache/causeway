@@ -39,6 +39,8 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 /**
  * Provides no-op implementations of each of the methods within
  * {@link InteractionListener}, to simplify the creation of new listeners.
+ *
+ * @since 1.x {@index}
  */
 public class InteractionAdapter implements InteractionListener {
 

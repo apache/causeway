@@ -77,7 +77,6 @@ public class _Multimaps {
          * or a new List if this map contains no mapping for the key.
          * <p> In the latter case the List is also put onto this map.  
          * @param key
-         * @return
          */
         public List<V> getOrElseNew(K key);
         
@@ -86,7 +85,6 @@ public class _Multimaps {
          * or an immutable empty List if this map contains no mapping for the key.
          * <p> In the latter case the List is not put onto this map.  
          * @param key
-         * @return
          */
         default public List<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptyList());
@@ -118,7 +116,6 @@ public class _Multimaps {
          * or a new Set if this map contains no mapping for the key.
          * <p> In the latter case the Set is also put onto this map.  
          * @param key
-         * @return
          */
         public Set<V> getOrElseNew(K key);
         
@@ -127,7 +124,6 @@ public class _Multimaps {
          * or an immutable empty Set if this map contains no mapping for the key.
          * <p> In the latter case the Set is not put onto this map.  
          * @param key
-         * @return
          */
         default public Set<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptySet());
@@ -169,7 +165,6 @@ public class _Multimaps {
          * or a new Map if this map contains no mapping for the key.
          * <p> In the latter case the Map is also put onto this map.  
          * @param key
-         * @return
          */
         public Map<K2, V> getOrElseNew(K1 key);
         
@@ -178,7 +173,6 @@ public class _Multimaps {
          * or an immutable empty Map if this map contains no mapping for the key.
          * <p> In the latter case the Map not is put onto this map.  
          * @param key
-         * @return
          */
         default public Map<K2, V> getOrElseEmpty(K1 key) {
             return getOrDefault(key, Collections.emptyMap());

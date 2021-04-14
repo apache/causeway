@@ -22,11 +22,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -34,39 +31,38 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method = "exec") @RequiredArgsConstructor
+@Action(
+        semantics = SemanticsOf.SAFE,
+        domainEvent = HasUsername_open.ActionDomainEvent.class,
+        associateWith = "User" // associate with a 'User' property (if any)
+        )
+@ActionLayout(sequence = "1") 
+@RequiredArgsConstructor
 public class HasUsername_open {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
-    private final HasUsername holder;
+
+    private final HasUsername target;
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            domainEvent = ActionDomainEvent.class
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION
-            )
-    @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
-    public ApplicationUser exec() {
-        if (holder == null || holder.getUsername() == null) {
+    public ApplicationUser act() {
+        if (target == null || target.getUsername() == null) {
             return null;
         }
-        return applicationUserRepository.findByUsername(holder.getUsername()).orElse(null);
-    }
-    public boolean hideExec() {
-        return holder instanceof ApplicationUser;
+        return applicationUserRepository.findByUsername(target.getUsername()).orElse(null);
     }
 
-    public TranslatableString disableExec() {
-        if (holder == null || holder.getUsername() == null) {
+    public boolean hideAct() {
+        return target instanceof ApplicationUser;
+    }
+
+    public TranslatableString disableAct() {
+        if (target == null || target.getUsername() == null) {
             return TranslatableString.tr("No username");
         }
         return null;
     }
-    
+
 
 }

@@ -19,18 +19,25 @@
 package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import com.structurizr.model.Container;
+import com.structurizr.view.AutomaticLayout.RankDirection;
+import com.structurizr.view.LayoutMergeStrategy;
 
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
@@ -41,10 +48,13 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.graph._Graph;
 import org.apache.isis.tooling.c4.C4;
-import org.apache.isis.tooling.cli.CliConfig.ProjectDoc;
+import org.apache.isis.tooling.cli.CliConfig;
+import org.apache.isis.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
+import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
+import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import org.apache.isis.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.isis.tooling.projectmodel.Dependency;
 import org.apache.isis.tooling.projectmodel.ProjectNode;
@@ -57,13 +67,17 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
 import guru.nidi.codeassert.model.Model;
+
+import static guru.nidi.codeassert.config.Language.JAVA;
 
 /**
  * Acts both as a model and a writer (adoc).
@@ -79,35 +93,122 @@ public class ProjectDocModel {
         this.projTree = projTree;
     }
 
-    public String toAsciiDoc(ProjectDoc projectDocConfig) {
+    public enum Mode {
+        ALL,
+        OVERVIEW,
+        INDEX;
+        public boolean includeOverview() {   return this == OVERVIEW || this == ALL; }
+        public boolean includeIndex() {   return this == INDEX || this == ALL; }
+    }
+
+    public void generateAsciiDoc(final @NonNull CliConfig cliConfig, final @NonNull Mode mode) {
 
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        val doc = doc();
-        doc.setTitle("System Overview");
 
-        _Strings.nonEmpty(projectDocConfig.getLicenseHeader())
-        .ifPresent(block(doc)::setSource);
-        
-        _Strings.nonEmpty(projectDocConfig.getDescription())
-        .ifPresent(block(doc)::setSource);
+        val j2aContext = J2AdocContext.builder()
+                .formatterFactory(new Function<>() {
+                    @SneakyThrows
+                    @Override
+                    public UnitFormatter apply(J2AdocContext j2AdocContext) {
+                        final CliConfig.Commands.Index.Formatter formatter = cliConfig.getCommands().getIndex().getFormatter();
+                        final Class<? extends UnitFormatter> clz = formatter.getUnitFormatterClass();
+                        final Constructor<? extends UnitFormatter> constructor = clz.getConstructor(J2AdocContext.class);
+                        return constructor.newInstance(j2AdocContext);
+                    }
+                })
+                .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
+                .namespacePartsSkipCount(cliConfig.getCommands().getIndex().getNamespacePartsSkipCount())
+                .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
+                .build();
 
-        projectDocConfig.getArtifactGroups().forEach((section, groupId)->{
-            createSection(doc, section, groupId);
+        // partition modules into sections
+        val sections = new ArrayList<Section>();
+        cliConfig.getCommands().getOverview().getSections().forEach((section, groupIdArtifactIdPattern)->{
+            createSections(modules, section, groupIdArtifactIdPattern, sections::add);
         });
 
+        // ensure that each module is referenced only by a single section,
+        // preferring to be owned by a non-group section (ie more specific)
+        val modulesReferencedByNonGroupSections =
+            sections.stream()
+                .filter(Section::isNotGroupLevelOnly)
+                .flatMap(Section::streamMatchingProjectNodes)
+                .collect(Collectors.toList());
+
+        sections.stream()
+                .filter(Section::isGroupLevelOnly)
+                .forEach(section -> section.removeProjectNodes(modulesReferencedByNonGroupSections));
+
+        // any remaining modules go into an 'Other' section
+        sections.forEach(section -> modules.removeAll(section.getMatchingProjectNodes()));
         if(!modules.isEmpty()) {
-            createSection(doc, "Other", null);
+            final Section other = new Section("Other", null, false);
+            modules.forEach(other::addProjectNode);
+            sections.add(other);
+            modules.clear();
         }
 
-        try {
-            return AsciiDocWriter.toString(doc);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "ERROR: " + e.getMessage();
-        } 
+        // now generate the overview or index
+        final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
+        val overviewDoc = doc();
+        overviewDoc.setTitle("System Overview");
+
+        _Strings.nonEmpty(cliConfig.getGlobal().getLicenseHeader())
+                .ifPresent(notice->AsciiDocFactory.attrNotice(overviewDoc, notice));
+
+        _Strings.nonEmpty(cliConfig.getCommands().getOverview().getDescription())
+                .ifPresent(block(overviewDoc)::setSource);
+
+        writeSections(sections, overviewDoc, j2aContext, mode, asciiDocFiles::add);
+
+        ProjectDocWriter.write(cliConfig, overviewDoc, j2aContext, mode);
+
+        // update include statements ...
+        OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
+
+    }
+
+    @RequiredArgsConstructor
+    public static class Section {
+        @Getter
+        private final String sectionName;
+        @Getter
+        private final String groupIdArtifactIdPattern;
+        @Getter
+        private final boolean addAdocFiles;
+
+        private final List<ProjectNode> matchingProjectNodes = new ArrayList<>();
+
+        public List<ProjectNode> getMatchingProjectNodes() {
+            return Collections.unmodifiableList(matchingProjectNodes);
+        }
+
+        public Stream<ProjectNode> streamMatchingProjectNodes() {
+            return matchingProjectNodes.stream();
+        }
+
+        void addProjectNode(ProjectNode projectNode) {
+            matchingProjectNodes.add(projectNode);
+        }
+
+        boolean isGroupLevelOnly() {
+            return ! isNotGroupLevelOnly();
+        }
+        boolean isNotGroupLevelOnly() {
+            return groupIdArtifactIdPattern.contains(":");
+        }
+
+        void removeProjectNodes(Collection<ProjectNode> projectNodes) {
+            matchingProjectNodes.removeAll(projectNodes);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s (%s): %d modules", sectionName, isGroupLevelOnly() ? "group" : "non-group", getMatchingProjectNodes().size());
+        }
     }
 
     // -- HELPER
@@ -118,11 +219,11 @@ public class ProjectDocModel {
         final ProjectNode projectNode;
         @EqualsExclude final Container container;
     }
-    
+
     private static class GroupDiagram {
-        
+
         private final C4 c4;
-        private final List<ProjectNode> projectNodes = new ArrayList<>(); 
+        private final List<ProjectNode> projectNodes = new ArrayList<>();
 
         public GroupDiagram(C4 c4) {
             this.c4 = c4;
@@ -133,9 +234,9 @@ public class ProjectDocModel {
         }
 
         //XXX lombok issues, not using val here
-        public String toPlantUml() {
+        public String toPlantUml(String softwareSystemName) {
             val key = c4.getWorkspaceName();
-            val softwareSystem = c4.softwareSystem("package-ecosystem", null);
+            val softwareSystem = c4.softwareSystem(softwareSystemName, null);
 
             final Can<ProjectAndContainerTuple> tuples = Can.<ProjectNode>ofCollection(projectNodes)
             .map(projectNode->{
@@ -146,8 +247,8 @@ public class ProjectDocModel {
                 return ProjectAndContainerTuple.of(projectNode, container);
             });
 
-            
-            final _Graph<ProjectAndContainerTuple> adjMatrix = 
+
+            final _Graph<ProjectAndContainerTuple> adjMatrix =
                     _Graph.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
             tuples.forEach(tuple->{
@@ -157,115 +258,191 @@ public class ProjectDocModel {
                 });
             });
 
-            val containerView = c4.getViewSet().createContainerView(softwareSystem, key, "Artifact Dependency Diagram (Maven)");
+            val containerView = c4.getViewSet()
+                    .createContainerView(softwareSystem, key, "Artifact Hierarchy (Maven)");
             containerView.addAllContainers();
+
+            containerView.enableAutomaticLayout(RankDirection.LeftRight);
 
             val plantUmlSource = c4.toPlantUML(containerView);
             return plantUmlSource;
         }
 
-        public String toAsciiDoc() {
+        public String toAsciiDoc(String softwareSystemName) {
             val key = c4.getWorkspaceName();
 
-            return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(), key, null);
+            return AsciiDocFactory.toString(doc->
+                        AsciiDocFactory.DiagramFactory
+                        .plantumlSvg(doc, toPlantUml(softwareSystemName), key, null));
         }
-
     }
 
-    private void createSection(
-            final @NonNull Document doc, 
-            final @NonNull String sectionName, 
-            final @Nullable String groupIdPattern) {
+    private void createSections(
+            final @NonNull SortedSet<ProjectNode> projectNodes,
+            final @NonNull String sectionName,
+            final @Nullable String pattern,
+            final @NonNull Consumer<Section> sectionConsumer) {
 
-        val titleBlock = block(doc);
+        val section = new Section(sectionName, pattern, true);
 
-        titleBlock.setSource(String.format("== %s", sectionName));
+        projectNodes.stream()
+                .filter(module->matchesGroupId(module, pattern))
+                .forEach(section::addProjectNode);
 
-        val descriptionBlock = block(doc);
+        sectionConsumer.accept(section);
+    }
+
+    private void writeSections(
+            final @NonNull List<Section> sections,
+            final @NonNull Document overviewDoc,
+            final @NonNull J2AdocContext j2aContext,
+            final @NonNull Mode mode,
+            final @NonNull Consumer<File> onAdocFile) {
+
+        sections.forEach(section -> {
+            writeSection(section, overviewDoc, j2aContext, mode, onAdocFile);
+        });
+    }
+
+    private void writeSection(
+            final @NonNull Section section,
+            final @NonNull Document overviewDoc,
+            final @NonNull J2AdocContext j2aContext,
+            final @NonNull Mode mode,
+            final @NonNull Consumer<File> onAdocFile) {
+
+        val sectionName = section.getSectionName();
+        val groupIdPattern = section.getGroupIdArtifactIdPattern();
+
+        val titleBlock = block(overviewDoc);
+
+        val headingLevel =
+                (groupIdPattern == null || !groupIdPattern.contains(":"))
+                        ? "=="
+                        : "===";
+        titleBlock.setSource(String.format("%s %s", headingLevel, sectionName));
+
+        val sectionModules = section.getMatchingProjectNodes();
+        if(sectionModules.isEmpty()) {
+            return;
+        }
+
+        val descriptionBlock = block(overviewDoc);
         val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
 
-        val table = table(doc);
+        val table = table(overviewDoc);
         table.setTitle(String.format("Projects/Modules (%s)", sectionName));
-        table.setAttribute("cols", "2m,2m,1m,1m,2,5a", true);
+        table.setAttribute("cols", "3a,5a", true);
         table.setAttribute("header-option", "", true);
 
         val headRow = headRow(table);
 
-        cell(table, headRow, "Group");
-        cell(table, headRow, "Artifact");
-        cell(table, headRow, "Type");
-        cell(table, headRow, "Folder");
-        cell(table, headRow, "Name");
+        cell(table, headRow, "Coordinates");
         cell(table, headRow, "Description");
 
         val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
-        Set<ProjectNode> modulesWritten = new HashSet<>();
+        sectionModules
+                .forEach(module -> {
+                    if(mode.includeIndex()) {
+                        gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
+                    }
 
-        modules.stream()
-        .filter(module->matchesGroupId(module, groupIdPattern))
-        .forEach(module->{
+                    val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
+                    val projRelativePath =
+                            Optional.ofNullable(
+                                    _Strings.emptyToNull(
+                                            _Files.toRelativePath(projRoot, projPath)))
+                                    .orElse("/");
 
-            val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
-            val projRelativePath = _Files.toRelativePath(projRoot, projPath);
+                    groupDiagram.collect(module);
 
-            modulesWritten.add(module);
-            groupDiagram.collect(module);
+                    val row = row(table);
+                    cell(table, row, coordinates(module, projRelativePath));
+                    cell(table, row, details(module, j2aContext));
+                });
 
-            val row = row(table);
-            cell(table, row, module.getArtifactCoordinates().getGroupId());
-            cell(table, row, module.getArtifactCoordinates().getArtifactId());
-            cell(table, row, module.getArtifactCoordinates().getPackaging());
-            cell(table, row, projRelativePath);
-            cell(table, row, module.getName());
-            cell(table, row, details(module));
-        });
-
-        descriptionBlock.setSource(groupDiagram.toAsciiDoc());
-
-        modules.removeAll(modulesWritten);
-
+        descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
     }
 
     private boolean matchesGroupId(ProjectNode module, String groupIdPattern) {
-        if(_Strings.isNullOrEmpty(module.getArtifactCoordinates().getGroupId())) {
+        val moduleCoords = module.getArtifactCoordinates();
+
+        if(_Strings.isNullOrEmpty(moduleCoords.getGroupId())) {
             return false; // never match on missing data
         }
         if(_Strings.isNullOrEmpty(groupIdPattern)) {
             return true; // no groupIdPattern, always matches
         }
-        if(groupIdPattern.equals(module.getArtifactCoordinates().getGroupId())) {
+        if(groupIdPattern.equals(moduleCoords.getGroupId())) {
             return true; // exact match
         }
         if(groupIdPattern.endsWith(".*")) {
             val groupIdPrefix = groupIdPattern.substring(0, groupIdPattern.length()-2);
-            if(groupIdPrefix.equals(module.getArtifactCoordinates().getGroupId())) {
-                return true; // exact match
-            }
-            if(groupIdPrefix.equals(module.getArtifactCoordinates().getGroupId())) {
-                return true; // exact prefix match
-            }
-            if(module.getArtifactCoordinates().getGroupId().startsWith(groupIdPrefix+".")) {
-                return true; // prefix match
+            if(groupIdPattern.contains(":")) {
+                final String[] split = groupIdPrefix.split(":");
+                val groupId = split[0];
+                val artifactIdPrefix = split[1];
+                if(groupId.equals(moduleCoords.getGroupId())) {
+                    if(moduleCoords.getArtifactId().startsWith(artifactIdPrefix)) {
+                        return true; // match on artifactId
+                    }
+                }
+            } else {
+                if(groupIdPrefix.equals(moduleCoords.getGroupId())) {
+                    return true; // exact prefix match
+                }
+                if(moduleCoords.getGroupId().startsWith(groupIdPrefix+".")) {
+                    return true; // prefix match
+                }
             }
         }
         return false;
     }
 
-    private String details(ProjectNode module) {
-        val description = module.getDescription().trim();
+    //    [source,yaml]
+    //    ----
+    //    Group: org.apache.isis.commons
+    //    Artifact: isis-commons
+    //    Type: jar
+    //    Directory: /commons
+    //    ----
+    private String coordinates(ProjectNode module, String projRelativePath) {
+        val coors = new StringBuilder();
+        appendKeyValue(coors, "Group", module.getArtifactCoordinates().getGroupId());
+        appendKeyValue(coors, "Artifact", module.getArtifactCoordinates().getArtifactId());
+        appendKeyValue(coors, "Type", module.getArtifactCoordinates().getPackaging());
+        appendKeyValue(coors, "Directory", projRelativePath.replaceAll("\\\\", "/"));
+        return String.format("%s\n%s",
+                module.getName(),
+                AsciiDocFactory.toString(doc->
+                    AsciiDocFactory.SourceFactory.yaml(doc, coors.toString(), null)));
+    }
+
+    private void appendKeyValue(StringBuilder sb, String key, String value) {
+        sb.append(String.format("%s: %s\n", key, value));
+    }
+
+    private String details(ProjectNode module, J2AdocContext j2aContext) {
+        val description = sanitizeDescription(module.getDescription());
         val dependencyList = module.getDependencies()
                 .stream()
                 .map(Dependency::getArtifactCoordinates)
                 .map(ArtifactCoordinates::toString)
-                .map(ProjectDocModel::toAdocListItem)
+                .map(ProjectDocModel::toAdocCompactListItem)
                 .collect(Collectors.joining())
                 .trim();
         val componentList = gatherSpringComponents(module.getProjectDirectory())
                 .stream()
-                .map(ProjectDocModel::toAdocListItem)
+                .map(s->s.replace("org.apache.isis.", "o.a.i."))
+                .map(ProjectDocModel::toAdocCompactListItem)
                 .collect(Collectors.joining())
+                .trim();
+
+        val indexEntriesCompactList = gatherGlobalDocIndexXrefs(module.getProjectDirectory(), j2aContext)
+                .stream()
+                .collect(Collectors.joining(", "))
                 .trim();
 
         val sb = new StringBuilder();
@@ -282,15 +459,49 @@ public class ProjectDocModel {
             sb.append(toAdocSection("Dependencies", dependencyList));
         }
 
+        if(!indexEntriesCompactList.isEmpty()) {
+            sb.append(toAdocSection("Document Index Entries", indexEntriesCompactList));
+        }
+
         return sb.toString();
     }
 
+    static String sanitizeDescription(String str) {
+        return Arrays.stream(str.split("\n"))
+                .map(String::trim)
+                .reduce("", (x, y) -> x + (x.isEmpty() ? "" : "\n") + y);
+    }
+
     private static String toAdocSection(String title, String content) {
-        return String.format("_%s_\n\n%s\n\n", title, content);
+
+        //XXX collapsible will be supported with antora 3
+        //        return AsciiDocFactory.toString(doc->{
+        //            val collapsibleBlock = AsciiDocFactory.collapsibleBlock(doc, content);
+        //            collapsibleBlock.setTitle(title);
+        //        });
+
+        // render as Sidebar block for now
+        return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
 
     private static String toAdocListItem(String element) {
         return String.format("* %s\n", element);
+    }
+
+    private static String toAdocCompactListItem(String element) {
+        return String.format("%s +\n", element);
+    }
+
+    private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2AdocContext j2aContext) {
+
+        val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
+
+        final SortedSet<String> docIndexXrefs = analyzerConfig.getSources(JAVA).stream()
+        .flatMap(j2aContext::add)
+        .map(unit->unit.getAsciiDocXref(j2aContext))
+        .collect(Collectors.toCollection(TreeSet::new));
+
+        return docIndexXrefs;
     }
 
     private SortedSet<String> gatherSpringComponents(File projDir) {
@@ -301,17 +512,25 @@ public class ProjectDocModel {
 
         SortedSet<String> components = model.getClasses()
                 .stream()
-                .filter(codeClass->codeClass
-                        .getAnnotations()
-                        .stream()
-                        .map(CodeClass::getName)
-                        .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
+//                .filter(CodeClasses::hasSourceFile)
+//                .filter(CodeClasses.packageNameStartsWith("org.apache.isis.applib."))
+//                .peek(CodeClasses::log) //debug
+                .filter(CodeClasses::isSpringStereoType)
                 .map(CodeClass::getName)
-                //.peek(System.out::println) //debug
                 .collect(Collectors.toCollection(TreeSet::new));
 
         return components;
     }
+
+    private void gatherAdocFiles(File projDir, Consumer<File> onFile) {
+
+        val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.ADOC).main();
+
+        analyzerConfig.getSources(Language.ADOC)
+                .stream()
+                .forEach(onFile::accept);
+    }
+
 
 }
 

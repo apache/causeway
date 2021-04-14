@@ -23,9 +23,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
@@ -39,7 +39,7 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepositor
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isissecurity.ApplicationTenancyMenu"
+        objectType = "isis.ext.secman.ApplicationTenancyMenu"
         )
 @DomainServiceLayout(
         named = "Security",
@@ -67,7 +67,7 @@ public class ApplicationTenancyMenu {
             domainEvent = FindTenanciesDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.30.1")
+    @ActionLayout(sequence = "100.30.1")
     public Collection<? extends ApplicationTenancy> findTenancies(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Partial Name Or Path", describedAs = "String to search for, wildcard (*) can be used")
@@ -84,7 +84,7 @@ public class ApplicationTenancyMenu {
             domainEvent = NewTenancyDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.30.3")
+    @ActionLayout(sequence = "100.30.3")
     public ApplicationTenancy newTenancy(
             @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
             @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.TYPICAL_LENGTH_NAME)
@@ -107,7 +107,7 @@ public class ApplicationTenancyMenu {
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
-    @MemberOrder(sequence = "100.30.4")
+    @ActionLayout(sequence = "100.30.4")
     public Collection<? extends ApplicationTenancy> allTenancies() {
         return applicationTenancyRepository.allTenancies();
     }

@@ -3,21 +3,48 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
 
 
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
 
-== FAQ
 
-How do I switch from using Shiro to using Keycloak?::
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecurityKeycloak.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+Make sure that no other `IsisModuleSecurityXxx` module is imported.
+
+
+== Design
+
+The module configures a filter that expects Keycloak to set three `X-Auth-Xxx` headers:
+
+* `X-Auth-Userid` - is used as the username
+* `X-Auth-Roles` - is a comma-separated set of roles.
 +
-* First, update the webapp's `pom.xml` to reference `org.apache.isis.security:isis-security-keycloak-impl` (instead of `o.a.i.security:isis-security-shiro-impl`)
+The `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to this list of roles.
 
-* Then change the `AppManifest` class to reference `IsisModuleSecurityKeycloak` instead of IsisModuleSecurityShiro`
+* `X-Auth-Subject` - is unused
 
-+
-This will result in the `KeycloakFilter` (link:https://github.com/apache/isis/blob/master/security/keycloak/src/main/java/org/apache/isis/security/keycloak/webmodule/KeycloakFilter.java[code here]) being configured. +
+The user and roles are accessible programmatically from the xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] obtained from xref:refguide:applib:index/services/user/UserService.adoc[UserService] domain service.
 
-As you can see, it expects for Keycloak to set three `X-Auth-Xxx` headers, and it just blindly trusts them to create an appropriate `AuthenticationSession`.
+
+== Walk-through
+
+WARNING: TODO - show how this fits together.
+

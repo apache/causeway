@@ -23,6 +23,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 /**
  * For <tt>enum</tt>s that act as powertypes, in other words acting as a factory
  * for subtypes of some inheritance hierarchy.
+ *
+ * @since 2.0 {@index}
  */
 public interface PowerType<T> {
 

@@ -23,8 +23,10 @@ import java.util.EnumSet;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
+ * Controls the way that a (synchronous) wrapper works.
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public class SyncControl extends ControlAbstract<SyncControl> {
 
     public static SyncControl control() {
@@ -32,28 +34,57 @@ public class SyncControl extends ControlAbstract<SyncControl> {
     }
 
     private SyncControl() {
-        with(exception -> {                 // <.>
+        with(exception -> {
             throw exception;
         });
     }
 
-    private boolean execute = true;         // <.>
+
+    /**
+     * Skip checking business rules (hide/disable/validate) before
+     * executing the underlying property or action
+     */
+    @Override
+    public SyncControl withSkipRules() {
+        return super.withSkipRules();
+    }
+
+
+    /**
+     * How to handle exceptions if they occur, using the provided
+     * {@link ExceptionHandler}.
+     *
+     * <p>
+     *     The default behaviour is to rethrow the exception.
+     * </p>
+     */
+    @Override
+    public SyncControl with(ExceptionHandler exceptionHandler) {
+        return super.with(exceptionHandler);
+    }
+
+
+    private boolean execute = true;
+
+    /**
+     * Explicitly set the action to be executed.
+     */
     public SyncControl withExecute() {
-        // end::refguide[]
         execute = true;
         return this;
-        // tag::refguide[]
-        // ...
-    }
-    public SyncControl withNoExecute() {
-        // end::refguide[]
-        execute = false;
-        return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
+    /**
+     * Explicitly set the action to <i>not</i >be executed, in other words a
+     * &quot;dry run&quot;.
+     */
+    public SyncControl withNoExecute() {
+        execute = false;
+        return this;
+        // ...
+    }
+
     /**
      * Not API.
      */
@@ -64,7 +95,5 @@ public class SyncControl extends ControlAbstract<SyncControl> {
         }
         return ImmutableEnumSet.from(modes);
     }
-    // tag::refguide[]
 
 }
-// end::refguide[]

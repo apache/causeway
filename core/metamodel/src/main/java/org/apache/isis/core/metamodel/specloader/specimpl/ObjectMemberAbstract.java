@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.UUID;
+import java.util.function.Function;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -28,10 +29,11 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -45,7 +47,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,13 +57,13 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ObjectMemberAbstract 
-implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
+public abstract class ObjectMemberAbstract
+implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     protected ObjectSpecification specificationOf(final Class<?> type) {
-        return type != null 
+        return type != null
                 ? getMetaModelContext().getSpecificationLoader().loadSpecification(type)
-                        : null;
+                : null;
     }
 
     // -- fields
@@ -179,7 +181,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        
+
         val visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
@@ -209,7 +211,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        
+
         val usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
@@ -243,7 +245,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
     ManagedObject mixinAdapterFor(
             @NonNull final Class<?> mixinType,
             @NonNull final ManagedObject mixedInAdapter) {
-        
+
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);
         val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixedInAdapter.getPojo()));
@@ -290,8 +292,6 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
         return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
-
-
     // -- toString
 
     @Override
@@ -305,27 +305,27 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
         return getServiceRegistry().lookupServiceElseFail(org.apache.isis.applib.services.iactn.InteractionContext.class);
     }
 
-    protected CommandDtoServiceInternal getCommandDtoServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(CommandDtoServiceInternal.class);
+    protected CommandDtoFactory getCommandDtoFactory() {
+        return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
     }
 
     // -- command (setup)
 
     protected void setupCommand(
             final ManagedObject managedObject,
-            final Supplier<CommandDto> commandDtoSupplier) {
+            final Function<UUID, CommandDto> commandDtoFactory) {
 
-        val command = getInteractionContext().getInteraction().getCommand();
+        val command = getInteractionContext().currentInteractionElseFail().getCommand();
 
         _Assert.assertNotNull(command,
             "No command available with current thread, "
                 + "are we missing an interaction context?");
 
         if (command.getCommandDto() != null) {
-            // guard here to prevent subsequent contributed/mixin actions from
+            // guard here to prevent subsequent mixin actions from
             // trampling over the command's DTO
         } else {
-            val dto = commandDtoSupplier.get();
+            val dto = commandDtoFactory.apply(command.getInteractionId());
             command.updater().setCommandDto(dto);
         }
 

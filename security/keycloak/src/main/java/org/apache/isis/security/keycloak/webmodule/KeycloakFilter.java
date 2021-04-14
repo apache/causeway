@@ -34,15 +34,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class KeycloakFilter implements Filter {
-    
-    @Autowired private IsisInteractionFactory isisInteractionFactory;
+
+    @Autowired private InteractionFactory isisInteractionFactory;
 
     @Override
     public void doFilter(
@@ -60,12 +64,13 @@ public class KeycloakFilter implements Filter {
             return;
         }
         final List<String> roles = toClaims(rolesHeader);
-        
-        val authenticationSession = new SimpleSession(userid, roles, subjectHeader);
-        authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
-        
+
+        val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
+        val authentication = SimpleAuthentication.of(user, subjectHeader);
+        authentication.setType(Authentication.Type.EXTERNAL);
+
         isisInteractionFactory.runAuthenticated(
-                authenticationSession,
+                authentication,
                 ()->{
                         filterChain.doFilter(servletRequest, servletResponse);
                 });

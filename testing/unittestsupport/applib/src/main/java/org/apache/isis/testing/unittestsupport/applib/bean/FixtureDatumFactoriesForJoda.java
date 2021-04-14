@@ -22,6 +22,9 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class FixtureDatumFactoriesForJoda {
 
 	public static PojoTester.FixtureDatumFactory<LocalDate> dates() {

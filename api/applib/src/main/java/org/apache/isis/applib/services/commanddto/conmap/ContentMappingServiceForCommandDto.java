@@ -40,8 +40,12 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 
+/**
+ * 
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisApplib.ContentMappingServiceForCommandDto")
+@Named("isis.applib.ContentMappingServiceForCommandDto")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("CommandDto")

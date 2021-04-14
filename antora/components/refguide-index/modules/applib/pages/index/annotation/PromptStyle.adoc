@@ -1,0 +1,107 @@
+= PromptStyle _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+How prompting for new values of a property/arguments for an action should be performed
+
+== API
+
+[source,java]
+.PromptStyle.java
+----
+enum PromptStyle {
+  AS_CONFIGURED     // <.>
+  DIALOG     // <.>
+  DIALOG_SIDEBAR     // <.>
+  DIALOG_MODAL     // <.>
+  INLINE     // <.>
+  INLINE_AS_IF_EDIT     // <.>
+  NOT_SPECIFIED     // <.>
+  boolean isDialog()
+  boolean isInline()
+  boolean isInlineAsIfEdit()
+  boolean isInlineOrInlineAsIfEdit()
+}
+----
+
+<.> xref:#AS_CONFIGURED[AS_CONFIGURED]
++
+--
+Prompt using the style configured by `isis.viewer.wicket.promptStyle` .
+--
+<.> xref:#DIALOG[DIALOG]
++
+--
+Use a dialog for the prompt.
+--
+<.> xref:#DIALOG_SIDEBAR[DIALOG_SIDEBAR]
++
+--
+Use a dialog for the prompt, rendered in a sidebar.
+--
+<.> xref:#DIALOG_MODAL[DIALOG_MODAL]
++
+--
+Use a dialog for the prompt, rendered in a modal dialog.
+--
+<.> xref:#INLINE[INLINE]
++
+--
+Show the form inline, temporarily replacing the rendering of the property.
+--
+<.> xref:#INLINE_AS_IF_EDIT[INLINE_AS_IF_EDIT]
++
+--
+Applies only to actions, show the form inline, invoked as if editing the property.
+--
+<.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
++
+--
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
+--
+
+== Members
+
+[#AS_CONFIGURED]
+=== AS_CONFIGURED
+
+Prompt using the style configured by `isis.viewer.wicket.promptStyle` .
+
+If no style is configured, then _#INLINE_ is assumed.
+
+[#DIALOG]
+=== DIALOG
+
+Use a dialog for the prompt.
+
+This will be either modal dialog (same as if _#DIALOG_MODAL_ was selected) or sidebar (same as if _#DIALOG_SIDEBAR_ was selected) depending on the value of the `isis.viweer.wicket.dialogMode` configuration property.
+
+[#DIALOG_SIDEBAR]
+=== DIALOG_SIDEBAR
+
+Use a dialog for the prompt, rendered in a sidebar.
+
+[#DIALOG_MODAL]
+=== DIALOG_MODAL
+
+Use a dialog for the prompt, rendered in a modal dialog.
+
+[#INLINE]
+=== INLINE
+
+Show the form inline, temporarily replacing the rendering of the property.
+
+[#INLINE_AS_IF_EDIT]
+=== INLINE_AS_IF_EDIT
+
+Applies only to actions, show the form inline, invoked as if editing the property.
+
+Note that:
+
+* Only one such action should have this attribute set per property. If there are multiple actions, then the first one discovered with the attribute is used.
+* If the property is editable, then this attribute is ignored (and the action is treated as having a prompt style of _#INLINE_ ).
+* If applied to a property, then is the property's prompt style is simply treated as _#INLINE_ .
+
+[#NOT_SPECIFIED]
+=== NOT_SPECIFIED
+
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).

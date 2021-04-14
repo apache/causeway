@@ -34,7 +34,7 @@ public class Veto extends ConsentAbstract {
      * logic into {@link Facet}s so that it is available for use by other
      * viewers.
      *
-     * @param reasonVeteod
+     * @param reasonVetoed
      *            - must not be empty or <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {

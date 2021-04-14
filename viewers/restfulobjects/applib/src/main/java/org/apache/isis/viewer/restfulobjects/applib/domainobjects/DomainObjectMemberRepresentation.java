@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonNode;
  * <p>
  * Do not confuse with the subclasses of {@link AbstractObjectMemberRepresentation}, which
  * are standalone representations in their own right.
+ *
+ * @since 1.x {@index}
  */
 public class DomainObjectMemberRepresentation extends DomainRepresentation  {
 

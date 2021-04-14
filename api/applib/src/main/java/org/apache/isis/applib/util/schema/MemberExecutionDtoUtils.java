@@ -18,8 +18,9 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import java.io.StringWriter;
 import java.io.Writer;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
@@ -30,12 +31,15 @@ import org.apache.isis.schema.ixn.v2.MetricsDto;
 import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 
 import lombok.NonNull;
-import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class MemberExecutionDtoUtils {
 
     public static <T extends MemberExecutionDto> T clone(final T dto) {
-        return _Xml.clone(dto);
+        return _Xml.clone(dto)
+                .presentElseFail();
     }
 
     public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
@@ -81,23 +85,27 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
-    
+
     public static <T extends MemberExecutionDto> String toXml(final @NonNull T dto) {
-        val writer = new StringWriter();
-        toXml(dto, writer);
-        return writer.toString();
+        return _Xml.writeXml(dto, writeOptions())
+                .presentElseFail();
     }
 
     public static <T extends MemberExecutionDto> void toXml(
-            final @NonNull T dto, 
-            final @NonNull Writer writer) {
-        
-        _Xml.writeXml(dto, writer, WriteOptions.builder()
+            final @NonNull T dto,
+            final @NonNull Writer writer) throws JAXBException {
+        _Xml.writeXml(dto, writer, writeOptions());
+    }
+
+    // -- HELPER
+
+    private static WriteOptions writeOptions() {
+        return WriteOptions.builder()
                 .useContextCache(true)
                 .formattedOutput(true)
                 .allowMissingRootElement(true)
-                .build());
+                .build();
     }
 
-    
+
 }

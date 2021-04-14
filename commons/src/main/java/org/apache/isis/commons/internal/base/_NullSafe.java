@@ -21,11 +21,9 @@ package org.apache.isis.commons.internal.base;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -265,37 +263,6 @@ public final class _NullSafe {
         return x==null;
     }
 
-    // -- EQUALS/COMPARE
-
-    /**
-     * equivalent to {@link java.util.Objects#equals(Object, Object)}
-     */
-    public static boolean equals(final @Nullable Object x, final @Nullable Object y) {
-        return Objects.equals(x, y);
-    }
-
-    /**
-     * Natural order compare, with nulls ordered first.
-     * @param x
-     * @param y
-     * @return
-     */
-    public static <T extends Comparable<T>> int compareNullsFirst(final @Nullable T x, final @Nullable T y) {
-        return Objects.compare(x, y, Comparator.nullsFirst(Comparator.naturalOrder()));
-
-    }
-
-    /**
-     * Natural order compare, with nulls ordered last.
-     * @param x
-     * @param y
-     * @return
-     */
-    public static <T extends Comparable<T>> int compareNullsLast(final @Nullable T x, final @Nullable T y) {
-        return Objects.compare(x, y, Comparator.nullsLast(Comparator.naturalOrder()));
-
-    }
-
     // -- EMTPY CHECKS
 
     public static boolean isEmpty(final @Nullable String x) { return x==null || x.length() == 0; }
@@ -354,7 +321,6 @@ public final class _NullSafe {
      * @param <K>
      * @param <V>
      * @param map
-     * @return
      */
     public static <K, V> Set<Map.Entry<K, V>> entrySet(final @Nullable Map<K, V> map) {
         return map==null

@@ -40,10 +40,24 @@ else
 fi
 
 
-if [[ "$SKIP_GENERATION" == "true" ]]; then
-  echo "skipping building..."
+if [[ "$SKIP_PROJDOC_GENERATION" == "true" ]]; then
+  echo "skipping projdoc generation"
 else
-  echo "building ..."
+  bash $SCRIPT_DIR/_adoc-gen-projdoc.sh
+fi
+
+if [[ "$SKIP_FIX_ADOC_LINE_ENDINGS" == "true" ]]; then
+  echo "skipping fix adoc line endings"
+else
+  bash $SCRIPT_DIR/_adoc-fix-adoc-line-endings.sh
+fi
+
+
+
+if [[ "$SKIP_ANTORA_GENERATION" == "true" ]]; then
+  echo "skipping Antora generation ..."
+else
+  echo "generating site using Antora ..."
   bash $SCRIPT_DIR/_adoc-antora.sh $*
   echo "site built in ${SECONDS}s"
 fi
@@ -60,3 +74,5 @@ fi
 
 # add a marker, that tells github not to use jekyll on the github pages folder
 touch ${PROJECT_ROOT_PATH}/antora/target/site/.nojekyll
+
+exit 0

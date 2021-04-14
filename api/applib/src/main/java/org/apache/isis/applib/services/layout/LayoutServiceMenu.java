@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -37,17 +36,20 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
-@Named("isisApplib.LayoutServiceMenu")
-@DomainService(objectType = "isisApplib.LayoutServiceMenu")
+/**
+ * Simply provides a UI to allow layouts (obtained from {@link LayoutService}
+ * to be downloaded within the UI.
+ *
+ * @since 1.x {@index}
+ */
+@Named("isis.applib.LayoutServiceMenu")
+@DomainService(objectType = "isis.applib.LayoutServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
-// tag::refguide[]
-// ...
 public class LayoutServiceMenu {
 
-    // end::refguide[]
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<LayoutServiceMenu> {}
 
@@ -70,26 +72,21 @@ public class LayoutServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Object Layouts (ZIP)"
-            )
-    @MemberOrder(sequence="500.400.1")
-    // tag::refguide[]
+            named = "Download Object Layouts (ZIP)",
+            sequence="500.400.1")
     // ...
-    public Blob downloadLayouts(final LayoutService.Style style) {
-        // end::refguide[]
+    public Blob downloadLayouts(final Style style) {
 
         final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
 
         final byte[] zipBytes = layoutService.toZip(style);
         return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
 
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
-    public LayoutService.Style default0DownloadLayouts() {
-        return LayoutService.Style.NORMALIZED;
+    public Style default0DownloadLayouts() {
+        return Style.NORMALIZED;
     }
 
     public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {}
@@ -101,23 +98,18 @@ public class LayoutServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Menu Bars Layout (XML)"
-            )
-    @MemberOrder(sequence="500.400.2")
-    // tag::refguide[]
+            named = "Download Menu Bars Layout (XML)",
+            sequence="500.400.2")
     // ...
     public Clob downloadMenuBarsLayout(
             @ParameterLayout(named = "File name") final String fileName,
             final MenuBarsService.Type type) {
-        // end::refguide[]
 
         final String xml = layoutService.toMenuBarsXml(type);
 
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     public String default0DownloadMenuBarsLayout() {
         return "menubars.layout.xml";
@@ -126,9 +118,7 @@ public class LayoutServiceMenu {
     public MenuBarsService.Type default1DownloadMenuBarsLayout() {
         return MenuBarsService.Type.DEFAULT;
     }
-    // tag::refguide[]
 
     @Inject LayoutService layoutService;
 
 }
-// end::refguide[]

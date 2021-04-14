@@ -26,6 +26,9 @@ import javax.xml.bind.annotation.XmlType;
 /**
  *
  */
+/**
+ * @since 1.x {@index}
+ */
 @XmlType(
         name = "sizeSpan"
         , propOrder = {}

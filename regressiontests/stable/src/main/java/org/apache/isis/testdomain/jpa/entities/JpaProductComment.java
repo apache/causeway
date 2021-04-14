@@ -25,39 +25,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.mixins.timestamp.Timestampable;
+import org.apache.isis.applib.mixins.updates.OnUpdatedByAndAt;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @DomainObject(
-        objectType = "testdomain.jpa.ProductComment",
-        nature = Nature.JPA_ENTITY) //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
-public class JpaProductComment implements Timestampable {
+        objectType = "testdomain.jpa.ProductComment")
+public class JpaProductComment implements OnUpdatedByAndAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter @Column(name = "id")
     private Long id;
-    
-    @Property @Column(nullable = false)
-    @Getter @Setter private JpaProduct product;
+
+    // n:1 relation
+    @Property
+    @ManyToOne @JoinColumn(nullable = false)
+    private @Getter @Setter JpaProduct product;
 
     @Property
-    @Getter @Setter private String comment;
+    private @Getter @Setter String comment;
 
     // -- TIMESTAMPABLE
-    
-    @Property
-    @Getter @Setter private String updatedBy;
-    
-    @Property
-    @Getter @Setter private Timestamp updatedAt;
 
-    
+    @Property
+    private @Getter @Setter String updatedBy;
+
+    @Property
+    private @Getter @Setter Timestamp updatedAt;
+
+
 }

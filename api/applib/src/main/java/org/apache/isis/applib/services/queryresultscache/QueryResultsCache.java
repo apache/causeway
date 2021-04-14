@@ -23,77 +23,85 @@ import java.util.concurrent.Callable;
 
 import org.springframework.beans.factory.DisposableBean;
 
-import org.apache.isis.applib.services.MethodReferences;
-
 import lombok.Data;
 import lombok.Getter;
 
 
 /**
- * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
- * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
- * be performance tuned.  The benefit is that the algorithm of the business logic can remain easy to understand.
+ * Provides a mechanism by which idempotent query results can be cached for
+ * the duration of an interaction.
  *
  * <p>
- * This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * Caching such values is useful to improve the response time (for the end user)
+ * of code that loops &quot;naively&quot; through a set of items, performing
+ * an expensive operation each time.  If the data is such that the same
+ * expensive operation is made many times, then the query cache is a perfect fit.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface QueryResultsCache extends DisposableBean {
 
-    <T> T execute(                                      // <.>
+    /**
+     * Executes the callable if not already cached for the supplied calling
+     * class, method and keys.
+     *
+     * @param callable
+     * @param callingClass
+     * @param methodName
+     * @param keys
+     * @param <T>
+     * @return
+     */
+    <T> T execute(
             Callable<T> callable,
             Class<?> callingClass, String methodName,
             Object... keys);
 
-    // end::refguide[]
 
     /**
      * Not API, for framework use only.
      */
-    void onTransactionEnded();                          // <.>
+    void onTransactionEnded();
 
-    <R> R execute(                                      // <.>
+    <R> R execute(
             MethodReferences.Call0<? extends R> action,
             Class<?> callingClass, String methodName);
 
-    <R, A0> R execute(                                  // <.>
+    <R, A0> R execute(
             MethodReferences.Call1<? extends R, A0> action,
             Class<?> callingClass, String methodName,
             A0 arg0);
 
-    <R, A0, A1> R execute(                              // <.>
+    <R, A0, A1> R execute(
             MethodReferences.Call2<? extends R, A0, A1> action,
             Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1);
 
-    <R, A0, A1, A2> R execute(                          // <.>
+    <R, A0, A1, A2> R execute(
             MethodReferences.Call3<? extends R, A0, A1, A2> action,
             Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1, A2 arg2);
 
-    <R, A0, A1, A2, A3> R execute(                      // <.>
+    <R, A0, A1, A2, A3> R execute(
             MethodReferences.Call4<? extends R, A0, A1, A2, A3> action,
             Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1, A2 arg2, A3 arg3);
 
-    <R, A0, A1, A2, A3, A4> R execute(                  // <.>
+    <R, A0, A1, A2, A3, A4> R execute(
             MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action,
             Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
 
-    // tag::refguide-1[]
     class Key {
 
         @Getter
-        private final Class<?> callingClass;            // <.>
+        private final Class<?> callingClass;
         @Getter
-        private final String methodName;                // <.>
+        private final String methodName;
         @Getter
-        private final Object[] keys;                    // <.>
+        private final Object[] keys;
 
-        // end::refguide-1[]
         public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
@@ -146,17 +154,11 @@ public interface QueryResultsCache extends DisposableBean {
         public String toString() {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
-        // tag::refguide-1[]
     }
-    // end::refguide-1[]
 
-    // tag::refguide-2[]
     @Data
     class Value<T> {
         private final T result;
     }
-    // end::refguide-2[]
 
-    // tag::refguide[]
 }
-// end::refguide[]

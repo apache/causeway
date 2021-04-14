@@ -1,0 +1,210 @@
+= InteractionListener _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Allows the interactions between the wrapper and the underlying domain object to be observed.
+
+== API
+
+[source,java]
+.InteractionListener.java
+----
+interface InteractionListener {
+  void objectTitleRead(ObjectTitleEvent ev)     // <.>
+  void objectPersisted(ObjectValidityEvent ev)     // <.>
+  void propertyVisible(PropertyVisibilityEvent ev)     // <.>
+  void propertyUsable(PropertyUsabilityEvent ev)     // <.>
+  void propertyAccessed(PropertyAccessEvent ev)     // <.>
+  void propertyModified(PropertyModifyEvent ev)     // <.>
+  void collectionVisible(CollectionVisibilityEvent ev)     // <.>
+  void collectionUsable(CollectionUsabilityEvent ev)     // <.>
+  void collectionAccessed(CollectionAccessEvent ev)     // <.>
+  void collectionAddedTo(CollectionAddToEvent ev)     // <.>
+  void collectionRemovedFrom(CollectionRemoveFromEvent ev)     // <.>
+  void collectionMethodInvoked(CollectionMethodEvent interactionEvent)     // <.>
+  void actionVisible(ActionVisibilityEvent interactionEvent)     // <.>
+  void actionUsable(ActionUsabilityEvent ev)     // <.>
+  void actionArgument(ActionArgumentEvent ev)     // <.>
+  void actionInvoked(ActionInvocationEvent ev)     // <.>
+}
+----
+
+<.> xref:#objectTitleRead__ObjectTitleEvent[objectTitleRead(ObjectTitleEvent)]
++
+--
+The title was read.
+--
+<.> xref:#objectPersisted__ObjectValidityEvent[objectPersisted(ObjectValidityEvent)]
++
+--
+The object was persisted (or an attempt to persist it was made).
+--
+<.> xref:#propertyVisible__PropertyVisibilityEvent[propertyVisible(PropertyVisibilityEvent)]
++
+--
+A check was made to determine if a property was visible.
+--
+<.> xref:#propertyUsable__PropertyUsabilityEvent[propertyUsable(PropertyUsabilityEvent)]
++
+--
+A check was made to determine if a property was usable.
+--
+<.> xref:#propertyAccessed__PropertyAccessEvent[propertyAccessed(PropertyAccessEvent)]
++
+--
+A property was read.
+--
+<.> xref:#propertyModified__PropertyModifyEvent[propertyModified(PropertyModifyEvent)]
++
+--
+A property was modified (or an attempt to modify it was made)
+--
+<.> xref:#collectionVisible__CollectionVisibilityEvent[collectionVisible(CollectionVisibilityEvent)]
++
+--
+A check was made to determine if a collection was visible.
+--
+<.> xref:#collectionUsable__CollectionUsabilityEvent[collectionUsable(CollectionUsabilityEvent)]
++
+--
+A check was made to determine if a collection was usable.
+--
+<.> xref:#collectionAccessed__CollectionAccessEvent[collectionAccessed(CollectionAccessEvent)]
++
+--
+A collection was read.
+--
+<.> xref:#collectionAddedTo__CollectionAddToEvent[collectionAddedTo(CollectionAddToEvent)]
++
+--
+An object was added to the collection (or an attempt to add it was made).
+--
+<.> xref:#collectionRemovedFrom__CollectionRemoveFromEvent[collectionRemovedFrom(CollectionRemoveFromEvent)]
++
+--
+An object was removed from the collection (or an attempt to remove it was made).
+--
+<.> xref:#collectionMethodInvoked__CollectionMethodEvent[collectionMethodInvoked(CollectionMethodEvent)]
++
+--
+A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
+--
+<.> xref:#actionVisible__ActionVisibilityEvent[actionVisible(ActionVisibilityEvent)]
++
+--
+A check was made to determine if an action was visible.
+--
+<.> xref:#actionUsable__ActionUsabilityEvent[actionUsable(ActionUsabilityEvent)]
++
+--
+A check was made to determine if an action was usable.
+--
+<.> xref:#actionArgument__ActionArgumentEvent[actionArgument(ActionArgumentEvent)]
++
+--
+A check was made as to whether an argument proposed for an action was valid.
+--
+<.> xref:#actionInvoked__ActionInvocationEvent[actionInvoked(ActionInvocationEvent)]
++
+--
+An action was invoked (or an attempt to invoke it was made).
+--
+
+== Members
+
+[#objectTitleRead__ObjectTitleEvent]
+=== objectTitleRead(ObjectTitleEvent)
+
+The title was read.
+
+[#objectPersisted__ObjectValidityEvent]
+=== objectPersisted(ObjectValidityEvent)
+
+The object was persisted (or an attempt to persist it was made).
+
+[#propertyVisible__PropertyVisibilityEvent]
+=== propertyVisible(PropertyVisibilityEvent)
+
+A check was made to determine if a property was visible.
+
+[#propertyUsable__PropertyUsabilityEvent]
+=== propertyUsable(PropertyUsabilityEvent)
+
+A check was made to determine if a property was usable.
+
+[#propertyAccessed__PropertyAccessEvent]
+=== propertyAccessed(PropertyAccessEvent)
+
+A property was read.
+
+Unlike most other events, a xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
+
+[#propertyModified__PropertyModifyEvent]
+=== propertyModified(PropertyModifyEvent)
+
+A property was modified (or an attempt to modify it was made)
+
+Use _PropertyModifyEvent#getProposed()_ to determine whether the property was being set or cleared.
+
+[#collectionVisible__CollectionVisibilityEvent]
+=== collectionVisible(CollectionVisibilityEvent)
+
+A check was made to determine if a collection was visible.
+
+Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
+
+[#collectionUsable__CollectionUsabilityEvent]
+=== collectionUsable(CollectionUsabilityEvent)
+
+A check was made to determine if a collection was usable.
+
+Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
+
+[#collectionAccessed__CollectionAccessEvent]
+=== collectionAccessed(CollectionAccessEvent)
+
+A collection was read.
+
+Unlike most other events, a xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
+
+[#collectionAddedTo__CollectionAddToEvent]
+=== collectionAddedTo(CollectionAddToEvent)
+
+An object was added to the collection (or an attempt to add it was made).
+
+[#collectionRemovedFrom__CollectionRemoveFromEvent]
+=== collectionRemovedFrom(CollectionRemoveFromEvent)
+
+An object was removed from the collection (or an attempt to remove it was made).
+
+[#collectionMethodInvoked__CollectionMethodEvent]
+=== collectionMethodInvoked(CollectionMethodEvent)
+
+A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
+
+Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is _CollectionMethodEvent#getDomainObject()_ still available, however).
+
+[#actionVisible__ActionVisibilityEvent]
+=== actionVisible(ActionVisibilityEvent)
+
+A check was made to determine if an action was visible.
+
+Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
+
+[#actionUsable__ActionUsabilityEvent]
+=== actionUsable(ActionUsabilityEvent)
+
+A check was made to determine if an action was usable.
+
+Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
+
+[#actionArgument__ActionArgumentEvent]
+=== actionArgument(ActionArgumentEvent)
+
+A check was made as to whether an argument proposed for an action was valid.
+
+Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
+
+[#actionInvoked__ActionInvocationEvent]
+=== actionInvoked(ActionInvocationEvent)
+
+An action was invoked (or an attempt to invoke it was made).

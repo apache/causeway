@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
  * underlying {@link PageClassList}.
  */
 @Service
-@Named("isisWicketViewer.PageClassRegistryDefault")
+@Named("isis.viewer.wicket.PageClassRegistryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

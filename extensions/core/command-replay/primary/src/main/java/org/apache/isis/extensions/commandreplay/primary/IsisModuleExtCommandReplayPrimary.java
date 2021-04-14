@@ -29,6 +29,9 @@ import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrieval
 import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand;
 import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimaryService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @Configuration's

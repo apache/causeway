@@ -21,6 +21,9 @@ package org.apache.isis.testing.unittestsupport.applib.bean;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class FixtureDatumFactoriesForApplib {
 
 	public static PojoTester.FixtureDatumFactory<Blob> blobs() {

@@ -21,25 +21,31 @@ package org.apache.isis.testing.integtestsupport.applib;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.exceptions.RecoverableException;
 
+import lombok.val;
+
+/**
+ * @since 2.0 {@index}
+ */
 public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandler {
 
     @Override
-    public void handleTestExecutionException(ExtensionContext extensionContext, Throwable throwable) throws Throwable {
+    public void handleTestExecutionException(
+            final ExtensionContext extensionContext, 
+            final Throwable throwable) throws Throwable {
 
-        extensionContext.getTestInstance()
-        .filter(IsisIntegrationTestAbstract.class::isInstance)
-        .map(IsisIntegrationTestAbstract.class::cast)
-        .map(IsisIntegrationTestAbstract::getServiceRegistry)
-        .ifPresent(serviceRegistry ->
-                serviceRegistry.select(ExceptionRecognizer.class)
-                .stream()
-                .forEach(exceptionRecognizer->{
-                    exceptionRecognizer.recognize(throwable);
-                })
-        );
-        throw throwable;
+        val translatedException = _Helper.getExceptionRecognizerService(extensionContext)
+        .flatMap(recService->recService.recognize(throwable))
+        .<Throwable>map(recognition->new RecoverableException(
+                String.format("%s: %s", 
+                        recognition.getCategory().getFriendlyName(), 
+                        recognition.getReason()
+                ),
+                throwable))
+        .orElse(throwable);
+
+        throw translatedException;
     }
 
 }

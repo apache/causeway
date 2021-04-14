@@ -58,6 +58,12 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
             if(spec==null) {
                 spec = mappingFunction.apply(cls);
                 internalPut(spec);
+
+//debug                
+//                if(cls.getSimpleName().equals("MarkupStream")) {
+//                    System.out.println("!!! MarkupStream");
+//                }
+                
             }
             return spec;
         }

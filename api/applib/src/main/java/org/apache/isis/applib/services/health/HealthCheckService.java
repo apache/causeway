@@ -18,14 +18,29 @@
  */
 package org.apache.isis.applib.services.health;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * This SPI service allow runtime infrastructure such as Kubernetes or Docker
+ * Swarm to monitor the app and (potentially) restart it if required.
+ *
+ * <p>
+ * This SPI service integrates with Spring Boot's
+ * <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html">HealthIndicator</a>
+ * SPI, surfaced through the
+ * <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html">Spring Boot Actuator</a>.
+ * It is therefore accessible from the <code>/actuator/health</code> endpoint
+ * (Spring allows the endpoint URL to be altered or suppressed).
+ * </p>
+ *
+ * <p>
+ * The service, when called, will be within the context of a special internal
+ * user <i>__health</i> with the internal role <i>__health-role</i>.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 public interface HealthCheckService {
 
     Health check();
-
 }
-// end::refguide[]
 
 

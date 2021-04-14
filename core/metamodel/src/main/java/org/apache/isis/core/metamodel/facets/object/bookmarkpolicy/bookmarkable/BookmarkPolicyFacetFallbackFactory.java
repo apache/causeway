@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -29,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -55,11 +53,10 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidator((objectSpec, validator) -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-
-            objectActions
+            // as an optimization only checking declared members (skipping inherited ones)
+            objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(objectAction->{
                 final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
                 if(bookmarkFacet == null || bookmarkFacet.isFallback() || 
@@ -71,16 +68,14 @@ implements MetaModelRefiner {
             .forEach(objectAction->{
                 final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                 if(semanticsFacet == null || semanticsFacet.isFallback() || !semanticsFacet.value().isSafeInNature()) {
-                    validator.onFailure(objectAction,
-                            objectAction.getIdentifier(),
+                    ValidationFailure.raiseFormatted(
+                            objectAction,
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                                     "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
-                            objectAction.getIdentifier().toClassAndNameIdentityString());
+                            objectAction.getIdentifier().toString());
                 }
             });
 
-            return true;
-            
         });
     }
 

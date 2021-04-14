@@ -103,12 +103,6 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-modelannotation</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-pdfjs-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -161,6 +155,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -199,7 +198,6 @@
 		<module>core/command-log</module>
 		<module>core/command-replay</module>
 		<module>core/flyway</module>
-		<module>core/model-annotation</module>
 		<module>core/quartz</module>
 
 		<module>security/secman</module>
@@ -224,8 +222,8 @@
 			<properties>
 
 				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>5.2.4</datanucleus-api-jdo.version>
-				<datanucleus-core.version>5.2.5</datanucleus-core.version>
+				<datanucleus-api-jdo.version>5.2.5</datanucleus-api-jdo.version>
+				<datanucleus-core.version>5.2.6</datanucleus-core.version>
 				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 

@@ -23,6 +23,9 @@ import java.util.Objects;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
 
     public static LocalDateInterval excluding(final LocalDate startDate, final LocalDate endDate) {
@@ -34,7 +37,7 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
     }
 
     // //////////////////////////////////////
-    
+
     public LocalDateInterval() {
     }
 
@@ -89,7 +92,7 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
                         .append(dateToString(endDateExcluding()));
         return builder.toString();
     }
-    
+
     public String toString(String format) {
         StringBuilder builder =
                 new StringBuilder(
@@ -100,14 +103,13 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
     }
 
     // //////////////////////////////////////
-    
+
     /**
      * Parse a string representation of a LocalDateInterval
-     * 
+     *
      * Since this method is only used for testing it's not heavily guarded against illegal arguments
-     * 
-     * @param input  a string with format yyyy-mm-dd/yyyy-mm-dd, end date is excluding
-     * @return
+     *
+     * @param input a string with format {@literal yyyy-mm-dd/yyyy-mm-dd}, end date is excluding
      */
     public static LocalDateInterval parseString(final String input) {
         String[] values = input.split("/");
@@ -120,9 +122,8 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
 
     /**
      * Parse a string to a LocalDate
-     * 
+     *
      * @param input  a string representing a parsable LocalDate, "*" or "----------" returns null
-     * @return
      */
     private static LocalDate parseLocalDate(final String input) {
         if (input.contains("--") || input.contains("*")) {
@@ -133,14 +134,13 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
 
 
     /**
-     * Returns an end date given the start date of the next adjoining interverval 
-     * 
+     * Returns an end date given the start date of the next adjoining interval
+     *
      * @param date
-     * @return
      */
     public static LocalDate endDateFromStartDate(LocalDate date) {
         return new LocalDateInterval(date, null).endDateFromStartDate();
-        
+
     }
-    
+
 }

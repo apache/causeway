@@ -20,74 +20,106 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface ObjectActionContainer {
-
+    
+    // -- ACTION LOOKUP (INHERITANCE CONSIDERED)
+    
     /**
-     * Returns the action of the specified type with the specified signature.
+     * Similar to {@link #getDeclaredAction(String, ActionType)}, 
+     * but also considering any inherited object members. (mixed-in included)
+     * @param id
+     * @param type
+     * 
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
+     * and if nothing found there, search the interfaces. Special care needs to be taken, as the
+     * {@link ActionType} might be redeclared when inheriting from a super-type or interface.
      */
-    Optional<ObjectAction> getObjectAction(ActionType type, String id, Can<ObjectSpecification> parameters);
+    Optional<ObjectAction> getAction(String id, @Nullable ActionType type);
+    
+    default ObjectAction getActionElseFail(String id, @Nullable ActionType type) {
+        return getAction(id, type)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
+                        id, 
+                        type==null ? "any" : type.name()));
+    }
 
+    default Optional<ObjectAction> getAction(String id) {
+        return getAction(id, null);
+    }
+    
+    default ObjectAction getActionElseFail(String id) {
+        return getActionElseFail(id, null);
+    }
+    
+    
+    // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
+    
     /**
-     * Get the action object represented by the specified identity string.
-     *
+     * Get the action object represented by the specified identity string. (mixed-in included)
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
      * {@link Identifier#toNameIdentityString()}).
      *
-     * @see #getObjectAction(String)
+     * @see #getDeclaredAction(String)
      */
-    Optional<ObjectAction> getObjectAction(ActionType type, String id);
-    
-    default ObjectAction getObjectActionElseFail(ActionType type, String id) {
-        return getObjectAction(type, id)
-                .orElseThrow(()->_Exceptions.noSuchElement("type=%s id=%s", type, id));  
-    }
-    
+    Optional<ObjectAction> getDeclaredAction(String id, @Nullable ActionType type);
 
     /**
-     * Get the action object represented by the specified identity string,
-     * irrespective of {@link ActionType}.
-     *
-     * <p>
-     * The identity string can be either fully specified with parameters (as per
-     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
-     * {@link Identifier#toNameIdentityString()}).
-     *
-     * @see #getObjectAction(ActionType, String)
+     * Shortcut to {@link #getDeclaredAction(String, ActionType)} with {@code ActionType = null},
+     * meaning where action type is <i>any</i>.
+     * @see #getDeclaredAction(String, ActionType)
      */
-    Optional<ObjectAction> getObjectAction(String id);
-    
-    default ObjectAction getObjectActionElseFail(String id) {
-        return getObjectAction(id)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));  
+    default Optional<ObjectAction> getDeclaredAction(String id) {
+        return getDeclaredAction(id, null);
     }
 
-    default Stream<ObjectAction> streamObjectActions(Contributed contributed) {
-        return streamObjectActions(ActionType.ALL, contributed);
+    // -- ACTION STREAM (W/ INHERITANCE)
+    
+    Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed,
+            Consumer<ObjectAction> onActionOverloaded);
+    
+    default Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed) {
+        return streamActions(types, contributed, __->{});
     }
+    
+    default Stream<ObjectAction> streamActions(ActionType type, MixedIn contributed) {
+        return streamActions(ImmutableEnumSet.of(type), contributed);
+    }
+    
+    default Stream<ObjectAction> streamActions(MixedIn contributed) {
+        return streamActions(ActionType.ANY, contributed);
+    }
+    
+    // -- ACTION STREAM (NO INHERITANCE)
 
     /**
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamObjectActions(ActionType type, Contributed contributee);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
 
-    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, Contributed contributee) {
-        return stream(types)
-                .flatMap(type->streamObjectActions(type, contributee));
+    default Stream<ObjectAction> streamDeclaredActions(ActionType type, MixedIn contributed) {
+        return streamDeclaredActions(ImmutableEnumSet.of(type), contributed);
+    }
+    
+    default Stream<ObjectAction> streamDeclaredActions(MixedIn contributed) {
+        return streamDeclaredActions(ActionType.ANY, contributed);
     }
 
-
+    
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -42,9 +44,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -54,7 +55,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
-public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
+public class BookmarkedPagesPanel 
+extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -164,8 +166,8 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     ObjectSpecification objectSpec = null;
                     RootOid oid = node.getOidNoVer();
                     if(oid != null) {
-                        ObjectSpecId objectSpecId = oid.getObjectSpecId();
-                        objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+                        objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
+                                .orElse(null);
                     }
                     final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
                     final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {

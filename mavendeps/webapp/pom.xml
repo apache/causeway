@@ -27,7 +27,10 @@
 
 	<name>Apache Isis Maven Deps - Webapp</name>
 	<description>
-        Defines a module that can be used as a single dependency for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security)
+        Defines a module that can be almost used as a single dependency for running 
+        an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
+        
+        Note: Also requires a persistence provider.
     </description>
 
 	<dependencies>
@@ -119,16 +122,6 @@
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-keycloak</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jpa-model</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
 		</dependency>
 
 		<dependency>

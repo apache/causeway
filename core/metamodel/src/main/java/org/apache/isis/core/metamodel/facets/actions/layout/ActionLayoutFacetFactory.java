@@ -19,11 +19,8 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
@@ -33,16 +30,19 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
 
-public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
-
+public class ActionLayoutFacetFactory 
+extends FacetFactoryAbstract {
+    
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -51,34 +51,36 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     public void process(final ProcessMethodContext processMethodContext) {
 
         val facetHolder = processMethodContext.getFacetHolder();
-
-        val actionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class);
+        val actionLayoutIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        ActionLayout.class,
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
         
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
         super.addFacet(bookmarkableFacet);
 
-
         // cssClass
         CssClassFacet cssClassFacet = CssClassFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(cssClassFacet);
-
 
         // cssClassFa
         CssClassFaFacet cssClassFaFacet = CssClassFaFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(cssClassFaFacet);
 
-
         // describedAs
         DescribedAsFacet describedAsFacet = DescribedAsFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
 
-
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-
+        
+        // layoutGroup
+        LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
+        super.addFacet(layoutGroupFacet);
 
         // named
         NamedFacet namedFacet = NamedFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
@@ -90,7 +92,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         super.addFacet(promptStyleFacet);
 
-
         // position
         ActionPositionFacet actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
@@ -99,73 +100,18 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
         super.addFacet(actionPositionFacet);
 
-
         // redirectPolicy
         RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         if(redirectFacet == null) {
             redirectFacet = new RedirectFacetFallback(facetHolder);
         }
         super.addFacet(redirectFacet);
-
-
-        // contributing
-        if (isContributingServiceOrMixinObject(processMethodContext)) {
-            NotContributedFacet notContributedFacet = NotContributedFacetForActionLayoutAnnotation
-                    .create(actionLayoutIfAny, facetHolder);
-            super.addFacet(notContributedFacet);
-        }
-    }
-
-    private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
-        final Class<?> cls =  processMethodContext.getCls();
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
-
-        return isContributingService(spec) || isMixinObject(spec);
-    }
-
-    private static boolean isContributingService(final ObjectSpecification spec) {
-        final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        return domainServiceFacet != null && !domainServiceFacet.isFallback() && 
-                !domainServiceFacet.getNatureOfService().isProgrammatic();
-    }
-
-    private static boolean isMixinObject(final ObjectSpecification spec) {
-        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
-        final boolean b = mixinFacet != null && !mixinFacet.isFallback();
-        return b;
-    }
-
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-        final FacetHolder holder = processMemberContext.getFacetHolder();
-
-        // cssClass
-        CssClassFacet cssClassFacet = null;
-        super.addFacet(cssClassFacet);
-
-        // cssClassFa
-        CssClassFaFacet cssClassFaFacet = null;
-        super.addFacet(cssClassFaFacet);
-
-        // describedAs
-        DescribedAsFacet describedAsFacet = null;
-        super.addFacet(describedAsFacet);
-
-        // hidden
-        HiddenFacet hiddenFacet = null;
-        super.addFacet(hiddenFacet);
-
-        // named
-        NamedFacet namedFacet = null;
-        super.addFacet(namedFacet);
-
-        // position
-        ActionPositionFacet actionPositionFacet = null;
-        if(! holder.containsNonFallbackFacet(ActionPositionFacet.class)) {
-            actionPositionFacet = new ActionPositionFacetFallback(holder);
-        }
-        super.addFacet(actionPositionFacet);
+        
+        // sequence (layout)
+        LayoutOrderFacet layoutOrderFacet = LayoutOrderFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder); 
+        super.addFacet(layoutOrderFacet);
 
     }
+
 
 }

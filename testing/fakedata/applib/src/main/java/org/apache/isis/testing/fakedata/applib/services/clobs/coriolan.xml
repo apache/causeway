@@ -264,7 +264,7 @@ clubs, and other weapons</STAGEDIR>
 
 <SPEECH>
 <SPEAKER>MENENIUS</SPEAKER>
-<LINE>There was a time when all the body's members</LINE>
+<LINE>There was a time when all the body's pathsToInclude</LINE>
 <LINE>Rebell'd against the belly, thus accused it:</LINE>
 <LINE>That only like a gulf it did remain</LINE>
 <LINE>I' the midst o' the body, idle and unactive,</LINE>
@@ -287,7 +287,7 @@ clubs, and other weapons</STAGEDIR>
 <LINE>Which ne'er came from the lungs, but even thus--</LINE>
 <LINE>For, look you, I may make the belly smile</LINE>
 <LINE>As well as speak--it tauntingly replied</LINE>
-<LINE>To the discontented members, the mutinous parts</LINE>
+<LINE>To the discontented pathsToInclude, the mutinous parts</LINE>
 <LINE>That envied his receipt; even so most fitly</LINE>
 <LINE>As you malign our senators for that</LINE>
 <LINE>They are not such as you.</LINE>
@@ -379,7 +379,7 @@ clubs, and other weapons</STAGEDIR>
 <SPEECH>
 <SPEAKER>MENENIUS</SPEAKER>
 <LINE>The senators of Rome are this good belly,</LINE>
-<LINE>And you the mutinous members; for examine</LINE>
+<LINE>And you the mutinous pathsToInclude; for examine</LINE>
 <LINE>Their counsels and their cares, digest things rightly</LINE>
 <LINE>Touching the weal o' the common, you shall find</LINE>
 <LINE>No public benefit which you receive</LINE>
@@ -3076,8 +3076,8 @@ and BRUTUS</STAGEDIR>
 <LINE>our noble acceptance of them. Ingratitude is</LINE>
 <LINE>monstrous, and for the multitude to be ingrateful,</LINE>
 <LINE>were to make a monster of the multitude: of the</LINE>
-<LINE>which we being members, should bring ourselves to be</LINE>
-<LINE>monstrous members.</LINE>
+<LINE>which we being pathsToInclude, should bring ourselves to be</LINE>
+<LINE>monstrous pathsToInclude.</LINE>
 </SPEECH>
 
 <SPEECH>

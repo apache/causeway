@@ -25,41 +25,33 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public abstract class EventObjectBase<T> {
 
-    // end::refguide[]
     /**
      * The object on which the Event initially occurred.
      */
-    // tag::refguide[]
     protected transient T source;
 
-    // end::refguide[]
     /**
      * Constructs a prototypical Event.
      *
      * @param    source    The object on which the Event initially occurred.
      */
-    // tag::refguide[]
     protected EventObjectBase(@Nullable T source) {
         this.source = source;
     }
 
-    // end::refguide[]
     /**
      * The object on which the Event initially occurred.
      *
      * @return   The object on which the Event initially occurred.
      */
-    // tag::refguide[]
     public @Nullable T getSource() {
         return source;
     }
 
-    // end::refguide[]
     /**
      * A one-shot function. Only allowed to be called if a source has not already been set.
      *
@@ -83,7 +75,5 @@ public abstract class EventObjectBase<T> {
     public String toString() {
         return getClass().getName() + "[source=" + source + "]";
     }
-    // tag::refguide[]
 
 }
-// end::refguide[]

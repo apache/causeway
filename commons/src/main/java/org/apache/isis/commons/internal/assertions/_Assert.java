@@ -22,6 +22,8 @@ package org.apache.isis.commons.internal.assertions;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.primitives._Ints;
@@ -84,6 +86,24 @@ public final class _Assert {
         }
     }
 
+    // -- NULL
+    
+    public static void assertNull(Object object) {
+        assertNull(object, (String) null);
+    }
+
+    public static void assertNull(Object object, String message) {
+        if (object!=null) {
+            fail(message, "null", "not null");
+        }
+    }
+
+    public static void assertNull(Object object, Supplier<String> lazyMessage) {
+        if (object!=null) {
+            fail(lazyMessage.get(), "null", "not null");
+        }
+    }
+    
     // -- NOT NULL
 
     public static void assertNotNull(Object object) {
@@ -164,6 +184,32 @@ public final class _Assert {
             throw _Exceptions.assertionError(String.format(
                     "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
         }
+    }
+    
+    // -- OPEN/CLOSE STATE
+
+    public enum OpenCloseState {
+
+        NOT_INITIALIZED, 
+        OPEN, 
+        CLOSED
+        ;
+
+        public boolean isNotInitialized() { return this == NOT_INITIALIZED; }
+        public boolean isOpen() { return this == OPEN; }
+        public boolean isClosed() { return this == CLOSED; }
+        
+        /**
+         * @param expected - nullable
+         * @throws IllegalArgumentException if {@code this} not equal to {@code expected} 
+         */
+        public void assertEquals(
+                final @Nullable OpenCloseState expected) {
+            if (expected != this) {
+                throw new IllegalStateException("State is: " + this + "; should be: " + expected);    
+            }
+        }
+        
     }
 
     // -- HELPER

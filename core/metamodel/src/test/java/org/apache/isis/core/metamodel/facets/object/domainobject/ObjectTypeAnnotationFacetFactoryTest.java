@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -58,7 +57,7 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetForDomainObjectAnnotation, is(true));
-        assertThat(facet.value(), is(ObjectSpecId.of("CUS")));
+        assertThat(facet.value(), is("CUS"));
 
     }
 

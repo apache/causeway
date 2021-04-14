@@ -6,4 +6,5 @@
 *** xref:security:secman:model.adoc[Model]
 *** xref:security:secman:jbcrypt-encryption.adoc[JBCrypt Encryption]
 *** xref:security:secman:jdo-persistence.adoc[JDO Persistence]
+*** xref:security:secman:jpa-persistence.adoc[JPA Persistence]
 *** xref:security:secman:shiro-realm.adoc[Realm (for Shiro)]

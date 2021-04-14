@@ -1,0 +1,59 @@
+= RoutingService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
+
+There are two primary use cases:
+
+* if an action returns an aggregate leaf (that is, a child object which has an owning parent), then the parent object can be * returned instead.
++
+--
+For example, an action returning `OrderItem` might instead render the owning `Order` object. It is the responsibility of the implementation to figure out what the "owning" object might be.
+--
+* if an action returns `null` or is `void`, then return some other "useful" object.
++
+--
+For example, return the home page (eg as defined by the _org.apache.isis.applib.annotation.HomePage_ annotation).
+--
+
+Currently this service is used only by the Wicket viewer; it is ignored by the Restful Objects viewer.
+
+== API
+
+[source,java]
+.RoutingService.java
+----
+interface RoutingService {
+  boolean canRoute(Object original)     // <.>
+  Object route(Object original)     // <.>
+}
+----
+
+<.> xref:#canRoute__Object[canRoute(Object)]
++
+--
+whether this implementation recognizes and can "route" the object.
+--
+<.> xref:#route__Object[route(Object)]
++
+--
+The object to route to instead; this may be the same as the original object, some other object, or (indeed) `null`.
+--
+
+== Members
+
+[#canRoute__Object]
+=== canRoute(Object)
+
+whether this implementation recognizes and can "route" the object.
+
+The _#route(Object)_ method is only called if this method returns `true` .
+
+[#route__Object]
+=== route(Object)
+
+The object to route to instead; this may be the same as the original object, some other object, or (indeed) `null`.
+
+include::hooks/RoutingService_010-implementation.adoc[]
+
+include::hooks/RoutingService_020-examples-and-usage.adoc[]

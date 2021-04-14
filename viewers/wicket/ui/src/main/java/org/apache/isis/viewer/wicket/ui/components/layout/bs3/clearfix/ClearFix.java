@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class ClearFix extends PanelAbstract<EntityModel> {
+public class ClearFix 
+extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
 

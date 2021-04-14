@@ -35,13 +35,16 @@ import org.springframework.stereotype.Service;
  * <p>
  * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
  * </p>
- * 
- * @apiNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
- * annotated type. 
- * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
- * 
+ *
+ * @implNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the
+ * annotated type.
+ * For more details see {@code org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ *
+ * @see DomainObject
+ * @see DomainServiceLayout
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.TYPE,
@@ -51,34 +54,27 @@ import org.springframework.stereotype.Service;
 @Service @Singleton
 public @interface DomainService {
 
-    // end::refguide[]
     /**
-     * The nature of this service, eg for menus, contributed actions, repository.
+     * The nature of this service, either in the UI or REST only
+     *
+     * @see DomainObject#nature()
      */
-    // tag::refguide[]
-    NatureOfService nature()                    // <.>
+    NatureOfService nature()
             default NatureOfService.VIEW;
 
-    // end::refguide[]
     /**
-     * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
+     * Provides a unique abbreviation for the object type's, eg
+     * &quot;customer.CustomerService&quot; for CustomerService.
      *
      * <p>
-     * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
+     * This value, if specified, is used in the serialized form of the object's
+     * OID.  An OID is used by the framework to unique identify an object over
+     * time (same concept as a URN).
+     * </p>
+     *
+     * @see DomainObject#objectType()
      */
-    // tag::refguide[]
-    String objectType()                         // <.>
+    String objectType()
             default "";
 
-    // end::refguide[]
-    /**
-     * If this domain service acts as a repository for an entity type, specify that entity type.
-     * @deprecated was never implemented
-     */
-    @Deprecated
-    Class<?> repositoryFor()                    // <.>
-            default Object.class;
-
-    // tag::refguide[]
 }
-// end::refguide[]

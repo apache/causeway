@@ -18,12 +18,14 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -31,90 +33,174 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Modifies the way in which an asynchronous action initiated through the
+ * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} is actually
+ * executed.
+ *
+ * <p>
+ *     Executing in a separate thread means that the target and arguments are
+ *     used in a new {@link org.apache.isis.applib.services.iactn.Interaction}
+ *     (and transaction).  If any of these are entities, they are retrieved
+ *     from the database afresh; it isn't possible to pass domain entity
+ *     references from the foreground calling thread to the background threads.
+ * </p>
  *
  * @param <R> - return value.
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
-    public static AsyncControl<Void> returningVoid() {                        // <.>
+    /**
+     * Factory method to instantiate a control instance for a void action
+     * or a property edit (where there is no need or intention to provide a
+     * return value through the `Future`).
+     */
+    public static AsyncControl<Void> returningVoid() {
         return new AsyncControl<>(Void.class);
     }
-    public static <X> AsyncControl<X> returning(final Class<X> cls) {     // <.>
+
+    /**
+     * Factory method to instantiate for a control instance for an action
+     * returning a value of `<R>` (where this value will be returned through
+     * the `Future`).
+     *
+     * @param cls
+     * @param <X>
+     * @return
+     */
+    public static <X> AsyncControl<X> returning(final Class<X> cls) {
         return new AsyncControl<X>(cls);
     }
 
     @Getter
-    private final Class<R> returnType;                                  // <.>
+    private final Class<R> returnType;
 
     private AsyncControl(final Class<R> returnType) {
         this.returnType = returnType;
-        with(exception -> {                                             // <.>
+        with(exception -> {
             log.error(logMessage(), exception);
             return null;
         });
     }
 
+    /**
+     * Skip checking business rules (hide/disable/validate) before
+     * executing the underlying property or action
+     */
+    @Override
+    public AsyncControl<R> withSkipRules() {
+        return super.withSkipRules();
+    }
+
+    /**
+     * How to handle exceptions if they occur, using the provided
+     * {@link ExceptionHandler}.
+     *
+     * <p>
+     *     The default behaviour is to rethrow the exception.
+     * </p>
+     */
+    @Override
+    public AsyncControl with(ExceptionHandler exceptionHandler) {
+        return super.with(exceptionHandler);
+    }
+
+
+
     @Getter @NonNull
-    private ExecutorService executorService =                           // <.>
+    private ExecutorService executorService =
                             ForkJoinPool.commonPool();
+
+    /**
+     * Specifies the {@link ExecutorService} to use to obtain the thread
+     * to invoke the action.
+     *
+     * <p>
+     * The default executor service is the common pool.
+     * </p>
+     *
+     *
+     * @param executorService
+     * @return
+     */
     public AsyncControl<R> with(ExecutorService executorService) {
-        // end::refguide[]
         this.executorService = executorService;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
-     * Defaults to user initiating the action, if not overridden
+     * Defaults to the system clock, if not overridden
      */
-    // tag::refguide[]
     @Getter
-    private String user;                                                // <.>
-    public AsyncControl<R> withUser(final String user) {
-        // end::refguide[]
+    private VirtualClock clock;
+    public AsyncControl<R> withClock(final @NonNull VirtualClock clock) {
+        this.clock = clock;
+        return this;
+        // ...
+    }
+
+    /**
+     * Defaults to the system locale, if not overridden
+     */
+    @Getter
+    private Locale locale;
+    public AsyncControl<R> withLocale(final @NonNull Locale locale) {
+        this.locale = locale;
+        return this;
+        // ...
+    }
+
+    /**
+     * Defaults to the system time zone, if not overridden
+     */
+    @Getter
+    private TimeZone timeZone;
+    public AsyncControl<R> withTimeZone(final @NonNull TimeZone timeZone) {
+        this.timeZone = timeZone;
+        return this;
+        // ...
+    }
+
+
+
+    @Getter
+    private UserMemento user;
+    /**
+     * Specifies the user for the session used to execute the command
+     * asynchronously, in the background.
+     *
+     * <p>
+     * If not specified, then the user of the current foreground session is used.
+     * </p>
+     */
+    public AsyncControl<R> withUser(final @NonNull UserMemento user) {
         this.user = user;
         return this;
-        // tag::refguide[]
         // ...
     }
 
-    // end::refguide[]
     /**
-     * Defaults to roles of user initiating the action, if not overridden
-     */
-    // tag::refguide[]
-    @Getter
-    private List<String> roles;                                         // <.>
-    public AsyncControl<R> withRoles(final List<String> roles) {
-        // end::refguide[]
-        this.roles = Collections.unmodifiableList(roles);
-        return this;
-        // tag::refguide[]
-        // ...
-    }
-    public AsyncControl<R> withRoles(String... roles) {
-        // end::refguide[]
-        return withRoles(Arrays.asList(roles));
-        // tag::refguide[]
-        // ...
-    }
-
-    // end::refguide[]
-    /**
-     * Set by framework.
+     * Contains the result of the invocation.
      *
-     * Contains the result of the invocation.  However, if an entity is returned, then the object is automatically
-     * detached because the persistence session within which it was obtained will have been closed already.
+     * <p>
+     * If an entity is returned, then the object is automatically detached
+     * because the persistence session within which it was obtained will have
+     * been closed already.
+     * </p>
      */
-    // tag::refguide[]
-    @Getter @Setter
-    private Future<R> future;                                           // <.>
+    @Getter
+    private Future<R> future;
 
-    // end::refguide[]
+    /**
+     * For framework use only.
+     */
+    public void setFuture(Future<R> future) {
+        this.future = future;
+    }
+
     private String logMessage() {
         StringBuilder buf = new StringBuilder("Failed to execute ");
         if(getMethod() != null) {
@@ -130,7 +216,5 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return buf.toString();
     }
 
-    // tag::refguide[]
     // ...
 }
-// end::refguide[]

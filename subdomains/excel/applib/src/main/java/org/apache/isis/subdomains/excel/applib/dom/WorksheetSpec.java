@@ -27,12 +27,15 @@ import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
 import lombok.Setter;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class WorksheetSpec {
 
     /**
      * Maximum supported by Microsoft Excel UI.
      *
-     * @see <a href="http://stackoverflow.com/questions/3681868/is-there-a-limit-on-an-excel-worksheets-name-length">this SO answer</a>, for example.
+     * @see <a href="http://stackoverflow.com/questions/3681868/is-there-a-limit-on-an-excel-worksheets-name-length">stackoverflow.com</a>
      */
     private static final int SHEET_NAME_MAX_LEN = 31;
     private static final String ROW_HANDLER_SUFFIX = "RowHandler";

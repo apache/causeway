@@ -18,6 +18,7 @@
  */
 package org.apache.isis.subdomains.base.applib.services.calendar;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,6 +32,7 @@ import org.junit.runners.Parameterized.Parameters;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @RunWith(Parameterized.class)
@@ -58,16 +60,13 @@ public class CalendarServiceTest_beginningOfMonth {
     
     @Before
     public void setUp() throws Exception {
-
         stubClockService = new ClockService() {
             @Override
-            public LocalDate now() {
-                return now;
+            public VirtualClock getClock() {
+                return VirtualClock.frozenAt(Instant.from(now));
             }
         };
-
         calendarService = new CalendarService(stubClockService);
-        
     }
     
     @Test

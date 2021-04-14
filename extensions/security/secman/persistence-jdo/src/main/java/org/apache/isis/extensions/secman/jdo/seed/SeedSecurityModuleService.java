@@ -27,15 +27,16 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisExtSecman.SeedSecurityModuleService")
+@Named("isis.ext.secman.SeedSecurityModuleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
@@ -48,28 +49,19 @@ public class SeedSecurityModuleService {
         this.fixtureScripts = fixtureScripts;
     }
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    @EventListener(MetamodelEvent.class)
+    public void onMetamodelEvent(final MetamodelEvent event) {
 
-        val eventType = event.getEventType(); 
+        log.debug("received metamodel event {}", event);
 
-        log.debug("received app lifecycle event {}", eventType);
-
-        switch (eventType) {
-        case appPreMetamodel:
-            break;
-        case appPostMetamodel:
-
-            log.info("SEED");
+        if (event.isPostMetamodel()) {
+        	log.info("SEED security fixtures (JDO)");
 
             fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
-            break;
-
-        default:
-            throw _Exceptions.unmatchedCase(eventType);
         }
+
     }
 
-    
+
 
 }

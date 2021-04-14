@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.commons.InteractionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.DemoEnum;
@@ -38,6 +37,7 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
+import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
@@ -62,7 +62,7 @@ import lombok.val;
 class ActionInteractionTest extends InteractionTestAbstract {
 
     @Test 
-    void actionInteraction_whenEnabled_shouldHaveNoVeto() {
+    void whenEnabled_shouldHaveNoVeto() {
 
         val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw  
@@ -72,7 +72,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test 
-    void actionInteraction_whenDisabled_shouldHaveVeto() {
+    void whenDisabled_shouldHaveVeto() {
 
         val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw  
@@ -88,7 +88,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test 
-    void actionInteraction_whenEnabled_shouldProvideProperDecoratorModels() {
+    void whenEnabled_shouldProvideProperDecoratorModels() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -99,7 +99,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test 
-    void actionInteraction_whenDisabled_shouldProvideProperDecoratorModels() {
+    void whenDisabled_shouldProvideProperDecoratorModels() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -110,7 +110,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test 
-    void actionInteraction_whenEnabled_shouldProvideActionMetadata() {
+    void whenEnabled_shouldProvideActionMetadata() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -123,7 +123,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test    
-    void mixinActionInteraction_whenDisabled_shouldProvideActionMetadata() {
+    void mixinwhenDisabled_shouldProvideActionMetadata() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -137,7 +137,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test
-    void actionInteraction_whenEnabled_shouldAllowInvocation() {
+    void whenEnabled_shouldAllowInvocation() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
@@ -150,7 +150,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    void actionInteraction_whenDisabled_shouldVetoInvocation() {
+    void whenDisabled_shouldVetoInvocation() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
         .checkVisibility()
@@ -169,7 +169,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test
-    void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
+    void withParams_shouldProduceCorrectResult() throws Throwable {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
@@ -187,7 +187,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    void actionInteraction_withTooManyParams_shouldIgnoreOverflow() throws Throwable {
+    void withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
@@ -205,7 +205,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test
-    void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() {
+    void withTooLittleParams_shouldIgnoreUnderflow() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
@@ -224,7 +224,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test 
-    void actionInteraction_shouldProvideParameterDefaults() {
+    void shouldProvideParameterDefaults() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -243,7 +243,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test 
-    void actionInteraction_whenHavingChoices_shouldProvideProperParameterDefaults() {
+    void whenHavingChoices_shouldProvideProperParameterDefaults() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -279,7 +279,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test 
-    void actionInteraction_whenHavingEnumChoices_shouldProvideProperParameterDefaults() {
+    void whenHavingEnumChoices_shouldProvideProperParameterDefaults() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -315,7 +315,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     
     
     @Test 
-    void actionInteraction_shouldProvideChoices() {
+    void shouldProvideChoices() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -338,7 +338,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
     
     @Test 
-    void actionInteraction_shouldProvideParameterBinding() {
+    void shouldProvideParameterBinding() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()

@@ -18,8 +18,11 @@
  */
 package org.apache.isis.subdomains.base.applib.utils;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class ClassUtils {
-    
+
     private ClassUtils(){}
 
     @SuppressWarnings("unchecked")
@@ -28,11 +31,11 @@ public final class ClassUtils {
         try {
             clsx = Thread.currentThread().getContextClassLoader().loadClass(clsName);
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Class '" + clsName + "' not found"); 
+            throw new IllegalArgumentException("Class '" + clsName + "' not found");
         }
-        if (!cls.isAssignableFrom(clsx)) { 
-            throw new IllegalArgumentException("Class '" + clsName + "' not a subclass of " + cls.getName()); 
-        } 
+        if (!cls.isAssignableFrom(clsx)) {
+            throw new IllegalArgumentException("Class '" + clsName + "' not a subclass of " + cls.getName());
+        }
         return (Class<? extends T>) clsx;
     }
 

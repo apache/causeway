@@ -58,7 +58,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-public class ResourceContext extends RuntimeContextBase implements IResourceContext {
+public class ResourceContext 
+extends RuntimeContextBase 
+implements IResourceContext {
 
     @Getter private final HttpHeaders httpHeaders;
     @Getter private final Request request;
@@ -204,7 +206,6 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
 
     /**
      * Only applies to rendering of objects
-     * @return
      */
     @Override
     public RepresentationService.Intent getIntent() {

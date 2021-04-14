@@ -1,0 +1,102 @@
+= ApplicationFeatureId
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Value type representing a namespace, type or member.
+
+This value is _Comparable_ , the implementation of which considers _#getSort() (feature) sort_ , _#getNamespace() namespace_ , _#getTypeSimpleName() type simple name_ and _#getMemberName() member name_ .
+
+== API
+
+[source,java]
+.ApplicationFeatureId.java
+----
+class ApplicationFeatureId {
+  public static final ApplicationFeatureId NAMESPACE_DEFAULT;
+  ApplicationFeatureId fromIdentifier(final Identifier identifier)
+  ApplicationFeatureId newFeature(final ApplicationFeatureSort featureSort, final String qualifiedName)
+  ApplicationFeatureId newFeature(final String namespace, final String logicalTypeSimpleName, final String memberName)
+  ApplicationFeatureId newNamespace(final String namespace)
+  ApplicationFeatureId newType(final String logicalTypeName)
+  ApplicationFeatureId newMember(final String logicalTypeName, final String memberName)
+  ApplicationFeatureId newMember(String fullyQualifiedName)
+  String title()     // <.>
+  ApplicationFeatureId getParentTypeFeatureId()     // <.>
+  String getFullyQualifiedName()
+  String getLogicalTypeName()
+  ApplicationFeatureId getParentNamespaceFeatureId()     // <.>
+  String stringify()
+  ApplicationFeatureId parse(final String stringified)     // <.>
+  String asEncodedString()
+  ApplicationFeatureId parseEncoded(final String encodedString)     // <.>
+  Can<ApplicationFeatureId> getPathIds()
+  Can<ApplicationFeatureId> getParentFeatureIds()
+  int compareTo(final ApplicationFeatureId other)
+  boolean equals(final Object o)
+  int hashCode()
+  String toString()
+  ApplicationFeatureId withNamespace(final String namespace)     // <.>
+}
+----
+
+<.> xref:#title__[title()]
++
+--
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+--
+<.> xref:#getParentTypeFeatureId__[getParentTypeFeatureId()]
++
+--
+The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the member's logical type.
+--
+<.> xref:#getParentNamespaceFeatureId__[getParentNamespaceFeatureId()]
++
+--
+The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the parent package of this class or package.
+--
+<.> xref:#parse__String[parse(String)]
++
+--
+Round-trip with _#stringify()_
+--
+<.> xref:#parseEncoded__String[parseEncoded(String)]
++
+--
+Round-trip with _#asEncodedString()_
+--
+<.> xref:#withNamespace__String[withNamespace(String)]
++
+--
+Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.
+--
+
+== Members
+
+[#title__]
+=== title()
+
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+
+[#getParentTypeFeatureId__]
+=== getParentTypeFeatureId()
+
+The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the member's logical type.
+
+[#getParentNamespaceFeatureId__]
+=== getParentNamespaceFeatureId()
+
+The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the parent package of this class or package.
+
+[#parse__String]
+=== parse(String)
+
+Round-trip with _#stringify()_
+
+[#parseEncoded__String]
+=== parseEncoded(String)
+
+Round-trip with _#asEncodedString()_
+
+[#withNamespace__String]
+=== withNamespace(String)
+
+Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.

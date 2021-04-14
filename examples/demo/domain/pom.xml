@@ -62,10 +62,6 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-modelannotation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-exceldownload-ui</artifactId>
 		</dependency>
 		<dependency>
@@ -102,12 +98,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.17.2</version>
-			<scope>test</scope>
-		</dependency>
         <dependency>
             <groupId>org.apache.isis.valuetypes</groupId>
             <artifactId>isis-valuetypes-markdown-applib</artifactId>
@@ -117,6 +107,26 @@
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-command-log-jdo</artifactId>
+		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-unittestsupport-applib</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- DEV TIME -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 	</dependencies>

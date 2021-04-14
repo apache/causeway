@@ -23,11 +23,6 @@ import java.util.List;
 
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -49,9 +44,9 @@ import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityColle
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Bs3GridPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
@@ -70,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIn
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.oiddto.OidDtoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
@@ -93,6 +89,10 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -102,7 +102,7 @@ import lombok.extern.log4j.Log4j2;
  * implementations discovered by the IoC container.
  */
 @Service
-@Named("isisWicketViewer.ComponentFactoryRegistrarDefault")
+@Named("isis.viewer.wicket.ComponentFactoryRegistrarDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -135,7 +135,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityLinksSelectorPanelFactory());
         componentFactories.add(new CollectionContentsMultipleViewsPanelFactory());
     }
 
@@ -185,6 +184,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForEntity(final ComponentFactoryList componentFactories) {
+
+        // top level
+        componentFactories.add(new Bs3GridPanelFactory());
 
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
@@ -251,6 +253,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new JodaLocalDatePanelFactory());
         componentFactories.add(new JodaLocalDateTimePanelFactory());
+        componentFactories.add(new JodaLocalTimePanelFactory());
         componentFactories.add(new JodaDateTimePanelFactory());
 
         componentFactories.add(new Jdk8OffsetDateTimePanelFactory());

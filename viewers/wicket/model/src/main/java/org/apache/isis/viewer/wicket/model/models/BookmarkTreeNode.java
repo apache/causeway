@@ -27,12 +27,13 @@ import java.util.stream.Stream;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
@@ -190,17 +191,16 @@ public class BookmarkTreeNode implements Serializable {
 
     private boolean addToGraphIfParented(BookmarkableModel candidateBookmarkableModel) {
 
-        final boolean whetherAdded[] = {false}; // simply a fast non-thread-safe value reference
+        val whetherAdded = _Refs.booleanRef(false); 
 
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
             val entityModel = (EntityModel) candidateBookmarkableModel;
             val candidateAdapter = entityModel.getObject();
-            final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
-                    .streamAssociations(Contributed.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
-
-            properties
+            
+            candidateAdapter.getSpecification()
+            .streamAssociations(MixedIn.EXCLUDED)
+            .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES) // properties only
             .map(objectAssoc->{
                 val parentAdapter = 
                         objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
@@ -219,11 +219,11 @@ public class BookmarkTreeNode implements Serializable {
             .forEach(parentOidStr->{
                 if(Objects.equals(this.oidNoVerStr, parentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
-                    whetherAdded[0] = true;
+                    whetherAdded.setValue(true);
                 }
             });
         }
-        return whetherAdded[0];
+        return whetherAdded.isTrue();
     }
 
     public void appendGraphTo(List<BookmarkTreeNode> list) {

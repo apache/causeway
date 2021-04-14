@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,9 +33,9 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
 @RequiredArgsConstructor
 public class JavaAwtImageHolder_updateReadOnlyProperty {
 

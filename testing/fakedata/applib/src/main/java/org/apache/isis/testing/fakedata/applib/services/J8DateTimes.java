@@ -20,9 +20,13 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.time.OffsetDateTime;
 import java.time.Period;
+import java.time.ZoneId;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class J8DateTimes extends AbstractRandomValueGenerator {
 
     public J8DateTimes(final FakeDataService fakeDataService) {
@@ -36,13 +40,13 @@ public class J8DateTimes extends AbstractRandomValueGenerator {
 
     @Programmatic
     public OffsetDateTime before(final Period period) {
-        final OffsetDateTime now = fake.clockService.nowAsOffsetDateTime();
+        final OffsetDateTime now = fake.clockService.getClock().offsetDateTime(ZoneId.systemDefault());
         return now.minus(period);
     }
 
     @Programmatic
     public OffsetDateTime after(final Period period) {
-        final OffsetDateTime now = fake.clockService.nowAsOffsetDateTime();
+        final OffsetDateTime now = fake.clockService.getClock().offsetDateTime(ZoneId.systemDefault());
         return now.plus(period);
     }
 

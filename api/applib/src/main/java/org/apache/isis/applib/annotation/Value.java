@@ -48,19 +48,18 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
  * the flyweight pattern). In addition, the {@link EqualByContent} semantic
  * means that we needn't care whether value types are being shared or not.
  *
+ * @since 1.x {@index}
  * @see EqualByContent
  *
  * <p>
  *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
  * </p>
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Value {
 
-    // end::refguide[]
     /**
      * The fully qualified name of a class that implements the
      * {@link ValueSemanticsProvider} interface.
@@ -84,10 +83,8 @@ public @interface Value {
      * Implementation note: the default value provided here is simply an empty
      * string because <tt>null</tt> is not a valid default.
      */
-    // tag::refguide[]
     String semanticsProviderName() default "";
 
-    // end::refguide[]
     /**
      * As per {@link #semanticsProviderName()}, but specifying a class literal
      * rather than a fully qualified class name.
@@ -96,8 +93,6 @@ public @interface Value {
      * Implementation note: the default value provided here is simply the
      * {@link Value}'s own class, because <tt>null</tt> is not a valid default.
      */
-    // tag::refguide[]
     Class<?> semanticsProviderClass() default Value.class;
 
 }
-// end::refguide[]

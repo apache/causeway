@@ -33,7 +33,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
  *
  */
 @Configuration
-@Named("isisMetaModel.MetaModelContexts")
+@Named("isis.metamodel.MetaModelContexts")
 public class MetaModelContexts {
 
     @Bean @Singleton @Primary

@@ -32,12 +32,12 @@ import lombok.val;
 
 class JaxbServiceTest {
 
-    private JaxbService.Simple jaxbServiceSimple;
+    private JaxbService.Simple simple;
     private ActionInvocationDto sampleDto;
-    
+
     @BeforeEach
     void setUp() throws Exception {
-        jaxbServiceSimple = new JaxbService.Simple();
+        simple = new JaxbService.Simple();
         sampleDto = getSample();
     }
 
@@ -47,30 +47,30 @@ class JaxbServiceTest {
 
     @Test @Disabled("fails because ActionInvocationDto has no @XmlRootElement annoation")
     void roundtrip() {
-        val xml = jaxbServiceSimple.toXml(sampleDto);
-        val clone = jaxbServiceSimple.<ActionInvocationDto>fromXml(ActionInvocationDto.class, xml);
+        val xml = simple.toXml(sampleDto);
+        val clone = simple.<ActionInvocationDto>fromXml(ActionInvocationDto.class, xml);
         assertEquals(sampleDto, clone);
     }
-    
+
     @Test
     void clone_usingUtility() {
         val dto = getSample();
-        assertDtoEquals(dto, _Xml.clone(dto));
+        assertDtoEquals(dto, _Xml.clone(dto).presentElseFail());
     }
-    
+
     // -- HELPER
-    
+
     private ActionInvocationDto getSample() {
         val dto = new ActionInvocationDto();
         dto.setTitle("hello");
         dto.setUser("world");
         return dto;
     }
-    
+
     private void assertDtoEquals(ActionInvocationDto a, ActionInvocationDto b) {
         assertEquals(a.getTitle(), b.getTitle());
         assertEquals(a.getUser(), b.getUser());
     }
-    
+
 
 }

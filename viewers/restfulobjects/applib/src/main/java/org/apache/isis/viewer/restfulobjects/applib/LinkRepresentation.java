@@ -24,6 +24,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class LinkRepresentation extends JsonRepresentation {
 
     public LinkRepresentation() {
@@ -95,8 +98,6 @@ public final class LinkRepresentation extends JsonRepresentation {
      * <p>
      * If there is no &quot;arguments&quot; node, then as a convenience will
      * return an empty map.
-     *
-     * @return
      */
     public JsonRepresentation getArguments() {
         final JsonNode arguments = asObjectNode().get("arguments");

@@ -30,6 +30,7 @@ import org.apache.isis.extensions.fullcalendar.applib.Calendarable;
  *     <tt>Note</tt> (ie the <tt>Notable</tt>) sto be shown instead.
  * </p>
  *
+ * @since 2.0 {@index}
  */
 public interface CalendarableDereferencingService {
 	Object dereference(final Object calendarableOrCalendarEventable);

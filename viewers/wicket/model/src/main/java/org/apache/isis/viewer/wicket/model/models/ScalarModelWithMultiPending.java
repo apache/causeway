@@ -23,8 +23,7 @@ import java.util.ArrayList;
 
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -63,8 +62,8 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public void setMultiPending(final ArrayList<ObjectMemento> pending) {
-                    ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
-                    ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
+                    val logicalType = getScalarModel().getTypeOfSpecification().getLogicalType();
+                    ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, logicalType);
                     scalarModel.getPendingModel().setObject(adapterMemento);
                 }
 
@@ -108,9 +107,9 @@ public interface ScalarModelWithMultiPending extends Serializable {
                         final ArrayList<ObjectMemento> ownerPending = owner.getMultiPending();
                         if (ownerPending != null) {
                             log.debug("setting to pending: {}", ownerPending.toString());
-                            final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
+                            val logicalType = ownerScalarModel.getTypeOfSpecification().getLogicalType();
                             ownerScalarModel.memento(
-                                    ObjectMemento.wrapMementoList(adapterMemento, objectSpecId));
+                                    ObjectMemento.wrapMementoList(adapterMemento, logicalType));
                         }
                     }
                 }

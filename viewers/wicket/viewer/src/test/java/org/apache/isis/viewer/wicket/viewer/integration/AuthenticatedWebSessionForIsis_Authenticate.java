@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Collections;
@@ -30,26 +29,25 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthentication;
+import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -63,8 +61,8 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock protected IsisInteractionTracker mockIsisInteractionTracker;
+    @Mock protected InteractionFactory mockIsisInteractionFactory;
+    @Mock protected InteractionTracker mockIsisInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -81,21 +79,21 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockServiceRegistry).select(SessionLoggingService.class);
                 will(returnValue(Can.empty()));
 
-                allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
+                allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockIsisInteractionFactory));
 
-                allowing(mockCommonContext).getIsisInteractionTracker();
+                allowing(mockCommonContext).getInteractionTracker();
                 will(returnValue(mockIsisInteractionTracker));
-                
-                allowing(mockIsisInteractionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(new InitialisationSession())));
-                
+
+                allowing(mockIsisInteractionTracker).currentAuthentication();
+                will(returnValue(Optional.of(new SingleUserAuthentication())));
+
                 allowing(mockIsisInteractionFactory)
-                .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
-                
+                .runAuthenticated(with(new SingleUserAuthentication()), with(any(ThrowingRunnable.class)));
+
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
-                
+
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.
@@ -134,14 +132,14 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(new SimpleSession("test-user", null)));
+                will(returnValue(new SingleUserAuthentication()));
             }
         });
 
         setupWebSession();
 
         assertThat(webSession.authenticate("jsmith", "secret"), is(true));
-        assertThat(webSession.getAuthenticationSession(), is(not(nullValue())));
+        assertThat(webSession.getAuthentication(), is(not(nullValue())));
     }
 
     @Test
@@ -154,11 +152,11 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(null));
             }
         });
-        
+
         setupWebSession();
-        
+
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-        assertThat(webSession.getAuthenticationSession(), is(nullValue()));
+        assertThat(webSession.getAuthentication(), is(nullValue()));
     }
 
 }

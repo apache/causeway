@@ -19,27 +19,24 @@
 package org.apache.isis.applib.services.userprof;
 
 /**
- * Optional API providing details about the user.
+ * Provides the ability to return supplementary metadata about the current user.
  *
- * <p>
- *     Used by the Wicket viewer in its {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
- *     &quot;Me&quot; menu bar.
- * </p>
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface UserProfileService {
 
-    // end::refguide[]
     /**
-     * Used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
+     * Returns an alternate name for the current user.
+     *
+     * <p>
+     * In the Wicket viewer, used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
      * &quot;Me&quot; menu bar.
+     * </p>
      *
      * <p>
      *     If returns <tt>null</tt>, then the current user name is used instead.
      * </p>
      */
-    // tag::refguide[]
-    String userProfileName();   // <.>
+    String userProfileName();
 
 }
-// end::refguide[]

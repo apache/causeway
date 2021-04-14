@@ -23,6 +23,9 @@ import java.net.URL;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Urls extends AbstractRandomValueGenerator {
 
     public Urls(final FakeDataService fakeDataService) {

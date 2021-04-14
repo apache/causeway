@@ -61,8 +61,11 @@ import lombok.val;
  * their backing model.
  *
  * <p>
- * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
- * {@link Rendering#REGULAR regular} (eg within a form).
+ * Supports the concept of being 
+ * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT} 
+ * (eg within a table) or
+ * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#REGULAR regular} 
+ * (eg within a form).
  * </p>
  *
  * <p>
@@ -272,8 +275,8 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Rendering#COMPACT compact} format.
-     *
+     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact} 
+     * format.
      * <p>
      * This default implementation uses a {@link Label}, however it may be overridden if required.
      */

@@ -87,7 +87,7 @@ final class ObjectBulkLoader_builtinHandlers {
             val entityFacet = spec.getFacet(EntityFacet.class);
             if(entityFacet==null) {
                 throw _Exceptions.illegalArgument(
-                        "ObjectSpecification is missing an EntityFacet: %s", spec);
+                        "ObjectSpecification is missing an EntityFacet: %s", spec.getCorrespondingClass());
             }
             
             val entities = entityFacet.fetchByQuery(spec, objectQuery.getQuery());

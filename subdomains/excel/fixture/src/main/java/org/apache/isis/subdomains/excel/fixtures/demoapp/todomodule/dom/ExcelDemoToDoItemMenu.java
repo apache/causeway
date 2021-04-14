@@ -20,6 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,13 +31,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -54,8 +54,7 @@ public class ExcelDemoToDoItemMenu {
     @Inject private ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
     public List<ExcelDemoToDoItem> toDoItemsNotYetComplete() {
         final List<ExcelDemoToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {
@@ -66,22 +65,20 @@ public class ExcelDemoToDoItemMenu {
 
     public List<ExcelDemoToDoItem> notYetCompleteNoUi() {
         return repositoryService.allMatches(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "todo_notYetComplete", 
-                        "ownedBy", currentUserName()));
+                Query.named(ExcelDemoToDoItem.class, "todo_notYetComplete") 
+                .withParameter("ownedBy", currentUserName()));
     }
 
     public ExcelDemoToDoItem findToDoItemsByDescription(final String description) {
         return repositoryService.firstMatch(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "findByDescription",
-                        "description", description,
-                        "ownedBy", currentUserName()))
+                Query.named(ExcelDemoToDoItem.class, "findByDescription")
+                .withParameter("description", description)
+                .withParameter("ownedBy", currentUserName()))
                 .orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "3")
+    @ActionLayout(sequence = "3")
     public List<ExcelDemoToDoItem> toDoItemsComplete() {
         final List<ExcelDemoToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -93,14 +90,13 @@ public class ExcelDemoToDoItemMenu {
     @Programmatic
     public List<ExcelDemoToDoItem> completeNoUi() {
         return repositoryService.allMatches(
-            new QueryDefault<>(ExcelDemoToDoItem.class,
-                    "todo_complete", 
-                    "ownedBy", currentUserName()));
+            Query.named(ExcelDemoToDoItem.class, "todo_complete")
+            .withParameter("ownedBy", currentUserName()));
     }
 
 
 
-    @MemberOrder(sequence = "40")
+    @ActionLayout(sequence = "40")
     public ExcelDemoToDoItem newToDoItem(
             @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
             final String description,
@@ -120,7 +116,7 @@ public class ExcelDemoToDoItemMenu {
         return Category.Professional.subcategories().get(0);
     }
     public LocalDate default3NewToDoItem() {
-        return clockService.now().plusDays(14);
+        return currentDate().plusDays(14);
     }
     public List<Subcategory> choices2NewToDoItem(
             final String description, final Category category) {
@@ -135,7 +131,7 @@ public class ExcelDemoToDoItemMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "50")
+    @ActionLayout(sequence = "50")
     public List<ExcelDemoToDoItem> allMyToDoItems() {
         final String currentUser = currentUserName();
         final List<ExcelDemoToDoItem> items = repositoryService.allMatches(ExcelDemoToDoItem.class, ExcelDemoToDoItem.Predicates.thoseOwnedBy(currentUser));
@@ -150,10 +146,9 @@ public class ExcelDemoToDoItemMenu {
     @Programmatic
     public List<ExcelDemoToDoItem> autoComplete(@MinLength(1) final String description) {
         return repositoryService.allMatches(
-                new QueryDefault<>(ExcelDemoToDoItem.class,
-                        "todo_autoComplete", 
-                        "ownedBy", currentUserName(), 
-                        "description", description));
+                Query.named(ExcelDemoToDoItem.class, "todo_autoComplete") 
+                .withParameter("ownedBy", currentUserName()) 
+                .withParameter("description", description));
     }
 
 
@@ -175,7 +170,7 @@ public class ExcelDemoToDoItemMenu {
 //        toDoItem.setLocation(
 //                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
 
-        LocalDate today = clockService.now();
+        LocalDate today = currentDate();
         toDoItem.setDueBy(today.plusDays((long)random(10)-2L));
 
         repositoryService.persist(toDoItem);
@@ -204,7 +199,11 @@ public class ExcelDemoToDoItemMenu {
     }
     
     private String currentUserName() {
-        return userService.getUser().getName();
+        return userService.currentUserNameElseNobody();
+    }
+    
+    private LocalDate currentDate() {
+        return clockService.getClock().localDate(ZoneId.systemDefault());
     }
 
 

@@ -38,55 +38,56 @@ public final class BigComplex {
 
     private BigDecimal re;
     private BigDecimal im;
-    
+
     public static BigComplex zero() {
-        return BigComplex.of(BigDecimal.ZERO, BigDecimal.ZERO); 
+        return BigComplex.of(BigDecimal.ZERO, BigDecimal.ZERO);
     }
-    
+
     public static BigComplex of(String re, String im) {
-        return BigComplex.of(new BigDecimal(re), new BigDecimal(im)); 
+        return BigComplex.of(new BigDecimal(re), new BigDecimal(im));
     }
-    
+
     public BigComplex add(BigComplex other) {
         return BigComplex.of(
-                this.re.add(other.re), 
+                this.re.add(other.re),
                 this.im.add(other.im));
     }
-    
+
     public BigComplex subtract(BigComplex other) {
         return BigComplex.of(
-                this.re.subtract(other.re), 
+                this.re.subtract(other.re),
                 this.im.subtract(other.im));
     }
-    
-    public BigDecimal norm() {
-        return this.re.multiply(this.re)
-                .add(this.im.multiply(this.im))
-                .sqrt(MathContext.UNLIMITED); 
-    }
-    
+
+// java 9 dependency
+//    public BigDecimal norm() {
+//        return this.re.multiply(this.re)
+//                .add(this.im.multiply(this.im))
+//                .sqrt(MathContext.UNLIMITED);
+//    }
+
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof BigComplex)) {
-            return false;    
+            return false;
         }
         val other = (BigComplex) obj;
         return this.re.compareTo(other.re) == 0
                 && this.im.compareTo(other.im) == 0;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(re, im);
     }
-    
+
     public static void assertEquals(BigComplex a, BigComplex b) {
         _Assert.assertEquals(a.re.toPlainString(), b.re.toPlainString());
         _Assert.assertEquals(a.im.toPlainString(), b.im.toPlainString());
     }
-    
-    public static void assertNumberEquals(BigComplex a, BigComplex b, double epsilon) {
-        _Assert.assertTrue(a.subtract(b).norm().doubleValue()<epsilon);
-    }
-    
+
+//    public static void assertNumberEquals(BigComplex a, BigComplex b, double epsilon) {
+//        _Assert.assertTrue(a.subtract(b).norm().doubleValue()<epsilon);
+//    }
+
 }

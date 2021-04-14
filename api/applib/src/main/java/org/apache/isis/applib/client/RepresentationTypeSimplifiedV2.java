@@ -31,53 +31,56 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @RequiredArgsConstructor
 public enum RepresentationTypeSimplifiedV2 {
 
     /**
-     * The media type used as content-Type header when a domain object is rendered. 
+     * The media type used as content-Type header when a domain object is rendered.
      */
     OBJECT("object"),
-    
-    /** 
-     * The media type used as content-Type header when a parented collection is rendered. 
+
+    /**
+     * The media type used as content-Type header when a parented collection is rendered.
      */
     OBJECT_COLLECTION("object-collection"),
-    
-    /** 
+
+    /**
      * The media type used as content-Type header when a standalone collection is rendered.
      */
     LIST("list"),
 
-    /** 
+    /**
      * The media type used as content-Type header when a single (nullable) value is rendered.
      * @since 2.0
      */
     VALUE("value"),
 
-    /** 
-     * The media type used as content-Type header when a list of values is rendered. 
+    /**
+     * The media type used as content-Type header when a list of values is rendered.
      * @since 2.0
      */
     VALUES("values"),
-    
-    /** 
+
+    /**
      * The media type used as content-Type header when a void action result is rendered.
      * @since 2.0
      */
     VOID("void"),
-    
+
     ;
-    
+
     @Getter final String typeLiteral;
-    
+
     public boolean isObject()               { return this == OBJECT; }
     public boolean isObjectCollection()     { return this == OBJECT_COLLECTION; }
     public boolean isList()                 { return this == LIST; }
     public boolean isValue()                { return this == VALUE; }
     public boolean isValues()               { return this == VALUES; }
     public boolean isVoid()                 { return this == VOID; }
-    
+
     public String getContentTypeHeaderValue(final String profileName) {
         return "application/json;"
                 + "profile=\"" + profileName + "\""
@@ -90,7 +93,7 @@ public enum RepresentationTypeSimplifiedV2 {
         .filter(candidate->candidate.typeLiteral.equals(typeLiteral))
         .findAny();
     }
-    
+
     public static Optional<RepresentationTypeSimplifiedV2> parseContentTypeHeaderString(
             final @Nullable String contentTypeHeaderString) {
         return extractReprType(_Strings.splitThenStream(contentTypeHeaderString, ";"))
@@ -98,16 +101,16 @@ public enum RepresentationTypeSimplifiedV2 {
         .filter(Objects::nonNull);
     }
 
-    
+
     // -- HELPER
-    
+
     private static String trimFirstAndLastCharacter(String s) {
         if(s.length()<2) {
             return s;
         }
         return s.substring(1, s.length()-1);
     }
-    
+
     private static Optional<String> extractReprType(final @NonNull Stream<String> stringStream) {
         return stringStream
         .map(String::trim)
@@ -120,7 +123,7 @@ public enum RepresentationTypeSimplifiedV2 {
         .findAny()
         .map(RepresentationTypeSimplifiedV2::trimFirstAndLastCharacter);
     }
-    
-   
-    
+
+
+
 }

@@ -16,17 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.user;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import java.io.Serializable;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
+import lombok.Value;
 
-// tag::refguide[]
-public final class RoleMemento {
+/**
+ * Immutable serializable value held by {@link UserMemento}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
+@DomainObject(objectType = "isis.applib.RoleMemento")
+@Value
+public class RoleMemento implements Serializable {
 
-    // end::refguide[]
+    private static final long serialVersionUID = -3876856609238378274L;
+
     /**
      * Creates a new role with the specified name. Description is left blank.
      */
@@ -52,18 +62,12 @@ public final class RoleMemento {
         return name;
     }
 
-    @MemberOrder(sequence = "1.1")
-    // tag::refguide[]
+    @PropertyLayout(sequence = "1.1")
     @Getter
-    private final String name;
+    String name;
 
-    // end::refguide[]
-    @MemberOrder(sequence = "1.2")
-    // tag::refguide[]
+    @PropertyLayout(sequence = "1.2")
     @Getter
-    private final String description;
-
-    // ...
+    String description;
 
 }
-// end::refguide[]

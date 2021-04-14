@@ -43,7 +43,7 @@ If using an RDBMS for persistence then we strongly recommend that you implement 
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer).
 +
-The xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
+The xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
 * third, if the relationship is bidirectional then the ORM (JDO/DataNucleus) will automatically maintain the relationship.
 
@@ -189,7 +189,7 @@ public class JUnitRuleMockery2Test_autoWiring_setterInjection_happyCase {
 
 [NOTE]
 ====
-Isis also includes (and automatically uses) a link:http://www.javassist.org[Javassist]-based implementation of JMock's link:http://www.jmock.org/mocking-classes.html[`ClassImposteriser`] interface, so that you can mock out concrete classes as well as interfaces.  We've provided this rather than JMock's own cglib-based implementation (which is problematic for us given its own dependencies on link:http://asm.ow2.org/[asm]).
+Isis also includes (and automatically uses) a link:http://www.javassist.org[Javassist]-based implementation of JMock's link:http://www.jmock.org/mocking-classes.html[ClassImposteriser] interface, so that you can mock out concrete classes as well as interfaces.  We've provided this rather than JMock's own cglib-based implementation (which is problematic for us given its own dependencies on link:http://asm.ow2.org/[asm]).
 ====
 
 

@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.DeleteDomainEvent;
@@ -32,7 +32,10 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = DeleteDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@Action(
+        domainEvent = DeleteDomainEvent.class, 
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
     
@@ -40,13 +43,13 @@ public class ApplicationRole_delete {
     
     private final ApplicationRole holder;
     
-    @MemberOrder(sequence = "1")
+    @MemberSupport
     public Collection<? extends ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return applicationRoleRepository.isAdminRole(holder) ? "Cannot delete the admin role" : null;
     }

@@ -46,6 +46,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import junit.framework.AssertionFailedError;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class PojoTester {
 
 	public static class FixtureDatumFactory<T> {
@@ -84,11 +87,11 @@ public final class PojoTester {
 	    STRICT,
 	    RELAXED
 	}
-	
+
 	private Mode mode;
-	
+
 	private PojoTester(Mode mode) {
-		
+
 		this.mode = mode;
         FixtureDatumFactory<Boolean> booleanDatumFactory = new FixtureDatumFactory<Boolean>(Boolean.class) {
 			public Boolean getNext() {
@@ -98,7 +101,7 @@ public final class PojoTester {
 		fixtureDataByType.put(boolean.class, booleanDatumFactory);
 		fixtureDataByType.put(Boolean.class, booleanDatumFactory);
 
-		
+
 		FixtureDatumFactory<Byte> byteDatumFactory = new FixtureDatumFactory<Byte>(Byte.class) {
 			public Byte getNext() {
 				return (byte) counter.getAndIncrement();
@@ -106,8 +109,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(byte.class, byteDatumFactory);
 		fixtureDataByType.put(Byte.class, byteDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Short> shortDatumFactory = new FixtureDatumFactory<Short>(Short.class) {
 			public Short getNext() {
 				return (short) counter.getAndIncrement();
@@ -115,8 +118,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(short.class, shortDatumFactory);
 		fixtureDataByType.put(Short.class, shortDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Character> charDatumFactory = new FixtureDatumFactory<Character>(Character.class) {
 			public Character getNext() {
 				return (char) counter.getAndIncrement();
@@ -124,8 +127,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(char.class, charDatumFactory);
 		fixtureDataByType.put(Character.class, charDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Integer> intDatumFactory = new FixtureDatumFactory<Integer>(Integer.class) {
 			public Integer getNext() {
 				return counter.getAndIncrement();
@@ -133,8 +136,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(int.class, intDatumFactory);
 		fixtureDataByType.put(Integer.class, intDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Long> longDatumFactory = new FixtureDatumFactory<Long>(Long.class) {
 			public Long getNext() {
 				return (long) counter.getAndIncrement();
@@ -142,8 +145,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(long.class, longDatumFactory);
 		fixtureDataByType.put(Long.class, longDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Float> floatDatumFactory = new FixtureDatumFactory<Float>(Float.class) {
 			public Float getNext() {
 				return new Float(counter.getAndIncrement());
@@ -151,8 +154,8 @@ public final class PojoTester {
 		};
 		fixtureDataByType.put(float.class, floatDatumFactory);
 		fixtureDataByType.put(Float.class, floatDatumFactory);
-		
-		
+
+
 		FixtureDatumFactory<Double> doubleDatumFactory = new FixtureDatumFactory<Double>(Double.class) {
 			public Double getNext() {
 				return new Double(counter.getAndIncrement());
@@ -184,19 +187,19 @@ public final class PojoTester {
 				return new Date(counter.getAndIncrement());
 			}
 		});
-		
+
 		fixtureDataByType.put(Timestamp.class, new FixtureDatumFactory<Timestamp>(Timestamp.class) {
 			public Timestamp getNext() {
 				return new Timestamp(counter.getAndIncrement());
 			}
 		});
-		
+
 		fixtureDataByType.put(Pattern.class, new FixtureDatumFactory<Pattern>(Pattern.class) {
 			public Pattern getNext() {
 				return Pattern.compile("p" + counter.getAndIncrement());
 			}
 		});
-		
+
 		fixtureDataByType.put(File.class, new FixtureDatumFactory<File>(File.class) {
 			public File getNext() {
 				return new File("file" + counter.getAndIncrement());
@@ -253,7 +256,7 @@ public final class PojoTester {
 	public <T> PojoTester withFixture(Class<T> c, final T... fixtureData) {
 		if (Enum.class.isAssignableFrom(c)) {
 			throw new IllegalArgumentException("No need to provide fixture data for enums");
-		} 
+		}
 		if (fixtureData == null || fixtureData.length == 0) {
 			throw new IllegalArgumentException("Test data is mandatory");
 		}
@@ -415,7 +418,7 @@ public final class PojoTester {
 		} catch (NoSuchMethodException e) {
 		    if(mode == Mode.RELAXED) {
 		        // ignore
-		        return; 
+		        return;
 		    }
             final TestException error = new TestException(property + ": "
                     + e.getMessage());
@@ -486,8 +489,8 @@ public final class PojoTester {
 				+ property.substring(1);
 	}
 
-	
-	
+
+
 	public static final class TestException extends Exception {
 
 		private static final long serialVersionUID = 7870820619976334343L;

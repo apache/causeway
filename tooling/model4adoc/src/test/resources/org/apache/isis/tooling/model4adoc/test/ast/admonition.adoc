@@ -1,0 +1,9 @@
+[NOTE]
+====
+the note is multiple paragraphs, and can have all the usual styling
+
+also note
+====
+
+TIP: Here's something worth knowing...
+

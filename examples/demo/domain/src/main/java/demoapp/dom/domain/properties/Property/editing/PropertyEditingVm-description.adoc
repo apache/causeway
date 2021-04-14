@@ -1,0 +1,74 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `editing` element specifies that a property's value can be changed through the UI:
+
+* for properties, the element can be specified using either the `@Property` annotation, or a meta-annotation
+
+There is no corresponding element for parameters, parameters are implicitly editable.
+
+== Class Level
+
+Usually editing of properties is discouraged; it is usually better to modify state through an explicit action instead.
+For that reason, editing of properties is disabled by default (though that can be changed globally if necessary using the `isis.applib.annotation.domain-object.editing` configuration property).
+
+Editing can also be specified at the class level.
+This will override any configured defaults, but just for the properties of that class:
+
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=class]
+----
+
+The property-level element can, in turn, overrides the configured or class-level default.
+
+
+== Annotated
+
+The `editing` element can be specified explicitly using an annotation:
+
+* for properties, using `@Property#editing()`:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=annotation]
+----
+<.> explicitly specifies that the property is editable
+
+The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
+
+== Meta-annotated
+
+The `editing` element can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::EditingEnabledMetaAnnotation.java[tags=class]
+----
+<.> annotated for a property
+<.> annotation can be applied to a property (either its getter or the field directly)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=meta-annotated]
+----
+<.> semantic is inherited from the meta-annotation
+
+
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyEditingVm.java[tags=meta-annotated-overridden]
+----
+<.> semantic from meta-annotation ...
+<.> \... is overridden by the `@Property` annotation
+

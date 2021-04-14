@@ -30,17 +30,18 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * Immutable value type holding pre-rendered HTML.
+ * Intended to be used as a read-only property, to render arbitrary HTML
+ * markup into the user interface.
  *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
-// end::refguide[]
-@Value(semanticsProviderName = 
+@Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Markup implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
+
     private final String html;
 
     public Markup() {

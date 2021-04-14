@@ -39,15 +39,14 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceSer
 import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 /**
- * 
- * @since 2.0
+ * @since 1.x {@index}
  */
 @Configuration
 @Import({
         // modules
         IsisModuleCoreWebapp.class,
         IsisModuleRestfulObjectsRendering.class,
-        
+
         // @Component's
         HomePageResourceServerside.class,
         DomainTypeResourceServerside.class,

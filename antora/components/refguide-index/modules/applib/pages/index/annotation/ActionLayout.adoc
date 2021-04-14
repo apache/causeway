@@ -1,0 +1,199 @@
+= @ActionLayout
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Layout hints for actions.
+
+== API
+
+[source,java]
+.ActionLayout.java
+----
+@interface ActionLayout {
+  BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>
+  String cssClass() default "";     // <.>
+  String cssClassFa() default "";     // <.>
+  CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;     // <.>
+  String describedAs() default "";     // <.>
+  String fieldSetId() default "__infer";     // <.>
+  String fieldSetName() default "__infer";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  String named() default "";     // <.>
+  Position position() default Position.NOT_SPECIFIED;     // <.>
+  PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;     // <.>
+  Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
+  String sequence() default "";     // <.>
+}
+----
+
+<.> xref:#bookmarking[bookmarking]
++
+--
+Whether (and how) this action can be bookmarked in the UI.
+--
+<.> xref:#cssClass[cssClass]
++
+--
+Indicates the css class that an action should have.
+--
+<.> xref:#cssClassFa[cssClassFa]
++
+--
+Indicates theFont AwesomeCSS class to decorate an action (button or menu item).
+--
+<.> xref:#cssClassFaPosition[cssClassFaPosition]
++
+--
+Indicates the position of theFont Awesomeicon.
+--
+<.> xref:#describedAs[describedAs]
++
+--
+Description of this action, eg to be rendered in a tooltip.
+--
+<.> xref:#fieldSetId[fieldSetId]
++
+--
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+--
+<.> xref:#fieldSetName[fieldSetName]
++
+--
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+--
+<.> xref:#hidden[hidden]
++
+--
+Indicates where in the UI the action should _not_ not be visible.
+--
+<.> xref:#named[named]
++
+--
+Name of this action (overriding the name derived from its name in code).
+--
+<.> xref:#position[position]
++
+--
+For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
+--
+<.> xref:#promptStyle[promptStyle]
++
+--
+How the parameters for this action are prompted, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
+--
+<.> xref:#redirectPolicy[redirectPolicy]
++
+--
+If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
+--
+<.> xref:#sequence[sequence]
++
+--
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+--
+
+== Members
+
+[#bookmarking]
+=== bookmarking
+
+Whether (and how) this action can be bookmarked in the UI.
+
+For bookmarkable actions, either _org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that an action should have.
+
+For the Wicket viewer, this can be a bootstrap class such as `btn-info` .
+
+[#cssClassFa]
+=== cssClassFa
+
+Indicates theFont AwesomeCSS class to decorate an action (button or menu item).
+
+[#cssClassFaPosition]
+=== cssClassFaPosition
+
+Indicates the position of theFont Awesomeicon.
+
+The icon could be rendered on the left or the right of the action button
+
+[#describedAs]
+=== describedAs
+
+Description of this action, eg to be rendered in a tooltip.
+
+[#fieldSetId]
+=== fieldSetId
+
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+
+For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ .
+
+[#fieldSetName]
+=== fieldSetName
+
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+
+For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ ;
+
+[#hidden]
+=== hidden
+
+Indicates where in the UI the action should _not_ not be visible.
+
+[#named]
+=== named
+
+Name of this action (overriding the name derived from its name in code).
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+[#position]
+=== position
+
+For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
+
+Ignored if the action has not been associated with a property.
+
+[#promptStyle]
+=== promptStyle
+
+How the parameters for this action are prompted, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
+
+[#redirectPolicy]
+=== redirectPolicy
+
+If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
+
+Not re-rendering can provide a smoother UI experience.
+
+Supported by the Wicket viewer.
+
+[#sequence]
+=== sequence
+
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+
+An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
+
+include::hooks/ActionLayout_010-examples-and-usage.adoc[]
+
+include::hooks/ActionLayout_021-promptStyle.adoc[]
+
+include::hooks/ActionLayout_022-position.adoc[]
+
+include::hooks/ActionLayout_023-describedAs.adoc[]
+
+include::hooks/ActionLayout_024-cssClass.adoc[]
+
+include::hooks/ActionLayout_025-cssClassFa.adoc[]
+
+include::hooks/ActionLayout_026-bookmarking.adoc[]
+
+include::hooks/ActionLayout_027-hidden.adoc[]
+
+include::hooks/ActionLayout_028-named.adoc[]
+
+include::hooks/ActionLayout_029-redirect.adoc[]

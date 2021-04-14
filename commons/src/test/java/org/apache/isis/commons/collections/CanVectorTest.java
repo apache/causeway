@@ -22,9 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.commons.SerializationTester;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.collections.CanVector;
+import org.apache.isis.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 
@@ -37,8 +35,8 @@ class CanVectorTest {
     
     @Test
     void emptyCanVector_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(CanVector.empty());
-        SerializationTester.assertEqualsOnRoundtrip(new CanVector<String>(0));
+        _SerializationTester.assertEqualsOnRoundtrip(CanVector.empty());
+        _SerializationTester.assertEqualsOnRoundtrip(new CanVector<String>(0));
     }
     
     @Test
@@ -46,9 +44,7 @@ class CanVectorTest {
         val vector = new CanVector<String>(3);
         vector.set(0, Can.<String>of("hi"));
         vector.set(1, Can.<String>of("hi", "there"));
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
+        _SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
     }
-    
-
 
 }

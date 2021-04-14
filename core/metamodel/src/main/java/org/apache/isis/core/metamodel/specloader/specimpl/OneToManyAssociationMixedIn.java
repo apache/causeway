@@ -18,10 +18,9 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -33,10 +32,10 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -59,7 +58,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     /**
      * The domain object type being mixed in to (being supplemented).
      */
-    private final ObjectSpecification mixedInType;
+    private final ObjectSpecification mixeeSpec;
 
 
     /**
@@ -75,19 +74,19 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectActionDefault objectAction) {
 
         val actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault, 
-        // which ensures that there is always a TypeOfFacet for any mixedIn associations 
+        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault,
+        // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
-        val type = actionTypeOfFacet != null
+        Class<?> type = actionTypeOfFacet != null
                 ? actionTypeOfFacet.value()
                 : (Class<?>)Object.class;
-                
+
         return objectAction.getSpecificationLoader().loadSpecification(type);
     }
 
     public OneToManyAssociationMixedIn(
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
@@ -95,16 +94,16 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+        this.mixeeSpec = mixeeSpec;
 
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
         //
-        final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
+        final SnapshotExcludeFacet snapshotExcludeFacet = new SnapshotExcludeFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
-        FacetUtil.addFacet(notPersistedFacet);
+        FacetUtil.addFacet(snapshotExcludeFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
 
@@ -127,11 +126,16 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
+        val memberParameterNames = mixinIdentifier.getMemberParameterClassNames();
 
-        identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
+        identifier = Identifier.actionIdentifier(
+                LogicalType.eager(
+                        mixeeSpec.getCorrespondingClass(), 
+                        mixeeSpec.getLogicalTypeName()), 
+                getId(), 
+                memberParameterNames);
     }
-    
+
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
@@ -152,7 +156,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     public ManagedObject get(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return getPublishingServiceInternal().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
                         headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
@@ -175,7 +179,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
     @Override
     public ObjectSpecification getOnType() {
-        return mixedInType;
+        return mixeeSpec;
     }
 
     @Override
@@ -188,8 +192,8 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         return this.mixinAction == mixinAction;
     }
 
-    private PublisherDispatchService getPublishingServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
+    private ExecutionPublisher getPublishingServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
 

@@ -20,10 +20,12 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.DeleteDomainEvent;
@@ -32,24 +34,25 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class, 
-        associateWithSequence = "1")
+        domainEvent = DeleteDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private RepositoryService repository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationUser> act() {
-        repository.removeAndFlush(holder);
+        repository.removeAndFlush(target);
         return applicationUserRepository.allUsers();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
-        return applicationUserRepository.isAdminUser(holder)? "Cannot delete the admin user": null;
+        return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
 }

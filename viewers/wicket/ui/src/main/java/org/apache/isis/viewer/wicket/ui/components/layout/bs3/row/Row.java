@@ -24,6 +24,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
@@ -33,7 +34,9 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
+public class Row 
+extends PanelAbstract<ManagedObject, EntityModel> 
+implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 

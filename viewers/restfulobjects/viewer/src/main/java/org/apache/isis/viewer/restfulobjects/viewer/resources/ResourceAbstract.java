@@ -35,13 +35,13 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -56,7 +56,7 @@ public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
     protected final IsisConfiguration isisConfiguration;
-    protected final IsisInteractionTracker isisInteractionTracker;
+    protected final InteractionTracker isisInteractionTracker;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -70,7 +70,7 @@ public abstract class ResourceAbstract {
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final InteractionTracker isisInteractionTracker) {
         
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;

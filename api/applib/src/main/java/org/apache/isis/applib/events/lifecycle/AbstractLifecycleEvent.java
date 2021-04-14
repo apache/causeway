@@ -18,9 +18,16 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.events.EventObjectBase;
 
-// tag::refguide[]
+/**
+ * Superclass for all lifecycle events that are raised by the framework when
+ * loading, saving, updating or deleting objects from the database.
+ *
+ * @since 1.x {@index}
+ */
 public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
 
     public AbstractLifecycleEvent() {
@@ -32,4 +39,3 @@ public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
     }
 
 }
-// end::refguide[]

@@ -37,47 +37,34 @@ import lombok.val;
  *
  * <p>
  * Analogous to the <tt>RootOid</tt>.
+ * 
+ * @since 1.x revised for 2.0 {@index}
  */
 @Value 
 @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-// tag::refguide[]
 public class Bookmark implements Serializable {
 
-    // end::refguide[]
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     protected static final String SEPARATOR = ":";
 
     /**
-     * corresponds directly to the object's specification-id
-     * @see <code>RootOid</code>
+     * Corresponds directly to the object's logical-type-name (aka. object-type).
+     * @see RootOid
      */
-    // tag::refguide[]
-    @NonNull  private final String objectType;
+    @NonNull  private final String logicalTypeName;
     @NonNull  private final String identifier;
-    // end::refguide[]
 
     @Nullable private final String hintId;
-    // tag::refguide[]
 
-    public static Bookmark of(String objectType, String identifier) {
-        // end::refguide[]
-
-        return new Bookmark(objectType, identifier, /*hintId*/ null);
-
-        // tag::refguide[]
-        // ...
+    public static Bookmark of(String logicalTypeName, String identifier) {
+        return new Bookmark(logicalTypeName, identifier, /*hintId*/ null);
     }
-
-    // end::refguide[]
 
     /**
      * Round-trip with {@link #toString()} representation.
-     * @return
      */
-    // tag::refguide[]
     public static Optional<Bookmark> parse(@Nullable String str) {
-        // end::refguide[]
 
         if(str==null) {
             return Optional.empty();
@@ -92,14 +79,12 @@ public class Bookmark implements Serializable {
         }
         return Optional.empty();
 
-        // tag::refguide[]
         // ...
     }
-    // end::refguide[]
 
     public OidDto toOidDto() {
         val oidDto = new OidDto();
-        oidDto.setType(getObjectType());
+        oidDto.setType(getLogicalTypeName());
         oidDto.setId(getIdentifier());
         return oidDto;
     }
@@ -110,25 +95,32 @@ public class Bookmark implements Serializable {
     
     /**
      * The canonical form of the {@link Bookmark}, that is 
-     * &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
+     * &quot;{@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
      *
      * <p>
      * This is parseable by the {@link #parse(String)}.
      */
     @Override
     public String toString() {
-        return objectType + SEPARATOR + identifier;
+        return toStringUsingIdentifier(identifier);
     }
 
-
     public Bookmark withHintId(@NonNull String hintId) {
-        return new Bookmark(this.getObjectType(), this.getIdentifier(), hintId); 
+        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId); 
     }
 
     public String toStringUsingIdentifier(String id) {
-        return objectType + SEPARATOR + id;
+        return logicalTypeName + SEPARATOR + id;
     }
+    
+    // -- ALIAS
+    
+    /**
+     * Alias for {@link #getLogicalTypeName()}.
+     */
+    public String getObjectType() {
+        return getLogicalTypeName();
+    }
+    
 
-    // tag::refguide[]
 }
-// end::refguide[]

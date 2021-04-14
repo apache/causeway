@@ -34,7 +34,7 @@ import lombok.experimental.UtilityClass;
  * </pre>
  * 
  *  
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @UtilityClass
 public final class JavaUtilJaxbAdapters {

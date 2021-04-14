@@ -24,7 +24,8 @@ import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 
@@ -43,7 +44,7 @@ class PoWriter extends PoAbstract {
     private final SortedMap<String, Block> blocksByMsgId = _Maps.newTreeMap();
 
     public PoWriter(final TranslationServicePo translationServicePo) {
-        super(translationServicePo, TranslationService.Mode.WRITE);
+        super(translationServicePo, Mode.WRITE);
     }
 
     @Override
@@ -81,14 +82,14 @@ class PoWriter extends PoAbstract {
         log.info(buf.toString());
     }
 
-    static final DateTimeFormatter timestampFormat = 
+    static final DateTimeFormatter timestampFormat =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss+Z", Locale.US);
-    
+
     /**
      * As per <a href="http://pology.nedohodnik.net/doc/user/en_US/ch-poformat.html">section 2.6</a>.
      */
     protected void header(final StringBuilder buf) {
-        
+
         final String createdAt = ZonedDateTime.now().format(timestampFormat);
         buf.append("#, fuzzy").append("\n");
         buf.append("msgid \"\"").append("\n");
@@ -105,29 +106,29 @@ class PoWriter extends PoAbstract {
 
 
     @Override
-    public String translate(final String context, final String msgId) {
+    public String translate(final TranslationContext context, final String msgId) {
 
         if(msgId == null) {
             return null;
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context);
+            block.contexts.add(context.getName());
         }
 
         return msgId;
     }
 
     @Override
-    String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
+    String translate(final TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
 
         if(msgId == null) {
             return null;
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context);
-            block.msgIdPlural = msgIdPlural;    
+            block.contexts.add(context.getName());
+            block.msgIdPlural = msgIdPlural;
         }
 
         return null;

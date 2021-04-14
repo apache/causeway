@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.security.authorization.manager;
 
-import java.util.function.Predicate;
-
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,16 +31,14 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
-
-import lombok.NonNull;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
  */
 @Service
-@Named("isisSecurityApi.AuthorizationManager")
+@Named("isis.security.AuthorizationManager")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -63,17 +59,19 @@ public class AuthorizationManager {
      * Normally the view of the specified field, or the display of the action will be suppress if this returns false.
      * </p>
      */
-    public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
+    public boolean isUsable(
+            final Authentication authentication,
+            final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
-        if(containsSudoSuperuserRole(session)) {
+        if(containsSudoSuperuserRole(authentication)) {
             return true;
         }
-        if (authorizor.isUsableInAnyRole(identifier)) {
+        if (authorizor.isUsable(authentication, identifier)) {
             return true;
         }
-        return anyMatchOnRoles(session, roleName->authorizor.isUsableInRole(roleName, identifier));
+        return false;
     }
 
     /**
@@ -84,7 +82,9 @@ public class AuthorizationManager {
      * Normally the specified field will be not appear editable if this returns false.
      * </p>
      */
-    public boolean isVisible(final AuthenticationSession session, final Identifier identifier) {
+    public boolean isVisible(
+            final Authentication authentication,
+            final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -92,35 +92,24 @@ public class AuthorizationManager {
         if (identifier.getMemberName().equals("")) {
             return true;
         }
-        if(containsSudoSuperuserRole(session)) {
+        if(containsSudoSuperuserRole(authentication)) {
             return true;
         }
-        if (authorizor.isVisibleInAnyRole(identifier)) {
+        if (authorizor.isVisible(authentication, identifier)) {
             return true;
         }
-        return anyMatchOnRoles(session, roleName->authorizor.isVisibleInRole(roleName, identifier));
+        return false;
     }
 
     // -- HELPER
-    
-    private static boolean containsSudoSuperuserRole(@Nullable final AuthenticationSession session) {
-        if(session==null) {
+
+    private static boolean containsSudoSuperuserRole(
+            final @Nullable Authentication session) {
+        if(session==null || session.getUser()==null) {
             return false;
         }
-        return session.hasRole(SudoService.ACCESS_ALL_ROLE);
+        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
     }
-    
-    private boolean anyMatchOnRoles(
-            @Nullable final AuthenticationSession session, 
-            @NonNull final Predicate<String> predicate) {
-        if(session==null) {
-            return false;
-        }
-        return session.getRoles()
-                .stream()
-                .anyMatch(predicate);
-    }
-    
 
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));

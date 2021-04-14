@@ -20,6 +20,9 @@ package org.apache.isis.extensions.secman.api;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 public class IsisModuleExtSecmanApi {
 

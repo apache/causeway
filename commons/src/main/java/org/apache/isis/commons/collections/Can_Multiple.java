@@ -25,15 +25,21 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
+import javax.annotation.Nullable;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +55,11 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public Optional<T> getFirst() {
         return Optional.of(elements.get(0));
+    }
+    
+    @Override
+    public Optional<T> getLast() {
+        return Optional.of(elements.get(size()-1));
     }
     
     @Override
@@ -106,9 +117,51 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
-    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
-        requires(zippedIn, "zippedIn");
-        requires(action, "action");
+    public Iterator<T> reverseIterator() {
+        return new Iterator<T>() {
+            private int remainingCount = size();
+            @Override public boolean hasNext() { return remainingCount>0; }
+            @Override public T next() {
+                if(!hasNext()) { throw _Exceptions.noSuchElement(); }
+                return elements.get(--remainingCount);
+            }
+        };
+    }
+    
+    @Override
+    public Can<T> reverse() {
+        val reverse = new ArrayList<T>(elements.size());
+        for(int i=elements.size()-1; i>=0; --i) {
+            reverse.add(elements.get(i));
+        }
+        return Can_Multiple.of(reverse);
+    }
+    
+    @Override
+    public void forEach(final @NonNull Consumer<? super T> action) {
+        elements.forEach(action);
+    }
+    
+    @Override
+    public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
+        if(predicate==null) {
+            return this; // identity
+        }
+        val filteredElements = 
+                stream()
+                .filter(predicate)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // optimization for the case when the filter accepted all
+        if(filteredElements.size()==size()) {
+            return this; // identity
+        }
+        return Can.ofCollection(filteredElements);
+    }
+
+    
+    @Override
+    public <R> void zip(@NonNull Iterable<R> zippedIn, @NonNull BiConsumer<? super T, ? super R> action) {
         val zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
@@ -116,9 +169,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
-    public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
-        requires(zippedIn, "zippedIn");
-        requires(mapper, "mapper");
+    public <R, Z> Can<R> zipMap(@NonNull Iterable<Z> zippedIn, @NonNull BiFunction<? super T, ? super Z, R> mapper) {
         val zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }
@@ -195,8 +246,74 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        // when returning
+        // -1 ... this (multi-can) is before other 
+        // +1 ... this (multi-can) is after other
+        if(other==null
+                || other.isEmpty()) {
+            return 1; // all empty Cans are same and come first
+        }
+        if(other.isCardinalityOne()) {
+            final int firstElementComparison = _Objects.compareNonNull(
+                    this.elements.get(0), 
+                    other.getSingletonOrFail());
+            if(firstElementComparison!=0) {
+                return firstElementComparison;
+            }
+        }
+        // at this point firstElementComparison is 0 and other is a multi-can
+        // XXX we already compared the first elements, could skip ahead for performance reasons
+        if(this.size()>=other.size()) {
+            val otherIterator = other.iterator();
+            for(T left: this) {
+                if(!otherIterator.hasNext()) {
+                    return 1; // the other has fewer elements hence comes first
+                }
+                val right = otherIterator.next();
+                int c = _Objects.compareNonNull(left, right);
+                if(c!=0) {
+                    return c;
+                }
+            }
+        } else {
+            val thisIterator = this.iterator();
+            for(T right: other) {
+                if(!thisIterator.hasNext()) {
+                    return -1; // this has fewer elements hence comes first
+                }
+                val left = thisIterator.next();
+                int c = _Objects.compareNonNull(left, right);
+                if(c!=0) {
+                    return c;
+                }
+            }
+        }
+        return 0; // we compared all elements and found no difference
+    }
+    
+    @Override
     public List<T> toList() {
         return Collections.unmodifiableList(elements); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        val set = _Sets.<T>newHashSet(); // serializable
+        elements.forEach(set::add);
+        return Collections.unmodifiableSet(set); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        val set = _Sets.<T>newHashSet(); // serializable
+        elements
+        .forEach(s->{
+            if(!set.add(s)) {
+                onDuplicated.accept(s);
+            }
+        });
+        return Collections.unmodifiableSet(set); // serializable and immutable
     }
     
     @Override

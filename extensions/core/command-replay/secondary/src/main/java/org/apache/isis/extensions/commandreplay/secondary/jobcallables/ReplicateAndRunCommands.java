@@ -35,7 +35,6 @@ import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -49,6 +48,8 @@ import lombok.extern.log4j.Log4j2;
  *     (<code>{@link org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob}</code>)
  *     files.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
@@ -94,7 +95,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                     // give up if there was a failure; admin will need to fix issue and retry
                     if (hwm.getReplayState() != null &&
                             hwm.getReplayState().isFailed()) {
-                        log.info("Command {} hit replay error", hwm.getUniqueId());
+                        log.info("Command {} hit replay error", hwm.getInteractionId());
                         return;
                     }
                 } else {
@@ -108,8 +109,10 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                 val commandDtos = commandFetcher.fetchCommand(hwm);
                 commandsToReplay = commandDtos.stream()
                         .map(dto ->
-                                transactionService.executeWithinTransaction(
+                                transactionService.callWithinCurrentTransactionElseCreateNew(
                                     () -> commandJdoRepository.saveForReplay(dto))
+                                .optionalElseFail()
+                                .orElse(null)
                         ).collect(Collectors.toList());
 
                 if(commandsToReplay.isEmpty()) {
@@ -124,13 +127,13 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     /**
      *
      * @param commandsToReplay
-     * @return - whether there was a command to process (and so continue)
+     * @apiNote could return, whether there was a command to process (and so continue)
      */
     private void replay(List<CommandJdo> commandsToReplay) {
 
         commandsToReplay.forEach(commandJdo -> {
 
-            log.info("replaying {}", commandJdo.getUniqueId());
+            log.info("replaying {}", commandJdo.getInteractionId());
 
             //
             // run command
@@ -147,8 +150,10 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             //
             val parent = commandJdo;
             val childCommands =
-                    transactionService.executeWithinTransaction(
-                            () -> commandJdoRepository.findByParent(parent));
+                    transactionService.callWithinCurrentTransactionElseCreateNew(
+                            () -> commandJdoRepository.findByParent(parent))
+                    .optionalElseFail()
+                    .orElse(null);
             for (val childCommand : childCommands) {
                 val childReplayState = executeCommandInTranAndAnalyse(childCommand);
                 if(childReplayState.isFailed()) {
@@ -163,13 +168,13 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     }
 
     private ReplayState executeCommandInTranAndAnalyse(final CommandJdo commandJdo) {
-        transactionService.executeWithinTransaction(
+        transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
                         CommandExecutorService.SudoPolicy.SWITCH, commandJdo.getCommandDto(), commandJdo.outcomeHandler());
                 });
 
-        transactionService.executeWithinTransaction(() -> {
+        transactionService.runWithinCurrentTransactionElseCreateNew(() -> {
             analysisService.analyse(commandJdo);
         });
 
@@ -179,7 +184,10 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
     private boolean isRunning() {
         return controller
-                .map( control -> transactionService.executeWithinTransaction(control::getState))
+                .map( control -> transactionService
+                        .callWithinCurrentTransactionElseCreateNew(control::getState)
+                        .optionalElseFail()
+                        .orElse(null))
                 .map(state -> state == ReplayCommandExecutionController.State.RUNNING)
             // if no controller implementation provided, then just continue
             .orElse(true);

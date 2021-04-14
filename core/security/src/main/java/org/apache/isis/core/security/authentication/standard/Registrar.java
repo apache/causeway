@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
+import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.manager.RegistrationDetails;
 
 public interface Registrar extends Authenticator {

@@ -18,29 +18,34 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
-import java.util.SortedSet;
+import java.util.Collection;
+import java.util.Map;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * Provides the access to string representations of the packages, classes and
+ * class members (collectively: "application features") of the domain classes
+ * within the framework's internal metamodel.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 public interface ApplicationFeatureRepository  {
+    
+    ApplicationFeature newApplicationFeature(ApplicationFeatureId featureId);
 
-    SortedSet<String> packageNames();
+    Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 
-    SortedSet<String> packageNamesContainingClasses(
-            ApplicationMemberType memberType);
+    ApplicationFeature findFeature(ApplicationFeatureId featureId);
 
-    SortedSet<String> classNamesContainedIn(
-            String packageFqn,
-            ApplicationMemberType memberType);
+    Collection<ApplicationFeature> allActions();
 
-    SortedSet<String> classNamesRecursivelyContainedIn(
-            String packageFqn);
+    Collection<ApplicationFeature> allCollections();
 
-    SortedSet<String> memberNamesOf(
-            String packageFqn,
-            String className,
-            ApplicationMemberType memberType);
+    Collection<ApplicationFeature> allProperties();
+
+    Collection<ApplicationFeature> allNamespaces();
+
+    Collection<ApplicationFeature> allTypes();
+    
+    Collection<ApplicationFeature> allMembers();
 
 }
-// end::refguide[]

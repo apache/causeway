@@ -31,10 +31,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -46,7 +46,6 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
 
-        TestClock.initialize();
         date = new Date(0);
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);

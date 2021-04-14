@@ -142,7 +142,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @param head
      * @param pendingArgs
      * @param interactionInitiatedBy
-     * @return
      */
     Consent isVisible(
             InteractionHead head,
@@ -154,7 +153,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @param head
      * @param pendingArgs
      * @param interactionInitiatedBy
-     * @return
      */
     Consent isUsable(
             InteractionHead head,
@@ -167,7 +165,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @param head
      * @param pendingArgs
      * @param interactionInitiatedBy
-     * @return
      */
     Consent isValid(
             InteractionHead head,
@@ -180,7 +177,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @param adapter
      * @param proposedValue
      * @param interactionInitiatedBy
-     * @return
      * @deprecated use variant with all pendingArgs instead
      */
     @Deprecated

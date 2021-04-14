@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import java.util.function.Predicate;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -32,23 +29,23 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * This implements {@link org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
- * is added to the eventual {@link FacetHolder} twice: once under
- * <tt>HiddeFacet.class</tt> and once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
+ * This once implemented {@code org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} 
+ * so that each concrete implementation
+ * is added to the eventual {@link FacetHolder} twice: 
+ * once under <tt>HiddeFacet.class</tt> and 
+ * once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
  * This satisfies a couple of (independent) requirements:
  * <ul>
  *     <li>that we don't have the concept of a single (blessed?) HiddenFacet; rather there are simply facets some of
  *     which implement {@link HidingInteractionAdvisor}</li>
  *     <li>that there is nevertheless always at least one facet that is registered under <tt>HiddenFacet.class</tt>;
- *     this is used by the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
+ *     this was once used by the 
+ *     {@code org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
  * </ul>
- * <p>
- *     Note that the {@link FacetUtil#getFacets(java.util.Map, Predicate)}
- *     (which among other things is used to return all facets matching a particular facet type) ensures that the list
- *     of facets returned contains no duplicates.
- * </p>
  */
-public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implements HiddenFacet {
+public abstract class HiddenFacetAbstract 
+extends WhereValueFacetAbstract 
+implements HiddenFacet {
 
     public HiddenFacetAbstract(
             Class<? extends Facet> facetType,

@@ -21,19 +21,20 @@ package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 
 import java.util.EnumSet;
 
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
-public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionParameterAutoCompleteFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
 

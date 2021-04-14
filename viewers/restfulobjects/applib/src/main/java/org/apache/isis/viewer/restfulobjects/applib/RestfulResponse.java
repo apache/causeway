@@ -40,6 +40,9 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
+/**
+ * @since 1.x {@index}
+ */
 public class RestfulResponse<T> {
 
     public static final class HttpStatusCode {

@@ -23,6 +23,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
+/**
+ * @since 2.0 {@index}
+ */
 public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     public enum IntervalEnding {
@@ -64,7 +67,7 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * Determines how end dates are shown in the ui and stored in the database:
-     * 
+     *
      * {@link IntervalEnding#EXCLUDING_END_DATE} uses the start date of the next interval as end date.
      * {@link IntervalEnding#INCLUDING_END_DATE} used the last day of the interval as the end date.
      */
@@ -99,9 +102,8 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * Does this date contain the specified time interval.
-     * 
+     *
      * @param date
-     * @return
      */
     public boolean contains(final LocalDate date) {
         if (date == null){
@@ -121,9 +123,8 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * Does this time interval contain the specified time interval.
-     * 
+     *
      * @param localDateInterval
-     * @return
      */
     public boolean contains(final T localDateInterval) {
         return asInterval().contains(localDateInterval.asInterval());
@@ -131,8 +132,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * The duration in days
-     * 
-     * @return
      */
     public int days() {
         if (isInfinite()) {
@@ -179,12 +178,11 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
     protected String dateToString(LocalDate localDate, String format) {
         return localDate == null ? "----------" : localDate.toString(format);
     }
-    
+
     /**
      * Gets the overlap between this interval and another interval.
-     * 
+     *
      * @param otherInterval
-     * @return
      */
     @SuppressWarnings("unchecked")
     public T overlap(final T otherInterval) {
@@ -209,15 +207,13 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
     /**
      * Mandatory hook
      * @param overlap
-     * @return
      */
     protected abstract T newInterval(Interval overlap);
 
     /**
      * Does this time interval contain the specified time interval.
-     * 
+     *
      * @param interval
-     * @return
      */
     public boolean overlaps(final T interval) {
         return asInterval().overlaps(interval.asInterval());
@@ -232,9 +228,8 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * Does this interval is within the specified interval
-     * 
+     *
      * @param interval
-     * @return
      */
     public boolean within(final T interval) {
         return interval.asInterval().contains(asInterval());

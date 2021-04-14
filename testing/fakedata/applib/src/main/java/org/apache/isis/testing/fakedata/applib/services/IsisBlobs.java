@@ -30,6 +30,9 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisBlobs extends AbstractRandomValueGenerator {
 
     public IsisBlobs(final FakeDataService fakeDataService) {

@@ -18,27 +18,19 @@
  */
 package org.apache.isis.core.config;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.Getter;
 
 
 /**
- * Configuration 'beans' with meta-data (IDE-support).
+ * Selected configuration for <code>resteasy-spring-boot-starter</code>, to provide IDE-support.
  *
- * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot docs</a>
+ * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot-starter docs</a>
  * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
- * 
+ *
  * @since 2.0
  */
 @ConfigurationProperties("resteasy")
@@ -46,22 +38,7 @@ import lombok.Data;
 @Validated
 public class RestEasyConfiguration {
 
-    @Autowired private ConfigurableEnvironment environment;
-
-    @Inject @Named("resteasy-settings") private Map<String, String> resteasySettings;
-    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(resteasySettings); }
-
-      
-    private final Authentication authentication = new Authentication();
-    @Data
-    public static class Authentication {
-        /**
-         * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth</code>.
-         */
-        private Optional<String> strategyClassName = Optional.empty();    
-    }
-    
-    
+    @Getter
     private final Jaxrs jaxrs = new Jaxrs();
     @Data
     public static class Jaxrs {
@@ -74,6 +51,8 @@ public class RestEasyConfiguration {
          * because there is <i>NO</i> implementation of {@link javax.ws.rs.core.Application}, so we rely on it being
          * automatically created.
          * </p>
+         *
+         * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot-starter docs</a>
          */
         @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
         private String defaultPath = "/restful";
@@ -96,9 +75,7 @@ public class RestEasyConfiguration {
              *     There should be very little reason to change this from its default.
              * </p>
              *
-             * <p>
-             *     See <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md#jax-rs-application-registration-methods">here</a> for more details.
-             * </p>
+             * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot-starter docs</a>
              */
             private Registration registration = Registration.BEANS;
         }

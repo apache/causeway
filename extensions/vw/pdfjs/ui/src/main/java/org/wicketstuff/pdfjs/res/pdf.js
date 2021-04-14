@@ -2380,7 +2380,7 @@
             if (this._isInvalid || !this._scheme) {
               return '';
             }
-            // javascript: Gecko returns String(""), WebKit/Blink String("null")
+            // JavaScript: Gecko returns String(""), WebKit/Blink String("null")
             // Gecko throws error for "data://"
             // data: Gecko returns "", Blink returns "data://", WebKit returns "null"
             // Gecko returns String("") for file: mailto:

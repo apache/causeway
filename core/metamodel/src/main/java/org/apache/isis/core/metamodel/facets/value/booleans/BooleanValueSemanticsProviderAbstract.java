@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -87,7 +87,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
             case 'F':
                 return Boolean.FALSE;
             default:
-                throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
+                throw new UnrecoverableException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
             }
         } else if (dataLength == 4 || dataLength == 5) {
             switch (data.charAt(0)) {
@@ -96,10 +96,10 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
             case 'f':
                 return Boolean.FALSE;
             default:
-                throw new IsisException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
+                throw new UnrecoverableException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
             }
         }
-        throw new IsisException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);
+        throw new UnrecoverableException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);
     }
 
     private boolean isSet(final Object value) {

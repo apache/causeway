@@ -29,7 +29,7 @@ public class ApplicationMemberTypeTest {
 
         @Test
         public void happyCase() throws Exception {
-            assertThat(ApplicationMemberType.PROPERTY.toString(), is("PROPERTY"));
+            assertThat(ApplicationMemberSort.PROPERTY.toString(), is("PROPERTY"));
         }
     }
 

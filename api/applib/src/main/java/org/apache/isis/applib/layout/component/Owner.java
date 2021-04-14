@@ -18,7 +18,9 @@
  */
 package org.apache.isis.applib.layout.component;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface Owner {
-
 
 }

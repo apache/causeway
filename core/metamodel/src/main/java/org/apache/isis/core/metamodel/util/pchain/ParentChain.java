@@ -46,7 +46,6 @@ public interface ParentChain {
     /**
      * Returns the parent node of this {@code node} or {@code null} if {@code node} has no parent.
      * @param node
-     * @return
      */
     public Object parentOf(Object node);
 
@@ -59,7 +58,6 @@ public interface ParentChain {
      *
      * @param startNode
      * @param maxChainLength maximum length of the chain returned
-     * @return
      */
     public default Stream<Object> streamParentChainOf(Object startNode, int maxChainLength){
         final Set<Object> chain = new LinkedHashSet<>();

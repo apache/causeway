@@ -19,32 +19,30 @@
 package org.apache.isis.core.webapp.health;
 
 import java.util.Optional;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.security.authentication.health.HealthAuthSession;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.security.authentication.health.HealthAuthentication;
 
 import lombok.val;
 
 @Component
-@Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
+@Named("isis.webapp.HealthCheckService") // logical name appears in the endpoint
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     private final Optional<HealthCheckService> healthCheckServiceIfAny;
 
     @Inject
     public HealthIndicatorUsingHealthCheckService(
-            final IsisInteractionFactory isisInteractionFactory,
+            final InteractionFactory isisInteractionFactory,
             final Optional<HealthCheckService> healthCheckServiceIfAny) {
         this.isisInteractionFactory = isisInteractionFactory;
         this.healthCheckServiceIfAny = healthCheckServiceIfAny;
@@ -53,7 +51,7 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
         val health = healthCheckServiceIfAny.map(healthCheckService ->
-                        isisInteractionFactory.callAuthenticated(new HealthAuthSession(), healthCheckService::check))
+                        isisInteractionFactory.callAuthenticated(new HealthAuthentication(), healthCheckService::check))
                      .orElse(null);
         if(health != null) {
             final boolean result = health.getResult();

@@ -33,6 +33,8 @@ import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
  *
  * <p>
  * See {@link IsisLdapRealm} for typical configuration within <tt>shiro.ini</tt>.
+ *
+ * @since 1.x {@index}
  */
 public class IsisLdapContextFactory extends JndiLdapContextFactory {
 

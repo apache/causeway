@@ -2,32 +2,197 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-CAUTION: TODO v2 - to document.  AbstractIsisInteractionTemplate has been removed.
+Quartz is (according to their link:https://www.quartz-scheduler.org/[website]) a richly featured, open source job scheduling library that can be integrated within virtually any Java application.
 
-* Implementation of a Quartz `Job` interface:
+We can configure Quartz to run ``Job``s using xref:userguide:btb:headless-access.adoc[headless access], for numerous use cases, most commonly involving the polling of work to be performed in the background.
+For example:
+
+* period archiving of data to another system, eg blob images to S3
+* aggregating data
+* proactively monitoring health/status
+
+In simple use cases, Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-quartz[integration] with Quartz can be used without bringing in a dependency on this extension.
+
+This extension supports the use case where there is a requirement to pass state from one invocation of a ``Job`` to the next.
+
+
+== Simple use case
+
+The simple use case (that _doesn't_ require a dependeny on this extension) is demonstrated in the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
+
+* add the dependency (eg to the webapp module):
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-quartz</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+    <exclusions>
+        <exclusion>                                         <!--.-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+----
+<.> to avoid Slf4j <--> log4j2 cyclic dependency
+
+* implement quartz's `Job` interface:
 +
 [source,java]
-.DemoJob.java
+.SampleJob.java
 ----
-include::example$DemoJob.java[tag=class]
-----
-+
-Domain services (such as `IsisConfiguration`) can be injected into this class.
+@Component
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Slf4j
+public class SampleJob implements Job {
 
-* The job calls a subclass of `AbstractIsisInteractionTemplate` to perform the work.
-This runs within a transactionm under the user and role specified by `DemoJob`, above:
+    private final InteractionFactory interactionFactory;         // <1>
+    private final TransactionalProcessor transactionalProcessor; // <1>
+
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        // ...
+    }
+}
+----
+<1> for xref:userguide:btb:headless-access.adoc[headless access] to the domain object model.
+
+* Set up beans to act as the trigger factory and a job factory:
 +
-.DemoIsisInteractionTemplate.java
+[source,java]
+.QuartzModule.java
+----
+@Configuration
+@ComponentScan
+public class QuartzModule {
+
+    private static final int REPEAT_INTERVAL_SECS = 60;
+    private static final int START_DELAY_SECS = 20;
+    private static final int MILLIS_PER_SEC = 1000;
+
+    @Bean
+    public JobDetailFactoryBean jobDetail() {
+        val jobDetailFactory = new JobDetailFactoryBean();
+        jobDetailFactory.setJobClass(SampleJob.class);
+        jobDetailFactory.setDescription("Invoke Sample Job service...");
+        jobDetailFactory.setDurability(true);
+        return jobDetailFactory;
+    }
+
+    @Bean
+    public SimpleTriggerFactoryBean trigger(JobDetail job) {
+        val trigger = new SimpleTriggerFactoryBean();
+        trigger.setJobDetail(job);
+        trigger.setStartDelay(START_DELAY_SECS * MILLIS_PER_SEC);
+        trigger.setRepeatInterval(REPEAT_INTERVAL_SECS * MILLIS_PER_SEC);
+        trigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+        return trigger;
+    }
+}
+----
+
+* include the `QuartzModule` in the application's top-level `AppManifest`.
+
+
+
+== More complex use cases
+
+This extension supports a couple of slightly more advanced use cases.
+
+If either are used:
+
+* update the `pom.xml` dependencies:
++
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.extensions</groupId>
+    <artifactId>isis-extensions-quartz-impl</artifactId>
+</dependency>
+----
+
+* import the extension's module in your application's top-level `AppManifest`:
++
 [source,java]
 ----
-include::example$DemoIsisInteractionTemplate.java[tag=class]
+@Configuration
+@Import({
+        // ...
+        IsisModuleExtQuartzImpl.class,
+})
+// ...
+public class AppManifest {
+    // ...
+}
 ----
 
-* Finally, the job is configured to run using Spring:
-+
-.DemoJobQuartzConfigurerModule.java
+=== Preserving job state
+
+Sometimes there is a requirement to pass state from one invocation of a job to another.
+For example, if some external service is unavailable, then we wouldn't necessarily want to a periodic job to keep trying to connect, creating noise in the logs.
+
+To support this use case, this extension provides the xref:refguide:extensions:index/quartz/context/JobExecutionData.adoc[] class, which simplifies the API of Quartz's job data map.
+
+
+
+=== Injecting domain services into jobs
+
+CAUTION: TODO - it's possible this boilerplate may be unnecessary?
+xref:docs:starters:simpleapp.adoc[SimpleApp]'s job seems to be injected into without this extra rigamorole.
+
+If we want to inject domain services into the Quartz `Job`, then we should define a number of additional beans.
+These instantiate xref:refguide:extensions:index/quartz/spring/AutowiringSpringBeanJobFactory.adoc[] as the job factory:
+
 [source,java]
+.QuartzModule.java
 ----
-include::example$DemoJobQuartzConfigurerModule.java[tag=class]
+import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
+
+@Configuration
+@ComponentScan
+public class QuartzModule {
+
+    // ...
+
+    @Bean
+    public SpringBeanJobFactory springBeanJobFactory() {
+        val jobFactory = new AutowiringSpringBeanJobFactory();  // <.>
+        jobFactory.setApplicationContext(applicationContext);
+        return jobFactory;
+    }
+
+    @Bean
+    public SchedulerFactoryBean scheduler(
+            final Trigger trigger,
+            final JobDetail jobDetail,
+            final SpringBeanJobFactory sbjf) {
+        val schedulerFactory = new SchedulerFactoryBean();
+
+        schedulerFactory.setJobFactory(sbjf);
+        schedulerFactory.setJobDetails(jobDetail);
+        schedulerFactory.setTriggers(trigger);
+
+        return schedulerFactory;
+    }
+
+    @Bean
+    public Scheduler scheduler(
+            final Trigger trigger,
+            final JobDetail job,
+            final SchedulerFactoryBean factory)
+            throws SchedulerException {
+        val scheduler = factory.getScheduler();
+        scheduler.start();
+        return scheduler;
+    }
 ----
+<.> as provided by this extension
+
 

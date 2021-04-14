@@ -18,25 +18,40 @@
  */
 package org.apache.isis.applib.services.menu;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 
-// tag::refguide[]
+/**
+ * Returns the {@link BS3MenuBars} instance (bootstrap3-specific subtype of
+ * {@link org.apache.isis.applib.layout.menubars.MenuBars}, for the UI.
+ *
+ * <p>
+ *     The default implementation deserializes the `menubars.layout.xml` file
+ *     read from the classpath.
+ * </p>
+ *
+ * <p>
+ *     The service is <i>called</i> by the default implementation of
+ *     {@link MenuBarsService}.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface MenuBarsLoaderService {
 
-    // end::refguide[]
     /**
      * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p>
+     * If not, then the calling {@link MenuBarsService}will cache the layout
+     * once loaded.
+     * </p>
      */
-    // tag::refguide[]
-    boolean supportsReloading();    // <.>
+    boolean supportsReloading();
 
-    // end::refguide[]
     /**
-     * Returns a new instance of a {@link BS3MenuBars}, else <tt>null</tt>.
+     * Returns a new instance of a {@link BS3MenuBars} if possible,
+     * else <tt>null</tt>.
      */
-    // tag::refguide[]
-    BS3MenuBars menuBars();         // <.>
+    BS3MenuBars menuBars();
 
 }
-// end::refguide[]

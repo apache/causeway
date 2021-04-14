@@ -1,0 +1,98 @@
+= JUnitRuleMockery2
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Use as a `@Rule` , meaning that the `@RunWith(JMock.class)` can be ignored.
+
+----
+
+public class MyTest {
+
+    @Rule
+    public final Junit4Mockery2 context = Junit4Mockery2.createFor(Mode.INTERFACES);
+
+}
+----
+
+The class also adds some convenience methods, and uses a factory method to make it explicit whether the context can mock only interfaces or interfaces and classes.
+
+== API
+
+[source,java]
+.JUnitRuleMockery2.java
+----
+class JUnitRuleMockery2 {
+  JUnitRuleMockery2 createFor(final Mode mode)     // <.>
+  Statement apply(final Statement base, final FrameworkMethod method, final Object target)
+  T getClassUnderTest()
+  T ignoring(final T mock)     // <.>
+  T allowing(final T mock)     // <.>
+  T never(final T mock)     // <.>
+  void ignoring(Object... mocks)     // <.>
+  Object oneOf(final Object mock)     // <.>
+  T checking(T mock, Class<? extends ExpectationsOn> expectationsClass)
+  Expectations expectationsWith(Consumer<Expectations> initializer)
+}
+----
+
+<.> xref:#createFor__Mode[createFor(Mode)]
++
+--
+Factory method.
+--
+<.> xref:#ignoring__T[ignoring(T)]
++
+--
+Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
+--
+<.> xref:#allowing__T[allowing(T)]
++
+--
+Allow any interaction with the mock; an allowing mock will be returned in turn.
+--
+<.> xref:#never__T[never(T)]
++
+--
+Prohibit any interaction with the mock.
+--
+<.> xref:#ignoring__Object[ignoring(Object)]
++
+--
+Ignore a set of mocks.
+--
+<.> xref:#oneOf__Object[oneOf(Object)]
++
+--
+Require one interaction
+--
+
+== Members
+
+[#createFor__Mode]
+=== createFor(Mode)
+
+Factory method.
+
+[#ignoring__T]
+=== ignoring(T)
+
+Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
+
+[#allowing__T]
+=== allowing(T)
+
+Allow any interaction with the mock; an allowing mock will be returned in turn.
+
+[#never__T]
+=== never(T)
+
+Prohibit any interaction with the mock.
+
+[#ignoring__Object]
+=== ignoring(Object)
+
+Ignore a set of mocks.
+
+[#oneOf__Object]
+=== oneOf(Object)
+
+Require one interaction

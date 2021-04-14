@@ -21,13 +21,14 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
@@ -57,7 +58,6 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -67,8 +67,8 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import lombok.NonNull;
 import lombok.val;
 
-public class ObjectActionDefault 
-extends ObjectMemberAbstract 
+public class ObjectActionDefault
+extends ObjectMemberAbstract
 implements ObjectAction {
 
     public static ActionType getType(final String typeStr) {
@@ -151,7 +151,7 @@ implements ObjectAction {
     public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
-    
+
     // -- Parameters
 
     @Override
@@ -165,7 +165,7 @@ implements ObjectAction {
     }
 
     protected Can<ObjectActionParameter> determineParameters() {
-        
+
         val parameterCount = getParameterCount();
         val paramPeers = getFacetedMethod().getParameters();
 
@@ -231,27 +231,27 @@ implements ObjectAction {
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject target, 
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new ActionVisibilityContext(
-                headFor(target), 
-                this, 
-                getIdentifier(), 
-                interactionInitiatedBy, 
+                headFor(target),
+                this,
+                getIdentifier(),
+                interactionInitiatedBy,
                 where);
     }
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject target, 
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new ActionUsabilityContext(
-                headFor(target), 
-                this, 
-                getIdentifier(), 
-                interactionInitiatedBy, 
+                headFor(target),
+                this,
+                getIdentifier(),
+                interactionInitiatedBy,
                 where);
     }
 
@@ -295,14 +295,14 @@ implements ObjectAction {
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
-        
+
         val actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
                 val validityContext = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
                                 head, proposedArguments, i, interactionInitiatedBy);
-                
+
                 InteractionUtils.isValidResultSet(getParameter(i), validityContext, resultSet);
             }
         }
@@ -325,7 +325,7 @@ implements ObjectAction {
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
-        
+
         val validityContext = createActionInvocationInteractionContext(
                 head, proposedArguments, interactionInitiatedBy);
         InteractionUtils.isValidResultSet(this, validityContext, resultSet);
@@ -335,11 +335,11 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return new ActionValidityContext(
-                head, 
-                this, 
-                getIdentifier(), 
+                head,
+                this,
+                getIdentifier(),
                 proposedArguments,
                 interactionInitiatedBy);
     }
@@ -356,7 +356,7 @@ implements ObjectAction {
             final Where where) {
 
         val target = head.getOwner();
-        
+
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
         if (visibility.isVetoed()) {
@@ -390,9 +390,9 @@ implements ObjectAction {
 
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
-        
+
         setupCommand(head.getTarget(), argumentAdapters);
-        
+
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }
 
@@ -403,7 +403,7 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
@@ -420,13 +420,13 @@ implements ObjectAction {
 
         val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
         if (!actionDefaultsFacet.isFallback()) {
-            
+
             // use the old defaultXxx approach
-            
+
             final int parameterCount = getParameterCount();
             val parameters = getParameters();
             final Object[] parameterDefaultPojos;
-            
+
             parameterDefaultPojos = actionDefaultsFacet.getDefaults(target);
             if (parameterDefaultPojos.length != parameterCount) {
                 throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + actionDefaultsFacet);
@@ -441,7 +441,7 @@ implements ObjectAction {
                     }
                 }
             }
-            
+
             final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
                 val paramSpec = parameters.getElseFail(i).getSpecification();
@@ -449,9 +449,9 @@ implements ObjectAction {
             }
 
             return Can.ofArray(parameterDefaultAdapters);
-            
-        } 
-        
+
+        }
+
         // else use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
         return interactionHead(target)
@@ -460,8 +460,8 @@ implements ObjectAction {
 
     }
 
-        
-    
+
+
     private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
 
     /**
@@ -476,7 +476,7 @@ implements ObjectAction {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new ApplicationException(e);
+            throw new RecoverableException(e);
         } finally {
             commandTargetAdaptersHolder.remove();
         }
@@ -493,7 +493,7 @@ implements ObjectAction {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final int parameterCount = getParameterCount();
-        CanVector<ManagedObject> paramChoicesVector; 
+        CanVector<ManagedObject> paramChoicesVector;
 
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
@@ -521,9 +521,14 @@ implements ObjectAction {
                 val param = parameters.getElseFail(i);
                 val paramSpec = param.getSpecification();
                 val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
-                
+
                 if (paramFacet != null && !paramFacet.isFallback()) {
-                    val visibleChoices = paramFacet.getChoices(paramSpec, target, emptyPendingArgs, interactionInitiatedBy);
+
+                    val visibleChoices = paramFacet.getChoices(
+                            paramSpec,
+                            interactionHead(target),
+                            emptyPendingArgs,
+                            interactionInitiatedBy);
                     ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
                             getSpecificationLoader(), visibleChoices, paramSpec);
                     paramChoicesVector.set(i, visibleChoices);
@@ -533,36 +538,6 @@ implements ObjectAction {
             }
         }
         return paramChoicesVector;
-
-//        final List<Can<ManagedObject>> parameterChoicesAdapters = new ArrayList<>(parameterCount);
-//        for (int i = 0; i < parameterCount; i++) {
-//            
-//            ManagedObject[] choices;
-//            
-//            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
-//
-//            if (paramChoicesVector[i] != null && paramChoicesVector[i].length > 0) {
-//                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-//                        getSpecificationLoader(), paramChoicesVector[i], paramSpec);
-//                choices = new ManagedObject[paramChoicesVector[i].length];
-//                for (int j = 0; j < paramChoicesVector[i].length; j++) {
-//                    choices[j] = ManagedObject.of(paramSpec, paramChoicesVector[i][j]);
-//                }
-//            } else if (paramSpec.isNotCollection()) {
-//                choices = new ManagedObject[0];
-//            } else {
-//                throw new UnknownTypeException(paramSpec);
-//            }
-//
-//            if (choices.length == 0) {
-//                choices = null;
-//            }
-//            
-//            parameterChoicesAdapters.add(Can.ofArray(choices));
-//            
-//        }
-//
-//        return Can.ofCollection(parameterChoicesAdapters);
     }
 
     @Override
@@ -579,7 +554,7 @@ implements ObjectAction {
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
-        setupCommand(targetAdapter, ()->commandDtoFor(targetAdapter, argumentAdapters));
+        setupCommand(targetAdapter, interactionId->commandDtoFor(interactionId, targetAdapter, argumentAdapters));
     }
 
     @Override
@@ -613,18 +588,19 @@ implements ObjectAction {
     }
 
     // -- HELPER
-    
+
     private CommandDto commandDtoFor(
+            final UUID interactionId,
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
-        
+
         val commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
                     ? Can.ofCollection(commandTargetAdaptersHolder.get())
                     : Can.ofSingleton(targetAdapter);
 
-        return getCommandDtoServiceInternal()
-                .asCommandDto(commandTargetAdapters, this, argumentAdapters);
+        return getCommandDtoFactory()
+                .asCommandDto(interactionId, commandTargetAdapters, this, argumentAdapters);
     }
-    
+
 }

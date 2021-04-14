@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +34,10 @@ import demoapp.dom.types.Samples;
 
 
 //tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
+@Action(
+        semantics = SemanticsOf.SAFE,
+        hidden = Where.EVERYWHERE   // TODO: not yet supported
+)
 @RequiredArgsConstructor
 public class JavaAwtImageHolder_actionReturningCollection {
 

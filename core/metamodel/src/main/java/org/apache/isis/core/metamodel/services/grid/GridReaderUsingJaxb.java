@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
  *
  */
 @Service
-@Named("isisMetaModel.GridReaderUsingJaxb")
+@Named("isis.metamodel.GridReaderUsingJaxb")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

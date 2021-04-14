@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration;
 
-import java.util.Date;
 import java.util.Objects;
 
 import org.apache.wicket.Session;
@@ -28,17 +27,17 @@ import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -54,8 +53,8 @@ import lombok.val;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis 
-extends AuthenticatedWebSession 
+public class AuthenticatedWebSessionForIsis
+extends AuthenticatedWebSession
 implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonContext {
 
     private static final long serialVersionUID = 1L;
@@ -66,20 +65,15 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    @Getter protected transient IsisAppCommonContext commonContext; 
-    
+    @Getter protected transient IsisAppCommonContext commonContext;
+
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;
 
     /**
      * As populated in {@link #signIn(String, String)}.
-     *
-     * <p>
-     * However, if a valid session has been set up previously and stored in {@link AuthenticationSessionWormhole}, then
-     * it will be used instead.
-     * </p>
      */
-    private AuthenticationSession authenticationSession;
+    private Authentication authentication;
 
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
@@ -94,10 +88,10 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
+        val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(USER_ROLE);
-        this.authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authenticationSession != null) {
+        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
+        if (this.authentication != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);
             return true;
         } else {
@@ -123,11 +117,11 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
-        getAuthenticationManager().closeSession(getAuthenticationSession());
+        getAuthenticationManager().closeSession(getAuthentication());
         //getIsisInteractionFactory().closeSessionStack();
-        
+
         super.invalidateNow();
-        
+
     }
 
     @Override
@@ -139,28 +133,28 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                 : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
         String userName = null;
-        if (getAuthenticationSession() != null) {
-            userName = getAuthenticationSession().getUserName();
+        if (getAuthentication() != null) {
+            userName = getAuthentication().getUserName();
         }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public synchronized AuthenticationSession getAuthenticationSession() {
-        
-        commonContext.getIsisInteractionTracker().currentAuthenticationSession()
-        .ifPresent(currentAuthenticationSession->{
-            
-            if (getAuthenticationManager().isSessionValid(currentAuthenticationSession)) {
-                if (this.authenticationSession != null) {
-                    if (Objects.equals(currentAuthenticationSession.getUserName(), this.authenticationSession.getUserName())) {
+    public synchronized Authentication getAuthentication() {
+
+        commonContext.getInteractionTracker().currentAuthentication()
+        .ifPresent(currentAuthentication->{
+
+            if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
+                if (this.authentication != null) {
+                    if (Objects.equals(currentAuthentication.getUserName(), this.authentication.getUserName())) {
                         // ok, same session so far as Wicket is concerned
                         if (isSignedIn()) {
                             // nothing to do...
                         } else {
                             // force as signed in (though not sure if this case can occur)
                             signIn(true);
-                            this.authenticationSession = currentAuthenticationSession;
+                            this.authentication = currentAuthentication;
                         }
                     } else {
                         // different user name
@@ -171,26 +165,27 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
                         // either way, the current one is now signed in
                         signIn(true);
-                        this.authenticationSession = currentAuthenticationSession;
+                        this.authentication = currentAuthentication;
                     }
                 } else {
                     signIn(true);
-                    this.authenticationSession = currentAuthenticationSession;
+                    this.authentication = currentAuthentication;
                 }
             }
-            
+
         });
 
-        return this.authenticationSession;
+        return this.authentication;
     }
 
     /**
-     * This is a no-op if the {@link #getAuthenticationSession() authentication session}'s
-     * {@link AuthenticationSession#getType() type} is {@link AuthenticationSession.Type#EXTERNAL external} (eg as
-     * managed by keycloak).
+     * This is a no-op if the {@link #getAuthentication() authentication session}'s
+     * {@link Authentication#getType() type} is
+     * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external}
+     * (eg as managed by keycloak).
      */
     public void invalidate() {
-        if(this.authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+        if(this.authentication.getType() == Authentication.Type.EXTERNAL) {
             return;
         }
         // otherwise
@@ -204,7 +199,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         }
 
         final Roles roles = new Roles();
-        getAuthenticationSession().getRoles().stream()
+        getAuthentication().getUser().streamRoleNames()
         .forEach(roles::add);
         return roles;
     }
@@ -252,10 +247,13 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
+
+            val now = virtualClock().javaUtilDate();
+
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingServices.forEach(
-                sessionLoggingService -> sessionLoggingService.log(type, username, now(), causedBy, Integer.toString(sessionHashCode))
+            sessionLoggingServices.forEach(sessionLoggingService ->
+                sessionLoggingService.log(type, username, now, causedBy, Integer.toString(sessionHashCode))
             );
         };
 
@@ -269,28 +267,28 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     protected Can<SessionLoggingService> getSessionLoggingServices() {
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
-    
-    protected IsisInteractionFactory getIsisInteractionFactory() {
-        return commonContext.lookupServiceElseFail(IsisInteractionFactory.class);
+
+    protected InteractionFactory getIsisInteractionFactory() {
+        return commonContext.lookupServiceElseFail(InteractionFactory.class);
     }
 
-    protected IsisInteractionTracker getIsisInteractionTracker() {
-        return commonContext.getIsisInteractionTracker();
+    protected InteractionTracker getIsisInteractionTracker() {
+        return commonContext.getInteractionTracker();
     }
 
-    private Date now() {
+    private VirtualClock virtualClock() {
         try {
             return commonContext.getServiceRegistry()
                     .lookupService(ClockService.class)
-                    .map(ClockService::nowAsJavaUtilDate)
-                    .orElse(nowFallback());
+                    .map(ClockService::getClock)
+                    .orElseGet(this::nowFallback);
         } catch (Exception e) {
             return nowFallback();
         }
     }
 
-    private Date nowFallback() {
-        return new Date(Clock.getEpochMillis());
+    private VirtualClock nowFallback() {
+        return VirtualClock.system();
     }
 
     @Override

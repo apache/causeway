@@ -35,13 +35,12 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Hamcrest {@link org.hamcrest.Matcher} implementations.
- * 
+ *
+ * @since 2.0 {@index}
  */
 public final class IsisMatchers {
 
-    private IsisMatchers() {
-    }
-
+    private IsisMatchers() { }
 
     public static <T> Matcher<T> anInstanceOf(final Class<T> expected) {
         return new TypeSafeMatcher<T>() {
@@ -185,12 +184,12 @@ public final class IsisMatchers {
 
     public static <T> Matcher<List<T>> listContaining(final T t) {
         return new TypeSafeMatcher<List<T>>() {
-    
+
             @Override
             public void describeTo(Description arg0) {
                 arg0.appendText("list containing ").appendValue(t);
             }
-    
+
             @Override
             public boolean matchesSafely(List<T> arg0) {
                 return arg0.contains(t);
@@ -205,7 +204,7 @@ public final class IsisMatchers {
             @Override
             public void describeTo(Description arg0) {
                 arg0.appendText("has items ").appendValue(items);
-                
+
             }
 
             @Override
@@ -265,7 +264,7 @@ public final class IsisMatchers {
         };
     }
 
-    
+
     public static Matcher<File> equalsFile(final File file) throws IOException {
         final String canonicalPath = file.getCanonicalPath();
         return new TypeSafeMatcher<File>() {
@@ -305,6 +304,4 @@ public final class IsisMatchers {
             }
         };
     }
-
-
 }

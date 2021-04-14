@@ -27,7 +27,9 @@ import org.asciidoctor.ast.Title;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString(callSuper = true)
 public class SimpleDocument extends SimpleStructuralNode implements Document {
 
     @Getter @Setter private Title structuredDoctitle;

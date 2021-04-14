@@ -19,6 +19,9 @@
 package org.apache.isis.extensions.commandlog.impl.jdo;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +33,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -39,12 +41,12 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -53,154 +55,144 @@ import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides supporting functionality for querying and persisting
  * {@link CommandJdo command} entities.
  */
 @Service
-@Named("isisExtensionsCommandLog.CommandJdoRepository")
+@Named("isis.ext.commandLog.CommandJdoRepository")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public class CommandJdoRepository {
 
     @Inject final Provider<InteractionContext> interactionContextProvider;
-    @Inject final RepositoryService repositoryService;
-    @Inject final IsisJdoSupport_v3_2 isisJdoSupport;
+    @Inject final Provider<RepositoryService> repositoryServiceProvider;
+    @Inject final JdoSupportService jdoSupport;
 
     public List<CommandJdo> findByFromAndTo(
-            @Nullable final LocalDate from,
-            @Nullable final LocalDate to) {
+            final @Nullable LocalDate from,
+            final @Nullable LocalDate to) {
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
-        
+
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampBetween", 
-                        "from", fromTs,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTimestampBetween")
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampAfter", 
-                        "from", fromTs);
+                query = Query.named(CommandJdo.class, "findByTimestampAfter")
+                        .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTimestampBefore", 
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTimestampBefore")
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "find");
+                query = Query.named(CommandJdo.class, "find");
             }
         }
-        return repositoryService.allMatches(query);
+        return repositoryService().allMatches(query);
     }
 
 
-    public Optional<CommandJdo> findByUniqueId(final UUID uniqueId) {
-        return repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class,
-                        "findByUniqueIdStr",
-                        "uniqueIdStr", uniqueId.toString()));
+    public Optional<CommandJdo> findByInteractionId(final UUID interactionId) {
+        return repositoryService().firstMatch(
+                Query.named(CommandJdo.class, "findByInteractionIdStr")
+                    .withParameter("interactionIdStr", interactionId.toString()));
     }
 
     public List<CommandJdo> findByParent(final CommandJdo parent) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class,
-                        "findByParent",
-                        "parent", parent));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findByParent")
+                    .withParameter("parent", parent));
     }
 
 
     public List<CommandJdo> findCurrent() {
-        return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findCurrent"));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findCurrent"));
     }
 
 
     public List<CommandJdo> findCompleted() {
-        return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findCompleted"));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findCompleted"));
     }
 
 
     public List<CommandJdo> findByTargetAndFromAndTo(
-            final Bookmark target
-            , final LocalDate from
-            , final LocalDate to) {
+            final Bookmark target,
+            final @Nullable LocalDate from,
+            final @Nullable LocalDate to) {
 
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
-        
+
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampBetween", 
-                        "target", target,
-                        "from", fromTs,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBetween")
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampAfter", 
-                        "target", target,
-                        "from", fromTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampAfter")
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTargetAndTimestampBefore", 
-                        "target", target,
-                        "to", toTs);
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBefore")
+                        .withParameter("target", target)
+                        .withParameter("to", toTs);
             } else {
-                query = new QueryDefault<>(CommandJdo.class,
-                        "findByTarget", 
-                        "target", target);
+                query = Query.named(CommandJdo.class, "findByTarget")
+                        .withParameter("target", target);
             }
         }
-        return repositoryService.allMatches(query);
+        return repositoryService().allMatches(query);
     }
 
-    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
+    private static Timestamp toTimestampStartOfDayWithOffset(
+            final @Nullable LocalDate dt,
+            final int daysOffset) {
+
         return dt!=null
-                ?new java.sql.Timestamp(dt.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis())
-                :null;
+                ? new java.sql.Timestamp(
+                        Instant.from(dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault()))
+                        .toEpochMilli())
+                : null;
     }
 
 
     public List<CommandJdo> findRecentByUsername(final String username) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(
-                        CommandJdo.class,
-                        "findRecentByUsername",
-                        "username", username));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findRecentByUsername")
+                    .withParameter("username", username));
     }
 
 
     public List<CommandJdo> findRecentByTarget(final Bookmark target) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(
-                        CommandJdo.class,
-                        "findRecentByTarget",
-                        "target", target));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findRecentByTarget")
+                    .withParameter("target", target));
     }
 
 
     /**
-     * Intended to support the replay of commands on a seconadry instance of
+     * Intended to support the replay of commands on a secondary instance of
      * the application.
      *
      * This finder returns all (completed) {@link CommandJdo}s started after
-     * the command with the specified uniqueId.  The number of commands
+     * the command with the specified interactionId.  The number of commands
      * returned can be limited so that they can be applied in batches.
      *
-     * If the provided uniqueId is null, then only a single
+     * If the provided interactionId is null, then only a single
      * {@link CommandJdo command} is returned.  This is intended to support
      * the case when the secondary does not yet have any
      * {@link CommandJdo command}s replicated.  In practice this is unlikely;
@@ -209,26 +201,24 @@ public class CommandJdoRepository {
      * case there will already be a {@link CommandJdo command} representing the
      * current high water mark on the secondary system.
      *
-     * If the unique id is not null but the corresponding
+     * If the interactionid is not null but the corresponding
      * {@link CommandJdo command} is not found, then <tt>null</tt> is returned.
      * In the replay scenario the caller will probably interpret this as an
      * error because it means that the high water mark on the secondary is
      * inaccurate, referring to a non-existent {@link CommandJdo command} on
      * the primary.
      *
-     * @param uniqueId - the identifier of the {@link CommandJdo command} being
+     * @param interactionId - the identifier of the {@link CommandJdo command} being
      *                   the replay hwm (using {@link #findMostRecentReplayed()} on the
      *                   secondary), or null if no HWM was found there.
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
-     *
-     * @return
      */
-    public List<CommandJdo> findSince(final UUID uniqueId, final Integer batchSize) {
-        if(uniqueId == null) {
+    public List<CommandJdo> findSince(final UUID interactionId, final Integer batchSize) {
+        if(interactionId == null) {
             return findFirst();
         }
-        final CommandJdo from = findByUniqueIdElseNull(uniqueId);
+        final CommandJdo from = findByInteractionIdElseNull(interactionId);
         if(from == null) {
             return Collections.emptyList();
         }
@@ -236,38 +226,40 @@ public class CommandJdoRepository {
     }
 
     private List<CommandJdo> findFirst() {
-        Optional<CommandJdo> firstCommandIfAny = repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class, "findFirst"));
+        Optional<CommandJdo> firstCommandIfAny = repositoryService().firstMatch(
+                Query.named(CommandJdo.class, "findFirst"));
         return firstCommandIfAny
                 .map(Collections::singletonList)
                 .orElse(Collections.emptyList());
     }
 
 
-    private CommandJdo findByUniqueIdElseNull(final UUID uniqueId) {
-        val tsq = isisJdoSupport.newTypesafeQuery(CommandJdo.class);
+    private CommandJdo findByInteractionIdElseNull(final UUID interactionId) {
+        val tsq = jdoSupport.newTypesafeQuery(CommandJdo.class);
         val cand = QCommandJdo.candidate();
         val q = tsq.filter(
-                cand.uniqueIdStr.eq(tsq.parameter("uniqueIdStr", String.class))
+                cand.interactionIdStr.eq(tsq.parameter("interactionIdStr", String.class))
         );
-        q.setParameter("uniqueIdStr", uniqueId.toString());
+        q.setParameter("interactionIdStr", interactionId.toString());
         return q.executeUnique();
     }
 
     private List<CommandJdo> findSince(
             final Timestamp timestamp,
             final Integer batchSize) {
-        val q = new QueryDefault<>(
-                CommandJdo.class,
-                "findSince",
-                "timestamp", timestamp);
 
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
-        if(batchSize != null) {
-            q.withCount(batchSize == 1 ? 2 : batchSize);
-        }
-        final List<CommandJdo> commandJdos = repositoryService.allMatches(q);
-        return batchSize != null && batchSize == 1 && commandJdos.size() > 1
+        // XXX that's a historic workaround, should rather be fixed upstream
+        val needsTrimFix = batchSize != null && batchSize == 1;
+
+        val q = Query.named(CommandJdo.class, "findSince")
+                .withParameter("timestamp", timestamp)
+                .withRange(QueryRange.limit(
+                        needsTrimFix ? 2L : batchSize
+                ));
+
+        final List<CommandJdo> commandJdos = repositoryService().allMatches(q);
+        return needsTrimFix && commandJdos.size() > 1
                     ? commandJdos.subList(0,1)
                     : commandJdos;
     }
@@ -284,9 +276,8 @@ public class CommandJdoRepository {
      */
     public Optional<CommandJdo> findMostRecentReplayed() {
 
-        return repositoryService.firstMatch(
-                new QueryDefault<>(
-                        CommandJdo.class, "findMostRecentReplayed"));
+        return repositoryService().firstMatch(
+                Query.named(CommandJdo.class, "findMostRecentReplayed"));
     }
 
     /**
@@ -301,22 +292,21 @@ public class CommandJdoRepository {
      * </p>
      */
     public Optional<CommandJdo> findMostRecentCompleted() {
-        return repositoryService.firstMatch(
-                new QueryDefault<>(CommandJdo.class, "findMostRecentCompleted"));
+        return repositoryService().firstMatch(
+                Query.named(CommandJdo.class, "findMostRecentCompleted"));
     }
 
 
     public List<CommandJdo> findNotYetReplayed() {
-        return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class,
-                        "findNotYetReplayed"));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findNotYetReplayed"));
     }
 
 
 
     public List<CommandJdo> findReplayedOnSecondary() {
-        return repositoryService.allMatches(
-                new QueryDefault<>(CommandJdo.class, "findReplayableMostRecentStarted"));
+        return repositoryService().allMatches(
+                Query.named(CommandJdo.class, "findReplayableMostRecentStarted"));
     }
 
 
@@ -343,7 +333,7 @@ public class CommandJdoRepository {
 
         final CommandJdo commandJdo = new CommandJdo();
 
-        commandJdo.setUniqueIdStr(dto.getTransactionId());
+        commandJdo.setInteractionIdStr(dto.getInteractionId());
         commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
         commandJdo.setUsername(dto.getUser());
 
@@ -360,11 +350,15 @@ public class CommandJdoRepository {
     }
 
     public void persist(final CommandJdo commandJdo) {
-        repositoryService.persist(commandJdo);
+        repositoryService().persist(commandJdo);
     }
 
     public void truncateLog() {
-        repositoryService.removeAll(CommandJdo.class);
+        repositoryService().removeAll(CommandJdo.class);
+    }
+
+    private RepositoryService repositoryService() {
+        return repositoryServiceProvider.get();
     }
 
 }

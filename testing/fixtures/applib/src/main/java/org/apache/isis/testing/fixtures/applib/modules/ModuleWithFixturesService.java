@@ -40,18 +40,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
 import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
 import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
-import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisTstFixtures.ModuleService")
+@Named("isis.test.ModuleWithFixturesService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -119,24 +119,26 @@ public class ModuleWithFixturesService {
                     if(annotatedWithConfiguration != null && annotatedWithImport != null) {
 
                         final Import importAnnot = Annotations.getAnnotation(annotatedWithImport.getClass(), Import.class);
-                        final Class<?>[] importedClasses = importAnnot.value();
-
-                        Arrays.stream(importedClasses)
-                                .forEach(importedClass -> {
-                                    final Map<String, ?> importedBeansOfType = context.getBeansOfType(importedClass);
-                                    importedBeansOfType.forEach((name, entryValue) -> {
-                                        final Collection<?> beanCollection;
-                                        if (entryValue instanceof Collection) {
-                                            beanCollection = (Collection) entryValue;
-                                        } else {
-                                            beanCollection = Collections.singletonList(entryValue);
-                                        }
-                                        beanCollection.stream()
-                                                .filter(ModuleWithFixtures.class::isInstance)
-                                                .map(ModuleWithFixtures.class::cast)
-                                                .forEach(mod -> importedModulesByBeanName.put(name, mod));
-                                    });
+                        if(importAnnot!=null) {
+                            final Class<?>[] importedClasses = importAnnot.value();
+    
+                            Arrays.stream(importedClasses)
+                            .forEach(importedClass -> {
+                                final Map<String, ?> importedBeansOfType = context.getBeansOfType(importedClass);
+                                importedBeansOfType.forEach((name, entryValue) -> {
+                                    final Collection<?> beanCollection;
+                                    if (entryValue instanceof Collection) {
+                                        beanCollection = (Collection) entryValue;
+                                    } else {
+                                        beanCollection = Collections.singletonList(entryValue);
+                                    }
+                                    beanCollection.stream()
+                                            .filter(ModuleWithFixtures.class::isInstance)
+                                            .map(ModuleWithFixtures.class::cast)
+                                            .forEach(mod -> importedModulesByBeanName.put(name, mod));
                                 });
+                            });
+                        }
                     }
 
                     val descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);

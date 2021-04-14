@@ -19,12 +19,14 @@
 
 package org.apache.isis.applib.services.wrapper;
 
+import org.apache.isis.applib.exceptions.recoverable.InteractionException;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 
 /**
  * Superclass of exceptions which indicate an attempt to interact with a class
  * member that is in some way hidden or invisible.
+ * @since 2.0 {@index}
  */
 public class HiddenException extends InteractionException {
 

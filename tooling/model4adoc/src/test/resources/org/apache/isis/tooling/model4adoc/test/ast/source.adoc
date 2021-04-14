@@ -1,0 +1,8 @@
+= Source
+
+[source,java]
+.Java Example
+----
+class Hello {
+}
+----

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.ArrayList;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -33,6 +34,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -46,8 +48,6 @@ import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,7 +61,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectActionParameterAbstract 
-implements ObjectActionParameter, FacetHolder.Delegating {
+implements ObjectActionParameter, HasFacetHolder {
 
     private final FeatureType featureType;
     private final int number;
@@ -175,8 +175,8 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public boolean hasAutoComplete() {
-        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
-        return facet != null;
+        val actionParameterAutoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
+        return actionParameterAutoCompleteFacet != null;
     }
 
     @Override
@@ -222,8 +222,11 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         if (choicesFacet == null) {
             return Can.empty();
         }
-
-        val visibleChoices = choicesFacet.getChoices(paramSpec, pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
+        
+        val visibleChoices = choicesFacet.getChoices(paramSpec, 
+                pendingArgs.getHead(), 
+                pendingArgs.getParamValues(), 
+                interactionInitiatedBy);
         checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
         
         return visibleChoices;
@@ -406,18 +409,6 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty(getAction().getParameterTypes().getElseFail(paramIndex)));
         }
         return Can.ofCollection(arguments);
-    }
-
-
-
-    // -- Dependencies (from parent)
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return parentAction.getSpecificationLoader();
-    }
-
-    protected ObjectManager getObjectManager() {
-        return parentAction.getObjectManager();
     }
 
 }

@@ -38,8 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections.Samples.FiniteSpace2;
 
 import lombok.val;

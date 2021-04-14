@@ -40,61 +40,61 @@ import lombok.val;
 @Named("demo.AsciiDocConverterService")
 public class AsciiDocConverterService {
 
-    private static ThreadLocal<Class<?>> context = new ThreadLocal<>();
+    private final static ThreadLocal<Class<?>> context = new ThreadLocal<>();
 
+    private final ResourceReaderService resourceReaderService;
 
-    private Asciidoctor asciidoctor;
-    private Options options;
+    private final Asciidoctor asciidoctor;
+    private final Options options;
 
-    private Asciidoctor getAsciidoctor() {
-        if(asciidoctor == null) {
-            asciidoctor = Asciidoctor.Factory.create();
-            asciidoctor.javaExtensionRegistry().includeProcessor(new LocalIncludeProcessor());
+    @Inject
+    public AsciiDocConverterService(ResourceReaderService resourceReaderService) {
+        this.resourceReaderService = resourceReaderService;
+        this.asciidoctor = createAsciidoctor();
+        this.options = OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .toFile(false)
+                .attributes(AttributesBuilder.attributes()
+                        .sourceHighlighter("prism")
+                        .icons("font")
+                        .get())
+                .get();
+
+    }
+
+    private Asciidoctor createAsciidoctor() {
+
+        class LocalIncludeProcessor extends IncludeProcessor {
+
+            @Override
+            public boolean handles(String target) {
+                return true;
+            }
+
+            @Override
+            public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributes) {
+                val contextClass = context.get();
+                val content = resourceReaderService.readResource(contextClass, target, attributes);
+                reader.push_include(content, target, target, 1, attributes);
+            }
         }
+
+        val asciidoctor = Asciidoctor.Factory.create();
+        asciidoctor.javaExtensionRegistry().includeProcessor(new LocalIncludeProcessor());
         return asciidoctor;
     }
 
-     class LocalIncludeProcessor extends IncludeProcessor {
-
-        @Override
-        public boolean handles(String target) {
-            return true;
-        }
-
-        @Override
-        public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributes) {
-            Class<?> contextClass = context.get();
-            val content = resourceReaderService.readResource(contextClass, target, attributes);
-            reader.push_include(content, target, target, 1, attributes);
-        }
-    }
-
-    private Options getOptions() {
-        if (options == null) {
-            options = OptionsBuilder.options()
-                    .safe(SafeMode.UNSAFE)
-                    .toFile(false)
-                    .attributes(AttributesBuilder.attributes()
-                            .sourceHighlighter("prism")
-                            .icons("font")
-                            .get())
-                    .get();
-        }
-        return options;
-    }
 
 
-    String adocToHtml(Class<?> contextClass, String adoc) {
+    String adocToHtml(final Class<?> contextClass, final String adoc) {
         try {
             context.set(contextClass);
-            return getAsciidoctor().convert(adoc, getOptions());
+            return asciidoctor.convert(adoc, options);
         } finally {
             context.remove();
         }
     }
 
 
-    @Inject
-    ResourceReaderService resourceReaderService;
 
 }

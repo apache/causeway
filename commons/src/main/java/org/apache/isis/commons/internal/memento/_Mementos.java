@@ -66,7 +66,6 @@ public final class _Mementos {
          * Returns the Object associated with {@code name}
          * @param name
          * @param cls the expected type which to cast the retrieved value to (required)
-         * @return
          */
         public <T> T get(String name, Class<T> cls);
 
@@ -100,7 +99,6 @@ public final class _Mementos {
          * Converts the value into a {@link Serializable} that is write-able to an {@link ObjectOutput}.<br/>
          * Note: write and read are complementary operators.
          * @param value
-         * @return
          */
         public Serializable write(Object value);
 
@@ -110,7 +108,6 @@ public final class _Mementos {
          * Note: write and read are complementary operators.
          * @param cls the expected type which to cast the {@code value} to (required)
          * @param value
-         * @return
          */
         public <T> T read(Class<T> cls, Serializable value);
     }

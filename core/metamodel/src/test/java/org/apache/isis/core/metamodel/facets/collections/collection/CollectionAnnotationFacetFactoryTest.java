@@ -5,9 +5,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -43,21 +43,11 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -94,32 +84,27 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             }
         });
     }
-    
+
     private static void processModify(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processModify(processMethodContext, collectionIfAny);
     }
-    
+
     private static void processHidden(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
-    private static void processEditing(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processEditing(processMethodContext, collectionIfAny);
-    }
-    
+
     private static void processTypeOf(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processTypeOf(processMethodContext, collectionIfAny);
     }
 
-    
+
     @Before
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory();
@@ -131,266 +116,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         facetFactory = null;
     }
 
-    public static class Modify extends CollectionAnnotationFacetFactoryTest {
-
-        private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
-                @Override
-                public Object getProperty(
-                        final ManagedObject inObject,
-                        final InteractionInitiatedBy interactionInitiatedBy) {
-                    return null;
-                }
-            });
-        }
-
-        private void addAddToFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new CollectionAddToFacetAbstract(holder) {
-                @Override
-                public void add(
-                        final ManagedObject inObject,
-                        final ManagedObject value,
-                        final InteractionInitiatedBy interactionInitiatedBy) {
-                }
-            });
-        }
-
-        private void addRemoveFromFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new CollectionRemoveFromFacetAbstract(holder) {
-                @Override
-                public void remove(
-                        final ManagedObject inObject,
-                        final ManagedObject element,
-                        final InteractionInitiatedBy interactionInitiatedBy) {
-                }
-            });
-        }
-
-        // @Test
-        public void withDeprecatedPostsCollectionAddedToEvent_andGetterFacet_andSetterFacet() {
-
-            class Order {
-            }
-            class Customer {
-                class OrdersAddedToOrRemovedFromDomainEvent extends CollectionDomainEvent<Customer, Order> {
-                }
-
-                @Collection(domainEvent = OrdersAddedToOrRemovedFromDomainEvent.class)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            addGetterFacet(facetedMethod);
-            addAddToFacet(facetedMethod);
-            addRemoveFromFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, collectionMethod.getReturnType());
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
-
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
-            Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetDefault);
-            final CollectionDomainEventFacetDefault domainEventFacetDefault = (CollectionDomainEventFacetDefault) domainEventFacet;
-            assertThat(domainEventFacetDefault.getEventType(), IsisMatchers.classEqualTo(CollectionDomainEvent.Default.class)); // this
-            // is
-            // discarded
-            // at
-            // runtime,
-            // see
-            // PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
-
-            // then
-            final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
-            Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionAnnotation);
-            final CollectionAddToFacetForDomainEventFromCollectionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
-
-            // then
-            final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
-            Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation);
-            final CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersAddedToOrRemovedFromDomainEvent.class));
-        }
-
-        // @Test
-        public void withCollectionInteractionEvent() {
-
-            class Order {
-            }
-            class Customer {
-                class OrdersChangedDomainEvent extends CollectionDomainEvent<Customer, Order> {
-                }
-
-                @Collection(domainEvent = OrdersChangedDomainEvent.class)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            addGetterFacet(facetedMethod);
-            addAddToFacet(facetedMethod);
-            addRemoveFromFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, collectionMethod.getReturnType());
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
-
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
-            Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation);
-            final CollectionDomainEventFacetForCollectionAnnotation domainEventFacetImpl = (CollectionDomainEventFacetForCollectionAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChangedDomainEvent.class));
-
-            // then
-            final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
-            Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionAnnotation);
-            final CollectionAddToFacetForDomainEventFromCollectionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChangedDomainEvent.class));
-
-            // then
-            final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
-            Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation);
-            final CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChangedDomainEvent.class));
-        }
-
-        // @Test
-        public void withCollectionDomainEvent() {
-
-            class Order {
-            }
-            class Customer {
-                class OrdersChanged extends CollectionDomainEvent<Customer, Order> {
-                }
-                @Collection(domainEvent = OrdersChanged.class)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            addGetterFacet(facetedMethod);
-            addAddToFacet(facetedMethod);
-            addRemoveFromFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, collectionMethod.getReturnType());
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
-
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
-            Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation);
-            final CollectionDomainEventFacetForCollectionAnnotation domainEventFacetImpl = (CollectionDomainEventFacetForCollectionAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChanged.class));
-
-            // then
-            final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
-            Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionAnnotation);
-            final CollectionAddToFacetForDomainEventFromCollectionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChanged.class));
-
-            // then
-            final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
-            Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation);
-            final CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), IsisMatchers.classEqualTo(Customer.OrdersChanged.class));
-        }
-
-        // @Test
-        public void withDefaultEvent() {
-
-            class Order {
-            }
-            class Customer {
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            addGetterFacet(facetedMethod);
-            addAddToFacet(facetedMethod);
-            addRemoveFromFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, collectionMethod.getReturnType());
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
-
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
-            Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetDefault);
-            final CollectionDomainEventFacetDefault domainEventFacetImpl = (CollectionDomainEventFacetDefault) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), IsisMatchers.classEqualTo(CollectionDomainEvent.Default.class));
-
-            // then
-            final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
-            Assert.assertNotNull(addToFacet);
-            Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromDefault);
-            final CollectionAddToFacetForDomainEventFromDefault addToFacetImpl = (CollectionAddToFacetForDomainEventFromDefault) addToFacet;
-            assertThat(addToFacetImpl.value(), IsisMatchers.classEqualTo(CollectionDomainEvent.Default.class));
-
-            // then
-            final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
-            Assert.assertNotNull(removeFromFacet);
-            Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromDefault);
-            final CollectionRemoveFromFacetForDomainEventFromDefault removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromDefault) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), IsisMatchers.classEqualTo(CollectionDomainEvent.Default.class));
-        }
-    }
 
     public static class Hidden extends CollectionAnnotationFacetFactoryTest {
 
@@ -430,45 +155,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
         }
 
-    }
-
-    public static class Editing extends CollectionAnnotationFacetFactoryTest {
-
-        @Test
-        public void withAnnotation() {
-
-            class Order {
-            }
-            class Customer {
-                @Collection(
-                        editing = org.apache.isis.applib.annotation.Editing.DISABLED,
-                        editingDisabledReason = "you cannot edit the orders collection"
-                        )
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            Assert.assertNotNull(disabledFacet);
-            Assert.assertTrue(disabledFacet instanceof DisabledFacetForCollectionAnnotation);
-            final DisabledFacetForCollectionAnnotation disabledFacetImpl = (DisabledFacetForCollectionAnnotation) disabledFacet;
-            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the orders collection"));
-        }
     }
 
     public static class TypeOf extends CollectionAnnotationFacetFactoryTest {

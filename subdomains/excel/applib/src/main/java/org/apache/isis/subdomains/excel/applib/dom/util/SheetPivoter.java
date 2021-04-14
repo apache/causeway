@@ -39,6 +39,9 @@ import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class SheetPivoter {
 
     private Sheet sourceSheet;

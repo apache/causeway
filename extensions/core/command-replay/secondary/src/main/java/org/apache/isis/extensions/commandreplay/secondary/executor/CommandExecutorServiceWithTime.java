@@ -42,9 +42,11 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  *     It then delegates down to the default implementation.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandExecutorServiceWithTime")
+@Named("isis.ext.commandReplaySecondary.CommandExecutorServiceWithTime")
 @Order(OrderPrecedence.MIDPOINT - 10) // before CommandExecutorServiceDefault
 @Qualifier("WithTime")
 @Log4j2

@@ -1,0 +1,92 @@
+= TransactionalProcessor _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the mechanism to run a block of code within a transaction boundary, using Spring Framework's transaction primitives (such as _TransactionDefinition_ and its annotation equivalent, _Propagation_ ).
+
+== API
+
+[source,java]
+.TransactionalProcessor.java
+----
+interface TransactionalProcessor {
+  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
+  Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
+  Result<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>
+  Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable)     // <.>
+  Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable)     // <.>
+  Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable)     // <.>
+}
+----
+
+<.> xref:#callTransactional__TransactionDefinition_Callable[callTransactional(TransactionDefinition, Callable)]
++
+--
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+--
+<.> xref:#runTransactional__TransactionDefinition_ThrowingRunnable[runTransactional(TransactionDefinition, ThrowingRunnable)]
++
+--
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+--
+<.> xref:#callTransactional__Propagation_Callable[callTransactional(Propagation, Callable)]
++
+--
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+--
+<.> xref:#runTransactional__Propagation_ThrowingRunnable[runTransactional(Propagation, ThrowingRunnable)]
++
+--
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+--
+<.> xref:#callWithinCurrentTransactionElseCreateNew__Callable[callWithinCurrentTransactionElseCreateNew(Callable)]
++
+--
+Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
+--
+<.> xref:#runWithinCurrentTransactionElseCreateNew__ThrowingRunnable[runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)]
++
+--
+Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
+--
+
+== Members
+
+[#callTransactional__TransactionDefinition_Callable]
+=== callTransactional(TransactionDefinition, Callable)
+
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+
+[#runTransactional__TransactionDefinition_ThrowingRunnable]
+=== runTransactional(TransactionDefinition, ThrowingRunnable)
+
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+
+[#callTransactional__Propagation_Callable]
+=== callTransactional(Propagation, Callable)
+
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+
+More fine grained control is given via _#callTransactional(TransactionDefinition, Callable)_
+
+[#runTransactional__Propagation_ThrowingRunnable]
+=== runTransactional(Propagation, ThrowingRunnable)
+
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+
+More fine grained control is given via _#runTransactional(TransactionDefinition, ThrowingRunnable)_
+
+[#callWithinCurrentTransactionElseCreateNew__Callable]
+=== callWithinCurrentTransactionElseCreateNew(Callable)
+
+Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
+
+In other words, support a current transaction, create a new one if none exists.
+
+[#runWithinCurrentTransactionElseCreateNew__ThrowingRunnable]
+=== runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)
+
+Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
+
+include::hooks/TransactionalProcessor_010-implementation.adoc[]
+
+include::hooks/TransactionalProcessor_020-examples-and-usage.adoc[]

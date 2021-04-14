@@ -18,27 +18,19 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
-import java.util.function.Consumer;
-
-import static java.util.Objects.requireNonNull;
-
 import javax.annotation.Nullable;
 
-import org.springframework.beans.factory.InjectionPoint;
-
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 @RequiredArgsConstructor
 class FactoryService_forTesting implements FactoryService {
 
+    @SuppressWarnings("unused")
     private final MetaModelContext metaModelContext;
 
     @SneakyThrows
@@ -58,6 +50,11 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T detachedEntity(Class<T> domainClass) {
         return domainClass.newInstance();
     }
+    
+    @Override
+    public <T> T detachedEntity(@NonNull T entity) {
+        return entity;
+    }
 
     @Override
     public <T> T mixin(Class<T> mixinClass, Object mixedIn) {
@@ -68,10 +65,17 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr) {
         throw new IllegalArgumentException("Not yet supported");
     }
+    
+    @Override
+    public <T> T viewModel(T viewModel) {
+        return viewModel;
+    }
 
     @SneakyThrows
     @Override
     public <T> T create(Class<T> domainClass) {
         return domainClass.newInstance();
     }
+
+
 }

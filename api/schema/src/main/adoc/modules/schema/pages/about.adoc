@@ -18,7 +18,7 @@ To facilitate such integration scenarios, Apache Isis defines a number of standa
 These each use XSD types defined by the xref:refguide:schema:common.adoc[common schema] (most notably the `oidDto` complex type which identifies a domain object).
 
 
-The xref:extensions:command-log:about.adoc[Command Log] extension and xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] implementation use these schemas to reify corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedObjects`), either to persist or publishing using an link:http://activemq.apache.org[Apache ActiveMQ] message queue.
+The xref:userguide:command-log:about.adoc[Command Log] extension and xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] implementation use these schemas to reify corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedObjects`), either to persist or publishing using an link:http://activemq.apache.org[Apache ActiveMQ] message queue.
 
 The sections below discuss these schemas in more detail.
 

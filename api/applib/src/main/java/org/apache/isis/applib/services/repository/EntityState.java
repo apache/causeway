@@ -19,34 +19,66 @@
 package org.apache.isis.applib.services.repository;
 
 /**
- * TODO lower case enums not up to standard, is this an issue?
- * 
+ * Enumerates the state of an entity.
+ *
  * @apiNote use the provided predicates rather then directly referencing the enum names
- *  
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public enum EntityState {
+
+    /**
+     * Object with this state is not an entity (for example it might be a view
+     * model, value type or a domain service).
+     */
     NOT_PERSISTABLE,
+    /**
+     * Object with this state is an entity that is attached to a persistence
+     * session, in other words changes to the entity will be flushed back to
+     * the database.
+     */
     PERSISTABLE_ATTACHED,
+    /**
+     * Object with this state is an entity but that is detached from a
+     * persistence session, in other words changes to the entity will <i>not</i>
+     * be flushed back to the database.
+     */
     PERSISTABLE_DETACHED,
+    /**
+     * Object with this state is an entity that has been removed from the
+     * database. Objects in this state may no longer be interacted with.
+     */
     PERSISTABLE_DESTROYED,
-    // end::refguide[]
     ;
 
+    /**
+     * Object is an entity so is <i>potentially</i> persistable ot the database.
+     */
     public boolean isPersistable() {
         return this != NOT_PERSISTABLE;
     }
+    /**
+     * Object with this state is an entity that is attached to a persistence
+     * session, in other words changes to the entity will be flushed back to
+     * the database.
+     */
     public boolean isAttached() {
         return this == PERSISTABLE_ATTACHED;
     }
+    /**
+     * Object with this state is an entity but that is detached from a
+     * persistence session, in other words changes to the entity will <i>not</i>
+     * be flushed back to the database.
+     */
     public boolean isDetached() {
         return this == PERSISTABLE_DETACHED;
     }
+    /**
+     * Object with this state is an entity that has been removed from the
+     * database.  Objects in this state may no longer be interacted with.
+     */
     public boolean isDestroyed() {
         return this == PERSISTABLE_DESTROYED;
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

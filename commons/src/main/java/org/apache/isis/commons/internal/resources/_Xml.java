@@ -30,10 +30,12 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
@@ -85,7 +87,7 @@ public final class _Xml {
     // -- READ
 
     @SneakyThrows
-    public static <T> T readXml(
+    public static <T> T _readXml(
             final @NonNull Class<T> dtoClass,
             final @NonNull Reader reader,
             final @NonNull ReadOptions readOptions) {
@@ -104,19 +106,24 @@ public final class _Xml {
 
     // -- WRITE
 
-    public static <T> String writeXml(
+    private static <T> String _writeXml(
             final @NonNull T dto,
-            final @NonNull WriteOptions writeOptions) {
+            final @NonNull WriteOptions writeOptions) throws JAXBException {
         val writer = new StringWriter();
         writeXml(dto, writer, writeOptions);
         return writer.toString();
     }
 
-    @SneakyThrows
+    public static <T> Result<String> writeXml(
+            final @NonNull T dto,
+            final @NonNull WriteOptions writeOptions) {
+        return Result.of(()->_writeXml(dto, writeOptions));
+    }
+    
     public static <T> void writeXml(
             final @NonNull T dto, 
             final @NonNull Writer writer,
-            final @NonNull WriteOptions writeOptions) {
+            final @NonNull WriteOptions writeOptions) throws JAXBException {
         
         val dtoClass = _Casts.<Class<T>>uncheckedCast(dto.getClass());
         val marshaller = jaxbContextFor(dtoClass, writeOptions.useContextCache).createMarshaller();
@@ -134,7 +141,8 @@ public final class _Xml {
     }
 
     // -- CLONE
-    public static <T> T clone(final @Nullable T dto) {
+    
+    private static <T> T _clone(final @Nullable T dto) throws JAXBException {
         if(dto==null) {
             return dto;
         }
@@ -146,10 +154,14 @@ public final class _Xml {
                 .allowMissingRootElement(true)
                 .build());
         val reader = new StringReader(writer.toString());
-        return readXml(type, reader, ReadOptions.builder()
+        return _readXml(type, reader, ReadOptions.builder()
                 .useContextCache(true)
                 .allowMissingRootElement(true)
                 .build());
+    }
+    
+    public static <T> Result<T> clone(final @Nullable T dto) {
+        return Result.of(()->_clone(dto));
     }
     
     

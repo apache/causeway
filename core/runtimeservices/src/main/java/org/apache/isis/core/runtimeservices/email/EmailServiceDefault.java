@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * A service that sends email notifications when specific events occur
  */
 @Service
-@Named("isisRuntimeServices.EmailServiceDefault")
+@Named("isis.runtimeservices.EmailServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

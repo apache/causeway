@@ -1,0 +1,66 @@
+= UserRegistrationService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the ability for users to sign-up to access an application by providing a valid email address. Also provides the capability for users to reset their password if forgotten.
+
+== API
+
+[source,java]
+.UserRegistrationService.java
+----
+interface UserRegistrationService {
+  boolean usernameExists(String username)     // <.>
+  boolean emailExists(String emailAddress)     // <.>
+  void registerUser(UserDetails userDetails)     // <.>
+  boolean updatePasswordByEmail(String emailAddress, String password)     // <.>
+}
+----
+
+<.> xref:#usernameExists__String[usernameExists(String)]
++
+--
+Checks if there is already a user with the specified username
+--
+<.> xref:#emailExists__String[emailExists(String)]
++
+--
+Checks if there is already a user with the specified email address.
+--
+<.> xref:#registerUser__UserDetails[registerUser(UserDetails)]
++
+--
+Creates the user, with specified password and email address.
+--
+<.> xref:#updatePasswordByEmail__String_String[updatePasswordByEmail(String, String)]
++
+--
+Allows the user to reset their password.
+--
+
+== Members
+
+[#usernameExists__String]
+=== usernameExists(String)
+
+Checks if there is already a user with the specified username
+
+[#emailExists__String]
+=== emailExists(String)
+
+Checks if there is already a user with the specified email address.
+
+[#registerUser__UserDetails]
+=== registerUser(UserDetails)
+
+Creates the user, with specified password and email address.
+
+The username and email address must both be unique (not being used by an existing user).
+
+[#updatePasswordByEmail__String_String]
+=== updatePasswordByEmail(String, String)
+
+Allows the user to reset their password.
+
+include::hooks/UserRegistrationService_010-implementation.adoc[]
+
+include::hooks/UserRegistrationService_020-examples-and-usage.adoc[]

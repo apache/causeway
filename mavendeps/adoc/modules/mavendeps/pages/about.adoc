@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The framework provides a number of "aggregator" POMs that act as a convenient way to  aggregate together various common dependencies.
+The framework provides a number of "aggregator" POMs that act as a convenient way to aggregate together various common dependencies.
 
 For example, when writing unit tests for your domain app, it can simply depend on the `isis-mavendeps-unittests` artifact (rather than have to reference all of JUnit, AssertJ, Spring Boot, Hamcrest, Mockito and so on).
 
@@ -11,6 +11,7 @@ Currently five aggregator POMs are provided.
 == Webapp
 
 The `isis-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
+Note however that it does _not_ include the runtime dependencies for either JDO or JPA; these have their own "mavendeps" POM, discussed xref:#jdo-and-jpa[below].
 
 To use, add the following :
 
@@ -32,13 +33,12 @@ For convenience, it includes all of the current components available:
 
 * Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (xref:core:runtime-services:about.adoc[Runtime Services])
 
-* All the security implementations (xref:security:bypass:about.adoc[Bypass],
-xref:security:shiro:about.adoc[Shiro], xref:security:keycloak:about.adoc[Keycloak])
+* All the security implementations (xref:security:bypass:about.adoc[Bypass],xref:security:shiro:about.adoc[Shiro] and  xref:security:keycloak:about.adoc[Keycloak])
 
-* All the viewer implementations (
-xref:vw:ROOT:about.adoc[Wicket], xref:vro:ROOT:about.adoc[Restful Objects])
+* All the viewer implementations (xref:vw:ROOT:about.adoc[Wicket], xref:vro:ROOT:about.adoc[Restful Objects])
 
-* All the persistence implementations (xref:pjdo:ROOT:about.adoc[JDO/DataNucleus])
+// doesn't seem to include these...
+//* All the persistence implementations (xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], xref:pjpa:ROOT:about.adoc[JPA/EclipseLink])
 
 If you don't need any of these (for example, you'll probably only want one security implementation), then you can exclude the others.
 
@@ -46,6 +46,40 @@ Also, remember that adding the class onto the classpath does _not_ make that fun
 So, you must also add in the appropriate `IsisModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
 For example, see the xref:docs:starters:simpleapp.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
 
+
+[#jdo-and-jpa]
+== JDO and JPA
+
+The `isis-mavendeps-jdo` aggregates the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] dependencies, while the `isis-mavendeps-jpa` similarly aggregates the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] dependencies.
+Applications should use one or the other:
+
+* to use JDO, add:
++
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-jdo</artifactId>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+----
+
+* to use JPA, add:
++
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-jpa</artifactId>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+----
 
 == Testing and BDD Specs
 
@@ -111,15 +145,33 @@ integtests
 integspecs
 
 
-|Apache Isis' own xref:testing:unittestsupport:about.adoc[unit test support] +
-with JMock2 extensions to mock classes
+|Apache Isis +
+xref:testing:unittestsupport:about.adoc[unit test support] +
 | Y |  |
 
-|Apache Isis' own xref:testing:integtestsupport:about.adoc[integ test support]
+|Apache Isis +
+xref:testing:integtestsupport:about.adoc[integ test support] +
 |   | Y | Y
 
-|Apache Isis' own xref:testing:specsupport:about.adoc[BDD spec support]
+|Apache Isis +
+xref:testing:specsupport:about.adoc[BDD spec support] +
 |   |   | Y
+
+| Apache Isis +
+xref:refguide:ROOT:about.adoc[Applib]
+| Y | Y | Y
+
+| Apache Isis +
+xref:security:bypass:about.adoc[Bypass] security
+|   | Y | Y
+
+| Apache Isis +
+xref:testing:fakedata:about.adoc[Fake Data]
+| Y | Y | Y
+
+|Apache Isis +
+xref:testing:fixtures:about.adoc[Fixture Scripts]
+|   | Y | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/[JUnit 5 "jupiter"]
 | Y | Y | Y
@@ -148,24 +200,6 @@ with JMock2 extensions to mock classes
 | link:http://picocontainer.com/[PicoContainer] +
 (for JMock2 extensions)
 | Y |   |
-
-| Apache Isis xref:refguide:ROOT:about.adoc[Applib]
-| Y | Y | Y
-
-| Apache Isis xref:core:runtime-services:about.adoc[Runtime Services]
-|   | Y | Y
-
-| Apache Isis xref:security:bypass:about.adoc[Bypass] security
-|   | Y | Y
-
-| Apache Isis xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]
-|   | Y | Y
-
-| Apache Isis xref:testing:fakedata:about.adoc[Fake Data]
-| Y | Y | Y
-
-| Apache Isis xref:testing:fixtures:about.adoc[Fixture Scripts]
-|   | Y | Y
 
 | link:https://github.com/google/guava/wiki[Google's Guava]
 | Y |   |

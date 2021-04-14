@@ -29,7 +29,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -117,13 +118,13 @@ public final class ActionSupport {
         
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
@@ -162,13 +163,13 @@ public final class ActionSupport {
             
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
-                MethodFinder2
+                MethodFinder
                     .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
                 break;
             case TEXT:
-                MethodFinder2
+                MethodFinder
                     .findMethod_returningText(type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);

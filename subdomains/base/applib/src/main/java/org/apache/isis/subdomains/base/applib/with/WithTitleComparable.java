@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.base.applib.with;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface WithTitleComparable<T extends WithTitleComparable<T>> extends Comparable<T>, WithTitleGetter {
     void setTitle(String title);
 }

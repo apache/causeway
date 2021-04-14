@@ -20,6 +20,9 @@ package org.apache.isis.applib.layout.component;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface HasCssClassFa {
 
     @XmlAttribute(required = false)

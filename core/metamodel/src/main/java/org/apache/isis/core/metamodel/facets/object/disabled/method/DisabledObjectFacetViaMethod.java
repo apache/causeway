@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -39,12 +40,12 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
 
     private final Method method;
     private TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
 
     public DisabledObjectFacetViaMethod(
             final Method method,
             final TranslationService translationService,
-            final String translationContext,
+            final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);
         this.method = method;

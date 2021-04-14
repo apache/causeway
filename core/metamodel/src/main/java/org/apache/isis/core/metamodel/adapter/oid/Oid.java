@@ -22,18 +22,17 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.schema.common.v2.OidDto;
 
-
 /**
- * An immutable identifier for either a root object (subtype {@link RootOid}) or
- * a parented collection (subtype {@link ParentedOid}).
+ * An immutable identifier for a root object (subtype {@link RootOid}).
  *
  * <p>
- * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}.
+ * @apiNote value objects (strings, ints, {@link Value}s etc) do not have a 
+ * semantically meaningful {@link Oid}, but as an implementation detail 
+ * might have a placeholder {@link Oid}. 
  */
 public interface Oid extends Serializable {
 
@@ -47,21 +46,16 @@ public interface Oid extends Serializable {
     }
     
     /**
-     * {@link ObjectSpecId} of the domain object this instance is representing, or when parented,
-     * the ObjectSpecId of the parent domain object. When representing a value returns {@code null}.   
+     * The logical-type-name of the domain object this instance is representing.
+     * When representing a value returns {@code null}.
      */
-    ObjectSpecId getObjectSpecId();
+    String getLogicalTypeName();
 
     // -- MARSHALLING
 
     public static interface Marshaller {
-
-        String marshal(ParentedOid parentedOid);
-
         String marshal(RootOid rootOid);
-
-        String joinAsOid(String domainType, String instanceId);
-
+        String joinAsOid(String logicalTypeName, String instanceId);
     }
 
     public static Marshaller marshaller() {
@@ -71,11 +65,8 @@ public interface Oid extends Serializable {
     // -- UN-MARSHALLING
 
     public static interface Unmarshaller {
-
         <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType);
-
         String splitInstanceId(String oidStr);
-
     }
 
     public static Unmarshaller unmarshaller() {
@@ -93,28 +84,27 @@ public interface Oid extends Serializable {
 
         public static RootOid ofBookmark(final Bookmark bookmark) {
             return Oid_Root.of(
-                    ObjectSpecId.of(bookmark.getObjectType()), 
+                    bookmark.getLogicalTypeName(), 
                     bookmark.getIdentifier());
         }
         
         public static RootOid ofDto(final OidDto oid) {
             return Oid_Root.of(
-                    ObjectSpecId.of(oid.getType()), 
+                    oid.getType(), 
                     oid.getId());
         }
 
-        public static RootOid root(final ObjectSpecId objectSpecId, final String identifier) {
-            return Oid_Root.of(objectSpecId, identifier);
+        public static RootOid root(final LogicalType logicalType, final String identifier) {
+            return Oid_Root.of(
+                    logicalType.getLogicalTypeName(), 
+                    identifier);
         }
         
-        // -- PARENTED COLLECTIONS
-
-        public static ParentedOid parented(RootOid parent, OneToManyAssociation oneToMany) {
-            return Oid_Parented.ofOneToManyId(parent, oneToMany.getId());
-        }
-
-        public static ParentedOid parentedForTesting(RootOid parent, String oneToManyId) {
-            return Oid_Parented.ofOneToManyId(parent, oneToManyId);
+        @Deprecated
+        public static RootOid root(final String logicalTypeName, final String identifier) {
+            return Oid_Root.of(
+                    logicalTypeName, 
+                    identifier);
         }
         
     }

@@ -143,24 +143,6 @@ parallelize
 | Whether to perform metamodel validation in parallel.
 
 
-|
-[[isis.core.meta-model.validator.mixins-only]]
-isis.core.meta-model.validator. +
-mixins-only
-
-|  true
-| If set, then domain services actions are not contributed to domain objects. @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
-
-
-|
-[[isis.core.meta-model.validator.service-actions-only]]
-isis.core.meta-model.validator. +
-service-actions-only
-
-|  true
-| If set, checks that any domain services have only actions associated with them, not properties or collections. @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
-
-
 
 |===
 

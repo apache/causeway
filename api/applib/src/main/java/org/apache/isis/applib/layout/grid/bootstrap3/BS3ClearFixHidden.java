@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  * <p>
  *     It is rendered as a (eg) &lt;div class=&quot;clearfix hidden-xs ...&quot;&gt;
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "clearFixHidden"

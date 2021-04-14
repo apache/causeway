@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  * An implementation that provides the locale of the current session.
  */
 @Service
-@Named("isisWicketViewer.LocaleProviderWicket")
+@Named("isis.viewer.wicket.LocaleProviderWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 public class LocaleProviderWicket implements LocaleProvider {

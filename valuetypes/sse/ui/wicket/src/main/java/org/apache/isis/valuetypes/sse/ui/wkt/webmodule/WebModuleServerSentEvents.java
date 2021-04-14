@@ -37,11 +37,11 @@ import lombok.Getter;
 
 /**
  * WebModule providing support for Server Sent Events.
- * 
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  */
 @Service
-@Named("isisValSse.WebModuleServerSentEvents")
+@Named("isis.val.WebModuleServerSentEvents")
 @Qualifier("ServerSentEvents")
 @Order(OrderPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {

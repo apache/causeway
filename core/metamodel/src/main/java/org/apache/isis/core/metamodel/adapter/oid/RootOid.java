@@ -53,7 +53,7 @@ public interface RootOid extends Oid {
     default public ManagedObject loadObject(SpecificationLoader specificationLoader) {
         val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
 
-        val spec = specificationLoader.loadSpecification(this.getObjectSpecId());
+        val spec = specificationLoader.specForLogicalTypeName(this.getLogicalTypeName()).orElse(null);
         val objectId = this.getIdentifier();
 
         val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);

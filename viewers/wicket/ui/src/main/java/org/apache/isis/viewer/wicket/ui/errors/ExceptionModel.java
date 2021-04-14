@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.errors;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -48,29 +48,29 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private final String mainMessage;
 
     public static ExceptionModel create(
-            IsisAppCommonContext commonContext, 
-            Optional<Recognition> recognition, 
+            IsisAppCommonContext commonContext,
+            Optional<Recognition> recognition,
             Exception ex) {
-        
+
         val translationService = commonContext.getTranslationService();
         val recognizedMessage = recognition.map($->$.toMessage(translationService));
-        
+
         return new ExceptionModel(commonContext, recognizedMessage.orElse(null), ex);
     }
 
     /**
      * Three cases: authorization exception, else recognized, else or not recognized.
-     * @param commonContext 
+     * @param commonContext
      * @param recognizedMessageIfAny
      * @param ex
      */
     private ExceptionModel(IsisAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
-        
+
         super(commonContext);
 
-        final ObjectMember.AuthorizationException authorizationException = 
+        final ObjectMember.AuthorizationException authorizationException =
                 causalChainOf(ex, ObjectMember.AuthorizationException.class);
-        
+
         if(authorizationException != null) {
             this.authorizationCause = true;
             this.mainMessage = authorizationException.getMessage();
@@ -83,16 +83,16 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
                 this.recognized =false;
 
                 // see if we can find a NonRecoverableException in the stack trace
-                
-                NonRecoverableException nonRecoverableException =
+
+                UnrecoverableException nonRecoverableException =
                 _Exceptions.streamCausalChain(ex)
-                .filter(NonRecoverableException.class::isInstance)
-                .map(NonRecoverableException.class::cast)
+                .filter(UnrecoverableException.class::isInstance)
+                .map(UnrecoverableException.class::cast)
                 .findFirst()
                 .orElse(null);
 
                 this.mainMessage = nonRecoverableException != null
-                        ? nonRecoverableException.getMessage() 
+                        ? nonRecoverableException.getMessage()
                                 : MAIN_MESSAGE_IF_NOT_RECOGNIZED;
             }
         }

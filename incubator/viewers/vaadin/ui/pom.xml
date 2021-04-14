@@ -44,7 +44,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.7.6</version>
+				<version>1.11.3</version>
 				<executions>
 
 					<execution>
@@ -93,11 +93,6 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtimeservices</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin</artifactId>
 		</dependency>
 
 		<dependency>

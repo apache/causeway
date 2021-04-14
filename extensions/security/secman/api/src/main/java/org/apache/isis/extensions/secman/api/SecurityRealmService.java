@@ -18,6 +18,9 @@
  */
 package org.apache.isis.extensions.secman.api;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface SecurityRealmService {
 
     SecurityRealm getCurrentRealm();

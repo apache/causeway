@@ -41,14 +41,10 @@ package org.apache.isis.applib.adapters;
  * than having the framework do this).
  *
  * <p>
- * Similarly, the ability to return a typical length also overlaps with the
- * {@link TypicalLength} annotation; which is why {@link TypicalLength} cannot
- * be applied to types, only to properties and parameters.
- *
- * <p>
- * For third-party value types, eg {@see http://timeandmoney.sourceforge.net/
- * Time-and-Money} there is no ability to write <tt>title()</tt> methods or
- * annotated with {@link TypicalLength}; so this is the main reason that this
+ * For third-party value types, 
+ * eg see <a href="http://timeandmoney.sourceforge.net/">Time-and-Money</a> 
+ * there is no ability to write <tt>title()</tt> methods; 
+ * so this is the main reason that this
  * interface has to deal with titles and lengths.
  *
  * <p>
@@ -59,9 +55,6 @@ package org.apache.isis.applib.adapters;
  * The framework will instantiate an instance, invoke the appropriate method
  * method, and use the returned object. The instantiated instance itself will be
  * discarded.</li>
- * <li>Alternatively, an implementor of this interface can be nominated in the
- * {@link org.apache.isis.applib.annotation.Parseable} annotation, allowing a
- * class that needs to be parseable to indicate how it can be parsed.</li>
  *
  * <p>
  * Whatever the class that implements this interface, it must also expose either
@@ -73,11 +66,10 @@ package org.apache.isis.applib.adapters;
  * @see DefaultsProvider
  * @see EncoderDecoder
  * @see ValueSemanticsProvider
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface Parser<T> {
 
-    // end::refguide[]
     /**
      * Parses a string to an instance of the object.
      *
@@ -87,31 +79,23 @@ public interface Parser<T> {
      *            - the context domain object for which the text is being
      *            parsed. For example +3 might mean add 3 to the current number.
      */
-    // tag::refguide[]
     T parseTextEntry(Object contextPojo, String entry);
 
-    // end::refguide[]
     /**
      * The typical length of objects that can be parsed.
      */
-    // tag::refguide[]
     int typicalLength();
 
-    // end::refguide[]
     /**
      * The title of the object.
      */
-    // tag::refguide[]
     String displayTitleOf(T object);
 
-    // end::refguide[]
     /**
      * The title of the object using a mask.
      */
-    // tag::refguide[]
     String displayTitleOf(T object, String usingMask);
 
-    // end::refguide[]
     /**
      * A title for the object that is valid but which may be easier to edit than
      * the title provided by a <code>TitleFacet</code>.
@@ -122,18 +106,14 @@ public interface Parser<T> {
      * field. So, a date might be rendered via a <code>TitleFacet</code> as
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
-    // tag::refguide[]
     String parseableTitleOf(T existing);
 
-    // end::refguide[]
     /**
      * The max length of objects that can be parsed (if any).
      * A return type of -1 corresponds to unlimited.
      */
-    // tag::refguide[]
     default int maxLength() {
         return -1;
     }
 
 }
-// end::refguide[]

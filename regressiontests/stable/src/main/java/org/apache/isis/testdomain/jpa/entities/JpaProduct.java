@@ -20,18 +20,24 @@ package org.apache.isis.testdomain.jpa.entities;
 
 import java.util.List;
 
-import javax.jdo.annotations.Persistent;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,17 +47,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-//@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
-//@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-//@Discriminator(strategy=DiscriminatorStrategy.VALUE_MAP, value="Product")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("Product")
+@DiscriminatorColumn(
+        name="product_type", 
+        discriminatorType = DiscriminatorType.STRING)
 @DomainObject(
-        objectType = "testdomain.jpa.Product",
-        nature = Nature.JPA_ENTITY //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
-        )
+        objectType = "testdomain.jpa.Product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 
 @ToString
-public class JpaProduct {
+public class JpaProduct implements Comparable<JpaProduct> {
 
     public String title() {
         return toString();
@@ -59,28 +65,33 @@ public class JpaProduct {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter @Setter @Column(name = "id")
-    private Long id;
+    @Column(name = "id")
+    private @Getter @Setter Long id;
 
     @Property(editing = Editing.DISABLED) // used for an async rule check test
-    @Getter @Setter @Column(nullable = true)
-    private String name;
+    @Column(nullable = true)
+    private @Getter @Setter String name;
 //    public void setName(String name) {
 //        System.err.println("!!! setting name " + name);
 //        this.name = name;
 //    }
 
     @Property
-    @Getter @Setter @Column(nullable = true)
-    private String description;
+    @Column(nullable = true)
+    private @Getter @Setter String description;
 
     @Property
-    @Getter @Setter @Column(nullable = false)
-    private double price;
+    @Column(nullable = false)
+    private @Getter @Setter double price;
     
+    // 1:n relation
     @Collection 
-    @Persistent(mappedBy="product") @Column(nullable = true) 
-    @Getter @Setter 
-    private List<JpaProductComment> comments;
+    @OneToMany(mappedBy = "product") @JoinColumn(nullable = true)  
+    private @Getter @Setter List<JpaProductComment> comments;
+
+    @Override
+    public int compareTo(JpaProduct other) {
+        return _Strings.compareNullsFirst(this.getName(), other==null ? null : other.getName());
+    }
 
 }

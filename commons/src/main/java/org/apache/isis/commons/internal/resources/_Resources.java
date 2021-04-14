@@ -33,6 +33,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.context._Context;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -54,12 +57,11 @@ public final class _Resources {
      * @param resourceName
      * @return An input stream for reading the resource, or null if the resource could not be found.
      */
-    public static InputStream load(Class<?> contextClass, String resourceName) {
+    public static InputStream load(
+            final @NonNull Class<?> contextClass, 
+            final @NonNull String resourceName) {
 
-        _With.requires(contextClass, "contextClass");
-        _With.requires(resourceName, "resourceName");
-
-        final String absoluteResourceName = resolveName(resourceName, contextClass);
+        val absoluteResourceName = resolveName(resourceName, contextClass);
 
         return _Context.getDefaultClassLoader()
                 .getResourceAsStream(absoluteResourceName);
@@ -74,15 +76,21 @@ public final class _Resources {
      * @return The resource as a String, or null if the resource could not be found.
      * @throws IOException
      */
-    public static String loadAsString(Class<?> contextClass, String resourceName, Charset charset) throws IOException {
-        final InputStream is = load(contextClass, resourceName);
-        return _Strings.ofBytes(_Bytes.of(is), charset);
+    public static String loadAsString(
+            final @NonNull Class<?> contextClass, 
+            final @NonNull String resourceName, 
+            final @NonNull Charset charset) throws IOException {
+        
+        val inputStream = load(contextClass, resourceName);
+        return _Strings.ofBytes(_Bytes.of(inputStream), charset);
     }
 
     /**
      * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)} 
      */
-    public static String loadAsStringUtf8(Class<?> contextClass, String resourceName) throws IOException {
+    public static String loadAsStringUtf8(
+            final @NonNull Class<?> contextClass, 
+            final @NonNull String resourceName) throws IOException {
         return loadAsString(contextClass, resourceName, StandardCharsets.UTF_8);
     }
 
@@ -90,7 +98,10 @@ public final class _Resources {
      * @param resourceName
      * @return The resource location as an URL, or null if the resource could not be found.
      */
-    public static URL getResourceUrl(Class<?> contextClass, String resourceName) {
+    public static URL getResourceUrl(
+            final @NonNull Class<?> contextClass, 
+            final @NonNull String resourceName) {
+        
         _With.requires(resourceName, "resourceName");
         final String absoluteResourceName = resolveName(resourceName, contextClass);
         return _Context.getDefaultClassLoader().getResource(absoluteResourceName);
@@ -118,7 +129,6 @@ public final class _Resources {
      * 
      * @param extendee
      * @param suffix
-     * @return
      */
     public static String combinePath(@Nullable String extendee, @Nullable String suffix) {
         return _Strings.combineWithDelimiter(extendee, suffix, "/");

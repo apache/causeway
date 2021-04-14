@@ -21,49 +21,58 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationPermissionRepository<P extends ApplicationPermission> {
 
     Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue);
 
     Optional<P> findByRoleAndRuleAndFeature(
-            ApplicationRole holder, 
+            ApplicationRole holder,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type, 
+            ApplicationFeatureSort type,
             String featureFqn);
 
     Collection<P> allPermissions();
-    
+
     Collection<P> findOrphaned();
     Collection<P> findByFeatureCached(ApplicationFeatureId featureId);
     Collection<P> findByRoleAndRuleAndFeatureTypeCached(
             ApplicationRole holder,
-            ApplicationPermissionRule rule, 
-            ApplicationFeatureType type);
+            ApplicationPermissionRule rule,
+            ApplicationFeatureSort type);
 
 
     /**
      * @return detached entity
      */
     P newApplicationPermission();
-    
+
     P newPermission(
             ApplicationRole role,
-            ApplicationPermissionRule rule, 
+            ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            String packageFqn, 
-            String className, 
+            String packageFqn,
+            String className,
             String memberName);
 
     P newPermission(
-            ApplicationRole holder, 
-            ApplicationPermissionRule rule, 
+            ApplicationRole role,
+            ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            ApplicationFeatureType featureType, 
+            ApplicationFeatureSort featureSort,
             String featureFqn);
-    
 
+    P newPermission(
+            ApplicationRole role,
+            ApplicationPermissionRule rule,
+            ApplicationPermissionMode mode,
+            ApplicationFeatureId featureId);
+    
+    
 }

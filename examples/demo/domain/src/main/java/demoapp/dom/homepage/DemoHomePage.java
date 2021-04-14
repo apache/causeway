@@ -19,17 +19,15 @@
 package demoapp.dom.homepage;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.resources.AsciiDocReaderService;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 //tag::class[]
 @DomainObject(
@@ -41,7 +39,7 @@ public class DemoHomePage
         implements HasAsciiDocDescription {                     // <.>
 
     public String title() {                                     // <.>
-        return "Hello, " + userService.getUser().getName();
+        return "Hello, " + userService.currentUserNameElseNobody();
     }
 
     public AsciiDoc getWelcome() {                              // <.>

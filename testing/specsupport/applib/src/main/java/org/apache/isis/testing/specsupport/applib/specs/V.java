@@ -22,6 +22,8 @@ import org.joda.time.format.DateTimeFormat;
 
 /**
  * A set of converters for built-in value types; for use in Cucumber step definitions.
+ *
+ * @since 2.0 {@index}
  */
 public class V {
 
@@ -29,7 +31,7 @@ public class V {
     }
 
     /**
-     * @deprecated this is just a dummy, it seems the former cucumber.api.Transformer was removed; 
+     * @deprecated this is just a dummy, it seems the former cucumber.api.Transformer was removed;
      * what's the replacement?
      *
      * @param <T>

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.Data;
 import lombok.val;
@@ -100,7 +100,7 @@ final class ObjectCreator_builtinHandlers {
         private ManagedObject initializePropertiesAndDoCallback(ManagedObject adapter) {
 
             // initialize new object
-            adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
+            adapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
             .forEach(field->field.toDefault(adapter));
 
              val pojo = adapter.getPojo();

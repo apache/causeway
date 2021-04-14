@@ -27,17 +27,18 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 
 import lombok.val;
 
 /**
- * See also {@link BulkActionsHelper}.
+ * See also {@link BulkActionsProvider}.
  */
 public class AssociatedWithActionsHelper implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -59,7 +60,7 @@ public class AssociatedWithActionsHelper implements Serializable {
         final ObjectSpecification objectSpec = getObjectSpecification();
 
         val actionTypes = inferActionTypes(collectionModel.getCommonContext());
-        final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
+        final Stream<ObjectAction> objectActions = objectSpec.streamActions(actionTypes, MixedIn.INCLUDED);
 
         return objectActions
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collection))

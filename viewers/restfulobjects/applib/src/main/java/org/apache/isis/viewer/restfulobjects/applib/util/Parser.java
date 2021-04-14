@@ -35,6 +35,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public abstract class Parser<T> {
 
     public T valueOf(final List<String> str) {

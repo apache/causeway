@@ -20,21 +20,22 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
  * A serializable value object representing an (anonymized)
- * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission}.
+ * {@link ApplicationPermission}.
  *
  * <p>
  *     Intended for value type arithmetic and also for caching.  No user/role information is held because that information
  *     is not required to perform the arithmetic.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public class ApplicationPermissionValue implements Comparable<ApplicationPermissionValue>, Serializable {
 
@@ -107,8 +108,7 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
 
     private boolean onPathOf(final ApplicationFeatureId featureId) {
 
-        final List<ApplicationFeatureId> pathIds = featureId.getPathIds();
-        for (final ApplicationFeatureId pathId : pathIds) {
+        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             if(getFeatureId().equals(pathId)) {
                 return true;
             }

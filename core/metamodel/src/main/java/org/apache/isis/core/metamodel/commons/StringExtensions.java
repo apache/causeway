@@ -180,7 +180,6 @@ public final class StringExtensions {
      * Converts any <tt>\n</tt> to <tt>line.separator</tt>
      *
      * @param extendee
-     * @return
      */
     public static String lineSeparated(final String extendee) {
         final StringBuilder buf = new StringBuilder();
@@ -240,7 +239,6 @@ public final class StringExtensions {
      * Condenses any whitespace to a single character
      *
      * @param extendee
-     * @return
      */
     public static String normalized(@javax.annotation.Nullable final String extendee) {
         return _Strings.asNormalized.apply(extendee);

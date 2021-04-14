@@ -32,7 +32,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
 
-// tag::refguide[]
+/**
+ * @since 2.0 {@index}
+ */
 public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>> {
 
     @Inject @Getter(AccessLevel.PROTECTED)
@@ -40,7 +42,6 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
 
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
-        // end::refguide[]
 
         List<Object> domainObjects = new ArrayList<>();
         for (val oidDto : oidsDto.getOid()) {
@@ -49,14 +50,10 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
             domainObjects.add(domainObject);
         }
         return domainObjects;
-
-        // tag::refguide[]
-        // ...
     }
 
     @Override
     public OidsDto marshal(final List<Object> domainObjects) {
-        // end::refguide[]
 
         if(domainObjects == null) {
             return null;
@@ -67,10 +64,6 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
             oidsDto.getOid().add(bookmark.toOidDto());
         }
         return oidsDto;
-
-        // tag::refguide[]
-        // ...
     }
 
 }
-// end::refguide[]

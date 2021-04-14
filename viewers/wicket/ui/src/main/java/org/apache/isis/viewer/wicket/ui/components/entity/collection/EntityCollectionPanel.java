@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -56,7 +57,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityCollectionPanel extends PanelAbstract<EntityModel> 
+public class EntityCollectionPanel 
+extends PanelAbstract<ManagedObject, EntityModel> 
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;

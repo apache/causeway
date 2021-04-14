@@ -1,0 +1,134 @@
+[#collections]
+= Collections
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+A collection is an instance variable of a domain object, of a collection type that holds references to other domain objects.
+For example, a `Customer` may have a collection of ``Order``s).
+
+It's ok for a xref:userguide:fun:view-models.adoc[view model] to reference both view model and domain entities.
+However, it _isn't_ valid for a domain entity to hold a reference to view model, because the ORM will not know how to persist the view model object.
+
+Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).
+Most collections (those that are modifiable) will also have a setter and, if persisted, a backing instance field.
+And collections properties will also have a number of annotations:
+
+* Apache Isis defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
+It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file)
+
+* the collections of domain entities are often annotated with ORM annotation(s).
+In the case of JDO/DataNucleus annotations this is most notably `javax.jdo.annotations.Persistent`.
+Other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
+
+* for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
+
+Apache Isis may recognise some of these annotations from the persistence layer infers some domain semantics from them.
+
+Unlike xref:userguide:fun:object-members.adoc#properties[properties], the framework does not allow collections to be "edited".
+Instead, xref:userguide:fun:object-members.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
+For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
+
+Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
+
+TIP: see the DataNucleus http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html[Mapping Guide] for more in-depth coverage of this topic.
+
+== Mapping bidir 1:m
+
+Bidirectional one-to-many collections are one of the most common types of associations between two entities:
+
+[plantuml]
+.Parent has many Children, each Child has one Parent.
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+class ParentObject
+class ChildObject
+
+ParentObject "1" <-d-> "0.*" ChildObject
+----
+
+In the parent object, the collection can be defined as:
+
+[source,java]
+----
+import javax.jdo.annotations.Persistent;
+import lombok.Getter;
+import lombok.Setter;
+
+public class ParentObject
+        implements Comparable<ParentObject>{
+
+    @Persistent(
+        mappedBy = "parent",                                               // <.>
+        dependentElement = "false"                                         // <.>
+    )
+    @Collection                                                            // <.>
+    @Getter @Setter
+    private SortedSet<ChildObject> children = new TreeSet<ChildObject>();  // <.>
+
+}
+----
+<.> indicates a bidirectional association; the foreign key pointing back to the `Parent` will be in the table for `ChildObject`
+<.> disables cascade delete
+<.> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Isis)
+<.> uses a `SortedSet` (as opposed to some other collection type; discussion below)
+
+while in the child object you will have:
+
+[source,java]
+----
+import javax.jdo.annotations.Column;
+import lombok.Getter;
+import lombok.Setter;
+
+public class ChildObject
+        implements Comparable<ChildObject> {    // <.>
+
+    @Column(allowsNull = "false")               // <.>
+    @Property(editing = Editing.DISABLED)       // <.>
+    @Getter @Setter
+    private ParentObject parent;
+}
+----
+<.> implements `Comparable` because is mapped using a `SortedSet`
+<.> mandatory; every child must reference its parent
+<.> cannot be edited directly
+
+Generally speaking you should use `SortedSet` for collection types (as opposed to `Set`, `List` or `Collection`).
+JDO/Datanucleus does support the mapping of these other types, but RDBMS are set-oriented, so using this type introduces the least friction.
+
+== Maps
+
+While ORMs support `java.util.Map` as a collection type, maps are not supported by Apache Isis.
+
+If you do wish to use this collection type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
+
+== Value vs Reference Types
+
+While ORMs support collections/arrays of value types, such collections are not supported by Apache Isis.
+Apache Isis can (currently) only provide a UI for collections of references.
+
+If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
+
+As a workaround, if you want to visualize an array of value types in Apache Isis, then one option is to wrap the value in a view model, as explained xref:userguide:btb:about.adoc#simulating-collections-of-values[here].
+
+== Derived Collections
+
+A derived collection is simply a getter (no setter) that returns a `java.util.Collection` (or subtype).
+
+While derived properties and derived collections typically "walk the graph" to associated objects, there is nothing to prevent the returned value being the result of invoking a repository (domain service) action.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    ...
+    public List<Order> getMostRecentOrders() {
+        return orderRepo.findMostRecentOrders(this, 5);
+    }
+}
+----
+

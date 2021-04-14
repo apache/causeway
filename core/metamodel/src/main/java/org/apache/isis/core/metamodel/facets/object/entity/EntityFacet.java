@@ -50,10 +50,11 @@ public interface EntityFacet extends Facet {
     /**
      * Whether given method originates from byte code mangling.
      * @param method
-     * @return
      */
     boolean isProxyEnhancement(Method method);
 
     <T> T detach(T pojo);
+    
+    PersistenceStandard getPersistenceStandard();
     
 }

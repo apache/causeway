@@ -25,15 +25,14 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public abstract class ObjectAssociationAbstract 
-extends ObjectMemberAbstract 
+public abstract class ObjectAssociationAbstract
+extends ObjectMemberAbstract
 implements ObjectAssociation {
 
     private final ObjectSpecification specification;
@@ -49,11 +48,11 @@ implements ObjectAssociation {
         }
         this.specification = specification;
     }
-    
+
     protected InteractionHead headFor(final ManagedObject ownerAdapter) {
         return InteractionHead.simple(ownerAdapter);
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return getFacetedMethod();
@@ -76,10 +75,6 @@ implements ObjectAssociation {
         return specification;
     }
 
-    @Override
-    public boolean isNotPersisted() {
-        return containsFacet(NotPersistedFacet.class);
-    }
 
     @Override
     public boolean hasChoices() {

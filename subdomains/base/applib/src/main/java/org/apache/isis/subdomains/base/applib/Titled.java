@@ -18,8 +18,9 @@
  */
 package org.apache.isis.subdomains.base.applib;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface Titled {
-    
     String title();
-
 }

@@ -8,8 +8,8 @@
 The changes ("chg") schema defines the serialized form identifying which objects have been created, updated or deleted as the result of invoking an action or editing a property.
 It also captures a number of other metrics counts (number of objects loaded, number of object properties modified), useful for profiling.
 
-An instance of the DTO (corresponding to this schema) is used within the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI, identifying changed objects that are to be
-published (as per xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] or equivalent).
+An instance of the DTO (corresponding to this schema) is used within the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, identifying changed objects that are to be
+published (as per xref:refguide:applib:index/annotation/DomainObject.adoc#publishing[@DomainObject#publishing()] or equivalent).
 
 
 == `changesDto`

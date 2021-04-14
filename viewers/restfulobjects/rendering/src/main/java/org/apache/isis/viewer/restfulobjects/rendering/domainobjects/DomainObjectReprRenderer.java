@@ -33,9 +33,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -193,10 +192,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 rootOidIfAny.ifPresent(rootOid->{
-                    Optional.ofNullable(rootOid.getObjectSpecId())
-                    .map(ObjectSpecId::asString)
-                    .ifPresent(objectSpecIdLiteral->
-                        representation.mapPut("domainType", objectSpecIdLiteral));
+                    Optional.ofNullable(rootOid.getLogicalTypeName())
+                    .ifPresent(domainType->
+                        representation.mapPut("domainType", domainType));
                     representation.mapPut("instanceId", rootOid.getIdentifier());
                 });
             }
@@ -290,7 +288,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification()
-                .streamAssociations(Contributed.INCLUDED)
+                .streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         addProperties(objectAdapter, appendTo, associations);
@@ -302,7 +300,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             if (mode.isRegular()) {
                 final Stream<ObjectAction> actions = objectAdapter.getSpecification()
-                        .streamObjectActions(Contributed.INCLUDED);
+                        .streamActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
             }
@@ -413,7 +411,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().getSpecId().asString();
+        final String domainType = objectAdapter.getSpecification().getLogicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

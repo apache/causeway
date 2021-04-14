@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.GridServiceDefault")
+@Named("isis.metamodel.GridServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

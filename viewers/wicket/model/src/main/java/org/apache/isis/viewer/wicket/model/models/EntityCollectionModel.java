@@ -45,10 +45,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMementoService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -68,8 +67,11 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ManagedObject}s within
  * the collection are stored as {@link ObjectMemento}s.
  */
-public class EntityCollectionModel extends ModelAbstract<List<ManagedObject>> 
-implements LinksProvider, UiHintContainer {
+public class EntityCollectionModel 
+extends ModelAbstract<List<ManagedObject>> 
+implements 
+    LinksProvider, 
+    UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,21 +82,20 @@ implements LinksProvider, UiHintContainer {
 
     public static EntityCollectionModel createParented(EntityModel entityModel) {
 
-        final OneToManyAssociation collection = collectionFor(entityModel);
-        final Class<?> typeOf = forName(collection.getSpecification());
-        final int pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
-        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
+        val oneToManyAssociation = collectionFor(entityModel);
+        val typeOf = forName(oneToManyAssociation.getSpecification());
+        final int pageSize = pageSize(oneToManyAssociation.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+        val sortedByFacet = oneToManyAssociation.getFacet(SortedByFacet.class);
 
-        final EntityCollectionModel colModel = new EntityCollectionModel(
+        val entityCollectionModel = new EntityCollectionModel(
                 entityModel.getCommonContext(), Variant.PARENTED, entityModel, typeOf, pageSize);
-
-        colModel.collectionMemento = new CollectionMemento(collection);
-        colModel.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
-        
-        return colModel;
+        entityCollectionModel.collectionMemento = new CollectionMemento(oneToManyAssociation);
+        entityCollectionModel.sortedBy = (sortedByFacet != null)
+                ? sortedByFacet.value()
+                : null;
+        return entityCollectionModel;
     }
 
-    //XXX lombok enum issue, cannot use val here ...
     public static EntityCollectionModel createStandalone(
             ManagedObject collectionAsAdapter, 
             ModelAbstract<?> model) {
@@ -102,38 +103,35 @@ implements LinksProvider, UiHintContainer {
         // dynamically determine the spec of the elements
         // (ie so a List<Object> can be rendered according to the runtime type of its elements,
         // rather than the compile-time type
-        final ClassExtensions.CommonSuperclassFinder commonSuperClassFinder = 
-                new ClassExtensions.CommonSuperclassFinder();
+        val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
         
-        final ObjectMementoService mementoService = model.getMementoService();
-
+        val mementoService = model.getMementoService();
+        
         final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .filter(_NullSafe::isPresent)
                 .peek(commonSuperClassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
 
-        final SpecificationLoader specificationLoader = model.getSpecificationLoader();
+        val specificationLoader = model.getSpecificationLoader();
 
-        final ObjectSpecification elementSpec = commonSuperClassFinder.getCommonSuperclass()
+        val elementSpec = commonSuperClassFinder.getCommonSuperclass()
                 .map(specificationLoader::loadSpecification)
                 .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
-        final Class<?> elementType;
-        int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
-        if (elementSpec != null) {
-            elementType = elementSpec.getCorrespondingClass();
-            pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
-        } else {
-            elementType = Object.class;
-        }
+        final int pageSize = (elementSpec != null) 
+                ? pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE)
+                : PAGE_SIZE_DEFAULT_FOR_STANDALONE;
+        
+        val elementType = (elementSpec != null) 
+                ? elementSpec.getCorrespondingClass()
+                : Object.class;
 
-        final EntityModel entityModel = null;
-
-        final EntityCollectionModel colModel = new EntityCollectionModel(
+        val entityModel = (EntityModel)null;
+        val entityCollectionModel = new EntityCollectionModel(
                 model.getCommonContext(), Variant.STANDALONE, entityModel, elementType, pageSize);
-        colModel.mementoList = mementoList;
-        return colModel;
+        entityCollectionModel.mementoList = mementoList;
+        return entityCollectionModel;
         
     }
 

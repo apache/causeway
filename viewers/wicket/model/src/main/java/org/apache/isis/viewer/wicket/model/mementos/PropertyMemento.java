@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -34,39 +34,37 @@ public class PropertyMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(OneToOneAssociation property) {
-        
         val specificationLoader = property.getMetaModelContext().getSpecificationLoader();
-        return specificationLoader.lookupBySpecIdElseLoad(
-                ObjectSpecId.of(property.getIdentifier().toClassIdentityString()));
+        return specificationLoader.specForLogicalTypeElseFail(property.getIdentifier().getLogicalType());
     }
 
-    private final ObjectSpecId owningSpecId;
+    private final LogicalType owningType;
     private final String identifier;
-    private final ObjectSpecId specId;
+    private final LogicalType type;
 
     public PropertyMemento(final OneToOneAssociation property) {
         this(
-                owningSpecFor(property).getSpecId(),
-                property.getIdentifier().toNameIdentityString(),
-                property.getSpecification().getSpecId()
+                owningSpecFor(property).getLogicalType(),
+                property.getIdentifier().getMemberName(),
+                property.getSpecification().getLogicalType()
                 );
     }
 
     private PropertyMemento(
-            final ObjectSpecId owningSpecId,
+            final LogicalType owningType,
             final String name,
-            final ObjectSpecId specId) {
-        this.owningSpecId = owningSpecId;
+            final LogicalType type) {
+        this.owningType = owningType;
         this.identifier = name;
-        this.specId = specId;
+        this.type = type;
     }
 
-    public ObjectSpecId getOwningType() {
-        return owningSpecId;
+    public LogicalType getOwningType() {
+        return owningType;
     }
 
-    public ObjectSpecId getType() {
-        return specId;
+    public LogicalType getType() {
+        return type;
     }
 
     public String getIdentifier() {
@@ -74,15 +72,15 @@ public class PropertyMemento implements Serializable {
     }
 
     public OneToOneAssociation getProperty(final SpecificationLoader specificationLoader) {
-        return propertyFor(owningSpecId, identifier, specificationLoader);
+        return propertyFor(owningType, identifier, specificationLoader);
     }
 
     private static OneToOneAssociation propertyFor(
-            ObjectSpecId owningType,
+            LogicalType owningType,
             String identifier,
             final SpecificationLoader specificationLoader) {
         
-        return (OneToOneAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+        return (OneToOneAssociation) specificationLoader.specForLogicalTypeElseFail(owningType)
                 .getAssociationElseFail(identifier);
     }
 
@@ -124,7 +122,7 @@ public class PropertyMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getOwningType().asString() + "#" + getIdentifier();
+        return getOwningType().getLogicalTypeName() + "#" + getIdentifier();
     }
 
 }

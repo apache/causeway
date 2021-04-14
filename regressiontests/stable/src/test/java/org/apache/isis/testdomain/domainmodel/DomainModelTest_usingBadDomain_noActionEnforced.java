@@ -28,11 +28,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.badnoact.Configuration_usingInvalidDomain_noActionEnforced;
@@ -56,7 +58,6 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-//@Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain_noActionEnforced {
     
     @Inject private IsisConfiguration configuration;
@@ -81,7 +82,7 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
         
         assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidOrphanedActionSupportNoActionEnforced.class, 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)), 
                 "is assumed to support"));
     }
     

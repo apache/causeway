@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -34,15 +35,13 @@ import lombok.Setter;
 /**
  * {@link PanelAbstract Panel} representing an action invocation, backed by an
  * {@link ActionModel}.
- *
  * <p>
- * Based on the {@link ActionModel.Mode mode}, will render either parameter
- * dialog or the results.
- *
+ * Will render either parameter dialog or the results.
  * <p>
  * Corresponding component to edit properties is {@link PropertyEditPanel}.
  */
-public class ActionParametersPanel extends PanelAbstract<ActionModel> {
+public class ActionParametersPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -91,16 +90,14 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
         addOrReplace(header);
 
-        {
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
+                .getParentUiModel());
 
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
-                    .getParentUiModel());
+        final String actionName = getActionModel().getMetaModel().getName();
+        header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
-            final String actionName = getActionModel().getMetaModel().getName();
-            header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
-        } 
     }
 
 

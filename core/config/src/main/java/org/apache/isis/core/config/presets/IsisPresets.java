@@ -18,12 +18,6 @@
  */
 package org.apache.isis.core.config.presets;
 
-import java.util.List;
-
-import org.apache.isis.commons.internal.collections._Lists;
-
-import lombok.RequiredArgsConstructor;
-
 /**
  * Supports Spring's {@code @PropertySource} annotation.
  * 
@@ -36,13 +30,7 @@ public final class IsisPresets  {
     public static final String IntrospectLazily = "classpath:/org/apache/isis/core/config/presets/IntrospectLazily.properties";
     public static final String IntrospectFully = "classpath:/org/apache/isis/core/config/presets/IntrospectFully.properties";
 
-    public static final String H2InMemory = "classpath:/org/apache/isis/core/config/presets/H2InMemory.properties";
-
-    /** randomized (unique) database name, eg. to allow for concurrent testing */
-    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/core/config/presets/H2InMemory_withUniqueSchema.properties";
-    
-    public static final String HsqlDbInMemory = "classpath:/org/apache/isis/core/config/presets/HsqlDbInMemory.properties";
-    public static final String DataNucleusAutoCreate = "classpath:/org/apache/isis/core/config/presets/DataNucleusAutoCreate.properties";
+    public static final String DatanucleusAutocreateNoValidate = "classpath:/org/apache/isis/core/config/presets/DatanucleusAutocreateNoValidate.properties";
     
     public static final String DebugPersistence = "classpath:/org/apache/isis/core/config/presets/DebugPersistence.properties";
     public static final String DebugRequestScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugRequestScopedServices.properties";
@@ -61,8 +49,8 @@ public final class IsisPresets  {
     
     public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
     public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
-    
 
+    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/core/config/presets/H2InMemory_withUniqueSchema.properties";
 
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property 
@@ -85,31 +73,6 @@ public final class IsisPresets  {
     public static void logging(Class<?> clazz, String loggingLevel) {
         System.setProperty("logging.level." + clazz.getName(), loggingLevel);
     }
-    
-    @RequiredArgsConstructor
-    public static enum DebugLoggingPreset {
-        PERSISTENCE(_Lists.of(
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo",
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5",
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo"                
-                )), 
-        ISIS_SESSION(_Lists.of(
-                "org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault"
-                )),
-        VAADIN(_Lists.of(
-                "com.vaadin",
-                "org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler"
-                )),
-        ;
-        private final List<String> include;        
-        public void apply() {
-            include.forEach(className->
-                System.setProperty("logging.level." + className, "debug"));
-        }
-    }
-    
-    
-    
     
 
 }

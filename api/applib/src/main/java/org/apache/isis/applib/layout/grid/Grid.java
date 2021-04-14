@@ -34,6 +34,8 @@ import org.apache.isis.applib.services.layout.LayoutService;
  * <p>
  *     It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 public interface Grid {
 

@@ -1,0 +1,475 @@
+= Migrating from M4 to M5
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+== Removal of Image Value Type
+
+Some Java classes and/or packages have been renamed/moved:
+
+[source,java]
+.Applib
+----
+// org.apache.isis.applib.value.Image
+org.apache.isis.legacy.applib.value.Image // <.>
+----
+<.> only kept to ease migration, use `java.awt.image.BufferedImage` instead, which is supported by the framework as value type
+
+
+== Removal of deprecated Contributees
+
+.Config
+[source,java]
+----
+isis.core.metaModel.validator.serviceActionsOnly=true // <.>
+isis.core.metaModel.validator.mixins-only=true        // <.>
+----
+<.> `@DomainService(natureOfService=VIEW/REST)` is now solely used for UI menu action providers and REST end-points.
+There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.
+<.> Support for services that contribute members to other `DomainObjects` was removed. Use `Mixins` instead.
+
+See the former java-doc for hints on how to migrate the previous options.
+
+.@DomainService(natureOfService=...)
+[source,java]
+----
+/**
+ * A <em>programmatic</em> service.
+ * <p>
+ * The service's actions do not appear on any viewer and are not visible in the REST API. In other words
+ * these are not contributed to the domain-model. However, the service is injectable into domain objects.
+ * </p>
+ *
+ * @deprecated will be removed with 2.0.0 release! use Spring's {@link org.springframework.stereotype.Service @Service} instead;
+ * @apiNote For now, used as synonym for {@link #REST}
+ */
+@Deprecated
+DOMAIN,
+
+/**
+ * @deprecated will be removed with 2.0.0 release! use {@link #REST} instead;
+ * @apiNote For now, used as synonym for {@link #REST}
+ */
+@Deprecated
+VIEW_REST_ONLY,
+
+/**
+ * @deprecated will be removed with 2.0.0 release! use {@link #VIEW} instead
+ * @apiNote For now, used as synonym for {@link #VIEW}
+ */
+@Deprecated
+VIEW_MENU_ONLY,
+
+/**
+ * @deprecated will be removed with 2.0.0 release!
+ * <p>
+ * For now, contributing actions will be gathered to show up in the 'others' menu to ease migration.
+ * These will likely not work.
+ * <p>
+ * Migration Note: For each {@code Action} write a new mixin class.
+ * see {@link Mixin}
+ * @apiNote For now, used as synonym for {@link #VIEW}
+ */
+@Deprecated
+VIEW_CONTRIBUTIONS_ONLY,
+----
+
+== Changes to the Configuration
+
+[cols="2a,3a", options="header"]
+.as mapped to IsisConfiguration
+|===
+
+| was
+| new
+
+| isis.persistence.jdo-datanucleus.impl
+| removed, instead configure datasources the Spring way (eg. by providing a DataSource factory) or properties like:
+[source]
+----
+spring.datasource.platform=h2
+spring.datasource.url=jdbc:h2:mem:...
+----
+configure Datanucleus settings using
+[source]
+----
+datanucleus. ...
+javax.jdo. ...
+----
+
+| isis.core.runtimeservices.exception-recognizer.jdo
+| isis.core.runtimeservices.exception-recognizer.dae
+
+|===
+
+Framework functionality was removed to inspect the JDO meta-model for any schemas, such that these would be auto-created. This responsibility is now delegated to Spring.
+However, as a fallback we introduced configuration options, that allow explicit schema creation by the framework, for both JDO and JPA:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: hello
+      create-schema-sql-template: "CREATE SCHEMA IF NOT EXISTS %S"
+----
+
+More details, on the various configuration options can be found with _Javadoc_ on _IsisConfiguration_.
+
+== Changes to the Programming Model
+
+=== Removed (Programming Model)
+
+[cols="2a,3a", options="header"]
+
+|===
+
+| was
+| now what?
+
+| `@ActionLayout(contributed=...)`
+| was only effective on mixin methods; use `@Action`, `@Property` or `@Collection` instead
+
+| `@Action/@Property(command=...)`
+| replaced with `commandPublishing`
+
+| `@Action/@Property(publish=...)`
+| replaced with `executionPublishing`
+
+| `@DomainObject(audit=...)`
+| replaced with `entityChangePublishing`
+
+| `@DomainObject(nature=...)`
+
+* `EXTERNAL_ENTITY`
+* `INMEMORY_ENTITY`
+| use `@DomainObject(nature=VIEW_MODEL)` instead
+
+| `@DomainObject(nature=...)`
+
+* `JDO_ENTITY`
+* `JPA_ENTITY`
+| use `@DomainObject(nature=ENTITY)` instead
+
+| `@DomainObject(publish=...)`
+| replaced with `entityChangePublishing`
+
+| `@DomainService(repositoryFor=...)`
+| if this domain service acts as a repository for an entity type,
+specify that entity type (was never implemented)
+
+| `@Mixin`
+| use `@Action`, `@Property` or `@Collection` instead;
+
+for more fine grained control (eg. setting the mixin's method name)
+use `@DomainObject(nature=MIXIN, ...)` combined with one of the above
+
+| `@ViewModel`
+| use `@DomainObject(nature=VIEW_MODEL)` instead
+
+| `@ViewModelLayout`
+| use `@DomainObjectLayout` instead
+
+|===
+
+
+=== Added (Programming Model)
+
+.Command/Execution Publishing (Member Level Annotations)
+[source,java]
+----
+@Action/@Property(commandPublishing=ENABLED/DISABLED)   // <.>
+@Action/@Property(executionPublishing=ENABLED/DISABLED) // <.>
+----
+<.> affects Command publishing
+<.> affects Execution publishing
+
+.Entity Change Publishing (Class Level Annotations)
+[source,java]
+----
+@DomainObject(entityChangePublishing=ENABLED/DISABLED) // <.>
+----
+<.> affects EntityChange publishing (effective only for entity types)
+
+=== Renamed (Programming Model)
+
+.Publishing API/SPI
+[source,java]
+----
+AuditerService -> EntityPropertyChangeSubscriber                  // <.>
+PublisherService -> ExecutionSubscriber & EntityChangesSubscriber // <.>
+CommandServiceListener -> CommandSubscriber
+
+PublishedObjects -> ChangingEntities
+----
+<.> `EntityPropertyChangeSubscriber` receives pre-post property values for each changed entity
+<.> `EntityChangesSubscriber` receives the entire set of changed entities, serializable as `ChangesDto`
+
+
+.Loggers - each to be activated by enabling debug logging for the corresponding Logger class
+[source,java]
+----
+AuditerServiceLogging -> EntityPropertyChangeLogger
+PublisherServiceLogging -> ExecutionLogger & EntityChangesLogger
+CommandLogger (NEW)
+----
+
+.Internal Services
+[source,java]
+----
+AuditerDispatchService -> EntityPropertyChangePublisher
+PublisherDispatchService -> ExecutionPublisher & EntityChangesPublisher
+PublisherDispatchServiceDefault -> ExecutionPublisherDefault & EntityChangesPublisherDefault
+CommandServiceInternal -> CommandPublisher
+----
+
+== Changes to Applib and Services
+
+* Interaction related classes have been moved to module `core/interaction`.
+* Transaction related classes have been moved to module `core/transaction`.
+* JDO classes have been split up into several modules under `persistence/jdo/`.
+* Multiple `Exception` classes have been relocated at `org.apache.isis.applib.exceptions`
+
+[cols="3m,3m", options="header"]
+
+|===
+
+| was
+| new
+
+| ApplicationException (removed)
+| removed, adds no new semantics compared to the already existing RecoverableException
+
+| AuthenticationSession
+| Authentication (no longer holds MessageBroker or session attributes, is now immutable)
+
+| AuthenticationSessionStrategy
+| AuthenticationStrategy
+
+| AuthenticationSessionStrategyBasicAuth.footnote:[These might be in use with configuration files, check yours!]
+| AuthenticationStrategyBasicAuth
+
+| AuthenticationSessionStrategyDefault.footnote:[These might be in use with configuration files, check yours!]
+| AuthenticationStrategyDefault
+
+| AuthenticationSessionTracker#getInteraction : Interaction
+| AuthenticationContext#currentInteraction : *Optional*<Interaction>
+
+| Clock (moved from applib module to fixture-applib module)
+| VirtualClock (introduced)
+
+| FatalException (removed)
+| removed, adds no new semantics compared to the already existing UnrecoverableException
+
+| HoldsUpdatedBy, HoldsUpdatedAt, Timestampable
+| moved to 'commons' and renamed:
+ HasUpdatedBy,
+ HasUpdatedAt,
+ HasUpdatedByAndAt
+
+| IsisInteractionFactory
+| InteractionFactory
+
+| IsisModuleJdoDataNucleus5
+| removed, use IsisModuleJdoDatanucleus instead (symmetry with JPA/IsisModuleJpaEclipselink)
+
+| IsisJdoSupport, IsisJdoSupport_v3_2
+| removed, use JdoSupportService instead (symmetry with JPA/JpaSupportService)
+
+| InteractionClosure
+| AuthenticationLayer
+
+| IsisApplicationException
+| ApplicationException
+
+| IsisException (removed)
+| use one of 2 hierarchies (in support of i18n translation)
+
+- RecoverableException
+
+- UnrecoverableException
+
+| IsisInteractionTracker
+| InteractionTracker
+
+| MessageBroker is held by Authentication(Session)
+| MessageBroker is held by InteractionSession
+
+| NonRecoverableException
+| renamed to UnrecoverableException
+
+| ParentedOid, PojoRecreationException, PojoRefreshException
+| removed, as no longer used
+
+| QueryDefault (removed)
+|
+[line-through]#new QueryDefault<>(CommandJdo.class, "findByParent",
+                        "parent", parent));#
+
+Query.named(CommandJdo.class, "findByParent") +
+    .withParameter("parent", parent));
+
+| SudoService
+| redefined, see java doc for details
+
+| TestClock (removed)
+| use factories of VirtualClock.frozenTestClock() instead
+
+| Transaction (removed)
+| no replacement (use TransactionService to get current tx id)
+
+| TransactionScopeListener (removed)
+| use Spring's TransactionSynchronization instead
+
+| TransactionService
+| improved API provides more fine grained control
+
+| UserService#getUser() : UserMemento
+| UserService#currentUser() : *Optional*<UserMemento>
+
+|===
+
+
+== Deprecations
+
+.RepositoryService
+[source,java]
+----
+<T> T detachedEntity(Class<T> ofType);     // <.>
+----
+<.> if applicable use `<T> T detachedEntity(T entity)` instead ... "new is the new new", passing
+in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check
+validity of the used constructor rather than doing construction reflective at runtime
+
+== Wicket Viewer
+
+All descendants of `PanelAbstract` now need 2 generic type arguments instead of 1,
+where the newly added is first and specifies the _IModel's_ generic type parameter.
+
+[source,java]
+.PanelAbstract
+----
+// PanelAbstract<T extends IModel<?>> extends PanelBase // <-- previously
+PanelAbstract<T, M extends IModel<T>> extends PanelBase<T> // <.>
+----
+<.> solves methods clashing 'having same erasure yet neither overrides the other'
+
+[source,java]
+.Example Migration
+----
+// MyPanel extends PanelAbstract<IModel<String>> // <-- previously
+MyPanel extends PanelAbstract<String, IModel<String>>
+----
+
+== Extensions
+
+Object type namespaces have been renamed.
+
+WARNING: check menubars.layout.xml for any occurrences
+
+[cols="3m,3m", options="header"]
+|===
+
+| Old
+| New
+
+| isisApplib
+| isis.applib
+
+| isisMetaModel
+| isis.metamodel
+
+| isisSecurityApi
+| isis.security
+
+| isissecurity
+| isis.ext.secman
+
+| isisExt*
+| isis.ext.*
+
+| isisSub*
+| isis.sub.*
+
+|===
+
+
+=== SecMan (Extension)
+
+Permission are now matched against logical packages, logical object types or logical object member names and use the former fully qualified names only as fallback.
+
+[WARNING]
+====
+SecMan database schema changed, namely the *ApplicationPermission* table! See table below.
+====
+
+[source,sql]
+.SecMan database migration // adapt to your schema and db vendor!
+----
+UPDATE ApplicationPermission
+   SET featureType='NAMESPACE'
+ WHERE featureType like 'PACKAGE';
+
+UPDATE ApplicationPermission
+   SET featureType='TYPE'
+ WHERE featureType like 'CLASS';
+
+ALTER TABLE ApplicationPermission
+    RENAME COLUMN `featureType` TO `featureSort`;
+----
+
+[cols="3m,3m,3a", options="header"]
+|===
+
+| What
+| Old
+| New
+
+| ApplicationPermission table column name
+| featureType
+| `featureSort`
+
+| ApplicationPermission#featureType/Sort entries
+| PACKAGE
+| `NAMESPACE`
+
+| ApplicationPermission#featureType/Sort entries
+| CLASS
+| `TYPE`
+
+| Domain Object namespaces in SecMan scope like eg. objectType = "isissecurity.ApplicationUser"
+| isissecurity
+| isis.ext.secman
+
+WARNING: check menubars.layout.xml for any occurrences
+
+| Default Regular User Role Name
+| isis-module-security-regular-user
+| secman-regular-user
+
+| Default Fixture Role Name
+| isis-module-security-fixtures
+| secman-fixtures
+
+| Default Admin Role Name
+| isis-module-security-admin
+| secman-admin
+
+| Default Admin User Name
+| isis-module-security-admin
+| secman-admin
+
+| Class
+| SecurityModuleConfig
+| SecmanConfiguration
+
+| Option
+| SecurityModuleConfig#adminAdditionalPackagePermission
+| SecmanConfiguration#adminAdditionalNamespacePermission
+
+
+
+|===
+

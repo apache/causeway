@@ -23,13 +23,19 @@ import java.util.NoSuchElementException;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.exceptions.IsisException;
 
-// tag::refguide[]
+import lombok.NonNull;
+
+/**
+ * Collects together methods for instantiating domain objects, also injecting
+ * them with any domain services and calling lifecycle methods if defined.
+ *
+ * @since 1.x {@index}
+ */
 public interface FactoryService {
 
-    // end::refguide[]
     /**
      * General purpose factory method, to automatically get or create an instance of
      * {@code requiredType}.
@@ -41,18 +47,23 @@ public interface FactoryService {
      *
      * @param <T>
      * @param requiredType
-     * @return
      * @throws NoSuchElementException if result is empty
-     * @throws IsisException if instance creation failed
+     * @throws UnrecoverableException if instance creation failed
      * @throws IllegalArgumentException if requiredType is not recognized by the meta-model
      *
      * @since 2.0
      *
      */
-    // tag::refguide[]
-    <T> T getOrCreate(Class<T> requiredType);                               // <.>
 
-    // end::refguide[]
+    /**
+     * Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any
+     * life-cycle callback processed.
+     * @param requiredType
+     * @param <T>
+     * @return
+     */
+    <T> T getOrCreate(@NonNull Class<T> requiredType);
+
     /**
      * Gets an instance (possibly shared or independent) of the specified {@code requiredType},
      * with injection points resolved
@@ -64,44 +75,51 @@ public interface FactoryService {
      * (i.e. not multiple candidates found with none marked as primary)
      *
      * @throws NoSuchElementException if result is empty
-     * @throws IsisException if instance creation failed
+     * @throws UnrecoverableException if instance creation failed
      *
      * @apiNote does not force the requiredType to be added to the meta-model
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T get(Class<T> requiredType);                                       // <.>
+    <T> T get(@NonNull Class<T> requiredType);
 
-    // end::refguide[]
     /**
      * Creates a new detached entity instance, with injection points resolved
      * and defaults applied.
      *
+     * <p>
+     *     The entity will be detacted, in other words not yet persisted.
+     * </p>
+     *
      * @param <T>
      * @param domainClass - only applicable to entity types
-     * @return
      * @throws IllegalArgumentException if domainClass is not an entity type
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T detachedEntity(Class<T> domainClass);                             // <.>
+    <T> T detachedEntity(@NonNull Class<T> domainClass);
 
-    // end::refguide[]
+    /**
+     * Creates a new detached entity instance, with injection points resolved.
+     *
+     * @param <T>
+     * @param entity - most likely just new-ed up, without injection points resolved
+     * @throws IllegalArgumentException if domainClass is not an entity type
+     * @apiNote forces the domainClass to be added to the meta-model if not already
+     * @since 2.0
+     */
+    <T> T detachedEntity(@NonNull T entity);
+
     /**
      * Creates a new Mixin instance, with injection points resolved.
      *
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @return
      * @throws IllegalArgumentException if mixinClass is not a mixin type
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
-    // tag::refguide[]
-    <T> T mixin(Class<T> mixinClass, Object mixedIn);                       // <.>
+    <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn);
 
-    // end::refguide[]
     /**
      * Creates a new ViewModel instance, with injection points resolved,
      * and initialized according to the given {@code mementoStr}
@@ -112,10 +130,8 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);  // <.>
+    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable String mementoStr);
 
-    // end::refguide[]
     /**
      * Creates a new ViewModel instance,
      * with injection points resolved
@@ -125,12 +141,19 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    default <T> T viewModel(Class<T> viewModelClass) {                      // <.>
+    default <T> T viewModel(@NonNull Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
 
-    // end::refguide[]
+    /**
+     * Resolves injection points for given ViewModel instance.
+     * @param viewModel - most likely just new-ed up, without injection points resolved
+     * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
+     * @apiNote forces the viewModel's class to be added to the meta-model if not already
+     * @since 2.0
+     */
+    <T> T viewModel(@NonNull T viewModel);
+
     /**
      * Creates a new instance of the specified class,
      * with injection points resolved
@@ -141,9 +164,7 @@ public interface FactoryService {
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
-    // tag::refguide[]
-    <T> T create(Class<T> domainClass);                                 // <.>
-    // end::refguide[]
+    <T> T create(@NonNull Class<T> domainClass);
 
     // -- DEPRECATIONS
 
@@ -183,6 +204,4 @@ public interface FactoryService {
         return getOrCreate(domainClass);
     }
 
-    // tag::refguide[]
 }
-// end::refguide[]

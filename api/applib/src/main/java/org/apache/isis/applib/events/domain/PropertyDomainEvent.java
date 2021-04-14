@@ -24,72 +24,104 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * Fired whenever the framework interacts with a domain object's property.
+ *
+ * <p>
+ * This is the specialization of {@link AbstractDomainEvent}, for properties,
+ *  * which should then be further subclassed by domain application.
+ * </p>
+ *
+ * <p>
+ * The class has a number of responsibilities (in addition to those it
+ * inherits):
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *          capture the old and new values of the property
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework using a
+ * no-arg constructor; fields are set reflectively.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Property#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.property.domain-event.post-for-default</tt>
-     * configuration property.
-     */
-    // tag::refguide[]
-    public static class Default extends PropertyDomainEvent<Object, Object> {}
-
-    // end::refguide[]
-    /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
-     */
-    // tag::refguide[]
-    public static class Noop extends PropertyDomainEvent<Object, Object> {}
-
-    // end::refguide[]
-    /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
-     */
-    // tag::refguide[]
-    public static class Doop extends PropertyDomainEvent<Object, Object> {}
-
-    // end::refguide[]
-    /**
-     * If used then the framework will set state via (non-API) setters.
+     * {@link org.apache.isis.applib.annotation.Property#domainEvent()}
+     * annotation attribute.
      *
      * <p>
-     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.applib.annotation.property.domain-event.post-for-default</tt>
+     * configuration property.
      * </p>
+     */
+    public static class Default extends PropertyDomainEvent<Object, Object> {}
+
+    /**
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
+     */
+    public static class Noop extends PropertyDomainEvent<Object, Object> {}
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event..
+     */
+    public static class Doop extends PropertyDomainEvent<Object, Object> {}
+
+    /**
+     * Subtypes can define a no-arg constructor; the framework sets state
+     * via (non-API) setters.
      */
     public PropertyDomainEvent() {
     }
 
-    // end::refguide[]
     /**
-     * The current (pre-modification) value of the property; populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
-     * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
+     * The current (pre-modification) value of the property.
+     *
+     * <p>
+     * Populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent
+     * phases (but null for
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden}
+     * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable}
+     * phases).
+     * </p>
      */
-    // tag::refguide[]
     @Getter @Setter
     private T oldValue;
 
-    // end::refguide[]
     /**
-     * The proposed (post-modification) value of the property; populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
-     * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
+     * The proposed (post-modification) value of the property.
+     *
+     * <p>
+     * Populated at
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
+     * and subsequent phases (but null for
+     * {@link Phase#HIDE hidden}
+     * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable}
+     * phases).
+     * </p>
      *
      * <p>
      *     The proposed new value can also be modified by event handlers
-     *     during the {@link Phase#EXECUTING} phase.  The new value must be
-     *     the same type as the expected value; the framework performs
-     *     no sanity checks.
+     *     during the
+     *     {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTING executing}
+     *     phase.  The new value must be the same type as the expected value;
+     *     the framework performs no sanity checks.
      * </p>
      */
-    // tag::refguide[]
     @Getter @Setter
     private T newValue;
-
-    // end::refguide[]
 
 
 
@@ -107,7 +139,5 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

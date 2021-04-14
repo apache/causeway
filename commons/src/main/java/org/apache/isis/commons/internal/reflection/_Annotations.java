@@ -172,12 +172,7 @@ public final class _Annotations {
      * @apiNote don't expose Spring's MergedAnnotations
      */
     static MergedAnnotations collect(AnnotatedElement annotatedElement) {
-        
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
-        
-//        val collected = syntCache.computeIfAbsent(annotatedElement, __->
-//            MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS));
-
         return collected;
     }
     

@@ -20,11 +20,10 @@ package org.apache.isis.applib.annotation;
 
 /**
  * The available policies for editing properties and collections.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Editing {
 
-    // end::refguide[]
     /**
      * The editing of the object should be as per the default editing policy configured in <tt>application.properties</tt>.
      *
@@ -32,30 +31,22 @@ public enum Editing {
      *     If no editing policy is configured, then the editing is enabled.
      * </p>
      */
-    // tag::refguide[]
     AS_CONFIGURED,
 
-    // end::refguide[]
     /**
      * Audit changes to this object.
      */
-    // tag::refguide[]
     ENABLED,
 
-    // end::refguide[]
     /**
      * Do not allow the properties to be edited, or the collections to be added to/removed from.
      */
-    // tag::refguide[]
     DISABLED,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]

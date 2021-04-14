@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-
-
 /**
  * Enumerates the different types of pages that can be rendered.
  *

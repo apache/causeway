@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.Locale;
 
 import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
@@ -42,7 +43,7 @@ class PrototypingMessageProvider {
     public static String getTookTimingMessageModel() {
         return isPrototyping()
                 ? getTookTimingMessage()
-                        : "";
+                : "";
     }
 
     // -- HELPER
@@ -59,9 +60,10 @@ class PrototypingMessageProvider {
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 
-        commonContext().getIsisInteractionTracker().currentInteractionSession()
+        commonContext().getInteractionTracker().currentInteraction()
+        .map(IsisInteraction.class::cast)
         .ifPresent(interaction->{
-            val stopWatch = _Timing.atSystemNanos(interaction.getLifecycleStartedAtSystemNanos());    
+            val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());    
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));
         });
 

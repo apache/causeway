@@ -19,20 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * The css class of a class, a property, collection, or an action.
+ * The CSS class of a class, a property, collection, or an action.
  */
 public interface CssClassFacet extends Facet {
 
     /**
      * return custom CSS (if any) for provided {@link ManagedObject object}.
      *
-     * @param objectAdapter - to evaluate.  May be <tt>null</tt> in exceptional circumstances (specifically: the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson#asJson(ObjectSpecification)} which generates <tt>xxx.layout.json</tt> for a spec without recourse to any given object).
+     * @param objectAdapter - to evaluate.  May be <tt>null</tt> in exceptional circumstances.
      */
-    public String cssClass(final ManagedObject objectAdapter);
+    public String cssClass(final @Nullable ManagedObject objectAdapter);
 
 }

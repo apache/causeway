@@ -9,51 +9,12 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
+
 <jdo xmlns="http://xmlns.jcp.org/xml/ns/jdo/jdo"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/jdo http://xmlns.jcp.org/xml/ns/jdo/jdo_3_1.xsd"
 	version="3.1">
 
-	<package name="demoapp.dom.events">
-		<class name="EventLogEntry" />
-	</package>
-
-	<package name="demoapp.dom.types.tuple">
-		<class name="ComplexNumber" />
-		<class name="NumberConstant" />
-	</package>
-
-	<package name="demoapp.dom.viewmodels.jaxbrefentity">
-		<class name="ChildJdo" />
-	</package>
-
-	<package name="demoapp.dom.types.primitive.booleans.jdo">
-		<class name="PrimitiveBooleanJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.bytes.jdo">
-		<class name="PrimitiveByteJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.chars.jdo">
-		<class name="PrimitiveCharJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.doubles.jdo">
-		<class name="PrimitiveDoubleJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.floats.jdo">
-		<class name="PrimitiveFloatJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.ints.jdo">
-		<class name="PrimitiveIntJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.longs.jdo">
-		<class name="PrimitiveLongJdo" />
-	</package>
-	<package name="demoapp.dom.types.primitive.shorts.jdo">
-		<class name="PrimitiveShortJdo" />
-	</package>
-	<package name="demoapp.dom.types.javalang.characters.jdo">
-		<class name="WrapperCharacterJdo" />
-	</package>
 
 </jdo>
 

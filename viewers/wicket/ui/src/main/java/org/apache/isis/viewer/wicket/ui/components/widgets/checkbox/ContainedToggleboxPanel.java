@@ -30,7 +30,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * A button contained within its own form.
  */
-public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
+public class ContainedToggleboxPanel
+extends PanelAbstract<Boolean, Model<Boolean>> {
 
     private static final long serialVersionUID = 1L;
 

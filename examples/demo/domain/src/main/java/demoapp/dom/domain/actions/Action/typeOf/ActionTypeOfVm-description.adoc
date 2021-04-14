@@ -1,0 +1,38 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `typeOf` element indicates the element type for an action that returns a collection.
+
+Normally this can be inferred from the generic type, for example `Customer` within `List<Customer>`.
+This annotation offers an alternative syntax.
+
+CAUTION: this annotation may be deprecated in the future.
+
+// TODO: I have a suspicion that there is a genuine use case for this annotation ... but need to dig deeper.
+
+== Example
+
+The demo object defines a `children` collection:
+
+[source,java]
+----
+include::ActionTypeOfVm.java[tags=class-collections-children]
+----
+
+The `find` action returns a standalone collection for a subset of these child objects matching the specified value:
+
+[source,java,indent=0]
+----
+include::ActionTypeOfVm.java[tags=action]
+----
+<.> indicates the type of element in the returned list
+<.> action defines a raw list
+
+That said, the `findButWithNoAnnotation` action has identical behaviour, even without the `typeOf` element:
+
+[source,java,indent=0]
+----
+include::ActionTypeOfVm.java[tags=action-no-annotation]
+----
+<.> action defines a raw list
+
+

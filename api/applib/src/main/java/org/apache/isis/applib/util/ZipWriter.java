@@ -45,7 +45,6 @@ import lombok.val;
  *  
  * return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
  * </pre>
- * @return a new ZipWriter instance
  * 
  * @since 2.0
  * @apiNote Implementation is <em>not</em> thread safe.

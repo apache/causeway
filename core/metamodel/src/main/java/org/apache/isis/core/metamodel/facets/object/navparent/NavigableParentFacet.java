@@ -36,7 +36,6 @@ public interface NavigableParentFacet extends Facet {
      * Returns the navigable parent (a domain-object or a domain-view-model) for the target object
      * or null if there is no parent.
      * @param object
-     * @return
      */
     Object navigableParent(final Object object);
 

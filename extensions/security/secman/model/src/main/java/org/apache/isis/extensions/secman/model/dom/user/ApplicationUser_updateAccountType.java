@@ -18,10 +18,11 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
@@ -31,32 +32,32 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateAccountTypeDomainEvent.class, 
-        associateWith = "accountType",
-        associateWithSequence = "1")
+        associateWith = "accountType")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateAccountType {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             final AccountType accountType) {
-        holder.setAccountType(accountType);
-        return holder;
+        target.setAccountType(accountType);
+        return target;
     }
     
-    @Model
+    @MemberSupport
     public String disableUpdateAccountType() {
-        return applicationUserRepository.isAdminUser(holder)
+        return applicationUserRepository.isAdminUser(target)
                 ? "Cannot change account type for admin user"
                         : null;
     }
     
-    @Model
+    @MemberSupport
     public AccountType default0UpdateAccountType() {
-        return holder.getAccountType();
+        return target.getAccountType();
     }
 
 }

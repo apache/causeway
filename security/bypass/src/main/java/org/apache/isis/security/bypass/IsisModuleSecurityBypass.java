@@ -27,8 +27,8 @@ import org.apache.isis.security.bypass.authorization.AuthorizorBypass;
 
 /**
  * Auth/bypass for eg. Integration Testing
- *  
- * @since 2.0
+ *
+ * @since 1.x {@index}
  */
 @Configuration
 @Import({

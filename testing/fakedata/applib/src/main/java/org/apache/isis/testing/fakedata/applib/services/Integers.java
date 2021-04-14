@@ -22,6 +22,9 @@ import org.apache.commons.lang3.RandomUtils;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Integers extends AbstractRandomValueGenerator {
 
     public Integers(final FakeDataService fakeDataService) {

@@ -32,6 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -43,7 +45,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.TranslationServicePo")
+@Named("isis.runtimeservices.TranslationServicePo")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Po")
@@ -103,12 +105,12 @@ public class TranslationServicePo implements TranslationService {
     }
 
     @Override
-    public String translate(final String context, final String text) {
+    public String translate(final TranslationContext context, final String text) {
         return po.translate(context, text);
     }
 
     @Override
-    public String translate(final String context, final String singularText, final String pluralText, final int num) {
+    public String translate(final TranslationContext context, final String singularText, final String pluralText, final int num) {
         return po.translate(context, singularText, pluralText, num);
     }
 
@@ -172,7 +174,7 @@ public class TranslationServicePo implements TranslationService {
     @Inject private IsisSystemEnvironment systemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private IsisConfiguration configuration;
-    
+
     private _Lazy<Can<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
     serviceRegistry.select(TranslationsResolver.class) );
 
@@ -187,6 +189,6 @@ public class TranslationServicePo implements TranslationService {
         return localeProviders.get();
     }
 
-    
+
 
 }

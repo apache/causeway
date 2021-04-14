@@ -20,34 +20,46 @@ package org.apache.isis.applib.services.userreg;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 
 /**
  * Supporting service for the user-registration functionality.
- *
  * <p>
- *     The framework provides a default implementation which in turn uses the
- *     {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
+ * The framework provides a default implementation which in turn uses the
+ * {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface EmailNotificationService
         extends Serializable {
 
-    boolean send(EmailRegistrationEvent ev);    // <.>
+    /**
+     * Sends an email to verify an email address as part of the initial user registration
+     *
+     * @param ev
+     * @return
+     */
+    boolean send(EmailRegistrationEvent ev);
 
-    boolean send(PasswordResetEvent ev);        // <.>
+    /**
+     * Sends an email to reset a password for an already-registered user
+     *
+     * @param ev
+     * @return
+     */
+    boolean send(PasswordResetEvent ev);
 
-    // end::refguide[]
     /**
      * Whether this service has been configured and thus available for use.
+     *
+     * <p>
+     *     If this returns false then it is _not_ valid to call
+     *     {@link #send(EmailRegistrationEvent)} (and doing so will result in
+     *     an {@link IllegalStateException} being thrown).
+     * </p>
      */
-    // tag::refguide[]
-    boolean isConfigured();                     // <.>
+    boolean isConfigured();
 
 }
-// end::refguide[]

@@ -26,8 +26,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
@@ -54,7 +54,7 @@ public class UiContextFxDefault implements UiContextFx {
     @Getter(onMethod_ = {@Override})
     private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
     @Getter(onMethod_ = {@Override})
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
     

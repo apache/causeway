@@ -24,26 +24,24 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._NullSafe;
 
-// tag::refguide[]
+/**
+ *
+ * @since 1.x {@index}
+ */
 public interface ContentMappingService {
 
-    // end::refguide[]
     /**
      * Typically for mapping from a domain object to a DTO.
      */
-    // tag::refguide[]
     Object map(
-            Object object,                                  // <.>
-            final List<MediaType> acceptableMediaTypes);    // <.>
+            Object object,
+            final List<MediaType> acceptableMediaTypes);
 
-    // end::refguide[]
     /**
      * Convenience utilities for implementations of {@link ContentMappingService}.
      */
-    // tag::refguide-2[]
     public static class Util {
 
         public static String determineDomainType(final List<MediaType> acceptableMediaTypes) {
@@ -69,8 +67,5 @@ public interface ContentMappingService {
             return clazz.getName().equals(domainType);
         }
     }
-    // end::refguide-2[]
 
-    // tag::refguide[]
 }
-// end::refguide[]

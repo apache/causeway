@@ -34,10 +34,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
@@ -45,7 +43,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectMemento> {
+public abstract class ObjectAdapterMementoProviderAbstract 
+extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,54 +52,52 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     private static final String NULL_DISPLAY_TEXT = "";
 
     @Getter private final ScalarModel scalarModel;
-    @Getter private final transient IsisAppCommonContext commonContext;
-    @Getter private final transient WicketViewerSettings wicketViewerSettings;
+    private transient IsisAppCommonContext commonContext;
+    private transient WicketViewerSettings wicketViewerSettings;
 
     public ObjectAdapterMementoProviderAbstract(ScalarModel scalarModel) {
-        
         this.scalarModel = scalarModel;
-        this.commonContext = scalarModel.getCommonContext();
-        this.wicketViewerSettings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
     }
 
     @Override
-    public String getDisplayValue(final ObjectMemento choice) {
-        if (choice == null) {
+    public String getDisplayValue(final ObjectMemento choiceMemento) {
+        if (choiceMemento == null) {
             return NULL_DISPLAY_TEXT;
         }
-        val objectAdapter = commonContext.reconstructObject(choice);
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "Internal error: broken memento " + choice;
+        val choice = getCommonContext().reconstructObject(choiceMemento);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
+            return "Internal error: broken memento " + choiceMemento;
         }
-        final IConverter<Object> converter = findConverter(objectAdapter);
+        final IConverter<Object> converter = findConverter(choice);
         return converter != null
-                ? converter.convertToString(objectAdapter.getPojo(), getLocale())
-                : objectAdapter.titleString(null);
+                ? converter.convertToString(choice.getPojo(), getLocale())
+                : choice.titleString(null);
     }
 
     protected Locale getLocale() {
         return Session.exists() ? Session.get().getLocale() : Locale.ENGLISH;
     }
 
-    protected IConverter<Object> findConverter(final ManagedObject objectAdapter) {
-        return IsisConverterLocator.findConverter(objectAdapter, wicketViewerSettings);
+    protected IConverter<Object> findConverter(final ManagedObject choice) {
+        return IsisConverterLocator.findConverter(choice, getWicketViewerSettings());
     }
 
     @Override
-    public String getIdValue(final ObjectMemento choice) {
-        if (choice == null) {
+    public String getIdValue(final ObjectMemento choiceMemento) {
+        if (choiceMemento == null) {
             return NULL_PLACEHOLDER;
         }
-        final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = commonContext.getSpecificationLoader()
-                .lookupBySpecIdElseLoad(objectSpecId);
+        val logicalType = choiceMemento.getLogicalType();
+        val spec = getCommonContext().getSpecificationLoader()
+                .specForLogicalType(logicalType)
+                .orElse(null);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
         if(spec != null && spec.isEncodeable()) {
-            return objectSpecId.asString() + ":" + choice.asString();
+            return logicalType.getLogicalTypeName() + ":" + choiceMemento.asString();
         } else {
-            return choice.asString();
+            return choiceMemento.asString();
         }
     }
 
@@ -136,6 +133,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return choicesMementos;
         } 
             
+        val commonContext = getCommonContext();
+        
         return choicesMementos.filter((ObjectMemento candidate)->{
             val objectAdapter = commonContext.reconstructObject(candidate); 
             val title = objectAdapter.titleString(objectAdapter);
@@ -157,6 +156,22 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         return true;
     }
     
+    // -- DEPS
+    
+    protected IsisAppCommonContext getCommonContext() {
+        if(commonContext==null) {
+            commonContext = scalarModel.getCommonContext();
+        }
+        return commonContext;
+    }
+    
+    protected WicketViewerSettings getWicketViewerSettings() {
+        if(wicketViewerSettings==null) {
+            wicketViewerSettings = getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+        }
+        return wicketViewerSettings;
+    }
+
     // -- HELPER
     
     private ObjectMemento idToMemento(String id) {
@@ -166,8 +181,6 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         val rootOid = RootOid.deString(id);
         return getCommonContext().mementoFor(rootOid);
     }
-
-    
 
 
 }

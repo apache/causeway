@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
@@ -55,49 +54,24 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     private MetaModelContext metaModelContext;
     private ViewModelSemanticCheckingFacetFactory facetFactory;
-
-    private ValidationFailures processThenValidate(final Class<?> cls) {
-        
-        val programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
-        facetFactory.refineProgrammingModel(programmingModel);
-        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
-        
-        val holder = new FacetHolderImpl();
-        ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
-        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
-        
-        val validationFailures = new ValidationFailures();
-        
-        programmingModel.streamValidators()
-        .forEach(validator->((MetaModelValidatorAbstract)validator).collectFailuresInto(validationFailures));
-
-        return validationFailures;
-    }
+    private ProgrammingModelAbstract programmingModel;
 
     @Before
     public void setUp() throws Exception {
 
         val configuration = new IsisConfiguration(null);
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
+        
+        programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
+        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
+                .programmingModel(programmingModel)
                 .build();
 
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
         facetFactory.setMetaModelContext(metaModelContext);
-    }
-
-    @Test
-    public void whenValidAnnotatedWithViewModelAndViewModelLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.ViewModel
-        @org.apache.isis.applib.annotation.ViewModelLayout
-        class ValidAnnotatedWithViewModelAndViewModelLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidAnnotatedWithViewModelAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -108,34 +82,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         class ValidAnnotatedDomainObjectAndDomainObjectLayout {
         }
 
-        final ValidationFailures validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
+        val validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
         assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenInvalidAnnotatedViewModelAndDomainObjectLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.ViewModel
-        @org.apache.isis.applib.annotation.DomainObjectLayout
-        class InvalidAnnotatedViewModelAndDomainObjectLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(InvalidAnnotatedViewModelAndDomainObjectLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with both @ViewModel and @DomainObjectLayout (annotate with @ViewModelLayout instead of @DomainObjectLayout, or annotate with @DomainObject instead of @ViewModel)"));
-    }
-
-    @Test
-    public void whenInvalidAnnotatedDomainObjectAndViewModelLayout() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject
-        @org.apache.isis.applib.annotation.ViewModelLayout
-        class InvalidAnnotatedDomainObjectAndViewModelLayout {
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(InvalidAnnotatedDomainObjectAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @ViewModelLayout and also be annotated with @DomainObject (annotate with @ViewModel instead of @DomainObject, or instead annotate with @DomainObjectLayout instead of @ViewModelLayout)"));
     }
 
     @Test
@@ -152,43 +100,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             }
         }
 
-        final ValidationFailures validationFailures = processThenValidate(ValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.EXTERNAL_ENTITY)
-        class ValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.INMEMORY_ENTITY)
-        class ValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        final ValidationFailures validationFailures = processThenValidate(ValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject.class);
+        val validationFailures = processThenValidate(
+                ValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
@@ -206,15 +119,16 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             }
         }
 
-        final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
+        val validationFailures = processThenValidate(
+                InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
+        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
     @Test
     public void whenInvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject() throws Exception {
 
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.JDO_ENTITY)
+        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.ENTITY)
         class InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
             @Override
             public String __isis_memento() {
@@ -225,11 +139,23 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             }
         }
 
-        final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
+        val validationFailures = processThenValidate(
+                InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of JDO_ENTITY and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
+        assertThat(validationFailures.getMessages().iterator().next(), 
+                containsString("should not be annotated with @DomainObject with nature of ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
+    // -- HELPER
+    
+    private ValidationFailures processThenValidate(final Class<?> cls) {
+        
+        val holder = new FacetHolderImpl();
+        ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
+        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
+        
+        return metaModelContext.getSpecificationLoader().getValidationResult();
+    }
 
 
 }

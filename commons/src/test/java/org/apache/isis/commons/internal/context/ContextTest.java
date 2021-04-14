@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.internal.context._Context;
-
 @Disabled("some tests fail to run on eclipse -> "
         + "java.lang.ClassNotFoundException: org.junit.platform.commons.logging.LogRecordListener")
 class ContextTest {

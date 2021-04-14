@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.bidir;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface Instantiator {
     Instantiator NOOP = new Instantiator() {
 

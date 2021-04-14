@@ -18,12 +18,13 @@
  */
 package org.apache.isis.applib.services.commanddto.processor;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 
 /**
  * Convenience adapter for command processors for property edits.
+ *
+ * @since 1.x {@index}
  */
 public abstract class CommandDtoProcessorForPropertyAbstract
 implements CommandDtoProcessor {

@@ -26,6 +26,8 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
  * making the call (the "who").
  *
  * @see #handles(Class)
+ *
+ * @since 2.0 {@index}
  */
 public interface ApplicationTenancyEvaluator {
 

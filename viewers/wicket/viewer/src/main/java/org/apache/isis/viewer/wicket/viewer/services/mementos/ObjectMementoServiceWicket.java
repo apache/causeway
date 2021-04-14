@@ -31,6 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -39,12 +40,11 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoCollection;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoForEmpty;
-import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMementoCollection;
+import org.apache.isis.core.runtime.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.runtime.memento.ObjectMementoService;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -57,7 +57,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisWicketViewer.ObjectMementoServiceWicket")
+@Named("isis.viewer.wicket.ObjectMementoServiceWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @Singleton
@@ -82,7 +82,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard)
             return ManagedObjects.isSpecified(adapter)
-                    ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
+                    ? new ObjectMementoForEmpty(adapter.getSpecification().getLogicalType())
                     : null;
             // sonar-ignore-on
         }
@@ -95,7 +95,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         assertSingleton(paramAdapter);
         val mementoAdapter = ObjectMementoWkt.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
-            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getSpecId());
+            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
@@ -111,13 +111,13 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
     
     @Override
-    public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId) {
+    public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType) {
 //        _Probe.errOut("mementoForPojos");
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
 
-        return ObjectMementoCollection.of(listOfMementos, specId);
+        return ObjectMementoCollection.of(listOfMementos, logicalType);
     }
 
     @Override
@@ -129,9 +129,11 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         
         if(memento instanceof ObjectMementoForEmpty) {
             val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
-            val specId = objectMementoForEmpty.getObjectSpecId();
-            val spec = specificationLoader.loadSpecification(specId);
-            return ManagedObject.empty(spec);
+            val logicalType = objectMementoForEmpty.getLogicalType();
+            val spec = specificationLoader.specForLogicalType(logicalType);
+            return spec.isPresent()
+                    ? ManagedObject.empty(spec.get())
+                    : ManagedObject.unspecified();
         }
         
         if(memento instanceof ObjectMementoCollection) {
@@ -196,10 +198,10 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         public Bookmark asHintingBookmarkIfSupported() {
             return delegate.asHintingBookmark();
         }
-
+        
         @Override
-        public ObjectSpecId getObjectSpecId() {
-            return delegate.getObjectSpecId();
+        public LogicalType getLogicalType() {
+            return delegate.getLogicalType();
         }
 
         ManagedObject reconstructObject(MetaModelContext mmc) {
@@ -210,6 +212,8 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         public String toString() {
             return delegate.toString();
         }
+
+
 
     }
 

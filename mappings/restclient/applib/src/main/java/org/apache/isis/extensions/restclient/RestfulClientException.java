@@ -18,6 +18,9 @@
  */
 package org.apache.isis.extensions.restclient;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class RestfulClientException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

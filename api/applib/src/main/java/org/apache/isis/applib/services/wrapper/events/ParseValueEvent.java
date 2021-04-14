@@ -28,7 +28,8 @@ import org.apache.isis.applib.Identifier;
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * proposed value is invalid, otherwise the new value is acceptable.
- *
+ * 
+ * @since 1.x {@index}
  */
 public class ParseValueEvent extends ValidityEvent {
 

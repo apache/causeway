@@ -1,0 +1,66 @@
+= CommandDtoFactory _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Used to serialize the intention to invoke an action or edit a property as a _CommandDto_ , for example such that it can be persisted and then executed at some later time or even against some external system.
+
+There are some similarities to _org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory_ , which is used to instantiate an _org.apache.isis.schema.ixn.v2.InteractionDto_ that represents the _actual_ execution of the action invocation or property edit.
+
+== API
+
+[source,java]
+.CommandDtoFactory.java
+----
+interface CommandDtoFactory {
+  CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters, final ObjectAction objectAction, final Can<ManagedObject> argAdapters)     // <.>
+  CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters, final OneToOneAssociation association, final ManagedObject valueAdapterOrNull)     // <.>
+  void addActionArgs(final ObjectAction objectAction, final ActionDto actionDto, final Can<ManagedObject> argAdapters)     // <.>
+  void addPropertyValue(final OneToOneAssociation property, final PropertyDto propertyDto, final ManagedObject valueAdapter)     // <.>
+}
+----
+
+<.> xref:#asCommandDto__UUID_Can_ObjectAction_Can[asCommandDto(UUID, Can, ObjectAction, Can)]
++
+--
+Returns a _CommandDto_ that represents the intention to invoke an action on a target object (or target objects, to support the notion of bulk actions).
+--
+<.> xref:#asCommandDto__UUID_Can_OneToOneAssociation_ManagedObject[asCommandDto(UUID, Can, OneToOneAssociation, ManagedObject)]
++
+--
+Returns a _CommandDto_ that represents the intention to edit (set or clear) a property on a target (or possibly many targets, for symmetry with actions).
+--
+<.> xref:#addActionArgs__ObjectAction_ActionDto_Can[addActionArgs(ObjectAction, ActionDto, Can)]
++
+--
+Adds the arguments of an action to an _ActionDto_ (the element within a _CommandDto_ representing an action invocation).
+--
+<.> xref:#addPropertyValue__OneToOneAssociation_PropertyDto_ManagedObject[addPropertyValue(OneToOneAssociation, PropertyDto, ManagedObject)]
++
+--
+Adds the new value argument of a property to a _PropertyDto_ (the element a _CommandDto_ representing an property edit).
+--
+
+== Members
+
+[#asCommandDto__UUID_Can_ObjectAction_Can]
+=== asCommandDto(UUID, Can, ObjectAction, Can)
+
+Returns a _CommandDto_ that represents the intention to invoke an action on a target object (or target objects, to support the notion of bulk actions).
+
+[#asCommandDto__UUID_Can_OneToOneAssociation_ManagedObject]
+=== asCommandDto(UUID, Can, OneToOneAssociation, ManagedObject)
+
+Returns a _CommandDto_ that represents the intention to edit (set or clear) a property on a target (or possibly many targets, for symmetry with actions).
+
+[#addActionArgs__ObjectAction_ActionDto_Can]
+=== addActionArgs(ObjectAction, ActionDto, Can)
+
+Adds the arguments of an action to an _ActionDto_ (the element within a _CommandDto_ representing an action invocation).
+
+This is used when the command is actually executed to populate the parameters of the equivalent _org.apache.isis.schema.ixn.v2.ActionInvocationDto_
+
+[#addPropertyValue__OneToOneAssociation_PropertyDto_ManagedObject]
+=== addPropertyValue(OneToOneAssociation, PropertyDto, ManagedObject)
+
+Adds the new value argument of a property to a _PropertyDto_ (the element a _CommandDto_ representing an property edit).
+
+This is used when the command is actually executed to set the the new value of the equivalent _org.apache.isis.schema.ixn.v2.PropertyEditDto_ .

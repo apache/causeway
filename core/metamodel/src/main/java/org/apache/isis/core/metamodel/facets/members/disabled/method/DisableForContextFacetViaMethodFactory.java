@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.MethodFinder2;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -60,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         boolean searchExactMatch = !noParamsOnly;
         if(searchExactMatch) {
             // search for exact match
-            disableMethod = MethodFinder2.findMethod_returningText(
+            disableMethod = MethodFinder.findMethod_returningText(
                     cls,
                     namingConvention,
                     actionOrGetter.getParameterTypes())
@@ -69,7 +68,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         }
         if (disableMethod == null) {
             // search for no-arg version
-            disableMethod = MethodFinder2.findMethod_returningText(
+            disableMethod = MethodFinder.findMethod_returningText(
                     cls,
                     namingConvention,
                     NO_ARG)
@@ -82,10 +81,11 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         processMethodContext.removeMethod(disableMethod);
 
-        final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = getTranslationService();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassAndNameIdentityString();
+        val translationContext = TranslationContext
+                .forTranslationContextHolder(((IdentifiedHolder)facetHolder).getIdentifier());
         super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
     }
 

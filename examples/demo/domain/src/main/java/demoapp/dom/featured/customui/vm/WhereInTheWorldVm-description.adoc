@@ -1,0 +1,151 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The link:https://isis.apache.org/vw/{isis-version}/about.html[Wicket viewer] renders the generic UI for entities and view models using a series of Wicket ``Component``s, with each such `Component` created by a `ComponentFactory`.
+
+You can customise the UI by providing alternate implementations of `ComponentFactory`, for any component on the page, including the top-level component for the entire domain object.
+
+This custom UI uses the technique to provide a custom page for a `WhereInTheWorldVm` view model.
+
+
+== Domain Objects
+
+The domain objects involved are the `WhereInTheWorldMenu` domain service and `WhereInTheWorldVm` view model.
+
+The `WhereInTheWorldMenu` domain service prompts for an address, and uses the injected `GeoapifyClient` service to determine the latitude and longitude.
+A `zoom` level, which will be used when retrieving the map, is also prompted for:
+
+[source,java,indent=0]
+.WhereInTheWorldMenu.java
+----
+include::WhereInTheWorldMenu.java[tags=action]
+----
+
+The `WhereInTheWorldVm` view model returned by the menu is defined normally.
+In this case, we have a JAXB view model with four properties:
+
+[source,java]
+.WhereInTheWorldVm.java
+----
+include::WhereInTheWorldVm.java[tags=class]
+----
+
+== Wicket components
+
+To provide a custom component, we need to implement the `o.a.i.viewer.wicket.ui.ComponentFactory` interface, as a domain service.
+
+TIP: For more on this topic, see the link:https://isis.apache.org/vw/{isis-version}/extending.html#replacing-page-elements[Wicket viewer documentation].
+
+There are various subclasses available; as we want to replace the component for the entire entity, we can subclass from `EntityComponentFactoryAbstract`:
+
+
+[source,java]
+.WhereInTheWorldPanelFactory.java
+----
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanelFactory.java[tags=class]
+----
+<.> the framework use the chain-of-responsibility pattern to look for a component factory to render the domain object.
+This `@Order` precedence ensures that this custom implementation is consulted early on.
+<.> indicates that this component applies when rendering a domain object (applies to view models as well as domain entities)
+<.> the superclass ensures that an `EntityModel` is provided to inspect.
+This is a Wicket model that is a serializable equivalent to the core framework's notion of a domain object.
+<.> the `ManagedObject` is the core framework's (aforementioned) notion of a domain object (providing access into the metamodel).
+<.> the actual domain object pojo, wrapped by and obtained from `ManagedObject`.
+<.> this component factory only applies if the domain object is an instance of `WhereInTheWorldVm`
+<.> safe to downcast, because of the `ComponentType specified in the constructor.
+<.> instantiates the actual Wicket component
+<.> the `GeoapifyClient` is required by the Wicket component.
+The framework doesn't inject into Wicket components, so instead this domain service is passed into the constructor.
+
+
+The `WhereInTheWorldPanel` is the actual custom Wicket component, using the Wicket API:
+
+* its constructor is:
++
+[source,java]
+.WhereInTheWorldPanel.java
+----
+include::../wicket/WhereInTheWorldPanel.java[tags=class]
+----
+<.> Wicket components are required to be serializable.
+<.> The `GeoapifyClient` as provided by the component factory, above.
+Note that this must _also_ be serializable.
+
+* the `onInitialize` method actually builds the UI:
++
+[source,java,indent=0]
+.WhereInTheWorldPanel.java
+----
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=onInitialize]
+----
+<.> obtain the core framework's `ManagedObject` from the Wicket model...
+<.> \... and obtain the domain object in turn.
+We can downcast to the view model because of the `appliesTo` check in the component factory, earlier.
+<.> create a Wicket `Label` component to display the latitude
+<.> similarly for the longitude
+<.> similarly for the address
+<.> call a helper method (shown below) to create the map's `Image` component
+<.> call a helper method (shown below) to create the Wicket viewer's normal component for the view model's `sources` property ...
+<.> \... and its `description` property.
+You are reading the content of this `description` property right now!
+<.> add all of these Wicket components to the containing div.
++
+Wicket requires there to be corresponding HTML (`WhereInTheWorld.html`) file for this component, and this has an HTML element for each subcomponent, identified using the `wicket:id` attribute.
+
+* the `createMapComponent()` helper is:
++
+[source,java,indent=0]
+.WhereInTheWorldPanel.java
+----
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createMapComponent]
+----
+<.> call the `GeoapifyClient` to download the JPEG...
+<.> \... and returns an `Image` component holding same
+
+* the `createPropertyComponent()` helper is:
+*
+[source,java,indent=0]
+.WhereInTheWorldPanel.java
+----
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
+----
+<.> obtains the `ObjectSpecification` (the framework's equivalent of `java.lang.Class`) for the domain object
+<.> obtains the `OneToOneAssociation` (the framework's equivalent of a `java.lang.reflect.Method`) for the specified property
+<.> creates a Wicket (serializable) model to represent this aspect of the framework's metamodel
+<.> uses the parent entity model to create a scalar model holding the actual value of the property of the domain object
+<.> uses the Wicket viewer's `ComponentFactoryRegistry` to create an appropriate component for this property value.
+
+This example therefore shows that the resultant page can be a mix of entirely custom Wicket components, and also reusing components provided by the Wicket viewer.
+
+== GeoapifyClient
+
+We have already seen the `GeoapifyClient` domain service; it provides a geocode lookup of (lat, lng) for an address, and provides a jpeg image for that location, at the specified zoom:
+
+[source,java]
+.GeoapifyClient.java
+----
+include::../geocoding/GeoapifyClient.java[tags=class]
+----
+
+== Classpath
+
+It's probably best practice for the custom Wicket component classes to be in the `webapp` module, rather than here in the domain module; we've placed them here just to have all the code together and to be easily locatable.
+
+It does however mean that we had to tweak the classpath to bring in a dependency on the Wicket viewer modules:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.viewer</groupId>
+        <artifactId>isis-viewer-wicket-model</artifactId>
+        <optional>true</optional>	<!--1-->
+    </dependency>
+    <dependency>
+        <groupId>org.apache.isis.viewer</groupId>
+        <artifactId>isis-viewer-wicket-ui</artifactId>
+        <optional>true</optional>	<!--1-->
+    </dependency>
+</dependencies>
+----
+<.> to avoid polluting the classpath

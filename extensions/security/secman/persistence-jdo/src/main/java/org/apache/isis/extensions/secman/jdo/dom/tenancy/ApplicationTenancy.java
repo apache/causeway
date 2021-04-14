@@ -33,10 +33,8 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -78,7 +76,7 @@ import lombok.Setter;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
                     + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
-        objectType = "isissecurity.ApplicationTenancy",
+        objectType = "isis.ext.secman.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
         )
@@ -98,9 +96,8 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_NAME
-            )
-    @MemberOrder(sequence = "1")
+            typicalLength=TYPICAL_LENGTH_NAME,
+            sequence = "1")
     @Getter @Setter
     private String name;
 
@@ -143,8 +140,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     @javax.jdo.annotations.Persistent(mappedBy = "parent")
     @Collection(
-            domainEvent = ChildrenDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = ChildrenDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"

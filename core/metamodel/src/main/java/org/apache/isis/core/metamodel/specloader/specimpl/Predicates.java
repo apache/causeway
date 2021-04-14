@@ -20,9 +20,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
@@ -34,22 +33,6 @@ final class Predicates {
     
     static boolean isRequiredType(final ObjectAction objectAction) {
         return objectAction instanceof ObjectActionDefault;
-    }
-    
-    static boolean isActionContributionVetoed(final ObjectAction contributeeAction) {
-        val notContributed = contributeeAction.getFacet(NotContributedFacet.class);
-        if(notContributed != null && notContributed.toActions()) {
-            return true;
-        }
-        return false;
-    }
-    
-    static boolean isAssociationContributionVetoed(final ObjectAction contributeeAction) {
-        val notContributed = contributeeAction.getFacet(NotContributedFacet.class);
-        if(notContributed != null && notContributed.toAssociations()) {
-            return true;
-        }
-        return false;
     }
     
     static boolean isGetterCandidate(final ObjectAction action) {
@@ -67,13 +50,6 @@ final class Predicates {
         return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
     }
     
-    static boolean isAnyContributeeParameterMatching(
-            final ObjectSpecification typeSpec, 
-            final ObjectAction contributeeAction) {
-
-        return Utils.contributeeParameterIndexOf(typeSpec, contributeeAction)!=-1;
-    }
-    
     // -- HIGHER LEVEL - MIXINS
     
     static boolean isMixedInAction(ObjectAction mixinTypeAction) {
@@ -83,7 +59,7 @@ final class Predicates {
         if(isAlwaysHidden(mixinTypeAction)) {
             return false;
         }
-        if(isActionContributionVetoed(mixinTypeAction)) {
+        if(ContributingFacet.isActionContributionVetoed(mixinTypeAction)) {
             return false;
         }
         return true;
@@ -96,7 +72,7 @@ final class Predicates {
         if(isAlwaysHidden(mixinAction)) {
             return false;
         }
-        if(isAssociationContributionVetoed(mixinAction)) {
+        if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {
             return false;
         }
         if(!isGetterCandidate(mixinAction)) {

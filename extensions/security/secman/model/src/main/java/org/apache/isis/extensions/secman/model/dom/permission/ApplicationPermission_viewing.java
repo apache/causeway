@@ -25,20 +25,22 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = ViewingDomainEvent.class, associateWith = "mode")
+@Action(
+        domainEvent = ViewingDomainEvent.class, 
+        associateWith = "mode")
 @RequiredArgsConstructor
 public class ApplicationPermission_viewing {
 
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
     
-    //@MemberOrder(name = "Mode", sequence = "1")
+    //@PropertyLayout(group = "Mode", sequence = "1")
     public ApplicationPermission act() {
-        holder.setMode(ApplicationPermissionMode.VIEWING);
-        return holder;
+        target.setMode(ApplicationPermissionMode.VIEWING);
+        return target;
     }
     
     public String disableAct() {
-        return holder.getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
+        return target.getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
     }
     
 

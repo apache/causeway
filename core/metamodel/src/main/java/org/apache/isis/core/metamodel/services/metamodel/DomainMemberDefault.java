@@ -37,8 +37,6 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
@@ -56,7 +54,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import lombok.val;
@@ -70,7 +67,7 @@ public class DomainMemberDefault implements DomainMember {
     private final ObjectMember member;
     private ObjectAction action;
 
-    // to support JAX-B marshaling 
+    // to support JAX-B marshaling
     DomainMemberDefault(){
         throw _Exceptions.unexpectedCodeReach();
     }
@@ -131,20 +128,6 @@ public class DomainMemberDefault implements DomainMember {
     @XmlElement @Override
     public String getNumParams() {
         return action!=null?""+action.getParameterCount():"";
-    }
-
-    @XmlElement @Override
-    public boolean isContributed() {
-        return member instanceof ContributeeMember;
-    }
-
-    @XmlElement @Override
-    public String getContributedBy() {
-        if(member instanceof ContributeeMember) {
-            final ObjectSpecification serviceContributedBy = ((ContributeeMember) member).getServiceContributedBy();
-            return serviceContributedBy.getCorrespondingClass().getSimpleName();
-        }
-        return "";
     }
 
     @XmlElement @Override
@@ -224,7 +207,7 @@ public class DomainMemberDefault implements DomainMember {
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
             return !interpretations.isEmpty()
-                    ? interpretations.stream().collect(Collectors.joining(";"))
+                    ? String.join(";", interpretations)
                             : interpretRowAndFacet(ActionDefaultsFacet.class);
         }
     }
@@ -234,10 +217,7 @@ public class DomainMemberDefault implements DomainMember {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyValidateFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
-            final SortedSet<String> interpretations = _Sets.newTreeSet();
-            addIfNotEmpty(interpretRowAndFacet(CollectionValidateAddToFacet.class), interpretations);
-            addIfNotEmpty(interpretRowAndFacet(CollectionValidateRemoveFromFacet.class), interpretations);
-            return interpretations.stream().collect(Collectors.joining(";"));
+            return String.join(";", _Sets.newTreeSet());
         } else {
             return interpretRowAndFacet(ActionValidationFacet.class);
         }
@@ -279,7 +259,7 @@ public class DomainMemberDefault implements DomainMember {
         if (ignore(name)) {
             return "";
         }
-        //[ahuber] not sure why abbreviated, so I disabled abbreviation        
+        //[ahuber] not sure why abbreviated, so I disabled abbreviation
         //        final String abbr = StringExtensions.toAbbreviation(name);
         //        return abbr.length()>0 ? abbr : name;
 
@@ -291,7 +271,7 @@ public class DomainMemberDefault implements DomainMember {
                 .contains(name);
     }
 
-    private static final Comparator<DomainMember> comparator = 
+    private static final Comparator<DomainMember> comparator =
             Comparator.comparing(DomainMember::getClassType)
             .thenComparing(DomainMember::getClassName)
             .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc

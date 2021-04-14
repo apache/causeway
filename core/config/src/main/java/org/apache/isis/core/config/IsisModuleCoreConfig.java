@@ -18,20 +18,26 @@
  */
 package org.apache.isis.core.config;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.config.applib.RestfulPathProvider;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.converters.PatternsConverter;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
+import org.apache.isis.core.config.environment.IsisLocaleInitializer;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.environment.IsisTimeZoneInitializer;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+
+import lombok.Data;
 
 @Configuration
 @Import({
@@ -39,29 +45,38 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     // @Component's
     PatternsConverter.class,
     IsisBeanFactoryPostProcessorForSpring.class,
+    IsisLocaleInitializer.class,
+    IsisTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,
+    RestfulPathProvider.class,
 
     // @Service's
+    DataSourceIntrospectionService.class,
+    IsisBeanTypeRegistryDefault.class,
     IsisSystemEnvironment.class,
     WebAppContextPath.class,
+
 })
 @EnableConfigurationProperties({
         IsisConfiguration.class,
+        DatanucleusConfiguration.class,
+        EclipselinkConfiguration.class,
+        EclipselinkConfiguration.Weaving.class,
+        EclipselinkConfiguration.DdlGeneration.class,
+        EclipselinkConfiguration.Jdbc.BatchWriting.class,
+        EclipselinkConfiguration.Jdbc.CacheStatements.class,
         RestEasyConfiguration.class,
+        IsisModuleCoreConfig.ConfigProps.class,
 })
 public class IsisModuleCoreConfig {
-    
-    @ConfigurationProperties(prefix = "isis")
-    @Bean("isis-settings")
-    public Map<String, String> getIsisConfigProps() {
-        return new HashMap<>();
-    }
 
-    @ConfigurationProperties(prefix = "resteasy")
-    @Bean("resteasy-settings")
-    public Map<String, String> getResteasyConfigProps() {
-        return new HashMap<>();
+    @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
+    @Data
+    public static class ConfigProps {
+        private Map<String, String> isis = Collections.emptyMap();
+        private Map<String, String> resteasy = Collections.emptyMap();
+        private Map<String, String> datanucleus = Collections.emptyMap();
+        private Map<String, String> eclipselink = Collections.emptyMap();
     }
-
 
 }

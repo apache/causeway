@@ -33,8 +33,11 @@ import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplay
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandReplayAnalysisService")
+@Named("isis.ext.commandReplaySecondary.CommandReplayAnalysisService")
 @Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class CommandReplayAnalysisService {

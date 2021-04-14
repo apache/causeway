@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import com.vaadin.flow.server.Constants;
+import com.vaadin.flow.server.InitParameters;
 import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
 import com.vaadin.flow.spring.SpringServlet;
@@ -41,7 +41,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 
 import lombok.val;
@@ -71,7 +71,7 @@ public class IsisModuleIncViewerVaadinViewer {
     
     @Inject private WebApplicationContext context;
     @Inject private VaadinConfigurationProperties configurationProperties;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private InteractionFactory isisInteractionFactory;
 
     /**
      * Creates a {@link ServletContextInitializer} instance.
@@ -95,7 +95,7 @@ public class IsisModuleIncViewerVaadinViewer {
         val isRootMapping = RootMappedCondition.isRootMapping(urlMapping);
         if (isRootMapping) {
             urlMapping = "/vaadinServlet/*";
-            initParameters.put(Constants.SERVLET_PARAMETER_PUSH_URL,
+            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(

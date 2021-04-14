@@ -30,26 +30,57 @@ import lombok.Getter;
  * <p>
  *     Implementation note: a class has been used here so that additional fields might be added in the future.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 @AllArgsConstructor
 public class ErrorDetails {
 
-    @Getter
-    private final String mainMessage;                           // <.>
-    @Getter
-    private final boolean recognized;                           // <.>
-    @Getter
-    private final boolean authorizationCause;                   // <.>
-    @Getter
-    private final List<String> stackTraceDetailListCombined;    // <.>
-    // end::refguide[]
     /**
-     * One per exception cause.
+     * The main message to be displayed to the end-user.
+     *
+     * <p>
+     * The service is responsible for translating this into the language of the end-user (it can use xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`] if required).
+     * </p>
+     *
      */
-    // tag::refguide[]
+    @Getter
+    private final String mainMessage;
+
+    /**
+     * Whether this message has already been recognized by an {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer} implementation.
+     *
+     * <p>
+     * Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
+     * </p>
+     */
+    @Getter
+    private final boolean recognized;
+
+    /**
+     * Whether the cause of the exception was due to a lack of privileges.
+     *
+     * <p>
+     * In such cases the UI restricts the information shown to the end-user, to avoid leaking potentially sensitive information
+     * </p>
+     */
+    @Getter
+    private final boolean authorizationCause;
+
+    /**
+     * The stack trace of the exception, including the trace of any exceptions in the causal chain.
+     *
+     * <p>
+     * These technical details are hidden from the user and only shown for non-recoverable exceptions.
+     * </p>
+     */
+    @Getter
+    private final List<String> stackTraceDetailListCombined;
+
+    /**
+     * The stack trace, broken out by exception cause.
+     */
     @Getter
     private final List<List<String>> stackTraceDetailPerCause;
 
 }
-// end::refguide[]

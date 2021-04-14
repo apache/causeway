@@ -18,11 +18,7 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
-import java.util.function.Consumer;
-
 import static java.util.Objects.requireNonNull;
-
-import org.springframework.beans.factory.InjectionPoint;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -40,7 +36,7 @@ class ServiceInjector_forTesting implements ServiceInjector {
     private ServiceInjector delegate;
 
     @Override
-    public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
+    public <T> T injectServicesInto(T domainObject) {
 
         if(delegate==null) {
 

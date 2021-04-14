@@ -20,7 +20,6 @@ package org.apache.isis.core.runtimeservices.command;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -41,14 +40,19 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -56,15 +60,13 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MemberDto;
@@ -82,7 +84,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.CommandExecutorServiceDefault")
+@Named("isis.runtimeservices.CommandExecutorServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -97,10 +99,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final SudoService sudoService;
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
-    @Inject final IsisInteractionTracker isisInteractionTracker;
+    @Inject final InteractionTracker isisInteractionTracker;
     @Inject final Provider<InteractionContext> interactionContextProvider;
 
-    @Inject @Getter final IsisInteractionFactory isisInteractionFactory;
+    @Inject @Getter final InteractionFactory isisInteractionFactory;
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override
@@ -138,7 +140,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().currentInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -146,34 +148,30 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         copyStartedAtFromInteractionExecution(commandUpdater);
 
-        try {
-            val result = transactionService.executeWithinTransaction(
-                () -> sudoPolicy == SudoPolicy.SWITCH
-                    ? sudoService.sudo(
-                        dto.getUser(),
+        val result = transactionService.callWithinCurrentTransactionElseCreateNew(
+            () -> sudoPolicy == SudoPolicy.SWITCH
+                ? sudoService.call(
+                        context->context.withUser(UserMemento.ofName(dto.getUser())),
                         () -> doExecuteCommand(dto))
-                    : doExecuteCommand(dto));
+                : doExecuteCommand(dto));
 
-            return handleOutcomeAndSetCompletedAt(commandUpdater, result, null);
-
-        } catch (Exception ex) {
-
+        result.ifFailure(ex->{
             log.warn("Exception when executing : {}",
                     dto.getMember().getLogicalMemberIdentifier(), ex);
+        });
 
-            return handleOutcomeAndSetCompletedAt(commandUpdater, null, ex);
-        }
+        return handleOutcomeAndSetCompletedAt(commandUpdater, result);
     }
 
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().currentInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
                 ? currentExecution.getStartedAt()
-                : clockService.nowAsJavaSqlTimestamp();
+                : clockService.getClock().javaSqlTimestamp();
 
         commandOutcomeHandler.setStartedAt(startedAt);
     }
@@ -182,7 +180,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         log.info("Executing: {} {} {}",
                 dto.getMember().getLogicalMemberIdentifier(),
-                dto.getTimestamp(), dto.getTransactionId());
+                dto.getTimestamp(), dto.getInteractionId());
 
         final MemberDto memberDto = dto.getMember();
         final String memberId = memberDto.getMemberIdentifier();
@@ -211,8 +209,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 } else {
                     head = InteractionHead.simple(targetAdapter);
                 }
-                val resultAdapter = objectAction.execute(head
-                        , argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Isis PersistenceCommands pending
                 // (else might get transient objects for the return value)
@@ -222,7 +219,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // for the result adapter, we could alternatively have used...
                 // (priorExecution populated by the push/pop within the interaction object)
                 //
-                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                // final Execution priorExecution = backgroundInteraction.getPriorExecution();
                 // Object unused = priorExecution.getReturned();
                 //
 
@@ -242,6 +239,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                 val targetAdapter = adapterFor(targetObject);
 
+                if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
+                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s", bookmark);
+                }
+
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
                 val newValueAdapter = newValueAdapterFor(propertyDto);
@@ -256,13 +257,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark handleOutcomeAndSetCompletedAt(
             final CommandOutcomeHandler outcomeHandler,
-            Bookmark resultIfAny, final Exception exceptionIfAny) {
+            final Result<Bookmark> result) {
+
 
         //
         // copy over the outcome
         //
-        outcomeHandler.setResult(resultIfAny);
-        outcomeHandler.setException(exceptionIfAny);
+        outcomeHandler.setResult(result);
 
         //
         // also, copy over the completedAt at to the command.
@@ -271,9 +272,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // there was an exception when performing the action invocation/property
         // edit.  We therefore need to guard that case.
         //
-        val interaction = interactionContextProvider.get().getInteraction();
+        val interaction = interactionContextProvider.get().currentInteractionElseFail();
 
-        final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
+        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {
 
             if (outcomeHandler.getStartedAt() == null) {
@@ -286,7 +287,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             outcomeHandler.setCompletedAt(completedAt);
         }
 
-        return resultIfAny;
+        return result.getValue().orElse(null);
     }
 
     // //////////////////////////////////////
@@ -343,30 +344,18 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
-        final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
 
-        return objectActions
-                .filter(objectAction->
-                        Objects.equals(objectAction.getId(), localActionId))
-                .findAny()
-                .orElse(null);
+        return specification.getAction(localActionId).orElse(null);
     }
 
     private static OneToOneAssociation findOneToOneAssociationElseNull(
             final ObjectSpecification specification,
             final String localPropertyId) {
 
-        final Stream<ObjectAssociation> associations = specification.streamAssociations(Contributed.INCLUDED);
-
-        return associations
-                .filter(association->
-                            Objects.equals(association.getId(), localPropertyId) &&
-                            association instanceof OneToOneAssociation
-                        )
-                .findAny()
-                .map(association->(OneToOneAssociation) association)
+        return specification.getAssociation(localPropertyId)
+                .filter(ObjectAssociation::isOneToOneAssociation)
+                .map(OneToOneAssociation.class::cast)
                 .orElse(null);
-
     }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
@@ -398,12 +387,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private ManagedObject adapterFor(final RootOid oid) {
-        val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
-        val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
-
-        return isisInteractionTracker.currentInteractionSession()
-                .map(x -> x.getObjectManager().loadObject(loadRequest))
-                .orElse(null);
+        val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
+        val loadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
+        return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
     }
 
 

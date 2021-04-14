@@ -39,5 +39,5 @@ public enum ActionType {
 
     public static final ImmutableEnumSet<ActionType> USER_ONLY = ImmutableEnumSet.of(ActionType.USER);
     public static final ImmutableEnumSet<ActionType> USER_AND_PROTOTYPE = ImmutableEnumSet.of(ActionType.USER, ActionType.PROTOTYPE);
-    public static final ImmutableEnumSet<ActionType> ALL = ImmutableEnumSet.allOf(ActionType.class);
+    public static final ImmutableEnumSet<ActionType> ANY = ImmutableEnumSet.allOf(ActionType.class);
 }

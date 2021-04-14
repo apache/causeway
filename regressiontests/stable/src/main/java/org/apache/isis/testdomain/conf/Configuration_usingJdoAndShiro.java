@@ -29,10 +29,10 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -42,25 +42,24 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityShiro.class,
-    IsisModuleJdoDataNucleus5.class,
+    IsisModuleJdoDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 JdoTestDomainModule.class
         })
 @PropertySources({
-    //@PropertySource("classpath:/org/apache/isis/testdomain/conf/application.properties"),
-    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
-    @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJdoAndShiro {
 
     @Bean @Singleton
-    public SecurityModuleConfig securityModuleConfigBean() {
-        return SecurityModuleConfig.builder()
+    public SecmanConfiguration securityModuleConfigBean() {
+        return SecmanConfiguration.builder()
                 .build();
     }
 

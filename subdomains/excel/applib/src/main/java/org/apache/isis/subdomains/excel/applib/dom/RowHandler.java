@@ -18,8 +18,9 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface RowHandler<T extends RowHandler<T>> {
-
     void handleRow(T previousRow);
-
 }

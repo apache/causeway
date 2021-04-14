@@ -47,6 +47,9 @@ import org.apache.isis.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public enum RepresentationType {
 
     HOME_PAGE(
@@ -296,7 +299,7 @@ public enum RepresentationType {
      */
     public MediaType matchesJsonProfileWithParameter(
             final List<MediaType> mediaTypes, final String parameterKey) {
-        
+
         for (MediaType mediaType : mediaTypes) {
             if(this.matchesJsonProfile(mediaType)) {
                 final String paramValue = mediaType.getParameters().get(parameterKey);
@@ -319,8 +322,8 @@ public enum RepresentationType {
         public String asString(final RepresentationType t) {
             return t.getName();
         }
-    }; 
-    
+    };
+
     public static Parser<RepresentationType> parser() {
         return PARSER;
     }

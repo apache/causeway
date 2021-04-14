@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * Whether a component is unchanging and so does not require repainting.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
@@ -31,20 +31,15 @@ public enum Repainting {
 
     REPAINT,
 
-    // end::refguide[]
     /**
      * Equivalent to <tt>@PropertyLayout(unchanging=true)</tt> prior to Isis 2.x
      */
-    // tag::refguide[]
     NO_REPAINT,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]

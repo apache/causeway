@@ -24,14 +24,13 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdMalformedValidator;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.metamodel.services.ServiceInjectorDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
@@ -82,7 +81,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // @Service's
         ObjectManagerDefault.class,
         ServiceInjectorDefault.class,
-        ApplicationFeatureFactory.class,
         MetamodelEventService.class,
         ExceptionRecognizerForRecoverableException.class,
         GridLoaderServiceDefault.class,
@@ -96,7 +94,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ServiceRegistryDefault.class,
         TableColumnOrderServiceDefault.class,
         TitleServiceDefault.class,
-        IsisBeanTypeRegistryDefault.class,
         SpecificationLoaderDefault.class,
 
         // @Repository's
@@ -104,6 +101,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
         IsisSchemaMetaModelRefiner.class,
         IsisSchemaValueTypeProvider.class,
+        ObjectSpecIdMalformedValidator.class,
 
 })
 public class IsisModuleCoreMetamodel {

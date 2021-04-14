@@ -19,11 +19,16 @@
 
 package org.apache.isis.core.security.authentication;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
 
@@ -44,12 +49,28 @@ public abstract class AuthenticationRequestAbstract implements AuthenticationReq
         return roles.stream();
     }
 
-    @Override
+    /**
+     * Add a role to associate with the account.
+     *
+     * <p>
+     * Null or empty roles are ignored.
+     * </p>
+     *
+     * @apiNote this is not part of the {@link AuthenticationRequest} API.
+     *
+     * @param role
+     * @since 2.0
+     */
     public void addRole(String role) {
         if(_Strings.isNullOrEmpty(role)) {
             return; // ignore
         }
         this.roles.add(role);
+    }
+
+    public void addRoles(@Nullable Collection<String> roles) {
+        stream(roles)
+                .forEach(this::addRole);
     }
 
 }

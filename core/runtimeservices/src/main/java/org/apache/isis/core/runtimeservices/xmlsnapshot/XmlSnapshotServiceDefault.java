@@ -36,22 +36,12 @@ import org.w3c.dom.Element;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
-/**
- * This service allows an XML document to be generated capturing the data of a root entity and specified related
- * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
- *
- * <p>
- * This implementation has no UI and there are no other implementations of the service API, and so it annotated
- * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
- * that it is automatically registered and available for use; no further configuration is required.
- */
 @Service
-@Named("isisRuntimeServices.XmlSnapshotServiceDefault")
+@Named("isis.runtimeservices.XmlSnapshotServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -103,8 +93,11 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
 
     /**
      * Creates a builder that allows a custom snapshot - traversing additional associated
-     * properties or collections (using {@link Snapshot.Builder#includePath(String)} and
-     * {@link Snapshot.Builder#includePathAndAnnotation(String, String)}) - to be created.
+     * properties or collections 
+     * (using {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePath(String)} 
+     * and
+     * {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePathAndAnnotation(String, String)}) 
+     * - to be created.
      */
     @Override
     public Snapshot.Builder builderFor(final Object domainObject) {

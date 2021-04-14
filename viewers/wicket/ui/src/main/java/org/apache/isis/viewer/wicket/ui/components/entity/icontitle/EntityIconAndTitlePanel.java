@@ -33,7 +33,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -49,7 +49,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
+public class EntityIconAndTitlePanel 
+extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
 

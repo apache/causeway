@@ -23,7 +23,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.AbstractPlantUMLWriter;
+import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.io.plantuml.StructurizrPlantUMLWriter;
 import com.structurizr.model.Element;
 import com.structurizr.model.Model;
@@ -47,7 +47,7 @@ import lombok.val;
 public class C4 {
 
     @Getter private final Workspace workspace;
-    private final AbstractPlantUMLWriter plantUMLWriter;
+    private final PlantUMLWriter plantUMLWriter;
 
     /**
      * Creates a new workspace.

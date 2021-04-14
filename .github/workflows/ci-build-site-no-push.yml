@@ -18,7 +18,7 @@ jobs:
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
-      
+
       # used for printing
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
 
@@ -28,12 +28,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2.3.4
-    
+
     - name: Set up JDK 11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
+        distribution: 'zulu'
         java-version: 11
-    
+
     - name: Setup Script Environment
       shell: bash
       # we write the more tricky variables to the $SHARED_VARS_FILE using the full power of bash commands
@@ -49,19 +50,19 @@ jobs:
         echo REVISION               \: $REVISION
         cat $SHARED_VARS_FILE
         echo ======================================
-    
+
 
     - name: Print Node Version
       run: node --version
-    
+
     - name: Install NVM
       shell: bash
       run: bash $CI_SCRIPTS_PATH/install-nvm.sh
-      
+
     - name: Install Antora
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      # we install the 'node' modules into the project root under 'node_modules', 
+      # we install the 'node' modules into the project root under 'node_modules',
       # because we have no privileges to install them globally with -g option
       run: npm i @antora/cli@2.3.3 @antora/site-generator-default@2.3.3  @asciidoctor/core@2.2.0 asciidoctor-kroki
 
@@ -72,7 +73,9 @@ jobs:
 
     - name: Setup Groovy
       if: steps.revision.outputs.revision != 'skip'
-      run: sudo apt-get -f install groovy
+      run: |
+        sudo apt-get update
+        sudo apt-get -f install groovy
 
     - name: Print Groovy Version
       if: steps.revision.outputs.revision != 'skip'
@@ -82,6 +85,10 @@ jobs:
     - name: Build Apache Isis Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: bash -x $CI_SCRIPTS_PATH/build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
+      run: bash -x $CI_SCRIPTS_PATH/_build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
       env:
         REVISION: ${{ steps.revision.outputs.revision }}
+        SKIP_PROJDOC_GENERATION: true
+        SKIP_EXAMPLES: true
+        SKIP_CONFIGS: true
+        SKIP_STALE_EXAMPLE_CHECK: true

@@ -26,16 +26,27 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object collection.
+ * Groups together all domain-specific metadata for an invokable action on a
+ * domain object or domain service.
+ *
+ * @see Property
+ * @see Collection
+ * @see DomainObject
+ * @see ActionLayout
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -43,20 +54,18 @@ import org.apache.isis.applib.value.Clob;
         ElementType.ANNOTATION_TYPE }
 )
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "act")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface Action {
 
-    // end::refguide[]
     /**
      * Associates this action with a property or collection, specifying its id.
      *
      * <p>
-     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
-     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
+     *     To specify the layout order use {@link ActionLayout#sequence()}.
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     *     For example <code>@Action(associateWith="items") @ActionLayout(sequence="2.1")</code>
      * </p>
      *
      * <p>
@@ -65,37 +74,12 @@ public @interface Action {
      *     and any collection parameter defaults can be specified using checkboxes
      *     (in the Wicket UI, at least).
      * </p>
+     *
+     * @see ActionLayout#sequence()
      */
-    // tag::refguide[]
-    String associateWith()                                          // <.>
+    String associateWith()
             default "";
 
-    // end::refguide[]
-    /**
-     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
-     *
-     * <p>
-     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
-     *     {@link Action#associateWith()} isn't also specified.
-     * </p>
-     *
-     * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
-     * </p>
-     */
-    // tag::refguide[]
-    String associateWithSequence()                                  // <.>
-            default "1";
-
-    // end::refguide[]
-    /**
-     * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
-     */
-    // tag::refguide[]
-    CommandReification command()                                    // <.>
-            default CommandReification.NOT_SPECIFIED;
-
-    // end::refguide[]
     /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
@@ -103,16 +87,33 @@ public @interface Action {
      *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
+     *
+     * @see Property#commandDtoProcessor()
+     * @see Action#commandPublishing()
      */
-    // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor()      // <.>
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()
             default CommandDtoProcessor.class;
 
-    // end::refguide[]
+    /**
+     * Whether action invocations, captured as {@link Command}s,
+     * should be published to {@link CommandSubscriber}s.
+     *
+     * @see Property#commandPublishing()
+     * @see Action#commandDtoProcessor()
+     */
+    Publishing commandPublishing()
+            default Publishing.NOT_SPECIFIED;
+
     /**
      * Indicates that an invocation of the action should be posted to the
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.ActionDomainEvent}.
+     *
+     * <p>
+     *     Subscribers of this event can interact with the business rule
+     *     checking (hide, disable, validate) and its modification (before and
+     *     after).
+     * </p>
      *
      * <p>For example:
      * </p>
@@ -130,88 +131,102 @@ public @interface Action {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see Property#domainEvent()
+     * @see Collection#domainEvent()
+     * @see DomainObject#actionDomainEvent()
      */
-    // tag::refguide[]
-    Class<? extends ActionDomainEvent<?>> domainEvent()             // <.>
+    Class<? extends ActionDomainEvent<?>> domainEvent()
             default ActionDomainEvent.Default.class;
 
-    // end::refguide[]
+    /**
+     * Whether {@link Execution}s (triggered by action invocations), should
+     * be published to {@link ExecutionSubscriber}s.
+     *
+     * @see Property#executionPublishing()
+     */
+    Publishing executionPublishing()
+            default Publishing.NOT_SPECIFIED;
+
     /**
      * Indicates where (in the UI) the action is not visible to the user.
      *
      * <p>
      * It is also possible to suppress an action's visibility using {@link ActionLayout#hidden()}.
-     * </p>
      *
      * <p>
-     *     For {@link DomainService domain service} actions, the action's visibility is dependent upon its
-     *     {@link DomainService#nature() nature} and for contributed actions on how it is
-     *     {@link ActionLayout#contributed()}.
-     * </p>
+     * For {@link DomainService domain service} actions, the action's visibility is dependent upon its
+     * {@link DomainService#nature() nature}.
+     *
+     * @see Property#hidden()
+     * @see Collection#hidden()
      */
-    // tag::refguide[]
-    Where hidden()                                                  // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
-     * Whether the action invocation should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService}
-     * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
-     * </p>
-     */
-    // tag::refguide[]
-    Publishing publishing()                                         // <.>
-            default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether the action is restricted to prototyping.
+     * Whether the action is restricted to prototyping, or whether it is
+     * available also in production mode.
      *
      * <p>
      *     By default there are no restrictions, with the action being available in all environments.
      * </p>
      */
-    // tag::refguide[]
-    RestrictTo restrictTo()                                         // <.>
+    RestrictTo restrictTo()
             default RestrictTo.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
-     * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
+     * The action semantics, either
+     * {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached},
+     * {@link SemanticsOf#SAFE safe} (query-only),
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
+     *
+     * <p>
+     * The action's semantics determine whether objects are modified as the
+     * result of invoking this action (if not, the results can be cached for the
+     * remainder of the request).  If the objects do cause a change in state,
+     * they additionally determine whether re-invoking the action would result
+     * in a further change.
+     * </p>
+     *
+     * <p>
+     *     There are also `...ARE_YOU_SURE` variants
+     *     (@link {@link SemanticsOf#IDEMPOTENT_ARE_YOU_SURE} and
+     *     (@link {@link SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE} that cause a
+     *     confirmation dialog to be displayed in the Wicket viewer.
+     * </p>
      */
-    // tag::refguide[]
-    SemanticsOf semantics()                                         // <.>
+    SemanticsOf semantics()
             default SemanticsOf.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
-     * The type-of the elements returned by the action.
-     * @return
+     * If the action returns a collection, then this hints as to the run-time
+     * type of the objects within that collection.
+     *
+     * <p>
+     *     This is only provided as a fallback; usually the framework can infer
+     *     the element type of the collection from the action method's
+     *     return type (eg if it returns <code>Collection</code> instead of <code>Collection&lt;Customer&gt;</code>)
+     * </p>
+     *
+     * @see Collection#typeOf()
      */
-    // tag::refguide[]
-    Class<?> typeOf()                                               // <.>
+    Class<?> typeOf()
             default Object.class;
 
-    // end::refguide[]
     /**
-     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     * For downloading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
      *
      * <p>
      * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
      * </p>
      *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     *
-     * @deprecated - unused; see instead @Parameter and @Property
+     * @see Parameter#fileAccept()
+     * @see Property#fileAccept()
      */
-    @Deprecated
-    String fileAccept()                                             // <.>
+    String fileAccept()
             default "";
-    // tag::refguide[]
+
 }
-// end::refguide[]

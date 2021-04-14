@@ -33,7 +33,9 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -43,12 +45,13 @@ import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -69,16 +72,13 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 
@@ -93,7 +93,7 @@ import lombok.extern.log4j.Log4j2;
 @lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2 
 public abstract class ObjectSpecificationAbstract 
-extends FacetHolderImpl 
+extends ObjectMemberContainer
 implements ObjectSpecification {
 
 
@@ -185,7 +185,7 @@ implements ObjectSpecification {
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
-    protected ObjectSpecId specId;
+    private _Lazy<LogicalType> logicalTypeLazy = _Lazy.threadSafe(this::lookupLogicalType);
 
     private ObjectSpecification superclassSpec;
 
@@ -212,7 +212,10 @@ implements ObjectSpecification {
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
-        this.identifier = Identifier.classIdentifier(introspectedClass);
+        this.identifier = Identifier.classIdentifier(
+                LogicalType.lazy(
+                        introspectedClass,
+                        ()->logicalTypeLazy.get().getLogicalTypeName()));
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -225,15 +228,16 @@ implements ObjectSpecification {
     }
 
     @Override
-    public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
-            if(objectSpecIdFacet == null) {
-                throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
-            }
-            specId = objectSpecIdFacet.value();
+    public LogicalType getLogicalType() {
+        return logicalTypeLazy.get();
+    }
+        
+    private LogicalType lookupLogicalType() {
+        val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
+        if(objectSpecIdFacet == null) {
+            throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
         }
-        return specId;
+        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value());
     }
 
     /**
@@ -368,7 +372,7 @@ implements ObjectSpecification {
     }
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        val orderedAssociations = Utils.sortAssociations(associations);
+        val orderedAssociations = MemberSortingUtils.sortAssociations(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -377,7 +381,7 @@ implements ObjectSpecification {
     }
 
     protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
-        val orderedActions = Utils.sortActions(objectActions);
+        val orderedActions = MemberSortingUtils.sortActions(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
@@ -467,16 +471,11 @@ implements ObjectSpecification {
     @Override
     public boolean isOfType(final ObjectSpecification other) {
         
-        // do the comparison using value types because of a possible aliasing/race condition
-        // in matchesParameterOf when building up contributed associations
-        if (other.getSpecId().equals(this.getSpecId())) {
-            return true;
-        }
-        
         val thisClass = this.getCorrespondingClass();
         val otherClass = other.getCorrespondingClass();
         
-        return otherClass.isAssignableFrom(thisClass);
+        return thisClass == otherClass 
+                || otherClass.isAssignableFrom(thisClass);
         
 //XXX legacy of ...        
 //        
@@ -678,16 +677,19 @@ implements ObjectSpecification {
     // -- ASSOCIATIONS
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if(contributed.isIncluded()) {
             createMixedInAssociations(); // only if not already
+            synchronized(unmodifiableAssociations) {
+                return stream(unmodifiableAssociations.get());
+            }
         }
         
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
-                    .filter(ContributeeMember.Predicates.regularElse(contributed));    
+                    .filter(MixedIn::isNotMixedIn);    
         }
         
     }
@@ -696,7 +698,7 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
@@ -708,38 +710,35 @@ implements ObjectSpecification {
     }
 
 
+
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
-     *
-     * <p>
-     * This is overridable because {@link ObjectSpecificationOnContainer}
-     * simply returns <tt>null</tt>.
-     *
-     * <p>
-     * TODO put fields into hash.
-     *
-     * <p>
-     * TODO: could this be made final? (ie does the framework ever call this
-     * method for an {@link ObjectSpecificationOnContainer})
      */
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String id) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        return streamAssociations(Contributed.INCLUDED)
+        return streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
+    
+
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(
+            final ImmutableEnumSet<ActionType> types, 
+            final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        if(contributed.isIncluded()) {
+        if(contributed.isIncluded()) { // conditional not strictly required, could instead always go this code path 
             createMixedInActions(); // only if not already
         }
-
-        return stream(objectActionsByType.get(type))
-                .filter(ContributeeMember.Predicates.regularElse(contributed));
+        
+        return types.stream()
+                .flatMap(type->stream(objectActionsByType.get(type)))
+                .filter(contributed.isIncluded()
+                        ? _Predicates.alwaysTrue() 
+                        : MixedIn::isNotMixedIn);
     }
 
     // -- mixin associations (properties and collections)
@@ -776,10 +775,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectAction> mixinActions = specification
-                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-
-        mixinActions
+        specification.streamActions(ActionType.ANY, MixedIn.INCLUDED)
         .filter(Predicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
@@ -831,10 +827,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectAction> mixinsActions = mixinSpec
-                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-
-        mixinsActions
+        mixinSpec.streamActions(ActionType.ANY, MixedIn.INCLUDED)
         .filter(Predicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
@@ -949,12 +942,8 @@ implements ObjectSpecification {
         }
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return getMetaModelContext().getSpecificationLoader();
-    }
-    
     protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return getMetaModelContext().getServiceRegistry()
+        return getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
     }
 

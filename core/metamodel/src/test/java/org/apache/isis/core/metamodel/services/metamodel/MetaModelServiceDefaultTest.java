@@ -51,6 +51,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -78,7 +79,8 @@ class MetaModelServiceDefaultTest {
         context.checking(new Expectations() {
             {
                 allowing(mockFacetedMethod).getIdentifier();
-                will(returnValue(Identifier.actionIdentifier("Customer", "reduceheadcount")));
+                will(returnValue(Identifier.actionIdentifier(
+                        TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
 
                 allowing(mockFacetedMethod).getFacet(with(facetMatcher));
                 will(returnValue(null));

@@ -25,6 +25,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class PrimitiveJaxbAdapters {
 
     /**

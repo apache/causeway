@@ -74,9 +74,7 @@ public abstract class WebModuleAbstract implements WebModule {
 
     /**
      * Instantiates a new {@link ServletContextListener}
-     * @param ctx
      * @param listenerCls
-     * @return
      * @throws ServletException
      */
     protected ServletContextListener createListener(

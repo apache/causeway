@@ -23,7 +23,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.PlantUMLWriter;
+import com.structurizr.io.plantuml.BasicPlantUMLWriter;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.SystemContextView;
@@ -82,7 +82,7 @@ class C4Test {
         // Now the view needs to be rendered.
         
         val stringWriter = new StringWriter();
-        val plantUMLWriter = new PlantUMLWriter();
+        val plantUMLWriter = new BasicPlantUMLWriter();
         plantUMLWriter.write(workspace, stringWriter);
         
         _Text.assertTextEquals(

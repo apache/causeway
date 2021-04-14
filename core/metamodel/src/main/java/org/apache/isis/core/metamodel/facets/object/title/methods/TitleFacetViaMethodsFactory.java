@@ -21,20 +21,22 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.TITLE;
-import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.TO_STRING;
+import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TITLE;
+import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_STRING;
+
+import lombok.val;
 
 public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -61,12 +63,12 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
                 NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
-            final TranslationService translationService = getTranslationService();
+            val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            final String translationContext = method.getDeclaringClass().getName() + "#" + method.getName() + "()";
+            val translationContext = TranslationContext.forMethod(method);
 
-            final TitleFacetViaTitleMethod facet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
-            FacetUtil.addFacet(facet);
+            val titleFacet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
+            FacetUtil.addFacet(titleFacet);
             return;
         }
 

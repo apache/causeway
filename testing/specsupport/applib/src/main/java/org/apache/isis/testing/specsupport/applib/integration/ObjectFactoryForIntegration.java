@@ -29,10 +29,12 @@ import lombok.RequiredArgsConstructor;
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
 
-
+/**
+ * @since 2.0 {@index}
+ */
 @RequiredArgsConstructor
 public class ObjectFactoryForIntegration implements ObjectFactory {
-    
+
     private final ServiceInjector serviceInjector;
     private final Map<Class<?>, Object> instances = _Maps.newHashMap();
 

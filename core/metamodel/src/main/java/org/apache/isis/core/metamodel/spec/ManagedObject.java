@@ -110,7 +110,6 @@ public interface ManagedObject {
      * Optimized for cases, when the pojo's specification is already available.
      * @param specification
      * @param pojo - might also be a collection of pojos
-     * @return
      */
     public static ManagedObject of(
             @NonNull ObjectSpecification specification, 
@@ -160,7 +159,6 @@ public interface ManagedObject {
      * For cases, when the pojo's specification is not available and needs to be looked up. 
      * @param specLoader
      * @param pojo
-     * @return
      */
     public static ManagedObject of(
             Function<Class<?>, ObjectSpecification> specLoader, 

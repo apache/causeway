@@ -34,10 +34,9 @@ which normally would be used from a repository:
 public List<IncomingInvoice> findCompletedOrLaterWithItemsByReportedDate(
         final LocalDate reportedDate) {
     return repositoryService.allMatches(
-            new QueryDefault<>(
-                    IncomingInvoice.class,
-                    "findCompletedOrLaterWithItemsByReportedDate",
-                    "reportedDate", reportedDate));
+            Query.named(IncomingInvoice.class,
+                    "findCompletedOrLaterWithItemsByReportedDate")
+               .withParameter("reportedDate", reportedDate));
 }
 ----
 

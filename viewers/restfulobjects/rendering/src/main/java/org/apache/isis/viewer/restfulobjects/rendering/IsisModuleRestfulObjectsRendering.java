@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
@@ -37,6 +37,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 @Import({
         // modules
@@ -49,15 +52,15 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
         TaggerDefault.class,
         ValuePropertyFactoryDefault.class,
 
-        
+
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheIsisV2.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported) 
+        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoder.class,
-        RepresentationServiceContentNegotiator.class,
+        RepresentationService.class,
         SwaggerServiceDefault.class,
         SwaggerServiceMenu.class,
 

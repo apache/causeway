@@ -25,11 +25,11 @@ import java.util.Comparator;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 
 /**
- * Compares by (simple) group name of each {@link OrderSet}.
+ * Compares by (simple) group name of each {@link DeweyOrderSet}.
  *
  * <p>
- * Note that it only makes sense to use this comparator for {@link OrderSet}s
- * that are known to have the same parent {@link OrderSet}s.
+ * Note that it only makes sense to use this comparator for {@link DeweyOrderSet}s
+ * that are known to have the same parent {@link DeweyOrderSet}s.
  */
 public class OrderSetGroupNameComparator implements Comparator<DeweyOrderSet>, Serializable {
 

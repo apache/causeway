@@ -6,7 +6,7 @@
 
 
 The `ExecutionParametersService` is used by the framework simply to instantiate the `ExecutionParameters` object.
-The `ExecutionParameters` object in turn is responsible for parsing the string parameter passed when executing fixtures through the UI to the xref:testing:fixtures:services/FixtureScripts.adoc[`FixtureScripts`] domain service.
+The `ExecutionParameters` object in turn is responsible for parsing the string parameter passed when executing fixtures through the UI to the xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScripts] domain service.
 
 == API & Implementation
 

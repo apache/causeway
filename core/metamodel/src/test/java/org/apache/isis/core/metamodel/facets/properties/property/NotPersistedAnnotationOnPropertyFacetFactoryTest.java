@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.MementoSerialization;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
@@ -46,12 +46,12 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }
-    
+
     public void testAnnotationPickedUpOnProperty() {
 
         class Customer {
             @SuppressWarnings("unused")
-            @Property(mementoSerialization = MementoSerialization.EXCLUDED)
+            @Property(snapshot = Snapshot.EXCLUDED)
             public String getFirstName() {
                 return null;
             }
@@ -60,9 +60,9 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
 
         processNotPersisted(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
+        final Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetForPropertyAnnotation);
+        assertTrue(facet instanceof SnapshotExcludeFacetForPropertyAnnotation);
 
         assertNoMethodsRemoved();
     }

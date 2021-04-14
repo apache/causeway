@@ -1,0 +1,102 @@
+= Parser _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides a mechanism for parsing and rendering string representations of objects.
+
+Specifically, this interface embodies three related capabilities:
+
+* to parse a string representation and convert to an object.
+* to provide a string representation of the object, for use as its title.
+* to indicate the typical length of such a string representation.
+
+For custom-written (as opposed to third-party) value types, the ability for the xref:refguide:applib:index/adapters/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:refguide:applib:index/adapters/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
+
+For third-party value types, eg seeTime-and-Moneythere is no ability to write `title()` methods; so this is the main reason that this interface has to deal with titles and lengths.
+
+This interface is used in two complementary ways:
+
+* As one option, it allows objects to take control of their own parsing, by implementing directly. However, the instance is used as a factory for itself. The framework will instantiate an instance, invoke the appropriate method method, and use the returned object. The instantiated instance itself will be discarded.
+
+Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a single `FacetHolder` . This constructor allows the framework to instantiate the object reflectively.
+
+== API
+
+[source,java]
+.Parser.java
+----
+interface Parser<T> {
+  T parseTextEntry(Object contextPojo, String entry)     // <.>
+  int typicalLength()     // <.>
+  String displayTitleOf(T object)     // <.>
+  String displayTitleOf(T object, String usingMask)     // <.>
+  String parseableTitleOf(T existing)     // <.>
+  int maxLength()     // <.>
+}
+----
+
+<.> xref:#parseTextEntry__Object_String[parseTextEntry(Object, String)]
++
+--
+Parses a string to an instance of the object.
+--
+<.> xref:#typicalLength__[typicalLength()]
++
+--
+The typical length of objects that can be parsed.
+--
+<.> xref:#displayTitleOf__T[displayTitleOf(T)]
++
+--
+The title of the object.
+--
+<.> xref:#displayTitleOf__T_String[displayTitleOf(T, String)]
++
+--
+The title of the object using a mask.
+--
+<.> xref:#parseableTitleOf__T[parseableTitleOf(T)]
++
+--
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
+--
+<.> xref:#maxLength__[maxLength()]
++
+--
+The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.
+--
+
+== Members
+
+[#parseTextEntry__Object_String]
+=== parseTextEntry(Object, String)
+
+Parses a string to an instance of the object.
+
+Note that here the implementing class is acting as a factory for itself.
+
+[#typicalLength__]
+=== typicalLength()
+
+The typical length of objects that can be parsed.
+
+[#displayTitleOf__T]
+=== displayTitleOf(T)
+
+The title of the object.
+
+[#displayTitleOf__T_String]
+=== displayTitleOf(T, String)
+
+The title of the object using a mask.
+
+[#parseableTitleOf__T]
+=== parseableTitleOf(T)
+
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
+
+The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacet` as `May 2, 2007` , but its editable form might be `20070502` .
+
+[#maxLength__]
+=== maxLength()
+
+The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.

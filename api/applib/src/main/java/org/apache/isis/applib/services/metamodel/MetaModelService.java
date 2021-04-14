@@ -18,47 +18,38 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
-
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
-import lombok.val;
-
 /**
- * This service provides a formal API into Isis' metamodel.
+ * This service provides a formal API into the framework's metamodel.
  *
- * <p>
- * This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
- * </p>
+ * @apiNote This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface MetaModelService {
 
-    // end::refguide[]
     /**
      * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
-    // tag::refguide[]
-    Class<?> fromObjectType(final String objectType);   // <.>
+    Class<?> fromObjectType(final String objectType);
 
-    // end::refguide[]
     /**
      * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
-    // tag::refguide[]
-    String toObjectType(final Class<?> domainType);     // <.>
+    String toObjectType(final Class<?> domainType);
 
-    void rebuild(final Class<?> domainType);            // <.>
+    /**
+     * Invalidates and rebuilds the internal metadata for the specified domain
+     * type.
+     */
+    void rebuild(final Class<?> domainType);
 
-    // end::refguide[]
     /**
      * Returns a list of representations of each of member of each domain class.
      *
@@ -71,134 +62,64 @@ public interface MetaModelService {
      * </p>
      *
      */
-    // tag::refguide[]
-    DomainModel getDomainModel();                       // <.>
+    DomainModel getDomainModel();
 
-    BeanSort sortOf(Class<?> domainType, Mode mode);    // <.>
+    /**
+     * What sort of object the domain type represents.
+     *
+     * @param domainType
+     * @param mode
+     */
+    BeanSort sortOf(Class<?> domainType, Mode mode);
 
-    BeanSort sortOf(Bookmark bookmark, Mode mode);      // <.>
+    /**
+     * Override of {@link #sortOf(Class, Mode)}, extracting the domain type
+     * from the provided {@link Bookmark} of a domain object instance.
+     *
+     * @param bookmark
+     * @param mode
+     */
+    BeanSort sortOf(Bookmark bookmark, Mode mode);
 
-    CommandDtoProcessor commandDtoProcessorFor(         // <.>
+    /**
+     * Obtains the implementation of {@link CommandDtoProcessor} (if any) as
+     * per {@link Action#commandDtoProcessor()} or
+     * {@link Property#commandDtoProcessor()}.
+     *
+     * <p>
+     *     This is used by framework-provided implementations of
+     *     {@link org.apache.isis.applib.services.conmap.ContentMappingService}.
+     * </p>
+     */
+    CommandDtoProcessor commandDtoProcessorFor(
                             String logicalMemberIdentifier);
 
-    // end::refguide[]
-    // tag::refguide-1[]
+    /**
+     * How {@link MetaModelService#sortOf(Class, Mode)} show act if an object
+     * type is unknown.
+     */
     enum Mode {
-        // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
          */
-        // tag::refguide-1[]
         STRICT,
-        // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link BeanSort#UNKNOWN}.
          */
-        // tag::refguide-1[]
         RELAXED
     }
-    // end::refguide-1[]
 
-    // tag::refguide-2[]
-    class Config {
-        private static final int IGNORE_NOOP_FACETS = 1;
-        private static final int IGNORE_INTERFACES = 2;
-        private static final int IGNORE_ABSTRACT_CLASSES = 4;
-        private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
-        private static final int IGNORE_MIXINS = 16;
-        // end::refguide-2[]
-
-        private static final String WILDCARD = "*";
-
-        private final int mask;
-
-        private final Set<String> packagePrefixes = _Sets.newHashSet();
-
-        public Config() {
-            this(0, Collections.emptyList());
-        }
-        private Config(final int mask, final Collection<String> packagePrefixes) {
-            this.mask = mask;
-            this.packagePrefixes.addAll(packagePrefixes);
-        }
-
-        public Set<String> getPackagePrefixes() {
-            return Collections.unmodifiableSet(packagePrefixes);
-        }
-
-        public Config withIgnoreNoop() {
-            return newConfigWith(IGNORE_NOOP_FACETS);
-        }
-
-        public Config withIgnoreInterfaces() {
-            return newConfigWith(IGNORE_INTERFACES);
-        }
-        public Config withIgnoreAbstractClasses() {
-            return newConfigWith(IGNORE_ABSTRACT_CLASSES);
-        }
-        public Config withIgnoreBuiltInValueTypes() {
-            return newConfigWith(IGNORE_BUILT_IN_VALUE_TYPES);
-        }
-        public Config withIgnoreMixins() {
-            return newConfigWith(IGNORE_MIXINS);
-        }
-
-        private Config newConfigWith(final int x) {
-            return new Config(mask | x, packagePrefixes);
-        }
-
-        public Config withPackagePrefixAny() {
-            val newPrefixes = _Sets.<String>newHashSet();
-            newPrefixes.add(WILDCARD);
-            return new Config(mask, newPrefixes);
-        }
-
-        public boolean isPackagePrefixAny() {
-            return packagePrefixes.contains(WILDCARD);
-        }
-
-        /**
-         * Returns a new {@code Config} with given {@code packagePrefix} added to the set of
-         * this {@code Config}'s packagePrefixes.
-         * @param packagePrefix - prefix to be added
-         */
-        // tag::refguide-2[]
-        public Config withPackagePrefix(final String packagePrefix) {
-            val newPrefixes = _Sets.newHashSet(this.packagePrefixes);
-            newPrefixes.add(packagePrefix);
-            return new Config(mask, newPrefixes);
-        }
-        // end::refguide-2[]
-
-        public boolean isIgnoreNoop() {
-            return hasFlag(IGNORE_NOOP_FACETS);
-        }
-
-        public boolean isIgnoreInterfaces() {
-            return hasFlag(IGNORE_INTERFACES);
-        }
-
-        public boolean isIgnoreAbstractClasses() {
-            return hasFlag(IGNORE_ABSTRACT_CLASSES);
-        }
-        public boolean isIgnoreBuiltInValueTypes() {
-            return hasFlag(IGNORE_BUILT_IN_VALUE_TYPES);
-        }
-        public boolean isIgnoreMixins() {
-            return hasFlag(IGNORE_MIXINS);
-        }
-
-        private boolean hasFlag(final int x) {
-            return (mask & x) == x;
-        }
-
-        // tag::refguide-2[]
-        // ...
-    }
-    // end::refguide-2[]
-
-    // tag::refguide[]
-    MetamodelDto exportMetaModel(final Config config);  // <.>
+    /**
+     * Exports the entire metamodel as a DTO, serializable into XML using JAXB.
+     *
+     * <p>
+     *     The {@link Config} parameter can be used to restrict/filter the
+     *     export to some subset of the metamodel; in particular to specific
+     *     {@link Config#getPackagePrefixes() package prefixes}.
+     * </p>
+     *
+     * @param config - restricts/filters to a subsets of the metamodel.
+     */
+    MetamodelDto exportMetaModel(final Config config);
 
 }
-// end::refguide[]

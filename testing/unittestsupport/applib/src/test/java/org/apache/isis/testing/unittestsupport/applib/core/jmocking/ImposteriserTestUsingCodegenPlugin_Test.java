@@ -322,7 +322,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
     // //////////////////////////////////////
 
 
-    // See issue JMOCK-256 (Github #36)
+    // See issue JMOCK-256 (GitHub #36)
     @Test @Disabled("fails with surefire on jdk-11, not with eclipse") //TODO[2112] jdk-11 issue?
     void doesntDelegateFinalizeMethod() throws Exception {
         Invokable failIfInvokedAction = new Invokable() {

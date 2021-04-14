@@ -37,8 +37,11 @@ import org.apache.isis.schema.common.v2.InteractionType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandReplayAnalyserException")
+@Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserException")
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserException implements CommandReplayAnalyser {

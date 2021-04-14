@@ -24,18 +24,20 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
- * A serializable value object representing a set of (anonymized) 
+ * A serializable value object representing a set of (anonymized)
  * {@link ApplicationPermissionValue permission}s.
  *
  * <p>
  *     Intended for value type arithmetic and also for caching.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public class ApplicationPermissionValueSet implements Serializable {
 
@@ -77,16 +79,16 @@ public class ApplicationPermissionValueSet implements Serializable {
      *                     -> VETO, VIEWING
      *                     -> VETO, CHANGING
      * </pre>
-     * 
+     *
      * <p>
      *     Note that {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermissionRule#ALLOW allow} rule
      *     is ordered before {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermissionRule#VETO veto} rule
      *     meaning that it is checked first and therefore also takes precedence.
      * </p>
      */
-    private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature = 
+    private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature =
             _Multimaps.newSortedSetMultimap(
-                    Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
+                    Collections.reverseOrder(),
                     null // natural element order
                     );
 
@@ -99,7 +101,7 @@ public class ApplicationPermissionValueSet implements Serializable {
     // -- constructor
 
     public ApplicationPermissionValueSet(
-            final List<ApplicationPermissionValue> permissionValues, 
+            final List<ApplicationPermissionValue> permissionValues,
             final PermissionsEvaluationService permissionsEvaluationService) {
 
         this.values = Collections.unmodifiableList(_Lists.newArrayList(permissionValues));
@@ -140,8 +142,8 @@ public class ApplicationPermissionValueSet implements Serializable {
     public Evaluation evaluate(
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
-        final List<ApplicationFeatureId> pathIds = featureId.getPathIds();
-        for (final ApplicationFeatureId pathId : pathIds) {
+        
+        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             final Collection<ApplicationPermissionValue> permissionValues = permissionsByFeature.get(pathId);
             final Evaluation evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
             if(evaluation != null) {

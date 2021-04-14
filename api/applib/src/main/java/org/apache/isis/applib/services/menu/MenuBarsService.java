@@ -20,41 +20,48 @@ package org.apache.isis.applib.services.menu;
 
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
-// tag::refguide[]
+/**
+ * Responsible for returning a {@link MenuBarsService} instance, a data
+ * structure representing the arrangement of domain service actions across
+ * multiple menu bars, menus and sections.
+ *
+ * <p>
+ * This is used by the Wicket viewer to build up the menu.  It is also served
+ * as the "menuBars" resource by the Restful Objects viewer.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface MenuBarsService {
 
-    // end::refguide[]
-    // tag::refguide-1[]
     enum Type {
 
-        // end::refguide-1[]
         /**
          * Either derived from annotations or as obtained elsewhere
          * (eg using the {@link MenuBarsLoaderService} if the
          * default implementation of this service is in use).
          */
-        // tag::refguide-1[]
         DEFAULT,
 
-        // end::refguide-1[]
         /**
          * As derived from annotations.
          */
-        // tag::refguide-1[]
         FALLBACK
     }
-    // end::refguide-1[]
 
 
     /**
      * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
-     * @return
      */
-    // tag::refguide[]
-    default MenuBars menuBars() {           // <.>
+    default MenuBars menuBars() {
         return menuBars(Type.DEFAULT);
     }
 
-    MenuBars menuBars(final Type type);     // <.>
+    /**
+     * Returns the menu bars with the requested {@link Type}.
+     *
+     * @param type - as requested
+     * @return
+     */
+    MenuBars menuBars(final Type type);
 }
-// end::refguide[]

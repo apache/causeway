@@ -29,8 +29,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
@@ -68,6 +68,7 @@ public class WrapperFactoryDefaultTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock private _ProxyFactoryService mockProxyFactoryService;
+    
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;

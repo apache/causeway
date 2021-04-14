@@ -20,6 +20,8 @@ package org.apache.isis.applib.services.userreg.events;
 
 /**
  * An event sent to all services interested in user registration
+ *
+ * @since 1.x {@index}
  */
 public abstract class EmailEventAbstract {
 

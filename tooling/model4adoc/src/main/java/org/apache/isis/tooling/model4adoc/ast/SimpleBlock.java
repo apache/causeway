@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
 import org.asciidoctor.ast.Block;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString(callSuper = true)
 public class SimpleBlock extends SimpleStructuralNode implements Block {
 
     @Getter private final List<String> lines = new ArrayList<>();
@@ -56,6 +58,23 @@ public class SimpleBlock extends SimpleStructuralNode implements Block {
 
     @Override
     public void setSource(String source) {
+        if(source==null) {
+            lines.clear();
+            return;
+        }
         setLines(Arrays.asList(source.replace("\r", "").split("\n")));
     }
+    
+    @Override
+    public void setStyle(String style) {
+        setAttribute("style", style, true);
+        super.setStyle(style);
+    }
+    
+    @Override
+    public void setTitle(String title) {
+        setAttribute("title", title, true);
+        super.setTitle(title);
+    }
+    
 }

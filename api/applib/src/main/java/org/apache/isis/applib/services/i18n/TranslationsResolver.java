@@ -20,12 +20,31 @@ package org.apache.isis.applib.services.i18n;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-// tag::refguide[]
+/**
+ * Locates and return translations.
+ *
+ * <p>
+ * This is one of the supporting services that work together to implement
+ * the framework's support for i18n, being used by the default implementation
+ * {@link TranslationService}.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface TranslationsResolver {
 
+    /**
+     * Reads the lines from the specified &quot;logical&quot; file name.
+     *
+     * <p>
+     *     It is the responsibility of {@link TranslationsResolver} to determine
+     *     where the file actually resides (the data could be read from a
+     *     database, for example, rather than an actual file.
+     * </p>
+     *
+     * @param file
+     * @return
+     */
     List<String> readLines(final String file);
 
 }
-// end::refguide[]

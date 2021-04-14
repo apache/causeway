@@ -34,13 +34,13 @@ public interface IsisConfigurationLegacy {
     // -- VERSION
 
     public default String getVersion() {
-        return "2.0.0-M4";
+        return "2.0.0-M5";
     }
 
     // --
 
     /**
-     * Creates a copy of this instance, that is a new IsisConfiguration populated 
+     * Creates a copy of this instance, that is a new IsisConfiguration populated
      * with a copy of the underlying key/value pairs.
      *
      */

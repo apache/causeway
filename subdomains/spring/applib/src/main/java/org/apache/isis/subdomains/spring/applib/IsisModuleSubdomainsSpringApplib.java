@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     SpringBeansService.class

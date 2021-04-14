@@ -31,12 +31,14 @@ import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.Getter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.SecondaryConfig")
+@Named("isis.ext.commandReplaySecondary.SecondaryConfig")
 @Order(OrderPrecedence.MIDPOINT)
-@Log4j2
+//@Log4j2
 public class SecondaryConfig {
 
     @Getter final String primaryUser;

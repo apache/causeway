@@ -22,10 +22,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ErrorRepresentation extends JsonRepresentation {
 
     public ErrorRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-
 }

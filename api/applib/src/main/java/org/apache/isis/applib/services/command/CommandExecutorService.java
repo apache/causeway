@@ -21,28 +21,24 @@ package org.apache.isis.applib.services.command;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
-// tag::refguide[]
+/**
+ * 
+ * @since 1.x {@index}
+ */
 public interface CommandExecutorService {
 
-    // end::refguide[]
-    // tag::refguide-2[]
     enum SudoPolicy {
 
-        // end::refguide-2[]
         /**
          * For example, regular background commands.
          */
-        // tag::refguide-2[]
         NO_SWITCH,
 
-        // end::refguide-2[]
         /**
          * For example, replayable commands.
          */
-        // tag::refguide-2[]
         SWITCH,
     }
-    // end::refguide-2[]
 
     /**
      * Executes the specified command.
@@ -51,24 +47,22 @@ public interface CommandExecutorService {
      * @param command
      * @return - any exception raised by the command.
      */
-    // tag::refguide[]
     Bookmark executeCommand(
-            SudoPolicy sudoPolicy,                  // <.>
-            Command command                         // <.>
+            SudoPolicy sudoPolicy,
+            Command command
     );
 
     Bookmark executeCommand(
-            SudoPolicy sudoPolicy,                  // <.>
-            CommandDto commandDto,                  // <.>
-            CommandOutcomeHandler outcomeHandler);  // <.>
+            SudoPolicy sudoPolicy,
+            CommandDto commandDto,
+            CommandOutcomeHandler outcomeHandler);
 
     Bookmark executeCommand(
-            Command command                         // <.>
+            Command command
     );
 
     Bookmark executeCommand(
-            CommandDto commandDto,                  // <.>
-            CommandOutcomeHandler outcomeHandler);  // <.>
+            CommandDto commandDto,
+            CommandOutcomeHandler outcomeHandler);
 
 }
-// end::refguide[]

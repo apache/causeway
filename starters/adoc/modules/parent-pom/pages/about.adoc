@@ -10,24 +10,24 @@ It builds upon a similar POM provided by the Spring Boot framework, which ensure
 
 To use it, just add:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <parent>
     <groupId>org.apache.isis.app</groupId>
     <artifactId>isis-app-starter-parent</artifactId>
-    <version>2.0.0</version>                            <!--1-->
+    <version>{page-isisrel}</version>                    <!--.-->
 </parent>
 ----
-<1> update as required for new versions of the framework.
+<.> update as required for new versions of the framework.
 
 You'll see that it is used by both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps.
 
 == Relationship to other POMs
 
-The diagram below (link:{attachmentsdir}/parent-pom.pptx[PPT]) below shows how the parent POM relates to other POMs:
+The diagram below shows how the parent POM relates to other POMs:
 
-image::parent-pom.png[width="800px"]
+image::parent-pom.drawio.svg[]
 
 
 As the diagram shows, the parent POM inherits two Spring Boot parent POMs: directly from `org.springframework.boot:spring-boot-starter-parent`, and transitively inherits from `org.springframework.boot:spring-boot-dependencies`.

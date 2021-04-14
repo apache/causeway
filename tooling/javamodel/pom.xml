@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	you under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,15 +22,23 @@
 
 	<artifactId>isis-tooling-javamodel</artifactId>
 
-	<name>Apache Isis Tooling - Java Model (Code Mining)</name>
+	<name>Apache Isis - Tooling - Java Model (Code Mining)</name>
 	<description>
         Code mining library for Java bytecode introspection.
     </description>
 
 	<properties>
-		<code-assert.version>0.9.13</code-assert.version>
+		<code-assert.version>0.9.14</code-assert.version>
+		<javaparser.version>3.20.2</javaparser.version>
 		<skipTests>true</skipTests>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 
@@ -38,11 +46,25 @@
 			<groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>guru.nidi</groupId>
-			<artifactId>code-assert</artifactId>
-			<version>${code-assert.version}</version>
+			<groupId>com.github.javaparser</groupId>
+			<artifactId>javaparser-core</artifactId>
+			<version>${javaparser.version}</version>
+		</dependency>
+
+		<!--
+			as a workaround for code-assert-core not having an option to add 'adoc' as a language
+			we use repo jitpack.io (as declared above) to pull a fork on github
+			see	https://github.com/nidi3/code-assert/pull/47
+		 -->
+		<dependency>
+		    <groupId>com.github.andi-huber</groupId>
+		    <artifactId>code-assert</artifactId>
+		    <version>-SNAPSHOT</version>
+<!-- 			<groupId>guru.nidi</groupId> -->
+<!-- 			<artifactId>code-assert</artifactId> -->
+<!-- 			<version>${code-assert.version}</version> -->
 			<exclusions>
 				<exclusion>
 					<groupId>com.pinterest.ktlint</groupId>

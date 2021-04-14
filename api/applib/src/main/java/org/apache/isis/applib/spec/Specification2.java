@@ -28,16 +28,14 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  *     If implemented, then the {@link #satisfies(Object)} inherited from {@link Specification} can just return <tt>null</tt>;
  *     it will never be called by the framework.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface Specification2 extends Specification {
 
-    // end::refguide[]
     /**
      * If <tt>null</tt> then satisfied, otherwise is the reason (as a {@link TranslatableString} translatable string) as to why the specification is not satisfied.
      */
-    // tag::refguide[]
     TranslatableString satisfiesTranslatable(Object obj);
 
 }
-// end::refguide[]

@@ -26,7 +26,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -35,10 +35,10 @@ import demoapp.dom.types.Samples;
 @Service
 public class JavaTimeOffsetTimeJdoSeedService {
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    @EventListener(MetamodelEvent.class)
+    public void onMetamodelEvent(MetamodelEvent event) {
 
-        if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
+    	if (event.isPostMetamodel()) {
             fixtureScripts.run(new TemporalJavaTimeOffsetTimeJdoEntityFixture());
         }
     }

@@ -19,9 +19,7 @@
 
 package org.apache.isis.commons.internal.factory;
 
-import org.apache.isis.commons.exceptions.IsisException;
-
-public class _InstanceCreationException extends IsisException {
+public class _InstanceCreationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public _InstanceCreationException(final String s) {

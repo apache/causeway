@@ -24,9 +24,8 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -40,7 +39,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
-        final String typeFullName = objectSpec.getSpecId().asString();
+        final String typeFullName = objectSpec.getLogicalTypeName();
         final String url = String.format("domain-types/%s", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
     }
@@ -49,7 +48,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             final IResourceContext resourceContext,
             final ObjectSpecification objectSpec) {
         final Rel rel = Rel.LAYOUT;
-        final String typeFullName = objectSpec.getSpecId().asString();
+        final String typeFullName = objectSpec.getLogicalTypeName();
         final String url = String.format("domain-types/%s/layout", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.LAYOUT, url);
     }
@@ -97,9 +96,9 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(Contributed.EXCLUDED);
-
-        associations.forEach(association->{
+        
+        objectSpecification.streamAssociations(MixedIn.EXCLUDED)
+        .forEach(association->{
             if (association.isOneToOneAssociation()) {
                 final OneToOneAssociation property = (OneToOneAssociation) association;
                 final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
@@ -111,7 +110,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             }
         });
 
-        final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(Contributed.INCLUDED);
+        final Stream<ObjectAction> actions = objectSpecification.streamActions(MixedIn.INCLUDED);
 
         actions.forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer
@@ -136,7 +135,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
-        final String url = "domain-types/" + objectSpecification.getSpecId().asString() + "/type-actions/isSubtypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.getLogicalTypeName() + "/type-actions/isSubtypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.INVOKE.andParam("typeaction", "isSubtypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getResourceContext(), "supertype", null);
@@ -145,7 +144,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private JsonRepresentation linkToIsSupertypeOf() {
-        final String url = "domain-types/" + objectSpecification.getSpecId().asString() + "/type-actions/isSupertypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.getLogicalTypeName() + "/type-actions/isSupertypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.INVOKE.andParam("typeaction", "isSupertypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getResourceContext(), "subtype", null);
@@ -158,7 +157,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         final JsonRepresentation link = JsonRepresentation.newMap();
         arguments.mapPut(paramName, link);
         if (objectSpec != null) {
-            link.mapPut("href", resourceContext.urlFor("domain-types/" + objectSpec.getSpecId().asString()));
+            link.mapPut("href", resourceContext.urlFor("domain-types/" + objectSpec.getLogicalTypeName()));
         } else {
             link.mapPut("href", NullNode.instance);
         }

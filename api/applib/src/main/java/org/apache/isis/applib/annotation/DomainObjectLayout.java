@@ -33,45 +33,50 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for domain objects.
+ *
+ * @see ActionLayout
+ * @see PropertyLayout
+ * @see CollectionLayout
+ * @see DomainObject
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.TYPE,
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-// tag::refguide-ui-events[]
 public @interface DomainObjectLayout {
 
-    // end::refguide[]
     // ...
-    // end::refguide-ui-events[]
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
-    // tag::refguide[]
-    BookmarkPolicy bookmarking()                    // <.>
+    BookmarkPolicy bookmarking()
             default BookmarkPolicy.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
-     * Indicates the css class that a domain class (type) should have.
+     * Indicates the css class that a domain class (type) should have, to
+     * allow more targeted styling in <code>application.css</code>.
+     *
+     * @see ActionLayout#cssClass()
+     * @see PropertyLayout#cssClass()
+     * @see ParameterLayout#cssClass()
+     * @see CollectionLayout#cssClass()
      */
-    // tag::refguide[]
-    String cssClass()                               // <.>
+    String cssClass()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * domain object.
+     *
+     * @see ActionLayout#cssClassFa()
      */
-    // tag::refguide[]
-    String cssClassFa()                             // <.>
+    String cssClassFa()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the object's title.
@@ -80,27 +85,37 @@ public @interface DomainObjectLayout {
      *     This attribute is currently ignored by Isis viewers.
      * </p>
      */
-    // tag::refguide[]
-    CssClassFaPosition cssClassFaPosition()         // <.>
+    CssClassFaPosition cssClassFaPosition()
             default CssClassFaPosition.LEFT;
 
-    // end::refguide[]
     /**
      * Description of this class, eg to be rendered in a tooltip.
+     *
+     * @see ActionLayout#describedAs()
+     * @see ParameterLayout#describedAs()
+     * @see PropertyLayout#describedAs()
+     * @see CollectionLayout#describedAs()
      */
-    // tag::refguide[]
-    String describedAs()                            // <.>
+    String describedAs()
             default "";
 
-    // end::refguide[]
     /**
      * Name of this class (overriding the name derived from its name in code).
+     *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
+     * @see ActionLayout#named()
+     * @see ParameterLayout#named()
+     * @see PropertyLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainServiceLayout#named()
+     * @see DomainObjectLayout#plural()
      */
-    // tag::refguide[]
-    String named()                                  // <.>
+    String named()
             default "";
 
-    // end::refguide[]
     /**
      * The page size for instances of this class when rendered within
      * a table.
@@ -112,76 +127,82 @@ public @interface DomainObjectLayout {
      * <p>
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
+     *
+     * @see CollectionLayout#paged()
      */
-    // tag::refguide[]
-    int paged()                                     // <.>
+    int paged()
             default -1;
 
-    // end::refguide[]
     /**
      * The plural name of the class.
+     *
+     * @see DomainObjectLayout#named()
      */
-    // tag::refguide[]
-    String plural()                                 // <.>
+    String plural()
             default "";
 
-    // end::refguide[]
     /**
      * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
-    // tag::refguide-ui-events[]
     Class<? extends CssClassUiEvent<?>>
-            cssClassUiEvent()                       // <.>
+            cssClassUiEvent()
             default CssClassUiEvent.Default.class;
 
-    // end::refguide-ui-events[]
     /**
      * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
      *
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
-    // tag::refguide-ui-events[]
     Class<? extends IconUiEvent<?>>
-            iconUiEvent()                           // <.>
+            iconUiEvent()
             default IconUiEvent.Default.class;
 
-    // end::refguide-ui-events[]
     /**
      * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
      *
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
-    // tag::refguide-ui-events[]
     Class<? extends LayoutUiEvent<?>>
-            layoutUiEvent()                         // <.>
+            layoutUiEvent()
             default LayoutUiEvent.Default.class;
 
-    // end::refguide-ui-events[]
     /**
      * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
      *
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
      */
-    // tag::refguide-ui-events[]
     Class<? extends TitleUiEvent<?>>
-            titleUiEvent()                          // <.>
+            titleUiEvent()
             default TitleUiEvent.Default.class;
 
-    // end::refguide-ui-events[]
 
-    // tag::refguide[]
     // ...
-    // tag::refguide-ui-events[]
 }
-// end::refguide[]
-// end::refguide-ui-events[]

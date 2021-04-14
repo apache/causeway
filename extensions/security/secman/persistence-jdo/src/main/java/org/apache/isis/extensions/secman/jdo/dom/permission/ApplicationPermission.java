@@ -33,20 +33,19 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -56,34 +55,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
-/**
- * Specifies how a particular {@link #getRole() application role} may interact with a specific
- * {@link #getFeature() application feature}.
- *
- * <p>
- *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
- *     {@link ApplicationPermissionRule rule} determines whether the permission {@link ApplicationPermissionRule#ALLOW grants}
- *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
- *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
- *     the role can {@link ApplicationPermissionMode#VIEWING view} the feature
- *     or can {@link ApplicationPermissionMode#CHANGING change} the state of the
- *     system using the feature.
- * </p>
- *
- * <p>
- *     For a given permission, there is an interaction between the {@link ApplicationPermissionRule rule} and the
- *     {@link ApplicationPermissionMode mode}:
- * <ul>
- *     <li>for an {@link ApplicationPermissionRule#ALLOW allow}, a
- *     {@link ApplicationPermissionMode#CHANGING usability} allow
- *     implies {@link ApplicationPermissionMode#VIEWING visibility} allow.
- *     </li>
- *     <li>conversely, for a {@link ApplicationPermissionRule#VETO veto},
- *     a {@link ApplicationPermissionMode#VIEWING visibility} veto
- *     implies a {@link ApplicationPermissionMode#CHANGING usability} veto.</li>
- * </ul>
- * </p>
- */
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = "isisExtensionsSecman",
@@ -111,7 +82,7 @@ import lombok.experimental.UtilityClass;
             name = "findByFeature", language = "JDOQL",
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE featureType == :featureType "
+                    + "WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @javax.jdo.annotations.Query(
             name = "findByRoleAndRuleAndFeature", language = "JDOQL",
@@ -119,7 +90,7 @@ import lombok.experimental.UtilityClass;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
                     + "   && rule == :rule "
-                    + "   && featureType == :featureType "
+                    + "   && featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn "),
     @javax.jdo.annotations.Query(
             name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
@@ -127,25 +98,23 @@ import lombok.experimental.UtilityClass;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
                     + "   && rule == :rule "
-                    + "   && featureType == :featureType "),
+                    + "   && featureSort == :featureSort "),
 })
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
+            name = "ApplicationPermission_role_feature_rule_UNQ",
+            members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @DomainObject(
-        objectType = "isissecurity.ApplicationPermission"
+        objectType = "isis.ext.secman.ApplicationPermission"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-//@MemberGroupLayout(
-//        columnSpans = {3,3,6,12},
-//        left={"Role", "Metadata"},
-//        middle = {"Permissions"},
-//        right={"Feature"}
-//)
-public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
+public class ApplicationPermission
+implements
+    org.apache.isis.extensions.secman.api.permission.ApplicationPermission,
+    Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
 
@@ -160,13 +129,10 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT
-            )
-    @MemberOrder(name="Role", sequence = "1")
-    @Getter(onMethod = @__(@Override)) 
+    @PropertyLayout(hidden = Where.REFERENCES_PARENT)
+    @Getter(onMethod = @__(@Override))
     private ApplicationRole role;
-    
+
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.ApplicationRole applicationRole) {
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
@@ -181,8 +147,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Permissions", sequence = "2")
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
 
@@ -196,49 +161,48 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Permissions", sequence = "3")
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
 
     // -- featureId (derived property)
 
     private Optional<ApplicationFeature> getFeature() {
-        return createFeatureId()
-                .map(featureId -> applicationFeatureRepository.findFeature(featureId));
+        return asFeatureId()
+                .map(featureId -> featureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberType of associated feature)
+    // region > type (derived, memberSort of associated feature)
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureType() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature type} and member type.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    @MemberOrder(name="Feature", sequence = "5")
-    public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
-                ? getFeatureType() 
-                        : getMemberType().orElse(null);
+    @Override
+    public String getSort() {
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
+                ? getFeatureSort()
+                : getMemberSort().orElse(null);
         return e != null ? e.name(): null;
     }
 
     @Programmatic
-    private Optional<ApplicationMemberType> getMemberType() {
+    private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
-                .map(ApplicationFeature::getMemberType);
+                .flatMap(ApplicationFeature::getMemberSort);
     }
 
 
-    // -- featureType
+    // -- FEATURE SORT
 
     /**
-     * The {@link ApplicationFeatureId#getType() feature type} of the
+     * The {@link ApplicationFeatureId#getSort() feature sort} of the
      * feature.
      *
      * <p>
@@ -250,12 +214,12 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Setter
-    private ApplicationFeatureType featureType;
+    private ApplicationFeatureSort featureSort;
 
     @Override
     @Programmatic
-    public ApplicationFeatureType getFeatureType() {
-        return featureType;
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
     }
 
 
@@ -269,28 +233,27 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      * of the feature.
      *
      * <p>
-     *     The combination of the {@link #getFeatureType() feature type} and the fully qualified name is used to build
+     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
      *     the corresponding {@link #getFeature() feature} (view model).
      * </p>
      *
-     * @see #getFeatureType()
+     * @see #getFeatureSort()
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
             domainEvent = FeatureFqnDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Feature", sequence = "5.1")
     @Getter @Setter
     private String featureFqn;
 
 
     // -- CONTRACT
 
-    private static final ObjectContract<ApplicationPermission> contract	= 
+    private static final ObjectContract<ApplicationPermission> contract	=
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
-            .thenUse("featureType", ApplicationPermission::getFeatureType)
+            .thenUse("featureSort", ApplicationPermission::getFeatureSort)
             .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
             .thenUse("mode", ApplicationPermission::getMode);
 
@@ -329,15 +292,15 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     @UtilityClass
     public static final class Functions {
 
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
                 (ApplicationPermission input) ->
                     new ApplicationPermissionValue(
-                            input.createFeatureId().orElseThrow(_Exceptions::noSuchElement), 
-                            input.getRule(), 
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                            input.getRule(),
                             input.getMode());
 
     }
 
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
 
 }

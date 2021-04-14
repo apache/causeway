@@ -29,7 +29,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
  *
  * <p>
  *
- * @see LoadingCallbackFacet
+ * @see LoadedCallbackFacet
  * @see CreatedCallbackFacet
  */
 public interface LoadedCallbackFacet extends CallbackFacet {

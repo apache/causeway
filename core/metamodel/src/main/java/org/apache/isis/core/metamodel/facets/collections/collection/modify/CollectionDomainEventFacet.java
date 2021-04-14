@@ -20,15 +20,13 @@
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Corresponds to <tt>@Collection(domainEvent=...)</tt> annotation in the Isis programming model.
  */
 public interface CollectionDomainEventFacet
-extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+extends SingleClassValueFacet, HidingInteractionAdvisor {
 
 }
 

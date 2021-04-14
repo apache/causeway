@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.fullcalendar.ui.component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -40,7 +41,8 @@ import net.ftlines.wicket.fullcalendar.selector.EventSourceSelector;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public abstract class CalendaredCollectionAbstract extends PanelAbstract<EntityCollectionModel> {
+public abstract class CalendaredCollectionAbstract 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 

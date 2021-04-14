@@ -39,8 +39,28 @@ import org.apache.isis.commons.internal.image._Images;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-// tag::refguide[]
-// end::refguide[]
+/**
+ * Represents a binary large object.
+ *
+ * <p>
+ * Conceptually you can consider it as a set of bytes (a picture, a video etc),
+ * though in fact it wraps three pieces of information:
+ * </p>
+ * <ul>
+ *     <li>
+ *         the set of bytes
+ *     </li>
+ *     <li>
+ *         a name
+ *     </li>
+ *     <li>
+ *         a mime type
+ *     </li>
+ * </ul>
+ *
+ * @see Clob
+ * @since 1.x {@index}
+ */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
@@ -49,24 +69,27 @@ public final class Blob implements NamedWithMimeType {
 
     /**
      * Computed for state:
+     *
+     * <p>
      * <pre>
-     *     private final MimeType mimeType;
-     *     private final byte[] bytes;
-     *     private final String name;
+     * private final MimeType mimeType;
+     * private final byte[] bytes;
+     * private final String name;
      * </pre>
+     * </p>
      */
     private static final long serialVersionUID = 5659679806709601263L;
-    
+
     // -- FACTORIES
-    
+
     /**
      * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it 
-     * is guaranteed, that the resulting {@link Blob} has the appropriate extension 
+     * {@code name} may or may not include the desired filename extension, it
+     * is guaranteed, that the resulting {@link Blob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
-     * For more fine-grained control use one of the {@link Blob} constructors directly. 
+     * For more fine-grained control use one of the {@link Blob} constructors directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
      * @param content - bytes
@@ -77,8 +100,8 @@ public final class Blob implements NamedWithMimeType {
         val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
         return new Blob(fileName, mimeType.getMimeType(), content);
     }
-    
-     // -- 
+
+     // --
 
     private final MimeType mimeType;
     private final byte[] bytes;
@@ -202,23 +225,23 @@ public final class Blob implements NamedWithMimeType {
         }
 
     }
-    
+
     /**
-     * @return optionally the payload as a {@link BufferedImage} based on whether 
-     * this Blob's MIME type identifies as image and whether the payload is not empty 
+     * @return optionally the payload as a {@link BufferedImage} based on whether
+     * this Blob's MIME type identifies as image and whether the payload is not empty
      */
     public Optional<BufferedImage> asImage() {
-        
+
         val bytes = getBytes();
         if(bytes == null) {
             return Optional.empty();
         }
-        
+
         val mimeType = getMimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
             return Optional.empty();
         }
-        
+
         try {
             val img = _Images.fromBytes(getBytes());
             return Optional.ofNullable(img);
@@ -226,7 +249,7 @@ public final class Blob implements NamedWithMimeType {
             log.error("failed to read image data", e);
             return Optional.empty();
         }
-        
+
     }
-    
+
 }

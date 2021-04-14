@@ -1,0 +1,43 @@
+= Contributee
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The interfaces listed in this chapter act as contributees; they allow domain services to contribute actions/properties/collections to any domain objects that implement these interfaces.
+
+
+
+== Usage Notes
+
+If the interaction is an action that in turn calls other actions by way of xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
+
+The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
+
+Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+
+
+[[HasUserName]]
+== `HasUsername`
+
+The `HasUsername` interface is a mix-in for domain objects to be associated with a username.
+Other services and modules can then contribute actions/collections to render such additional information relating to the activities of the user.
+
+The interface is defined is:
+
+[source,java]
+----
+public interface HasUsername {
+    public String getUsername();
+}
+----
+
+Some of the extension/mapping modules that have domain entity/ies that implement this interface are:
+
+* xref:security:ROOT:about.adoc[SecMan extension]: `ApplicationUser` entity
+* xref:security:audit-trail:about.adoc[Auditer] module: `AuditEntry` entity
+* xref:userguide:command-log:about.adoc[Command Log] module: `CommandJdo` entity
+* xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] module: `OutboxEvent` entity
+* xref:security:session-log:about.adoc[Session Log] module: `SessionLogEntry` entity
+* xref:subdomains:settings:about.adoc[Settings] module: `UserSettingJdo` entity
+

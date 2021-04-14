@@ -47,6 +47,10 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         }
     }
 
+    public void add(ValidationFailure validationFailure) {
+        failures.add(validationFailure);
+    }
+    
     public void add(ValidationFailures validationFailures) {
         addAll(validationFailures.getFailures());
     }
@@ -64,7 +68,6 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     
     /**
      * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
-     * @return
      */
     public ArrayList<String> getMessages(String messageFormat) { // <-- ensure serializable result
         val messages = _Lists.<String>newArrayList();

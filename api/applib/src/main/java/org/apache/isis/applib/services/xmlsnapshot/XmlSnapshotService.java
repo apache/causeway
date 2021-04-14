@@ -22,52 +22,81 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * This service allows an XML document to be generated capturing the data of a root entity and specified related
- * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
+ * Allows an XML document to be generated capturing the data of a root entity
+ * and specified related entities.
  *
  * <p>
- * The framework provides an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) which is automatically
- * registered and available for use; no further configuration is required.
+ *     An XSD schema (to which the XML will be compatible) can also be
+ *     generated.
  * </p>
+ *
+ * <p>
+ *     This XML/XSD can be used for various purposes, such as mail
+ *     merge/reporting, or adhoc auditing.
+ * </p>
+ *
+ * <p>
+ *     The service offers a basic API to create a snapshot of a single object,
+ *     and a more flexible API that allows the size of the graph to be
+ *     customized.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface XmlSnapshotService {
 
-    // end::refguide[]
-    // tag::refguide-1[]
+
+    /**
+     * @since 1.x {@index}
+     */
     interface Snapshot {
-        Document getXmlDocument();          // <.>
-        Document getXsdDocument();          // <.>
-        // end::refguide-1[]
-        // tag::refguide-2[]
+        /**
+         *  Converts the snapshotted state into an XML document.
+         */
+        Document getXmlDocument();
+        /**
+         *  Creates a corresponding XSD that describes the structure of the exported XML.
+         */
+        Document getXsdDocument();
+        /**
+         * @since 1.x {@index}
+         */
         interface Builder {
-            void includePath(final String path);                    // <.>
-            void includePathAndAnnotation(                          // <.>
+            /**
+             * Enrich the snapshot to include the state of these referenced objects
+             */
+            void includePath(final String path);
+            /**
+             * Ditto, but add an XML annotation attribute to the included element(s).
+             */
+            void includePathAndAnnotation(
                 final String path, final String annotation);
-            XmlSnapshotService.Snapshot build();                    // <.>
+            /**
+             * Builds the Snapshot.
+             */
+            XmlSnapshotService.Snapshot build();
         }
-        // end::refguide-2[]
-        // tag::refguide-1[]
     }
-    // end::refguide-1[]
 
-    // tag::refguide[]
-    XmlSnapshotService.Snapshot snapshotFor(                    // <.>
+    /**
+     *  Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
+     */
+    XmlSnapshotService.Snapshot snapshotFor(
                                     final Object domainObject);
 
-    XmlSnapshotService.Snapshot.Builder builderFor(             // <.>
+    /**
+     *  Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
+     */
+    XmlSnapshotService.Snapshot.Builder builderFor(
                                     final Object domainObject);
 
-    // end::refguide[]
 
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
-    // tag::refguide[]
-    <T> T getChildElementValue(                                 // <.>
+    <T> T getChildElementValue(
             final Element el, final String tagname,
             final Class<T> expectedCls);
 
 
 }
-// end::refguide[]

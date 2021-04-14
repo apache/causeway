@@ -21,11 +21,9 @@ package org.apache.isis.testdomain.jdo.entities;
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Query;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
@@ -41,12 +39,26 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @PersistenceCapable
-@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
+//@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
 @DomainObject(
         objectType = "testdomain.jdo.Book",
-        publishing=Publishing.ENABLED, 
-        auditing = Auditing.ENABLED)
+        entityChangePublishing = Publishing.ENABLED)
+@javax.jdo.annotations.Uniques({
+    @javax.jdo.annotations.Unique(
+            name = "JdoBook_isbn_UNQ", members = { "isbn" })
+})
+//@NamedQuery(
+//name = "JdoInventory.findAffordableProducts", 
+//query = "SELECT p FROM JdoInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
+@Query(
+      name = "findAffordableBooks",
+      language = "JDOQL",
+      value = "SELECT "
+              + "FROM org.apache.isis.testdomain.jdo.entities.JdoBook "
+              + "WHERE price <= :priceUpperBound")
+
+
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
@@ -63,6 +75,7 @@ public class JdoBook extends JdoProduct {
         this.myService = myService;
     }
     public boolean hasInjectionPointsResolved() {
+        getAuthor(); // seems to have the required side-effect to actually trigger injection
         return myService != null;
     }
     // --

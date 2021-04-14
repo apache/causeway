@@ -21,6 +21,9 @@ package org.apache.isis.extensions.secman.jdo;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @ComponentScan(
         basePackageClasses= {

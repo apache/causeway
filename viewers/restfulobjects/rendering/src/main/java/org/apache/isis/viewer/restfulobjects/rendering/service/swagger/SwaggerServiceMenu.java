@@ -28,20 +28,24 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 
 
-@Named("isisApplib.SwaggerServiceMenu")
-@DomainService(objectType = "isisApplib.SwaggerServiceMenu")
+/**
+ * @since 1.x {@index}
+ */
+@Named("isis.applib.SwaggerServiceMenu")
+@DomainService(objectType = "isis.applib.SwaggerServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
@@ -73,13 +77,12 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link-alt"
-            )
-    @MemberOrder(sequence="500.600.1")
+            cssClassFa = "fa-external-link-alt",
+            sequence="500.600.1")
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.thtml");
     }
-    
+
     public String disableOpenSwaggerUi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -92,13 +95,12 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link-alt"
-            )
-    @MemberOrder(sequence="500.600.2")
+            cssClassFa = "fa-external-link-alt",
+            sequence="500.600.2")
     public LocalResourcePath openRestApi() {
         return new LocalResourcePath(basePath);
     }
-    
+
     public String disableOpenRestApi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -111,15 +113,14 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-download"
-            )
-    @MemberOrder(sequence="500.600.3")
+            cssClassFa = "fa-download",
+            sequence="500.600.3")
     public Clob downloadSwaggerSchemaDefinition(
             @ParameterLayout(named = "Filename")
             final String fileNamePrefix,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
-        
+            final Visibility visibility,
+            final Format format) {
+
         final String fileName = buildFileName(fileNamePrefix, visibility, format);
         final String spec = swaggerService.generateSwaggerSpec(visibility, format);
         return new Clob(fileName, format.mediaType(), spec);
@@ -128,35 +129,36 @@ public class SwaggerServiceMenu {
     public String default0DownloadSwaggerSchemaDefinition() {
         return "swagger";
     }
-    public SwaggerService.Visibility default1DownloadSwaggerSchemaDefinition() {
-        return SwaggerService.Visibility.PRIVATE;
+    public Visibility default1DownloadSwaggerSchemaDefinition() {
+        return Visibility.PRIVATE;
     }
-    public SwaggerService.Format default2DownloadSwaggerSchemaDefinition() {
-        return SwaggerService.Format.YAML;
+    public Format default2DownloadSwaggerSchemaDefinition() {
+        return Format.YAML;
     }
 
     // -- HELPER
-    
+
     private String disableReasonWhenRequiresROViewer() {
-        final Optional<?> moduleIfAny = serviceRegistry.lookupBeanById("isisRoViewer.WebModuleJaxrsRestEasy4");
+        final Optional<?> moduleIfAny = serviceRegistry
+                .lookupBeanById("isis.viewer.ro.WebModuleJaxrsRestEasy4");
         return moduleIfAny.isPresent()
                 ? null
                 : "RestfulObjects viewer is not configured";
     }
-    
+
     private static String buildFileName(
             String fileNamePrefix,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
+            final Visibility visibility,
+            final Format format) {
         final String formatLower = format.name().toLowerCase();
         int i = fileNamePrefix.lastIndexOf("." + formatLower);
         if(i > 0) {
             fileNamePrefix = fileNamePrefix.substring(0, i);
         }
         return _Strings.asFileNameWithExtension(
-                fileNamePrefix + "-" + visibility.name().toLowerCase(), 
+                fileNamePrefix + "-" + visibility.name().toLowerCase(),
                 formatLower);
     }
-    
-     
+
+
 }

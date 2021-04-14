@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
  * Used as a fallback.
  */
 @Service
-@Named("isisMetaModel.TableColumnOrderServiceDefault")
+@Named("isis.metamodel.TableColumnOrderServiceDefault")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")

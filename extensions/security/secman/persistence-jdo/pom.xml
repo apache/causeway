@@ -42,10 +42,16 @@
 	
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus5</artifactId>
+			<artifactId>isis-persistence-jdo-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
@@ -55,21 +61,18 @@
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-api</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-model</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fixtures-applib</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 
     </dependencies>

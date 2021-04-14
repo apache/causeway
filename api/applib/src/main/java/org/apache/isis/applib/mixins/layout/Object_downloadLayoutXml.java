@@ -22,28 +22,34 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
 import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Provides the ability to download the layout XML for any domain
+ * entity or view model.
+ *
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_downloadLayoutXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
 )
 @ActionLayout(
         cssClassFa = "fa-download",
-        position = ActionLayout.Position.PANEL_DROPDOWN
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "700.1"
 )
 @RequiredArgsConstructor
 public class Object_downloadLayoutXml {
@@ -53,24 +59,30 @@ public class Object_downloadLayoutXml {
 
     private final Object holder;
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public Object act(
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            final LayoutService.Style style) {
+            final Style style) {
 
         val xmlString = layoutService.toXml(holder.getClass(), style);
         return  Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
+    /**
+     * Defaults to the (simple) name of the domain object's class, with a <code>.layout</code> suffix
+     */
     public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
 
-    public LayoutService.Style default1Act() {
-        return LayoutService.Style.NORMALIZED;
+    /**
+     * Default style is {@link Style#NORMALIZED}.
+     * @return
+     */
+    public Style default1Act() {
+        return Style.NORMALIZED;
     }
 
     @Inject LayoutService layoutService;

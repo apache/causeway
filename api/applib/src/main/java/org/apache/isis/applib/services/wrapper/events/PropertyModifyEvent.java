@@ -28,7 +28,7 @@ import org.apache.isis.applib.Identifier;
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * value is invalid; otherwise the value is valid.
- *
+ * @since 1.x {@index}
  */
 public class PropertyModifyEvent extends ValidityEvent {
 
@@ -41,8 +41,6 @@ public class PropertyModifyEvent extends ValidityEvent {
 
     /**
      * If <tt>null</tt>, then the property was cleared.
-     *
-     * @return
      */
     @Override
     public Object getProposed() {

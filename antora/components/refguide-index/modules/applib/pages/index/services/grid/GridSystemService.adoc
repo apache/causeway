@@ -1,0 +1,113 @@
+= GridSystemService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Encapsulates a single layout grid system which can be used to customize the layout of domain objects.
+
+In particular this means being able to return a "normalized" form (validating and associating domain object members into the various regions of the grid) and in providing a default grid if there is no other metadata available.
+
+== API
+
+[source,java]
+.GridSystemService.java
+----
+interface GridSystemService<G> {
+  Class<G> gridImplementation()     // <.>
+  String tns()     // <.>
+  String schemaLocation()     // <.>
+  G defaultGrid(Class<?> domainClass)     // <.>
+  void normalize(G grid, Class<?> domainClass)     // <.>
+  void complete(G grid, Class<?> domainClass)     // <.>
+  void minimal(G grid, Class<?> domainClass)     // <.>
+}
+----
+
+<.> xref:#gridImplementation__[gridImplementation()]
++
+--
+The concrete subclass of xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] supported by this implementation.
+--
+<.> xref:#tns__[tns()]
++
+--
+The target namespace for this grid system.
+--
+<.> xref:#schemaLocation__[schemaLocation()]
++
+--
+The schema location for the XSD.
+--
+<.> xref:#defaultGrid__Class[defaultGrid(Class)]
++
+--
+A default grid, used when no grid layout can be found for the domain class.
+--
+<.> xref:#normalize__G_Class[normalize(G, Class)]
++
+--
+Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
+--
+<.> xref:#complete__G_Class[complete(G, Class)]
++
+--
+Takes a normalized grid and enriches it with all the available metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
+--
+<.> xref:#minimal__G_Class[minimal(G, Class)]
++
+--
+Takes a normalized grid and strips out removes all members, leaving only the grid structure.
+--
+
+== Members
+
+[#gridImplementation__]
+=== gridImplementation()
+
+The concrete subclass of xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] supported by this implementation.
+
+There can be multiple implementations of this service, this indicates the base class used by the implementation.
+
+[#tns__]
+=== tns()
+
+The target namespace for this grid system.
+
+This is used when generating the XML. The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3`.
+
+[#schemaLocation__]
+=== schemaLocation()
+
+The schema location for the XSD.
+
+Every grid system is expected to provide a schema XSD in order to provide code completion in an IDE. The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
+
+[#defaultGrid__Class]
+=== defaultGrid(Class)
+
+A default grid, used when no grid layout can be found for the domain class.
+
+For example, this layout could define two columns in ratio 4:8.
+
+[#normalize__G_Class]
+=== normalize(G, Class)
+
+Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
+
+This is done using existing metadata, most notably that of the _org.apache.isis.applib.annotation.MemberOrder_ annotation. Such a grid, if persisted as the layout XML file for the domain class, allows the _org.apache.isis.applib.annotation.MemberOrder_ annotation to be removed from the source code of the domain class (but other annotations must be retained).
+
+[#complete__G_Class]
+=== complete(G, Class)
+
+Takes a normalized grid and enriches it with all the available metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
+
+Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations ( _org.apache.isis.applib.annotation.ActionLayout_ , _org.apache.isis.applib.annotation.PropertyLayout_ , _org.apache.isis.applib.annotation.CollectionLayout_ ) to be removed from the source code of the domain class.
+
+[#minimal__G_Class]
+=== minimal(G, Class)
+
+Takes a normalized grid and strips out removes all members, leaving only the grid structure.
+
+Such a grid, if persisted as the layout XML file for the domain class, requires that the _org.apache.isis.applib.annotation.MemberOrder_ annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+
+include::hooks/GridSystemService_010-implementation.adoc[]
+
+include::hooks/GridSystemService_020-examples-and-usage.adoc[]

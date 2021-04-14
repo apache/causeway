@@ -1,0 +1,35 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Wrapper Factory
+
+If the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] is used to call other objects then the metrics are captured for each sub-execution.
+
+
+
+
+
+== Related Services
+
+
+See also:
+
+* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] is used to obtain the `Interaction` from which the member executions are published.
+
+* the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
+
+* the xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
+
+* The services provided by this module combine very well with the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] and with xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
++
+The xref:refguide:applib:index/services/command/Command.adoc[Command]  captures the __cause__ of an interaction (an action was invoked, a property was edited), while the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] captures the __effect__ of that interaction in terms of events, while the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures the effect of the interaction in terms of changed state.
+
+All of these services collaborate implicitly by way of the xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] interface.
+
+In contrast:
+
+* The xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] differs from the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] in that the former is intended for fine-grained publish/subscribe for object-to-object interactions _within_ an Apache Isis domain object model.
++
+The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.
+

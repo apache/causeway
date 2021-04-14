@@ -24,22 +24,22 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
@@ -54,48 +54,47 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract 
-implements MetaModelRefiner {
-
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
-            new MetaModelValidatorForConflictingOptionality();
+public class PropertyAnnotationFacetFactory 
+extends FacetFactoryAbstract {
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
-    
+
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        conflictingOptionalityValidator.setMetaModelContext(metaModelContext);
     }
-    
+
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
-        val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
-        
+
+        val propertyIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Property.class, 
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                            .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
-        
+
         processModify(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
-        processCommand(processMethodContext, propertyIfAny);
+        processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
-        processPublishing(processMethodContext, propertyIfAny);
+        processExecutionPublishing(processMethodContext, propertyIfAny);
         processMaxLength(processMethodContext, propertyIfAny);
         processMustSatisfy(processMethodContext, propertyIfAny);
         processNotPersisted(processMethodContext, propertyIfAny);
@@ -104,7 +103,6 @@ implements MetaModelRefiner {
         processFileAccept(processMethodContext, propertyIfAny);
     }
 
-
     void inferIntentWhenOnTypeLevel(ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         if(!processMethodContext.isMixinMain() || !propertyIfAny.isPresent()) {
             return; // no @Property found neither type nor method
@@ -112,14 +110,14 @@ implements MetaModelRefiner {
 
         //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
         //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-        //          if(isPropertyMethodLevel) return; 
+        //          if(isPropertyMethodLevel) return;
 
-        //[1998] if @Property detected on method or type level infer:    
+        //[1998] if @Property detected on method or type level infer:
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ASSOCIATION, facetedMethod) {});
+        FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
     }
 
     void processModify(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -218,7 +216,7 @@ implements MetaModelRefiner {
 
     void processHidden(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
-        
+
         // search for @Property(hidden=...)
         val hiddenFacet = HiddenFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
@@ -234,23 +232,25 @@ implements MetaModelRefiner {
         super.addFacet(disabledFacet);
     }
 
-    void processCommand(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
+    void processCommandPublishing(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
 
-        // check for @Property(command=...)
-        val commandFacet = CommandFacetForPropertyAnnotation
+        // check for @Property(commandPublishing=...)
+        val commandPublishing = CommandPublishingFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
 
-        super.addFacet(commandFacet);
+        super.addFacet(commandPublishing);
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
@@ -264,26 +264,28 @@ implements MetaModelRefiner {
 
     }
 
-    void processPublishing(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
+    void processExecutionPublishing(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Property> propertyIfAny) {
 
-        
+
         val holder = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
 
-        // check for @Property(publishing=...)
-        val facet = PublishedPropertyFacetForPropertyAnnotation
+        // check for @Property(executionPublishing=...)
+        val executionPublishingFacet = ExecutionPublishingPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
-        super.addFacet(facet);
+        super.addFacet(executionPublishingFacet);
     }
 
 
@@ -311,7 +313,7 @@ implements MetaModelRefiner {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        val facet = NotPersistedFacetForPropertyAnnotation.create(propertyIfAny, holder);
+        val facet = SnapshotExcludeFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         super.addFacet(facet);
     }
@@ -327,13 +329,13 @@ implements MetaModelRefiner {
         val facet2 =
                 MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableIfAny, method, holder);
         super.addFacet(facet2);
-        conflictingOptionalityValidator.flagIfConflict(
+        MetaModelValidatorForConflictingOptionality.flagIfConflict(
                 facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
         val facet3 = MandatoryFacetForPropertyAnnotation.create(propertyIfAny, method, holder);
         super.addFacet(facet3);
-        conflictingOptionalityValidator.flagIfConflict(
+        MetaModelValidatorForConflictingOptionality.flagIfConflict(
                 facet3, "Conflicting Property#optionality with other optionality annotation");
     }
 
@@ -349,14 +351,13 @@ implements MetaModelRefiner {
             super.addFacet(facet);
             return;
         }
-        
+
         // else search for @Property(pattern=...)
         val facet2 = RegExFacetForPropertyAnnotation.create(propertyIfAny, returnType, holder);
         super.addFacet(facet2);
-        
-        
-    }
 
+
+    }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
@@ -366,13 +367,5 @@ implements MetaModelRefiner {
 
         super.addFacet(facet);
     }
-
-    // //////////////////////////////////////
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(conflictingOptionalityValidator);
-    }
-
 
 }

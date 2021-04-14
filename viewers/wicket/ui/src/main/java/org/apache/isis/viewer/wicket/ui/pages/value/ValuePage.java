@@ -40,7 +40,7 @@ public class ValuePage extends PageAbstract {
     private static final String ID_ACTION_NAME = "actionName";
 
     /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
+     * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
     public ValuePage(final ValueModel valueModel) {
         this(valueModel, actionNameFrom(valueModel));

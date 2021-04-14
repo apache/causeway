@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -35,7 +36,8 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class ActionLinkPanel extends PanelAbstract<ActionModel> {
+public class ActionLinkPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 

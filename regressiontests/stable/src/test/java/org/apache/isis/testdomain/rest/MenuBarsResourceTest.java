@@ -32,9 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.actnsemantics.Configuration_usingActionSemantics;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -46,7 +47,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJdo.class,
+                Configuration_headless.class,
                 Configuration_usingActionSemantics.class,
                 MenuBarsResourceTest.TestSetup.class
         }, 
@@ -91,16 +92,16 @@ class MenuBarsResourceTest {
         
         assertNotNull(menuBars);
         
-        final ServiceActionLayoutData[] blobDemoMenuRef = {null};
+        val blobDemoMenuRef = _Refs.<ServiceActionLayoutData>objectRef(null);
         
         // find service action by object-type
         menuBars.visit(actionLayoutData->{
-            if("smoketests.BlobDemoMenu".equals(actionLayoutData.getObjectType())) {
-                blobDemoMenuRef[0] = actionLayoutData;
+            if("regressiontests.BlobDemoMenu".equals(actionLayoutData.getObjectType())) {
+                blobDemoMenuRef.setValue(actionLayoutData);
             }
         });
         
-        val blobDemoMenu = blobDemoMenuRef[0];
+        val blobDemoMenu = blobDemoMenuRef.getValue().orElse(null);
         
         assertNotNull(blobDemoMenu);
         

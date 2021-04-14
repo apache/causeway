@@ -30,8 +30,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -52,7 +52,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     public UserResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final InteractionTracker isisInteractionTracker) {
         super(metaModelContext, isisConfiguration, isisInteractionTracker);
     }
 
@@ -64,7 +64,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.includesSelf().with(resourceContext.getAuthenticationSessionTracker().getAuthenticationSessionElseFail());
+        renderer.includesSelf().with(resourceContext.getAuthenticationContext().currentAuthenticationElseFail());
 
         return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }
@@ -99,7 +99,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         final HomePageReprRenderer renderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        resourceContext.logoutAuthenticationSession();
+        resourceContext.logoutFromSession();
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).

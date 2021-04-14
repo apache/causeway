@@ -16,19 +16,18 @@ In a similar way, if the user has forgotten their password then they can request
 
 To support this the framework requires three services to be registered and configured:
 
-* the xref:refguide:applib-svc:UserRegistrationService.adoc[user registration service], which provides an API to create the user account
-* the xref:refguide:applib-svc:EmailNotificationService.adoc[email notification service], which provides an API for to send the verification emails
-* the xref:refguide:applib-svc:EmailService.adoc[email service], that is used by the email notification service to actually send the email.
+* the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[user registration service], which provides an API to create the user account
+* the xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[email notification service], which provides an API for to send the verification emails
+* the xref:refguide:applib:index/services/email/EmailService.adoc[email service], that is used by the email notification service to actually send the email.
 
 The Apache Isis core framework provides a default implementation of both the email notification service and the email service.
-The xref:security:ROOT:about.adoc[Security Manager] extension provides a partial implementation of xref:refguide:applib-svc:UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
+The xref:security:ROOT:about.adoc[Security Manager] extension provides a partial implementation of xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
 
 
 
 
 == Screenshots
 
-// TODO: v2: update theses screenshots, perhaps we could make secman's implementation complete with an optionaly override?
 
 The user is presented with a login page:
 
@@ -66,13 +65,15 @@ image::user-registration/sign-up-after-registration.png[width="800px"]
 
 There are two prerequisites:
 
-* register an implementation of the xref:refguide:applib-svc:UserRegistrationService.adoc[user registration service] (eg by using the xref:security:ROOT:about.adoc[SecMan extension])
+* register an implementation of the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[user registration service]
++
+The xref:security:ROOT:about.adoc[SecMan extension] provides an abstract subclass implementation that does most of the work.
 
-* configure the xref:refguide:applib-svc:EmailService.adoc[email service]
+* configure the xref:refguide:applib:index/services/email/EmailService.adoc[email service]
++
+This is required by the default xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[email notification service].
 
-The latter is required if you are using the default email notification service and email service. If you are using your own alternative implementation of the email notification service then it may be omitted (and configure your own alternative implementation as required).
-
-It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:vw:ROOT:configuration-properties.adoc#sign-in[here] for further details.
+It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:vw:ROOT:setup-and-configuration.adoc#sign-in-sign-up-and-remember-me[here] for further details.
 
 
 

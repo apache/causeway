@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * <li>/0/1 ... the second child of root</li>
  * <li>/0/0/0 ... the first child of first child of root</li>
  * </ul>
- * @since 2.0
+ * @since 2.0 {@index}
  */
 public interface TreePath extends Serializable {
 

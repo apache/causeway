@@ -1,12 +1,6 @@
 
-
-
-
 include::vw:ROOT:partial$module-nav.adoc[]
 
 * Extensions
-include::vw:exceldownload:partial$module-nav.adoc[]
-include::vw:fullcalendar:partial$module-nav.adoc[]
-include::vw:gmap3:partial$module-nav.adoc[]
-include::vw:pdfjs:partial$module-nav.adoc[]
 
+include::vw:ROOT:partial$extensions.adoc[]

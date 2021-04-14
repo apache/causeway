@@ -26,14 +26,14 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class SwaggerExporter {
@@ -49,15 +49,15 @@ public class SwaggerExporter {
         this.swaggerService = swaggerService;
     }
 
-    public void export(SwaggerService.Visibility visibility, SwaggerService.Format format) throws IOException {
+    public void export(Visibility visibility, Format format) throws IOException {
         export(visibility, format, defaultOutputDir());
     }
 
-    public void export(SwaggerService.Visibility visibility, SwaggerService.Format format, File outputDir) throws IOException {
+    public void export(Visibility visibility, Format format, File outputDir) throws IOException {
         export(visibility, format, outputDir, defaultFileNamePrefix());
     }
 
-    public void export(SwaggerService.Visibility visibility, SwaggerService.Format format, File outputDir, String fileNamePrefix) throws IOException {
+    public void export(Visibility visibility, Format format, File outputDir, String fileNamePrefix) throws IOException {
         final File swaggerSpecFile = buildSwaggerSpecFile(outputDir, fileNamePrefix, visibility, format);
         writeSwaggerSpec(visibility, format, swaggerSpecFile);
         swaggerService.generateSwaggerSpec(visibility, format);
@@ -66,15 +66,15 @@ public class SwaggerExporter {
 
     private File buildSwaggerSpecFile(
             final File outputDir, final String fileNamePrefix,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
+            final Visibility visibility,
+            final Format format) {
         final String swaggerSpecName = fileNamePrefix + "-" + visibility + "." + format.name().toLowerCase();
         return new File(outputDir, swaggerSpecName);
     }
 
     private void writeSwaggerSpec(
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format,
+            final Visibility visibility,
+            final Format format,
             final File swaggerSpecFile) throws IOException {
         final String swaggerSpec = swaggerService.generateSwaggerSpec(visibility, format);
 

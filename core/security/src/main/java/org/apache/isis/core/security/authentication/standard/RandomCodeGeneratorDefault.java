@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.security.authentication.standard;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import javax.inject.Named;
 
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
-@Named("isisSecurityApi.RandomCodeGenerator10Chars")
+@Named("isis.security.RandomCodeGenerator10Chars")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")
@@ -39,7 +39,7 @@ public class RandomCodeGeneratorDefault implements RandomCodeGenerator {
     private static final int NUMBER_CHARACTERS = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-    private final Random random = new Random(); 
+    private final SecureRandom random = new SecureRandom(); // Compliant for security-sensitive use cases
 
     @Override
     public String generateRandomCode() {

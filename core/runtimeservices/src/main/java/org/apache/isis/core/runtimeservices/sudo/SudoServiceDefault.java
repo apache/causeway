@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtimeservices.sudo;
 
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.concurrent.Callable;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,73 +31,84 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.sudo.SudoServiceListener;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
-@Named("isisRuntimeServices.SudoServiceDefault")
+@Named("isis.runtimeservices.SudoServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SudoServiceDefault implements SudoService {
 
-    @Inject private List<SudoService.Spi> spiServices;
-    
-    @Override
-    public void sudo(final String username, final Runnable runnable) {
-        try {
-            runAs(username, null);
-            runnable.run();
-        } finally {
-            releaseRunAs();
-        }
+    private final InteractionFactory interactionFactory;
+    private final InteractionTracker interactionTracker;
+
+    // -- LISTENERS
+
+    private Can<SudoServiceListener> sudoListeners = Can.empty();
+
+    @PostConstruct @Inject
+    public void init(final ServiceRegistry serviceRegistry) {
+        this.sudoListeners = serviceRegistry.select(SudoServiceListener.class);
     }
+
+    // -- IMPLEMENTATION
 
     @Override
-    public <T> T sudo(final String username, final Supplier<T> supplier) {
+    public <T> T call(
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull Callable<T> callable) {
+
+        val currentInteractionLayer = interactionTracker.currentAuthenticationLayerElseFail();
+        val currentExecutionContext = currentInteractionLayer.getExecutionContext();
+        val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
+
+        val sodoSession = currentInteractionLayer
+                .getAuthentication()
+                .withExecutionContext(sudoExecutionContext);
+
         try {
-            runAs(username, null);
-            return supplier.get();
+            beforeCall(currentExecutionContext, sudoExecutionContext);
+
+            return interactionFactory.callAuthenticated(sodoSession, callable);
         } finally {
-            releaseRunAs();
+            afterCall(sudoExecutionContext, currentExecutionContext);
         }
     }
 
-    @Override
-    public void sudo(final String username, final List<String> roles, final Runnable runnable) {
-        try {
-            runAs(username, roles);
-            runnable.run();
-        } finally {
-            releaseRunAs();
+    // -- HELPER
+
+    private void beforeCall(
+            final @NonNull ExecutionContext before,
+            final @NonNull ExecutionContext after) {
+        for (val sudoListener : sudoListeners) {
+            sudoListener.beforeCall(before, after);
         }
     }
 
-    @Override
-    public <T> T sudo(final String username, final List<String> roles, final Supplier<T> supplier) {
-        try {
-            runAs(username, roles);
-            return supplier.get();
-        } finally {
-            releaseRunAs();
+    private void afterCall(
+            final @NonNull ExecutionContext before,
+            final @NonNull ExecutionContext after) {
+        for (val sudoListener : sudoListeners) {
+            sudoListener.afterCall(before, after);
         }
     }
 
-    private void runAs(final String username, final List<String> roles) {
-        if(spiServices != null) {
-            for (SudoService.Spi spiService : spiServices) {
-                spiService.runAs(username, roles);
-            }
-        }
-    }
 
-    private void releaseRunAs() {
-        if(spiServices != null) {
-            for (SudoService.Spi spiService : spiServices) {
-                spiService.releaseRunAs();
-            }
-        }
-    }
 
-    
+
 
 }

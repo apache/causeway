@@ -1,0 +1,137 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `cssClass` element indicates that the `<div>` containing the property or parameter component within the UI should set the specified CSS class:
+
+* for properties, the element can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+
+* for parameters, the element can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+
+The `application.css` file can then be used to apply styling to that CSS class
+
+== Annotated
+
+The `cssClass` element can be specified explicitly using an annotation:
+
+* for properties, using `@PropertyLayout#cssClass()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=annotation]
+----
+<.> explicitly specifies the CSS class to apply to the property `<div>`
+
+* for parameters, using `@ParameterLayout#cssClass()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies the CSS class to apply to the parameter `<div>`
+
+== Layout File
+
+For properties (not parameters), the CSS class hint can be specified using the `Xxx.layout.xml` file:
+
+* property definition:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=layout-file]
+----
+<.> `cssClass` hint is _not_ present.
+
+* layout file snippet:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout" cssClass="red"/>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+//include::PropertyLayoutCssClassVm.layout.xml[tags=layout-file]
+
+One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+
+TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+
+== Contributed
+
+The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
+
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_mixinProperty.java[tags=class]
+----
+<.> explicitly specifies the CSS class element for the contributed property
+
+== Meta-annotated
+
+The CSS class element can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::CssClassRedMetaAnnotation.java[tags=class]
+----
+<.> annotated for a property ...
+<.> \... and for a parameter.
+<.> annotation can be applied to a property (either its getter or the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=meta-annotated]
+----
+<.> hint is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> hint is inherited from the meta-annotation
+
+* or can be applied to mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+----
+<.> hint is inherited from the meta-annotation
+
+=== Meta-annotated Overridden
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm.java[tags=meta-annotated-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@ParameterLayout` annotation
+
+
+* or a mixin:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> hint from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+

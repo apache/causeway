@@ -18,12 +18,14 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 
 /**
  * Named after UNIX modes (<code>chmod</code> etc), determines that nature of access (of denial of access if vetoed)
  * to an {@link ApplicationFeature}.
+ *
+ * @since 2.0 {@index}
  */
 public enum ApplicationPermissionMode {
     /**
@@ -31,7 +33,7 @@ public enum ApplicationPermissionMode {
      *
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
-     * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission} indicates whether access is being
+     * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
      * </p>
      */
@@ -46,7 +48,7 @@ public enum ApplicationPermissionMode {
      *
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
-     * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission} indicates whether access is being
+     * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
      * </p>
      *

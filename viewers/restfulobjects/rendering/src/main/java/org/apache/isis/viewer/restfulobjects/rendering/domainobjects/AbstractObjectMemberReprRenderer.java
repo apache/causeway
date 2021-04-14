@@ -118,7 +118,7 @@ extends ReprRendererAbstract<R, ManagedMember> {
     }
 
     /**
-     * Must be called after {@link #with(ObjectAndMember)} (which provides the
+     * Must be called after {@link #with(ManagedMember)} (which provides the
      * {@link #objectAdapter}).
      */
     public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {

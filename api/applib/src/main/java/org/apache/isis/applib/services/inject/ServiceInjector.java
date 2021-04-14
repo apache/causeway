@@ -18,44 +18,26 @@
  */
 package org.apache.isis.applib.services.inject;
 
-import java.util.NoSuchElementException;
-import java.util.function.Consumer;
-
-import org.springframework.beans.factory.InjectionPoint;
-
-import lombok.val;
+import javax.annotation.Nullable;
 
 /**
- * Resolves injection points using the ServiceRegistry.
- * <p>
- * Implementation must be thread-safe.
- * </p>
- * 
- * @since 2.0
+ * Resolves injection points using the
+ * {@link org.apache.isis.applib.services.registry.ServiceRegistry} (in other
+ * words provides a domain service instance to all fields and setters that are
+ * annotated with {@link javax.inject.Inject}).
+ *
+ * @since 1.x extended in 2.0 {@index}
  */
-// tag::refguide[]
 public interface ServiceInjector {
 
-    <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
+    /**
+     * Injects domain services into the object.
+     *
+     * @param domainObject
+     * @param <T>
+     * @return domainObject with injection points resolved
+     */
+    <T> @Nullable T injectServicesInto(final @Nullable T domainObject);
 
-    default <T> T injectServicesInto(final T domainObject) {
-        // end::refguide[]
-
-        return injectServicesInto(domainObject, injectionPoint->{
-
-            val injectionPointName = injectionPoint.toString();
-            val requiredType = injectionPoint.getDeclaredType();
-            val msg = String
-                    .format("Could not resolve injection point [%s] in target '%s' of required type '%s'",
-                            injectionPointName,
-                            domainObject.getClass().getName(),
-                            requiredType);
-            throw new NoSuchElementException(msg);
-        });
-
-        // tag::refguide[]
-        // ...
-    }
 
 }
-// end::refguide[]

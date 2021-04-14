@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
@@ -31,19 +32,38 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
 
+/**
+ * Provides access to request-specific context (eg HTTP headers),
+ * session-specific context (eg authentication) and
+ * global context (eg configuration settings).
+ *
+ * @since 1.x  {@index}
+ */
 public interface IResourceContext {
 
+    /**
+     * Prepends with the base URI
+     */
     String urlFor(final String url);
 
+    /**
+     * Returns the {@link HttpHeaders#getAcceptableMediaTypes() acceptable media types}
+     * as obtained from {@link HttpHeaders}.
+     */
     List<MediaType> getAcceptableMediaTypes();
 
+    /**
+     * Whether this interaction was initiated directly by a
+     * {@link InteractionInitiatedBy#USER user} (or indirectly by the
+     * {@link InteractionInitiatedBy#FRAMEWORK framework}.
+     */
     InteractionInitiatedBy getInteractionInitiatedBy();
 
     Where getWhere();
@@ -64,7 +84,7 @@ public interface IResourceContext {
     boolean suppressMemberDisabledReason();
 
     /**
-     * To avoid infinite loops when {@link Render.Type#EAGERLY eagerly} rendering graphs
+     * To avoid infinite loops when eagerly rendering graphs
      * of objects as {@link DomainObjectReprRenderer#asEventSerialization() events}.
      *
      * <p>
@@ -77,13 +97,12 @@ public interface IResourceContext {
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
-    
-    AuthenticationSessionTracker getAuthenticationSessionTracker();
-    
+
+    AuthenticationContext getAuthenticationContext();
     SpecificationLoader getSpecificationLoader();
-    MetaModelContext getMetaModelContext(); // TODO derive from specLoader
-    ServiceRegistry getServiceRegistry(); // TODO derive from specLoader
-    IsisConfiguration getConfiguration(); // TODO derive from specLoader
+    MetaModelContext getMetaModelContext();
+    ServiceRegistry getServiceRegistry();
+    IsisConfiguration getConfiguration();
 
     // -- UTILITY
 

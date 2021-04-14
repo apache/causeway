@@ -20,9 +20,12 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.util.Collection;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
+/**
+ * @since 2.0 {@index}
+ */
 public abstract class PermissionsEvaluationServiceAbstract implements PermissionsEvaluationService {
 
     private static final long serialVersionUID = 1L;

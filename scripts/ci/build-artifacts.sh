@@ -32,6 +32,15 @@ case $JIB_MODE in
   *) JIB_CMD="skip" ;;
 esac
 
+# possible modes are
+# attach ... enables the 'source' profile, which brings in the maven-source-plugin
+# (else) ... explicitly ensure that maven-source-plugin is disabled. (in case maven-source-plugin is included by some other means)
+# this is a bit belt-n-braces
+case $SOURCE_MODE in
+  "attach") SOURCE_MODE_OPTS="-Dsources" ;;
+  "*") SOURCE_MODE_OPTS="-Dmaven.source.skip=true" ;;
+esac
+
 SCRIPT_DIR=$( dirname "$0" )
 if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
@@ -55,7 +64,6 @@ function buildDependency() {
 
 	mvn --batch-mode \
 	  install \
-      -Dmaven.source.skip=true \
       -Dskip.git \
       -Dskip.arch \
       -DskipTests \
@@ -142,11 +150,12 @@ fi
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
-echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $MVN_STAGES $* $MVN_ADDITIONAL_OPTS"
+echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $* -Dmodule-all"
 echo ""
 echo ""
 mvn -s $SETTINGS_XML \
     $BATCH_MODE \
+    $SOURCE_MODE_OPTS \
     -T1C \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \

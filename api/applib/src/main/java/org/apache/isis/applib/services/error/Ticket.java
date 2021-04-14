@@ -30,17 +30,15 @@ import java.io.Serializable;
  *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
  *     </ul>
  * </p>
+ *
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface Ticket extends Serializable {
 
-    // end::refguide[]
-    // tag::refguide-2[]
     enum StackTracePolicy {
         SHOW,
         HIDE
     }
-    // end::refguide-2[]
 
     /**
      * A unique identifier that the end-user can use to track any follow-up from this error.
@@ -50,21 +48,17 @@ public interface Ticket extends Serializable {
      *     which case the {@link #getReference() reference} would be the JIRA issue number <tt>XXX-1234</tt>.
      * </p>
      */
-    // tag::refguide[]
-    String getReference();                  // <.>
+    String getReference();
 
-    // end::refguide[]
     /**
-     * Message to display to the user.
+     * A short, jargon-free message to display to the user.
      *
      * <p>
      *     Typically this message should be short, one line long.
      * </p>
      */
-    // tag::refguide[]
-    String getUserMessage();                // <.>
+    String getUserMessage();
 
-    // end::refguide[]
     /**
      * Optional additional details to show to the end-user.
      *
@@ -73,10 +67,8 @@ public interface Ticket extends Serializable {
      *     details on contacting the help desk if the issue is severe and requires immediate attention.
      * </p>
      */
-    // tag::refguide[]
-    String getDetails();                    // <.>
+    String getDetails();
 
-    // end::refguide[]
     /**
      * Whether the stack trace for the exception should be displayed or be hidden.
      *
@@ -85,15 +77,11 @@ public interface Ticket extends Serializable {
      *     the support team, meaning there's no need to expose this info to the end-user.
      * </p>
      */
-    // tag::refguide[]
-    StackTracePolicy getStackTracePolicy(); // <.>
+    StackTracePolicy getStackTracePolicy();
 
-    // end::refguide[]
     /**
      * Returns a Html representation of this ticket.
      */
-    // tag::refguide[]
-    String getMarkup();                     // <.>
+    String getMarkup();
 
 }
-// end::refguide[]

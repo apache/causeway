@@ -23,7 +23,9 @@ import org.apache.isis.subdomains.base.applib.utils.StringUtils;
 /**
  * An enum that implements {@link Titled} and moreover its {@link #title()}
  * is derived according to the {@link StringUtils#enumTitle(String)} algorithm.
+ *
+ * @since 2.0 {@index}
  */
 public interface TitledEnum extends Titled {
-    
+
 }

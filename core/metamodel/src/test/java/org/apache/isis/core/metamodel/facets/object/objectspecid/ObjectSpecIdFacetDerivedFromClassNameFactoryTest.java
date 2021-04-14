@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -56,7 +55,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
 
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));
-        assertThat(facet.value(), is(ObjectSpecId.of(Customer.class.getCanonicalName())));
+        assertThat(facet.value(), is(Customer.class.getCanonicalName()));
     }
 
 }

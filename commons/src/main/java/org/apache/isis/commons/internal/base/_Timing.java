@@ -49,7 +49,7 @@ public final class _Timing {
 
     /**
      * 
-     * @param startedAtNanos
+     * @param startedAtSystemNanos
      * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
      */
     public static StopWatch atSystemNanos(long startedAtSystemNanos) {

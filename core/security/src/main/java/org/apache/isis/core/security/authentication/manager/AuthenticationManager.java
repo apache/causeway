@@ -21,8 +21,8 @@ package org.apache.isis.core.security.authentication.manager;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,81 +32,87 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.NoAuthenticatorException;
-import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.Authenticator;
+import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.isis.core.security.authentication.standard.Registrar;
 
 import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named("isisSecurityApi.AuthenticationManager")
+@Named("isis.security.AuthenticationManager")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class AuthenticationManager {
 
-    private final Map<String, String> userByValidationCode = _Maps.newHashMap();
+    @Getter private final Can<Authenticator> authenticators;
 
+    private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
     private final RandomCodeGenerator randomCodeGenerator;
-    @Getter
-    private final List<Authenticator> authenticators;
-    private final List<Registrar> registrars;
+    private final Can<Registrar> registrars;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             final RandomCodeGenerator randomCodeGenerator) {
         this.randomCodeGenerator = randomCodeGenerator;
-        this.authenticators = authenticators;
-        if (authenticators.isEmpty()) {
+        this.authenticators = Can.ofCollection(authenticators);
+        if (this.authenticators.isEmpty()) {
             throw new NoAuthenticatorException("No authenticators specified");
         }
-
-        registrars = authenticators.stream()
+        this.registrars = this.authenticators
                 .filter(Registrar.class::isInstance)
-                .map(Registrar.class::cast)
-                .collect(_Lists.toUnmodifiable());
+                .map(Registrar.class::cast);
     }
 
     // -- SESSION MANAGEMENT (including authenticate)
 
-    public synchronized final AuthenticationSession authenticate(AuthenticationRequest request) {
-        
+    public final Authentication authenticate(AuthenticationRequest request) {
+
         if (request == null) {
             return null;
         }
 
-        val compatibleAuthenticators = _NullSafe.stream(authenticators)
-                .filter(authenticator->authenticator.canAuthenticate(request.getClass()))
-                .collect(Collectors.toList());
-                
-        if (compatibleAuthenticators.size() == 0) {
-            throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
+        val compatibleAuthenticators = authenticators
+                .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
+
+        if (compatibleAuthenticators.isEmpty()) {
+            throw new NoAuthenticatorException(
+                    "No authenticator available for processing " + request.getClass().getName());
         }
-        
-        for (final Authenticator authenticator : compatibleAuthenticators) {
-            val authSession = authenticator.authenticate(request, getUnusedRandomCode());
-            if (authSession != null) {
-                userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
-                return authSession;
+
+        for (val authenticator : compatibleAuthenticators) {
+            val authentication = authenticator.authenticate(request, getUnusedRandomCode());
+            if (authentication != null) {
+                userByValidationCode.put(authentication.getValidationCode(), authentication.getUserName());
+                return authentication;
             }
         }
-        
+
         return null;
     }
-    
+
     private String getUnusedRandomCode() {
+
+        val stopWatch = _Timing.now();
+
         String code;
         do {
+
+            // guard against infinite loop when unique code generation for some reason fails
+            if(stopWatch.getMillis()>3000L) {
+                throw new NoAuthenticatorException(
+                        "RandomCodeGenerator failed to produce a unique code within 3s.");
+            }
+
             code = randomCodeGenerator.generateRandomCode();
         } while (userByValidationCode.containsKey(code));
 
@@ -114,23 +120,23 @@ public class AuthenticationManager {
     }
 
 
-    public final boolean isSessionValid(final AuthenticationSession session) {
-        if(session instanceof SimpleSession) {
-            final SimpleSession simpleSession = (SimpleSession) session;
-            if(simpleSession.getType() == AuthenticationSession.Type.EXTERNAL) {
-                return true;
-            }
+    public final boolean isSessionValid(final @Nullable Authentication authentication) {
+        if(authentication==null) {
+            return false;
         }
-        final String userName = userByValidationCode.get(session.getValidationCode());
-        return session.hasUserNameOf(userName);
+        if(authentication.getType() == Authentication.Type.EXTERNAL) {
+            return true;
+        }
+        final String userName = userByValidationCode.get(authentication.getValidationCode());
+        return authentication.getUser().isCurrentUser(userName);
     }
 
 
-    public void closeSession(AuthenticationSession session) {
-        for (Authenticator authenticator : authenticators) {
-            authenticator.logout(session);
+    public void closeSession(Authentication authentication) {
+        for (val authenticator : authenticators) {
+            authenticator.logout(authentication);
         }
-        userByValidationCode.remove(session.getValidationCode());
+        userByValidationCode.remove(authentication.getValidationCode());
     }
 
     // -- AUTHENTICATORS
@@ -157,7 +163,7 @@ public class AuthenticationManager {
 
 
     // -- DEBUGGING
- 
+
     private static final ToString<AuthenticationManager> toString =
             ToString.<AuthenticationManager>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())

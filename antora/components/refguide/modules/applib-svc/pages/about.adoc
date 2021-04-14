@@ -1,0 +1,198 @@
+= Domain Services
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+
+This guide documents Apache Isis' domain services, both those that act as an API (implemented by the framework for your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and which are called by the framework).
+
+== Types of Domain Service
+
+The domain services can be categorised as API or SPI, and within a particular architectural layer:
+
+image::reference-services/categories.png[width="600px"]
+
+What distinguishes API from SPI is primarily whether it is called by the domain application itself, or is called by the framework:
+
+* All of the API domain services provide a default implementation, and so can always be called by domain objects.
+* Most of the SPI domain services also have a default implementation, although in many cases this is a fallback implementation.
+
+In one sense all API domain services are also SPI, in that they can be overridden by the domain programmer providing another domain service implementing the same type.
+For example, the framework-provided implementation of xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] could be overridden this way, perhaps for more monitoring or caching purposes.
+This is most easily done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
+
+Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
+For some services, though, _all_ available implementations are delegated to; these are typically subscribers such as xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
+
+A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib:index/services/email/EmailService.adoc[EmailService] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
+The same is true of the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
+xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()] etc.
+For these hybrid services we have categorized the service as an API service.
+
+This body of this guide has one page per domain service, alphabetically.
+To help you learn about them, the tables below also group the services by category.
+
+
+include::applib-svc:partial$_presentation-layer-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_presentation-layer-spi.adoc[leveloffset=+2]
+include::applib-svc:partial$_application-layer-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_application-layer-spi.adoc[leveloffset=+2]
+include::applib-svc:partial$_core-domain-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_integration-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_integration-spi.adoc[leveloffset=+2]
+include::applib-svc:partial$_metadata-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_metadata-spi.adoc[leveloffset=+2]
+include::applib-svc:partial$_persistence-layer-api.adoc[leveloffset=+2]
+include::applib-svc:partial$_persistence-layer-spi.adoc[leveloffset=+2]
+include::applib-svc:partial$_security-spi.adoc[leveloffset=+2]
+
+
+== Public API vs Internal Services
+
+The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-applib` module) as stable, public classes.
+Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
+
+The framework also defines a number of "internal" services.
+These are not part of the framework's formal API, in that they use classes that are outside of the applib.
+These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
+
+
+== Using the services
+
+Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    public void sendEmail( String subject, String body) {
+        List<String> cc = Collections.emptyList;
+        List<String> bcc = Collections.emptyList;
+        emailService.send(getEmailAddress(), cc, bcc, subject, body);
+    }
+    public boolean hideSendEmail() {
+        return !emailService.isConfigured();
+    }
+
+    @Inject                                                            // <.>
+    EmailService emailService;
+}
+----
+
+<.> Service automatically injected by the framework.
+
+You may also need to `@Import` the module that contains the service into your application's `AppManifest` (though all of the services in core will be available automatically).
+
+
+For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
+
+For transient objects (instantiated programmatically), the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService#viewModel(...)] or the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService#detachedEntity(...)]'s will automatically inject the services.
+
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector]'s ``injectServicesInto(...)`` method.
+
+[#overriding-the-services]
+== Overriding the services
+
+The framework provides default implementations for many of the domain services.
+This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
+This is most commonly done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
+Inspect the source code of the default implementation to determine which value to use.
+The xref:refguide:applib:index/annotation/OrderPrecedence.adoc[OrderPrecedence] class provides some pre-defined precedences.
+
+
+Spring offers a number of other mechanisms to specify the ordering; these can also be used.
+
+For some domain services, all framework will delegate to all available implementation, using a chain-of-responsibility pattern):
+These include:
+
+xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService],
+xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], and
+xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService].
+
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider].
+The default implementation has these annotations:
+
+[source,java]
+----
+@Service
+@Named("isisWicketViewer.LocaleProviderWicket")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Wicket")
+@Log4j2
+public class LocaleProviderWicket implements LocaleProvider { /* ... */ }
+----
+
+To override this, use something like:
+
+[source,java]
+----
+@Service
+@Order(OrderPrecedence.HIGH)
+public class MyLocaleProvider implements LocaleProvider { /* ... */ }
+----
+
+It's not necessary to annotate `@Named` or `@Qualifier`, but could be considered good practice.
+
+== Command and Events
+
+A good number of the domain services manage the execution of action invocations/property edits, along with the state of domain objects that are modified as a result of these.
+These services capture information which can then be used for various purposes, most notably for auditing or for publishing events, or for deferring execution such that the execution be performed in the background at some later date.
+
+The diagram below shows how these services fit together.
+The outline boxes are services while the coloured boxes represent data structures - defined in the applib and therefore accessible to domain applications - which hold various information about the executions.
+
+image::reference-services/commands-and-events.png[width="960px"]
+
+
+To explain:
+
+* the (request-scoped) xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
++
+In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] extensively each successive call results in a new child execution.
+
+* the `Interaction` also holds a reference to the `Command`, which represents the top-level intention to invoke the action / edit the property.
+
+* before and after each action invocation/property edit, a xref:applib-classes:events/domainevent.adoc[domain event] is may be broadcast to all subscribers.
+Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()] or xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()]).
++
+(Note that subscribers will also receive events for vetoing the action/property; this is not shown on the diagram).
+
+* As each execution progresses, and objects that are modified are "enlisted" (managed by an service internal to the framework).
+Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] (not shown on the diagram).
+
+* At the end of each execution, details of that execution are published through the (internal)
+xref:core:runtime-services:ExecutionPublisher.adoc[ExecutionPublisher] domain service.
+This is only done for actions/properties annotated appropriate (with xref:refguide:applib:index/annotation/Action.adoc#exectionPublishing[@Action#exectionPublishing()] or xref:refguide:applib:index/annotation/Property.adoc#exectionPublishing[@Property#exectionPublishing()]).
++
+The internal service delegates in turn to any registered xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]s (there may be more than one).
+
+* At the end of each transaction, details of all changed objects are published to any registered xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] implementations and (through an internal service) also to any registered xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] implementations.
+Only domain objects specified to be published with xref:refguide:applib:index/annotation/DomainObject.adoc#entityChangePublishing[@DomainObject#entityChangePublishing()] are published.
++
+[NOTE]
+====
+Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService].
+====
+
+* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber].
+This captures whether the command succeeded or failed.
++
+The xref:userguide:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:userguide:command-replay:about.adoc[Command Replay] extension.
+
+
+Implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[cmd.xsd] schema.
+This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
+
+Similarly, implementations of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
+This can be converted into XML in a similar fashion.
+
+Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the `PublishedObjects#getDto()` method which returns a `ChangesDto` instance.
+This can be converted into XML using the `ChangesDtoUtils` utility class.
+
+One final point: multiple xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] implementations are supported because different implementations may have different responsibilities.
+
+However, the SPI can also be used for profiling; each execution within the call-graph contains metrics of the number of objects loaded or modified as a result of that execution, and thus could be used for application profiling.
+The framework provides a default `PublisherServiceLogging` implementation that logs this using LOG4J2.

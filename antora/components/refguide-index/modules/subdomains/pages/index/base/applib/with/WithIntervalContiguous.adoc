@@ -1,0 +1,57 @@
+= WithIntervalContiguous _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.WithIntervalContiguous.java
+----
+interface WithIntervalContiguous<T> {
+  T getPredecessor()     // <.>
+  T getSuccessor()     // <.>
+  SortedSet<T> getTimeline()     // <.>
+}
+----
+
+<.> xref:#getPredecessor__[getPredecessor()]
++
+--
+The interval that immediately precedes this one, if any.
+--
+<.> xref:#getSuccessor__[getSuccessor()]
++
+--
+The interval that immediately succeeds this one, if any.
+--
+<.> xref:#getTimeline__[getTimeline()]
++
+--
+Show this xref:refguide:subdomains:index/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] in context with its predecessors and successors.
+--
+
+== Members
+
+[#getPredecessor__]
+=== getPredecessor()
+
+The interval that immediately precedes this one, if any.
+
+The predecessor's _#getEndDate() end date_ is the day before this interval's _#getStartDate() start date_ .
+
+Implementations where successive intervals are NOT contiguous should instead implement xref:refguide:subdomains:index/base/applib/Chained.adoc[Chained] .
+
+[#getSuccessor__]
+=== getSuccessor()
+
+The interval that immediately succeeds this one, if any.
+
+The successor's _#getStartDate() start date_ is the day after this interval's _#getEndDate() end date_ .
+
+Implementations where successive intervals are NOT contiguous should instead implement xref:refguide:subdomains:index/base/applib/Chained.adoc[Chained] .
+
+[#getTimeline__]
+=== getTimeline()
+
+Show this xref:refguide:subdomains:index/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] in context with its predecessors and successors.
+
+This will typically (always) be a derived collection obtained by filtering a collection of the "parent".

@@ -33,7 +33,7 @@ import demoapp.dom.DemoModule;
 @SpringBootTest(
         classes = { 
                 DemoModule.class,
-                DemoFxTestConfig.class,
+                DemoFxTestConfig_usingJdo.class,
                 
                 // INCUBATING
                 IsisModuleSecurityBypass.class,

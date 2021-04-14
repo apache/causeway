@@ -18,63 +18,49 @@
  */
 package org.apache.isis.applib.services.iactn;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Optional;
+import java.util.UUID;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * This service (API and implementation) provides access to context information about any {@link Interaction}.
+ * Provides the current thread's {@link Interaction}.
  *
- * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
- * {@link DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * <p>
+ * An {@link Interaction}  contains a top-level {@link Execution}
+ * representing the invocation of an action or the editing of a property.
+ * If that top-level action or property uses the
+ * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} domain
+ * service to invoke child actions/properties, then those sub-executions are
+ * captured as a call-graph. The {@link Execution} is thus a
+ * graph structure.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-@Service
-@Named("isisApplib.InteractionContext")
-@Order(OrderPrecedence.EARLY - 10) // before ChangedObjectService
-@Primary
-@Qualifier("Default")
-@IsisInteractionScope
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
-public class InteractionContext implements DisposableBean {
-
-    // end::refguide[]
+public interface InteractionContext {
 
     /**
-     * The currently active {@link Interaction} for this thread.
+     * Whether there is a currently active {@link Interaction} for the calling thread.
      */
-    // tag::refguide[]
-    @Getter
-    private Interaction interaction;    // <1>
-    // end::refguide[]
-
+    boolean isInInteraction();
+    
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
+     * Optionally, the currently active {@link Interaction} for the calling thread.
      */
-    public void setInteraction(final Interaction interaction) {
-        this.interaction = interaction;
+    Optional<Interaction> currentInteraction();
+    
+    /** 
+     * Unique id of the current request- or test-scoped {@link Interaction}.
+     */
+    Optional<UUID> getInteractionId();
+
+    // -- SHORTCUTS
+
+    default Interaction currentInteractionElseFail() {
+    	return currentInteraction().orElseThrow(()->_Exceptions
+    			.illegalState("No InteractionSession on current thread"));
     }
 
-    @Override
-    public void destroy() throws Exception {
-        setInteraction(null);
-    }
 
-    // tag::refguide[]
-    // ...
 }
-// end::refguide[]

@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -34,15 +32,15 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
+
+import lombok.val;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -66,7 +64,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     @Override
     ManagedObject get(
-            ManagedObject owner, 
+            ManagedObject owner,
             InteractionInitiatedBy interactionInitiatedBy);
 
     //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
@@ -112,12 +110,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     int getAutoCompleteMinLength();
 
     /**
-     * Returns true if calculated from other data in the object, that is, should
-     * not be persisted.
-     */
-    boolean isNotPersisted();
-
-    /**
      * Returns <code>true</code> if this field on the specified object is deemed
      * to be empty, or has no content.
      */
@@ -134,82 +126,42 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     ObjectSpecification getOnType();
 
+
     // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
 
     @Vetoed
-    public static class Predicates {
+    class Predicates {
 
         private Predicates(){}
 
-        public static final Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation association) {
-                return association.isOneToOneAssociation();
-            }
-        };
-        public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation association) {
-                return association.isOneToOneAssociation() &&
-                        !association.getSpecification().containsNonFallbackFacet(ValueFacet.class);
-            }
-        };
-        public static final Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation property) {
-                return property.isOneToManyAssociation();
-            }
-        };
+        public static final Predicate<ObjectAssociation> PROPERTIES =
+                assoc -> assoc.isOneToOneAssociation();
+
+        public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
+                assoc ->  assoc.isOneToOneAssociation() &&
+                         !assoc.getSpecification().containsNonFallbackFacet(ValueFacet.class);
+
+        public static final Predicate<ObjectAssociation> COLLECTIONS =
+                assoc -> assoc.isOneToManyAssociation();
 
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
-            return new Predicate<ObjectAssociation>() {
-                @Override
-                public boolean test(final ObjectAssociation association) {
-                    final Stream<Facet> facets = association.streamFacets()
-                            .filter((final Facet facet)->
-                            facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+            return assoc -> {
 
-                    return !facets
-                            .map(facet->(WhereValueFacet) facet)
-                            .anyMatch(wawF->wawF.where().includes(where));
-                }
+                val b = assoc.streamFacets()
+                        .filter(facet ->
+                                facet instanceof WhereValueFacet &&
+                                facet instanceof HiddenFacet)
+                        .map(facet -> (WhereValueFacet) facet)
+                        .anyMatch(wawF -> wawF.where().includes(where));
+                return !b;
             };
         }
 
     }
 
-
-    // //////////////////////////////////////////////////////
-    // Comparators
-    // //////////////////////////////////////////////////////
-
-    @Vetoed
-    public static class Comparators {
-        /**
-         * Use {@link ObjectMember.Comparators#byMemberOrderSequence()} instead.
-         */
-        @Deprecated
-        public static Comparator<ObjectAssociation> byMemberOrderSequence() {
-            return new Comparator<ObjectAssociation>() {
-                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
-                @Override
-                public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
-                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
-                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
-                    return o1Facet == null? +1:
-                        o2Facet == null? -1:
-                            deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
-                }
-            };
-        }
-
-    }
-
-    // //////////////////////////////////////////////////////
-    // Util
-    // //////////////////////////////////////////////////////
+    // -- UTIL
 
     @Vetoed
     public static class Util {
@@ -232,11 +184,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         private static void addAssociationIntoGroup(
                 final Map<String, List<ObjectAssociation>> associationsByGroup,
                 final ObjectAssociation association) {
-            final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
-            if(memberOrderFacet != null) {
-                final String untranslatedName = memberOrderFacet.untranslatedName();
-                if(!_Strings.isNullOrEmpty(untranslatedName)) {
-                    getFrom(associationsByGroup, untranslatedName).add(association);
+            
+            val layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
+            if(layoutGroupFacet != null) {
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if(_Strings.isNotEmpty(fieldSetId)) {
+                    getFrom(associationsByGroup, fieldSetId).add(association);
                     return;
                 }
             }

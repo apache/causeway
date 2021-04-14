@@ -20,9 +20,11 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
+ * <i>Supported only by {@link WrapperFactory} service, </i> represents a check 
+ * as to whether a particular argument for an action is valid
  * or not.
  *
  * <p>
@@ -31,6 +33,8 @@ import org.apache.isis.applib.Identifier;
  *
  * <p>
  * Called after each of the {@link ActionArgumentEvent}s.
+ * 
+ * @since 1.x {@index}
  */
 public class ActionInvocationEvent extends ValidityEvent {
 

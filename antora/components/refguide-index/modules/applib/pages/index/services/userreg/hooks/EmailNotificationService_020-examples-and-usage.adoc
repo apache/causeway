@@ -1,0 +1,45 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Alternatives
+
+The text of these email templates are hard-coded as resources, in other words baked into the core jar files.
+If you need to use different text then you can of course always write and register your own implementation to be used instead of Apache Isis' default.
+
+If you have configured an alternative email service implementation, it should process the message body as HTML.
+
+Be aware also that there may not be any Apache Isis session running when this service is called.
+If necessary, one can be created on the fly using the `InteractionFactory#runAuthenticated(...)` (not API).
+.
+
+== User Registration
+
+The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) features of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] whereby a user can sign-up to access an application by providing a valid email address.
+
+* The Wicket viewer will check whether an implementation of this service (and also the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address.
+
+* A verification email is sent using this service; the email includes a link back to the running application.
+
+* The user then completes the registration process (choosing a user name, password and so on) and the Wicket viewer creates an account for them (using the aforementioned `UserRegistrationService`).
+
+* The role of this service in all of this is to format and send out emails for the initial registration, or for password resets.
+
+The default implementation of this service uses the xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], which must be configured in order for user registration to be enabled.
+
+
+== Related Services
+
+The default implementation of this service uses xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], which must have been configured/initialized correctly.
+
+This service is used by (Apache Isis' default implementation of) xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService].
+
+
+== Related Event Classes
+
+See:
+
+* xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent]
+* xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent]
+
+

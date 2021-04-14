@@ -33,13 +33,13 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.PersistFailedException;
-import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.unrecoverable.PersistFailedException;
+import org.apache.isis.applib.exceptions.unrecoverable.RepositoryException;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -54,10 +54,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
+import lombok.NonNull;
 import lombok.val;
 
-@Repository
-@Named("isisRuntimeServices.RepositoryServiceDefault")
+@Service
+@Named("isis.runtimeservices.RepositoryServiceDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
@@ -85,8 +86,8 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
     
     @Override
-    public <T> T detachedEntity(final Class<T> domainClass) {
-        return factoryService.detachedEntity(domainClass);
+    public <T> T detachedEntity(final @NonNull T entity) {
+        return factoryService.detachedEntity(entity);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(!EntityUtil.isDetached(adapter)) {
             return domainObject;
         }
-        EntityUtil.persistInTransaction(adapter);
+        EntityUtil.persistInCurrentTransaction(adapter);
         return domainObject;
     }
 
@@ -119,7 +120,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
         if(EntityUtil.isAttached(adapter)) {
-            EntityUtil.destroyInTransaction(adapter);   
+            EntityUtil.destroyInCurrentTransaction(adapter);   
         }
     }
 
@@ -134,14 +135,14 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> List<T> allInstances(final Class<T> type) {
-        return allMatches(new QueryFindAllInstances<T>(type, 0L, Long.MAX_VALUE));
+        return allMatches(Query.<T>allInstances(type));
     }
 
     @Override
     public <T> List<T> allInstances(final Class<T> type, long start, long count) {
-        return allMatches(new QueryFindAllInstances<T>(type, start, count));
+        return allMatches(Query.<T>allInstances(type)
+                .withRange(QueryRange.of(start, count)));
     }
-
 
     @Override
     public <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate) {
@@ -195,14 +196,14 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> Optional<T> firstMatch(final Class<T> type, final Predicate<T> predicate) {
-        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        final List<T> instances = allMatches(type, predicate);
         return firstInstanceElseEmpty(instances);
     }
 
 
     @Override
     public <T> Optional<T> firstMatch(final Query<T> query) {
-        final List<T> instances = allMatches(query); // No need to fetch more than 2.
+        final List<T> instances = allMatches(query);
         return firstInstanceElseEmpty(instances);
     }
 

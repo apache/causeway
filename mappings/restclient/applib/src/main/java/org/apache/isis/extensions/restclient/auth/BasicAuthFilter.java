@@ -31,14 +31,13 @@ import org.apache.isis.commons.internal.base._Strings;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Priority(100)
 public class BasicAuthFilter implements ClientRequestFilter {
 
     /**
-     * 
+     *
      * @since 2.0
      */
     public static class Credentials {

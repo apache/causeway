@@ -24,16 +24,16 @@ package org.apache.isis.extensions.secman.api.tenancy;
  * can be used to determine its visibility/editability.
  *
  * <p>
- *     Previously the <code>atPath</code> would have corresponded to the unique path of some particular
- *     {@link org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy} instance.  However, this has now been
- *     generalized; the atPath is simply a string whose interpretation is application-specific (in particular by
- *     the {@link ApplicationTenancyEvaluator} SPI).
- * </p>
+ * Previously the <code>atPath</code> would have corresponded to the unique path of some particular
+ * {@link ApplicationTenancy} instance.  
+ * However, this has now been generalized; 
+ * the atPath is simply a string whose interpretation is application-specific (in particular by
+ * the {@link ApplicationTenancyEvaluator} SPI).
  *
  * <p>
  * For applications that still wish to follow the original more specific design (that the <code>atPath</code>
- * corresponds to a single {@link ApplicationTenancy}), then the path can be interpreted according to the following
- * table:
+ * corresponds to a single {@link ApplicationTenancy}), then the path can be interpreted according to the 
+ * following table:
  * </p>
  * <table border="1">
  *     <tr>
@@ -100,8 +100,12 @@ package org.apache.isis.extensions.secman.api.tenancy;
  *         <td>/it/car</td><td>null</td><td>not visible</td>
  *     </tr>
  * </table>
- * <p>any object that is not tenanted (that is, its class does not implement {@link HasAtPath the WithApplicationTenancy interface} is accessible by any user (usual permission rules apply).
+ * <p>any object that is not tenanted (that is, its class does not implement 
+ * {@link HasAtPath the WithApplicationTenancy interface} is accessible by any user 
+ * (usual permission rules apply).
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public interface HasAtPath {
 

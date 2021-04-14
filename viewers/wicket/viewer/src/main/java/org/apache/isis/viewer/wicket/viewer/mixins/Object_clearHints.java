@@ -22,9 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -33,15 +31,42 @@ import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Provides the ability for the end-user to discard these UI hints so that the
+ * object is rendered in its initial state:
+ *
+ * <p>
+ * When a domain object is rendered the end-user can select different tabs,
+ * and for collections can sort the columns, navigate to second pages, or
+ * select different views of collections.
+ * If the user revisits that object, the Wicket viewer (at least) will remember
+ * these hints and render the domain object in the same state.
+ * </p>
+ *
+ * <p>
+ * These rendering hints are also included if the user copies the URL using
+ * the anchor link (to right hand of the object's title).
+ * </p>
+ *
+ * <p>
+ *     This mixin - contributed to <code>java.lang.Object</code> and therefore
+ *     to allo domain objects - provides the ability for the end user to clear
+ *     any hints that might have been set for the domain object being rendered.
+ * </p>
+ *
+ * @see HintStore
+ *
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        command = CommandReification.DISABLED
+        commandPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        contributed = Contributed.AS_ACTION,
-        cssClassFa = "far fa-circle",
-        position = ActionLayout.Position.PANEL_DROPDOWN
+        cssClassFa = "fa-circle",
+        position = ActionLayout.Position.PANEL_DROPDOWN, 
+        sequence = "400.1"
 )
 @RequiredArgsConstructor
 public class Object_clearHints {
@@ -51,7 +76,6 @@ public class Object_clearHints {
 
     private final Object holder;
 
-    @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
             val bookmark = bookmarkService.bookmarkForElseThrow(holder);

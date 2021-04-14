@@ -38,8 +38,6 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
     /**
      * null if the feature is an object action param.
-     *
-     * @return
      */
     public MemberType getMemberType() {
         return memberType;
@@ -72,7 +70,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
         final ObjectMember objectMember = getObjectFeature();
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
                 getResourceContext(), Rel.SELF.getName(), getMediaType(),
-                "domain-types/%s/%s%s", getParentSpecification().getSpecId().asString(), getMemberType().getUrlPart(), objectMember.getId());
+                "domain-types/%s/%s%s", getParentSpecification().getLogicalTypeName(), getMemberType().getUrlPart(), objectMember.getId());
         getLinks().arrayAdd(linkBuilder.build());
     }
 

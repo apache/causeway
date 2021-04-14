@@ -28,18 +28,21 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.Authenticator;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisSecurityKeycloak.AuthenticatorKeycloak")
+@Named("isis.security.AuthenticatorKeycloak")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
-    
-    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
+
+    @Inject private AuthenticationContext authenticationTracker;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -47,13 +50,13 @@ public class AuthenticatorKeycloak implements Authenticator {
     }
 
     @Override
-    public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
-        // HTTP request filters should already have taken care of AuthenticationSession creation    
-        return authenticationSessionTracker.currentAuthenticationSession().orElse(null);
+    public Authentication authenticate(final AuthenticationRequest request, final String code) {
+        // HTTP request filters should already have taken care of Authentication creation
+        return authenticationTracker.currentAuthentication().orElse(null);
     }
 
     @Override
-    public void logout(final AuthenticationSession session) {
+    public void logout(final Authentication session) {
     }
 
 }

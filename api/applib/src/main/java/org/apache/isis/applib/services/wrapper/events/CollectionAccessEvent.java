@@ -30,6 +30,7 @@ import org.apache.isis.applib.Identifier;
  * always be <tt>null</tt>. (If access is not allowed then a vetoing
  * {@link CollectionVisibilityEvent} would have been fired).
  *
+ * @since 1.x {@index}
  */
 public class CollectionAccessEvent extends AccessEvent {
 

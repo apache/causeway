@@ -29,17 +29,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -51,7 +51,9 @@ implements MetaModelRefiner, PostConstructMethodCache {
     }
 
     /**
-     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
+     * We simply attach all facets we can find; 
+     * the {@link #refineProgrammingModel(ProgrammingModel) meta-model validation} 
+     * will detect if multiple interfaces/annotations have
      * been attached.
      */
     @Override
@@ -67,11 +69,6 @@ implements MetaModelRefiner, PostConstructMethodCache {
                     facetHolder, postConstructMethodCache));
         }
 
-        // ViewModel annotation
-        final org.apache.isis.applib.annotation.ViewModel annotation = 
-                Annotations.getAnnotation(type, org.apache.isis.applib.annotation.ViewModel.class);
-        FacetUtil.addFacet(create(annotation, facetHolder));
-        
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(type)) {
             final PostConstructMethodCache postConstructMethodCache = this;
@@ -87,13 +84,6 @@ implements MetaModelRefiner, PostConstructMethodCache {
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
     }
 
-    private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
-        final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null 
-                ? new RecreatableObjectFacetForViewModelAnnotation(holder, postConstructMethodCache) 
-                        : null;
-    }
-
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
         return annotation != null
@@ -106,24 +96,22 @@ implements MetaModelRefiner, PostConstructMethodCache {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator((objectSpec, validate) -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
             val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
             if(underlyingFacet == null) {
-                return true;    
+                return;    
             }
             if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
-                validate.onFailure(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "%s: has multiple incompatible annotations/interfaces indicating that " +
                                 "it is a recreatable object of some sort (%s and %s)",
                                 objectSpec.getFullIdentifier(),
                                 viewModelFacet.getClass().getSimpleName(),
                                 underlyingFacet.getClass().getSimpleName());
             }
-            return true;
         });
     }
 

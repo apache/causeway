@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 @Import({
         // modules

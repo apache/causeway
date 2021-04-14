@@ -36,8 +36,11 @@ import org.apache.isis.schema.common.v2.InteractionType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandReplayAnalyserResult")
+@Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserResult")
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {

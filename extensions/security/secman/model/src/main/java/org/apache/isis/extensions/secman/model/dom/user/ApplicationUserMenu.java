@@ -23,9 +23,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -46,7 +46,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isissecurity.ApplicationUserMenu"
+        objectType = "isis.ext.secman.ApplicationUserMenu"
         )
 @DomainServiceLayout(
         named = "Security",
@@ -54,7 +54,7 @@ import lombok.val;
         )
 public class ApplicationUserMenu {
 
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecurityRealmService securityRealmService;
@@ -84,7 +84,7 @@ public class ApplicationUserMenu {
             domainEvent = FindUsersByNameDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.10.2")
+    @ActionLayout(sequence = "100.10.2")
     public Collection<? extends ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
@@ -97,7 +97,7 @@ public class ApplicationUserMenu {
             domainEvent = NewDelegateUserDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.10.3")
+    @ActionLayout(sequence = "100.10.3")
     @Deprecated
     public ApplicationUser newDelegateUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -110,7 +110,7 @@ public class ApplicationUserMenu {
             @ParameterLayout(named = "Enabled?")
             final Boolean enabled) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newDelegateUserMixin = factory.mixin(
                 ApplicationUserManager_newDelegateUser.class, applicationUserManager);
         return newDelegateUserMixin.act(username, initialRole, enabled);
@@ -131,7 +131,7 @@ public class ApplicationUserMenu {
             domainEvent = NewLocalUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.10.4")
+    @ActionLayout(sequence = "100.10.4")
     @Deprecated
     public ApplicationUser newLocalUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -153,7 +153,7 @@ public class ApplicationUserMenu {
             @ParameterLayout(named = "Email Address")
             final String emailAddress) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newLocalUserMixin = factory.mixin(
                 ApplicationUserManager_newLocalUser.class, applicationUserManager);
         return newLocalUserMixin.act(username, password, passwordRepeat, initialRole, enabled, emailAddress);
@@ -167,7 +167,7 @@ public class ApplicationUserMenu {
             final Boolean enabled,
             final String emailAddress) {
         
-        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
         val newLocalUserMixin = factory.mixin(
                 ApplicationUserManager_newLocalUser.class, applicationUserManager);
         
@@ -186,7 +186,7 @@ public class ApplicationUserMenu {
             domainEvent = AllUsersDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.10.5")
+    @ActionLayout(sequence = "100.10.5")
     public Collection<? extends ApplicationUser> allUsers() {
         return applicationUserRepository.allUsers();
     }

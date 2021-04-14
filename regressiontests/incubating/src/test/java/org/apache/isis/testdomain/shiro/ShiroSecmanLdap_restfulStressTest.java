@@ -28,6 +28,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -58,8 +60,6 @@ import lombok.val;
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                IsisPresets.DataNucleusAutoCreate,
-                "datanucleus.schema.autoCreateDatabase=true",
                 "server.servlet.session.persistent=false", // defaults to false
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -78,7 +78,10 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-//XXX "does not work, when executed in sequence with other smoketests
+@PropertySources({
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)
+})
+//XXX "does not work, when executed in sequence with other regressiontests
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
@@ -86,7 +89,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     @Inject LdapServerService ldapServerService;
 //    @Inject ApplicationUserRepository applicationUserRepository;
 //    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject SecurityModuleConfig securityConfig;
+    @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
     
     @BeforeAll

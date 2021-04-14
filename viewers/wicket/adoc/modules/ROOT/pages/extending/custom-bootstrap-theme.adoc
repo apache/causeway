@@ -8,7 +8,7 @@
 The Apache Isis Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components, courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration.
 
 By default the viewer uses the default bootstrap theme.
-It is possible to configure the Wicket viewer to allow the user to xref:vw:ROOT:configuration-properties.adoc#themes[select other themes] provided by http://bootswatch.com[bootswatch.com], and if required one of these can be xref:vw:ROOT:customisation.adoc#default-theme[set as the default].
+It is possible to configure the Wicket viewer to allow the user to xref:vw:ROOT:setup-and-configuration.adoc#themes[select other themes] provided by http://bootswatch.com[bootswatch.com], and if required one of these can be xref:vw:ROOT:customisation.adoc#default-theme[set as the default].
 
 However, you may instead want to write your own custom theme, for example to fit your company's look-n-feel/interface guidelines.
 This is done by implementing https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap]'s `de.agilecoders.wicket.core.settings.ITheme` class.

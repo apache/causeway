@@ -22,6 +22,9 @@ import java.lang.reflect.Constructor;
 
 import org.apache.isis.commons.internal.reflection._Reflect;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class PrivateConstructorTester {
 
     private Class<?> cls;

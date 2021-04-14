@@ -28,144 +28,144 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
-        nature = NatureOfService.REST, 
+        nature = NatureOfService.REST,
         objectType = "testdomain.RoSpecSampler")
 public class RoSpecSampler {
 
     // -- VOID
-    
-    @Action 
+
+    @Action
     public void voidResult() {
     }
-    
+
     // -- STRING
-    
-    @Action 
+
+    @Action
     public String string() {
         return "aString";
     }
-    
-    @Action(semantics = SemanticsOf.SAFE) 
+
+    @Action(semantics = SemanticsOf.SAFE)
     public String stringSafe() {
         return "aSafeString";
     }
-    
-    @Action 
+
+    @Action
     public String stringNull() {
         return null;
     }
-    
+
     // -- STRING ARRAY
-    
-    @Action 
+
+    @Action
     public String[] stringArray() {
         return new String[] {"Hello", "World!"};
     }
-    
-    @Action 
+
+    @Action
     public String[] stringArrayEmpty() {
         return new String[0];
     }
-    
-    @Action 
+
+    @Action
     public String[] stringArrayNull() {
         return null;
     }
-    
+
     // -- STRING LIST
-    
-    @Action 
+
+    @Action
     public List<String> stringList() {
         return _Lists.of("Hello", "World!");
     }
-    
-    @Action 
+
+    @Action
     public List<String> stringListEmpty() {
         return _Lists.of();
     }
-    
-    @Action 
+
+    @Action
     public List<String> stringListNull() {
         return null;
     }
-    
+
     // -- INT
-    
-    @Action 
+
+    @Action
     public int integerPrimitive() {
         return 123;
     }
-    
-    @Action 
+
+    @Action
     public Integer integer() {
         return 123;
     }
-    
-    @Action 
+
+    @Action
     public Integer integerNull() {
         return null;
     }
-    
+
     // -- BIG INT
-    
-    @Action 
+
+    @Action
     public BigInteger bigInteger() {
-        return BigInteger.valueOf(Long.MAX_VALUE).multiply(BigInteger.TWO);
+        return BigInteger.valueOf(Long.MAX_VALUE).multiply(BigInteger.valueOf(2));
     }
-    
-    @Action 
+
+    @Action
     public BigInteger bigIntegerNull() {
         return null;
     }
-    
-    @Action 
+
+    @Action
     public List<BigInteger> bigIntegerList() {
         return _Lists.of(BigInteger.ZERO, bigInteger());
     }
-    
-    
+
+
     // -- CUSTOMER
-    
-    @Action 
+
+    @Action
     public Customer customer() {
         return new Customer("Hello World!", 22);
     }
-    
-    @Action 
+
+    @Action
     public Customer customerNull() {
         return null;
     }
-    
+
     // -- CUSTOMER LIST
-    
-    @Action 
+
+    @Action
     public List<Customer> customerList() {
         return _Lists.of(
                 new Customer("Alice", 22),
                 new Customer("Bob", 33));
     }
-    
-    @Action 
+
+    @Action
     public List<Customer> customerListEmpty() {
         return _Lists.of();
     }
-    
-    @Action 
+
+    @Action
     public List<Customer> customerListNull() {
         return null;
     }
-    
+
     // -- COMPOSITE
-    
-    @Action 
+
+    @Action
     public List<BigComplex> complexList() {
         return _Lists.of(BigComplex.zero(), BigComplex.of("2.1", "-4.3"));
     }
-    
-    @Action 
+
+    @Action
     public BigComplex complexAdd(String are, String aim, String bre, String bim) {
         return BigComplex.of(are, aim).add(BigComplex.of(bre, bim));
     }
-    
-    
+
+
 }

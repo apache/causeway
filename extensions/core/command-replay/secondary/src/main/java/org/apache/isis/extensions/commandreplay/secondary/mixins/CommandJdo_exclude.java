@@ -23,7 +23,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
@@ -31,15 +31,19 @@ import org.apache.isis.extensions.commandlog.impl.jdo.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 
+/**
+ * @since 2.0 {@index}
+ */
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandJdo_exclude.ActionDomainEvent.class
+    domainEvent = CommandJdo_exclude.ActionDomainEvent.class,
+    associateWith = "executeIn"
 )
+@ActionLayout(sequence = "2")
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public class CommandJdo_exclude {
 
     public static class ActionDomainEvent
@@ -47,7 +51,6 @@ public class CommandJdo_exclude {
 
     final CommandJdo commandJdo;
 
-    @MemberOrder(name = "executeIn", sequence = "2")
     public CommandJdo act() {
         commandJdo.setReplayState(ReplayState.EXCLUDED);
         return commandJdo;

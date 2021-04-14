@@ -1,0 +1,70 @@
+= TransactionService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides utilities to access active transactions associated with the current thread.
+
+This is a low-level service that domain objects will typically have little need to leverage; there will normally be a transaction started already by the framework at the beginning of an _org.apache.isis.applib.services.iactn.Interaction_ and committed at the end. On occasion though it can be useful to take explicit control over transaction boundaries, which is where the methods provided by this domain service can be useful.
+
+== API
+
+[source,java]
+.TransactionService.java
+----
+interface TransactionService {
+  Optional<TransactionId> currentTransactionId()     // <.>
+  TransactionState currentTransactionState()     // <.>
+  void flushTransaction()     // <.>
+  void nextTransaction()     // <.>
+}
+----
+
+<.> xref:#currentTransactionId__[currentTransactionId()]
++
+--
+Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
+--
+<.> xref:#currentTransactionState__[currentTransactionState()]
++
+--
+Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
+--
+<.> xref:#flushTransaction__[flushTransaction()]
++
+--
+Flushes all changes to the object store.
+--
+<.> xref:#nextTransaction__[nextTransaction()]
++
+--
+Commits the current thread's transaction (if there is one), and in any case begins a new one.
+--
+
+== Members
+
+[#currentTransactionId__]
+=== currentTransactionId()
+
+Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
+
+[#currentTransactionState__]
+=== currentTransactionState()
+
+Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
+
+[#flushTransaction__]
+=== flushTransaction()
+
+Flushes all changes to the object store.
+
+Occasionally useful to ensure that newly persisted domain objects are flushed to the database prior to a subsequent repository query.
+
+If there is no active transaction associated with the current thread, then does nothing.
+
+[#nextTransaction__]
+=== nextTransaction()
+
+Commits the current thread's transaction (if there is one), and in any case begins a new one.
+
+include::hooks/TransactionService_010-implementation.adoc[]
+
+include::hooks/TransactionService_020-examples-and-usage.adoc[]

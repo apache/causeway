@@ -1,0 +1,174 @@
+= InteractionEvent
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+ _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an interaction with a domain object or a particular feature (property, collection, action) of a domain object.
+
+Many of the interactions are checks for xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] and xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] .
+
+== API
+
+[source,java]
+.InteractionEvent.java
+----
+class InteractionEvent {
+  InteractionEvent(final Object source, final Identifier identifier)
+  Object getSource()     // <.>
+  Identifier getIdentifier()     // <.>
+  String getClassName()     // <.>
+  String getClassNaturalName()     // <.>
+  String getMemberName()     // <.>
+  String getMemberNaturalName()     // <.>
+  Can<String> getMemberParameterNames()     // <.>
+  Can<String> getMemberParameterNaturalNames()     // <.>
+  String getReason()     // <.>
+  String getReasonMessage()     // <.>
+  Class<?> getAdvisorClass()     // <.>
+  void advised(final String reason, final Class<?> advisorClass)     // <.>
+  boolean isVeto()     // <.>
+}
+----
+
+<.> xref:#getSource__[getSource()]
++
+--
+The domain object (pojo) against which the interaction occurred.
+--
+<.> xref:#getIdentifier__[getIdentifier()]
++
+--
+The xref:refguide:applib:index/Identifier.adoc[Identifier] of the feature of the object being interacted with.
+--
+<.> xref:#getClassName__[getClassName()]
++
+--
+As per _#getClassName()_ , but naturalized.
+--
+<.> xref:#getClassNaturalName__[getClassNaturalName()]
++
+--
+Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
+--
+<.> xref:#getMemberName__[getMemberName()]
++
+--
+Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
+--
+<.> xref:#getMemberNaturalName__[getMemberNaturalName()]
++
+--
+As per _#getMemberName()_ , but naturalized.
+--
+<.> xref:#getMemberParameterNames__[getMemberParameterNames()]
++
+--
+Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
+--
+<.> xref:#getMemberParameterNaturalNames__[getMemberParameterNaturalNames()]
++
+--
+As per _#getMemberParameterNames()_ , but naturalized.
+--
+<.> xref:#getReason__[getReason()]
++
+--
+The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
+--
+<.> xref:#getReasonMessage__[getReasonMessage()]
++
+--
+The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
+--
+<.> xref:#getAdvisorClass__[getAdvisorClass()]
++
+--
+The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
+--
+<.> xref:#advised__String_Class[advised(String, Class)]
++
+--
+Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
+--
+<.> xref:#isVeto__[isVeto()]
++
+--
+Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
+--
+
+== Members
+
+[#getSource__]
+=== getSource()
+
+The domain object (pojo) against which the interaction occurred.
+
+[#getIdentifier__]
+=== getIdentifier()
+
+The xref:refguide:applib:index/Identifier.adoc[Identifier] of the feature of the object being interacted with.
+
+Will be consistent with the subclass of xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent] . So for example a xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] will have an xref:refguide:applib:index/Identifier.adoc[Identifier] that identifies the property being modified.
+
+[#getClassName__]
+=== getClassName()
+
+As per _#getClassName()_ , but naturalized.
+
+[#getClassNaturalName__]
+=== getClassNaturalName()
+
+Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberName__]
+=== getMemberName()
+
+Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberNaturalName__]
+=== getMemberNaturalName()
+
+As per _#getMemberName()_ , but naturalized.
+
+[#getMemberParameterNames__]
+=== getMemberParameterNames()
+
+Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberParameterNaturalNames__]
+=== getMemberParameterNaturalNames()
+
+As per _#getMemberParameterNames()_ , but naturalized.
+
+[#getReason__]
+=== getReason()
+
+The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
+
+Intended to be _#advised(String, Class) set_ as a result of consulting one of the facets.
+
+[#getReasonMessage__]
+=== getReasonMessage()
+
+The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
+
+This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
+
+[#getAdvisorClass__]
+=== getAdvisorClass()
+
+The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
+
+[#advised__String_Class]
+=== advised(String, Class)
+
+Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
+
+[#isVeto__]
+=== isVeto()
+
+Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
+
+The interpretation of this depends on the subclass:
+
+* for xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , a veto means that the feature (property, collection, action) is hidden
+* for xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] , a veto means that the feature is disabled
+* for xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] , a veto means that the proposed modification (property value, object added/removed, action argument) is invalid

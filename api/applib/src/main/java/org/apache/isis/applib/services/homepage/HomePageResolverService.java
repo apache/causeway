@@ -21,14 +21,13 @@ package org.apache.isis.applib.services.homepage;
 import org.apache.isis.applib.annotation.HomePage;
 
 /**
- * Returns a view model annotated with {@link HomePage}.
+ * This service simply provides access to the home page object (if any)
+ * annotated with {@link HomePage}.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public interface HomePageResolverService {
 
     Object getHomePage();
 
 }
-// end::refguide[]

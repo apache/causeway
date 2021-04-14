@@ -27,40 +27,42 @@ import javax.inject.Named;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.REST,
-    objectType = "isisExtensionsCommandReplayPrimary.CommandRetrievalService"
+    objectType = "isis.ext.commandReplayPrimary.CommandRetrievalService"
 )
-@Named("isisExtensionsCommandReplayPrimary.CommandRetrievalService")
+@Named("isis.ext.commandReplayPrimary.CommandRetrievalService")
 @Order(OrderPrecedence.MIDPOINT)
-@Log4j2
+//@Log4j2
 public class CommandRetrievalService {
 
     public static abstract class ActionDomainEvent
             extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<CommandRetrievalService> { }
 
     public static class FindCommandsOnPrimaryFromDomainEvent extends ActionDomainEvent { }
-    public static class NotFoundException extends ApplicationException {
+    public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
-        private final UUID uniqueId;
-        public NotFoundException(final UUID uniqueId) {
+        private final UUID interactionId;
+        public NotFoundException(final UUID interactionId) {
             super("Command not found");
-            this.uniqueId = uniqueId;
+            this.interactionId = interactionId;
         }
     }
 
@@ -68,24 +70,22 @@ public class CommandRetrievalService {
      * These actions should be called with HTTP Accept Header set to:
      * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
      *
-     * @param uniqueId - to search from.  This transactionId will <i>not</i> be included in the response.
+     * @param interactionId - to search from.  This interactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     *
-     * @return
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsOnPrimaryFromDomainEvent.class, semantics = SemanticsOf.SAFE)
     public List<CommandJdo> findCommandsOnPrimaryFrom(
             @Nullable
-            @ParameterLayout(named="Unique Id")
-            final UUID uniqueId,
+            @ParameterLayout(named="Interaction Id")
+            final UUID interactionId,
             @Nullable
             @ParameterLayout(named="Batch size")
             final Integer batchSize)
             throws NotFoundException {
-        final List<CommandJdo> commands = commandServiceRepository.findSince(uniqueId, batchSize);
+        final List<CommandJdo> commands = commandServiceRepository.findSince(interactionId, batchSize);
         if(commands == null) {
-            throw new NotFoundException(uniqueId);
+            throw new NotFoundException(interactionId);
         }
         return commands;
     }

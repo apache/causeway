@@ -36,23 +36,15 @@ public interface BigDecimalValueFacet extends Facet {
      */
     Integer getPrecision();
 
-    /*
-     * Same as {@link #getPrecision()}.
-     *
-     * @deprecated
-     */
-    //@Deprecated
-    //Integer getLength();
-
     /**
      * The number of digits to the right of the decimal place (fractional part) for this decimal.
      *
      * <p>
      * For example:
      * <ul>
-     * <li><tt>12345.789</tt> has scale of 3 (and a {@link #getLength() length} of 8)</li>
-     * <li><tt>12345</tt> has a scale of 0 (and a {@link #getLength() length} of 5)</li>
-     * <li><tt>12345.0</tt> has a scale of 1 (and a {@link #getLength() length} of 6)</li>
+     * <li><tt>12345.789</tt> has scale of 3 (and a {@link #getPrecision() precision} of 8)</li>
+     * <li><tt>12345</tt> has a scale of 0 (and a {@link #getPrecision() precision} of 5)</li>
+     * <li><tt>12345.0</tt> has a scale of 1 (and a {@link #getPrecision() precision} of 6)</li>
      * </ul>
      */
     Integer getScale();

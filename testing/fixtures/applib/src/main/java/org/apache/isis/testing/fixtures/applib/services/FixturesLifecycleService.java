@@ -30,22 +30,20 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
+import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisTstFixtures.FixturesLifecycleService")
+@Named("isis.test.FixturesLifecycleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -55,7 +53,7 @@ public class FixturesLifecycleService {
     @SuppressWarnings("unused")
 
     @Inject
-    private IsisInteractionFactory isisInteractionFactory; // depends on relationship
+    private InteractionFactory isisInteractionFactory; // depends on relationship
     @Inject
     private IsisSystemEnvironment isisSystemEnvironment;
     @Inject
@@ -90,28 +88,18 @@ public class FixturesLifecycleService {
         }
     }
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(final AppLifecycleEvent event) {
+    @EventListener(MetamodelEvent.class)
+    public void onMetamodelEvent(final MetamodelEvent event) {
 
-        val eventType = event.getEventType();
+        log.debug("received metamodel event {}", event);
 
-        log.debug("received app lifecycle event {}", eventType);
-
-        switch (eventType) {
-            case appPreMetamodel:
-                break;
-            case appPostMetamodel:
-
-                log.info("SEED");
-
-                if(initialFixtureScript != null) {
-                        fixtureScripts.run(initialFixtureScript);
-                }
-                break;
-
-            default:
-                throw _Exceptions.unmatchedCase(eventType);
+        if (event.isPostMetamodel()
+                && initialFixtureScript != null) {
+            
+            log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
+            fixtureScripts.run(initialFixtureScript);
         }
+        
     }
 
 

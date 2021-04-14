@@ -23,6 +23,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
@@ -42,16 +43,20 @@ public class AsciiDocReaderService {
 
     public AsciiDoc readFor(Class<?> aClass) {
         val adocResourceName = String.format("%s.adoc", aClass.getSimpleName());
-        val asciiDoc = resourceReaderService.readResource(aClass, adocResourceName);
+        val asciiDoc = readResourceAndReplaceProperties(aClass, adocResourceName);
         return AsciiDoc.valueOfHtml(asciiDocConverterService.adocToHtml(aClass, asciiDoc));
     }
 
     public AsciiDoc readFor(Class<?> aClass, final String member) {
         val adocResourceName = String.format("%s-%s.%s", aClass.getSimpleName(), member, "adoc");
-        val asciiDoc = resourceReaderService.readResource(aClass, adocResourceName);
+        val asciiDoc = readResourceAndReplaceProperties(aClass, adocResourceName);
         return AsciiDoc.valueOfHtml(asciiDocConverterService.adocToHtml(aClass, asciiDoc));
     }
 
+    private String readResourceAndReplaceProperties(Class<?> aClass, String adocResourceName) {
+        val adoc = resourceReaderService.readResource(aClass, adocResourceName);
+        return adoc.replace("{isis-version}", IsisSystemEnvironment.VERSION);
+    }
 
     @Inject
     AsciiDocConverterService asciiDocConverterService;

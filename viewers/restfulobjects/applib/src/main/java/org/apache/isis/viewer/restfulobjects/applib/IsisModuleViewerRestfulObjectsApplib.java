@@ -20,6 +20,9 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 public class IsisModuleViewerRestfulObjectsApplib {
 }

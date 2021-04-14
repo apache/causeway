@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -57,7 +56,7 @@ public interface _IocContainer {
      * @param requiredType
      * @return an instance of the bean, or null if not available or not unique
      * (i.e. multiple candidates found with none marked as primary)
-     * @throws IsisException if instance creation failed
+     * @throws RuntimeException if instance creation failed
      */
     <T> Optional<T> get(Class<T> requiredType);    
     
@@ -67,7 +66,6 @@ public interface _IocContainer {
      * @param <T>
      * @param requiredType
      * @param qualifiersRequired - if contains annotations, that are not qualifiers, these are just ignored
-     * @return
      */
     <T> Can<T> select(Class<T> requiredType, Annotation[] qualifiersRequired);
 

@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     IsisModuleValAsciidocApplib.class

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.schema.ixn.v2.InteractionDtoValueFa
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 @Component
-@Named("isisMetaModel.isisSchema.MetaModelRefiner")
+@Named("isis.metamodel.isisSchema.MetaModelRefiner")
 public class IsisSchemaMetaModelRefiner implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {

@@ -29,6 +29,7 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.id.LogicalType;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
 
@@ -43,42 +44,39 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void defaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
-                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertSame(ev.getValue(), other);
     }
 
     @Test
     public void collectionRemovedFromDefaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
-                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+                CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertSame(ev.getValue(), other);
     }
 
     @Test
     public void customEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
-                SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+                SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertThat(ev.getValue(), is(other));
     }
 
 }

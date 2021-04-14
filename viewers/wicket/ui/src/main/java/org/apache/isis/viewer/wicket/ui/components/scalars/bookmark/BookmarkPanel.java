@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.bookmark;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 

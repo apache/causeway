@@ -38,8 +38,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isisTstFakeData.FakeDataService")
+@Named("isis.test.FakeDataService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

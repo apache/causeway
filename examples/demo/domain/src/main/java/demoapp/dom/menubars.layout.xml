@@ -21,10 +21,130 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <mb3:primary>
+
+        <mb3:menu>
+            <mb3:named>Domain Objects</mb3:named>
+            <mb3:section>
+                <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="objectType"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@DomainObjectLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="xxxUiEvent"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Other</mb3:named>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenu" id="embeddedTypes"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Actions</mb3:named>
+            <mb3:section>
+                <mb3:named>@Action</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="commandPublishing"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="executionPublishing"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="semantics"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@ActionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Programming Model</mb3:named>
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
+                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
+                    <cpt:named>Dependent Arguments</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Properties</mb3:named>
+            <mb3:section>
+                <mb3:named>@Property</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="executionPublishing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="projecting"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="snapshot"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@PropertyLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="labelPosition"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Collections</mb3:named>
+            <mb3:section>
+                <mb3:named>@Collection</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="typeOf"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@CollectionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="defaultView"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
+            </mb3:section>
+        </mb3:menu>
+
         <mb3:menu>
             <mb3:named>Basic Types</mb3:named>
             <mb3:section>
-            	<mb3:named>Primitives</mb3:named>
+                <mb3:named>Primitives</mb3:named>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
@@ -35,7 +155,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
-            	<mb3:named>Wrappers</mb3:named>
+                <mb3:named>Wrappers</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
@@ -75,6 +195,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>JodaTime</mb3:named>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDates"/>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localTimes"/>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
             </mb3:section>
         </mb3:menu>
@@ -83,7 +204,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>More Types</mb3:named>
             <mb3:section>
                 <mb3:named>java.awt</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="images"/>
+                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="bufferedImages"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.math</mb3:named>
@@ -110,295 +231,207 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Apache Isis Extensions</mb3:named>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="asciiDocs"/>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="markdowns"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Domain Annot</mb3:named>
-            <mb3:section>
-                <mb3:named>@DomainObject</mb3:named>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="publishing"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Action</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="command"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="publishing"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Property</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="command"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="publishing"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Layout Annot</mb3:named>
-            <mb3:section>
-                <mb3:named>@ActionLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@PropertyLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="labelPosition"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
+                    <cpt:named>SSE</cpt:named>
+                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>Services</mb3:named>
             <mb3:section>
+                <mb3:named>Core</mb3:named>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Extensions - SecMan</mb3:named>
+                <mb3:serviceAction objectType="demo.ExtSecManMenu" id="appTenancy"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>View Models</mb3:named>
+            <mb3:named>Featured</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="stateful"/>
-                <mb3:serviceAction objectType="demo.ViewModelMenu" id="statefulRefsEntity"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Actions</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
-                    <cpt:named>Background (Async) Actions</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
-                    <cpt:named>Dependent Arguments</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.MixinMenu" id="mixinDemo">
-                    <cpt:named>Mixins</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.MixinLegacyMenu" id="mixinLegacyDemo">
-                    <cpt:named>Mixins (Legacy)</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Misc</mb3:named>
-            <mb3:section>
-                <mb3:named>Tooltips</mb3:named>
-                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Events</mb3:named>
-                <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Error Handling</mb3:named>
-                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Tabs</mb3:named>
+                <mb3:named>Layout</mb3:named>
+                <mb3:serviceAction objectType="demo.DescribedAsMenu" id="describedAs"/>
                 <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
             </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Extensions</mb3:named>
             <mb3:section>
-                <mb3:named>SecMan</mb3:named>
-                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="appTenancy"/>
+                <mb3:named>Custom UI</mb3:named>
+                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
             </mb3:section>
         </mb3:menu>
 
-        <mb3:menu>
-            <mb3:named>Experimental</mb3:named>
-            <mb3:section>
-            	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
-                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
-            </mb3:section>
-        </mb3:menu>
-        
         <mb3:menu unreferencedActions="true">
             <mb3:named>Other</mb3:named>
         </mb3:menu>
+
     </mb3:primary>
 	<mb3:secondary>
         <mb3:menu>
             <mb3:named>Prototyping</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="runFixtureScript">
+                <mb3:serviceAction objectType="isis.ext.fixtures.FixtureScripts" id="runFixtureScript">
                     <cpt:named>Run Fixture Script</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisExtFixtures.FixtureScripts" id="recreateObjectsAndReturnFirst">
+                <mb3:serviceAction objectType="isis.ext.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst">
                     <cpt:named>Recreate Objects And Return First</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.LayoutServiceMenu" id="downloadLayouts">
+                <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadLayouts">
                     <cpt:named>Download Object Layouts (ZIP)</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.LayoutServiceMenu" id="downloadMenuBarsLayout">
+                <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadMenuBarsLayout">
                     <cpt:named>Download Menu Bars Layout (XML)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelXml">
+                <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelXml">
                     <cpt:named>Download Meta Model (XML)</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelCsv">
+                <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelCsv">
                     <cpt:named>Download Meta Model (CSV)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisJdoDn5.JdoMetamodelMenu" id="downloadMetamodels">
+                <mb3:serviceAction objectType="isis.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels">
                     <cpt:named>Download JDO Metamodels (ZIP)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.SwaggerServiceMenu" id="openSwaggerUi">
+                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="openSwaggerUi">
                     <cpt:named>Open Swagger Ui</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.SwaggerServiceMenu" id="openRestApi">
+                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="openRestApi">
                     <cpt:named>Open Rest Api</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition">
+                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition">
                     <cpt:named>Download Swagger Schema Definition</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="downloadTranslations">
+                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="downloadTranslations">
                     <cpt:named>Download Translations</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="resetTranslationCache">
+                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="resetTranslationCache">
                     <cpt:named>Clear translation cache</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToReadingTranslations">
+                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToReadingTranslations">
                     <cpt:named>Switch To Reading Translations</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="switchToWritingTranslations">
+                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToWritingTranslations">
                     <cpt:named>Switch To Writing Translations</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
-                <mb3:serviceAction objectType="isisExtH2Console.H2ManagerMenu" id="openH2Console">
-                    <cpt:named>H2 Console</cpt:named>
+                <mb3:named>Prototype Actions (on Object)</mb3:named>
+                <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
+                    <cpt:named>Show for Object</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
+                    <cpt:named>Do not Show for Object</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
-                <mb3:named>Prototype Actions</mb3:named>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
-                    <cpt:named>Show</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
-                    <cpt:named>Do not Show</cpt:named>
+                <mb3:serviceAction objectType="isis.ext.h2Console.H2ManagerMenu" id="openH2Console">
+                    <cpt:named>H2 Console</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
-        
+
         <mb3:menu>
             <mb3:named>Activity</mb3:named>
             <mb3:section>
                 <mb3:named>Command Log</mb3:named>
-                <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="activeCommands"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="findCommands"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="findCommandById"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandLog.CommandServiceMenu" id="truncateLog"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="activeCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="findCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="findCommandById"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="truncateLog"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Command Replay - Primary</mb3:named>
-                <mb3:serviceAction objectType="isisExtensionsCommandReplayPrimary.CommandReplayOnPrimaryService" id="findCommands"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommands"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommandById"/>
+                <mb3:serviceAction objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="findCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommandById"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Command Replay - Secondary</mb3:named>
-                <mb3:serviceAction objectType="isisExtensionsCommandReplaySecondary.CommandReplayOnSecondaryService" id="findMostRecentReplayed"/>
-                <mb3:serviceAction objectType="isisExtensionsCommandReplaySecondary.CommandReplayOnSecondaryService" id="uploadCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="findMostRecentReplayed"/>
+                <mb3:serviceAction objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="uploadCommands"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Demo Replay Controller</mb3:named>
-                <mb3:serviceAction objectType="demoapp.web.DemoReplayController" id="pauseReplay"/>
-                <mb3:serviceAction objectType="demoapp.web.DemoReplayController" id="resumeReplay"/>
+                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="pauseReplay"/>
+                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="resumeReplay"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>Security</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="allRoles">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles">
                     <cpt:named>All Roles</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="newRole">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole">
                     <cpt:named>New Role</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="findRoles">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="findRoles">
                     <cpt:named>Find Roles</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="newTenancy">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="newTenancy">
                     <cpt:named>New Tenancy</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="findTenancies">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="findTenancies">
                     <cpt:named>Find Tenancies</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="allTenancies">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="allTenancies">
                     <cpt:named>All Tenancies</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="findOrphanedPermissions">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions">
                     <cpt:named>Find Orphaned Permissions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="allPermissions">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="allPermissions">
                     <cpt:named>All Permissions</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allProperties">
-                    <cpt:named>All Properties</cpt:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allNamespaces">
+                    <cpt:named>All Namespaces</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allClasses">
-                    <cpt:named>All Classes</cpt:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allTypes">
+                    <cpt:named>All Types</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allPackages">
-                    <cpt:named>All Packages</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allActions">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allActions">
                     <cpt:named>All Actions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allCollections">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allProperties">
+                    <cpt:named>All Properties</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allCollections">
                     <cpt:named>All Collections</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="findUsers">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="findUsers">
                     <cpt:named>Find Users</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newLocalUser">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newLocalUser">
                     <cpt:named>New Local User</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="allUsers">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="allUsers">
                     <cpt:named>All Users</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newDelegateUser">
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newDelegateUser">
                     <cpt:named>New Delegate User</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -408,10 +441,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         <mb3:menu>
             <mb3:named/>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.MeService" id="me"/>
-                <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration"/>
+                <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
+                <mb3:serviceAction objectType="isis.applib.ConfigurationMenu" id="configuration"/>
             </mb3:section><mb3:section>
-	            <mb3:serviceAction objectType="isisSecurityApi.LogoutMenu" id="logout">
+	            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout">
 	                <cpt:named>Logout</cpt:named>
 	            </mb3:serviceAction>
 	        </mb3:section>

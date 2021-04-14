@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.extern.log4j.Log4j2;
 

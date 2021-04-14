@@ -18,36 +18,42 @@
  */
 package org.apache.isis.applib.services.metrics;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
-// tag::refguide[]
+/**
+ * Hooks into the transaction nechanism to provide a counters relating to
+ * numbers of object loaded, dirtied etc.
+ *
+ * <p>
+ *     Only entities with {@link DomainObject#entityChangePublishing()} enabled
+ *     are counted.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface MetricsService {
 
-    // end::refguide[]
     /**
-     * The number of objects that have, so far in this request, been loaded from the database.
+     * The number of entities that have, so far in this request, been loaded from the database.
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}).
      */
-    // tag::refguide[]
-    int numberObjectsLoaded();      // <.>
+    int numberEntitiesLoaded();
 
-    // end::refguide[]
     /**
      * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
      * good measure of the footprint of the interaction.
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}.
      */
-    // tag::refguide[]
-    int numberObjectsDirtied();     // <.>
+    int numberEntitiesDirtied();
 
 }
-// end::refguide[]
 
 

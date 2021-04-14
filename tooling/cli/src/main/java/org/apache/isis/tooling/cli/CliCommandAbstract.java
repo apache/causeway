@@ -22,16 +22,43 @@ import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.tooling.cli.projdoc.ProjectDocModel;
+import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
+
+import lombok.val;
 
 abstract class CliCommandAbstract implements Callable<Integer> {
 
     public CliConfig getConfig() {
         return _Context.getElseFail(Cli.class).getConfig();
     }
-    
+
     public File getProjectRoot() {
         return _Context.getElseFail(Cli.class).getProjectRoot();
     }
 
-    
+    public File getOverviewPath() {
+        return _Context.getElseFail(Cli.class).getOverviewPath();
+    }
+    public File getIndexPath() {
+        return _Context.getElseFail(Cli.class).getIndexPath();
+    }
+
+    /**
+     * factor out common logic
+     * @param mode
+     */
+    protected void generateAsciidoc(ProjectDocModel.Mode mode) {
+        if (getOverviewPath() != null) {
+            getConfig().getCommands().getOverview().setRootFolder(getOverviewPath());
+        }
+        if (getIndexPath() != null) {
+            getConfig().getCommands().getIndex().setRootFolder(getIndexPath());
+        }
+
+        val projTree = ProjectNodeFactory.maven(getProjectRoot());
+        val projectDocModel = new ProjectDocModel(projTree);
+        projectDocModel.generateAsciiDoc(getConfig(), mode);
+    }
+
 }

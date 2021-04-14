@@ -21,7 +21,6 @@ package org.apache.isis.extensions.commandreplay.secondary.fetch;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -35,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.StatusException;
@@ -48,8 +48,11 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 import lombok.extern.log4j.Log4j2;
 
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service()
-@Named("isisExtensionsCommandReplaySecondary.CommandFetcher")
+@Named("isis.ext.commandReplaySecondary.CommandFetcher")
 @Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class CommandFetcher {
@@ -62,7 +65,6 @@ public class CommandFetcher {
      * Replicates a single command.
      *
      * @param previousHwmIfAny
-     * @return
      * @throws StatusException
      */
     public List<CommandDto> fetchCommand(
@@ -79,13 +81,13 @@ public class CommandFetcher {
 
     /**
      * @return - the commands, or <tt>null</tt> if none were found
-     * @throws StatusException
      * @param previousHwmIfAny
+     * @throws StatusException
      */
     private CommandsDto fetchCommands(final CommandJdo previousHwmIfAny)
             throws StatusException {
 
-        final UUID transactionId = previousHwmIfAny != null ? previousHwmIfAny.getUniqueId() : null;
+        final UUID transactionId = previousHwmIfAny != null ? previousHwmIfAny.getInteractionId() : null;
 
         log.debug("finding commands on primary ...");
 
@@ -103,12 +105,12 @@ public class CommandFetcher {
     }
 
 
-    private URI buildUri(final UUID uniqueId) {
+    private URI buildUri(final UUID interactionId) {
         final UriBuilder uriBuilder = UriBuilder.fromUri(
-                uniqueId != null
+                interactionId != null
                         ? String.format(
-                            "%s%s?uniqueId=%s&batchSize=%d",
-                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, uniqueId, secondaryConfig.getBatchSize())
+                            "%s%s?interactionId=%s&batchSize=%d",
+                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, interactionId, secondaryConfig.getBatchSize())
                         : String.format(
                             "%s%s?batchSize=%d",
                             secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, secondaryConfig.getBatchSize())
@@ -147,7 +149,7 @@ public class CommandFetcher {
         String entity = "<unable to read from response entity>";
         try {
             entity = readEntityFrom(response);
-            final JaxbService jaxbService = new JaxbService.Simple();
+            final JaxbService jaxbService = new Simple();
             commandsDto = jaxbService.fromXml(CommandsDto.class, entity);
             log.debug("commands:\n{}", entity);
         } catch(Exception ex) {

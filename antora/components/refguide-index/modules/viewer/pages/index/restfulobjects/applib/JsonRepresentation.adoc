@@ -1,0 +1,553 @@
+= JsonRepresentation
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A wrapper around _JsonNode_ that provides some additional helper methods.
+
+== API
+
+[source,java]
+.JsonRepresentation.java
+----
+class JsonRepresentation {
+  public static final DateTimeFormatter yyyyMMdd;
+  public static final DateTimeFormatter yyyyMMddTHHmmssZ;
+  public static final DateTimeFormatter _HHmmss;
+  JsonRepresentation(final JsonNode jsonNode)
+  JsonRepresentation newMap(final String... keyValuePairs)
+  JsonRepresentation newArray()
+  JsonRepresentation newArray(final int initialSize)
+  JsonNode asJsonNode()
+  int size()
+  boolean isValue()     // <.>
+  JsonRepresentation getRepresentation(final String pathTemplate, final Object... args)
+  boolean isArray(final String path)
+  boolean isArray()
+  JsonRepresentation getArray(final String path)
+  JsonRepresentation asArray()
+  JsonRepresentation getArrayEnsured(final String path)
+  boolean isMap(final String path)
+  boolean isMap()
+  JsonRepresentation getMap(final String path)
+  JsonRepresentation asMap()
+  boolean isNumber(final String path)
+  boolean isNumber()
+  Number asNumber()
+  boolean isIntegralNumber(final String path)     // <.>
+  boolean isIntegralNumber()     // <.>
+  java.util.Date getDate(final String path)
+  java.util.Date asDate()
+  java.util.Date getDateTime(final String path)
+  java.util.Date asDateTime()
+  java.util.Date getTime(final String path)
+  java.util.Date asTime()
+  boolean isBoolean(final String path)
+  boolean isBoolean()
+  Boolean getBoolean(final String path)     // <.>
+  Boolean asBoolean()     // <.>
+  Byte getByte(final String path)     // <.>
+  Byte asByte()     // <.>
+  Short getShort(final String path)     // <.>
+  Short asShort()     // <.>
+  Character getChar(final String path)     // <.>
+  Character asChar()     // <.>
+  boolean isInt(final String path)
+  boolean isInt()
+  Integer getInt(final String path)     // <.>
+  Integer asInt()     // <.>
+  boolean isLong(final String path)
+  boolean isLong()
+  Long getLong(final String path)     // <.>
+  Long asLong()     // <.>
+  Float getFloat(final String path)     // <.>
+  Float asFloat()     // <.>
+  boolean isDecimal(final String path)
+  boolean isDecimal()
+  boolean isDouble(final String path)     // <.>
+  boolean isDouble()     // <.>
+  Double getDouble(final String path)     // <.>
+  Double asDouble()     // <.>
+  boolean isBigInteger(final String path)
+  boolean isBigInteger()
+  BigInteger getBigInteger(final String path)     // <.>
+  BigInteger getBigInteger(final String path, final String formatRequested)     // <.>
+  BigInteger asBigInteger()     // <.>
+  BigInteger asBigInteger(final String format)
+  boolean isBigDecimal(final String path)
+  boolean isBigDecimal()
+  BigDecimal getBigDecimal(final String path)     // <.>
+  BigDecimal getBigDecimal(final String path, final String formatRequested)     // <.>
+  BigDecimal asBigDecimal()     // <.>
+  BigDecimal asBigDecimal(String format)     // <.>
+  boolean isString(final String path)
+  boolean isString()
+  String getString(final String path)     // <.>
+  String asString()     // <.>
+  String asArg()
+  boolean isLink()
+  boolean isLink(final String path)
+  boolean isLink(final JsonNode node)
+  LinkRepresentation getLink(final String path)     // <.>
+  LinkRepresentation asLink()     // <.>
+  boolean isNull()
+  Boolean isNull(final String path)     // <.>
+  JsonRepresentation getNull(final String path)     // <.>
+  JsonRepresentation asNull()     // <.>
+  LinkRepresentation mapValueAsLink()     // <.>
+  InputStream asInputStream()
+  T as(final Class<T> cls)     // <.>
+  String asUrlEncoded()
+  JsonRepresentation arrayAdd(final Object value)
+  JsonRepresentation arrayAdd(final JsonRepresentation value)
+  JsonRepresentation arrayAdd(final String value)
+  JsonRepresentation arrayAdd(final JsonNode value)
+  JsonRepresentation arrayAdd(final long value)
+  JsonRepresentation arrayAdd(final int value)
+  JsonRepresentation arrayAdd(final double value)
+  JsonRepresentation arrayAdd(final float value)
+  JsonRepresentation arrayAdd(final boolean value)
+  Stream<JsonRepresentation> streamArrayElements()
+  Stream<T> streamArrayElements(final Class<T> requiredType)
+  JsonRepresentation arrayGet(final int i)
+  JsonRepresentation arraySetElementAt(final int i, final JsonRepresentation objectRepr)
+  boolean mapHas(final String key)
+  JsonRepresentation mapPut(final String key, final List<Object> value)
+  JsonRepresentation mapPut(final String key, final Object value)
+  JsonRepresentation mapPut(final String key, final JsonRepresentation value)
+  JsonRepresentation mapPut(final String key, final String value)
+  JsonRepresentation mapPut(final String key, final JsonNode value)
+  JsonRepresentation mapPut(final String key, final byte value)
+  JsonRepresentation mapPut(final String key, final Byte value)
+  JsonRepresentation mapPut(final String key, final short value)
+  JsonRepresentation mapPut(final String key, final Short value)
+  JsonRepresentation mapPut(final String key, final int value)
+  JsonRepresentation mapPut(final String key, final Integer value)
+  JsonRepresentation mapPut(final String key, final long value)
+  JsonRepresentation mapPut(final String key, final Long value)
+  JsonRepresentation mapPut(final String key, final float value)
+  JsonRepresentation mapPut(final String key, final Float value)
+  JsonRepresentation mapPut(final String key, final double value)
+  JsonRepresentation mapPut(final String key, final Double value)
+  JsonRepresentation mapPut(final String key, final boolean value)
+  JsonRepresentation mapPut(final String key, final Boolean value)
+  JsonRepresentation mapPut(final String key, final char value)
+  JsonRepresentation mapPut(final String key, final Character value)
+  JsonRepresentation mapPut(final String key, final BigInteger value)
+  JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries)
+  JsonRepresentation mapPut(Entry<String, JsonRepresentation> entry)
+  JsonRepresentation mapPut(final String key, final BigDecimal value)
+  Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries()
+  JsonRepresentation ensureArray()     // <.>
+  int hashCode()
+  boolean equals(Object obj)
+  String toString()
+}
+----
+
+<.> xref:#isValue__[isValue()]
++
+--
+Node is a value (nb: could be _#isNull() null_ ).
+--
+<.> xref:#isIntegralNumber__String[isIntegralNumber(String)]
++
+--
+Is a long, an int or a _BigInteger_ .
+--
+<.> xref:#isIntegralNumber__[isIntegralNumber()]
++
+--
+Is a long, an int or a _BigInteger_ .
+--
+<.> xref:#getBoolean__String[getBoolean(String)]
++
+--
+Use _#isBoolean(String)_ to check first, if required.
+--
+<.> xref:#asBoolean__[asBoolean()]
++
+--
+Use _#isBoolean()_ to check first, if required.
+--
+<.> xref:#getByte__String[getByte(String)]
++
+--
+Use _#isIntegralNumber(String)_ to test if number (it is not possible to check if a byte, however).
+--
+<.> xref:#asByte__[asByte()]
++
+--
+Use _#isIntegralNumber()_ to test if number (it is not possible to check if a byte, however).
+--
+<.> xref:#getShort__String[getShort(String)]
++
+--
+Use _#isIntegralNumber(String)_ to check if number (it is not possible to check if a short, however).
+--
+<.> xref:#asShort__[asShort()]
++
+--
+Use _#isIntegralNumber()_ to check if number (it is not possible to check if a short, however).
+--
+<.> xref:#getChar__String[getChar(String)]
++
+--
+Use _#isString(String)_ to check if string (it is not possible to check if a character, however).
+--
+<.> xref:#asChar__[asChar()]
++
+--
+Use _#isString()_ to check if string (it is not possible to check if a character, however).
+--
+<.> xref:#getInt__String[getInt(String)]
++
+--
+Use _#isInt(String)_ to check first, if required.
+--
+<.> xref:#asInt__[asInt()]
++
+--
+Use _#isInt()_ to check first, if required.
+--
+<.> xref:#getLong__String[getLong(String)]
++
+--
+Use _#isLong(String)_ to check first, if required.
+--
+<.> xref:#asLong__[asLong()]
++
+--
+Use _#isLong()_ to check first, if required.
+--
+<.> xref:#getFloat__String[getFloat(String)]
++
+--
+Use _#isDecimal(String)_ to test if a decimal value
+--
+<.> xref:#asFloat__[asFloat()]
++
+--
+Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
+--
+<.> xref:#isDouble__String[isDouble(String)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#isDecimal(String)_
+====
+--
+<.> xref:#isDouble__[isDouble()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#isDecimal()_
+====
+--
+<.> xref:#getDouble__String[getDouble(String)]
++
+--
+Use _#isDouble(String)_ to check first, if required.
+--
+<.> xref:#asDouble__[asDouble()]
++
+--
+Use _#isDouble()_ to check first, if required.
+--
+<.> xref:#getBigInteger__String[getBigInteger(String)]
++
+--
+Use _#isBigInteger(String)_ to check first, if required.
+--
+<.> xref:#getBigInteger__String_String[getBigInteger(String, String)]
++
+--
+Use _#isBigInteger(String)_ to check first, if required.
+--
+<.> xref:#asBigInteger__[asBigInteger()]
++
+--
+Use _#isBigInteger()_ to check first, if required.
+--
+<.> xref:#getBigDecimal__String[getBigDecimal(String)]
++
+--
+Use _#isBigDecimal(String)_ to check first, if required.
+--
+<.> xref:#getBigDecimal__String_String[getBigDecimal(String, String)]
++
+--
+Use _#isBigDecimal(String)_ to check first, if required.
+--
+<.> xref:#asBigDecimal__[asBigDecimal()]
++
+--
+Use _#isBigDecimal()_ to check first, if required.
+--
+<.> xref:#asBigDecimal__String[asBigDecimal(String)]
++
+--
+Use _#isBigDecimal()_ to check first, if required.
+--
+<.> xref:#getString__String[getString(String)]
++
+--
+Use _#isString(String)_ to check first, if required.
+--
+<.> xref:#asString__[asString()]
++
+--
+Use _#isString()_ to check first, if required.
+--
+<.> xref:#getLink__String[getLink(String)]
++
+--
+Use _#isLink(String)_ to check first, if required.
+--
+<.> xref:#asLink__[asLink()]
++
+--
+Use _#isLink()_ to check first, if required.
+--
+<.> xref:#isNull__String[isNull(String)]
++
+--
+Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+--
+<.> xref:#getNull__String[getNull(String)]
++
+--
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+--
+<.> xref:#asNull__[asNull()]
++
+--
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+--
+<.> xref:#mapValueAsLink__[mapValueAsLink()]
++
+--
+Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
+--
+<.> xref:#as__Class[as(Class)]
++
+--
+Convenience to simply "downcast".
+--
+<.> xref:#ensureArray__[ensureArray()]
++
+--
+A reciprocal of the behaviour of the automatic dereferencing of arrays that occurs when there is only a single instance.
+--
+
+== Members
+
+[#isValue__]
+=== isValue()
+
+Node is a value (nb: could be _#isNull() null_ ).
+
+[#isIntegralNumber__String]
+=== isIntegralNumber(String)
+
+Is a long, an int or a _BigInteger_ .
+
+[#isIntegralNumber__]
+=== isIntegralNumber()
+
+Is a long, an int or a _BigInteger_ .
+
+[#getBoolean__String]
+=== getBoolean(String)
+
+Use _#isBoolean(String)_ to check first, if required.
+
+[#asBoolean__]
+=== asBoolean()
+
+Use _#isBoolean()_ to check first, if required.
+
+[#getByte__String]
+=== getByte(String)
+
+Use _#isIntegralNumber(String)_ to test if number (it is not possible to check if a byte, however).
+
+[#asByte__]
+=== asByte()
+
+Use _#isIntegralNumber()_ to test if number (it is not possible to check if a byte, however).
+
+[#getShort__String]
+=== getShort(String)
+
+Use _#isIntegralNumber(String)_ to check if number (it is not possible to check if a short, however).
+
+[#asShort__]
+=== asShort()
+
+Use _#isIntegralNumber()_ to check if number (it is not possible to check if a short, however).
+
+[#getChar__String]
+=== getChar(String)
+
+Use _#isString(String)_ to check if string (it is not possible to check if a character, however).
+
+[#asChar__]
+=== asChar()
+
+Use _#isString()_ to check if string (it is not possible to check if a character, however).
+
+[#getInt__String]
+=== getInt(String)
+
+Use _#isInt(String)_ to check first, if required.
+
+[#asInt__]
+=== asInt()
+
+Use _#isInt()_ to check first, if required.
+
+[#getLong__String]
+=== getLong(String)
+
+Use _#isLong(String)_ to check first, if required.
+
+[#asLong__]
+=== asLong()
+
+Use _#isLong()_ to check first, if required.
+
+[#getFloat__String]
+=== getFloat(String)
+
+Use _#isDecimal(String)_ to test if a decimal value
+
+[#asFloat__]
+=== asFloat()
+
+Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
+
+[#isDouble__String]
+=== isDouble(String)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#isDecimal(String)_
+====
+
+[#isDouble__]
+=== isDouble()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#isDecimal()_
+====
+
+[#getDouble__String]
+=== getDouble(String)
+
+Use _#isDouble(String)_ to check first, if required.
+
+[#asDouble__]
+=== asDouble()
+
+Use _#isDouble()_ to check first, if required.
+
+[#getBigInteger__String]
+=== getBigInteger(String)
+
+Use _#isBigInteger(String)_ to check first, if required.
+
+[#getBigInteger__String_String]
+=== getBigInteger(String, String)
+
+Use _#isBigInteger(String)_ to check first, if required.
+
+[#asBigInteger__]
+=== asBigInteger()
+
+Use _#isBigInteger()_ to check first, if required.
+
+[#getBigDecimal__String]
+=== getBigDecimal(String)
+
+Use _#isBigDecimal(String)_ to check first, if required.
+
+[#getBigDecimal__String_String]
+=== getBigDecimal(String, String)
+
+Use _#isBigDecimal(String)_ to check first, if required.
+
+[#asBigDecimal__]
+=== asBigDecimal()
+
+Use _#isBigDecimal()_ to check first, if required.
+
+[#asBigDecimal__String]
+=== asBigDecimal(String)
+
+Use _#isBigDecimal()_ to check first, if required.
+
+[#getString__String]
+=== getString(String)
+
+Use _#isString(String)_ to check first, if required.
+
+[#asString__]
+=== asString()
+
+Use _#isString()_ to check first, if required.
+
+[#getLink__String]
+=== getLink(String)
+
+Use _#isLink(String)_ to check first, if required.
+
+[#asLink__]
+=== asLink()
+
+Use _#isLink()_ to check first, if required.
+
+[#isNull__String]
+=== isNull(String)
+
+Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+
+[#getNull__String]
+=== getNull(String)
+
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+
+Use _#isNull(String)_ to check first, if required.
+
+[#asNull__]
+=== asNull()
+
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+
+Use _#isNull()_ to check first, if required.
+
+[#mapValueAsLink__]
+=== mapValueAsLink()
+
+Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
+
+[#as__Class]
+=== as(Class)
+
+Convenience to simply "downcast".
+
+In fact, the method creates a new instance of the specified type, which shares the underlying _#jsonNode jsonNode_ .
+
+[#ensureArray__]
+=== ensureArray()
+
+A reciprocal of the behaviour of the automatic dereferencing of arrays that occurs when there is only a single instance.

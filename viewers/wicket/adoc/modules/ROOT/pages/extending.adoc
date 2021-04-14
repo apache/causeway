@@ -2,26 +2,19 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The Wicket viewer allows you to customize the GUI in several (progressively more sophisticated) ways:
+The Wicket viewer allows you to customize the GUI in several (progressively more sophisticated) ways.
 
-* the xref:vw:ROOT:customisation.adoc[customisation] chapter described:
+In the xref:vw:ROOT:customisation.adoc[customisation] chapter described tweaking the UI using xref:vw:ROOT:customisation.adoc#custom-css[custom CSS] and  xref:vw:ROOT:customisation.adoc#custom-javascript[custom JavaScript].
 
-** by xref:vw:ROOT:customisation.adoc#tweaking-css-classes[tweaking the UI using CSS]
-** by xref:vw:ROOT:customisation.adoc#custom-javascript[tweaking the UI using Javascript]
-
-* in this chapter we have a number of heavier-weight approaches:
+In this chapter we have a number of more heavy-weight approaches:
 
 ** by writing a xref:vw:ROOT:extending.adoc#custom-bootstrap-theme[custom bootstrap theme]
 ** by xref:vw:ROOT:extending.adoc#replacing-page-elements[replacing elements of the page] using the `ComponentFactory` interface
 ** by implementing xref:vw:ROOT:extending.adoc#custom-pages[replacement page implementations] for the standard page types
-
-The chapter also includes a technique useful when prototyping, allowing xref:vw:ROOT:extending.adoc#login-via-query-args-prototyping[user/passwords to be specified as query arguments].
 
 
 
 include::extending/custom-bootstrap-theme.adoc[leveloffset=+1]
 include::extending/replacing-page-elements.adoc[leveloffset=+1]
 include::extending/custom-pages.adoc[leveloffset=+1]
-include::extending/login-via-query-args-prototyping.adoc[leveloffset=+1]

@@ -25,20 +25,19 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public abstract class MixinFacetAbstract 
-extends SingleValueFacetAbstract<String> 
+//@Log4j2
+public abstract class MixinFacetAbstract
+extends SingleValueFacetAbstract<String>
 implements MixinFacet {
 
     private final Class<?> mixinType;
-    private final Class<?> constructorType;
+    private final Class<?> holderType;
     private final Constructor<?> constructor;
 
     public static Class<? extends Facet> type() {
@@ -47,14 +46,15 @@ implements MixinFacet {
 
     public MixinFacetAbstract(
             final Class<?> mixinType,
-            final String value, 
+            final String value,
             final Constructor<?> constructor,
             final FacetHolder holder) {
 
         super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructor = constructor;
-        this.constructorType = constructor.getParameterTypes()[0];
+        // by mixin convention: first constructor argument is identified as the holder type
+        this.holderType = constructor.getParameterTypes()[0]; 
     }
 
     @Override
@@ -62,7 +62,7 @@ implements MixinFacet {
         if (candidateDomainType == null) {
             return false;
         }
-        return constructorType.isAssignableFrom(candidateDomainType);
+        return holderType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
@@ -76,7 +76,7 @@ implements MixinFacet {
         }
         if(!isMixinFor(domainPojo.getClass())) {
             throw _Exceptions.unrecoverableFormatted(
-                    "invalid mix-in declaration of type %s, unexpect owner type %s", 
+                    "invalid mix-in declaration of type %s, unexpect owner type %s",
                     mixinType, domainPojo.getClass());
         }
         try {
@@ -91,50 +91,31 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(Method method) {
-        return method.getName().equals(super.value()) &&
-                constructor.getDeclaringClass().equals(method.getDeclaringClass());
-    }
-    
-    @Override
-    public ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy) {
-        val mixinPojo = mixinAdapter.getPojo();
-        val holderPojo = holderPojoFor(mixinPojo, policy);
-        return holderPojo!=null
-                ? getObjectManager().adapt(holderPojo)
-                        : null;
+        
+        // include methods from super classes or interfaces
+        //
+        // it is sufficient to detect any match;
+        // mixin invocation will take care of calling the right method, 
+        // that is in terms of type-hierarchy the 'nearest' to this mixin 
+        
+        return method.getName().equals(getMainMethodName())
+                && method.getDeclaringClass()
+                    .isAssignableFrom(constructor.getDeclaringClass());
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("mixinType", mixinType);
-        attributeMap.put("constructorType", constructorType);
+        attributeMap.put("holderType", holderType);
     }
-    
-    // -- HELPER
-    
-    private Object holderPojoFor(Object mixinPojo, Policy policy) {
-        val mixinFields = mixinType.getDeclaredFields();
-        for (val mixinField : mixinFields) {
-            if(mixinField.getType().isAssignableFrom(constructorType)) {
-                try {
-                    val holderPojo = _Reflect.getFieldOn(mixinField, mixinPojo);
-                    return holderPojo;
-                } catch (IllegalAccessException e) {
-                    if(policy == Policy.FAIL_FAST) {
-                        throw new RuntimeException(
-                                "Unable to access " + mixinField + " for " + getTitleService().titleOf(mixinPojo));
-                    }
-                    // otherwise continue to next possible field.
-                }
-            }
-        }
-        if(policy == Policy.FAIL_FAST) {
-            throw new RuntimeException(
-                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixinPojo)
-                    + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
-        }
-        // else just...
-        return null;
+
+    /**
+     * The mixin's main method name.
+     * @implNote as stored in the SingleValueFacetAbstract's value field
+     */
+    public String getMainMethodName() {
+        return super.value();
     }
+
 }

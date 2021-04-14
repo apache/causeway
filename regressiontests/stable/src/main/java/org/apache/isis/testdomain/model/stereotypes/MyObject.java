@@ -21,7 +21,7 @@ package org.apache.isis.testdomain.model.stereotypes;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
-@DomainObject(nature = Nature.INMEMORY_ENTITY)
+@DomainObject(nature = Nature.VIEW_MODEL) // was INMEMORY_ENTITY
 public class MyObject {
 
 }

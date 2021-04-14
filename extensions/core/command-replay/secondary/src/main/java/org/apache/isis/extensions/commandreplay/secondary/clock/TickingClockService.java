@@ -28,8 +28,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
 
 import lombok.RequiredArgsConstructor;
@@ -52,9 +52,11 @@ import lombok.extern.log4j.Log4j2;
  *     thread-local.  These methods should therefore only be used in single-user
  *     systems, eg a replay secondary.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Service()
-@Named("isisExtensionsCommandReplaySecondary.TickingClockService")
+@Named("isis.ext.commandReplaySecondary.TickingClockService")
 @Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 @RequiredArgsConstructor

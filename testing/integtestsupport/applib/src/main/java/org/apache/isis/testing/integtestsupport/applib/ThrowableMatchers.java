@@ -18,13 +18,14 @@
  */
 package org.apache.isis.testing.integtestsupport.applib;
 
-import java.util.List;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ThrowableMatchers {
 
     ThrowableMatchers(){}
@@ -32,19 +33,22 @@ public class ThrowableMatchers {
     /**
      * Matches when the exception's causal chain contains the given {@code type}
      * @param type
-     * @return
      */
     public static TypeSafeMatcher<Throwable> causedBy(final Class<? extends Throwable> type) {
         return new TypeSafeMatcher<Throwable>() {
+            
             @Override
             protected boolean matchesSafely(final Throwable throwable) {
-                final List<Throwable> causalChain = _Exceptions.getCausalChain(throwable); // non null result
-                return causalChain.stream().filter(t->t.getClass().equals(type)).findAny().isPresent();
+                return _Exceptions.getCausalChain(throwable) // non null result
+                .stream()
+                .anyMatch(t->t.getClass().equals(type));
             }
 
-            @Override public void describeTo(final Description description) {
+            @Override 
+            public void describeTo(final Description description) {
                 description.appendText("Caused by " + type.getName());
             }
+            
         };
     }
 

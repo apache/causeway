@@ -22,7 +22,9 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
-// tag::refguide[]
+/**
+ * @since 1.x {@index}
+ */
 @RequiredArgsConstructor
 public abstract class TableColumnOrderForCollectionTypeAbstract<T>
         implements TableColumnOrderService {
@@ -62,4 +64,3 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
     }
 
 }
-// end::refguide[]

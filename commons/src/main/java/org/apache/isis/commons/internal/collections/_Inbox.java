@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.commons.collections.Can;
+
 import lombok.val;
 
 /**
@@ -48,16 +50,16 @@ public class _Inbox<T> implements Serializable {
         }
     }
 
-    public List<T> snapshot() {
+    public Can<T> snapshot() {
         synchronized($lock) {
-            val defensiveCopy = _Lists.newArrayList(list);
-            return defensiveCopy;
+            // defensiveCopy
+            return Can.ofCollection(list);
         }
     }
 
-    public List<T> snapshotThenClear() {
+    public Can<T> snapshotThenClear() {
         synchronized($lock) {
-            val defensiveCopy = _Lists.newArrayList(list);
+            val defensiveCopy = Can.ofCollection(list);
             list.clear();
             return defensiveCopy;
         }

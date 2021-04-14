@@ -23,11 +23,10 @@ import lombok.Value;
 /**
  * Fundamental building block for graph structures. 
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
-// tag::refguide[]
 @Value(staticConstructor = "of")
 public class SimpleEdge<T> implements Edge<T> {
 
@@ -35,4 +34,3 @@ public class SimpleEdge<T> implements Edge<T> {
     Vertex<T> to;
 
 }
-// end::refguide[]

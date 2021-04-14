@@ -20,15 +20,16 @@ package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.enterprise.inject.Vetoed;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -70,19 +71,42 @@ implements IsisBeanTypeClassifier {
             }
         }
 
-
-        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.MIXIN);
-        }
-
-        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
-        }
-
         if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
             return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
         }
 
+        val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
+        if(entityAnnotation!=null) {
+            
+            String objectType = null; 
+            
+            val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+            if(aDomainObject!=null) {
+                objectType = aDomainObject.objectType();
+            }
+            
+            // don't trample over the @DomainObject(objectType=..) if present
+            if(_Strings.isEmpty(objectType)) {
+                val aTable = findNearestAnnotation(type, Table.class).orElse(null);
+                if(aTable!=null) {
+                    val schema = aTable.schema();      
+                    if(_Strings.isNotEmpty(schema)) {
+                        val table = aTable.name();
+                        objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT), 
+                                _Strings.isNotEmpty(table)
+                                    ? table
+                                    : type.getSimpleName());
+                    }    
+                }
+            }
+      
+            if(_Strings.isNotEmpty(objectType)) {
+                BeanClassification.selfManaged(
+                        BeanSort.ENTITY, objectType);
+            }
+            return BeanClassification.selfManaged(BeanSort.ENTITY);
+        }
+        
         val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
@@ -90,12 +114,8 @@ implements IsisBeanTypeClassifier {
                 return BeanClassification.delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainObject));
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
-            case JDO_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
-            case JPA_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY_JPA);
-            case EXTERNAL_ENTITY:
-            case INMEMORY_ENTITY:
+            case ENTITY:
+                return BeanClassification.selfManaged(BeanSort.ENTITY);
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

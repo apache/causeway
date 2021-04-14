@@ -30,9 +30,6 @@ package org.apache.isis.applib.adapters;
  * a factory for itself. The framework will instantiate an instance, invoke the
  * appropriate method method, and use the returned object. The instantiated
  * instance itself will be discarded.</li>
- * <li>Alternatively, an implementor of this interface can be nominated in the
- * {@link org.apache.isis.applib.annotation.Encodable} annotation, allowing a
- * class that needs to be encodeable to indicate how it can be encoded/decoded.</li>
  *
  * <p>
  * Whatever the class that implements this interface, it must also expose either
@@ -44,11 +41,11 @@ package org.apache.isis.applib.adapters;
  * @see Parser
  * @see DefaultsProvider
  * @see ValueSemanticsProvider
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface EncoderDecoder<T> {
 
-    // end::refguide[]
     /**
      * Returns the provided object as an encoded string.
      *
@@ -58,20 +55,16 @@ public interface EncoderDecoder<T> {
      * constructor. That is, the object shouldn't encode itself, it should
      * encode the object provided to it.
      */
-    // tag::refguide[]
     String toEncodedString(T toEncode);
 
-    // end::refguide[]
     /**
      * Converts an encoded string to an instance of the object.
      *
      * <p>
      * Note that here the implementing class is acting as a factory for itself.
      *
-     * @see #toEncodedString(T toEncode)
+     * @see #toEncodedString(Object)
      */
-    // tag::refguide[]
     T fromEncodedString(String encodedString);
 
 }
-// end::refguide[]

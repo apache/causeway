@@ -30,17 +30,19 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Action(domainEvent = DeleteDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@Action(
+        domainEvent = DeleteDomainEvent.class, 
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @RequiredArgsConstructor
 public class ApplicationPermission_delete {
     
     @Inject private RepositoryService repository;
 
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
 
     public ApplicationRole act() {
-        val owningRole = holder.getRole();
-        repository.remove(holder);
+        val owningRole = target.getRole();
+        repository.remove(target);
         return owningRole;
     }
 

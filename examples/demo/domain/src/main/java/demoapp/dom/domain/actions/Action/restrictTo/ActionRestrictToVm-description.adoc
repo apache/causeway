@@ -1,0 +1,154 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `restrictTo` element specifies whether the action should be available only in prototype mode, or at all times.
+
+Prototype actions are useful in the early stages of development, typically  make it easier to explore the domain objects and their relationships.
+For example (when using a test database with a small amount of data), an action could return all instances of a domain object such as `Customer`.
+Or, a prototype action could return a random instance of a Customer, for exploratory testing or demos.
+
+Prototype mode can be activated in several ways, but one of the easiest is to set the `PROTOTYPING` environment variable to `true`:
+
+[source,bash]
+----
+export PROTOTYPING=true
+----
+
+The demo project uses this view model:
+
+[source,java]
+----
+include::ActionRestrictToVm.java[tags=class]
+----
+
+== No annotations
+
+If the `restrictTo` element is omitted completely, then the action is made available in both prototyping and production modes:
+
+* on a regular action, `updateNoAnnotation`:
++
+[source,java,indent=0]
+----
+include::ActionRestrictToVm.java[tags=action-no-annotation]
+----
+<.> does not indicate any `restrictTo` element; will be available in both prototype and production mode
+
+* on a mixin action, `mixinUpdateNoAnnotation`:
++
+[source,java]
+----
+include::ActionRestrictToVm_mixinUpdateNoAnnotation.java[tags=class]
+----
+<.> does not indicate any `restrictTo` element; will be available in production mode
+
+
+== Annotated
+
+The `restrictTo` element can be specified explicitly using the `@Action` annotation:
+
+* on regular actions; the `updateRestrictToPrototyping` action is annotated as a prototype action:
++
+[source,java,indent=0]
+----
+include::ActionRestrictToVm.java[tags=action-restrict-to-prototyping]
+----
+<.> available only in prototype mode
+
+* on mixin actions; `mixinUpdateRestrictToPrototyping` is annotated as a prototype mixin action:
++
+[source,java]
+----
+include::ActionRestrictToVm_mixinUpdateRestrictToPrototyping.java[tags=class]
+----
+<.> available only in prototype mode
+
+Similarly, we can explicit state that there are no restrictions.
+This is equivalent to not annotating at all:
+
+* the `updateRestrictToNoRestrictions` action is explicitly annotated as a having no restrictions, in other words is a regular production action:
++
+[source,java,indent=0]
+----
+include::ActionRestrictToVm.java[tags=action-restrict-to-no-restrictions]
+----
+<.> available in both prototype and production mode
+
+* on mixin actions; `mixinUpdateRestrictToNoRestrictions` action explicitly indicates no restrictions:
++
+[source,java]
+----
+include::ActionRestrictToVm_mixinUpdateRestrictToNoRestrictions.java[tags=class]
+----
+<.> available in both prototype and production mode
+
+
+The element can also be set to `NOT_SPECIFIED`.
+This is useful to allow inheritance of the element from a meta-annotation.
+
+
+== Meta-annotated
+
+The `restrictTo` element can also specified through a meta-annotation.
+For example:
+
+[source,java,indent=0]
+----
+include::ActionRestrictToPrototypingMetaAnnotation.java[tags=class]
+----
+<.> restrict to prototyping mode
+<.> apply either to a regular action or a mixin type
+
+For example:
+
+* on regular actions; the `updateMetaAnnotated` action is meta-annotated to only be available in prototype mode:
++
+[source,java,indent=0]
+----
+include::ActionRestrictToVm.java[tags=action-meta-annotated]
+----
+<.> available only in prototype mode
+
+* on mixin actions; `mixinUpdateMetaAnnotated` is meta-annotated to only be available in prototype mode:
++
+[source,java]
+----
+include::ActionRestrictToVm_mixinUpdateMetaAnnotated.java[tags=class]
+----
+<.> available only in prototype mode
+
+
+
+== Meta-annotated Overridden
+
+While the `restrictTo` element can be specified on a meta-annotation, it can still be overridden more locally.
+
+Here we have the meta-annotation:
+
+[source,java]
+----
+include::ActionRestrictToNoRestrictionsMetaAnnotation.java[tags=class]
+----
+
+This semantic can be overridden:
+
+* for regular actions, `updateMetaAnnotatedOverridden`:
++
+[source,java,indent=0]
+----
+include::ActionRestrictToVm.java[tags=action-meta-annotated-overridden]
+----
+<.> meta-annotation places no restrictions on the action's availability
+<.> overrides to make action available only in prototype mode
+
+* on mixin actions, `mixinUpdateMetaAnnotatedOverridden`:
++
+[source,java]
+----
+include::ActionRestrictToVm_mixinUpdateMetaAnnotatedOverridden.java[tags=class]
+----
+<.> meta-annotation places no restrictions on the action's availability
+<.> overrides to make action available only in prototype mode
+
+
+The attribute can also be set to `NOT_SPECIFIED`.
+This is useful to allow inheritance of the element from a meta-annotation.
+

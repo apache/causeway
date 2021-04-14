@@ -21,33 +21,25 @@ package org.apache.isis.applib.services.wrapper.control;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Whether interactions with the wrapper are actually passed onto the
  * underlying domain object.
  *
  * @see WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl)
+ * 
+ * @since 2.0 {@index}
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-// tag::refguide[]
 public enum ExecutionMode {
-    // end::refguide[]
     /**
      * Skip all business rules.
      */
-    // tag::refguide[]
     SKIP_RULE_VALIDATION,
-    // end::refguide[]
     /**
      * Skip actual execution.
      *
      * <p>
-     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
+     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; 
+     * instead just invoke {@link WrapperFactory#wrap(Object, SyncControl)}.
      */
-    // tag::refguide[]
     SKIP_EXECUTION,
-    // end::refguide[]
 }
-// end::refguide[]

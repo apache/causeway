@@ -20,11 +20,11 @@ package org.apache.isis.applib.annotation;
 
 /**
  * Whether the set of instances of a domain object is bounded or not.
+ * 
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Bounding {
     BOUNDED,
     UNBOUNDED,
     NOT_SPECIFIED
 }
-// end::refguide[]

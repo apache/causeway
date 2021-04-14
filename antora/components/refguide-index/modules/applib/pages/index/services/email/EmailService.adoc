@@ -1,0 +1,45 @@
+= EmailService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `EmailService` provides the ability to send HTML emails, with attachments, to one or more recipients.
+
+The framework provides a default implementation to send emails using an external SMTP provider.
+
+== API
+
+[source,java]
+.EmailService.java
+----
+interface EmailService {
+  void init()
+  boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments)     // <.>
+  boolean isConfigured()     // <.>
+}
+----
+
+<.> xref:#send__List_List_List_String_String_DataSource[send(List, List, List, String, String, DataSource)]
++
+--
+The main API to send the email (and optional attachments).
+--
+<.> xref:#isConfigured__[isConfigured()]
++
+--
+Whether this service has been configured and thus available for use.
+--
+
+== Members
+
+[#send__List_List_List_String_String_DataSource]
+=== send(List, List, List, String, String, DataSource)
+
+The main API to send the email (and optional attachments).
+
+[#isConfigured__]
+=== isConfigured()
+
+Whether this service has been configured and thus available for use.
+
+include::hooks/EmailService_010-implementation.adoc[]
+
+include::hooks/EmailService_020-examples-and-usage.adoc[]

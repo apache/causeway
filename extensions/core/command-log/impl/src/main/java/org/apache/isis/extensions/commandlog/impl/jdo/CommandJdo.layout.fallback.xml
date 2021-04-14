@@ -34,7 +34,7 @@
                         <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
                         <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
                         <cpt:property id="type"/>
-                        <cpt:property id="uniqueIdStr"/>
+                        <cpt:property id="interactionIdStr"/>
                         <cpt:property id="logicalMemberIdentifier"/>
                     </cpt:fieldSet>
                     <cpt:fieldSet name="Who and When">

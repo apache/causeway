@@ -1,0 +1,37 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+== Implementation
+
+The core framework itself defines only an SPI for this service; there is no default implementation.
+Rather, the implementation will depend on the security mechanism being used.
+
+=== SecMan
+
+If you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`.
+You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
+This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application.
+Without any role such user will be able only to see/use the logout link of the application.
+
+For example:
+
+[source,java]
+----
+@Service
+public class AppUserRegistrationService
+        extends SecurityModuleAppUserRegistrationServiceAbstract {
+
+    protected ApplicationRole getInitialRole() {
+        return applicationRoles.findRoleByName("regular-user");
+    }
+    protected Set<ApplicationRole> getAdditionalInitialRoles() {
+        return Collections.singleton(
+            applicationRoles.findRoleByName("self-registered-user"));
+    }
+
+    @Inject ApplicationRoles applicationRoles;
+}
+----
+

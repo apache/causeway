@@ -20,19 +20,17 @@ package org.apache.isis.applib.services.metamodel;
 
 /**
  * Top level object classification.
+ * 
+ * @since 2.0 {@index}
  */
-// tag::refguide[]
 public enum BeanSort {
-    // end::refguide[]
     /**
      * Stateful object, with a state that can be marshaled and unmarshaled.
      * <p>
      * Includes classes annotated with {@code @DomainObject}, when *not* associated
      * with a persistence layer. <p>  see also {@link #ENTITY}
      */
-    // tag::refguide[]
     VIEW_MODEL,
-    // end::refguide[]
     /**
      * Persistable object, associated with a persistence layer/context.
      * <p>
@@ -40,47 +38,35 @@ public enum BeanSort {
      * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
      *
      */
-    // tag::refguide[]
-    ENTITY_JDO, ENTITY_JPA,
-    // end::refguide[]
+    ENTITY,
     /**
      * Injectable object, associated with a lifecycle context
      * (application-scoped, request-scoped, ...).
      * <p>
      * to be introspected: YES
      */
-    // tag::refguide[]
     MANAGED_BEAN_CONTRIBUTING,
-    // end::refguide[]
     /**
      * Injectable object, associated with a lifecycle context
      * (application-scoped, request-scoped, ...).
      * <p>
      * to be introspected: NO
      */
-    // tag::refguide[]
     MANAGED_BEAN_NOT_CONTRIBUTING,
-    // end::refguide[]
     /**
      * Object associated with an 'entity' or 'bean' to act as contributer of
      * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
      */
-    // tag::refguide[]
     MIXIN,
-    // end::refguide[]
     /**
      * Immutable, serializable object.
      */
-    // tag::refguide[]
     VALUE,
-    // end::refguide[]
     /**
      * Container of objects.
      */
-    // tag::refguide[]
     COLLECTION,
     UNKNOWN;
-    // end::refguide[]
 
     // -- SIMPLE PREDICATES
 
@@ -104,13 +90,10 @@ public enum BeanSort {
         return this == COLLECTION;
     }
 
-    public boolean isEntityJdo() {
-        return this == ENTITY_JDO;
+    public boolean isEntity() {
+        return this == ENTITY;
     }
     
-    public boolean isEntityJpa() {
-        return this == ENTITY_JPA;
-    }
     
     public boolean isUnknown() {
         return this == UNKNOWN;
@@ -129,13 +112,11 @@ public enum BeanSort {
 
         return true;
     }
-    
-    public boolean isEntity() {
-        return isEntityJdo() || isEntityJpa();
+
+    public boolean isWrappingSupported() {
+        return isMixin() || isViewModel() || isEntity() || isManagedBean();
     }
 
 
-    // tag::refguide[]
     // ...
 }
-// end::refguide[]

@@ -124,6 +124,15 @@ secondary-access.base-url-wicket
 
 
 |
+[[isis.extensions.cors.allow-credentials]]
+isis.extensions.cors. +
+allow-credentials
+
+| 
+| TODO missing java-doc
+
+
+|
 [[isis.extensions.cors.allowed-headers]]
 isis.extensions.cors. +
 allowed-headers

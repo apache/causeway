@@ -23,10 +23,10 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The positioning of a label for a property or action parameter.
  *
+ * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.PropertyLayout
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
-// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
@@ -34,22 +34,17 @@ public enum LabelPosition {
 
     DEFAULT,
     LEFT,
-    // end::refguide[]
     /**
      * Right position of the label for Boolean properties.
      * <strong>Not supported</strong> for now for other types.
      */
-    // tag::refguide[]
     RIGHT,
     TOP,
     NONE,
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]

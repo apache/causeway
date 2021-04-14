@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {
 
     public static Class<? extends Facet> type() {
@@ -74,7 +76,8 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
         try {
             classCandidate = _InstanceUtil.loadClass(classCandidateName);
             return facetFactoryOrNull(classCandidate);
-        } catch (final IsisException ex) {
+        } catch (final Exception ex) {
+            log.warn("failed to load class by name {}", classCandidateName, ex);
             return null;
         }
     }

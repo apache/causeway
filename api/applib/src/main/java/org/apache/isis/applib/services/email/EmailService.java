@@ -24,30 +24,42 @@ import java.util.List;
 import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
- * Provides the ability to send emails to one or more recipients.
+ *
+ * The `EmailService` provides the ability to send HTML emails, with
+ * attachments, to one or more recipients.
  *
  * <p>
- * The core framework also provides a default implementation <tt>EmailServiceDefault</tt> that sends email as an
- * HTML message, using an external SMTP provider.  See the Isis website for further details.
+ *     The framework provides a default implementation to send emails using
+ *     an external SMTP provider.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface EmailService extends Serializable {
 
     @PostConstruct
     public void init() ;
 
+    /**
+     * The main API to send the email (and optional attachments).
+     *
+     * @param to - pass either `null` or `Collections.emptyList()` if not required
+     * @param cc - pass either `null` or `Collections.emptyList()` if not required
+     * @param bcc - pass either `null` or `Collections.emptyList()` if not required
+     * @param subject - a simple string, no formatting
+     * @param body - should be HTML text
+     * @param attachments - attachments that describe their mime type
+     *
+     * @return Will return `false` if failed to send
+     */
     boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments);
 
-    // end::refguide[]
     /**
      * Whether this service has been configured and thus available for use.
+     *
+     * @return if `false` then any attempt to call `send(...)` will throw an exception.
      */
-    // tag::refguide[]
     boolean isConfigured();
 
 }
-// end::refguide[]

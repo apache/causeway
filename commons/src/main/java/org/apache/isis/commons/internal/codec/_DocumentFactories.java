@@ -37,7 +37,7 @@ import lombok.experimental.UtilityClass;
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * 
- * @see https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+ * @see <a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">cheatsheetseries.owasp.org</a>
  *
  * @since 2.0
  */

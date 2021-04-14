@@ -21,7 +21,7 @@ datanucleus. +
 PublishingService. +
 serializedForm`
 |`PublishingService` has been removed.
-Use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] instead.
+Use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[PublisherService] instead.
 
 |===
 

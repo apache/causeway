@@ -1,0 +1,18 @@
+For example:
+
+[source,java]
+----
+public enum PaymentMethod {
+
+    VISA,
+    MASTERCARD,
+    AMERICAN_EXPRESS,
+    PAY_PAL,
+    BITCOIN,
+    ;
+
+    public String title() {
+        return Enums.getFriendlyNameOf(this);
+    }
+}
+----

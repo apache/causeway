@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -53,7 +53,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Mock
     private ManagedObject mockObjectAdapter;
     @Mock
-    private AuthenticationSession mockAuthenticationSession;
+    private Authentication mockAuthentication;
 
     @Before
     public void setUp() throws Exception {
@@ -66,11 +66,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationSessionTracker.class);
-                will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
+                allowing(mockServiceRegistry).lookupService(AuthenticationContext.class);
+                will(returnValue(Optional.of(mockAuthenticationTracker)));
 
-                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
-                will(returnValue(Optional.of(mockAuthenticationSession)));
+                allowing(mockAuthenticationTracker).currentAuthentication();
+                will(returnValue(Optional.of(mockAuthentication)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();
                 //                will(returnValue(mockSpecificationLoader));

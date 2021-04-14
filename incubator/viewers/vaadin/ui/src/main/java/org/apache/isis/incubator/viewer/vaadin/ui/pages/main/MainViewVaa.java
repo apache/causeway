@@ -29,9 +29,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -54,9 +51,6 @@ import lombok.extern.log4j.Log4j2;
 @Route("main")
 @RouteAlias("")
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
-@PWA(name = "Example Project", shortName = "Example Project")
-//@Theme(value = Material.class, variant = Material.DARK)
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/menu.css")
 @Log4j2
 public class MainViewVaa extends AppLayout 

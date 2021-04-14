@@ -21,33 +21,29 @@ package org.apache.isis.applib.services.bookmark;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Property;
 
-@Mixin(method = "prop")
+import lombok.RequiredArgsConstructor;
+
+/**
+ * @since 1.x {@index}
+ */
+@Property(
+        domainEvent = BookmarkHolder_object.PropertyDomainEvent.class
+)
+@RequiredArgsConstructor
 public class BookmarkHolder_object {
 
     private final BookmarkHolder bookmarkHolder;
 
-    public BookmarkHolder_object(final BookmarkHolder bookmarkHolder) {
-        this.bookmarkHolder = bookmarkHolder;
-    }
+    public static class PropertyDomainEvent
+    extends IsisModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
 
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<BookmarkHolder_object> { }
-
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            domainEvent = BookmarkHolder_object.ActionDomainEvent.class
-    )
-    @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION
-    )
     public Object prop() {
         return bookmarkService.lookup(bookmarkHolder);
     }
+
+    // -- DEPENDENCIES
 
     @Inject private BookmarkService bookmarkService;
 

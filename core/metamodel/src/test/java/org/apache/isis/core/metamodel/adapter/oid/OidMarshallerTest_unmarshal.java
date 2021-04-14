@@ -25,8 +25,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
 /**
  * <dt>CUS:123</dt>
  * <dd>persistent root</dd>
@@ -69,7 +67,7 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "CUS:123";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
+        assertThat(rootOid.getLogicalTypeName(), is("CUS"));
         assertThat(rootOid.getIdentifier(), is("123"));
 
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
@@ -81,7 +79,7 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "com.planchase.ClassName:8";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("com.planchase.ClassName")));
+        assertThat(rootOid.getLogicalTypeName(), is("com.planchase.ClassName"));
         assertThat(rootOid.getIdentifier(), is("8"));
 
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
@@ -102,42 +100,13 @@ public class OidMarshallerTest_unmarshal {
         final String oidStr = "!CUS:123";
 
         final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
+        assertThat(rootOid.getLogicalTypeName(), is("CUS"));
         assertThat(rootOid.getIdentifier(), is("123"));
 
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo((Oid)rootOid));
     }
 
-    @Test
-    public void collectionOfPersistentRoot() {
-        final String oidStr = "CUS:123$items";
-
-        final ParentedOid collectionOid = oidMarshaller.unmarshal(oidStr, ParentedOid.class);
-        assertThat(collectionOid.getParentOid(), is(oidMarshaller.unmarshal("CUS:123", RootOid.class)));
-        assertThat(collectionOid.getName(), is("items"));
-
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)collectionOid));
-    }
-
-    @Test
-    public void collectionOfTransientRoot() {
-        final String oidStr = "!CUS:123$items";
-
-        final ParentedOid collectionOid = oidMarshaller.unmarshal(oidStr, ParentedOid.class);
-        assertThat(collectionOid.getParentOid(), is(oidMarshaller.unmarshal("!CUS:123", RootOid.class)));
-        assertThat(collectionOid.getName(), is("items"));
-
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)collectionOid));
-    }
-
-
-    @Test(expected=IllegalArgumentException.class)
-    public void collection_forRoot_oidStr() {
-        oidMarshaller.unmarshal("CUS:123", ParentedOid.class);
-    }
 
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {

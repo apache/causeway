@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,19 +31,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -54,11 +54,11 @@ public class ResourceContext_getArg_Test {
 
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
-    @Mock private InteractionSession mockIsisInteraction;
-    @Mock private IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock private IsisInteractionTracker mockIsisInteractionTracker;
+    @Mock private IsisInteraction mockIsisInteraction;
+    @Mock private InteractionFactory mockIsisInteractionFactory;
+    @Mock private InteractionTracker mockIsisInteractionTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;
-    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private Authentication mockAuthentication;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private WebApplicationContext webApplicationContext;
 
@@ -79,7 +79,7 @@ public class ResourceContext_getArg_Test {
                 //                .serviceRegistry(mockServiceRegistry)
                 //                .translationService(mockTranslationService)
                 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
-                //                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                //                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
 
@@ -96,9 +96,6 @@ public class ResourceContext_getArg_Test {
                 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                
-//                allowing(mockIsisInteraction).getAuthenticationSession();
-//                will(returnValue(mockAuthenticationSession));
          
         }});
     }

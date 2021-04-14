@@ -20,16 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -69,7 +69,8 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+        val translationContext = TranslationContext.forMethod(method);
+        
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);

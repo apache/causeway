@@ -28,6 +28,8 @@ import org.apache.isis.applib.Identifier;
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * collection is disabled; otherwise collection is enabled.
  *
+ * 
+ * @since 1.x {@index}
  */
 public class CollectionUsabilityEvent extends UsabilityEvent {
 

@@ -21,6 +21,9 @@ package org.apache.isis.subdomains.excel.applib;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @ComponentScan
 public class IsisModuleSubdomainsExcelApplib {

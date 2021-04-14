@@ -24,17 +24,15 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Applies to {@link ObjectSpecification}s of classes that can act as a mix-in. 
  * <p>
- * Mix-ins are annotated e.g. {@link Mixin} or {@link DomainObject} with
+ * Mix-ins are annotated e.g. {@link DomainObject} with
  * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and have a public 1-arg 
  * constructor accepting an object (the mix-in's <i>holder</i>), being the object 
  * this is a mix-in for.
@@ -51,12 +49,6 @@ public interface MixinFacet extends SingleValueFacet<String> {
         FAIL_FAST,
         IGNORE_FAILURES
     }
-
-    /**
-     * Returns the (adapter of the) domain object that is the <i>holder</i> of the 
-     * given mix-in adapter.
-     */
-    ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy);
 
     /**
      * Returns the mix-in around the provided domain object (<i>holder</i>)

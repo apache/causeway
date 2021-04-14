@@ -27,9 +27,17 @@ package org.apache.isis.applib.util;
  * If no reasons are specified {@link #getReason()} will return
  * <code>null</code> , otherwise it will return a {@link String} with all the
  * valid reasons concatenated with a semi-colon separating each one.
+ * </p>
  *
  * <p>
- * An alternative is to use the {@link Reasons} class.
+ * An alternative is to use the (very simple) {@link Reasons} class or the
+ * (much more sophisticated) {@link ReasonBuffer2}.
+ * </p>
+ *
+ * @see Reasons
+ * @see ReasonBuffer2
+ *
+ * @since 1.x {@index}
  */
 public class ReasonBuffer {
     StringBuffer reasonBuffer = new StringBuffer();

@@ -1,0 +1,57 @@
+
+* xref:applib-classes:about.adoc[Classes]
+
+** xref:applib-classes:events.adoc[]
+
+** xref:applib-classes:non-persisted-objects.adoc[Non-persisted objects]
+*** xref:applib:index/ViewModel.adoc[ViewModel]
+*** xref:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject]
+
+** xref:applib-classes:layout.adoc[Layout]
+
+
+** xref:applib-classes:value-types.adoc[Value Types]
+*** xref:applib:index/value/Blob.adoc[Blob]
+*** xref:applib:index/value/Clob.adoc[Clob]
+*** xref:applib:index/value/Markup.adoc[Markup]
+*** xref:applib:index/value/LocalResourcePath.adoc[LocalResourcePath]
+*** xref:applib:index/value/Password.adoc[Password]
+
+
+** xref:applib-classes:utility.adoc[Utility Classes]
+*** xref:applib:index/util/Enums.adoc[Enums]
+*** xref:applib:index/util/JaxbUtil.adoc[JaxbUtil]
+*** xref:applib:index/util/ObjectContracts.adoc[ObjectContracts]
+*** xref:applib:index/util/Reasons.adoc[Reasons]
+*** xref:applib:index/util/ReasonBuffer.adoc[ReasonBuffer]
+*** xref:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2]
+*** xref:applib:index/util/TitleBuffer.adoc[TitleBuffer]
+
+** xref:applib-classes:mixees-and-mixins.adoc[Mixees and Mixins]
+
+*** xref:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
+
+*** xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml]
+*** xref:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel]
+*** xref:refguide:applib:index/mixins/metamodel/Object_objectType.adoc[Object_objectType] (property)
+*** xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier] (property)
+
+*** xref:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
+
+*** xref:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi]
+
+*** xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml]
+*** xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd]
+
+*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
+*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong] (property)
+*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
+*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
+
+*** xref:refguide:extensions:index/commandlog/impl/mixins/HasInteractionId_command.adoc[HasInteractionId_command]
+*** xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject]
+
+
+** xref:applib-classes:spec.adoc[Specification pattern]
+
+

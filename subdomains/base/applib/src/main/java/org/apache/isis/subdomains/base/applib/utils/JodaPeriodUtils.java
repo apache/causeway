@@ -24,6 +24,8 @@ import org.joda.time.format.PeriodFormatterBuilder;
 
 /**
  * Utilities for manipulating parsing JODA {@link Period}s.
+ *
+ * @since 2.0 {@index}
  */
 public final class JodaPeriodUtils {
 

@@ -27,13 +27,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 
 import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorForDomainObjects")
+@Named("isis.metamodel.ClassSubstitutorForDomainObjects")
 @Order(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 

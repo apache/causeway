@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         IsisModuleExtFullCalendarApplib.class

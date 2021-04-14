@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -37,6 +38,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -53,13 +55,13 @@ public final class CanonicalParameterUtil {
 
     public static <T> T construct(Constructor<T> constructor, Object[] executionParameters) {
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);
-        
+
         // supports effective private constructors as well
         return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
-        .mapException(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
-        .getOrThrow();
+        .mapFailure(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
+        .presentElseFail();
     }
-    
+
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException {
 
@@ -67,10 +69,11 @@ public final class CanonicalParameterUtil {
 
         // supports effective private methods as well
         return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
-        .mapException(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
-        .getNullableOrThrow();
+        .mapFailure(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
+        .optionalElseFail()
+        .orElse(null);
     }
-    
+
     private static Object[] preprocess(Executable executable, Object[] executionParameters) {
         if (isEmpty(executionParameters)) {
             return executionParameters;
@@ -100,11 +103,11 @@ public final class CanonicalParameterUtil {
         if(obj==null) {
             return null;
         }
-        
+
         if(obj instanceof Can) {
-            obj = ((Can<?>)obj).toList();            
+            obj = ((Can<?>)obj).toList();
         }
-        
+
         if(_Arrays.isArrayType(parameterType)) {
             final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
             if(componentType==null) {
@@ -137,36 +140,77 @@ public final class CanonicalParameterUtil {
         return obj;
     }
 
-    private static IllegalArgumentException toVerboseException(
-            Class<?>[] parameterTypes, 
+    private static Throwable toVerboseException(
+            Class<?>[] parameterTypes,
             Object[] adaptedExecutionParameters,
             Throwable e) {
 
-        val sb = new StringBuilder();
-        
         final int expectedParamCount = _NullSafe.size(parameterTypes);
         final int actualParamCount = _NullSafe.size(adaptedExecutionParameters);
         if(expectedParamCount!=actualParamCount) {
-            sb.append(String.format("param-count mismatch: expected %d, got %d\n", 
-                    expectedParamCount, actualParamCount));
-        } else {
-            sb.append("expected param type mismatch\n");
+            return new IllegalArgumentException(String.format(
+                    "param-count mismatch: expected %d, got %d\n",
+                    expectedParamCount, actualParamCount), e);
         }
-        
-        for(int j=0;j<parameterTypes.length;++j) {
-            final Class<?> parameterType = parameterTypes[j];
-            final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
-                    .map(Object::getClass)
-                    .map(Class::getName)
-                    .orElse("missing or null");
 
-            sb.append(String.format("param-type[%d]: '%s', got '%s'\n", 
-                    j, parameterType.getName(), parameterValueTypeLiteral));
+        // if method or constructor was invoked with incompatible param types, then the Throwable
+        // we receive here is of type IllegalArgumentException; in which case we can provide additional
+        // information, but also at the expense of a potentially hiding the original cause, namely when the
+        // IllegalArgumentException has a different origin and the param incompatibility check is a 
+        // false positive
+        if(e instanceof IllegalArgumentException) {
+            boolean paramTypeMismatchEncountered = false;
+            val sb = new StringBuilder();
+            for(int j=0;j<parameterTypes.length;++j) {
+                final Class<?> parameterType = parameterTypes[j];
+                val incompatible = !isValueCompatibleWithType(
+                        _Arrays.get(adaptedExecutionParameters, j), 
+                        parameterTypes[j]);
+                
+                paramTypeMismatchEncountered = paramTypeMismatchEncountered 
+                        || incompatible;
+                
+                if(incompatible) {
+                    
+                    final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
+                            .map(Object::getClass)
+                            .map(Class::getName)
+                            .orElse("missing or null");
+                    
+                    final String expected = parameterType.getName();
+                    final String actual = parameterValueTypeLiteral;
+                    
+                    sb.append(String.format("param-type[%d]: '%s', got '%s'\n",
+                        j, expected, actual));
+                }
+            }
+            if(paramTypeMismatchEncountered) {
+                sb.insert(0, "expected param type mismatch\n");
+                return new IllegalArgumentException(sb.toString(), e);
+            }
         }
-        
 
         // re-throw more verbose
-        return new IllegalArgumentException(sb.toString(), e);
+        return e;
+    }
+
+    private static boolean isValueCompatibleWithType(
+            final @NonNull Optional<Object> value, 
+            final @NonNull Class<?> type) {
+        
+        if(!value.isPresent()) {
+            // null is not compatible with an expected primitive type
+            // but null is compatible with any other expected type
+            return !type.isPrimitive(); 
+        }
+        
+        val runtimeType = value.get().getClass();
+        
+        if(ClassExtensions.equalsWhenBoxing(runtimeType, type)) {
+            return true;
+        }
+        
+        return type.isAssignableFrom(runtimeType);
     }
 
 

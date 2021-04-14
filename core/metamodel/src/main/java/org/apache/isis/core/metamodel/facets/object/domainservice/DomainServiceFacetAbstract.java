@@ -39,7 +39,6 @@ implements DomainServiceFacet {
 
     public DomainServiceFacetAbstract(
             final FacetHolder facetHolder,
-            final Class<?> repositoryFor,
             final NatureOfService natureOfService) {
         super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.natureOfService = natureOfService;

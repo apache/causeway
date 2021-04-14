@@ -31,18 +31,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -55,7 +53,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -183,7 +181,7 @@ public class FacetedMethodsBuilder {
                 try {
                     facetFactory = facetFactorie.newInstance();
                 } catch (final InstantiationException | IllegalAccessException e) {
-                    throw new IsisException(e);
+                    throw new UnrecoverableException(e);
                 }
                 getFacetProcessor().injectDependenciesInto(facetFactory);
                 facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, inspectedTypeSpec));
@@ -212,23 +210,20 @@ public class FacetedMethodsBuilder {
             log.debug("introspecting {}: properties and collections", getClassName());
         }
         
+        val specLoader = getSpecificationLoader();
+        
         val associationCandidateMethods = new HashSet<Method>();
         
         methodRemover.acceptRemaining(methodsRemaining->{
             getFacetProcessor()
             .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods::add);
         });
-
+        
         // Ensure all return types are known
-        val typesToLoad = _Sets.<Class<?>>newHashSet();
-        for (val method : associationCandidateMethods) {
-            new TypeExtractorMethodReturn(method).forEach(typesToLoad::add);
-        }
-        typesToLoad.remove(introspectedClass);
-
-        val specLoader = getSpecificationLoader();
-        val upTo = IntrospectionState.TYPE_INTROSPECTED;
-        typesToLoad.forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo));
+        
+        TypeExtractor.streamMethodReturn(associationCandidateMethods)
+        .filter(typeToLoad->typeToLoad!=introspectedClass)
+        .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
 
         // now create FacetedMethods for collections and for properties
         val associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
@@ -416,53 +411,63 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean representsAction(final Method actionMethod) {
-        
-        // just an optimization, not strictly required 
-        if(isExplicitActionAnnotationConfigured()) {
-
-            // even though when @Action is mandatory, Mixins now can provide actions,
-            // that do not need to be annotated at method-level (see ISIS-1998)
-            val type = actionMethod.getDeclaringClass();
-            val hasActionAnnotation = _Annotations.isPresent(actionMethod, Action.class);
-            val hasInferredActionAnnotation = 
-                    _Annotations.isPresent(type, Action.class)
-                    || _Annotations.isPresent(type, Property.class)
-                    || _Annotations.isPresent(type, org.apache.isis.applib.annotation.Collection.class)
-                    || (_Annotations.isPresent(type, Mixin.class) 
-                            && (_Annotations.isPresent(actionMethod, Property.class)
-                                || _Annotations.isPresent(actionMethod, org.apache.isis.applib.annotation.Collection.class)
-                                || _Annotations.isPresent(actionMethod, PropertyLayout.class)
-                                || _Annotations.isPresent(actionMethod, CollectionLayout.class)
-                            )
-                       );
-        
-            // try to short-circuit as much as possible
-            if(!(hasActionAnnotation || hasInferredActionAnnotation)) {
-                return false;
-            }
-        }
 
         if (MethodUtil.isStatic(actionMethod)) {
             return false;
         }
+        
+        // just an optimization, not strictly required:
+        // return false if both are true
+        // 1. actionMethod has no @Action annotation
+        // 2. actionMethod does not identify as a mixin's main method
+        if(isExplicitActionAnnotationConfigured()) {
 
-        val typesToLoad = _Sets.<Class<?>>newHashSet();
-        new TypeExtractorMethodReturn(actionMethod).forEach(typesToLoad::add);
+            // even though when @Action is mandatory for action methods, 
+            // mixins now can contribute methods, 
+            // that do not need to be annotated (see ISIS-1998)
+            val hasActionAnnotation = _Annotations
+                    .findNearestAnnotation(actionMethod, Action.class)
+                    .isPresent();
+            if(!hasActionAnnotation) {
+                // omitting the @Action annotation at given method is only allowed, when the 
+                // type is a mixin, and the mixin's main method identifies as the given actionMethod 
+                val type = actionMethod.getDeclaringClass();
+            
+                //XXX for given type we do this for every method, could cache the result!
+                val mixedInMethodName = _Annotations.findNearestAnnotation(type, DomainObject.class)
+                .filter(domainObject->Nature.MIXIN.equals(domainObject.nature()))
+                .map(DomainObject::mixinMethod)
+                .orElse(null);
+            
+                if(mixedInMethodName!=null) {
+                    // we have a mixin type
+                    if(!Objects.equals(actionMethod.getName(), mixedInMethodName)) {
+                        // the actionMethod does not identify as the mixin's main method
+                        return false;
+                    }    
+                }   
+            }
+            
+            // else fall through
+            
+        }
 
         val specLoader = getSpecificationLoader();
 
-        val anyLoadedAsNull = typesToLoad.stream()
-                .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
-                .anyMatch(Objects::isNull);
+        val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
+        .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
+        .anyMatch(Objects::isNull);
 
         if (anyLoadedAsNull) {
             return false;
         }
 
         // ensure we can load specs for all the params
-        if (!loadParamSpecs(actionMethod)) {
-            return false;
-        }
+//don't!! has side effect of pulling in all param types
+//even those that should be ignored by the metamodel        
+//        if (!loadParamSpecs(actionMethod)) {
+//            return false;
+//        }
         
         if(isMixinMain(actionMethod)) {
             // we are introspecting a mixin type, so accept this method for further processing
@@ -498,11 +503,6 @@ public class FacetedMethodsBuilder {
     private boolean isExplicitActionAnnotationConfigured() {
         return explicitAnnotationsForActions;
     }
-
-    private boolean loadParamSpecs(final Method actionMethod) {
-        return getSpecificationLoader().loadSpecifications(actionMethod.getParameterTypes());
-    }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.

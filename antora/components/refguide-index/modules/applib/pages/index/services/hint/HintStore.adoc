@@ -1,0 +1,79 @@
+= HintStore _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Defines a mechanism for viewers to store arbitrary UI hints on a per-object basis.
+
+This store _is_ used by the Wicket viewer. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
+
+== API
+
+[source,java]
+.HintStore.java
+----
+interface HintStore {
+  String get(final Bookmark bookmark, String hintKey)     // <.>
+  void set(final Bookmark bookmark, String hintKey, String value)     // <.>
+  void remove(final Bookmark bookmark, String hintKey)     // <.>
+  void removeAll(Bookmark bookmark)     // <.>
+  Set<String> findHintKeys(Bookmark bookmark)     // <.>
+}
+----
+
+<.> xref:#get__Bookmark_String[get(Bookmark, String)]
++
+--
+Obtain a hint (eg which tab to open) for a particular object.
+--
+<.> xref:#set__Bookmark_String_String[set(Bookmark, String, String)]
++
+--
+Set the state of a hint for the domain object
+--
+<.> xref:#remove__Bookmark_String[remove(Bookmark, String)]
++
+--
+Removes hint for the domain object.
+--
+<.> xref:#removeAll__Bookmark[removeAll(Bookmark)]
++
+--
+Remotes all hints for the domain object.
+--
+<.> xref:#findHintKeys__Bookmark[findHintKeys(Bookmark)]
++
+--
+The keys of all available hints for the domain object.
+--
+
+== Members
+
+[#get__Bookmark_String]
+=== get(Bookmark, String)
+
+Obtain a hint (eg which tab to open) for a particular object.
+
+Object identity is represented by xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] so that alternative implementations can easily serialize this state to a string.
+
+[#set__Bookmark_String_String]
+=== set(Bookmark, String, String)
+
+Set the state of a hint for the domain object
+
+[#remove__Bookmark_String]
+=== remove(Bookmark, String)
+
+Removes hint for the domain object.
+
+[#removeAll__Bookmark]
+=== removeAll(Bookmark)
+
+Remotes all hints for the domain object.
+
+[#findHintKeys__Bookmark]
+=== findHintKeys(Bookmark)
+
+The keys of all available hints for the domain object.
+
+include::hooks/HintStore_010-implementation.adoc[]
+
+include::hooks/HintStore_020-examples-and-usage.adoc[]

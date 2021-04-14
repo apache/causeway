@@ -26,6 +26,9 @@ import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class JMockActions {
 
     private JMockActions() {

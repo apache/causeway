@@ -40,6 +40,9 @@ import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 public class XDocReportService {
 
@@ -105,9 +108,4 @@ public class XDocReportService {
     protected IXWPFConverter<PdfOptions> pdfConverter() {
         return PdfConverter.getInstance();
     }
-
-
 }
-
-
-

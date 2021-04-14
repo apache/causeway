@@ -27,12 +27,12 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 
-import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.val;
 
@@ -54,7 +54,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).loadSpecification(cls);
             will(returnValue(mockTypeSpec));
-            
+
             allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
         }});
@@ -69,8 +69,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         context.checking(new Expectations() {{
-            allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationSessionTracker.class);
-            will(returnValue(mockAuthenticationSessionTracker));
+            allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationContext.class);
+            will(returnValue(mockAuthenticationTracker));
 
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));
@@ -78,7 +78,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");
-        
+
     }
 
     @Override
@@ -92,21 +92,21 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
     }
 
-    class SomeHasUniqueId implements HasUniqueId {
+    class SomeHasInteractionId implements HasInteractionId {
         public void someAction() {
         }
 
         @Override
-        public UUID getUniqueId() {
+        public UUID getInteractionId() {
             return null;
         }
 
 
     }
 
-    void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {
+    void allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy value) {
         val config = metaModelContext.getConfiguration();
-        config.getApplib().getAnnotation().getAction().setPublishing(value);
+        config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);
     }
 
 }

@@ -31,7 +31,8 @@ import org.apache.isis.applib.Identifier;
  *
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
- *
+ * 
+ * @since 1.x {@index}
  */
 public class ActionArgumentEvent extends ValidityEvent {
 
@@ -52,8 +53,6 @@ public class ActionArgumentEvent extends ValidityEvent {
 
     /**
      * The position (0-based) of the invalid argument.
-     *
-     * @return
      */
     public int getPosition() {
         return position;

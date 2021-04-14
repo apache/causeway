@@ -19,16 +19,17 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;
 
-public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
+public class MetaModelValidatorForMixinTypes {
 
     private final String annotation;
 
@@ -49,20 +50,24 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
         }
         
         if(mixinContructors.getCardinality().isZero()) {
-            onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(candidateMixinType),
-                    "%s: annotated with %s annotation but does not have a public 1-arg constructor",
-                    candidateMixinType.getName(), 
-                    annotation);
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
+                    String.format(
+                        "%s: annotated with %s annotation but does not have a public 1-arg constructor",
+                        candidateMixinType.getName(), 
+                        annotation)
+                    );
         } else {
-            onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(candidateMixinType),
-                    "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",
-                    candidateMixinType.getName(), 
-                    annotation,
-                    mixinContructors.size());
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
+                    String.format(
+                            "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",
+                            candidateMixinType.getName(), 
+                            annotation,
+                            mixinContructors.size())
+                    );
         }
         return false;
     }

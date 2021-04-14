@@ -317,7 +317,7 @@ public class LayoutFacetUtil {
 
         @Override
         public void visit(final ActionLayoutData actionLayoutData) {
-            objectSpec.getObjectAction(actionLayoutData.getId())
+            objectSpec.getAction(actionLayoutData.getId())
             .ifPresent(objectAction->{
                 setBookmarkingIfAny(actionLayoutData, objectAction);
                 setCssClassIfAny(actionLayoutData, objectAction);

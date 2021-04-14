@@ -40,21 +40,17 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
  * of {@link DefaultsProvider} could adjust the default it provides according to
  * circumstance, for example).
  *
- * @see <code>Encodable</code>
- * @see <code>Parseable</code>
- * @see Value
+ * @apiNote This annotation is only incompletely recognized by the framework, 
+ *     and may be deprecated in the future.
  *
- * <p>
- *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
- * </p>
+ * @see Value
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Defaulted {
 
-    // end::refguide[]
     /**
      * The fully qualified name of a class that implements the
      * {@link DefaultsProvider} interface.
@@ -68,10 +64,8 @@ public @interface Defaulted {
      * Implementation note: the default value provided here is simply an empty
      * string because <tt>null</tt> is not a valid default.
      */
-    // tag::refguide[]
     String defaultsProviderName() default "";
 
-    // end::refguide[]
     /**
      * As per {@link #defaultsProviderName()}, but specifying a class literal
      * rather than a fully qualified class name.
@@ -81,8 +75,6 @@ public @interface Defaulted {
      * {@link Defaulted}'s own class, because <tt>null</tt> is not a valid
      * default.
      */
-    // tag::refguide[]
     Class<?> defaultsProviderClass() default Defaulted.class;
 
 }
-// end::refguide[]

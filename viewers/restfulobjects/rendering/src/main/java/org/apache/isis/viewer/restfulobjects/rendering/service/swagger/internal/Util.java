@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -105,7 +105,7 @@ public final class Util {
                 correspondingClass == Void.class;
     }
 
-    static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
+    static Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
         return new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation objectAssociation) {
@@ -116,39 +116,37 @@ public final class Util {
 
     static List<OneToOneAssociation> propertiesOf(
             final ObjectSpecification objectSpecification,
-            final SwaggerService.Visibility visibility) {
+            final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.PROPERTIES, visibility);
     }
 
     static List<OneToManyAssociation> collectionsOf(
             final ObjectSpecification objectSpecification,
-            final SwaggerService.Visibility visibility) {
+            final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
     private static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
-            final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
+            final Predicate<ObjectAssociation> associationPredicate, final Visibility visibility) {
 
-        final List<ObjectAssociation> list =
-                objectSpecification.streamAssociations(Contributed.INCLUDED)
+        return objectSpecification.streamAssociations(MixedIn.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
+                .map(x->_Casts.<T>uncheckedCast(x))
                 .collect(Collectors.toList());
-
-        return _Casts.uncheckedCast(list);
     }
 
     static List<ObjectAction> actionsOf(
             final ObjectSpecification objectSpec,
-            final SwaggerService.Visibility visibility,
+            final Visibility visibility,
             final ClassExcluder classExcluder) {
         val actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED)
+        return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
-                !classExcluder.exclude(objectAction) &&
-                !visibility.isPublic() || isVisibleForPublic(objectAction)
-                        )
+                    !classExcluder.exclude(objectAction)
+                    && !visibility.isPublic()
+                    || isVisibleForPublic(objectAction) )
                 .collect(Collectors.toList());
     }
 
@@ -162,7 +160,7 @@ public final class Util {
         return response;
     }
 
-    static ImmutableEnumSet<ActionType> actionTypesFor(final SwaggerService.Visibility visibility) {
+    static ImmutableEnumSet<ActionType> actionTypesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
             return ActionType.USER_ONLY;

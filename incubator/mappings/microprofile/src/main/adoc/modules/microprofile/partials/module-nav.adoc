@@ -1,7 +1,0 @@
-
-
-
-* xref:incubator:microprofile:about.adoc[MicroProfile]
-
-
-

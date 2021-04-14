@@ -1,14 +1,14 @@
 = Tooling - Model for AsciiDoc
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Allows for programmatic generation of ascii-doc representing document models. 
+Allows for programmatic generation of ascii-doc representing document models.
 
 NOTE: The _AsciiDoc_ name is trademarked by the https://www.eclipse.org/[_Eclipse Foundation_].
-This project is *not* part of the specification effort for _AsciiDoc_ under the 
+This project is *not* part of the specification effort for _AsciiDoc_ under the
 _AsciiDoc Working Group_. See https://projects.eclipse.org/proposals/asciidoc-language[]
-and https://accounts.eclipse.org/mailing-list/asciidoc-wg[]. However, we are happy to 
-help with transfer of source code, if any project (under the umbrella of the 
-_AsciiDoc Working Group_) is willing to take over.   
+and https://accounts.eclipse.org/mailing-list/asciidoc-wg[]. However, we are happy to
+help with transfer of source code, if any project (under the umbrella of the
+_AsciiDoc Working Group_) is willing to take over.
 
 WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
 However, snapshots are available with our nightly-builds:
@@ -20,10 +20,10 @@ Say we have a list of employees, which we want to express as ascii-doc table.
 
 [source,java]
 ----
-public static class Employee {  
-    private int id;  
-    private String firstName;  
-    private String sirName;
+public static class Employee {
+    private int id;
+    private String firstName;
+    private String surName;
     ...
 }
 
@@ -33,7 +33,7 @@ List<Employee> employees = List.of(
 );
 ----
 
-Lets generate a _Document_ model programmatically, then print it to _System.out_. 
+Lets generate a _Document_ model programmatically, then print it to _System.out_.
 
 [source,java]
 ----
@@ -58,14 +58,14 @@ Row headRow = headRow(table);
 
 cell(table, headRow, "ID");
 cell(table, headRow, "Firstname");
-cell(table, headRow, "Sirname");
+cell(table, headRow, "Surname");
 
 for(Employee employee : employees) {
-    
+
     Row row = row(table);
     cell(table, row, "" + employee.getId());
     cell(table, row, employee.getFirstName());
-    cell(table, row, employee.getSirName());
+    cell(table, row, employee.getSurName());
 }
 
 System.out.println(AsciiDocWriter.toString(doc));
@@ -83,7 +83,7 @@ A simple block corresponds to a normal paragraph.
 .Employees
 [cols="1m,3,3", options="header"]
 |===
-|ID |Firstname |Sirname 
+|ID |Firstname |Surname
 
 |1
 |Alice
@@ -104,7 +104,7 @@ A simple block corresponds to a normal paragraph.
 .Employees
 [cols="1m,3,3", options="header"]
 |===
-|ID |Firstname |Sirname 
+|ID |Firstname |Surname
 
 |1
 |Alice
@@ -130,4 +130,3 @@ https://github.com/apache-isis-committers/isis-nightly#maven[]
 ----
 
 
- 

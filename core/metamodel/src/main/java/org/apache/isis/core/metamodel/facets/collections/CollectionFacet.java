@@ -49,10 +49,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.base._With.requires;
-
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

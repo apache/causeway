@@ -1,0 +1,85 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `XmlSnapshotService` can be used to convert a domain object into XML .
+It can also be used to convert a _graph_ of domain objects into XML, rooted at a starting domain object.
+
+One use case of the resultant XML, is for auditing, where there is a requirement to capture the state of a domain object or domain objects into a single artifact.
+This XML could for example be hashed and digitally signed, to form the basis of a legal decision.
+
+[TIP]
+====
+It is possible to explicitly exclude properties from the snapshot using the `@Property(snapshot=...)` element.
+====
+
+In addition to generating XML, the service can also generate an XSD schema that the XML will be conformant with.
+The original use case here was in support of mapping tools used to generate PDF documents (mail merges).
+
+[TIP]
+====
+The XML is returned by `XmlSnapshotService` as an instance of `org.w3c.dom.Document`.
+
+The related `XmlService` domain service can be used to convert this into a string.
+====
+
+== Example View model
+
+The `XmlSnapshotParentVm` is used as the root of snapshots.
+It references a collection of objects as its children, and another single domain object as its peer.
+
+.`XmlSnapshotVm` is the root of the snapshots
+image::class-diagram.svg[]
+
+
+//[plantuml]
+//.`XmlSnapshotVm` is the root of the snapshots
+//----
+//hide empty members
+//
+//class XmlSnapshotParentVm {
+//    text: String
+//}
+//class XmlSnapshotChildVm {
+//    value: String
+//}
+//class XmlSnapshotPeerVm {
+//    value: String
+//}
+//class XmlSnapshotPeerChildVm {
+//    value: String
+//}
+//
+//XmlSnapshotParentVm -r->  XmlSnapshotPeerVm : peer
+//XmlSnapshotParentVm -d-> "0..*" XmlSnapshotChildVm : " children"
+//XmlSnapshotPeerVm -d-> "0..*" XmlSnapshotPeerChildVm : " children"
+//----
+
+
+== XML Snapshot
+
+The `takeXmlSnapshot` service demonstrates how to create snapshots of different "depths":
+
+[source,java]
+----
+include::XmlSnapshotParentVm_takeXmlSnapshot.java[tags=class]
+----
+
+This uses two enums:
+
+* the `PathsToInclude` enum is used to indicate which members to include in the snapshot:
++
+[source,java,indent=0]
+----
+include::XmlSnapshotParentVm_takeXmlSnapshot.java[tags=PathsToInclude]
+----
++
+Note that this is in fact a path.
+In particular, the `peer/children` path will include both the peer object _and_ the peer object's children in the resultant snapshot
+
+* The `SnapshotType` enum is simply:
++
+[source,java,indent=0]
+----
+include::XmlSnapshotParentVm_takeXmlSnapshot.java[tags=SnapshotType]
+----
++
+This is used in the action to determine whether to generate the XML snapshot (of the values of the domain object) or an XSD document (with which the XML document is conformant).

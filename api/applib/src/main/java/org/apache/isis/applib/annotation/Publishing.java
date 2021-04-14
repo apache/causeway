@@ -18,44 +18,53 @@
  */
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
+
 /**
- * The available policies for publishing changes to the properties of the object.
+ * The available policies as to whether data should be published to
+ * corresponding subscribers. The framework supports several kinds of data
+ * that are available for publishing:
+ * <ul>
+ * <li><b>{@link EntityChanges} ... subscribed to via {@link EntityChangesSubscriber}</li>
+ * <li><b>{@link EntityPropertyChange} ... subscribed to via {@link EntityPropertyChangeSubscriber}</li>
+ * <li><b>{@link Command} ... subscribed to via {@link CommandSubscriber}</li>
+ * <li><b>{@link Execution} ... subscribed to via {@link ExecutionSubscriber}</li>
+ * </ul>
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public enum Publishing {
 
-    // end::refguide[]
     /**
-     * The publishing of the object should be as per the default publishing policy configured in <tt>application.properties</tt>.
-     *
+     * Publishing of data triggered by interaction with this object
+     * should be handled as per the default publishing policy
+     * configured in <tt>application.properties</tt>.
      * <p>
-     *     If no publishing policy is configured, then the publishing is disabled.
-     * </p>
+     * If no publishing policy is configured, then publishing is disabled.
      */
-    // tag::refguide[]
     AS_CONFIGURED,
 
-    // end::refguide[]
     /**
-     * Publish changes to this object.
+     * Do publish data triggered by interaction with this object.
      */
-    // tag::refguide[]
     ENABLED,
 
-    // end::refguide[]
     /**
-     * Do not publish changes to this object (even if otherwise configured to enable publishing).
+     * Do <b>not</b> publish data triggered by interaction with this object
+     * (even if otherwise configured to enable publishing).
      */
-    // tag::refguide[]
     DISABLED,
 
-    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
-     * annotations or superclasses/interfaces).
+     * annotations or super-classes/interfaces).
      */
-    // tag::refguide[]
     NOT_SPECIFIED
 
 }
-// end::refguide[]

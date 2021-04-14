@@ -19,21 +19,27 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -79,13 +85,24 @@ public final class _Text {
         return Can.ofStream(streamLines(text));
     }
     
+    public static Can<String> breakLines(Can<String> lines, int maxChars) {
+        if(lines.isEmpty()) {
+            return lines;
+        }
+        return lines.stream()
+        .flatMap(line->breakLine(line, maxChars))
+        .collect(Can.toCan());
+    }
+    
     /**
      * Reads content from given {@code input} into a {@link Can} of lines, 
      * removing new line characters {@code \n,\r} in the process.
-     * @param text - nullable
+     * @param input - nullable
      * @return non-null
      */
-    public static Can<String> readLines(final @Nullable InputStream input, final @NonNull Charset charset){
+    public static Can<String> readLines(
+            final @Nullable InputStream input, 
+            final @NonNull  Charset charset){
         if(input==null) {
             return Can.empty();
         }
@@ -128,6 +145,21 @@ public final class _Text {
         } 
     }
 
+    // -- WRITING
+    
+    @SneakyThrows
+    public static void writeLinesToFile(
+            final @NonNull Iterable<String> lines,
+            final @NonNull File file, 
+            final @NonNull Charset charset) {
+        
+        try(val bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
+            for(val line : lines) {
+                bw.append(line).append("\n");    
+            }
+        } 
+    }
+    
     // -- NORMALIZING
     
     public static String normalize(final @Nullable String text) {
@@ -263,12 +295,19 @@ public final class _Text {
         val na = normalize(a);
         val nb = normalize(b);
         
-        final int[] lineNrRef = {0};
-        
-        na.zip(nb, (left, right)->{
-            final int lineNr = ++lineNrRef[0];
-            _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
-        });
+        val lineNrRef = _Refs.intRef(0);
+
+        if(na.size()<=nb.size()) {
+            na.zip(nb, (left, right)->{
+                final int lineNr = lineNrRef.inc();
+                _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
+            });
+        } else {
+            nb.zip(na, (right, left)->{
+                final int lineNr = lineNrRef.inc();
+                _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
+            });
+        }
         
         _Assert.assertEquals(na.size(), nb.size(), ()->String.format("normalized texts differ in number of lines"));
     }
@@ -311,5 +350,47 @@ public final class _Text {
         return line->mapper.apply(indexRef[0]++, line);
     }
     
+    private static Stream<String> breakLine(String line, final int maxChars) {
+        line = line.trim();
+        if(line.length()<=maxChars) {
+            return Stream.of(line);
+        }
+        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
+                .map(String.class::cast);
+        
+        val constraintLines = _Lists.<String>newArrayList();
+        val partialSum = _Refs.intRef(0);
+        val partialCount = _Refs.intRef(0);
+        
+        val tokenIterator = tokens.iterator();
+        
+        tokens.stream()
+        .mapToInt(String::length)
+        .forEach(tokenLen->{
+          
+            final int nextLen = partialSum.getValue() + tokenLen;
+            if(nextLen <= maxChars) {
+                partialSum.update(x->nextLen);
+                partialCount.inc();
+            } else {
+                
+                constraintLines.add(
+                        IntStream.range(0, partialCount.getValue())
+                            .mapToObj(__->tokenIterator.next())
+                            .collect(Collectors.joining()));
+                
+                partialSum.update(x->tokenLen);
+                partialCount.setValue(1);
+            }
+        });
+        
+        // add remaining
+        constraintLines.add(
+                IntStream.range(0, partialCount.getValue())
+                    .mapToObj(__->tokenIterator.next())
+                    .collect(Collectors.joining()));
+        
+        return constraintLines.stream();
+    }
 
 }

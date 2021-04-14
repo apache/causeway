@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+/**
+ * @since 1.x {@index}
+ */
 public abstract class BS3ClearFix extends BS3RowContent {
 
     private static final long serialVersionUID = 1L;

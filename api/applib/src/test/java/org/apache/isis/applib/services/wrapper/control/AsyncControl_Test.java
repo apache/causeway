@@ -19,11 +19,14 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.core.task.support.ExecutorServiceAdapter;
 import org.springframework.core.task.support.TaskExecutorAdapter;
+
+import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.val;
 
@@ -71,10 +74,10 @@ public class AsyncControl_Test {
         val control = AsyncControl.returningVoid();
 
         // when
-        control.withUser("fred");
+        control.withUser(UserMemento.ofName("fred"));
 
         // then
-        Assertions.assertThat(control.getUser()).isEqualTo("fred");
+        Assertions.assertThat(control.getUser().getName()).isEqualTo("fred");
     }
 
     @Test
@@ -84,10 +87,11 @@ public class AsyncControl_Test {
         val control = AsyncControl.returningVoid();
 
         // when
-        control.withRoles("role-1", "role-2");
+        control.withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"));
 
         // then
-        Assertions.assertThat(control.getRoles()).containsExactlyInAnyOrder("role-1", "role-2");
+        Assertions.assertThat(control.getUser().streamRoleNames().collect(Collectors.toList()))
+        .containsExactlyInAnyOrder("role-1", "role-2");
     }
 
     @Test
@@ -102,8 +106,7 @@ public class AsyncControl_Test {
 
         val control = AsyncControl.returning(String.class)
                 .withSkipRules()
-                .withUser("fred")
-                .withRoles("role-1", "role-2")
+                .withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"))
                 .with(executorService)
                 .with(exceptionHandler);
 

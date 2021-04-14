@@ -41,7 +41,7 @@ public final class AwaitableLatch {
 
     /**
      * {@link AwaitableLatch#await()}
-     * @throws InterruptedException
+     * @throws RuntimeException when an InterruptedException occurred
      */
     public void await() {
         try {
@@ -53,7 +53,7 @@ public final class AwaitableLatch {
 
     /**
      * {@link AwaitableLatch#await(long, TimeUnit)}
-     * @throws InterruptedException
+     * @throws RuntimeException when an InterruptedException occurred
      */
     public boolean await(long timeout, TimeUnit unit) {
         try {

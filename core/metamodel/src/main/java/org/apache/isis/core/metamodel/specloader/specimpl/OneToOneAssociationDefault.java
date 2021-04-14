@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -52,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class OneToOneAssociationDefault 
-extends ObjectAssociationAbstract 
+public class OneToOneAssociationDefault
+extends ObjectAssociationAbstract
 implements OneToOneAssociation {
 
     public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
@@ -72,7 +73,7 @@ implements OneToOneAssociation {
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyVisibilityContext(
@@ -82,7 +83,7 @@ implements OneToOneAssociation {
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyUsabilityContext(
@@ -124,9 +125,9 @@ implements OneToOneAssociation {
     // -- init
     @Override
     public void initAssociation(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final ManagedObject referencedAdapter) {
-        
+
         final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
         if (initializerFacet != null) {
             initializerFacet.initProperty(ownerAdapter, referencedAdapter);
@@ -163,7 +164,6 @@ implements OneToOneAssociation {
     /**
      * Sets up the {@link Command}, then delegates to the appropriate facet
      * ({@link PropertySetterFacet} or {@link PropertyClearFacet}).
-     * @return
      */
     @Override
     public ManagedObject set(
@@ -187,20 +187,24 @@ implements OneToOneAssociation {
 
         val propertySetterFacet = getFacet(PropertySetterFacet.class);
         if (propertySetterFacet == null) {
-            return ownerAdapter;
+            throw _Exceptions.unexpectedCodeReach();
         }
-        
+
         EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
-        ManagedObject targetPossiblyCloned = propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
-        return targetPossiblyCloned;
+        return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
     private ManagedObject clearValue(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val propertyClearFacet = getFacet(PropertyClearFacet.class);
+
+        if (propertyClearFacet == null) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+
         return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
@@ -270,11 +274,11 @@ implements OneToOneAssociation {
             final ManagedObject ownerAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet
                 .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
-        
+
         val adapters = _NullSafe.stream(pojoOptions)
                 .map(getObjectManager()::adapt)
                 .collect(Can.toCan());
@@ -296,8 +300,9 @@ implements OneToOneAssociation {
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
 
-        setupCommand(targetAdapter, () -> getCommandDtoServiceInternal()
-                .asCommandDto(Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
+        setupCommand(targetAdapter, interactionId ->
+            getCommandDtoFactory()
+                .asCommandDto(interactionId, Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
     }
 
 

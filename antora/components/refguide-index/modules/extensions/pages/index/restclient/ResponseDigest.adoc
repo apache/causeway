@@ -1,0 +1,82 @@
+= ResponseDigest
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.ResponseDigest.java
+----
+class ResponseDigest<T> {
+  ResponseDigest<T> of(final Response response, final Class<T> entityType)     // <.>
+  ResponseDigest<T> ofList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType)     // <.>
+  ResponseDigest<T> ofAsyncFailure(final Future<Response> asyncResponse, final Class<T> entityType, final Exception failure)     // <.>
+  boolean isSuccess()     // <.>
+  boolean isFailure()     // <.>
+  Optional<T> getEntity()     // <.>
+  Can<T> getEntities()     // <.>
+  Exception getFailureCause()     // <.>
+  T singletonOrElseMapFailure(Function<Exception, T> failureMapper)     // <.>
+  Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper)     // <.>
+}
+----
+
+<.> xref:#of__Response_Class[of(Response, Class)]
++
+--
+synchronous response processing (single entity)
+--
+<.> xref:#ofList__Response_Class_GenericType[ofList(Response, Class, GenericType)]
++
+--
+synchronous response processing (list of entities)
+--
+<.> xref:#ofAsyncFailure__Future_Class_Exception[ofAsyncFailure(Future, Class, Exception)]
++
+--
+a-synchronous response failure processing
+--
+<.> xref:#isSuccess__[isSuccess()]
+<.> xref:#isFailure__[isFailure()]
+<.> xref:#getEntity__[getEntity()]
+<.> xref:#getEntities__[getEntities()]
+<.> xref:#getFailureCause__[getFailureCause()]
+<.> xref:#singletonOrElseMapFailure__Function[singletonOrElseMapFailure(Function)]
+<.> xref:#multipleOrElseMapFailure__Function[multipleOrElseMapFailure(Function)]
+
+== Members
+
+[#of__Response_Class]
+=== of(Response, Class)
+
+synchronous response processing (single entity)
+
+[#ofList__Response_Class_GenericType]
+=== ofList(Response, Class, GenericType)
+
+synchronous response processing (list of entities)
+
+[#ofAsyncFailure__Future_Class_Exception]
+=== ofAsyncFailure(Future, Class, Exception)
+
+a-synchronous response failure processing
+
+[#isSuccess__]
+=== isSuccess()
+
+[#isFailure__]
+=== isFailure()
+
+[#getEntity__]
+=== getEntity()
+
+[#getEntities__]
+=== getEntities()
+
+[#getFailureCause__]
+=== getFailureCause()
+
+[#singletonOrElseMapFailure__Function]
+=== singletonOrElseMapFailure(Function)
+
+[#multipleOrElseMapFailure__Function]
+=== multipleOrElseMapFailure(Function)

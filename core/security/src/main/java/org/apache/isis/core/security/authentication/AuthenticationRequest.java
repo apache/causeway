@@ -19,43 +19,41 @@
 
 package org.apache.isis.core.security.authentication;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
+/**
+ * Represents a request to authenticate the user identified by
+ * {@link AuthenticationRequest#getName()}.
+ *
+ * <p>
+ *     If successful, then the authentication mechanism is expected to add the
+ *     {@link AuthenticationRequest#streamRoles() roles} to the resultant
+ *     {@link Authentication} (obtained from the
+ *     {@link org.apache.isis.applib.services.user.UserMemento} returned by
+ *     {@link Authentication#getUser()}).
+ * </p>
+ *
+ * @apiNote This is a framework internal class and so does not constitute a formal API.
+ *
+ * @since 1.x - refactored/renamed for v2 {@index}
+ */
 public interface AuthenticationRequest {
 
     /**
-     * Account's name. 
+     * The name of the user to be authenticated by the configured
+     * {@link Authenticator}.
+     * Account's name.
      * @return nullable
      */
-    public @Nullable String getName();
+    @Nullable String getName();
 
     /**
-     * Account's roles as Stream.
+     * The roles to be  Account's roles as Stream.
      * @return non-null
      * @since 2.0
      */
-    public Stream<String> streamRoles();
-
-    /**
-     * Add a role to associate with the account. Null or empty roles are ignored.
-     * @param role
-     * @since 2.0
-     */
-    public void addRole(@Nullable String role);
-
-    /**
-     * Add a roles to associate with the account. Null or empty roles are ignored.
-     * @param roles
-     * @since 2.0
-     */
-    public default void addRoles(@Nullable Collection<String> roles) {
-        stream(roles)
-        .forEach(this::addRole);
-    }
+    Stream<String> streamRoles();
 
 }

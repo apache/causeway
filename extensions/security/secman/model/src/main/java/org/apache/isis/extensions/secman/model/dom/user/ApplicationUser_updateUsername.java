@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -30,25 +30,25 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateUsernameDomainEvent.class, 
-        associateWith = "username",
-        associateWithSequence = "1")
+        associateWith = "username")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateUsername {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
             @ParameterLayout(named="Username")
             final String username) {
-        holder.setUsername(username);
-        return holder;
+        target.setUsername(username);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
-        return holder.getUsername();
+        return target.getUsername();
     }
 
 }

@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 
 public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
-    public MultiLineFacetNone(final boolean preventWrapping, final FacetHolder holder) {
-        super(1, preventWrapping, holder);
+    public MultiLineFacetNone(final FacetHolder holder) {
+        super(1, holder);
     }
 
     @Override

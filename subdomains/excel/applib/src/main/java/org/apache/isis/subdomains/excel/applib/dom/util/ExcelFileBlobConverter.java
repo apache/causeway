@@ -32,6 +32,9 @@ import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ExcelFileBlobConverter {
 
     public Blob toBlob(final String name, final File file) {
@@ -56,7 +59,7 @@ public class ExcelFileBlobConverter {
     }
 
     // -- bytes
-    
+
     private byte[] bytes;
 
     private byte[] getBytes(URL resource) {
@@ -73,7 +76,7 @@ public class ExcelFileBlobConverter {
             throw new IllegalArgumentException("Could not read from resource: " + resource);
         }
     }
-    
+
 
 
 }

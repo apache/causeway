@@ -370,7 +370,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         long epochMillisAtStartOfDay = 
                 dueBy.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 
-        return epochMillisAtStartOfDay < (clockService.nowAsMillis() - ONE_WEEK_IN_MILLIS);
+        return epochMillisAtStartOfDay < (clockService.getEpochMillis() - ONE_WEEK_IN_MILLIS);
     }
 
     //endregion
@@ -438,7 +438,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //            optionality = Optionality.OPTIONAL,
 //            editing = Editing.DISABLED
 //    )
-//    @MemberOrder(sequence="3")
+//    @PropertyLayout(sequence="3")
 //    public Location getLocation() {
 //        return locationLatitude != null && locationLongitude != null? new Location(locationLatitude, locationLongitude): null;
 //    }
@@ -447,7 +447,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        locationLatitude = location != null ? location.getLatitude() : null;
 //    }
 //
-//    @MemberOrder(name="location", sequence="1")
+//    @PropertyLayout(group="location", sequence="1")
 //    public ExcelDemoToDoItem updateLocation(final Double longitude, final Double latitude) {
 //        locationLatitude = latitude;
 //        locationLongitude = longitude;

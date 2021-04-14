@@ -55,7 +55,7 @@ public class ExceptionRecognizerGeneralTest {
 
     @Test
     public void whenRecognizedWithMessageParser() {
-        ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE, s->"pre: " + s){};
+        ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE, ex->"pre: " + ex.getMessage()){};
         assertThat(ersGeneral.recognize(new FooException()).get().getReason(), is("pre: foo"));
     }
 

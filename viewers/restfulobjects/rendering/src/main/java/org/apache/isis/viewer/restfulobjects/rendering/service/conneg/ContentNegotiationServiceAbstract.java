@@ -37,39 +37,42 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
+/**
+ * @since 1.x {@index}
+ */
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection) {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
     }

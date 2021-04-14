@@ -18,77 +18,31 @@
  */
 package org.apache.isis.applib.services.swagger;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.annotation.ViewModel;
-
-// tag::refguide[]
+/**
+ * Generates Swagger schema definition files to describe the public and/or
+ * private RESTful APIs exposed by the RestfulObjects viewer.
+ *
+ * <p>
+ *     These spec files can then be used with the
+ *     link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the
+ *     REST API, or used to generate client-side stubs using the
+ *     link:http://swagger.io/swagger-codegen/[Swagger codegen] tool,
+ *     eg for use in a custom REST client app.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public interface SwaggerService {
 
-    String generateSwaggerSpec(             // <.>
+    /**
+     * Generate a Swagger spec with the specified visibility and format.
+     *
+     * @param visibility
+     * @param format
+     * @return
+     */
+    String generateSwaggerSpec(
             final Visibility visibility,
             final Format format);
 
-    // end::refguide[]
-    // tag::refguide[]
-    enum Visibility {
-        // end::refguide[]
-        /**
-         * Specification for use by third-party clients, ie public use.
-         *
-         * <p>
-         * Restricted only to view models ({@link ViewModel} or equivalent) and {@link DomainService} with a nature
-         * of {@link NatureOfService#VIEW_REST_ONLY}.
-         * </p>
-         */
-        // tag::refguide[]
-        PUBLIC,                             // <.>
-        // end::refguide[]
-        /**
-         * Specification for use only by internally-managed clients, ie private internal use.
-         *
-         * <p>
-         * Includes specifications of domain entities as well as view models.
-         * </p>
-         */
-        // tag::refguide[]
-        PRIVATE,                            // <.>
-        // end::refguide[]
-        /**
-         * As {@link #PRIVATE}, also including any prototype actions (where {@link Action#restrictTo()} set to
-         * {@link RestrictTo#PROTOTYPING}).
-         */
-        // tag::refguide[]
-        PRIVATE_WITH_PROTOTYPING            // <.>
-        // end::refguide[]
-        ;
-
-        public boolean isPublic() {
-            return this == PUBLIC;
-        }
-        // tag::refguide[]
-    }
-
-    enum Format {
-        JSON,                               // <.>
-        YAML                                // <.>
-        // end::refguide[]
-        ;
-        /**
-         * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
-         */
-        public String mediaType() {
-            if(this == JSON) {
-                return "text/json";
-            } else {
-                return "application/yaml";
-            }
-        }
-        // tag::refguide[]
-    }
-
 }
-// end::refguide[]

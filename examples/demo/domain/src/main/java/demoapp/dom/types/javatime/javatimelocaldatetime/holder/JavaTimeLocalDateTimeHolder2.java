@@ -19,7 +19,6 @@
 package demoapp.dom.types.javatime.javatimelocaldatetime.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -32,9 +31,8 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,9 +42,8 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "2")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "2")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -56,9 +53,8 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         labelPosition = LabelPosition.RIGHT,                // <.>
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "3")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "3")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -68,9 +64,8 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "4")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "4")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

@@ -26,12 +26,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
@@ -71,6 +77,11 @@ final class Can_Singleton<T> implements Can<T> {
     }
     
     @Override
+    public Optional<T> getLast() {
+        return getSingleton();
+    }
+    
+    @Override
     public Optional<T> get(int elementIndex) {
         return getSingleton();
     }
@@ -90,6 +101,31 @@ final class Can_Singleton<T> implements Can<T> {
         return Collections.singletonList(element).iterator();
     }
 
+    @Override
+    public Can<T> reverse() {
+        return this;
+    }
+    
+    @Override
+    public Iterator<T> reverseIterator() {
+        return iterator();
+    }
+    
+    @Override
+    public void forEach(@NonNull Consumer<? super T> action) {
+        action.accept(this.element);
+    }
+    
+    @Override
+    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+        if(predicate==null) {
+            return this; // identity
+        }
+        return predicate.test(element)
+                ? this // identity
+                : Can.empty();
+    }
+    
     @Override
     public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
         action.accept(element, zippedIn.iterator().next());
@@ -181,8 +217,38 @@ final class Can_Singleton<T> implements Can<T> {
     }
     
     @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        // when returning
+        // -1 ... this (singleton) is before other 
+        // +1 ... this (singleton) is after other
+        if(other==null
+                || other.isEmpty()) {
+            return 1; // all empty Cans are same and come first
+        }
+        final int firstElementComparison = _Objects.compareNonNull(
+                this.element, 
+                other.getFirstOrFail());
+        if(firstElementComparison!=0
+                || other.isCardinalityOne()) {
+            return firstElementComparison; // when both Cans are singletons, just compare by their contained values
+        }
+        // at this point firstElementComparison is 0 and other is of cardinality MULTIPLE
+        return -1; // singletons come before multi-cans 
+    }
+    
+    @Override
     public List<T> toList() {
         return Collections.singletonList(element); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        return Collections.singleton(element); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        return Collections.singleton(element); // serializable and immutable
     }
     
     @Override

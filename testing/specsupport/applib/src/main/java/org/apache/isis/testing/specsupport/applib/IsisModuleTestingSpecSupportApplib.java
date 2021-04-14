@@ -20,6 +20,9 @@ package org.apache.isis.testing.specsupport.applib;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 public class IsisModuleTestingSpecSupportApplib {
 }

@@ -70,7 +70,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final ObjectManager objectManager = commonContext.getObjectManager();
         final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
-        val spec = specificationLoader.loadSpecification(oid.getObjectSpecId());
+        val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
         val objectId = oid.getIdentifier();
         val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
 

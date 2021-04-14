@@ -39,7 +39,7 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.resources._Xml;
 
@@ -49,12 +49,12 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.JaxbServiceDefault")
+@Named("isis.runtimeservices.JaxbServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class JaxbServiceDefault extends JaxbService.Simple {
+public class JaxbServiceDefault extends Simple {
 
     private final ServiceInjector serviceInjector;
     /*circular dependency, so use provider*/
@@ -68,9 +68,9 @@ public class JaxbServiceDefault extends JaxbService.Simple {
             try {
                 val elementType = metaModelServiceProvider.get()
                         .fromObjectType(domainObjectList.getElementObjectType());
-                if (elementType!=null 
+                if (elementType!=null
                         && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
-                    
+
                     return JAXBContext.newInstance(domainClass, elementType);
                 } else {
                     return JAXBContext.newInstance(domainClass);
@@ -83,17 +83,18 @@ public class JaxbServiceDefault extends JaxbService.Simple {
     }
 
     @Override
-    protected Object internalFromXml(@NonNull JAXBContext jaxbContext, String xml,
-            Map<String, Object> unmarshallerProperties) throws JAXBException {
-     
+    protected Object internalFromXml(
+            final @NonNull JAXBContext jaxbContext,
+            final String xml,
+            final Map<String, Object> unmarshallerProperties) throws JAXBException {
+
         val pojo = super.internalFromXml(jaxbContext, xml, unmarshallerProperties);
         if(pojo instanceof DomainObjectList) {
 
             // go around the loop again, so can properly deserialize the contents
             val domainObjectList = (DomainObjectList) pojo;
             val jaxbContextForList = jaxbContextForObject(domainObjectList);
-
-            return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
+            return super.internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
         }
         return pojo;
     }

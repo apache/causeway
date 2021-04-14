@@ -1,0 +1,256 @@
+= @Property
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Collects together all the domain semantics for the property of a domain object.
+
+== API
+
+[source,java]
+.Property.java
+----
+@interface Property {
+  Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
+  Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class;     // <.>
+  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  String editingDisabledReason() default "";     // <.>
+  Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  String fileAccept() default "";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  int maxLength() default -1;     // <.>
+  Snapshot snapshot() default Snapshot.NOT_SPECIFIED;     // <.>
+  Class<? extends Specification>[] mustSatisfy() default {};     // <.>
+  Optionality optionality() default Optionality.NOT_SPECIFIED;     // <.>
+  Projecting projecting() default Projecting.NOT_SPECIFIED;     // <.>
+  String regexPattern() default "";     // <.>
+  int regexPatternFlags() default 0;     // <.>
+  String regexPatternReplacement() default "Doesn't match pattern";     // <.>
+}
+----
+
+<.> xref:#commandDtoProcessor[commandDtoProcessor]
++
+--
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+--
+<.> xref:#commandPublishing[commandPublishing]
++
+--
+Whether property edits, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+--
+<.> xref:#domainEvent[domainEvent]
++
+--
+Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+--
+<.> xref:#editing[editing]
++
+--
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+--
+<.> xref:#editingDisabledReason[editingDisabledReason]
++
+--
+If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
+--
+<.> xref:#executionPublishing[executionPublishing]
++
+--
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+--
+<.> xref:#fileAccept[fileAccept]
++
+--
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+--
+<.> xref:#hidden[hidden]
++
+--
+Indicates where the property is not visible to the user.
+--
+<.> xref:#maxLength[maxLength]
++
+--
+The maximum entry length of a field.
+--
+<.> xref:#snapshot[snapshot]
++
+--
+Indicates whether the property should be included or excluded from mementos.
+--
+<.> xref:#mustSatisfy[mustSatisfy]
++
+--
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
+--
+<.> xref:#optionality[optionality]
++
+--
+Whether this property is optional or is mandatory (ie required).
+--
+<.> xref:#projecting[projecting]
++
+--
+If set to _Projecting#PROJECTED projected_ , then indicates that the owner of this property is a view model which is a projection of some other entity, and that the property holds a reference to that "underlying".
+--
+<.> xref:#regexPattern[regexPattern]
++
+--
+Regular expression pattern that a value should conform to, and can be formatted as.
+--
+<.> xref:#regexPatternFlags[regexPatternFlags]
++
+--
+Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
+--
+<.> xref:#regexPatternReplacement[regexPatternReplacement]
++
+--
+Replacement text for the pattern in generated error message.
+--
+
+== Members
+
+[#commandDtoProcessor]
+=== commandDtoProcessor
+
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+
+The processor itself is used by xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+
+[#commandPublishing]
+=== commandPublishing
+
+Whether property edits, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+
+[#domainEvent]
+=== domainEvent
+
+Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+
+Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
+
+For example:
+
+----
+
+public static class StartDateChanged extends PropertyDomainEvent { ... }
+
+@Property(domainEvent=StartDateChanged.class)
+public LocalDate getStartDate() { ...}
+----
+
+This subclass must provide a no-arg constructor; the fields are set reflectively.
+
+[#editing]
+=== editing
+
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+
+Note that non-editable objects can nevertheless have actions invoked upon them.
+
+[#editingDisabledReason]
+=== editingDisabledReason
+
+If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
+
+[#executionPublishing]
+=== executionPublishing
+
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+
+[#fileAccept]
+=== fileAccept
+
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+
+The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+
+Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
+
+[#hidden]
+=== hidden
+
+Indicates where the property is not visible to the user.
+
+[#maxLength]
+=== maxLength
+
+The maximum entry length of a field.
+
+The default value ( `-1` ) indicates that no maxLength has been specified.
+
+NOTE: this will usually be supplemented by a JDO or JPA-specific annotation to indicate length of the column in the table to whic the entity is mapped.
+
+[#snapshot]
+=== snapshot
+
+Indicates whether the property should be included or excluded from mementos.
+
+To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation `javax.jdo.annotations.NotPersistent` 
+
+[#mustSatisfy]
+=== mustSatisfy
+
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
+
+If more than one is provided, then all must be satisfied (in effect "AND"ed together).
+
+[#optionality]
+=== optionality
+
+Whether this property is optional or is mandatory (ie required).
+
+NOTE: this will usually be supplmented by a JDO or JPA-specific annotation to specify the nullability of the corresponding column in the table to which the owning entity is mapped.
+
+[#projecting]
+=== projecting
+
+If set to _Projecting#PROJECTED projected_ , then indicates that the owner of this property is a view model which is a projection of some other entity, and that the property holds a reference to that "underlying".
+
+This is used to automatically redirect any bookmarks to the view model (projection) to instead be directed at the underlying entity.
+
+Only one such property should be marked as being a projection with a view model.
+
+[#regexPattern]
+=== regexPattern
+
+Regular expression pattern that a value should conform to, and can be formatted as.
+
+[#regexPatternFlags]
+=== regexPatternFlags
+
+Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
+
+The default value, `0` , means that no flags have been specified.
+
+[#regexPatternReplacement]
+=== regexPatternReplacement
+
+Replacement text for the pattern in generated error message.
+
+include::hooks/Property_010-examples-and-usage.adoc[]
+
+include::hooks/Property_021-optionality.adoc[]
+
+include::hooks/Property_022-editing.adoc[]
+
+include::hooks/Property_023-maxLength.adoc[]
+
+include::hooks/Property_024-mustSatisfy.adoc[]
+
+include::hooks/Property_025-projecting.adoc[]
+
+include::hooks/Property_026-domain-events.adoc[]
+
+include::hooks/Property_027-execution-publishing.adoc[]
+
+include::hooks/Property_028-command-processing.adoc[]
+
+include::hooks/Property_029-regexPattern.adoc[]
+
+include::hooks/Property_030-snapshot.adoc[]
+
+include::hooks/Property_031-fileAccept.adoc[]
+
+include::hooks/Property_033-hidden.adoc[]

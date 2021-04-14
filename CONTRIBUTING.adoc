@@ -1,3 +1,3 @@
 = Contributing
 
-You can find full details of how to contribute back to Isis at our http://isis.apache.org/guides/dg/dg.html[main website].
+You can find full details of how to contribute back to Isis at our https://isis.apache.org/conguide/2.0.0-M4/contributing.html[main website].

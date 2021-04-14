@@ -26,8 +26,9 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -37,7 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
+import org.apache.isis.core.metamodel.methods.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
@@ -46,7 +47,7 @@ import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import lombok.val;
 
 abstract class MixinIntendedAs {
-    
+
     protected ProgrammingModelFacetsJava8 programmingModel;
     private MetaModelContext metaModelContext;
 
@@ -58,8 +59,8 @@ abstract class MixinIntendedAs {
 
         val mockTranslationService = Mockito.mock(TranslationService.class);
         when(mockTranslationService.getMode()).thenReturn(Mode.DISABLED);
-        
-        
+
+
         // PRODUCTION
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -68,10 +69,10 @@ abstract class MixinIntendedAs {
                 .titleService(new TitleServiceDefault(null, null))
                 .serviceInjector(mockServiceInjector)
                 .build();
-        
+
         ((ProgrammingModelAbstract)programmingModel)
         .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
-        
+
         metaModelContext.getSpecificationLoader().createMetaModel();
     }
 
@@ -84,52 +85,52 @@ abstract class MixinIntendedAs {
             final Method method,
             final int paramNum,
             final MethodRemover methodRemover) {
-        
+
     }
 
     protected FacetHolder runTypeContextOn(Class<?> type) {
-        
+
         val facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
-              Identifier.classIdentifier(type));
+              Identifier.classIdentifier(LogicalType.fqcn(type)));
         facetHolder.setMetaModelContext(metaModelContext);
-        
-        val processClassContext = 
+
+        val processClassContext =
                 new FacetFactory.ProcessClassContext(
-                        type, 
-                        MethodRemoverConstants.NOOP, 
+                        type,
+                        MethodRemoverConstants.NOOP,
                         facetHolder);
-        
+
         programmingModel.streamFactories()
 //        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
 //        .peek(facetFactory->System.out.println("### " + facetFactory.getClass().getName()))
         .forEach(facetFactory->facetFactory.process(processClassContext));
-        
+
         return facetHolder;
     }
-    
+
     protected FacetedMethodParameter runScalarParameterContextOn(Method actionMethod, int paramIndex) {
-        
+
         val owningType = actionMethod.getDeclaringClass();
         val parameterType = actionMethod.getParameterTypes()[paramIndex];
-        
+
         val facetedMethodParameter = new FacetedMethodParameter(
-                FeatureType.ACTION_PARAMETER_SCALAR, 
-                owningType, 
-                actionMethod, 
+                FeatureType.ACTION_PARAMETER_SCALAR,
+                owningType,
+                actionMethod,
                 parameterType);
-        
-        val processParameterContext = 
+
+        val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        owningType, 
-                        actionMethod, 
-                        paramIndex, 
-                        MethodRemoverConstants.NOOP, 
+                        owningType,
+                        actionMethod,
+                        paramIndex,
+                        MethodRemoverConstants.NOOP,
                         facetedMethodParameter);
-        
+
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
-        
+
         return facetedMethodParameter;
     }
-    
+
 }

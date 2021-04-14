@@ -51,9 +51,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  *     runtime type is annotated with the JAXB {@link javax.xml.bind.annotation.XmlRootElement} annotation so that RestEasy is able to
  *     unambiguously serialize it.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
-@Named("isisRoRendering.ContentNegotiationServiceXRoDomainType")
+@Named("isis.viewer.ro.ContentNegotiationServiceXRoDomainType")
 @Order(OrderPrecedence.MIDPOINT - 100)
 @Qualifier("XRoDomainType")
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
@@ -61,24 +63,24 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
     @Inject private List<ContentMappingService> contentMappingServices;
-    
+
     /**
      * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext,
+            final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
         final Object domainObject = objectOf(objectAdapter);
         final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
 
-        final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
+        final MediaType mediaType = mediaTypeFrom(resourceContext, representationType);
         if (mediaType == null) {
             return null;
         }
 
-        return buildResponse(renderContext, domainObject, representationType);
+        return buildResponse(resourceContext, domainObject, representationType);
     }
 
     protected MediaType mediaTypeFrom(
@@ -100,12 +102,12 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext,
+            final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final RepresentationType representationType = RepresentationType.ACTION_RESULT;
 
-        final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
+        final MediaType mediaType = mediaTypeFrom(resourceContext, representationType);
         if (mediaType == null) {
             return null;
         }
@@ -114,7 +116,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         if(domainObject == null) {
             throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
         }
-        return buildResponse(renderContext, domainObject, representationType);
+        return buildResponse(resourceContext, domainObject, representationType);
     }
 
     protected Response.ResponseBuilder buildResponse(
@@ -160,6 +162,6 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    
+
 
 }

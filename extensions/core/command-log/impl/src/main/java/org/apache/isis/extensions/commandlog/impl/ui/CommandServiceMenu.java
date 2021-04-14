@@ -18,13 +18,14 @@
  */
 package org.apache.isis.extensions.commandlog.impl.ui;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.OrderPrecedence;
@@ -49,16 +49,19 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = "isisExtensionsCommandLog.CommandServiceMenu"
+    objectType = "isis.ext.commandLog.CommandServiceMenu"
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Service
-@Named("isisExtensionsCommandLog.CommandServiceMenu")
+@Named("isis.ext.commandLog.CommandServiceMenu")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
@@ -77,8 +80,7 @@ public class CommandServiceMenu {
 
     public static class ActiveCommandsDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = ActiveCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt")
-    @MemberOrder(sequence="10")
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt", sequence="10")
     public List<CommandJdo> activeCommands() {
         return commandServiceRepository.findCurrent();
     }
@@ -89,8 +91,7 @@ public class CommandServiceMenu {
 
     public static class FindCommandsDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-search")
-    @MemberOrder(sequence="20")
+    @ActionLayout(cssClassFa = "fa-search", sequence="20")
     public List<CommandJdo> findCommands(
             @Parameter(optionality= Optionality.OPTIONAL)
             @ParameterLayout(named="From")
@@ -104,21 +105,20 @@ public class CommandServiceMenu {
         return commandServiceRepository == null;
     }
     public LocalDate default0FindCommands() {
-        return clockService.nowAsJodaLocalDate().minusDays(7);
+        return now().minusDays(7);
     }
     public LocalDate default1FindCommands() {
-        return clockService.nowAsJodaLocalDate();
+        return now();
     }
 
 
     public static class FindCommandByIdDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-crosshairs")
-    @MemberOrder(sequence="30")
+    @ActionLayout(cssClassFa = "fa-crosshairs", sequence="30")
     public CommandJdo findCommandById(
             @ParameterLayout(named="Transaction Id")
             final UUID transactionId) {
-        return commandServiceRepository.findByUniqueId(transactionId).orElse(null);
+        return commandServiceRepository.findByInteractionId(transactionId).orElse(null);
     }
     public boolean hideFindCommandById() {
         return commandServiceRepository == null;
@@ -127,12 +127,15 @@ public class CommandServiceMenu {
 
     public static class TruncateLogDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = TruncateLogDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, restrictTo = RestrictTo.PROTOTYPING)
-    @ActionLayout(cssClassFa = "fa-trash")
-    @MemberOrder(sequence="40")
+    @ActionLayout(cssClassFa = "fa-trash", sequence="40")
     public void truncateLog() {
         commandServiceRepository.truncateLog();
     }
 
+
+    private LocalDate now() {
+        return clockService.getClock().localDate(ZoneId.systemDefault());
+    }
 
 }
 

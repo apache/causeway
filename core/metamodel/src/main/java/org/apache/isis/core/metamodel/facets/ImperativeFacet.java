@@ -83,8 +83,6 @@ public interface ImperativeFacet extends Facet {
          * Modify property using modify/clear rather than simply using set.
          */
         MODIFY_PROPERTY_SUPPORTING,
-        MODIFY_COLLECTION_ADD,
-        MODIFY_COLLECTION_REMOVE,
         CHOICES_OR_AUTOCOMPLETE,
         DEFAULTS,
         INITIALIZATION,
@@ -108,8 +106,7 @@ public interface ImperativeFacet extends Facet {
 
         /**
          * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if
-         * it either is one or if it is a {@link DecoratingFacet} that in turn wraps
-         * an {@link ImperativeFacet}.
+         * it either is one or if it wraps one.
          *
          * <p>
          * Otherwise, returns <tt>null</tt>.
@@ -134,7 +131,7 @@ public interface ImperativeFacet extends Facet {
                     .filter(_NullSafe::isPresent)
                     .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
                     .collect(Collectors.toList());
-            
+
             switch(imperativeFacets.size()) {
             case 0:
                 break;
@@ -147,12 +144,12 @@ public interface ImperativeFacet extends Facet {
                     if(intentToReturn == null) {
                         intentToReturn = intent;
                     } else if(intentToReturn != intent) {
-                        throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
+                        throw new IllegalArgumentException(member.getIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
                     }
                 }
                 return intentToReturn;
             }
-            throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": unable to determine intent of " + method.getName());
+            throw new IllegalArgumentException(member.getIdentifier().toString() +  ": unable to determine intent of " + method.getName());
         }
 
         public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {

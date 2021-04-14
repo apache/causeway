@@ -19,15 +19,11 @@
 package org.apache.isis.tooling.cli;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.tooling.cli.projdoc.ProjectDocModel;
-import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
 
 import lombok.val;
 
@@ -36,18 +32,31 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 @Command(
-        name = "cli", 
-        mixinStandardHelpOptions = true, 
+        name = "cli",
+        mixinStandardHelpOptions = true,
         version = "0.1",
         description = "CLI for the Apache Isis Tooling Ecosystem",
         subcommands = {
-                Cli.ProjectDocCommand.class})
+                Cli.ProjectDocCommand.class,
+                Cli.SystemOverviewCommand.class,
+                Cli.GlobalIndexCommand.class,
+        })
 class Cli implements Callable<Integer> {
 
     @Option(
-            names = {"-p", "--project"}, 
+            names = {"-p", "--project"},
             description = "path to the (multi-module) project root (default: current dir)")
     private String projectRootPath;
+
+    @Option(
+            names = {"-w", "--overview"},
+            description = "path to the overview file (default: NONE = write to std.out)")
+    private String overviewPath;
+
+    @Option(
+            names = {"-x", "--index"},
+            description = "path to the index files (default: NONE = write to std.out)")
+    private String indexPath;
 
     private _Lazy<CliConfig> configRef = _Lazy.threadSafe(()->CliConfig
             .read(projectRootPath!=null
@@ -57,15 +66,27 @@ class Cli implements Callable<Integer> {
     public CliConfig getConfig() {
         return configRef.get();
     }
-    
+
     public  File getProjectRoot() {
         return projectRootPath!=null
                 ? new File(projectRootPath)
                 : new File(".");
     }
 
+    public  File getOverviewPath() {
+        return overviewPath !=null
+                ? new File(overviewPath)
+                : new File(".");
+    }
+
+    public  File getIndexPath() {
+        return indexPath !=null
+                ? new File(indexPath)
+                : new File(".");
+    }
+
     @Override
-    public Integer call() throws Exception { 
+    public Integer call() throws Exception {
         // not used
         return 0;
     }
@@ -73,43 +94,44 @@ class Cli implements Callable<Integer> {
     // -- SUB COMMANDS
 
     @Command(
-            name = "projdoc",
+            name = "overview",
             description = "Writes a System Overview document (AsciiDoc) to given output.")
-    static class ProjectDocCommand extends CliCommandAbstract {
-
-        @Option(
-                names = {"-o", "--output"}, 
-                description = "path to the output file (default: NONE = write to std.out)")
-        private String outputFilePath;
+    static class SystemOverviewCommand extends CliCommandAbstract {
 
         @Override
         public Integer call() throws Exception {
-            
-            val projTree = ProjectNodeFactory.maven(getProjectRoot());
-            val projectDocModel = new ProjectDocModel(projTree);
-            val adoc = projectDocModel.toAsciiDoc(getConfig().getProjectDoc());
-            
-            if(outputFilePath!=null) {
-                try(val fos = new FileOutputStream(new File(outputFilePath))){
-                    fos.write(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
-                }
-            } else {
-                System.out.println(adoc);
-            }
-            
+            generateAsciidoc(ProjectDocModel.Mode.OVERVIEW);
             return 0;
         }
-    }
-    
-    //TODO mvn2gradle
-    //description = "Detects differences between Maven and Gradle (multi-module) projects.",
-    
 
-    //    @Command
-    //    int shout() {
-    //        System.out.println("HI! " + getConfig());
-    //        return 0;
-    //    }
+    }
+
+    @Command(
+            name = "index",
+            description = "Writes a Global Index (AsciiDoc) to given output.")
+    static class GlobalIndexCommand extends CliCommandAbstract {
+
+        @Override
+        public Integer call() throws Exception {
+            generateAsciidoc(ProjectDocModel.Mode.INDEX);
+            return 0;
+        }
+
+    }
+
+    @Command(
+            name = "projdoc",
+            description = "Writes all generated (AsciiDoc) to given output.")
+    static class ProjectDocCommand extends CliCommandAbstract {
+
+        @Override
+        public Integer call() throws Exception {
+            generateAsciidoc(ProjectDocModel.Mode.ALL);
+            return 0;
+        }
+
+    }
+
 
     // -- ENTRY POINT
 
@@ -119,8 +141,6 @@ class Cli implements Callable<Integer> {
         int exitCode = new CommandLine(cli).execute(args);
         System.exit(exitCode);
     }
-
-    // -- HELPER
 
 
 }

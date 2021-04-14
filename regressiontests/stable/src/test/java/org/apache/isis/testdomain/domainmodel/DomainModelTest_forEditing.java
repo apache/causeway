@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertTrue;
@@ -59,8 +58,6 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@DirtiesContext
-//@Incubating("fails when run with surefire")
 class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
     @Inject private WrapperFactory wrapper;

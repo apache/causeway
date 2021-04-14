@@ -16,7 +16,6 @@
 * xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
 
 * xref:what-is-apache-isis/screencasts.adoc[Screencasts]
-// * xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 |
 [discrete]
@@ -25,7 +24,11 @@
 _Starter Apps_
 
 * xref:docs:starters:helloworld.adoc[HelloWorld]
+(link:https://helloworld.jdo.isis.incode.work[jdo],
+link:https://helloworld.jpa.isis.incode.work[jpa])
 * xref:docs:starters:simpleapp.adoc[SimpleApp]
+(link:https://simpleapp.jdo.isis.incode.work[jdo],
+link:https://simpleapp.jpa.isis.incode.work[jpa])
 
 _POMs_
 
@@ -34,9 +37,10 @@ _POMs_
 
 |
 [discrete]
-== Demos & Tutorial
+== Demos
 
 * xref:docs:demo:about.adoc[Demo App]
+(link:https://demo-wicket.isis.incode.work[online])
 * link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
 
 [discrete]
@@ -75,27 +79,25 @@ _Integrate between Apps_
 _Other_
 
 *  xref:incubator:ROOT:about.adoc[Incubator]
-*  xref:legacy:ROOT:about.adoc[Legacy]
 
 
 |
 [discrete]
 == Components
 
-* xref:system:ROOT:about.adoc[System Overview]
-
 _Viewers_
 
-* xref:vw:ROOT:about.adoc[Wicket UI]
-* xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
+* xref:vw:ROOT:about.adoc[Web UI (Wicket)]
+* xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
+
+_Persistence_
+
+* xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
+* xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
 _Security_
 
 * xref:security:ROOT:about.adoc[Security Guide]
-
-_Persistence_
-
-* xref:pjdo:ROOT:about.adoc[DataNucleus (JDO)]
 
 _Extensions_
 
@@ -120,7 +122,8 @@ _Releases_
 _Nightly Builds (not ASF)_
 
 * link:https://github.com/apache-isis-committers/isis-nightly[CI]
-* link:https://repo.incode.cloud/[Maven Repo]
+* link:https://nexus.incode.work/[Maven Repo] (current)
+* link:https://repo.incode.cloud/[Maven Repo] (v1 only)
 * link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 
 
@@ -128,17 +131,25 @@ _Nightly Builds (not ASF)_
 [discrete]
 == Framework
 
+_Process_
+
 * xref:conguide:ROOT:about.adoc[Contributors' Guide]
 * xref:comguide:ROOT:about.adoc[Committers' Guide]
-* xref:core:ROOT:about.adoc[Design Docs]
-* xref:more-thanks/more-thanks.adoc[Acknowledgements]
+** xref:tooling:ROOT:about.adoc[Tooling]
 
+_Design_
 
+* xref:core:ROOT:about.adoc[Core Framework]
+** xref:core:_overview:about.adoc[System Overview]
 
 _Analysis_
 
 * link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
 * link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+
+_Thanks_
+
+* xref:more-thanks/more-thanks.adoc[Acknowledgements]
 
 
 |
@@ -153,46 +164,45 @@ _Reading_
 
 _Academia_
 
-* link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD] (Pawson)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+* link:{attachmentsdir}/Pawson-Naked-Objects-thesis.pdf[Naked Objects] (PhD thesis, Pawson)
+* link:https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
+* link:https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
 
 
 
 
-|
-[discrete]
-== Real-world Apps
+//|
+//[discrete]
+//== Real-world Apps
+//
+//* https://github.com/estatio/estatio[Estatio]
+//* https://github.com/incodehq/contactapp[ContactApp]
+//* https://github.com/incodehq/ecpcrm[ECP CRM]
 
-* https://github.com/estatio/estatio[Estatio]
-* https://github.com/incodehq/contactapp[ContactApp]
-* https://github.com/incodehq/ecpcrm[ECP CRM]
+//_Example Apps_
 
-_Example Apps_
+//* https://github.com/apache/isis-app-todoapp[TodoApp]
+//* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
+//* https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
-* https://github.com/apache/isis-app-todoapp[TodoApp]
-* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
-* https://github.com/isisaddons/isis-app-quickstart[Quickstart]
-
-_Experiments_
-
-* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
-* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
+//_Experiments_
+//
+//* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
+//* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
-|
-[discrete]
-== 3rd party
-
-_Restful Objects viewers_
-
-* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
-* link:https://github.com/sebastianslutzky/rob[ROB]
-* link:https://github.com/joerg-rade/kroviz[Kroviz]
-
-|
-[discrete]
+//|
+//[discrete]
+//== 3rd party
+//
+//_Restful Objects viewers_
+//
+//* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
+//* link:https://github.com/sebastianslutzky/rob[ROB]
+//
+//|
+//[discrete]
 
 
 

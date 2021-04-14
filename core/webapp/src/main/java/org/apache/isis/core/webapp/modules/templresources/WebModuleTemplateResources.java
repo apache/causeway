@@ -41,7 +41,7 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isisWebapp.WebModuleTemplateResources")
+@Named("isis.webapp.WebModuleTemplateResources")
 @Order(OrderPrecedence.MIDPOINT - 100)
 @Qualifier("TemplateResources")
 public final class WebModuleTemplateResources extends WebModuleAbstract {

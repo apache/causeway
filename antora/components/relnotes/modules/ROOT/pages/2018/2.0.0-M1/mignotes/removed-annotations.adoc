@@ -23,11 +23,11 @@ The following annotations, or attributes of annotations, have been removed
 
 |`@ActionInteraction`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[`@Action#domainEvent()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[@Action#domainEvent()]
 
 |`@ActionOrder`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[`@MemberOrder()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[@MemberOrder()]
 
 |`@Aggregated`
 |
@@ -36,38 +36,38 @@ The following annotations, or attributes of annotations, have been removed
 |`@Auditable`
 (JDO applib)
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[@DomainObject#auditing()]
 
 |`@Audited`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[@DomainObject#auditing()]
 
 |`@AutoComplete`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_autoComplete[`@DomainObject#autoComplete()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_autoComplete[@DomainObject#autoComplete()]
 
 |`@ActionSemantics`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[@Action#semantics()]
 
 |`@Bookmarkable`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bookmarking[`@DomainObject#bookmarking()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bookmarking[@DomainObject#bookmarking()]
 
 |`@Bounded`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[@DomainObject#bounding()]
 
 |`@Bulk`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_invokeOn[`@Action#invokeOn()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_invokeOn[@Action#invokeOn()]
 
 Similarly, the `Bulk.InteractionContext` domain service is replaced with the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#ActionInvocationContext[ActionInvocationContext] domain service.
 
 
 |`@Collection`
 |`notPersisted`
-| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, no replacement.
 
 |`@CollectionInteraction`
 |
@@ -76,35 +76,35 @@ Similarly, the `Bulk.InteractionContext` domain service is replaced with the lin
 
 |`@CollectionLayout`
 |`render`
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[@CollectionLayout#defaultView()]
 
 |`@Command`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_command[`@Action#command()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_command[@Action#command()]
 
 |`@CssClass`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClass[`@ActionLayout#cssClass()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_cssClass[`@CollectionLayout#cssClass()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_cssClass[`@ParameterLayout#cssClass()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClass[@ActionLayout#cssClass()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_cssClass[@PropertyLayout#cssClass()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_cssClass[@CollectionLayout#cssClass()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_cssClass[@ParameterLayout#cssClass()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClass[@DomainObjectLayout#cssClass()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClass[@ViewModelLayout#cssClass()].
 
 |`@CssClassFa`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClassFa[`@ViewModelLayout#cssClassFa()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_cssClassFa[@ActionLayout#cssClassFa()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_cssClassFa[@DomainObjectLayout#cssClassFa()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_cssClassFa[@ViewModelLayout#cssClassFa()].
 
 |`@Debug`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[@Action#restrictTo()]
 
 |`@DescribedAs`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_describedAs[`@ActionLayout#describedAs()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_describedAs[`@PropertyLayout#describedAs()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_describedAs[`@CollectionLayout#describedAs()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_describedAs[`@ParameterLayout#describedAs()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_describedAs[`@ViewModelLayout#describedAs()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_describedAs[@ActionLayout#describedAs()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_describedAs[@PropertyLayout#describedAs()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_describedAs[@CollectionLayout#describedAs()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_describedAs[@ParameterLayout#describedAs()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_describedAs[@DomainObjectLayout#describedAs()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_describedAs[@ViewModelLayout#describedAs()].
 
 |`@Disabled`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_editingDisabledReason[`@Property#editingDisabledReason()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_editingDisabledReason[@Property#editingDisabledReason()]
 
 .2+|`@DomainObject`
 |`bounded`
-|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[`@Property#bounding`]
+|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[@Property#bounding]
 
 |`publishingPayloadFactory`
 |Removed, use the simpler link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#PublisherService[PublisherService] SPI instead.
@@ -113,34 +113,34 @@ Similarly, the `Bulk.InteractionContext` domain service is replaced with the lin
 
 |`@Exploration`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[@Action#restrictTo()]
 
 |`@FieldOrder`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[`@MemberOrder()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MemberOrder[@MemberOrder()]
 
 |`@Hidden`
 |
-|For actions by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_hidden[`@Action#hidden()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_hidden[`@ActionLayout#hidden()`], for properties by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_hidden[`@Property#hidden()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`], for collections by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_hidden[`@Collection#hidden()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_hidden[`@CollectionLayout#hidden()`].
+|For actions by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_hidden[@Action#hidden()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_hidden[@ActionLayout#hidden()], for properties by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_hidden[@Property#hidden()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_hidden[@PropertyLayout#hidden()], for collections by either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_hidden[@Collection#hidden()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_hidden[@CollectionLayout#hidden()].
 
 |`@Idempotent`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[@Action#semantics()]
 
 |`@Ignore`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Programmatic[`@Programmatic`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Programmatic[@Programmatic]
 
 |`@Immutable`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_editing[`@DomainObject#editing()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_editing[@DomainObject#editing()]
 
 |`@Mandatory`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[`@Property#optionality()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[`@Parameter#optionality()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[@Property#optionality()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[@Parameter#optionality()].
 
-For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[`@Column#allowsNull()`]
-Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[`@Nullable`] for either properties or parameters.
+For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#allowsNull()]
+Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[@Nullable] for either properties or parameters.
 
 |`@Mask`
 |
@@ -148,9 +148,9 @@ Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.h
 
 |`@MaxLength`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_maxLength[`@Property#maxLength()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_maxLength[`@Parameter#maxLength()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_maxLength[@Property#maxLength()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_maxLength[@Parameter#maxLength()].
 
-For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_length[`@Column#length()`]
+For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_length[@Column#length()]
 
 |`@MemberGroups`
 |
@@ -158,37 +158,37 @@ For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guid
 
 |`@MultiLine`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_multiLine[`@PropertyLayout#multiLine()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_multiLine[`@ParameterLayout#multiLine()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_multiLine[@PropertyLayout#multiLine()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_multiLine[@ParameterLayout#multiLine()].
 
 |`@MustSatisfy`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_mustSatisfy[`@Property#mustSatisfy()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_mustSatisfy[@Property#mustSatisfy()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_mustSatisfy[@Parameter#mustSatisfy()].
 
 |`@NotPersisted`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_notPersisted[`@Property#notPersisted()`].
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_notPersisted[@Property#notPersisted()].
 
 |`@Optional`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[`@Property#optionality()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[`@Parameter#optionality()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[@Property#optionality()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[@Parameter#optionality()].
 
-For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[`@Column#allowsNull()`]
-Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[`@Nullable`] for either properties or parameters.
+For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#allowsNull()]
+Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[@Nullable] for either properties or parameters.
 
 |`@Named`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_named[`@ActionLayout#named()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_named[`@PropertyLayout#named()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_named[`@CollectionLayout#named()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_named[`@ParameterLayout#named()`], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_named[`@DomainObjectLayout#named()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_named[`@ViewModelLayout#named()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_named[@ActionLayout#named()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_named[@PropertyLayout#named()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_named[@CollectionLayout#named()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_named[@ParameterLayout#named()], link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_named[@DomainObjectLayout#named()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ViewModelLayout_named[@ViewModelLayout#named()].
 
 |`@NotInServiceMenu`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[`@DomainService#nature()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[@DomainService#nature()]
 
 Specify nature of `VIEW_CONTRIBUTIONS_ONLY`.
 Alternatively, use a link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Mixin[mixin].
 
 |`@NotContributed`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[`@DomainService#nature()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_nature[@DomainService#nature()]
 
 Specify nature of `VIEW_MENU_ONLY`.
 
@@ -198,72 +198,72 @@ Specify nature of `VIEW_MENU_ONLY`.
 
 |`@ObjectType`
 |
-|Removed, link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_objectType[`@DomainObject#objectType()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_objectType[`@DomainService#objectType()`]
+|Removed, link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_objectType[@DomainObject#objectType()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainService_objectType[@DomainService#objectType()]
 
 Alternatively, for domain entities either:
 
-* the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Discriminator[`@Discriminator`] annotation can be specified; the value is used as the object type, or
-* the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PersistenceCapable_schema[`@PersistenceCapable#schema()`] can be specified; the value is used as the concatenated with the class name to create a two part object type.
+* the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Discriminator[@Discriminator] annotation can be specified; the value is used as the object type, or
+* the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PersistenceCapable_schema[@PersistenceCapable#schema()] can be specified; the value is used as the concatenated with the class name to create a two part object type.
 
 |`@Parameter`
 |`minLength`
 |Never implemented internally in Isis 1.x so no replacement.
 
-Note that the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MinLength[`@MinLength`] annotation is for use with autocomplete supporting methods (specifying the minimum number of characters to enter before an auto-complete search is performed).
+Note that the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_MinLength[@MinLength] annotation is for use with autocomplete supporting methods (specifying the minimum number of characters to enter before an auto-complete search is performed).
 
 
 |`@Paged`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_paged[`@CollectionLayout#paged()`] (for parented collections), or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_paged[`@DomainObject#paged()`] (for standalone collections)
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_paged[@CollectionLayout#paged()] (for parented collections), or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_paged[@DomainObject#paged()] (for standalone collections)
 
 |`@ParameterLayout`
 | renderedAsDayBefore
-|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_renderDay[`@ParameterLayout#renderDay`].
+|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ParameterLayout_renderDay[@ParameterLayout#renderDay].
 
 
 |`@Plural`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_plural[`@DomainObjectLayout#plural()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObjectLayout_plural[@DomainObjectLayout#plural()]
 
 |`@PostsAction +
 InvokedEvent`
 |
-| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[`@Action#domainEvent()`]
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_domainEvent[@Action#domainEvent()]
 
 |`@PostsCollection +
 AddedToEvent`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[@Collection#domainEvent()]
 
 |`@PostsCollection +
 RemovedFromEvent`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[`@Collection#domainEvent()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_domainEvent[@Collection#domainEvent()]
 
 |`@PostsProperty +
 ChangedEvent`
 |
-| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[`@Property#domainEvent()`]
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[@Property#domainEvent()]
 
 |`@Property`
 |`notPersisted`
-| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_snapshot[@Property#snapshot()]
 
 |`@PropertyInteraction`
 |
-| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[`@Property#domainEvent()`]
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_domainEvent[@Property#domainEvent()]
 
 .2+|`@PropertyLayout`
 |`renderedAsDayBefore`
-|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_renderDay[`@PropertyLayout#renderDay`].
+|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_renderDay[@PropertyLayout#renderDay].
 
 |`unchanging`
-|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_repainting[`@PropertyLayout#repainting`].
+|Deleted (was a boolean attribute), replaced by link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_repainting[@PropertyLayout#repainting].
 
 
 |`@Prototype`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[`@Action#restrictTo()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_restrictTo[@Action#restrictTo()]
 
 |`@PublishedAction`
 |
@@ -285,38 +285,38 @@ FactoryForObject`
 
 |`@QueryOnly`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[`@Action#semantics()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Action_semantics[@Action#semantics()]
 
 |`@Regex`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_regexPattern[`@Property#regexPattern()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_regexPattern[`@Parameter#regexPattern()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_regexPattern[@Property#regexPattern()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_regexPattern[@Parameter#regexPattern()].
 
 |`@Render`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[@CollectionLayout#defaultView()]
 
 Supporting `RenderType` enum also removed.
 
 |`@RenderedAs +
 DayBefore`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_renderDay[`@Property#renderDay()`] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_renderDay[`@Parameter#renderDay()`].
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_renderDay[@Property#renderDay()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_renderDay[@Parameter#renderDay()].
 
 |`@Resolve`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_defaultView[@CollectionLayout#defaultView()]
 
 |`@SortedBy`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_sortedBy[`@CollectionLayout#sortedBy()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_sortedBy[@CollectionLayout#sortedBy()]
 
 |`@TypeOf`
 |
-|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_typeOf[`@CollectionLayout#typeOf()`] (for parented collections), or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_typeOf[`@ActionLayout#typeOf()`] (for actions returning a standalone collection).
+|Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_CollectionLayout_typeOf[@CollectionLayout#typeOf()] (for parented collections), or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_ActionLayout_typeOf[@ActionLayout#typeOf()] (for actions returning a standalone collection).
 
 |`@TypicalLength`
 |
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_typicalLength[`@PropertyLayout#typicalLength()`].
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_PropertyLayout_typicalLength[@PropertyLayout#typicalLength()].
 
 
 |===

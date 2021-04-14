@@ -100,7 +100,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
 
     private MarkupContainer addPageTitle() {
-        String applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
+        String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
         return add(new Label(ID_PAGE_TITLE, applicationName));
     }
 
@@ -120,10 +120,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
-                .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
-        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
-                .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
+        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
+        
+        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 
 

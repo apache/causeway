@@ -47,16 +47,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.Authenticator;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -67,9 +69,11 @@ import lombok.extern.log4j.Log4j2;
  * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
-@Named("isisSecurityShiro.AuthenticatorShiro")
+@Named("isis.security.AuthenticatorShiro")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 @Log4j2
@@ -96,12 +100,12 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+    public Authentication authenticate(final AuthenticationRequest request, final String code) {
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
             return null;
         }
-        
+
         final AuthenticationToken token = asAuthenticationToken(request);
 
         final Subject currentSubject = SecurityUtils.getSubject();
@@ -116,9 +120,9 @@ public class AuthenticatorShiro implements Authenticator {
             } else {
 
                 // TODO: should we verify the code passed in that this session is still alive?
-                // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and just retrieve it?
+                // TODO: perhaps we should cache Isis' Authentication inside the Shiro Session, and just retrieve it?
 
-                return authenticationSessionFor(request, code, token, currentSubject);
+                return authenticationFor(request, code, token, currentSubject);
             }
         }
         try {
@@ -144,21 +148,21 @@ public class AuthenticatorShiro implements Authenticator {
             return null;
         }
 
-        return authenticationSessionFor(request, code, token, currentSubject);
+        return authenticationFor(request, code, token, currentSubject);
     }
 
     @Override
-    public void logout(final AuthenticationSession session) {
+    public void logout(final Authentication session) {
         Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
             currentSubject.logout();
         }
     }
 
-    AuthenticationSession authenticationSessionFor(
-            AuthenticationRequest request, 
-            String code, 
-            AuthenticationToken token, 
+    Authentication authenticationFor(
+            AuthenticationRequest request,
+            String validationCode,
+            AuthenticationToken token,
             Subject currentSubject) {
 
         final Stream<String> roles = Stream.concat(
@@ -168,7 +172,8 @@ public class AuthenticatorShiro implements Authenticator {
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
 
-        return new SimpleSession(request.getName(), roles, code);
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles);
+        return SimpleAuthentication.of(user, validationCode);
     }
 
     /**

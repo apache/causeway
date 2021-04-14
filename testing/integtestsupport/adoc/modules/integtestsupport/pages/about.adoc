@@ -8,7 +8,7 @@ This configures and bootstraps the Apache Isis runtime, usually running against 
 On top of that, we usually:
 
 * use xref:testing:fixtures:about.adoc[fixture scripts] to set up the app's initial state
-* use the xref:refguide:applib-svc:WrapperFactory.adoc[WrapperFactory] to simulate the UI.
+* use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate the UI.
 
 To explain further, let's walk through of the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
 
@@ -350,32 +350,32 @@ This has an alias of `wm()`.
 
 This class also provides a number of injected domain services:
 
-* xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]
+* xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]
 +
 to query and persist objects through a generic repository
 
-* xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]
+* xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]
 +
 for instantiating domain objects and mixins
 
-* xref:refguide:applib-svc:UserService.adoc[`UserService`]
+* xref:refguide:applib:index/services/user/UserService.adoc[UserService]
 +
 to acces the current user
 
-* xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]
+* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 +
 to access domain services
 
-* xref:refguide:applib-svc:MetamodelService.adoc[`MetaModelService`]
+* xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService]
 +
 to access the metamodel.
 
-* xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`]
+* xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]
 +
 to simulate interactions through the UI.
 This is discussed further xref:about.adoc#wrapper-factory[below].
 
-* xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`]
+* xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]
 +
 for more control over transactions
 
@@ -384,9 +384,10 @@ The class also defines (as a nested static class) the `InteractionSupport` as a 
 If ``@Import``ed into the integration test's "app manifest", this ensures that any ``Command``s that are raised as the result of interactions through the wrapper factory are setup correctly.
 
 
+[#wrapper-factory]
 == Wrapper Factory
 
-The xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+The xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
 The role of this wrapper is to simulate the UI.
 
 It does this by allowing through method invocations that would be allowed if the user were interacting with the domain object through one of the viewers, but throwing an exception if the user attempts to interact with the domain object in a way that would not be possible if using the UI.

@@ -20,18 +20,19 @@ package org.apache.isis.extensions.secman.model.dom.tenancy;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateAtPath;
 
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,8 @@ import lombok.val;
 
 @Action(domainEvent = 
         DeleteDomainEvent.class, 
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, 
-        associateWithSequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_delete {
     
@@ -49,12 +50,12 @@ public class ApplicationTenancy_delete {
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
 
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationTenancy> act() {
-        for (val user : applicationUserRepository.findByTenancy(holder)) {
+        for (val user : applicationUserRepository.findByTenancy(target)) {
             val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
             updateAtPathMixin.act(null);
         }

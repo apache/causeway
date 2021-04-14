@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 import org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesForWicket;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     IsisModuleValMarkdownApplib.class,

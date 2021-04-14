@@ -23,6 +23,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
 extends MethodPrefixBasedFacetFactoryAbstract

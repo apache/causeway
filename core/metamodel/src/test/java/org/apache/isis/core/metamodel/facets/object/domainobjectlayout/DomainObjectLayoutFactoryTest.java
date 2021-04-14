@@ -35,7 +35,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -85,21 +84,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     @DomainObjectLayout 
     class CustomerWithDefaults { }
 
-    @ViewModelLayout(
-            bookmarking = BookmarkPolicy.AS_ROOT,
-            cssClass = "foobar",
-            cssClassFa = "foo",
-            cssClassFaPosition = CssClassFaPosition.RIGHT,
-            describedAs = "This is a description",
-            named = "Name override",
-            paged = 20,
-            plural = "Customers Plural Form"
-            )
-    class CustomerViewModel { }
-
-    @ViewModelLayout
-    class CustomerViewModelWithDefaults { }
-
     // -- LAYOUT TESTS
 
     public static class Bookmarking extends DomainObjectLayoutFactoryTest {
@@ -144,47 +128,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
         }
 
-        public static class ForViewModelLayout extends Bookmarking {
-
-            @Before
-            public void setUp2() throws Exception {
-
-            }
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof BookmarkPolicyFacetForViewModelLayoutAnnotation);
-
-                final BookmarkPolicyFacetForViewModelLayoutAnnotation facetImpl =
-                        (BookmarkPolicyFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                Assert.assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
-
-                expectNoMethodsRemoved();
-            }
-        }
-
     }
-
     // --
 
     public static class CssClass extends DomainObjectLayoutFactoryTest {
@@ -230,39 +174,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-        public static class ForViewModelLayout extends CssClass {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof CssClassFacetForViewModelLayoutAnnotation);
-
-                final CssClassFacetForViewModelLayoutAnnotation facetImpl = (CssClassFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNotNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -314,39 +225,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
         }
 
-        public static class ForViewModelLayout extends CssClassFa {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof CssClassFaFacetForViewModelLayoutAnnotation);
-
-                final CssClassFaFacetForViewModelLayoutAnnotation facetImpl = (CssClassFaFacetForViewModelLayoutAnnotation) facet;
-                assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
-                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
 
     }
 
@@ -392,38 +270,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
         }
 
-        public static class ForViewModelLayout extends DescribedAs {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof DescribedAsFacetForViewModelLayoutAnnotation);
-
-                final DescribedAsFacetForViewModelLayoutAnnotation facetImpl = (DescribedAsFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("This is a description"));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
 
     }
 
@@ -469,38 +315,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
         }
 
-        public static class ForViewModelLayout extends Named {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(NamedFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof NamedFacetForViewModelLayoutAnnotation);
-
-                final NamedFacetForViewModelLayoutAnnotation facetImpl = (NamedFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("Name override"));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(NamedFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
 
     }
 
@@ -538,39 +352,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 final Class<?> cls = CustomerWithDefaults.class;
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls,mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-        public static class ForViewModelLayout extends Paged {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof PagedFacetForViewModelLayoutAnnotation);
-
-                final PagedFacetForViewModelLayoutAnnotation facetImpl = (PagedFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is(20));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNull(facet);
@@ -619,39 +400,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 final PluralFacet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNotNull(facet);
                 Assert.assertThat(facet.value(), is(""));
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-        public static class ForViewModelLayout extends Plural {
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = CustomerViewModel.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PluralFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof PluralFacetForViewModelLayoutAnnotation);
-
-                final PluralFacetForViewModelLayoutAnnotation facetImpl = (PluralFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("Customers Plural Form"));
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerViewModelWithDefaults.class;
-
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PluralFacet.class);
-                assertNull(facet);
 
                 expectNoMethodsRemoved();
             }

@@ -25,6 +25,9 @@ import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObject
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 @Import({
         // modules

@@ -23,16 +23,23 @@ import java.util.UUID;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.applib.services.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  There can be only one such
@@ -65,27 +72,25 @@ import lombok.Getter;
  *     is created, and the originating {@link Command} is set to be its
  *     {@link Command#getParent() parent}.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-public class Command implements HasUniqueId, HasUsername, HasCommandDto {
+@RequiredArgsConstructor
+@ToString
+@Log4j2
+public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
-    // end::refguide[]
     /**
      * Unique identifier for the command.
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTransactionId()}
+     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
      * </p>
      */
-    @Override
-    // tag::refguide[]
-    public UUID getUniqueId() {                 // <.>
-        // ...
-        // end::refguide[]
-        return commandDto != null
-                ? UUID.fromString(commandDto.getTransactionId())
-                : null;
-    }
+    @Getter
+        (onMethod_ = {@Override})
+    private final UUID interactionId;
+
     /**
      * The user that created the command.
      *
@@ -94,10 +99,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      */
     @Override
-    // tag::refguide[]
-    public String getUsername() {               // <.>
+    public String getUsername() {
         // ...
-        // end::refguide[]
         return commandDto != null
                 ? commandDto.getUser()
                 : null;
@@ -110,10 +113,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTimestamp()}.
      * </p>
      */
-    // tag::refguide[]
-    public Timestamp getTimestamp() {           // <.>
+    public Timestamp getTimestamp() {
         // ...
-        // end::refguide[]
         return commandDto != null
                 ? JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp())
                 : null;
@@ -124,42 +125,39 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getTransactionId()},
+     *     expected to have {@link CommandDto#getInteractionId()},
      *     {@link CommandDto#getUser()}, {@link CommandDto#getTimestamp()},
      *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
-     *     to be populated.  The {@link #getUniqueId()}, {@link #getUsername()},
+     *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
      *     from the provided {@link CommandDto}.
      * </p>
      */
-    // tag::refguide[]
+    @ToString.Exclude
     @Getter
-    private CommandDto commandDto;              // <.>
-    // end::refguide[]
+    private CommandDto commandDto;
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
      * the target object (entity or service) on which this action/edit was performed.
      */
-    // tag::refguide[]
-    public Bookmark getTarget() {               // <.>
+    @ToString.Include(name = "target")
+    public Bookmark getTarget() {
         return commandDto != null
                 ? Bookmark.from(commandDto.getTargets().getOid().get(0))
                 : null;
     }
-    // end::refguide[]
 
     /**
      * Derived from {@link #getCommandDto()}, holds a string
      * representation of the invoked action, or the edited property.
      */
-    // tag::refguide[]
-    public String getLogicalMemberIdentifier() {    // <.>
+    @ToString.Include(name = "memberId")
+    public String getLogicalMemberIdentifier() {
         return commandDto != null
                     ? commandDto.getMember().getLogicalMemberIdentifier()
                     : null;
     }
-    // end::refguide[]
 
     /**
      * For async commands created through the {@link WrapperFactory},
@@ -173,22 +171,19 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * @see WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)
      *
      */
-    // tag::refguide[]
+    @ToString.Exclude
     @Getter
-    private Command parent;                     // <.>
-    // end::refguide[]
+    private Command parent;
 
     /**
      * For an command that has actually been executed, holds the date/time at
      * which the {@link Interaction} that executed the command started.
      *
      * @see Interaction#getCurrentExecution()
-     * @see Interaction.Execution#getStartedAt()
+     * @see Execution#getStartedAt()
      */
-    // tag::refguide[]
     @Getter
-    private Timestamp startedAt;                // <.>
-    // end::refguide[]
+    private Timestamp startedAt;
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -196,17 +191,15 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the completedAt is also held in
-     *     {@link Interaction.Execution#getCompletedAt()}). However, this property is now used in master/slave
+     *     {@link Execution#getCompletedAt()}). However, this property is now used in master/slave
      *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
-     * {@link Interaction.Execution#getCompletedAt()}.
+     * {@link Execution#getCompletedAt()}.
      */
-    // tag::refguide[]
     @Getter
-    private Timestamp completedAt;              // <.>
-    // end::refguide[]
+    private Timestamp completedAt;
 
     /**
      * For a command that has actually been executed, holds a {@link Bookmark}
@@ -218,12 +211,10 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      *
      * See also  {@link Interaction#getCurrentExecution()} and
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
+     * {@link Execution#getReturned()}.
      */
-    // tag::refguide[]
     @Getter
-    private Bookmark result;                    // <.>
-    // end::refguide[]
+    private Bookmark result;
 
     /**
      * For a command that has actually been executed, holds the exception stack
@@ -235,12 +226,10 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()}.
+     * {@link Execution#getThrew()}.
      */
-    // tag::refguide[]
     @Getter
-    private Throwable exception;                    // <.>
-    // end::refguide[]
+    private Throwable exception;
 
     /**
      * Whether this command resulted in a change of state to the system.
@@ -248,26 +237,24 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * <p>
      *     This can be used as a hint to decide whether to persist the command
      *     to a datastore, for example for auditing (though
-     *     {@link org.apache.isis.applib.services.publish.PublisherService} is
+     *     {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} is
      *     an alternative for that use case) or so that it can be retrieved
      *     and replayed on another system, eg for regression testing.
      * </p>
      *
      */
-    // tag::refguide[]
     @Getter
-    private boolean systemStateChanged;                // <.>
-    // end::refguide[]
+    private boolean systemStateChanged;
 
 
     /**
-     * Whether this command has been reified
+     * Whether this command has been enabled for dispatching,
+     * that is {@link CommandSubscriber}s will be notified when this Command completes.
      */
-    // tag::refguide[]
     @Getter
-    private boolean reified;
-    // end::refguide[]
-
+    private boolean publishingEnabled;
+    
+    @ToString.Exclude
     private final Updater UPDATER = new Updater();
 
     public class Updater implements CommandOutcomeHandler {
@@ -281,6 +268,17 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          */
         public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
+
+            // should be redundant, but we ensure commandInteractionId == dtoInteractionId
+            val commandInteractionId = Command.this.getInteractionId().toString();
+            val dtoInteractionId = commandDto.getInteractionId();
+
+            if(!commandInteractionId.equals(dtoInteractionId)) {
+                log.warn("setting CommandDto on a Command has side-effects if "
+                        + "their InteractionIds don't match; forcing CommandDto's Id to be same as Command's");
+                commandDto.setInteractionId(commandInteractionId);
+            }
+
         }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
@@ -318,17 +316,11 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         @Override
-        public void setResult(final Bookmark result) {
-            Command.this.result = result;
+        public void setResult(final Result<Bookmark> resultBookmark) {
+            Command.this.result = resultBookmark.getValue().orElse(null);
+            Command.this.exception = resultBookmark.getFailure().orElse(null);
         }
 
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        @Override
-        public void setException(final Throwable exception) {
-            Command.this.exception = exception;
-        }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -343,14 +335,9 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
-         *
-         * <p>
-         * Hint that this {@link Command} has resulted in a change of state to the system.
-         * Implementations can use this to persist the command, for example.
-         * </p>
          */
-        public void setReified(boolean reified) {
-            Command.this.reified = reified;
+        public void setPublishingEnabled(boolean publishingEnabled) {
+            Command.this.publishingEnabled = publishingEnabled;
         }
 
     };
@@ -363,7 +350,5 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
     }
 
 
-// tag::refguide[]
 
 }
-// end::refguide[]

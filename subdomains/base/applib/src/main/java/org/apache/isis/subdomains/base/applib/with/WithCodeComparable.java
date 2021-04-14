@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.base.applib.with;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface WithCodeComparable<T extends WithCodeComparable<T>> extends Comparable<T>, WithCodeGetter {
     void setCode(String code);
 }

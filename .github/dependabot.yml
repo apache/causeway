@@ -8,24 +8,30 @@ updates:
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
+    target-branch: "master"
     directory: "/"
     schedule:
       interval: "daily"
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
+    target-branch: "master"
     directory: "/"
     schedule:
       interval: "daily"
 
   # Maintain dependencies for Maven
   - package-ecosystem: "maven"
+    target-branch: "master"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    # Allow up to 10 open pull requests for maven dependencies
+    open-pull-requests-limit: 20
 
   # Maintain dependencies for Gradle
   - package-ecosystem: "gradle"
+    target-branch: "master"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"

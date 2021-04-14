@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
@@ -66,7 +66,7 @@ extends RecreatableObjectFacetAbstract {
 
         super.getServiceInjector().injectServicesInto(viewModelPojo);
         
-        val propertiesStream = spec.streamProperties(Contributed.EXCLUDED)
+        val propertiesStream = spec.streamProperties(MixedIn.EXCLUDED)
                 .filter(property->mementoKeys.contains(property.getId()));
 
         propertiesStream.forEach(property->{
@@ -99,7 +99,7 @@ extends RecreatableObjectFacetAbstract {
          */
         val ownerAdapter = ManagedObject.of(spec, viewModelPojo);
 
-        final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
+        final Stream<OneToOneAssociation> properties = spec.streamProperties(MixedIn.EXCLUDED);
 
         properties
         // ignore read-only

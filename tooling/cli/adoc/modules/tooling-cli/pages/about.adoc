@@ -1,0 +1,294 @@
+[[tooling-cli]]
+= Tooling - CLI
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Command Line Interface for the _Apache Isis Tooling_ ecosystem, to generate documentation from program sources (`.java` files, `pom.xml`, etc).
+
+
+
+== Prerequisites
+
+From the root of the git repo, build the tooling using Java 11:
+
+[source,java]
+----
+mvn install -D module-tooling -Dskip.essential
+----
+
+This will generate the command line CLI as an executable jar in its target directory (`tooling/cli/target`).
+
+
+== Available Commands
+
+Use the help command to see a list of available commands:
+
+[source]
+.calling for help
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar --help
+----
+
+which (currently) generates the following:
+
+[source]
+----
+Usage: cli [-hV] [-o=<outputPath>] [-p=<projectRootPath>] [COMMAND]
+CLI for the Apache Isis Tooling Ecosystem
+  -h, --help      Show this help message and exit.
+  -w, --overview=<overviewPath>
+                  path to write the overview file (default: NONE = write to std.out)
+  -x, --index=<indexPath>
+                  path to write the refguide index files (default: NONE = write to std.out)
+  -p, --project=<projectRootPath>
+                  path to the (multi-module) project root (default: current dir)
+  -V, --version   Print version information and exit.
+Commands:
+  projdoc   Writes all generated (AsciiDoc) to given output.
+  overview  Writes a System Overview document (AsciiDoc) to given output.
+  index     Writes a Global Index (AsciiDoc) to given output.
+----
+
+The "projdoc" command is the usual command to use, as it performs both the "overview" and "index" commands.
+
+By default, the current directory is used as the target to perform commands in.
+
+
+=== Configuration File
+
+The `isis-tooling.yml` configuration file (found in the root of the repo) provides default options for each command, as well as global defaults applicable to all commands:
+
+[source,yml]
+.isis-tooling.yml
+----
+global: # <.>
+  option ...
+  option ...
+command:
+  overview: # <.>
+    option ...
+    option ...
+    ...
+  index:    # <.>
+    option ...
+    option ...
+    ...
+----
+
+<.> configuration applicable to all commands
+<.> configuration for the "overview" command (also used by the "projdoc" command)
+<.> configuration for the "index" command (also used by the "projdoc" command)
+
+TIP: This configuration file is mapped onto the `CLIConfig` bean.
+Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java/org/apache/isis/tooling/cli/CliConfig.java#L31[source code] for more detailed information.
+
+
+== Commands
+
+All commands accept the following common parameters:
+
+* `-p` indicates the location of the multi-project root `pom.xml`
++
+in other words, the root of the git repo.
+
+A number of global configuration options can be specified under the `global` entry in the `isis-tooling.yml` file.
+
+[source,yml]
+.isis-tooling.yml
+----
+global:
+  licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
+----
+<.> license header to include with each generated adoc file
+
+
+
+=== Project documentation (`projdoc`)
+
+This command generates both a <<system-overview-overview,system overview>> and generates the <<index-index,global index>>, and as such is the command that you will probably want to use most of the time.
+See those two commands for further details.
+
+
+==== Usage
+
+The `projdoc` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -w core/adoc \
+    -x antora/components/refguide-index \
+    projdoc
+----
+
+where :
+
+* `-p` is a global options for all commands
+* `-w` is the option for the `overview` sub-command, specifying the output root path
+* `-x` is the option for the `index` sub-command
+* `projdoc` selects this sub-command (which simply runs both `overview` and `index` sub-commands)
+
+
+
+[[projdoc-configuration]]
+==== Configuration
+
+The `projdoc` command has no specific configuration.
+However, as it is effectively just the combination of the `overview` and `index` commands, note that those two commands _do_ have their own configuration settings; see <<overview-configuration,overview configuration>> and <<index-configuration,index configuration>> respectively.
+
+[#system-overview-overview]
+=== System Overview (`overview`)
+
+This command generates the _System Overview_ (`.adoc) page.
+
+This page summarises the contents of each section (defined by the `commands.overview.sections` configuration key), also with a link:https://c4model.com/[C4] diagram showing how the modules relate.
+
+
+==== Usage
+
+The `overview` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -v core/adoc \
+    overview
+----
+
+where :
+
+* `-p` is a global options for all commands
+* `-w` is the option for the `overview` sub-command, specifying the output root path
+* `overview` selects this sub-command
+
+There are no command-specific options.
+
+
+
+[[overview-configuration]]
+==== Configuration
+
+The `overview` command supports a number of command-specific configuration options:
+
+[source,yml]
+.isis-tooling.yml
+----
+commands:
+  overview:
+    rootFolder:                                                     # <.>
+    pagesPath: "modules/_overview/pages"                            # <.>
+    systemOverviewFilename: "about.adoc"                            # <.>
+    description: "These tables summarize all Maven artifacts ..."   # <.>
+    sections:                                                       # <.>
+      ...
+      Persistence: org.apache.isis.persistence
+      JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
+      JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
+      ...
+----
+<.> the output target root for generated overview _adoc_; corresponds to command line option `-v` (if empty the current dir is used)
+<.> sub-folder name for _adoc_ pages
+<.> name of the _System Overview_ (adoc) file
+<.> _System Overview_ summary description text
+<.> Logical grouping of modules for the system overview, but also used to determine which modules to scan for index files.
++
+If not specified the natural Maven project hierarchy is reflected as is.
+This is discussed in more detail below.
+
+The `sections` configuration key is used to group module artifacts into named sections.
+It consists of key:value pairs:
+
+* the key is the section name (eg "App", or "JDO")
+* the value is a pattern that identifies Maven artifacts.
+
+This pattern in turn can be either:
+
+* an exact Maven `groupId`, such as `org.apache.isis.persistence`
++
+This matches all Maven modules with exactly that `groupId`.
+
+* a Maven `groupId` with wildcard, such as `org.apache.isis.core.*`
++
+This matches all Maven modules whose `groupId` pattern matches the groupId.
+
+* a Maven group and artifact optionally with wildcard, such as `org.apache.isis.persistence:isis-persistence-jdo.*`
++
+This matches all Maven modules whose `groupId` pattern equals the specified groupId and whose `artifactId` pattern matches the specified `artifactId`.
+
+If a Maven module matches more than one section, then the more specific section (with both group and artifact) is used.
+
+These different types of sections are exploited by the `overview` command, described <<system-overview-overview,below>>.
+
+Sections that match on a groupID are placed under a level 2 heading, while sections matching on group and artifact are placed under a level 3 heading.
+By sequencing the sections correctly, this therefore allows a hierarchy to be created.
+
+For example, in the config example above the sections defined will render "Persistence" section at level 2 (because its pattern is only for a `groupId`), and then the "JDO" and "JPA" sections underneath at level 3 (because there patterns also include an `artifactId`).
+
+
+
+=== Index (`index`)
+
+This command generates the _Document Global Index_ (`.adoc`) files.
+
+Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_.
+
+Asciidoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths such as `refguide:applib:index/annotation/Xxx.adoc`.
+
+
+==== Usage
+
+The `index` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -x antora/components/refguide-index \
+    index
+----
+
+where :
+
+* `-p` is a global options for all commands
+* `-x` is the option for the `index` sub-command, specifying the output root path
+* `index` selects this sub-command
+
+
+
+[[index-configuration]]
+==== Configuration
+
+The `index` command supports a number of command-specific configuration options:
+
+[source,yml]
+.isis-tooling.yml
+----
+commands:
+  index:
+    rootFolder:                                                             # <.>
+    documentGlobalIndexPath: "pages/index"                                  # <.>
+    documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
+    namespacePartsSkipCount: 3                                              # <.>
+    fixOrphanedAdocIncludeStatements: true                                  # <.>
+
+----
+<.> the output target root for generated index _adoc_ files; corresponds to command line option `-x` (if empty the current dir is used)
+<.> sub-folder name for the _Document Global Index_
+<.> format for include statements via which other _adoc_ files may refer to the Document Global Index
+<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> whether to activate the `OrphanedIncludeStatementFixer`.
+
+The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
+
+
+==== Limitations
+
+There are currently a couple of limitations:
+
+* the _Document Global Index_ can only contain classes unique by their simple name, otherwise the `OrphanedIncludeStatementFixer` would not be able to reason about how to fix orphaned references.
+
+* the `OrphanedIncludeStatementFixer` also can fix up references to classes that have been moved, but it cannot fix up orphans where the class has been renamed.
+
+

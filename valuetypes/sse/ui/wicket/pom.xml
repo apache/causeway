@@ -29,11 +29,13 @@
 	</properties>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-wicket-ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-sse-metamodel</artifactId>

@@ -1,9 +1,14 @@
 
+* xref:pjdo:ROOT:setup-and-configuration.adoc[Setup and Configuration]
+** xref:pjdo:ROOT:configuring/disabling-persistence-by-reachability.adoc[Disabling Persistence by Reachability]
 
-
-* xref:pjdo:ROOT:configuring.adoc[Configuring]
-* xref:pjdo:ROOT:jdo-mappings.adoc[JDO Mappings]
+* xref:pjdo:ROOT:enhancer.adoc[Enhancer]
 * xref:pjdo:ROOT:db-schemas.adoc[DB Schemas]
+
+* xref:pjdo:ROOT:mapping-guide.adoc[Mapping Guide]
+** xref:pjdo:ROOT:mapping-guide/one-to-m-bidirectional-relationships.adoc[leveloffset=+1]
+** xref:pjdo:ROOT:mapping-guide/mandatory-properties-in-subtypes.adoc[leveloffset=+1]
+** xref:pjdo:ROOT:mapping-guide/mapping-to-a-view.adoc[leveloffset=+1]
+
+* xref:pjdo:ROOT:dependency-injection.adoc[Dependency Injection]
 * xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]
-* Domain Services
-** xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport]

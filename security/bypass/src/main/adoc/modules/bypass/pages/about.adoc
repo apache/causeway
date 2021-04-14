@@ -3,28 +3,35 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The bypass implementation, as its name suggests, allows both authentication and authorization to be bypassed.
-
 This is typically used for integration tests or for prototyping.
 
-== Configuring to use Bypass
 
-The bypass security component consists of an implementation of both the `AuthenticationManager` and `AuthorizationManager` APIs, and are intended for prototyping use only.
-
-The authentication manager allows access with any credentials (in a sense, "bypassing" authentication), while the authorization manager provides access to all class members (in a sense, "bypassing" authorization).
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
 
 
 
-To tell Apache Isis to bypass security, use the appropriate `IsisModuleSecurityBypass` in the xref:userguide:fun:modules.adoc[app manifest].
+== Update AppManifest
 
-[source,ini]
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
 ----
-isis.authentication=bypass
-isis.authorization=bypass
+@Configuration
+@Import({
+        ...
+        IsisModuleSecurityBypass.class,
+        ...
+})
+public class AppManifest {
+}
 ----
 
-This installs the appropriate no-op implementations for both authentication and authorization:
+Make sure that no other `IsisModuleSecurityXxx` module is imported.
 
-image::security/security-apis-impl/configure-isis-to-use-bypass.PNG[width="600px"]
+
+== In Use
+
+With bypass installed, you should be able to login with any credentials.

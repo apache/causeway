@@ -5,35 +5,28 @@
 
 
 
-The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:refguide:applib-ant:Action.adoc#semantics[@Action(semantics=...)]) actions.
+The Wicket viewer supports the automatic bookmarking of domain objects, as per xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[@DomainObjectLayout#bookmarking()].
+However, it does _not_ support bookmarking of action prompts (xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[@ActionLayout#bookmarking()]).
 
-Domain objects, if bookmarkable, can be nested.
-
-Bookmarking is automatic; whenever a bookmarkable object/action is visited, then a bookmark is created.
-To avoid the number of bookmarks from indefinitely growing, bookmarks that have not been followed after a whle are automatically removed (an MRU/LRU algorithm).
+Whenever a bookmarkable object/action is visited, then a bookmark is created.
+To avoid the number of bookmarks from indefinitely growing, bookmarks that have not been followed after a while are automatically removed (an MRU/LRU algorithm).
 The number of bookmarks to preserve can be configured.
+
 
 == Screenshots
 
-The following screenshot (nb: using a pre 1.8.0 version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI), taken from https://github.com/apache/isis-app-todoapp[Isisaddons example todoapp] (not ASF), shows how the bookmarks are listed in a sliding panel.
-
-image::bookmarked-pages/panel.png[width="800px"]
-
-
-Note how the list contains both domain objects and an action ("not yet complete").
-
-Bookmarks can also form a hierarchy.
-The following screenshot, also taken from the https://github.com/estatio/estatio[Estatio] application, shows a variety of different bookmarked objects with a nested structure:
+The following screenshot shows how bookmarks are rendered in the Wicket viewer:
 
 image::bookmarked-pages/panel-estatio.png[width="800px"]
 
-Some - like `Property`, `Lease` and `Party` - are root nodes.
-However, `LeaseItem` is bookmarkable as a child of `Lease`, and `LeaseTerm` is bookmarkable only as a child of `LeaseItem`.
+This screenshot demonstrates that bookmarks can be nested.
+Some - like `Property` and `Lease` - are root nodes.
+However, `Unit` is bookmarkable as a child of `Property`.
 This parent/child relationship is reflected in the layout.
 
 == Domain Code
 
-To indicate a class is bookmarkable, use the xref:refguide:applib-ant:DomainObjectLayout.adoc[@DomainObjectLayout] annotation:
+To indicate a class is bookmarkable, use the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] annotation:
 
 [source,java]
 ----
@@ -53,26 +46,6 @@ To indicate a class is bookmarkable but only as a child of some parent bookmark,
 public class LeaseItem { /* ... */ }
 ----
 
-To indicate that a safe (query only) action is bookmarkable, use the xref:refguide:applib-ant:ActionLayout.adoc[@ActionLayout] annotation:
-
-[source,java]
-----
-public class ToDoItem ... {
-    @Action(
-        semantics=SemanticsOf.SAFE
-    )
-    @ActionLayout(
-         bookmarking=BookmarkPolicy.AS_ROOT
-     )
-    public List<ToDoItem> notYetComplete() { /* ... */ }
-    ...
-}
-----
-
-[NOTE]
-====
-The BookmarkPolicy.AS_CHILD does not have a meaning for actions; if the `bookmarking` attribute is set to any other value, it will be ignored.
-====
 
 == User Experience
 
@@ -80,16 +53,8 @@ The sliding panel appears whenever the mouse pointer hovers over the thin blue t
 
 Alternatively, `alt+[` will toggle open/close the panel; it can also be closed using `Esc` key.
 
-=== Related functionality
-
-The xref:vw:ROOT:features.adoc#recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
 
 == Configuration
 
-By default, the bookmarked pages panel will show a maximum of 15 'root' pages.
-This can be overridden using the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[`isis.viewer.wicket.bookmarked-pages.max-size`] configuration property, for example:
+The maximum number of bookmarks that are shown can be overridden using the  xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[isis.viewer.wicket.bookmarked-pages.max-size] configuration property.
 
-[source,ini]
-----
-isis.viewer.wicket.bookmarked-pages.max-size=20
-----

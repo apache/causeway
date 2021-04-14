@@ -27,7 +27,7 @@ import org.apache.isis.applib.Identifier;
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * property is invisible; otherwise property is visible.
- *
+ * @since 1.x {@index}
  */
 public class PropertyVisibilityEvent extends VisibilityEvent {
 

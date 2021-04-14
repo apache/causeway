@@ -18,37 +18,29 @@
  */
 package org.apache.isis.core.runtime;
 
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.interaction.IsisModuleCoreInteraction;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
-import org.apache.isis.core.runtime.events.RuntimeEventService;
-import org.apache.isis.core.runtime.events.persistence.TimestampService;
-import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.persistence.changetracking.AuditerDispatchService;
-import org.apache.isis.core.runtime.persistence.changetracking.ChangedObjectsService;
+import org.apache.isis.core.runtime.events.MetamodelEventService;
+import org.apache.isis.core.runtime.events.TransactionEventEmitter;
+import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 
 @Configuration
 @Import({
         // modules
         IsisModuleCoreMetamodel.class,
+        IsisModuleCoreInteraction.class,
+        IsisModuleCoreTransaction.class,
 
         // @Service's
-        RuntimeEventService.class,
-        TimestampService.class,
-        AuditerDispatchService.class,
-        ChangedObjectsService.class,
+        MetamodelEventService.class,
+        TransactionEventEmitter.class,
 
         // @Configuration's
 
 })
 public class IsisModuleCoreRuntime {
-
-    @Bean
-    public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
-        return new IsisInteractionScopeBeanFactoryPostProcessor();
-    }
     
 }

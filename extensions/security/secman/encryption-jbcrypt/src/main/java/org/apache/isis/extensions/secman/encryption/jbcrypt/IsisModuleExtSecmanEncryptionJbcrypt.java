@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     PasswordEncryptionServiceUsingJBcrypt.class

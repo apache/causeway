@@ -22,10 +22,12 @@
 .whereAmI {
     color: #555;
 }
+
 .whereAmI img {
     width: 16px !important;
     height: 16px !important;
 }
+
 ul.whereAmI {
     padding: 8px 12px;
     list-style: none;
@@ -42,6 +44,11 @@ ul.whereAmI li+li:before {
     padding: 4px;
     color: black;
     content: "/\00a0";
+}
+
+/* alignment of the icons in certain cases ISIS-2588 */
+.whereAmI .fa-2x {
+    font-size: unset;
 }
 
 /* -------------------------- */

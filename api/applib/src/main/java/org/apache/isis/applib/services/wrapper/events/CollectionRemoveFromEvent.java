@@ -30,9 +30,9 @@ import org.apache.isis.applib.Identifier;
  * object is invalid; otherwise the object is valid.
  *
  * @see CollectionAddToEvent
- *
+ * @since 1.x {@index}
  */
-public class CollectionRemoveFromEvent extends ValidityEvent {
+ public class CollectionRemoveFromEvent extends ValidityEvent {
 
     private final Object proposed;
 

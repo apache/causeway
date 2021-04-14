@@ -19,7 +19,7 @@
 package org.apache.isis.commons.collections;
 
 /**
- * @since 2.0
+ * @since 2.0 {@index}
  */
 public enum Cardinality {
 

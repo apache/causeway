@@ -32,7 +32,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
@@ -109,7 +109,7 @@ public class Select2 implements Serializable {
         } else {
             final Collection<ObjectMemento> modelObject = select2MultiChoice.getModelObject();
 
-            return ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
+            return ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getLogicalType());
         }
     }
 
@@ -120,7 +120,7 @@ public class Select2 implements Serializable {
             final IModel<Collection<ObjectMemento>> model = select2MultiChoice.getModel();
             final Collection<ObjectMemento> modelObject = model.getObject();
 
-            final ObjectMemento memento = ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getSpecId());
+            final ObjectMemento memento = ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getLogicalType());
             return new IModel<ObjectMemento>() {
                 private static final long serialVersionUID = 1L;
 
@@ -147,7 +147,7 @@ public class Select2 implements Serializable {
             return select2Choice.getConvertedInput();
         } else {
             final Collection<ObjectMemento> convertedInput = select2MultiChoice.getConvertedInput();
-            return ObjectMemento.wrapMementoList(convertedInput, select2MultiChoice.getSpecId());
+            return ObjectMemento.wrapMementoList(convertedInput, select2MultiChoice.getLogicalType());
         }
     }
 

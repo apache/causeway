@@ -53,8 +53,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
 
     /**
      * For subclasses
-     *
-     * @return
      */
     protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
         return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);

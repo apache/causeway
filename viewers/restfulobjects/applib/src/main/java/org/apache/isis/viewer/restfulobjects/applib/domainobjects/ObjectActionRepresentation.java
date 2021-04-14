@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ObjectActionRepresentation extends AbstractObjectMemberRepresentation {
 
     public ObjectActionRepresentation(final JsonNode jsonNode) {
@@ -32,5 +35,4 @@ public class ObjectActionRepresentation extends AbstractObjectMemberRepresentati
     public LinkRepresentation getInvoke() {
         return getLinkWithRel(Rel.INVOKE);
     }
-
 }

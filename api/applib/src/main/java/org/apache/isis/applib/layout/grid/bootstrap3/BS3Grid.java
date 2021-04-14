@@ -45,6 +45,8 @@ import org.apache.isis.applib.mixins.dto.Dto;
  * <p>
  *     The element is rendered as a &lt;div class=&quot;...&quot;&gt;
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "grid"

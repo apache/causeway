@@ -37,17 +37,32 @@ This requires:
 To create/update documentation, we strongly recommend:
 
 * IntelliJ link:https://plugins.jetbrains.com/plugin/7391-asciidoc[Asciidoc plugin]
+* IntelliJ link:https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration[Diagrams.net plugin]
 
-Even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as this plugin on any other editor platform, especially when it comes to Antora.
+Even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as the Asciidoc plugin on any other editor platform, especially when it comes to writing Antora.
 
 
 == Build
 
-To build the website:
+The `preview.sh` script can be used to build the website, also calling the documentation tooling that automates documentation from code (the xref:core:_overview:about.adoc[System Overview], large parts of the xref:refguide::about.adoc[Reference Guide] and the xref:refguide:config:about.adoc[Configuration Guide]).
 
-* use `build-site.sh`; or even better ...
-* use `preview.sh`, to build and then preview in a web browser
+Use `preview.sh -h` to view options.
+The lower case flags skip steps, while the upper case flags exclude all steps except those indicated:
 
-Both scripts can be found at the root of this git repo.
+* `preview.sh`
++
+builds everything and serves up the site
+
+* `preview.sh -AS`
++
+runs only Antora generation and serves up the site
+
+* `preview.sh -ekcdl`
++
+does the same thing, by skipping the other 5 steps.
+
+The script can be found at the root of this git repo.
+
+
 
 

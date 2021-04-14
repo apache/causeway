@@ -19,14 +19,14 @@
 package org.apache.isis.core.metamodel.services.title;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.messages.MessageRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -34,16 +34,14 @@ import lombok.val;
  * @since 2.0
  *
  */
-public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
+public class TitlesAndTranslationsValidator 
+extends MetaModelValidatorAbstract {
 
     @Override
-    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
-        
+    public void validate() {
         validateServiceTitles();
         validateEnumTitles();
         validateRegisteredMessageTranslation();
-        
-        super.collectFailuresInto(validationFailures);
     }
 
     private void validateServiceTitles() {
@@ -51,23 +49,28 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
         val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
+        
 
         serviceRegistry.streamRegisteredBeans()
         .forEach(managedBeanAdapter->{
 
             val serviceInstanceIfAny = managedBeanAdapter.getInstance().getFirst();
             val domainService = serviceInstanceIfAny.orElse(null);
+            val objectType = managedBeanAdapter.getId();
             
             if(domainService == null) {
                 
-                val deficiencyOrigin = Identifier.classIdentifier(managedBeanAdapter.getBeanClass());
+                val deficiencyOrigin = Identifier.classIdentifier(
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
-                super.onFailure(
-                        facetHolder, 
+                ValidationFailure.raise(
+                        facetHolder.getSpecificationLoader(), 
                         deficiencyOrigin, 
-                        "Failed to get instance of service bean %s", 
-                        managedBeanAdapter.getId());
+                        String.format(
+                                "Failed to get instance of service bean %s", 
+                                managedBeanAdapter.getId())
+                        );
                 return; // next
             }
 
@@ -80,14 +83,17 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                 e.printStackTrace();
                 
-                val deficiencyOrigin = Identifier.classIdentifier(managedBeanAdapter.getBeanClass());
+                val deficiencyOrigin = Identifier.classIdentifier(
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
-                super.onFailure(
-                        facetHolder, 
+                ValidationFailure.raise(
+                        facetHolder.getSpecificationLoader(), 
                         deficiencyOrigin, 
-                        "Failed to get title for service bean %s", 
-                        managedBeanAdapter.getId());
+                        String.format(
+                                "Failed to get title for service bean %s", 
+                                managedBeanAdapter.getId())
+                        );
             }
 
 
@@ -116,14 +122,16 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = Identifier.classIdentifier(correspondingClass);
+                        val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
                         val facetHolder = objSpec;
 
-                        super.onFailure(
-                                facetHolder, 
+                        ValidationFailure.raise(
+                                facetHolder.getSpecificationLoader(), 
                                 deficiencyOrigin, 
-                                "Failed to get title for enum constant %s", 
-                                "" + enumConstant);
+                                String.format(
+                                        "Failed to get title for enum constant %s", 
+                                        "" + enumConstant)
+                                );
                     }
 
                 }
@@ -133,34 +141,40 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         
     private void validateRegisteredMessageTranslation() {
         
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
-        val translationService = serviceRegistry.lookupServiceElseFail(TranslationService.class);
+        val translationService = super.getMetaModelContext().getTranslationService();
         
-        // as used by the Wicket UI
-        final String context = "org.apache.isis.core.runtime.system.session.IsisInteractionFactory";
-        final MessageRegistry messageRegistry = new MessageRegistry();
+        // as used by the Wicket UI?
+        // final TranslationContext context = "org.apache.isis.core.interaction.session.InteractionFactory";
+        
+        // see @ConfirmUiModel#translate()
+        val translationContext = TranslationContext.forClassName(MessageRegistry.class);
+        
+        val messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
-
+        	
             try {
 
-                val translatedMessage = translationService.translate(context, message);
+                val translatedMessage = translationService.translate(translationContext, message);
                 _Blackhole.consume(translatedMessage);
 
             } catch (Exception e) {
 
-                val deficiencyOrigin = Identifier.classIdentifier(MessageRegistry.class);
-                val facetHolder = specificationLoader.loadSpecification(MessageRegistry.class);
+                val spec = specificationLoader.loadSpecification(MessageRegistry.class);
+                val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
-                super.onFailure(
-                        facetHolder, 
+                ValidationFailure.raise(
+                        spec.getSpecificationLoader(), 
                         deficiencyOrigin, 
-                        "Failed to translate message %s from MessageRegistry", 
-                        "" + message);
+                        String.format(
+                                "Failed to translate message %s from MessageRegistry", 
+                                "" + message)
+                        );
             }
 
         }
 
     }
+
 
 }

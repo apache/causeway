@@ -1,4 +1,4 @@
-= Core Runtime Services configurations
+= Core Runtime Services
 :page-role: -toc -narrow
 
 
@@ -139,12 +139,12 @@ tls.enabled
 
 
 |
-[[isis.core.runtime-services.exception-recognizer.jdo.disable]]
+[[isis.core.runtime-services.exception-recognizer.dae.disable]]
 isis.core.runtime-services. +
-exception-recognizer.jdo.disable
+exception-recognizer.dae.disable
 
 | 
-| Whether the ``ExceptionRecognizer`` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+| Whether the ``ExceptionRecognizer`` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
 |
@@ -174,6 +174,19 @@ There are three modes:
 * The default mode of write is appropriate for integration testing or prototyping, meaning that the service records any requests made of it but just returns the string unaltered. This is a good way to discover new strings that require translation.
 * The read mode is appropriate for production; the service looks up translations that have previously been captured.
 * The disabled performs no translation and simply returns the original string unchanged. Unlike the write mode, it does _not_ keep track of translation requests.
+
+
+|
+[[isis.core.runtime-services.translation.resource-location]]
+isis.core.runtime-services. +
+translation.resource-location
+
+| 
+| Specifies the relative resource path to look for translation files.
+
+If \{@code null} uses \{@code servletContext.getResource("/WEB-INF/")}.
+
+Replaces the former Servlet context parameter 'isis.config.dir';
 
 
 

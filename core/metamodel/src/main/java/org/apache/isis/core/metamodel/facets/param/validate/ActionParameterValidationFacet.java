@@ -43,7 +43,6 @@ extends Facet, ValidatingInteractionAdvisor {
 
     /**
      * Reason why the validation has failed, or <tt>null</tt> if okay.
-     * @param can 
      */
     public String invalidReason(
             ManagedObject target, 

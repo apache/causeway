@@ -22,6 +22,7 @@ import pl.treksoft.kvision.chart.*
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
+import pl.treksoft.kvision.utils.pc
 
 //IMPROVE https://github.com/datavisyn/chartjs-chart-box-and-violin-plot
 class EventChart(model: ChartModel) : SimplePanel() {
@@ -63,6 +64,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
 
     init {
         this.marginTop = 10.px
+        this.width = 100.pc
         chart(
                 configuration = Configuration(
                         type = ChartType.BAR,

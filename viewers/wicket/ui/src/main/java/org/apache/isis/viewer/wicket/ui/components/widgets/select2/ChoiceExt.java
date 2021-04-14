@@ -23,18 +23,18 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.applib.id.HasLogicalType;
+import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 /**
  * Represents functionality that is common to both {@link Select2Choice} and {@link Select2MultiChoice}, but for
  * which there is no suitable common supertype.
  *
- * Also holds extensions, notable {@link #getSpecId()}.
  */
-public interface ChoiceExt {
+public interface ChoiceExt extends HasLogicalType {
+    
     void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices);
     Settings getSettings();
 
-    ObjectSpecId getSpecId();
+    
 }

@@ -20,13 +20,16 @@ package org.apache.isis.applib.services.session;
 
 import java.util.Date;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
- * Similar to the {@link org.apache.isis.applib.services.audit.AuditerService}, this defines an API to track
- * the status of the current sessions (&quot;users logged on&quot;) on the system.
+ * Defines an API to track the status of the current sessions
+ * (&quot;users logged on&quot;) on the system.
+ *
+ * <p>
+ *     Multiple implementations can be registered; all will be called.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface SessionLoggingService {
 
     enum Type {
@@ -40,16 +43,27 @@ public interface SessionLoggingService {
         RESTART
     }
 
+    /**
+     * Callback to log the session.
+     *
+     * <p>
+     *     The <code>sessionId</code> is an internal identifier (for the
+     *     Wicket viewer, its the JVM hashCode of the Wicket session).
+     * </p>
+     *
+     * @param type
+     * @param username
+     * @param date
+     * @param causedBy
+     * @param sessionId
+     */
     void log(
             Type type,
             String username,
             Date date,
             CausedBy causedBy,
-            String sessionId        // <.>
+            String sessionId
     );
-    // end::refguide[]
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

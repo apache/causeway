@@ -23,41 +23,48 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.datanucleus.enhancement.Persistable;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
 /**
- * This class should be executed using {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} (it
- * has value semantics).
+ * This class should be executed using 
+ * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} 
+ * (it has value semantics).
+ *
+ * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = "isisexcel.ExcelFixture"
+        objectType = "isis.sub.excel.ExcelFixture"
 )
 public class ExcelFixture extends FixtureScript {
 
+    @Inject SpecificationLoader specLoader;
+
     private final List<Class<?>> classes;
 
-    public ExcelFixture(final URL excelResource, final Class... classes) {
+    public ExcelFixture(final URL excelResource, final Class<?>... classes) {
         this(excelResource, Arrays.asList(classes));
     }
 
@@ -66,7 +73,7 @@ public class ExcelFixture extends FixtureScript {
         setExcelResource(excelResource);
     }
 
-    public ExcelFixture(final Blob upload, final Class... classes) {
+    public ExcelFixture(final Blob upload, final Class<?>... classes) {
         this(upload, Arrays.asList(classes));
     }
 
@@ -77,9 +84,13 @@ public class ExcelFixture extends FixtureScript {
 
     private ExcelFixture(final List<Class<?>> classes) {
         for (Class<?> cls : classes) {
-            final boolean viewModel = ExcelFixtureRowHandler.class.isAssignableFrom(cls);
-            final boolean persistable = Persistable.class.isAssignableFrom(cls);
-            if (!viewModel && !persistable) {
+
+            val beanSort = Optional.ofNullable(specLoader)
+            .map(sl->sl.loadSpecification(cls))
+            .map(ObjectSpecification::getBeanSort)
+            .orElse(BeanSort.UNKNOWN);
+
+            if (!beanSort.isViewModel() && !beanSort.isEntity()) {
                 throw new IllegalArgumentException(String.format(
                         "Class '%s' does not implement '%s', nor is it persistable",
                         cls.getSimpleName(), ExcelFixtureRowHandler.class.getSimpleName()));
@@ -94,14 +105,14 @@ public class ExcelFixture extends FixtureScript {
      * used with different excel spreadsheets).
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.1")
+    @PropertyLayout(sequence = "1.1")
     private String excelResourceName;
 
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.2")
+    @PropertyLayout(sequence = "1.2")
     private URL excelResource;
 
     /**
@@ -198,7 +209,7 @@ public class ExcelFixture extends FixtureScript {
         objectList.addAll(createdObjects);
     }
 
-    private void addToCombined(final List<?> createdObjects) {
+    private void addToCombined(final List<Object> createdObjects) {
         this.objects.addAll(createdObjects);
     }
 
@@ -226,8 +237,8 @@ public class ExcelFixture extends FixtureScript {
 
     @javax.inject.Inject
     private RepositoryService repositoryService;
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
+//    @javax.inject.Inject
+//    private BookmarkService bookmarkService;
     @javax.inject.Inject
     private ServiceInjector serviceInjector;
 

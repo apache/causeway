@@ -1,0 +1,104 @@
+= EntityState _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Enumerates the state of an entity.
+
+== API
+
+[source,java]
+.EntityState.java
+----
+enum EntityState {
+  NOT_PERSISTABLE     // <.>
+  PERSISTABLE_ATTACHED     // <.>
+  PERSISTABLE_DETACHED     // <.>
+  PERSISTABLE_DESTROYED     // <.>
+  boolean isPersistable()     // <.>
+  boolean isAttached()     // <.>
+  boolean isDetached()     // <.>
+  boolean isDestroyed()     // <.>
+}
+----
+
+<.> xref:#NOT_PERSISTABLE[NOT_PERSISTABLE]
++
+--
+Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+--
+<.> xref:#PERSISTABLE_ATTACHED[PERSISTABLE_ATTACHED]
++
+--
+Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+--
+<.> xref:#PERSISTABLE_DETACHED[PERSISTABLE_DETACHED]
++
+--
+Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
+--
+<.> xref:#PERSISTABLE_DESTROYED[PERSISTABLE_DESTROYED]
++
+--
+Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
+--
+<.> xref:#isPersistable__[isPersistable()]
++
+--
+Object is an entity so is _potentially_ persistable ot the database.
+--
+<.> xref:#isAttached__[isAttached()]
++
+--
+Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+--
+<.> xref:#isDetached__[isDetached()]
++
+--
+Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
+--
+<.> xref:#isDestroyed__[isDestroyed()]
++
+--
+Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
+--
+
+== Members
+
+[#NOT_PERSISTABLE]
+=== NOT_PERSISTABLE
+
+Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+
+[#PERSISTABLE_ATTACHED]
+=== PERSISTABLE_ATTACHED
+
+Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+
+[#PERSISTABLE_DETACHED]
+=== PERSISTABLE_DETACHED
+
+Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
+
+[#PERSISTABLE_DESTROYED]
+=== PERSISTABLE_DESTROYED
+
+Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
+
+[#isPersistable__]
+=== isPersistable()
+
+Object is an entity so is _potentially_ persistable ot the database.
+
+[#isAttached__]
+=== isAttached()
+
+Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+
+[#isDetached__]
+=== isDetached()
+
+Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
+
+[#isDestroyed__]
+=== isDestroyed()
+
+Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.

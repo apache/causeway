@@ -26,6 +26,24 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
+    
+    // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITANCE CONSIDERED)
+    
+    /**
+     * Same as {@link #getDeclaredAssociation(String)}, but also considering any inherited object members.
+     * @param id
+     * 
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
+     * and if nothing found there, search the interfaces.  
+     */
+    Optional<ObjectAssociation> getAssociation(String id);
+    
+    default ObjectAssociation getAssociationElseFail(String id) {
+        return getAssociation(id)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
+    }
+
+    // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITANCE CONSIDERED)
 
     /**
      * Get the field object representing the field with the specified field
@@ -34,14 +52,42 @@ public interface ObjectAssociationContainer {
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
      */
-    Optional<ObjectAssociation> getAssociation(String id);
+    Optional<ObjectAssociation> getDeclaredAssociation(String id);
     
-    default ObjectAssociation getAssociationElseFail(String id) {
-        return getAssociation(id)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
-    }
+    // -- ASSOCIATION STREAMS (INHERITANCE CONSIDERED)
+
+    /**
+     * Same as {@link #streamDeclaredAssociations(MixedIn)}, but also considering any inherited object members.
+     * @param contributed
+     * 
+     * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream, 
+     * except don't add ObjectAssociations that already have been added (due to inheritance).
+     */
+    Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
     
 
+    /**
+     * All {@link ObjectAssociation association}s that represent
+     * {@link OneToOneAssociation properties}.
+     */
+    default Stream<OneToOneAssociation> streamProperties(MixedIn contributed) {
+        return streamAssociations(contributed)
+                .filter(ObjectAssociation.Predicates.PROPERTIES)
+                .map(OneToOneAssociation.class::cast);
+    }
+
+    /**
+     * All {@link ObjectAssociation association}s that represents
+     * {@link OneToManyAssociation collections}.
+     */
+    default Stream<OneToManyAssociation> streamCollections(MixedIn contributed){
+        return streamAssociations(contributed)
+                .filter(ObjectAssociation.Predicates.COLLECTIONS)
+                .map(OneToManyAssociation.class::cast);
+    }
+    
+    // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
+    
     /**
      * Return all the fields that exist in an object of this specification,
      * although they need not all be accessible or visible.
@@ -49,32 +95,7 @@ public interface ObjectAssociationContainer {
      * To get the statically visible fields (where any invisible and
      * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
-     *
      */
-    Stream<ObjectAssociation> streamAssociations(Contributed contributed);
-
-    /**
-     * All {@link ObjectAssociation association}s that represent
-     * {@link OneToOneAssociation properties}.
-     * 
-     */
-    default Stream<OneToOneAssociation> streamProperties(Contributed contributed) {
-        return streamAssociations(contributed)
-                .filter(ObjectAssociation.Predicates.PROPERTIES)
-                .map(x->(OneToOneAssociation)x);
-    }
-
-    /**
-     * All {@link ObjectAssociation association}s that represents
-     * {@link OneToManyAssociation collections}.
-     *
-     * @return
-     * 
-     */
-    default Stream<OneToManyAssociation> streamCollections(Contributed contributed){
-        return streamAssociations(contributed)
-                .filter(ObjectAssociation.Predicates.COLLECTIONS)
-                .map(x->(OneToManyAssociation)x);
-    }
+    Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
 
 }

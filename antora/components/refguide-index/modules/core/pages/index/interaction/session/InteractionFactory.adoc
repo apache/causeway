@@ -1,0 +1,110 @@
+= InteractionFactory _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The factory of _InteractionSession_ (s) and _AuthenticationLayer_ (s), also holding a reference to the current authentication layer stack using a thread-local.
+
+The implementation is a singleton service.
+
+== API
+
+[source,java]
+.InteractionFactory.java
+----
+interface InteractionFactory {
+  AuthenticationLayer openInteraction()     // <.>
+  AuthenticationLayer openInteraction(Authentication authentication)     // <.>
+  boolean isInInteraction()     // <.>
+  R callAuthenticated(Authentication authentication, Callable<R> callable)     // <.>
+  void runAuthenticated(Authentication authentication, ThrowingRunnable runnable)     // <.>
+  R callAnonymous(Callable<R> callable)     // <.>
+  void runAnonymous(ThrowingRunnable runnable)     // <.>
+  void closeSessionStack()     // <.>
+}
+----
+
+<.> xref:#openInteraction__[openInteraction()]
++
+--
+If present, reuses the current top level _AuthenticationLayer_ , otherwise creates a new anonymous one.
+--
+<.> xref:#openInteraction__Authentication[openInteraction(Authentication)]
++
+--
+Returns a new or reused _AuthenticationLayer_ that is a holder of xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] on top of the current thread's authentication layer stack.
+--
+<.> xref:#isInInteraction__[isInInteraction()]
+<.> xref:#callAuthenticated__Authentication_Callable[callAuthenticated(Authentication, Callable)]
++
+--
+Executes a block of code with a new or reused _InteractionSession_ using a new or reused _AuthenticationLayer_ .
+--
+<.> xref:#runAuthenticated__Authentication_ThrowingRunnable[runAuthenticated(Authentication, ThrowingRunnable)]
++
+--
+Variant of _#callAuthenticated(Authentication, Callable)_ that takes a runnable.
+--
+<.> xref:#callAnonymous__Callable[callAnonymous(Callable)]
++
+--
+Executes a block of code with a new or reused _InteractionSession_ using a new or reused _AuthenticationLayer_ .
+--
+<.> xref:#runAnonymous__ThrowingRunnable[runAnonymous(ThrowingRunnable)]
++
+--
+Variant of _#callAnonymous(Callable)_ that takes a runnable.
+--
+<.> xref:#closeSessionStack__[closeSessionStack()]
++
+--
+closes all open _AuthenticationLayer_ (s) as stacked on the current thread
+--
+
+== Members
+
+[#openInteraction__]
+=== openInteraction()
+
+If present, reuses the current top level _AuthenticationLayer_ , otherwise creates a new anonymous one.
+
+[#openInteraction__Authentication]
+=== openInteraction(Authentication)
+
+Returns a new or reused _AuthenticationLayer_ that is a holder of xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] on top of the current thread's authentication layer stack.
+
+If available reuses an existing _InteractionSession_ , otherwise creates a new one.
+
+The _InteractionSession_ represents a user's span of activities interacting with the application. The session's stack is later closed using _#closeSessionStack()_ .
+
+[#isInInteraction__]
+=== isInInteraction()
+
+[#callAuthenticated__Authentication_Callable]
+=== callAuthenticated(Authentication, Callable)
+
+Executes a block of code with a new or reused _InteractionSession_ using a new or reused _AuthenticationLayer_ .
+
+If there is currently no _InteractionSession_ a new one is created.
+
+If there is currently an _AuthenticationLayer_ that has an equal xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] to the given one, it is reused, otherwise a new one is created.
+
+[#runAuthenticated__Authentication_ThrowingRunnable]
+=== runAuthenticated(Authentication, ThrowingRunnable)
+
+Variant of _#callAuthenticated(Authentication, Callable)_ that takes a runnable.
+
+[#callAnonymous__Callable]
+=== callAnonymous(Callable)
+
+Executes a block of code with a new or reused _InteractionSession_ using a new or reused _AuthenticationLayer_ .
+
+If there is currently no _InteractionSession_ a new one is created and a new anonymous _AuthenticationLayer_ is returned. Otherwise both, session and layer are reused.
+
+[#runAnonymous__ThrowingRunnable]
+=== runAnonymous(ThrowingRunnable)
+
+Variant of _#callAnonymous(Callable)_ that takes a runnable.
+
+[#closeSessionStack__]
+=== closeSessionStack()
+
+closes all open _AuthenticationLayer_ (s) as stacked on the current thread

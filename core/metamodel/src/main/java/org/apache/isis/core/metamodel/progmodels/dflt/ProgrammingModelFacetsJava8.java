@@ -17,29 +17,23 @@
 
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
-import java.util.stream.Collectors;
-
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
-import org.apache.isis.core.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionOverloadingValidator;
+import org.apache.isis.core.metamodel.facets.actions.contributing.derived.ContributingFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.parented.ParentedFacetSinceCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.SortedByFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
@@ -49,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssCla
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
@@ -74,7 +67,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnno
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
@@ -104,8 +96,7 @@ import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.Disabl
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetUsingSemanticsProviderFactory;
@@ -148,13 +139,11 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
+import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.val;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
@@ -164,7 +153,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
-        
+
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ObjectSpecIdFacetDerivedFromClassNameFactory.class);
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, DomainServiceFacetAnnotationFactory.class);
 
@@ -185,9 +174,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // properties
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyAccessorFacetViaAccessorFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertySetAndClearFacetFactory.class);
-        // must come after PropertySetAndClearFacetFactory (replaces setter facet with modify if need be)
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyModifyFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertySetterFacetFactory.class);
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyValidateFacetViaMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyChoicesFacetViaMethodFactory.class);
@@ -196,8 +183,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // collections
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CollectionAccessorFacetViaAccessorFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CollectionClearFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CollectionAddToRemoveFromAndValidateFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, SortedByFacetAnnotationFactory.class);
 
         // actions
@@ -226,8 +211,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ValidateObjectFacetMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ObjectValidPropertiesFacetImplFactory.class);
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, MemberOrderFacetFactory.class);
-
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BookmarkPolicyFacetFallbackFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HomePageFacetAnnotationFactory.class);
 
@@ -238,7 +221,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory.class);
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotContributedFacetDerivedFromDomainServiceFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
 
 
@@ -252,8 +234,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, RecreatableObjectFacetFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, MixinFacetForMixinAnnotationFactory.class);
-
 
         // must come after RecreatableObjectFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DomainObjectAnnotationFacetFactory.class);
@@ -269,9 +249,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ParameterAnnotationFacetFactory.class);
 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotContributedFacetDerivedFromMixinFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, OrphanedSupportingMethodValidator.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
 
+        
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
         // must come before DomainObjectLayoutFacetFactory
@@ -364,27 +344,14 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class);
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
-        
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
-        addValidator(new TitlesAndTranslationsValidator());
 
-        addValidator((objectSpec, validator) -> {
-            final long numActions = objectSpec.streamObjectActions(Contributed.INCLUDED).count();
-            if (numActions > 0L) {
-                
-                val actionIds = objectSpec.streamObjectActions(Contributed.INCLUDED)
-                .map(ObjectAction::getIdentifier)
-                .map(Identifier::toString)
-                .collect(Collectors.joining(", "));
-                
-                validator.onFailure(objectSpec, objectSpec.getIdentifier(),
-                        "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
-                        objectSpec.getCorrespondingClass().getName(),
-                        numActions,
-                        actionIds);
-            }
-            return false;
-        }, objectSpec -> objectSpec.getBeanSort() == BeanSort.UNKNOWN && ! objectSpec.isAbstract());
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
+        
+        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
+        addValidator(new OrphanedSupportingMethodValidator());
+        addValidator(new TitlesAndTranslationsValidator());
+        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
+        addValidator(new ActionOverloadingValidator());
 
     }
 

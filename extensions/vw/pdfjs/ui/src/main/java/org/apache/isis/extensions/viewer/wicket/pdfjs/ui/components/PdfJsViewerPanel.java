@@ -54,7 +54,6 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 
 import lombok.val;
 
@@ -63,11 +62,13 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  *
  */
-class PdfJsViewerPanel extends ScalarPanelAbstractLegacy<ScalarPropertyModel> implements IRequestListener {
+class PdfJsViewerPanel 
+extends ScalarPanelAbstractLegacy 
+implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_NAME = "scalarName";
+    //private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_FEEDBACK = "feedback";
 
@@ -196,7 +197,7 @@ class PdfJsViewerPanel extends ScalarPanelAbstractLegacy<ScalarPropertyModel> im
     }
 
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(UserService userService) {
-        String userName = userService.getUser().getName();
+        String userName = userService.currentUserNameElseNobody();
 
         val model = getModel();
         val propertyId = model.getIdentifier();

@@ -24,6 +24,7 @@ import org.apache.isis.applib.Identifier;
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a collection object itself.
  *
+ * @since 1.x {@index}
  */
 public class CollectionMethodEvent extends AccessEvent {
 
@@ -67,8 +68,6 @@ public class CollectionMethodEvent extends AccessEvent {
     /**
      * The name of the method invoked on this collection, for example
      * <tt>isEmpty</tt>.
-     *
-     * @return
      */
     public String getMethodName() {
         return methodName;

@@ -1,5 +1,4 @@
 hide empty members
-'hide methods
 
 skinparam class {
     BackgroundColor<<desc>> Cyan

@@ -134,7 +134,6 @@ public final class _Arrays {
      * Known-size Collector.
      * @param componentType
      * @param length
-     * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
         _With.requires(componentType, "componentType");
@@ -144,7 +143,6 @@ public final class _Arrays {
     /**
      * Unknown-size Collector.
      * @param componentType
-     * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
         _With.requires(componentType, "componentType");
@@ -219,13 +217,14 @@ public final class _Arrays {
     /**
      * Copies a collection's elements into an array.
      *
-     * @param iterable the iterable to copy
-     * @param type the type of the elements
+     * @param collection - the collection to convert
+     * @param componentType - type of the elements
      * @return a newly-allocated array into which all the elements of the iterable
      *     have been copied (non-null)
      */
-    public static <T> T[] toArray(@Nullable final Collection<? extends T> collection, final Class<T> componentType) {
-        _With.requires(componentType, "componentType");
+    public static <T> T[] toArray(
+            final @Nullable Collection<? extends T> collection, 
+            final @NonNull  Class<T> componentType) {
         return _NullSafe.stream(collection)
                 .collect(toArray(componentType, collection!=null ? collection.size() : 0));
     }
@@ -233,13 +232,14 @@ public final class _Arrays {
     /**
      * Copies an iterable's elements into an array.
      *
-     * @param iterable the iterable to copy
-     * @param type the type of the elements
+     * @param iterable - the iterable to copy
+     * @param componentType - type of the elements
      * @return a newly-allocated array into which all the elements of the iterable
      *     have been copied (non-null)
      */
-    public static <T> T[] toArray(@Nullable final Iterable<? extends T> iterable, final Class<T> componentType) {
-        _With.requires(componentType, "componentType");
+    public static <T> T[] toArray(
+            final @Nullable Iterable<? extends T> iterable, 
+            final @NonNull  Class<T> componentType) {
 // unnecessary optimization        
 //        if(iterable!=null && (iterable instanceof Collection)) {
 //            return toArray((Collection<? extends T>) iterable, componentType);
@@ -256,7 +256,6 @@ public final class _Arrays {
      * @param <T>
      * @param array
      * @param index
-     * @return
      */
     public static <T> T[] removeByIndex(T[] array, int index) {
         if(array==null || array.length<1) {
@@ -326,10 +325,11 @@ public final class _Arrays {
 
     /**
      * Returns the inferred element type of the specified array type
-     * @param type of the array for which to infer the element type
+     * @param arrayType - type of the array for which to infer the element type
      * @return inferred type or null if inference fails
      */
-    public static @Nullable Class<?> inferComponentTypeIfAny(@Nullable final Class<?> arrayType) {
+    public static @Nullable Class<?> inferComponentTypeIfAny(
+            final @Nullable Class<?> arrayType) {
         if(!isArrayType(arrayType)) {
             return null;
         }
@@ -451,7 +451,6 @@ public final class _Arrays {
      * to each element of {@code collection}. 
      * Returns {@code null} if {@code collection} is {@code null};  
      * @param <T>
-     * @param <R>
      * @param collection
      * @param mapper
      * @return nullable

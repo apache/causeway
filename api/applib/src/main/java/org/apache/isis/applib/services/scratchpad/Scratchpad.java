@@ -18,52 +18,34 @@
  */
 package org.apache.isis.applib.services.scratchpad;
 
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Named;
-
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.IsisInteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.collections._Maps;
-
-import lombok.extern.log4j.Log4j2;
 
 /**
- * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
- * interaction.  Most commonly this will be as the result of invoking a {@link org.apache.isis.applib.annotation.Bulk}
- * action.
+ * This service (API and implementation) provides a mechanism to interchange information
+ * between multiple objects invoked in the same interaction.
  *
- * <p>
- * This implementation has only one implementation (this class) in applib, so it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface Scratchpad
         extends DisposableBean {
 
-    // end::refguide[]
     /**
      * Obtain user-data, as set by a previous object being acted upon.
+     *
+     * <p>
+     *     The key value should obey the general contract for hash maps.
+     * </p>
      */
-    // tag::refguide[]
     public Object get(Object key);
 
-    // end::refguide[]
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
+     *
+     * <p>
+     *     The key value should obey the general contract for hash maps.
+     * </p>
      */
-    // tag::refguide[]
     public void put(Object key, Object value);
 
 
 }
-// end::refguide[]

@@ -18,6 +18,12 @@
  */
 package org.apache.isis.testdomain.util;
 
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,6 +43,35 @@ public final class CollectionAssertions {
             .collect(_Arrays.toArray(Object.class));
         
         assertArrayEquals(array1, array2);
+        
+    }
+    
+    public static <T> void assertComponentWiseEquals(Object a, Object b, BiFunction<T, T, String> difference) {
+        
+        @SuppressWarnings("unchecked")
+        final List<T> list1 = _NullSafe.streamAutodetect(a)
+                .map(t->(T)t)
+                .collect(Collectors.toList());
+        @SuppressWarnings("unchecked")
+        final List<T> list2 = _NullSafe.streamAutodetect(b)
+                .map(t->(T)t)
+                .collect(Collectors.toList());
+        
+        assertEquals(list1.size(), list2.size(), "expected element count equals");
+        
+        for(int i=0; i<list1.size(); ++i) {
+            
+            final int index = i;
+            val u = list1.get(i);
+            val v = list2.get(i);
+            
+            val delta = difference.apply(u, v);
+            
+            if(delta!=null) {
+                Assertions.fail(String.format("elements at index %d differ: %s", index, delta));
+            }
+            
+        }
         
     }
     

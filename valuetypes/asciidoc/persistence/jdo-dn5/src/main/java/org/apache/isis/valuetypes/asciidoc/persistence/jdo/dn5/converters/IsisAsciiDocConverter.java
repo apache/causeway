@@ -22,6 +22,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisAsciiDocConverter implements TypeConverter<AsciiDoc, String>{
 
     private static final long serialVersionUID = 1L;

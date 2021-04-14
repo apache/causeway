@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 /**
  * Fundamental building block of Tree structures. 
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this node
  */
@@ -167,10 +167,9 @@ public interface TreeNode<T> extends Vertex<T> {
     // -- LAZY NODE ADAPTING
 
     /**
-     * @return
+     * @apiNote a class rather than an instance, because otherwise
+     * the adapter would need to be serializable for Wicket's trees to work correctly.
      */
-    // [ahuber] Implementation Note: a class rather than an instance, because otherwise
-    // the adapter would need to be serializable for Wicket's trees to work correctly.
     public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
 
 

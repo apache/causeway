@@ -29,13 +29,15 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Objects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * @since 2.0 {@index}
+ */
 @XmlRootElement(name = "configurationProperty")
 @XmlType(
         propOrder = {
@@ -45,7 +47,7 @@ import lombok.Setter;
 )
 @DomainObject(
         editing = Editing.DISABLED,
-        objectType = "isisApplib.ConfigurationProperty"
+        objectType = "isis.applib.ConfigurationProperty"
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)
@@ -68,8 +70,7 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
 
     @Override
     public int compareTo(final ConfigurationProperty other) {
-        return _NullSafe.compareNullsLast(getKey(), other.getKey());
+        return _Objects.compareNullsLast(getKey(), other.getKey());
     }
 
 }
-// end::refguide[]

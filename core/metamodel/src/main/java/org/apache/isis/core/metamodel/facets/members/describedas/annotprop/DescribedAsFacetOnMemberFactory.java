@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class DescribedAsFacetOnMemberFactory 
+extends FacetFactoryAbstract {
 
 
     public DescribedAsFacetOnMemberFactory() {
@@ -41,12 +41,6 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         // no-op if null
         super.addFacet(facet);
     }
-
-    @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-    }
-
-
 
     private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();

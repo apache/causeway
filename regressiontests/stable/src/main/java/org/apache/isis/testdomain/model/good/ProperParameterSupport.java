@@ -21,9 +21,9 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -48,81 +48,81 @@ public class ProperParameterSupport {
 
     // -- PARAM 0 (String)
     
-    @Model
+    @MemberSupport
     public String default0Act(Parameters p) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Collection<String> choices0Act(Parameters p) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Collection<String> autoComplete0Act(Parameters p, String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hide0Act(Parameters p) {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String disable0Act(Parameters p) {
         return null;
     }
     
     // -- PARAM 1 (int)
     
-    @Model
+    @MemberSupport
     public int default1Act(Parameters p) {
         return 0;
     }
     
-    @Model
+    @MemberSupport
     public int[] choices1Act(Parameters p) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public int[] autoComplete1Act(Parameters p, String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hide1Act(Parameters p) {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String disable1Act(Parameters p) {
         return null;
     }
     
     // -- PARAM 2 (boolean)
     
-    @Model
+    @MemberSupport
     public boolean default2Act(Parameters p) {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public boolean[] choices2Act(Parameters p) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean[] autoComplete2Act(Parameters p, String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hide2Act(Parameters p) {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String disable2Act(Parameters p) {
         return null;
     }

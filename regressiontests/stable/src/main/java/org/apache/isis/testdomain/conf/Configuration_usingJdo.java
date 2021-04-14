@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
@@ -38,7 +38,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     MyService.class, // testing injection into entities 
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleJdoDataNucleus5.class,
+    IsisModuleJdoDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
@@ -47,11 +47,11 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
                 JdoTestDomainModule.class
         })
 @PropertySources({
-    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
     @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJdo {
+   
     
-
 }

@@ -20,6 +20,7 @@ package org.apache.isis.applib.events.domain;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -27,126 +28,175 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
-// tag::refguide[]
+/**
+ * Fired whenever the framework interacts with a domain object's action.
+ *
+ * <p>
+ * This is the specialization of {@link AbstractDomainEvent}, for actions,
+ * which should then be further subclassed by domain application.
+ * </p>
+ *
+ * <p>
+ * The class has a number of responsibilities (in addition to those it
+ * inherits):
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *          capture the arguments for each of the action's parameters
+ *     </li>
+ *     <li>
+ *          provide selected metadata about the action parameters from the
+ *          metamodel (names, types)
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework using a
+ * no-arg constructor; fields are set reflectively.
+ * </p>
+ *
+ * @since 1.x {@index}
+ */
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
-    // end::refguide[]
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
-     * configuration property.
-     */
-    // tag::refguide[]
-    public static class Default extends ActionDomainEvent<Object> {}
-
-    // end::refguide[]
-    /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
-     */
-    // tag::refguide[]
-    public static class Noop extends ActionDomainEvent<Object> {}
-
-    // end::refguide[]
-    /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
-     */
-    // tag::refguide[]
-    public static class Doop extends ActionDomainEvent<Object> {}
-
-    // end::refguide[]
-    /**
-     * If used then the framework will set state via (non-API) setters.
+     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
      *
      * <p>
-     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.applib.annotation.action.domain-event.post-for-default</tt>
+     * configuration property.
      * </p>
+     */
+    public static class Default extends ActionDomainEvent<Object> {}
+
+    /**
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
+     */
+    public static class Noop extends ActionDomainEvent<Object> {}
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event..
+     */
+    public static class Doop extends ActionDomainEvent<Object> {}
+
+    /**
+     * Subtypes can define a no-arg constructor; the framework sets state
+     * via (non-API) setters.
      */
     public ActionDomainEvent() {
     }
 
-    // tag::refguide[]
+    /**
+     * The semantics of the action being invoked.
+     *
+     * <p>
+     *     Copied over from {@link Action#semantics()}
+     * </p>
+     */
     @Getter
     private SemanticsOf semantics;
 
+    /**
+     * The names of the parameters of the actions.
+     *
+     * @see #getParameterTypes()
+     * @see #getArguments()
+     */
     @Getter
     private List<String> parameterNames;
 
+    /**
+     * The types of the parameters of the actions.
+     *
+     * <p>
+     *     The {@link #getArguments() arguments} will be castable to the
+     *     parameter types here.
+     * </p>
+     *
+     * @see #getParameterNames()
+     * @see #getArguments()
+     */
     @Getter
     private List<Class<?>> parameterTypes;
 
-    // end::refguide[]
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
-    // tag::refguide[]
     @Getter
     private Object mixedIn;
 
-    // end::refguide[]
     /**
-     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     * The arguments being used to invoke the action.
      *
      * <p>
-     *     The argument values can also be modified by event handlders
-     *     during the {@link Phase#EXECUTING} phase.    The new value must be
-     *     the same type as the expected value; the framework performs
-     *     no sanity checks.
+     * Populated at {@link AbstractDomainEvent.Phase#VALIDATE} and subsequent
+     * phases (but null for {@link AbstractDomainEvent.Phase#HIDE hidden} and
+     * {@link AbstractDomainEvent.Phase#DISABLE disable} phases).
      * </p>
+     *
+     * <p>
+     *     The argument values can also be modified by event handlers
+     *     during the {@link AbstractDomainEvent.Phase#EXECUTING} phase. The
+     *     new value must be the same type as the expected value; the framework
+     *     performs no sanity checks.
+     * </p>
+     *
+     * @see #getParameterNames()
+     * @see #getParameterTypes()
      */
-    // tag::refguide[]
     @Getter @Setter
     private List<Object> arguments;
 
-    // end::refguide[]
     /**
      * The value returned by the action.
      *
      * <p>
-     *     Only available for the {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED}
-     *     {@link #getEventPhase() phase}.
+     * Only available for the {@link AbstractDomainEvent.Phase#EXECUTED}
+     * {@link #getEventPhase() phase}.
      * </p>
      */
-    // tag::refguide[]
     @Getter
     private Object returnValue;
 
-    // end::refguide[]
     /**
      * Set by the framework.
      *
-     * Event subscribers can replace the value with some other value if they wish, though only in the
-     * {@link Phase#EXECUTED} phase.
+     * <p>
+     * Event subscribers can replace the value with some other value if they
+     * wish, though only in the {@link AbstractDomainEvent.Phase#EXECUTED} phase.
+     * </p>
      */
-    // tag::refguide[]
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
 
-    // end::refguide[]
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setSemantics(SemanticsOf semantics) {
         this.semantics = semantics;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setParameterNames(final List<String> parameterNames) {
         this.parameterNames = parameterNames;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setParameterTypes(final List<Class<?>> parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     @Override
     public void setMixedIn(final Object mixedIn) {
@@ -165,7 +215,5 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
-    // tag::refguide[]
 
 }
-// end::refguide[]

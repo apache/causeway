@@ -52,7 +52,7 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
 
         // the default implementation seems to make its two calls in the wrong order, in particular with
         // appendDisableEnforceFocus called after the modal javascript object has already been created.
-        // so this patch makes sure it is called before hand.  This results in the Javascript fragment being
+        // so this patch makes sure it is called before hand.  This results in the JavaScript fragment being
         // invoked twice, but what the hey.
         appendDisableEnforceFocus(target);
 

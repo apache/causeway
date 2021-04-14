@@ -27,6 +27,8 @@ import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -41,6 +43,7 @@ import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCol
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 public enum ActionResultResponseType {
@@ -82,7 +85,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.downloadHandler(value);
+            IRequestHandler handler = model.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -90,7 +93,24 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.downloadHandler(value);
+            IRequestHandler handler = model.downloadHandler(value);
+            return ActionResultResponse.withHandler(handler);
+        }
+    },
+    VALUE_LOCALRESPATH_AJAX {
+        @Override @SneakyThrows
+        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+            final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
+            return ActionResultResponse
+                    .openUrlInBrowser(target, localResPath.getPath(), localResPath.getOpenUrlStrategy());
+        }
+    },
+    VALUE_LOCALRESPATH_NOAJAX {
+        @Override
+        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+            // open URL server-side redirect
+            final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
+            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy());
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -98,19 +118,18 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             final URL url = (URL)resultAdapter.getPojo();
-            return ActionResultResponse.openUrlInBrowser(target, url);
+            return ActionResultResponse
+                    .openUrlInBrowser(target, url.toString(), OpenUrlStrategy.NEW_WINDOW); // default behavior
         }
-
     },
     VALUE_URL_NOAJAX {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(value);
+            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
-
     },
     VOID {
         @Override
@@ -174,11 +193,12 @@ public enum ActionResultResponseType {
 
     private static ActionResultResponseType determineFor(
             final ManagedObject resultAdapter,
-            final AjaxRequestTarget targetIfAny) {
+            AjaxRequestTarget targetIfAny) {
         
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
         }
+        
         final ObjectSpecification resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
             if (resultSpec.getFacet(ValueFacet.class) != null) {
@@ -190,8 +210,15 @@ public enum ActionResultResponseType {
                 if(value instanceof Blob) {
                     return ActionResultResponseType.VALUE_BLOB;
                 }
+                if(value instanceof LocalResourcePath) {
+                    return targetIfAny != null
+                            ? ActionResultResponseType.VALUE_LOCALRESPATH_AJAX
+                            : ActionResultResponseType.VALUE_LOCALRESPATH_NOAJAX;
+                }
                 if(value instanceof java.net.URL) {
-                    return targetIfAny != null? ActionResultResponseType.VALUE_URL_AJAX: ActionResultResponseType.VALUE_URL_NOAJAX;
+                    return targetIfAny != null
+                            ? ActionResultResponseType.VALUE_URL_AJAX
+                            : ActionResultResponseType.VALUE_URL_NOAJAX;
                 }
                 // else
                 return ActionResultResponseType.VALUE;

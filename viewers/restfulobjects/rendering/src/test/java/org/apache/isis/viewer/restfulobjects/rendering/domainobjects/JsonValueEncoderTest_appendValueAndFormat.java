@@ -30,16 +30,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class JsonValueEncoderTest_appendValueAndFormat {
@@ -398,8 +398,11 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     private void allowingObjectSpecToReturnSpecIdFor(final Class<?> cls) {
         context.checking(new Expectations() {
             {
-                oneOf(mockObjectSpec).getSpecId();
-                will(returnValue(ObjectSpecId.of(cls.getName())));
+                allowing(mockObjectSpec).getCorrespondingClass();
+                will(returnValue(cls));
+                
+                allowing(mockObjectSpec).getLogicalType();
+                will(returnValue(LogicalType.fqcn(cls)));
                 
                 allowing(mockObjectSpec).getFacet(EncodableFacet.class);
                 will(returnValue(null));

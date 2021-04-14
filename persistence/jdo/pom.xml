@@ -32,8 +32,13 @@
 
 	<modules>
 		<module>applib</module>
-		<module>datanucleus-5</module>
+		
+		<module>integration</module>
+		<module>metamodel</module>
+		<module>spring</module>
+		<module>provider</module>
+		<module>datanucleus</module>
+		
 	</modules>
-
 
 </project>

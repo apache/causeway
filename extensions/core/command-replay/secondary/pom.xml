@@ -65,16 +65,22 @@
             <artifactId>isis-mappings-jaxrsclient-impl</artifactId>
         </dependency>
 
-<!--
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-command-log-jdo</artifactId>
         </dependency>
--->
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-quartz-impl</artifactId>
+        </dependency>
+
+         <!-- TESTING -->
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

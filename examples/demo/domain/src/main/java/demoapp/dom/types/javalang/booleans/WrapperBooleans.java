@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -85,7 +85,7 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             boolean primitive1) {
         return this;
     }
-    @Model
+    @MemberSupport
     public boolean default1BooleanParams() {
         return true;
     }
@@ -105,7 +105,7 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             Boolean boxed1) {
         return this;
     }
-    @Model
+    @MemberSupport
     public Boolean default1BooleanBoxedParams() {
         return true;
     }

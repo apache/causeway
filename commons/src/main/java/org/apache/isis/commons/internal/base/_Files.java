@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 public class _Files {
@@ -121,5 +122,18 @@ public class _Files {
         return absolutePath;
     }
     
+    /**
+     * Deletes given {@link File}. This operation is ignored if the file is a directory or does not exist.  
+     * @param file - the file to be deleted (null-able)
+     */
+    @SneakyThrows
+    public static void deleteFile(@Nullable File file) {
+        if(file==null 
+                || !file.exists()
+                || file.isDirectory()) {
+            return; // silently ignore if not an existing file
+        }
+        Files.delete(file.toPath());
+    }
     
 }

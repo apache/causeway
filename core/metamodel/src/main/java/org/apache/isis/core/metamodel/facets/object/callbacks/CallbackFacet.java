@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetMulti;
-import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**

@@ -20,6 +20,9 @@ package org.apache.isis.schema;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 public class IsisModuleSchema {
 

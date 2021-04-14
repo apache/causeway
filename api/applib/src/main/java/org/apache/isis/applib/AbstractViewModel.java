@@ -27,13 +27,8 @@ package org.apache.isis.applib;
  * Subclassing is NOT mandatory; the methods in this superclass can be pushed
  * down into domain objects and another superclass used if required.
  *
- * <p>
- *     As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel}.
- * </p>
- *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
-// end::refguide[]
 public abstract class AbstractViewModel implements ViewModel {
 
     @Override

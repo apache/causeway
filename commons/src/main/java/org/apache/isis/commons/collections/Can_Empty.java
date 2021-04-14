@@ -24,10 +24,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -71,6 +76,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Optional<T> getLast() {
+        return Optional.empty();
+    }
+    
+    @Override
     public Optional<T> get(int elementIndex) {
         return Optional.empty();
     }
@@ -88,6 +98,25 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
+    }
+    
+    @Override
+    public Can<T> reverse() {
+        return this;
+    }
+    
+    @Override
+    public Iterator<T> reverseIterator() {
+        return iterator();
+    }
+    
+    @Override
+    public void forEach(Consumer<? super T> action) {
+    }
+    
+    @Override
+    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+        return this; // identity
     }
     
     @Override
@@ -145,7 +174,7 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         if(INSTANCE == obj) {
             return true; // optimization not strictly necessary
         }
@@ -160,8 +189,29 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public int compareTo(final @Nullable Can<T> other) {
+        if(other==null) {
+            return 0; 
+        }
+        // when returning
+        // -1 ... this is before other 
+        // +1 ... this is after other
+        return Integer.compare(0, other.size()); // all empty Cans are same and come first
+    }
+    
+    @Override
     public List<T> toList() {
         return Collections.emptyList(); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        return Collections.emptySet(); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        return Collections.emptySet(); // serializable and immutable
     }
     
     @Override

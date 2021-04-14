@@ -28,8 +28,8 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionPara
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.val;
 
@@ -62,7 +62,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub("VOID");
+    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
 //    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
 //    private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
@@ -73,28 +73,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         super.setUp();
 
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
+        final Authentication mockAuthentication = context.mock(Authentication.class);
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
-            will(returnValue(Optional.of(mockAuthenticationSession)));
-
-            //            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            //            will(returnValue(Optional.of(mockTranslationService)));
-            //
-            //            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
-            //            will(returnValue(mockAuthenticationSessionProvider));
-
-            //            allowing(mockServicesInjector).getAuthenticationSessionProvider();
-            //            will(returnValue(mockAuthenticationSessionProvider));
-            //
-            //            allowing(mockServicesInjector).getSpecificationLoader();
-            //            will(returnValue(mockSpecificationLoader));
-            //
-            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            //            will(returnValue(mockPersistenceSessionServiceInternal));
-
+            allowing(mockAuthenticationContext).currentAuthentication();
+            will(returnValue(Optional.of(mockAuthentication)));
         }});
 
     }

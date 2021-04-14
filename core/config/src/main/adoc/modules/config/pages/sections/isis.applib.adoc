@@ -39,14 +39,14 @@ The CSS class for individual actions can be overridden using ``ActionLayout#cssC
 
 
 |
-[[isis.applib.annotation.action.command]]
+[[isis.applib.annotation.action.command-publishing]]
 isis.applib.annotation.action. +
-command
+command-publishing
 
 | 
-| The default for whether action invocations should be reified as a ``Command``, to be sent to any registered ``CommandServiceListener``s, either for auditing or for replayed against a secondary system, eg for regression testing.
+| TODO[2464] semantic renaming audit/dispatch -> publishing The default for whether action invocations should be reified as a ``Command``, to be sent to any registered ``CommandSubscriber``s, either for auditing or for replayed against a secondary system, eg for regression testing.
 
-This setting can be overridden on a case-by-case basis using ``Action#command()``.
+This setting can be overridden on a case-by-case basis using ``Action#commandPublishing()``.
 
 
 |
@@ -67,25 +67,25 @@ The algorithm for determining whether (and what type of) an event is actually se
 
 
 |
+[[isis.applib.annotation.action.execution-publishing]]
+isis.applib.annotation.action. +
+execution-publishing
+
+| 
+| TODO[2464] semantic renaming audit/dispatch -> publishing The default for whether action invocations should be sent through to the ``ExecutionSubscriber`` for publishing.
+
+The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
+
+This setting can be overridden on a case-by-case basis using ``Action#executionDispatch()``.
+
+
+|
 [[isis.applib.annotation.action.explicit]]
 isis.applib.annotation.action. +
 explicit
 
 | 
 | Whether or not a public method needs to be annotated with @``Action`` in order to be picked up as an action in the metamodel.
-
-
-|
-[[isis.applib.annotation.action.publishing]]
-isis.applib.annotation.action. +
-publishing
-
-| 
-| The default for whether action invocations should be sent through to the ``PublisherService`` for publishing.
-
-The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
-
-This setting can be overridden on a case-by-case basis using ``Action#publishing()``.
 
 
 |
@@ -214,19 +214,6 @@ The default is ``false``, because otherwise the mere presence of ``@DomainObject
 
 
 |
-[[isis.applib.annotation.domain-object.auditing]]
-isis.applib.annotation. +
-domain-object.auditing
-
-| 
-| The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to the ``AuditerService``.
-
-This setting can be overridden on a case-by-case basis using ``DomainObject#auditing()`` DomainObject#getAuditing()}
-
-Note: this applies only to domain entities, not view models.
-
-
-|
 [[isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default]]
 isis.applib.annotation. +
 domain-object. +
@@ -252,6 +239,20 @@ domain-object.editing
 | The default for whether the properties of domain objects can be edited, or whether instead they can be modified only using actions (or programmatically as a side-effect of actions on other objects).
 
 This setting can be overridden on a case-by-case basis using DomainObject#getEditing()
+
+
+|
+[[isis.applib.annotation.domain-object.entity-change-publishing]]
+isis.applib.annotation. +
+domain-object. +
+entity-change-publishing
+
+| 
+| TODO[2464] semantic renaming audit/dispatch -> publishing The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to ``EntityChangesSubscriber``s and sent through to ``EntityPropertyChangeSubscriber``.
+
+This setting can be overridden on a case-by-case basis using ``DomainObject#entityChangePublishing()``
+
+Note: this applies only to domain entities, not view models.
 
 
 |
@@ -309,19 +310,6 @@ The algorithm for determining whether (and what type of) an event is sent depend
 * If set to any other subtype, then an event _is_ sent.
 
 Note: this applies only to domain entities, not to view models.
-
-
-|
-[[isis.applib.annotation.domain-object.publishing]]
-isis.applib.annotation. +
-domain-object.publishing
-
-| 
-| The default for whether the identities of changed objects should be sent through to the ``PublisherService`` for publishing.
-
-The service's publish method is called only once per transaction, with ``PublishedObjects`` collecting details of all changed domain objects.
-
-This setting can be overridden on a case-by-case basis using ``DomainObject#publishing()``.
 
 
 |
@@ -410,14 +398,14 @@ If left as ``LabelPosition#NOT_SPECIFIED`` and not overridden, then the position
 
 
 |
-[[isis.applib.annotation.property.command]]
+[[isis.applib.annotation.property.command-publishing]]
 isis.applib.annotation.property. +
-command
+command-publishing
 
 | 
-| The default for whether property edits should be reified as a ``Command``, to be sent to any registered ``CommandServiceListener``s, either for auditing or for replayed against a secondary system, eg for regression testing.
+| TODO[2464] semantic renaming audit/dispatch -> publishing The default for whether property edits should be reified as a ``Command``, to be sent to any registered ``CommandSubscriber``s, either for auditing or for replayed against a secondary system, eg for regression testing.
 
-This setting can be overridden on a case-by-case basis using ``Property#command()``.
+This setting can be overridden on a case-by-case basis using ``Property#commandDispatch()``.
 
 
 |
@@ -438,16 +426,16 @@ The algorithm for determining whether (and what type of) an event is actually se
 
 
 |
-[[isis.applib.annotation.property.publishing]]
+[[isis.applib.annotation.property.execution-publishing]]
 isis.applib.annotation.property. +
-publishing
+execution-publishing
 
 | 
-| The default for whether property edits should be sent through to the ``PublisherService`` for publishing.
+| TODO[2464] semantic renaming audit/dispatch -> publishing The default for whether property edits should be sent through to the ``ExecutionSubscriber`` for publishing.
 
 The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the property edited, and the new value of the property.
 
-This setting can be overridden on a case-by-case basis using \{ @link org.apache.isis.applib.annotation.Property#publishing()}.
+This setting can be overridden on a case-by-case basis using ``Property#publishing()``.
 
 
 |

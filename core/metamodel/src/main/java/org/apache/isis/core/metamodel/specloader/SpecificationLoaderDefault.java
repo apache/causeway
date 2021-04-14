@@ -38,6 +38,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -50,6 +52,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
@@ -58,20 +61,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
@@ -98,7 +99,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Service
-@Named("isisMetaModel.SpecificationLoaderDefault")
+@Named("isis.metamodel.SpecificationLoaderDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
@@ -121,7 +122,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private FacetProcessor facetProcessor;
 
     private final SpecificationCache<ObjectSpecification> cache = new SpecificationCacheDefault<>();
-    private final SpecIdToClassResolver specIdToClassResolver = new SpecIdToClassResolverDefault();
+    private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
 
     /**
      * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
@@ -226,7 +227,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         //XXX[ISIS-2403] these classes only get discovered by validators, so just preload their specs
         // (an optimization, not strictly required)
-        loadSpecifications(ApplicationFeatureType.class/*, ...*/);
+        loadSpecifications(ApplicationFeatureSort.class/*, ...*/);
 
         log.info(" - adding types from ValueTypeProviders");
 
@@ -282,9 +283,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
-        log.info(" - introspecting {}/{} entities (JDO/JPA)",
-                isisBeanTypeRegistry.getEntityTypesJdo().size(),
-                isisBeanTypeRegistry.getEntityTypesJpa().size());
+//        log.info(" - introspecting {}/{} entities (JDO/JPA)",
+//                isisBeanTypeRegistry.getEntityTypesJdo().size(),
+//                isisBeanTypeRegistry.getEntityTypesJpa().size());
+
+        log.info(" - introspecting {} entities (JDO+JPA)",
+                isisBeanTypeRegistry.getEntityTypes().size());
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
@@ -315,7 +319,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void disposeMetaModel() {
-        specIdToClassResolver.clear();
+        logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
         log.info("Metamodel disposed.");
@@ -425,16 +429,54 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         cache.forEach(onSpec, shouldRunConcurrent);
     }
 
-    @Override @Nullable
-    public Class<?> lookupType(final @NonNull ObjectSpecId objectSpecId) {
-        return specIdToClassResolver.lookup(objectSpecId)
-                //XXX falling back assuming the specId equals the fqn of the corresponding class
-                //which might not always be true
-                // (should warn log when fails with null)
-                .orElseGet(()->ClassUtil.forNameElseNull(objectSpecId.asString()));
+    @Override
+    public LogicalType lookupLogicalType(final @NonNull String logicalTypeName) {
+        val logicalType = logicalTypeResolver.lookup(logicalTypeName)
+                .orElse(null);
+        if(logicalType!=null) {
+            return logicalType;
+        }
+        
+        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported 
+        
+        // falling back assuming the logicalTypeName equals the fqn of the corresponding class
+        // which might not always be true, 
+        
+        val cls = ClassUtil.forNameElseNull(logicalTypeName);
+        if(cls!=null) {
+
+//TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...              
+//            log.warn("Lookup for ObjectSpecId '{}' failed, but found a matching fully qualified "
+//                    + "class name to use instead. This warning is an indicator, that {} is not "
+//                    + "discovered by Spring during bootstrapping of this application.", 
+//                    objectSpecId.getSpecId(),
+//                    cls.getName());
+            return LogicalType.fqcn(cls);
+        }
+        
+        // immediately fail to not cause any NPEs further down the path
+        throw _Exceptions.unrecoverableFormatted(
+                "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
+                + "class name to use instead. This indicates, that the class we are not finding here"
+                + " is not discovered by Spring during bootstrapping of this application.",
+                logicalTypeName);
     }
     
     // -- VALIDATION STUFF
+    
+    private final ValidationFailures validationFailures = new ValidationFailures();
+    
+    @Override
+    public void addValidationFailure(ValidationFailure validationFailure) {
+//        if(validationResult.isMemoized()) {
+//            validationResult.clear(); // invalidate
+////            throw _Exceptions.illegalState(
+////                    "Validation result was already created and can no longer be modified.");
+//        }
+        synchronized(validationFailures) {
+            validationFailures.add(validationFailure);
+        }
+    }
     
     private _Lazy<ValidationFailures> validationResult = 
             _Lazy.threadSafe(this::collectFailuresFromMetaModel);
@@ -444,13 +486,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     private ValidationFailures collectFailuresFromMetaModel() {
         validationInProgress.set(true);               
-        val failures = new ValidationFailures();
+        
         programmingModel.streamValidators()
         .map(MetaModelValidatorAbstract.class::cast)
         .forEach(validator -> {
             log.debug("Running validator: {}", validator);
+            validator.setMetaModelContext(metaModelContext);
             try {
-                validator.collectFailuresInto(failures);
+                validator.validate();
             } catch (Throwable t) {
                 log.error(t);
                 throw t;
@@ -458,10 +501,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 log.debug("Done validator: {}", validator);
             }
         });
+        
         log.debug("Done");
         validationInProgress.set(false);
-        return failures;
+        
+        return validationFailures;
     }
+
 
     // -- HELPER
     
@@ -492,7 +538,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         final ObjectSpecification spec = cache.computeIfAbsent(substitutedType, __->{
             val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
-            specIdToClassResolver.register(newSpec);
+            logicalTypeResolver.register(newSpec);
             return newSpec;
         });
 
@@ -603,5 +649,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
     }
 
+   
 
 }

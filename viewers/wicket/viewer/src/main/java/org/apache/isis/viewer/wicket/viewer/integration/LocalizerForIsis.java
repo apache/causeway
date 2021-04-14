@@ -32,12 +32,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
+import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;
@@ -48,8 +48,8 @@ import lombok.val;
  */
 public class LocalizerForIsis extends Localizer {
 
-    @Inject private IsisInteractionTracker isisInteractionTracker;
-    @Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private InteractionTracker isisInteractionTracker;
+    @Inject private InteractionFactory isisInteractionFactory;
     @Inject private TranslationService translationService;
     
     /**
@@ -75,11 +75,11 @@ public class LocalizerForIsis extends Localizer {
 
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
-        final String context = contextClass.getName();
+        final TranslationContext context = TranslationContext.forClassName(contextClass);
         if(isisInteractionTracker.isInInteraction()) {
             return translate(key, context);
         } else {
-            return isisInteractionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));
+            return isisInteractionFactory.callAnonymous(()->translate(key, context));
         }
     }
 
@@ -142,7 +142,7 @@ public class LocalizerForIsis extends Localizer {
         return enclosingClass != null? enclosing(enclosingClass): cls;
     }
 
-    private String translate(final String key, final String context) {
+    private String translate(final String key, final TranslationContext context) {
         return translationService.translate(context, key);
     }
 

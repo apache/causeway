@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtimeservices.wrapper.dom.employees;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.runtimeservices.wrapper.dom.claims.Approver;
 import org.apache.isis.core.runtimeservices.wrapper.dom.claims.Claimant;
 
@@ -33,7 +33,7 @@ public class Employee implements Claimant, Approver {
     // {{ Name
     private String name;
 
-    @MemberOrder(sequence = "1")
+    @PropertyLayout(sequence = "1")
     public String getName() {
         return name;
     }
@@ -73,7 +73,7 @@ public class Employee implements Claimant, Approver {
     // {{ Password
     private String password;
 
-    @MemberOrder(sequence = "2")
+    @PropertyLayout(sequence = "2")
     public String getPassword() {
         return password;
     }
@@ -88,7 +88,7 @@ public class Employee implements Claimant, Approver {
     private Approver approver;
 
     @Override
-    @MemberOrder(sequence = "2")
+    @PropertyLayout(sequence = "2")
     public Approver getApprover() {
         return approver;
     }

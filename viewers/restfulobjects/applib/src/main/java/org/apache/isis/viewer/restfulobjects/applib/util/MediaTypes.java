@@ -26,17 +26,18 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * @since 1.x {@index}
+ */
 public class MediaTypes {
 
     /**
      * Same as {@code MediaType.valueOf(type)}, but with fallback in case {@code MediaType.valueOf(type)}
      * throws an IllegalArgumentException.
-     * <br/><br/>
-     *
+     * <p>
      * The fallback is to retry with some special characters replaces in String {@code type}.
      *
      * @param type
-     * @return
      */
     public static MediaType parse(String type) {
 

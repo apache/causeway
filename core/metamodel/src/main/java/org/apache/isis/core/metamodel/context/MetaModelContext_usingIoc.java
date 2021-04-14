@@ -30,19 +30,20 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._IocContainer;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -94,8 +95,8 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(AuthenticationManager.class);
     
     @Getter(lazy=true) 
-    private final AuthenticationSessionTracker authenticationSessionTracker =
-    getSingletonElseFail(AuthenticationSessionTracker.class);
+    private final AuthenticationContext authenticationContext =
+    getSingletonElseFail(AuthenticationContext.class);
 
     @Getter(lazy=true) 
     private final TitleService titleService =
@@ -117,11 +118,19 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     private final ObjectManager objectManager =
     getSingletonElseFail(ObjectManager.class);
     
+    @Getter(lazy=true) 
+    private final WrapperFactory wrapperFactory =
+    getSingletonElseFail(WrapperFactory.class);
     
-    @Override
-    public final TransactionState getTransactionState() {
-        return getTransactionService().currentTransactionState();
-    }
+    @Getter(lazy=true) 
+    private final MemberExecutorService memberExecutor =
+    getSingletonElseFail(MemberExecutorService.class);
+    
+    
+//    @Override
+//    public final TransactionState getTransactionState() {
+//        return getTransactionService().currentTransactionState();
+//    }
 
     @Override
     public final ManagedObject getHomePageAdapter() {

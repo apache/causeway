@@ -25,15 +25,16 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetFromParentedCollection extends ActionParameterChoicesFacetAbstract {
+public class ActionParameterChoicesFacetFromParentedCollection 
+extends ActionParameterChoicesFacetAbstract {
 
     private final OneToManyAssociation otma;
 
@@ -47,26 +48,12 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     @Override
     public Can<ManagedObject> getChoices(
             final ObjectSpecification requiredSpec,
-            final ManagedObject target,
+            final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val parentAdapter = determineParentAdapter(target);
-        val objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
-        return CollectionFacet.streamAdapters(objectAdapter).collect(Can.toCan());
-    }
-
-    /**
-     * in the case of a mixin action, the target passed to the facet is actually the mixin itself, 
-     * not the mixee.
-     */
-    private ManagedObject determineParentAdapter(final ManagedObject target) {
-        val mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
-        ManagedObject mixedInTarget = null;
-        if(mixinFacet != null) {
-            mixedInTarget = mixinFacet.mixedIn(target, MixinFacet.Policy.FAIL_FAST);
-        }
-        return mixedInTarget != null ? mixedInTarget : target;
+        val collectionAdapter = otma.get(head.getOwner(), interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(collectionAdapter).collect(Can.toCan());
     }
 
     @Override 

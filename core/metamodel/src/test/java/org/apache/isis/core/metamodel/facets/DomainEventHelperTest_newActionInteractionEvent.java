@@ -28,6 +28,7 @@ import static org.junit.Assert.assertSame;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.id.LogicalType;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -42,7 +43,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void defaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
@@ -57,7 +58,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void actionInvokedEventDefaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
@@ -72,7 +73,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void customEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<SomeDomainObject> ev = DomainEventHelper.newActionDomainEvent(

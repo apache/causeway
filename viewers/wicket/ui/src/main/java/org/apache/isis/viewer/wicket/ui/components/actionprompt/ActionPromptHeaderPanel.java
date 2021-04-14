@@ -23,6 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -31,7 +32,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * A panel used as a title for the action prompts
  */
-public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
+public class ActionPromptHeaderPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_ACTION_NAME = "actionName";

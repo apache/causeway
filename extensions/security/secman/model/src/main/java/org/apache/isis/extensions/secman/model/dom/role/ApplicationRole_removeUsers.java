@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -37,9 +37,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemoveUserDomainEvent.class,
-        associateWith = "users",
-        associateWithSequence = "2")
-@ActionLayout(named="Remove")
+        associateWith = "users")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationRole_removeUsers {
     
@@ -47,21 +46,21 @@ public class ApplicationRole_removeUsers {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
-    @Model
+    @MemberSupport
     public ApplicationRole act(Collection<ApplicationUser> users) {
         
         _NullSafe.stream(users)
         .filter(this::canRemove)
-        .forEach(user->applicationRoleRepository.removeRoleFromUser(holder, user));
+        .forEach(user->applicationRoleRepository.removeRoleFromUser(target, user));
 
-        return holder;
+        return target;
     }
     
     public boolean canRemove(ApplicationUser applicationUser) {
         if(applicationUserRepository.isAdminUser(applicationUser) 
-                && applicationRoleRepository.isAdminRole(holder)) {
+                && applicationRoleRepository.isAdminRole(target)) {
             messageService.warnUser("Cannot remove admin user from the admin role.");
             return false;
         }

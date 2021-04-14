@@ -32,7 +32,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
 
-public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
+public class ZeroClipboardPanel
+extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
 

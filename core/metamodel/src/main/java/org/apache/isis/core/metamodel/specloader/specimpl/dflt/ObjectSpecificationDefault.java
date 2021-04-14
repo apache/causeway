@@ -26,19 +26,15 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -47,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -58,9 +53,8 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -76,7 +70,9 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2 
-public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
+public class ObjectSpecificationDefault 
+extends ObjectSpecificationAbstract 
+implements FacetHolder {
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();
@@ -93,7 +89,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-
+    
     /**
      * available only for managed-beans
      */
@@ -132,16 +128,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if(this.containsFacet(ValueFacet.class)) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
-            }
-            return;
-        }
-
-        val domainServiceFacet = getFacet(DomainServiceFacet.class);
-        val isServiceWithNatureOfDomain = domainServiceFacet != null 
-                && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
-        if (isServiceWithNatureOfDomain) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
             }
             return;
         }
@@ -284,63 +270,16 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getObjectAction(
-            final ActionType type, 
-            final String id, 
-            final Can<ObjectSpecification> parameters) {
-        
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        final Stream<ObjectAction> actions =
-                streamObjectActions(type, Contributed.INCLUDED);
-        return firstAction(actions, id, parameters);
-    }
-
-    @Override
-    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
+    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(type, Contributed.INCLUDED);
+                streamDeclaredActions(
+                        type==null 
+                            ? ActionType.ANY 
+                            : ImmutableEnumSet.of(type), 
+                        MixedIn.INCLUDED);
         return firstAction(actions, id);
-    }
-
-    @Override
-    public Optional<ObjectAction> getObjectAction(final String id) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-
-        final Stream<ObjectAction> actions =
-                streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-        return firstAction(actions, id);
-    }
-
-    private static Optional<ObjectAction> firstAction(
-            final Stream<ObjectAction> candidateActions,
-            final String actionName,
-            final Can<ObjectSpecification> parameters) {
-
-        return candidateActions
-                .filter(action->actionName == null || actionName.equals(action.getId()))
-                .filter(action->isMatchingSignature(parameters, action.getParameters()))
-                .findAny();
-    }
-
-    private static  boolean isMatchingSignature(
-            final Can<ObjectSpecification> a,
-            final Can<ObjectActionParameter> b) {
-
-        if(a.size() != b.size()) {
-            return false;
-        }
-        for (int j = 0; j < a.size(); j++) {
-            
-            val elementA = a.getElseFail(j); 
-            val elementB = b.getElseFail(j);
-            
-            if (!elementA.isOfType(elementB.getSpecification())) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private static Optional<ObjectAction> firstAction(
@@ -355,10 +294,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 .filter(action->{
                     final Identifier identifier = action.getIdentifier();
 
-                    if (id.equals(identifier.toNameParmsIdentityString())) {
+                    if (id.equals(identifier.getMemberNameAndParameterClassNamesIdentityString())) {
                         return true;
                     }
-                    if (id.equals(identifier.toNameIdentityString())) {
+                    if (id.equals(identifier.getMemberName())) {
                         return true;
                     }
                     return false;
@@ -366,20 +305,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 .findFirst();
     }
 
-    /**
-     * @param method
-     * @return ObjectMember associated with given {@code method}, or else {@code null}
-     * @apiNote not API; refactoring result type to Optional<ObjectMember> would be desired, 
-     * but did not work with JMock tests on first attempt
-     */
-    @Nullable
-    public ObjectMember getMember(final Method method) {
+    @Override
+    public Optional<? extends ObjectMember> getMember(final Method method) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
         }
-        return membersByMethod.get(method);
+        return Optional.ofNullable(membersByMethod.get(method));
     }
 
     private Map<Method, ObjectMember> catalogueMembers() {
@@ -390,11 +323,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
-        streamAssociations(Contributed.EXCLUDED)
+        streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->{
-            final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
-            facets.forEach(facet->{
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
+            field.streamFacets()
+            .filter(ImperativeFacet.PREDICATE)
+            .forEach(facet->{
+                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     onMember.accept(imperativeFacetMethod, field);
                 }
@@ -403,11 +337,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
-        streamObjectActions(Contributed.INCLUDED)
+        streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->{
-            final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
-            facets.forEach(facet->{
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
+            userAction.streamFacets()
+            .filter(ImperativeFacet.PREDICATE)
+            .forEach(facet->{
+                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     onMember.accept(imperativeFacetMethod, userAction);
                 }
@@ -440,6 +375,5 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
     }
 
-    // --
 
 }

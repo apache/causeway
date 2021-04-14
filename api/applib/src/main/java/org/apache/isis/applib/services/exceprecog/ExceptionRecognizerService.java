@@ -20,27 +20,24 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.commons.collections.Can;
 
 /**
- * 
- * @since 2.0
+ * Used by the framework to iterate over all registered
+ * {@link ExceptionRecognizer}s in the correct order.
  *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 public interface ExceptionRecognizerService {
 
-    // end::refguide[]
     /**
-     *
+     * All ExceptionRecognizer implementations as discovered by the IoC
+     * container,  honoring order of precedence.
      * @return all ExceptionRecognizer implementations as discovered by the IoC container,
      * honoring order of precedence.
      */
-    // tag::refguide[]
     Can<ExceptionRecognizer> getExceptionRecognizers();
 
-    // end::refguide[]
     /**
      * Takes into consideration ExceptionRecognizers as given by {@link #getExceptionRecognizers()}.
      *
@@ -48,22 +45,18 @@ public interface ExceptionRecognizerService {
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    // tag::refguide[]
-    default Optional<Recognition> recognize(Exception ex) {
+    default Optional<Recognition> recognize(Throwable ex) {
         return recognizeFromSelected(getExceptionRecognizers(), ex);
     }
 
-    // end::refguide[]
     /**
      * Takes into consideration ExceptionRecognizers as given by {@code recognizers}.
      *
-     * @param recognizers - one or more recognizers to attempt to recognize the exceptoin
+     * @param recognizers - one or more recognizers to attempt to recognize the exception
      * @param ex - the exception to be recognized
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    // tag::refguide[]
-    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
+    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Throwable ex);
 
 }
-// end::refguide[]

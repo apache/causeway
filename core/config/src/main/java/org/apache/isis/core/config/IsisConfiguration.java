@@ -40,8 +40,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -58,26 +56,22 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishPropertiesConfiguration;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityChangePublishingPolicy;
+import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
@@ -86,9 +80,9 @@ import lombok.val;
 
 /**
  * Configuration 'beans' with meta-data (IDE-support).
- * 
+ *
  * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
- * 
+ *
  * @since 2.0
  */
 @ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
@@ -102,18 +96,6 @@ public class IsisConfiguration {
     public IsisConfiguration(final ConfigurableEnvironment environment) {
         this.environment = environment;
     }
-
-    @Inject @Named("isis-settings")
-    @Getter(AccessLevel.PRIVATE) private Map<String, String> isisSettings;
-    /**
-     * All of the isis configuration properties, gathered together as an immutable map.
-     */
-    public Map<String, String> getAsMap() {
-        return isisSettings!=null
-                ? Collections.unmodifiableMap(isisSettings)
-                : Collections.emptyMap();
-    }
-
 
     private final Security security = new Security();
     @Data
@@ -130,8 +112,26 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
-            
+
         }
+
+        private final Spring spring = new Spring();
+        @Data
+        public static class Spring {
+            /**
+             * The framework on initialization by default disables any {@code CsrfFilter}(s) it finds
+             * with <i>Spring Security</i> registered filters.
+             * <p>
+             * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
+             * configured. Yet EXPERIMENTAL.
+             *
+             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see "https://www.baeldung.com/spring-security-registered-filters"
+             */
+            private boolean allowCsrfFilters = false;
+
+        }
+
     }
 
     private final Applib applib = new Applib();
@@ -160,18 +160,20 @@ public class IsisConfiguration {
             public static class DomainObject {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to the {@link AuditerService}.
+                 * sent through to {@link EntityChangesSubscriber}s and
+                 * sent through to {@link EntityPropertyChangeSubscriber}.
                  *
                  * <p>
-                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
+                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#entityChangePublishing()}
                  * </p>
                  *
                  * <p>
                  *     Note: this applies only to domain entities, not view models.
                  * </p>
                  */
-                private AuditObjectsConfiguration auditing = AuditObjectsConfiguration.NONE;
+                private EntityChangePublishingPolicy entityChangePublishing = EntityChangePublishingPolicy.NONE;
 
                 /**
                  * The default for whether the properties of domain objects can be edited, or whether instead they
@@ -182,22 +184,6 @@ public class IsisConfiguration {
                  * </p>
                  */
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.FALSE;
-
-                /**
-                 * The default for whether the identities of changed objects should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
-                 *
-                 * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(PublishedObjects) publish}
-                 *     method is called only once per transaction, with {@link PublishedObjects} collecting details of
-                 *     all changed domain objects.
-                 * </p>
-                 *
-                 * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#publishing()}.
-                 * </p>
-                 */
-                private PublishObjectsConfiguration publishing = PublishObjectsConfiguration.NONE;
 
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
                 @Data
@@ -651,19 +637,39 @@ public class IsisConfiguration {
             public static class Action {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
+                 * {@link org.apache.isis.applib.services.publishing.spi.CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Action#command()}.
+                 *  {@link org.apache.isis.applib.annotation.Action#commandPublishing()}.
                  * </p>
                  */
-                private CommandActionsConfiguration command = CommandActionsConfiguration.NONE;
+                private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
+
+                /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
+                 * The default for whether action invocations should be sent through to the
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 *
+                 * <p>
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
+                 *     method is called only once per transaction, with
+                 *     {@link Execution} collecting details of
+                 *     the identity of the target object, the action invoked, the action arguments and the returned
+                 *     object (if any).
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
+                 * </p>
+                 */
+                private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
 
                 /**
                  * Whether or not a public method needs to be annotated with
@@ -712,23 +718,8 @@ public class IsisConfiguration {
                     private boolean postForDefault = true;
                 }
 
-                /**
-                 * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
-                 *
-                 * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
-                 *     method is called only once per transaction, with
-                 *     {@link Interaction.Execution} collecting details of
-                 *     the identity of the target object, the action invoked, the action arguments and the returned
-                 *     object (if any).
-                 * </p>
-                 *
-                 * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#publishing()}.
-                 * </p>
-                 */
-                private PublishActionsConfiguration publishing = PublishActionsConfiguration.NONE;
+
+
 
             }
 
@@ -810,8 +801,8 @@ public class IsisConfiguration {
                             "previous.*:fa-step-backward",
                             "refresh.*:fa-refresh",
                             "remove.*:fa-minus-square",
-                            "renew.*:fa-repeat",
-                            "reset.*:fa-repeat",
+                            "renew.*:fa-redo",
+                            "reset.*:fa-redo",
                             "resume.*:fa-play",
                             "run.*:fa-bolt",
                             "save.*:fa-floppy-o",
@@ -832,37 +823,39 @@ public class IsisConfiguration {
             public static class Property {
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.isis.applib.services.command.spi.CommandServiceListener}s,
+                 * {@link org.apache.isis.applib.services.publishing.spi.CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Property#command()}.
+                 *  {@link org.apache.isis.applib.annotation.Property#commandDispatch()}.
                  * </p>
                  */
-                private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
+                private PropertyPublishingPolicy commandPublishing = PropertyPublishingPolicy.NONE;
 
                 /**
+                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be sent through to the
-                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
-                 *     method is called only once per transaction, with
-                 *     {@link Interaction.Execution} collecting details of
-                 *     the identity of the target object, the property edited, and the new value of the property.
+                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
+                 * method is called only once per transaction, with
+                 * {@link Execution} collecting details of
+                 * the identity of the target object, the property edited, and the new value of the property.
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {
-                 *  @link org.apache.isis.applib.annotation.Property#publishing()}.
+                 * This setting can be overridden on a case-by-case basis using
+                 * {@link org.apache.isis.applib.annotation.Property#publishing()}.
                  * </p>
                  */
-                private PublishPropertiesConfiguration publishing = PublishPropertiesConfiguration.NONE;
+                private PropertyPublishingPolicy executionPublishing = PropertyPublishingPolicy.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
@@ -1206,6 +1199,32 @@ public class IsisConfiguration {
     @Data
     public static class Core {
 
+        private final Config config = new Config();
+        @Data
+        public static class Config {
+
+            public static enum ConfigurationPropertyVisibilityPolicy {
+                NEVER_SHOW,
+                SHOW_ONLY_IN_PROTOTYPE,
+                ALWAYS_SHOW
+            }
+
+            /**
+             * Configuration values might contain sensitive data, hence per default,
+             * configuration properties are only visible with the configuration-page
+             * when <i>prototyping</i>.
+             *
+             * <p>
+             * Alternatively this policy can be set to either <b>always</b> show or <b>never</b> show.
+             * </p>
+             *
+             * @see ConfigurationPropertyVisibilityPolicy
+             */
+            private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy
+                = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
+
+        }
+
         private final MetaModel metaModel = new MetaModel();
         @Data
         public static class MetaModel {
@@ -1239,12 +1258,12 @@ public class IsisConfiguration {
             @Data
             public static class Introspector {
                 /**
-                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.  
+                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.
                  * <p>
                  *     For now this is <i>experimental</i>. Leave this disabled (the default).
                  * </p>
                  */
-                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken 
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is experimental
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
@@ -1358,23 +1377,6 @@ public class IsisConfiguration {
                  * appropriate type.
                  */
                 private boolean actionCollectionParameterChoices = true;
-
-                /**
-                 * If set, checks that any domain services have only actions associated with them, not properties
-                 * or collections.
-                 *
-                 * @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
-                 */
-                @Deprecated
-                private boolean serviceActionsOnly = true;
-
-                /**
-                 * If set, then domain services actions are not contributed to domain objects.
-                 *
-                 * @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
-                 */
-                @Deprecated
-                private boolean mixinsOnly = true;
 
                 /**
                  * Whether to ensure that the object type of all objects must be specified explicitly, using either
@@ -1603,13 +1605,13 @@ public class IsisConfiguration {
             @Data
             public static class ExceptionRecognizer {
 
-                private final Jdo jdo = new Jdo();
+                private final Dae dae = new Dae();
                 @Data
-                public static class Jdo {
+                public static class Dae {
                     /**
                      * Whether the {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}
-                     * implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions
-                     * arising from that object store - should be disabled (meaning that exceptions will potentially
+                     * implementation for Spring's DataAccessException - which attempts to sanitize any exceptions
+                     * arising from object stores - should be disabled (meaning that exceptions will potentially
                      * propagate as more serious to the end user).
                      */
                     private boolean disable = false;
@@ -1622,6 +1624,15 @@ public class IsisConfiguration {
 
                 private final Po po = new Po();
 
+                /**
+                 * Specifies the relative resource path to look for translation files.
+                 * <p>
+                 * If {@code null} uses {@code servletContext.getResource("/WEB-INF/")}.
+                 * <p>
+                 * Replaces the former Servlet context parameter 'isis.config.dir';
+                 */
+                private String resourceLocation = null;
+
                 @Data
                 public static class Po {
                     /**
@@ -1632,7 +1643,7 @@ public class IsisConfiguration {
                      *     <ul>
                      *         <li>
                      *              <p>
-                     *                  The default mode of {@link TranslationService.Mode#WRITE write} is appropriate for
+                     *                  The default mode of {@link Mode#WRITE write} is appropriate for
                      *                  integration testing or prototyping, meaning that the service records any requests made of it
                      *                  but just returns the string unaltered.  This is a good way to discover new strings that
                      *                  require translation.
@@ -1640,13 +1651,13 @@ public class IsisConfiguration {
                      *         </li>
                      *         <li>
                      *              <p>
-                     *                  The {@link TranslationService.Mode#READ read} mode is appropriate for production; the
+                     *                  The {@link Mode#READ read} mode is appropriate for production; the
                      *                  service looks up translations that have previously been captured.
                      *              </p>
                      *         </li>
                      *         <li>
                      *             <p>
-                     *                 The {@link TranslationService.Mode#DISABLED disabled} performs no translation
+                     *                 The {@link Mode#DISABLED disabled} performs no translation
                      *                 and simply returns the original string unchanged.  Unlike the write mode, it
                      *                 does <i>not</i> keep track of translation requests.
                      *             </p>
@@ -1654,7 +1665,7 @@ public class IsisConfiguration {
                      *     </ul>
                      * </p>
                      */
-                    TranslationService.Mode mode = TranslationService.Mode.WRITE;
+                    Mode mode = Mode.WRITE;
                 }
             }
         }
@@ -1664,248 +1675,46 @@ public class IsisConfiguration {
     private final Persistence persistence = new Persistence();
     @Data
     public static class Persistence {
-        private final JdoDatanucleus jdoDatanucleus = new JdoDatanucleus();
+
+        private final Schema schema = new Schema();
         @Data
-        public static class JdoDatanucleus {
-            private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.CreateSchemaObjectFromClassMetadata";
+        public static class Schema {
 
-            private final Impl impl = new Impl();
-            @Data
-            public static class Impl {
-                private final Datanucleus datanucleus = new Datanucleus();
-                @Data
-                public static class Datanucleus {
+            /**
+             * List of additional schemas to be auto-created.
+             * <p>
+             * Explicitly creates given list of schemas by using the specified
+             * {@link #getCreateSchemaSqlTemplate()} to generate the actual SQL
+             * statement against the configured data-source.
+             * <p>
+             * This configuration mechanism does not consider any schema-auto-creation
+             * configuration (if any), that independently is provided the standard JPA way.
+             */
+            private final List<String> autoCreateSchemas = new ArrayList<>();
 
+            /**
+             * Does lookup additional "mapping-files" in META-INF/orm-<i>name</i>.xml
+             * (equivalent to "mapping-file" entries in persistence.xml) and adds these
+             * to those that are already configured the <i>Spring Data</i> way (if any).
+             * @implNote not implemented for JDO
+             */
+            private final List<String> additionalOrmFiles = new ArrayList<>();
 
-                    /**
-                     * 	The JNDI name for a connection factory for transactional connections.
-                     *
-                     * 	<p>
-                     * 	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
-                     * 	</p>
-                     *
-                     * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                     * </p>
-                     *
-                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                     */
-                    private String connectionFactoryName;
+            /**
+             * Vendor specific SQL syntax to create a DB schema.
+             * <p>
+             * This template is passed through {@link String#format(String, schemaName)} to
+             * make the actual SQL statement thats to be used against the configured data-source.
+             * <p>
+             * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name
+             * converted to upper-case.
+             * <p>
+             * For MYSQL/MARIADB use escape like {@code `%S`}
+             */
+            private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
 
-                    /**
-                     * 	The JNDI name for a connection factory for non-transactional connections.
-                     *
-                     * 	<p>
-                     * 	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
-                     * 	</p>
-                     *
-                     * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                     * </p>
-                     *
-                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                     */
-                    private String connectionFactory2Name;
-
-
-                    /**
-                     * Name of a class that implements <code>org.datanucleus.store.connection.DecryptionProvider</code>
-                     * and should only be specified if the password is encrypted in the persistence properties.
-                     *
-                     * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                     * </p>
-                     *
-                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                     */
-                    private String connectionPasswordDecrypter;
-
-
-                    /**
-                     * 	Used when we have specified the persistence-unit name for a PMF/EMF and where we want the
-                     * 	datastore "tables" for all classes of that persistence-unit loading up into the StoreManager.
-                     *
-                     * <p>
-                     *     Defaults to true, which is the opposite of DataNucleus' own default.
-                     *     (The reason that DN defaults to false is because some databases are slow so such an
-                     *     operation would slow down the startup process).
-                     * </p>
-                     *
-                     * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                     * </p>
-                     *
-                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                     */
-                    private boolean persistenceUnitLoadClasses = true;
-
-                    public enum TransactionTypeEnum {
-                        RESOURCE_LOCAL,
-                        JTA
-                    }
-
-                    /**
-                     * Type of transaction to use.
-                     *
-                     * <p>
-                     * If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.
-                     * </p>
-                     *
-                     * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                     * </p>
-                     *
-                     * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                     */
-                    private TransactionTypeEnum transactionType;
-
-                    private final Cache cache = new Cache();
-                    @Data
-                    public static class Cache {
-                        private final Level2 level2 = new Level2();
-                        @Data
-                        public static class Level2 {
-                            /**
-                             * Name of the type of Level 2 Cache to use.
-                             *
-                             * <p>
-                             * Can be used to interface with external caching products.
-                             * Use "none" to turn off L2 caching.
-                             * </p>
-                             *
-                             * <p>
-                             * See also Cache docs for JDO, and for JPA
-                             * </p>
-                             *
-                             * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                             */
-                            @NotNull @NotEmpty
-                            private String type = "none";
-                        }
-                    }
-                    private final ObjectProvider objectProvider = new ObjectProvider();
-                    @Data
-                    public static class ObjectProvider {
-                        /**
-                         * Enables dependency injection into entities
-                         *
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         */
-                        @NotNull @NotEmpty
-                        private String className = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis";
-                    }
-                    private final Schema schema = new Schema();
-                    @Data
-                    public static class Schema {
-                        /**
-                         * Whether DN should automatically create the database schema on bootstrapping.
-                         *
-                         * <p>
-                         *     This should be set to <tt>true</tt> when running against an in-memory database, but
-                         *     set to <tt>false</tt> when running against a persistent database (use something like
-                         *     flyway instead to manage schema evolution).
-                         * </p>
-                         *
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         *
-                         *
-                         * @implNote - this config property isn't used by the core framework, but is used by one the flyway extension.
-                         */
-                        private boolean autoCreateAll = false;
-
-                        /**
-                         * Previously we defaulted this property to "true", but that could cause the target database
-                         * to be modified
-                         *
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         *
-                         * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                         */
-                        private boolean autoCreateDatabase = false;
-
-                        /**
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         *
-                         * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-                         */
-                        private boolean validateAll = true;
-                    }
-                }
-                private final Javax javax = new Javax();
-                @Data
-                public static class Javax {
-                    private final Jdo jdo = new Jdo();
-                    @Data
-                    public static class Jdo {
-
-                        /**
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         *
-                         * @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
-                         */
-                        @NotNull @NotEmpty
-                        private String persistenceManagerFactoryClass = "org.datanucleus.api.jdo.JDOPersistenceManagerFactory";
-
-                        private final Option option = new Option();
-                        @Data
-                        public static class Option {
-                            /**
-                             * JDBC driver used by JDO/DataNucleus object store to connect.
-                             *
-                             * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                             * </p>
-                             *
-                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
-                             */
-                            private String connectionDriverName;
-                            /**
-                             * URL used by JDO/DataNucleus object store to connect.
-                             *
-                             * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                             * </p>
-                             *
-                             * @implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled.  Note that it is also mandatory if using JDO Datanucleus.
-                             */
-                            private String connectionUrl;
-                            /**
-                             * User account used by JDO/DataNucleus object store to connect.
-                             *
-                             * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                             * </p>
-                             *
-                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
-                             */
-                            private String connectionUserName;
-                            /**
-                             * Password for the user account used by JDO/DataNucleus object store to connect.
-                             *
-                             * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
-                             * </p>
-                             *
-                             * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete.  It is not necessarily mandatory, some databases accept an empty password.
-                             */
-                            private String connectionPassword;
-                        }
-                    }
-                }
-            }
         }
     }
-
 
 
     private final Viewer viewer = new Viewer();
@@ -1914,6 +1723,16 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
+
+            @Getter
+            private final Authentication authentication = new Authentication();
+            @Data
+            public static class Authentication {
+                /**
+                 * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
+                 */
+                private Optional<String> strategyClassName = Optional.empty();
+            }
 
             /**
              * Whether to enable the <code>x-ro-follow-links</code> support, to minimize round trips.
@@ -2023,7 +1842,7 @@ public class IsisConfiguration {
              * If set, eg <code>https://dev.myapp.com/</code>, then this value will be used instead.
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*$")
+            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
             private Optional<String> baseUri = Optional.empty();
         }
 
@@ -2315,19 +2134,19 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean wicketSourcePlugin = false;
-            
+
             //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
             private final Application application = new Application();
             @Data
             public static class Application {
-                
+
                 /**
                  * Label used on the about page.
                  */
                 private String about;
-                
+
                 /**
-                 * Either the location of the image file (relative to the class-path resource root), 
+                 * Either the location of the image file (relative to the class-path resource root),
                  * or an absolute URL.
                  *
                  * <p>
@@ -2337,9 +2156,9 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoHeader = Optional.empty();
-                
+
                 /**
-                 * Either the location of the image file (relative to the class-path resource root), 
+                 * Either the location of the image file (relative to the class-path resource root),
                  * or an absolute URL.
                  *
                  * <p>
@@ -2349,7 +2168,7 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoSignin = Optional.empty();
-                
+
                 /**
                  * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
                  *
@@ -2363,11 +2182,6 @@ public class IsisConfiguration {
                 private Optional<String> css = Optional.empty();
 
                 /**
-                 * Specifies the content type of the favIcon, if any.
-                 */
-                private Optional<String> faviconContentType = Optional.empty();
-
-                /**
                  * Specifies the URL to use of the favIcon.
                  *
                  * <p>
@@ -2376,11 +2190,11 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
-                
+
                 /**
                  */
                 /**
-                 * URL of file to read any custom Javascript, relative to <code>static</code> package on the class path.
+                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
                  *
                  * <p>
                  *     A typical value is <code>js/application.js</code>.  This will result in this file being read
@@ -2409,7 +2223,7 @@ public class IsisConfiguration {
                  */
                 @NotNull @NotEmpty
                 private String name = "Apache Isis ™";
-                
+
                 /**
                  * The version of the application, eg 1.0, 1.1, etc.
                  *
@@ -2420,7 +2234,7 @@ public class IsisConfiguration {
                  */
                 private String version;
             }
-            
+
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
@@ -2509,11 +2323,10 @@ public class IsisConfiguration {
 
                 /**
                  * Whether enough information has been defined for the credit to be appear.
-                 * @return
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
-            
+
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
@@ -2633,8 +2446,8 @@ public class IsisConfiguration {
             public static class Welcome {
 
                 /**
-                 * Text to be displayed on the application’s home page, used as a fallback if 
-                 * welcome.file is not specified. If a @HomePage action exists, then that will take 
+                 * Text to be displayed on the application’s home page, used as a fallback if
+                 * welcome.file is not specified. If a @HomePage action exists, then that will take
                  * precedence.
                  */
                 private String text;
@@ -2993,10 +2806,16 @@ public class IsisConfiguration {
     private final Extensions extensions = new Extensions();
     @Data
     public static class Extensions {
-        
+
         private final Cors cors = new Cors();
         @Data
         public static class Cors {
+
+            /**
+             * TODO missing java-doc
+             */
+            private boolean allowCredentials = false;
+
             /**
              * Which origins are allowed to make CORS requests.
              *
@@ -3049,6 +2868,8 @@ public class IsisConfiguration {
              * </p>
              */
             private List<String> exposedHeaders = listOf("Authorization");
+
+
         }
 
         private final Quartz quartz = new Quartz();
@@ -3119,7 +2940,7 @@ public class IsisConfiguration {
 
             }
         }
-        
+
 
     }
 
@@ -3189,4 +3010,40 @@ public class IsisConfiguration {
             return superType.isAssignableFrom(candidateClass);
         }
     }
+
+    @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
+    @Retention(RUNTIME)
+    @Constraint(validatedBy = OneOfValidator.class)
+    @Documented
+    public @interface OneOf {
+
+        String[] value();
+
+        String message()
+                default "{org.apache.isis.core.config.IsisConfiguration.OneOf.message}";
+
+        Class<?>[] groups() default { };
+
+        Class<? extends Payload>[] payload() default { };
+    }
+
+
+    public static class OneOfValidator implements ConstraintValidator<OneOf, String> {
+
+        private List<String> allowed;
+
+        @Override
+        public void initialize(final OneOf assignableFrom) {
+            val value = assignableFrom.value();
+            allowed = value != null? Collections.unmodifiableList(Arrays.asList(value)): Collections.emptyList();
+        }
+
+        @Override
+        public boolean isValid(
+                final String candidateValue,
+                final ConstraintValidatorContext constraintContext) {
+            return allowed.contains(candidateValue);
+        }
+    }
+
 }

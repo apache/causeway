@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -68,9 +68,9 @@ class Generation {
 
     // double quotes
     private static final String DQ = ""; // empty seems the only variant that works
-    
+
     private final String basePath;
-    private final SwaggerService.Visibility visibility;
+    private final Visibility visibility;
     private final SpecificationLoader specificationLoader;
 
     private final ValuePropertyFactory valuePropertyFactory;
@@ -83,7 +83,7 @@ class Generation {
 
     public Generation(
             final String basePath,
-            final SwaggerService.Visibility visibility,
+            final Visibility visibility,
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
@@ -99,8 +99,8 @@ class Generation {
     Swagger generate() {
         this.swagger = new Swagger();
 
-        final String swaggerVersionInfo = 
-                String.format("swagger.io (%s)", 
+        final String swaggerVersionInfo =
+                String.format("swagger.io (%s)",
                         Swagger.class.getPackage().getImplementationVersion()
                         );
 
@@ -151,25 +151,15 @@ class Generation {
 
         for (val spec : specificationLoader.snapshotSpecifications()) {
 
-            val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-            if (domainServiceFacet == null) {
+            if(!DomainServiceFacet.isContributing(spec)) {
                 continue;
-            }
-            val natureOfService = domainServiceFacet.getNatureOfService();
-            
-            if (natureOfService.isProgrammatic()) {
-                continue; // ignore programmatic services
-            }
-            
-            if (visibility.isPublic() && !natureOfService.isRestAlso()) {
-                continue; // ignore services that don't publicly contribute to rest
             }
 
             val serviceActions = Util.actionsOf(spec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
             }
-            
+
             appendServicePath(spec);
 
             for (val serviceAction : serviceActions) {
@@ -181,9 +171,9 @@ class Generation {
     @SuppressWarnings("unused")
     private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
         for (final ObjectSpecification objectSpec :  allSpecs) {
-            objectSpec.streamAssociations(Contributed.INCLUDED)
+            objectSpec.streamAssociations(MixedIn.INCLUDED)
             .collect(Collectors.toList());
-            objectSpec.streamObjectActions(Contributed.INCLUDED)
+            objectSpec.streamActions(MixedIn.INCLUDED)
             .collect(Collectors.toList());
         }
     }
@@ -408,7 +398,7 @@ class Generation {
         operation
         .response(200,
                 newResponse(Caching.TRANSACTIONAL)
-                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(newRefProperty(isisModelDefinition)));
 
         final ModelImpl isisModel = new ModelImpl();
@@ -513,7 +503,7 @@ class Generation {
         invokeOperation
         .response(
                 200, new Response()
-                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(actionReturnTypeFor(serviceAction))
                 );
     }
@@ -542,7 +532,7 @@ class Generation {
         collectionOperation
         .response(
                 200, new Response()
-                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(modelFor(collection))
                 );
     }
@@ -771,7 +761,7 @@ class Generation {
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {
-        return objectSpec.getFacet(ObjectSpecIdFacet.class).value().asString();
+        return objectSpec.getFacet(ObjectSpecIdFacet.class).value();
     }
 
     static StringProperty stringProperty() {
@@ -839,27 +829,27 @@ class Generation {
     private static Operation newOperation(String ... reprTypes) {
         Operation operation = new Operation()
                 .produces("application/json");
-        
+
         boolean supportsV1 = false;
-                
+
         if(reprTypes!=null) {
             for(String reprType: reprTypes) {
-                
+
                 if(reprType.equals("object") || reprType.equals("action-result")) {
                     supportsV1 = true;
                 }
-                
+
                 operation = operation.produces(
                         "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
             }
         }
-        
+
         if(supportsV1) {
             operation = operation
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1" + DQ)
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1;suppress=all" + DQ);
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2" + DQ)
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2;suppress=all" + DQ);
         }
-                
+
         return operation;
     }
 

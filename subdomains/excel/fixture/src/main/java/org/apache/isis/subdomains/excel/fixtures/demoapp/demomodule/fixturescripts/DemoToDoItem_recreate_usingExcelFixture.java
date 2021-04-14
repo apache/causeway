@@ -41,7 +41,7 @@ public class DemoToDoItem_recreate_usingExcelFixture extends FixtureScript {
     @Override
     public void execute(ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null ? this.user : userService.getUser().getName();
+        final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
         executionContext.executeChild(this, new ExcelDemoToDoItem_tearDown2(ownedBy));
         executionContext.executeChild(this, new DemoToDoItem_create_usingExcelFixture(ownedBy));

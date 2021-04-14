@@ -36,6 +36,12 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 
+/**
+ * Allows the interactions between the wrapper and the underlying domain object
+ * to be observed.
+ *
+ * @since 1.x {@index}
+ */
 public interface InteractionListener {
 
     /**
@@ -147,7 +153,7 @@ public interface InteractionListener {
      * <p>
      * Unlike the other methods in this interface, the source of these events will be an instance of a
      * Collection (such as <tt>java.util.List</tt>) rather than the domain object. (The domain object is
-     * {@link CollectionMethodEvent#getDomainObject() still available,  however).
+     * {@link CollectionMethodEvent#getDomainObject()} still available,  however).
      *
      * @param interactionEvent
      */

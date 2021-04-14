@@ -28,8 +28,8 @@ import com.vaadin.flow.spring.SpringServlet;
 
 import org.springframework.context.ApplicationContext;
 
-import org.apache.isis.core.runtime.iactn.InteractionSession;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
 import lombok.NonNull;
@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * An extension of {@link SpringServlet} to support {@link InteractionSession} life-cycle management.
+ * An extension of {@link SpringServlet} to support {@link Interaction} life-cycle management.
  * @since Mar 14, 2020
  *
  */
@@ -47,10 +47,10 @@ extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final InteractionFactory isisInteractionFactory;
 
     public IsisServletForVaadin(
-            @NonNull final IsisInteractionFactory isisInteractionFactory, 
+            @NonNull final InteractionFactory isisInteractionFactory, 
             @NonNull final ApplicationContext context, 
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);
@@ -62,13 +62,13 @@ extends SpringServlet {
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         
-        val authSession = AuthSessionStoreUtil.get(request.getSession(true))
+        val authentication = AuthSessionStoreUtil.get(request.getSession(true))
                 .orElse(null);
         
-        log.debug("new request incoming (authentication={})", authSession);
+        log.debug("new request incoming (authentication={})", authentication);
         
-        if(authSession!=null) {
-            isisInteractionFactory.runAuthenticated(authSession, ()->{
+        if(authentication!=null) {
+            isisInteractionFactory.runAuthenticated(authentication, ()->{
                 super.service(request, response);                
             });
         } else {
@@ -77,11 +77,11 @@ extends SpringServlet {
             super.service(request, response);    
         }
         
-        log.debug("request was successfully serviced (authentication={})", authSession);
+        log.debug("request was successfully serviced (authentication={})", authentication);
         
         if(isisInteractionFactory.isInInteraction()) {
             isisInteractionFactory.closeSessionStack();
-            log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authSession);
+            log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }
         
     }

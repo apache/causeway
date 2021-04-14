@@ -39,13 +39,13 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.ServiceRegistryDefault")
+@Named("isis.metamodel.ServiceRegistryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

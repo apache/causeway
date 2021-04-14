@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -75,7 +75,7 @@ public final class ClassExtensions {
                 }
             }
         } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
-            throw new IsisException(ex);
+            throw new UnrecoverableException(ex);
         }
     }
 

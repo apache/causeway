@@ -24,8 +24,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
 public class OidMarshallerTest_marshall {
 
     private Oid_Marshaller oidMarshaller;
@@ -37,7 +35,7 @@ public class OidMarshallerTest_marshall {
 
     @Test
     public void rootOid() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.root(ObjectSpecId.of("CUS"),  "123"));
+        final String marshal = oidMarshaller.marshal(Oid.Factory.root(LogicalTypeTestFactory.cus(),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 

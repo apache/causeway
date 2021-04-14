@@ -19,7 +19,6 @@
 #
 isis:
 
-
   applib:
     annotation:
       action:
@@ -70,15 +69,16 @@ isis:
     wicket:
       application:
         menubars-layout-xml: demoapp/dom/menubars.layout.xml
-        favicon-url: images/favicon.png
+        favicon-url: images/gift.svg
         brand-logo-header: images/gift_48.png
         brand-logo-signin: images/gift_256.png
         name: Apache Isis Demo App
         # https://stackoverflow.com/a/38983935/56880
-        version: @project.version@
+        # in addition using special config with the project's maven-resources-plugin 
+        version: ${project.version}
         css: css/application.css
         js: scripts/application.js
-        about: Apache Isis Hello World
+        about: This application demonstrates many aspects of the Apache Isis programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
 
       credit:
         - url:  http://isis.apache.org
@@ -101,24 +101,24 @@ isis:
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
 
-  persistence:
-    jdo-datanucleus:
-      impl:
-        # note that properties under 'isis.persistor.datanucleus.impl' are passed through directly
-        # to DataNucleus, and must use camelCase rather than kebab-case
-        datanucleus:
-          schema:
-            validateTables: true
-            validateConstraints: true
+# schema auto creation etc. ...
+#  persistence:
 
-          persistenceByReachabilityAtCommit: false
-          identifier:
-            case: MixedCase
+    
+# note that properties under 'datanucleus' must use camelCase rather than kebab-case
+datanucleus:
+  schema:
+    validateTables: true
+    validateConstraints: true
 
-          cache:
-            level2:
-              type: none
-              mode: ENABLE_SELECTIVE
+  persistenceByReachabilityAtCommit: false
+  identifier:
+    case: MixedCase
+
+  cache:
+    level2:
+      type: none
+      mode: ENABLE_SELECTIVE
 
 resteasy:
   jaxrs:
@@ -128,6 +128,9 @@ resteasy:
 
 server:
   max-http-header-size: 16KB
+  servlet:
+    session:
+      timeout: 20m
 
 spring:
   banner:

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -50,10 +51,19 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
+    /**
+     * Returns true if calculated from other data in the object, that is, should
+     * not be persisted.
+     */
+    default boolean isNotPersisted() {
+        return containsFacet(SnapshotExcludeFacet.class);
+    }
+
+
 
     default String getCssClass(String prefix) {
-        final String ownerSpecId = getOnType().getSpecId().asString().replace(".", "-");
-        final String memberId = getIdentifier().toNameIdentityString();
+        final String ownerSpecId = getOnType().getLogicalTypeName().replace(".", "-");
+        final String memberId = getIdentifier().getMemberName();
         return prefix + ownerSpecId + "-" + memberId;
     }
 

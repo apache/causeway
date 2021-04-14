@@ -31,8 +31,14 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for actions.
+ *
+ * @see PropertyLayout
+ * @see CollectionLayout
+ * @see DomainObjectLayout
+ * @see Action
+ *
+ * @since 1.x {@index}
  */
-// tag::refguide[]
 @Inherited
 @Target({
         ElementType.METHOD,
@@ -40,10 +46,9 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Mixin(method = "act")
+@DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
 public @interface ActionLayout {
 
-    // end::refguide[]
     /**
      * Whether (and how) this action can be bookmarked in the UI.
      *
@@ -53,94 +58,137 @@ public @interface ActionLayout {
      *     identically).
      * </p>
      */
-    // tag::refguide[]
-    BookmarkPolicy bookmarking()                        // <.>
+    BookmarkPolicy bookmarking()
             default BookmarkPolicy.NOT_SPECIFIED;
 
-    // end::refguide[]
-    /**
-     * For actions of domain services that can be viewed and contributed (that is, whose
-     * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
-     * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
-     * contribution should be implemented, as an action, as an association, or as both.
-     *
-     * <p>
-     *     Has no meaning for actions of domain entities.
-     * </p>
-     */
-    @Deprecated
-    Contributed contributed()                           // <.>
-            default Contributed.NOT_SPECIFIED;
-
-    // tag::refguide[]
-    // end::refguide[]
     /**
      * Indicates the css class that an action should have.
      *
      * <p>
      *     For the Wicket viewer, this can be a bootstrap class such as <code>btn-info</code>.
      * </p>
+     *
+     * @see PropertyLayout#cssClass()
+     * @see ParameterLayout#cssClass()
+     * @see CollectionLayout#cssClass()
+     * @see DomainObjectLayout#cssClass()
      */
-    // tag::refguide[]
-    String cssClass()                                   // <.>
+    String cssClass()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
+     *
+     * @see ActionLayout#cssClassFaPosition()
+     * @see DomainObjectLayout#cssClassFa()
      */
-    // tag::refguide[]
-    String cssClassFa()                                 // <.>
+    String cssClassFa()
             default "";
 
-    // end::refguide[]
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
-     * icon. The icon could be rendered on the left or the right of the action button
+     * icon.
+     *
+     * <p>
+     * The icon could be rendered on the left or the right of the action button
+     * </p>
+     *
+     * @see ActionLayout#cssClassFa()
      */
-    // tag::refguide[]
-    CssClassFaPosition cssClassFaPosition()             // <.>
+    CssClassFaPosition cssClassFaPosition()
             default CssClassFaPosition.LEFT;
 
-    // end::refguide[]
     /**
      * Description of this action, eg to be rendered in a tooltip.
+     *
+     * @see PropertyLayout#describedAs()
+     * @see ParameterLayout#describedAs()
+     * @see CollectionLayout#describedAs()
+     * @see DomainObjectLayout#describedAs()
      */
-    // tag::refguide[]
-    String describedAs()                                // <.>
+    String describedAs()
             default "";
 
-    // end::refguide[]
+    /**
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.  
+     * <p>
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}.
+     * </p>
+     * 
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     * instead.
+     * 
+     * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i> 
+     * its so called <i>peer</i>. 
+     * It will then be positioned close to its <i>peer</i>, either under it or on the header panel
+     * depending on other layout facets. Such an association is made available via 
+     * {@link Action#associateWith()}. However, in the presence of a {@link ActionLayout#fieldSet()} 
+     * this default placement is overruled.
+     * 
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetName()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetId()
+            default "__infer";
+    
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i> or <i>Collection</i>.
+     * <p>
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}; 
+     * </p>
+     * 
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     * instead.
+     * 
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetName()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName()
+            default "__infer";
+    
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
-    // tag::refguide[]
-    Where hidden()                                      // <.>
+    Where hidden()
             default Where.NOT_SPECIFIED;
 
-    // end::refguide[]
     /**
      * Name of this action (overriding the name derived from its name in code).
+     *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
+     * @see PropertyLayout#named()
+     * @see ParameterLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#named()
+     * @see DomainServiceLayout#named()
      */
-    // tag::refguide[]
-    String named()                                      // <.>
+    String named()
             default "";
 
-    // end::refguide[]
     /**
-     * For actions that are associated with a property, indicates the positioning of the
-     * action's button relative to the property.
+     * For actions that are associated with a property (using either
+     * {@link Action#associateWith()} or {@link ActionLayout#fieldSetId()}
+     * or {@link ActionLayout#fieldSetName()},
+     * indicates the positioning of the action's button relative to the
+     * property.
      *
      * <p>
      * Ignored if the action has not been associated with a property.
      * </p>
      */
-    // tag::refguide[]
-    Position position()                                 // <.>
+    Position position()
             default Position.NOT_SPECIFIED;
 
-    // end::refguide[]
     @XmlType(namespace = "http://isis.apache.org/applib/layout/component")
     enum Position {
         BELOW,
@@ -151,20 +199,38 @@ public @interface ActionLayout {
     }
 
     /**
-     * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
+     * How the parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or
+     * {@link PromptStyle#INLINE inline}.
      */
-    // tag::refguide[]
-    PromptStyle promptStyle()                           // <.>
+    PromptStyle promptStyle()
             default PromptStyle.AS_CONFIGURED;
 
-    // end::refguide[]
     /**
-     * If the action returns its target, then determines whether to update the page or
-     * instead to redirect (forcing a re-rendering of a new page).
+     * If the action returns its target, then determines whether to update the
+     * page or instead to redirect (forcing a re-rendering of a new page).
+     *
+     * <p>
+     *     Not re-rendering can provide a smoother UI experience.
+     * </p>
+     *
+     * <p>
+     *     Supported by the Wicket viewer.
+     * </p>
      */
-    // tag::refguide[]
-    Redirect redirectPolicy()                           // <.>
+    Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
+    
+    /**
+     * The order of this member relative to other members in the same (layout) group, 
+     * given in <i>Dewey-decimal</i> notation.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see CollectionLayout#sequence()
+     * @see PropertyLayout#sequence()
+     */
+    String sequence()
+            default "";
 
 }
-// end::refguide[]

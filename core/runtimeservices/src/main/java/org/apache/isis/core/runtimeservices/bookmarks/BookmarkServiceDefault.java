@@ -31,6 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
@@ -40,11 +41,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
@@ -53,7 +52,7 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
-@Named("isisRuntimeServices.BookmarkServiceDefault")
+@Named("isis.runtimeservices.BookmarkServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -79,7 +78,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return null;
         }
         try {
-            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(bookmark.getObjectType()));
+            val spec = specificationLoader.specForBookmark(bookmark).orElse(null);
             val identifier = bookmark.getIdentifier();
             val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
             
@@ -114,7 +113,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
         val spec = specificationLoader.loadSpecification(cls);
-        val objectType = spec.getSpecId().asString();
+        val objectType = spec.getLogicalTypeName();
         return Bookmark.of(objectType, identifier);
     }
 

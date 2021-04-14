@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -33,6 +34,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal._Constants;
@@ -43,7 +45,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 
 import lombok.val;
@@ -61,8 +62,18 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newConcurrentHashMap();
 
     @Override
-    public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
-        injectServices(domainObject, onNotResolvable);
+    public <T> T injectServicesInto(T domainObject) {
+        injectServices(domainObject, injectionPoint->{
+
+            val injectionPointName = injectionPoint.toString();
+            val requiredType = injectionPoint.getDeclaredType();
+            val msg = String
+                    .format("Could not resolve injection point [%s] in target '%s' of required type '%s'",
+                            injectionPointName,
+                            domainObject.getClass().getName(),
+                            requiredType);
+            throw new NoSuchElementException(msg);
+        });
         return domainObject;
     }
 

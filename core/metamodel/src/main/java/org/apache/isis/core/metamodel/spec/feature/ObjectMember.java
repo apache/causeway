@@ -21,17 +21,22 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.compare._Comparators;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
@@ -63,7 +68,7 @@ public interface ObjectMember extends ObjectFeature {
      * <p>
      * Determined as per the {@link HiddenFacet} being present and
      * {@link HiddenFacet#when()} returning {@link When#ALWAYS}, and
-     * {@link HiddenFacet#where()} returning {@link When#ANYWHERE}.
+     * {@link HiddenFacet#where()} returning {@link Where#ANYWHERE}.
      */
     boolean isAlwaysHidden();
 
@@ -143,7 +148,7 @@ public interface ObjectMember extends ObjectFeature {
      *
      * <p>
      *     For the former case, is thrown by
-     *     {@link ObjectAction#executeWithRuleChecking(ManagedObject, ManagedObject[], org.apache.isis.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
+     *     {@link ObjectAction#executeWithRuleChecking(org.apache.isis.core.metamodel.interactions.InteractionHead, org.apache.isis.commons.collections.Can, InteractionInitiatedBy, Where)}
      *     when the action being executed is not visible or not usable for the specified session.  One reason this
      *     might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
      * </p>
@@ -204,20 +209,49 @@ public interface ObjectMember extends ObjectFeature {
     }
 
 
-    // //////////////////////////////////////////////////////
-    // Comparators
-    // //////////////////////////////////////////////////////
+    // -- COMPARATORS
 
     public static class Comparators {
-        public static Comparator<ObjectMember> byMemberOrderSequence() {
-            return new Comparator<ObjectMember>() {
-                private final MemberOrderFacetComparator memberOrderFacetComparator =
-                        new MemberOrderFacetComparator(false);
+        
+        public static <T extends IdentifiedHolder> Comparator<T> byMemberOrderSequence(
+                final boolean ensureInSameGroup) {
+            
+            return new Comparator<T>() {
+
                 @Override
-                public int compare(final ObjectMember o1, final ObjectMember o2) {
-                    return memberOrderFacetComparator.compare(
-                            o1.getFacet(MemberOrderFacet.class),
-                            o2.getFacet(MemberOrderFacet.class));
+                public int compare(final T m1, final T m2) {
+                    
+                    val orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
+                    val orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
+                    
+                    if (orderFacet1 == null && orderFacet2 == null) {
+                        return 0;
+                    }
+                    if (orderFacet1 == null && orderFacet2 != null) {
+                        return +1; // annotated before non-annotated
+                    }
+                    if (orderFacet1 != null && orderFacet2 == null) {
+                        return -1; // annotated before non-annotated
+                    }
+
+                    if (ensureInSameGroup) { 
+                        
+                        val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
+                        val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
+                        val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
+                        val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
+                        
+                        if(!Objects.equals(groupId1, groupId2)) {
+                            throw _Exceptions.illegalArgument(
+                                    "Not in same fieldSetId1 when comparing: '%s', '%s'", 
+                                    groupId1, 
+                                    groupId2);
+                        }
+                    }
+
+                    return _Comparators.deweyOrderCompare(
+                            orderFacet1.getSequence(), 
+                            orderFacet2.getSequence());    
                 }
             };
         }

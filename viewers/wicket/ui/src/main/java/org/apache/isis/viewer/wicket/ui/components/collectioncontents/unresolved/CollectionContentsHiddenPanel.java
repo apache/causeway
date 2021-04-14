@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved;
 
+import java.util.List;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -27,7 +30,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link EntityCollectionModel collection of entity}s so that they can be only
  * lazily resolved.
  */
-public class CollectionContentsHiddenPanel extends PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsHiddenPanel 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
