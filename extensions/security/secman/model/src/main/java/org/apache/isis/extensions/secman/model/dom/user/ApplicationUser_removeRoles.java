@@ -59,7 +59,6 @@ public class ApplicationUser_removeRoles {
         return target;
     }
 
-    @MemberSupport
     // same logic in ApplicationRole_removeUsers
     public boolean canRemove(
             final ApplicationRole applicationRole) {

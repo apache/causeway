@@ -206,7 +206,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
-    public boolean hideClassName() {
+    public boolean hideTypeSimpleName() {
         return getSort().isNamespace();
     }
 
