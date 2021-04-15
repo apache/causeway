@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -47,7 +48,7 @@ import lombok.val;
 @Action(
         semantics = SemanticsOf.SAFE,
         associateWith = "permissions")
-@ActionLayout(sequence = "1")
+@ActionLayout(sequence = "1", promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 

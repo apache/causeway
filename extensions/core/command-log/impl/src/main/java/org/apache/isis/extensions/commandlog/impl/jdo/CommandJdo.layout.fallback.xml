@@ -45,7 +45,7 @@
                     </cpt:fieldSet>
                 </bs3:col>
                 <bs3:col span="0">
-                    <cpt:fieldSet name="Hidden">
+                    <cpt:fieldSet name="Hidden" id="hidden">
                         <cpt:property id="preValue" hidden="EVERYWHERE"/>
                         <cpt:property id="postValue" hidden="EVERYWHERE"/>
                     </cpt:fieldSet>
