@@ -23,9 +23,9 @@ import org.apache.isis.client.kroviz.handler.*
 object Response2Handler {
 
     val map = mapOf(
-            RESTFUL to RestfulHandler(),
             ACTIONS_STRINGS to ActionHandler(),
             ACTIONS_STRINGS_INVOKE to TObjectHandler(),
+            ACTIONS_WHEREINTHEWORLD_INVOKE to TObjectHandler(),
             ACTIONS_TEXT_INVOKE to TObjectHandler(),
             ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
             COLLECTIONS_ENTITIES to CollectionHandler(),
@@ -38,6 +38,7 @@ object Response2Handler {
             PRIMITIVES to TObjectHandler(),
             PROPERTY to PropertyHandler(),
             PROPERTY_DESCRIPTION to PropertyHandler(),
+            RESTFUL to RestfulHandler(),
             RESTFUL_DOMAIN_TYPES to DomainTypesHandler(),
             TAB_OBJECT_LAYOUT to LayoutHandler(),
             TAB_LAYOUT_XML to LayoutXmlHandler(),

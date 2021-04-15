@@ -269,15 +269,15 @@ open class RoWindow(
                                 this@RoWindow.top = (dragStartY + (me).pageY - dragMouseY).toInt().px
                             }
                         }
-                        kotlin.browser.window.addEventListener("mousemove", moveCallback)
+                        kotlinx.browser.window.addEventListener("mousemove", moveCallback)
                         var upCallback: ((Event) -> Unit)? = null
                         upCallback = {
                             isDrag = false
                             setOpacity("1.0")
-                            kotlin.browser.window.removeEventListener("mousemove", moveCallback)
-                            kotlin.browser.window.removeEventListener("mouseup", upCallback)
+                            kotlinx.browser.window.removeEventListener("mousemove", moveCallback)
+                            kotlinx.browser.window.removeEventListener("mouseup", upCallback)
                         }
-                        kotlin.browser.window.addEventListener("mouseup", upCallback)
+                        kotlinx.browser.window.addEventListener("mouseup", upCallback)
                     }
                 }
             }
@@ -416,38 +416,3 @@ open class RoWindow(
     }
 }
 
-/**
- * DSL builder extension function.
- *
- * It takes the same parameters as the constructor of the built component.
- */
-fun Container.window(
-        caption: String? = null,
-        contentWidth: CssSize? = CssSize(0, UNIT.auto),
-        contentHeight: CssSize? = CssSize(0, UNIT.auto),
-        isResizable: Boolean = true,
-        isDraggable: Boolean = true,
-        closeButton: Boolean = false,
-        maximizeButton: Boolean = false,
-        minimizeButton: Boolean = false,
-        icon: String? = null,
-        classes: Set<String> = setOf(),
-        init: (RoWindow.() -> Unit)? = null
-): RoWindow {
-    val window =
-            RoWindow(
-                    caption,
-                    contentWidth,
-                    contentHeight,
-                    isResizable,
-                    isDraggable,
-                    closeButton,
-                    maximizeButton,
-                    minimizeButton,
-                    icon,
-                    classes,
-                    init
-            )
-    this.add(window)
-    return window
-}

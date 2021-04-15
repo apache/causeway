@@ -47,6 +47,15 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val p = createPropertyFrom(m)
             addProperty(p)
         }
+        obj.getCollections().forEach { m ->
+            console.log("[ODM.addData] collection member")
+            console.log(m)
+        }
+    }
+
+    fun addResult(resultObject: ResultObject) {
+        val tObj = createObjectFrom(resultObject)
+        this.addData(tObj)
     }
 
     override fun getObject(): TObject {
@@ -92,6 +101,17 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
                 format = m.format,
                 disabledReason = m.disabledReason
         )
+    }
+
+    private fun createObjectFrom(resultObject: ResultObject): TObject {
+        val r = resultObject.result!!
+        return TObject(
+                links = r.links,
+                extensions = r.extensions!!,
+                title = r.title,
+                domainType = r.domainType,
+                instanceId = r.instanceId.toString(),
+                members = r.members)
     }
 
 }

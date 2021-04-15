@@ -21,13 +21,9 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.EventLogDetail
-import pl.treksoft.kvision.core.Border
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.FlexAlignItems
-import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.panel.hPanel
 import pl.treksoft.kvision.tabulator.*
@@ -111,7 +107,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     init {
         hPanel(FlexWrap.NOWRAP,
-                alignItems = FlexAlignItems.CENTER,
+                alignItems = AlignItems.CENTER,
                 spacing = 20) {
             border = Border(width = 1.px)
         }

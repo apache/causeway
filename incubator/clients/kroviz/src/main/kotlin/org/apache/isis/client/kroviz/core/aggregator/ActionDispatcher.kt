@@ -19,25 +19,37 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.to.Action
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.to.Relation
+import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.kv.ActionPrompt
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Utils
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
-        val action = logEntry.getTransferObject() as Action
-        action.links.forEach { link ->
-            if (link.isInvokeAction()) {
-                when (link.method) {
-                    Method.GET.name -> process(action, link)
-                    Method.POST.name -> invoke(action, link)
-                    Method.PUT.name -> process(action, link)
+        val to = logEntry.getTransferObject()
+        when {
+            to is Action -> {
+                to.links.forEach { link ->
+                    if (link.isInvokeAction()) {
+                        when (link.method) {
+                            Method.GET.name -> process(to, link)
+                            Method.POST.name -> invoke(to, link)
+                            Method.PUT.name -> process(to, link)
+                        }
+                    }
                 }
+            }
+            (to is TObject && to.domainType == "demo.CustomUiVm") -> {
+                logEntry.aggregators.removeAt(0)
+                val oa = ObjectAggregator(to.title)
+                logEntry.aggregators.add(oa)
+                oa.update(logEntry, Constants.subTypeJson)
+            }
+            else -> {
+                console.log(to)
+                throw Throwable("[ActionDispatcher.update] ${to!!::class.simpleName}")
             }
         }
     }

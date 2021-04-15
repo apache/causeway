@@ -24,7 +24,6 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 /** sequence of operations:
@@ -34,7 +33,7 @@ import org.apache.isis.client.kroviz.ui.kv.UiManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class ListAggregator(actionTitle: String) : BaseAggregator() {
+class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
 
     init {
         dpm = ListDM(actionTitle)
@@ -43,13 +42,13 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     override fun update(logEntry: LogEntry, subType: String) {
 
         if (logEntry.state == EventState.DUPLICATE) {
-            console.log("[LA.update] TODO duplicates should not be propagated to handlers")
+            console.log("[ListAggregator.update] TODO duplicates should not be propagated to handlers")
         } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
                 is TObject -> handleObject(obj)
-                is Layout -> handleLayout(obj)
+                is Layout -> handleLayout(obj, dpm as ListDM)
                 is Grid -> handleGrid(obj)
                 is Property -> handleProperty(obj)
                 else -> log(logEntry)
@@ -72,33 +71,9 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     private fun handleObject(obj: TObject) {
         dpm.addData(obj)
-        val l = obj.getLayoutLink()!!
-        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
-            invoke(l, this, Constants.subTypeXml)
-        } else {
-            invoke(l, this)
-        }
+        invokeLayoutLink(obj)
     }
 
-    //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
-    private fun handleLayout(layout: Layout) {
-        val dm = dpm as ListDM
-        // TODO layout is passed in at least twice.
-        //  Eventually due to parallel invocations  - only once required -> IMPROVE
-        if (dm.layout == null) {
-            dm.addLayout(layout)
-            dm.propertyLayoutList.forEach { p ->
-                val l = p.link!!
-                val isDn = l.href.contains("datanucleus")
-                val id = p.id!!
-                dm.addPropertyDescription(id, id)
-                if (!isDn) {
-                    //invoking DN links leads to an error
-                    invoke(l, this)
-                }
-            }
-        }
-    }
 
     private fun handleGrid(grid: Grid) {
         (dpm as ListDM).grid = grid

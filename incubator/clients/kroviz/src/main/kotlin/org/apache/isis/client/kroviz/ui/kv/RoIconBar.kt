@@ -18,6 +18,8 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
+import kotlinx.browser.document
+import kotlinx.dom.removeClass
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.Exposer
@@ -33,8 +35,6 @@ import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
-import kotlin.browser.document
-import kotlin.dom.removeClass
 
 object RoIconBar : SimplePanel() {
 
@@ -146,7 +146,7 @@ object RoIconBar : SimplePanel() {
         icon.id = id
         icon.title = title
         icon.addCssClass(cssClass)
-        icon.afterInsertHook = {
+        addAfterInsertHook {
             val btn = document.getElementById(btnId)!!
             btn.removeClass("dropdown-toggle")
         }
