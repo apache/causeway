@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.Render
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -313,7 +314,7 @@ public class LayoutFacetUtil {
     @RequiredArgsConstructor(staticName = "of")
     public static class MetamodelToGridOverridingVisitor extends Grid.VisitorAdapter  {
 
-        private final ObjectSpecification objectSpec; 
+        private final @NonNull ObjectSpecification objectSpec; 
 
         @Override
         public void visit(final ActionLayoutData actionLayoutData) {

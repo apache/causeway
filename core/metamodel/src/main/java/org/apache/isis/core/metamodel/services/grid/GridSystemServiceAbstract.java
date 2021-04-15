@@ -177,7 +177,7 @@ implements GridSystemService<G> {
             final G fcGrid,
             final Class<?> domainClass) {
 
-        val objectSpec = specificationLoader.loadSpecification(domainClass);
+        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
@@ -358,7 +358,7 @@ implements GridSystemService<G> {
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        val objectSpec = specificationLoader.loadSpecification(domainClass);
+        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
         grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
     }
 

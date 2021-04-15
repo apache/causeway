@@ -172,7 +172,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Class<?> domainClass) {
 
         val bs3Grid = (BS3Grid) grid;
-        val objectSpec = specificationLoader.loadSpecification(domainClass);
+        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));

@@ -79,9 +79,11 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(domainType);
-        final ObjectSpecIdFacet objectSpecIdFacet = objectSpecification.getFacet(ObjectSpecIdFacet.class);
-        return objectSpecIdFacet.value();
+        
+        return specificationLoader.specForType(domainType)
+        .flatMap(spec->spec.lookupFacet(ObjectSpecIdFacet.class))
+        .map(ObjectSpecIdFacet::value)
+        .orElse(null);
     }
 
     @Override
@@ -155,7 +157,10 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainType);
+        final ObjectSpecification objectSpec = specificationLoader.specForType(domainType).orElse(null);
+        if(objectSpec == null) {
+            return BeanSort.UNKNOWN;
+        }
         if(objectSpec.isManagedBean()) {
             return BeanSort.MANAGED_BEAN_CONTRIBUTING;
         }
