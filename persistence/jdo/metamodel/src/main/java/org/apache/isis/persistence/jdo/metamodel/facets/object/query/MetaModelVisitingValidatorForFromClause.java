@@ -43,29 +43,28 @@ extends MetaModelVisitingValidatorForClauseAbstract {
 
     @Override
     void postInterpretJdoql(
-            final String typeNameFromClause,
+            final String classNameFromClause, // actually class not logical type!
             final ObjectSpecification objectSpec,
             final String query) {
 
-        val logicalType = objectSpec.getLogicalType();
-        
-        if (Objects.equals(typeNameFromClause, logicalType.getLogicalTypeName())) {
+        val className = objectSpec.getCorrespondingClass().getName();
+        if (Objects.equals(classNameFromClause, className)) {
             return;
         }
 
         val fromSpecResult = Result.of(()->getSpecificationLoader()
-                    .specForType(_Context.loadClass(typeNameFromClause))
+                    .specForType(_Context.loadClass(classNameFromClause))
                     .orElse(null));
                 
         if(fromSpecResult.isFailure() 
                 || !fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
-                    Identifier.classIdentifier(logicalType),
+                    Identifier.classIdentifier(objectSpec.getLogicalType()),
                     String.format(
                             "%s: error in JDOQL query, "
                             + "logical type name after '%s' clause could not be loaded (JDOQL : %s)",
-                            objectSpec.getCorrespondingClass().getName(), 
+                            className, 
                             clause, 
                             query)
                     );
@@ -80,12 +79,12 @@ extends MetaModelVisitingValidatorForClauseAbstract {
         
         ValidationFailure.raise(
                 objectSpec.getSpecificationLoader(),
-                Identifier.classIdentifier(logicalType),
+                Identifier.classIdentifier(objectSpec.getLogicalType()),
                 String.format(
-                        "%s: error in JDOQL query, class name after '%s' "
+                        "%s: error in JDOQL query, type name after '%s' "
                         + "clause should be same as class name on which annotated, "
                         + "or one of its supertypes (JDOQL : %s)",
-                        objectSpec.getCorrespondingClass().getName(),
+                        className,
                         clause, 
                         query)
                 );

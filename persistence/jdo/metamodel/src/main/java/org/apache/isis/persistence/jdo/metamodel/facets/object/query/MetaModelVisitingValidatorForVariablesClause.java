@@ -20,6 +20,8 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -40,13 +42,17 @@ extends MetaModelVisitingValidatorForClauseAbstract {
 
     @Override
     void postInterpretJdoql(
-            final String typeNameFromClause,
+            final String classNameFromClause, // actually class not logical type!
             final ObjectSpecification objectSpec,
             final String query) {
 
-        final JdoPersistenceCapableFacet persistenceCapableFacet = getSpecificationLoader()
-                .specForLogicalTypeName(typeNameFromClause)
-                .map(spec->spec.getFacet(JdoPersistenceCapableFacet.class))
+        final JdoPersistenceCapableFacet persistenceCapableFacet = Result.of(
+                ()->getSpecificationLoader()
+                    .specForType(_Context.loadClass(classNameFromClause))
+                    .map(spec->spec.getFacet(JdoPersistenceCapableFacet.class))
+                    .orElse(null)
+                )
+                .getValue()
                 .orElse(null);
 
         if(persistenceCapableFacet == null) {
