@@ -24,7 +24,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -51,7 +51,7 @@ final class ManagedObjectInternalUtil {
         }
 
         @Override
-        public Optional<RootOid> getRootOid() {
+        public Optional<Oid> getRootOid() {
             return Optional.empty();
         }
 
@@ -68,7 +68,7 @@ final class ManagedObjectInternalUtil {
         .map(MetaModelContext::getObjectManager);
     }
     
-    static Optional<RootOid> identify(@Nullable ManagedObject adapter) {
+    static Optional<Oid> identify(@Nullable ManagedObject adapter) {
         return objectManager(adapter)
                 .map(objectManager->objectManager.identifyObject(adapter)); 
     }

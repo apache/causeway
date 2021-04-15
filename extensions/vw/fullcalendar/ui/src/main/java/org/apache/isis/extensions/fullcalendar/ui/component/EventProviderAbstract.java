@@ -30,7 +30,6 @@ import org.joda.time.Interval;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -104,7 +103,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             val dereferencedManagedObject = 
                     ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
 
-            final RootOid rootOid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
+            val rootOid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
             if(rootOid!=null) {
 
                 final String oidStr = rootOid.enString();

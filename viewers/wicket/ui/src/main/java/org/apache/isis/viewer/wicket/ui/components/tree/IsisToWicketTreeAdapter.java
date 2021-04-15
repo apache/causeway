@@ -46,7 +46,7 @@ import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -393,7 +393,7 @@ class IsisToWicketTreeAdapter {
     private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
         private static final long serialVersionUID = 1L;
 
-        private final RootOid id;
+        private final Oid id;
         private final TreePath treePath;
         private final int hashCode;
 

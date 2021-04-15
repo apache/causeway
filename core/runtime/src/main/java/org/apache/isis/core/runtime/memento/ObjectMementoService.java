@@ -19,7 +19,7 @@
 package org.apache.isis.core.runtime.memento;
 
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
@@ -29,7 +29,7 @@ import lombok.NonNull;
  */
 public interface ObjectMementoService {
 
-    ObjectMemento mementoForRootOid(RootOid rootOid);
+    ObjectMemento mementoForRootOid(Oid rootOid);
 
     ObjectMemento mementoForObject(ManagedObject adapter);
 

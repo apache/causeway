@@ -23,7 +23,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
@@ -84,7 +84,7 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default RootOid identifyObject(ManagedObject managedObject) {
+    public default Oid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);
     }
     

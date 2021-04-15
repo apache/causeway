@@ -30,7 +30,7 @@ public class RootOidTest_create {
     @Test
     public void create() throws Exception {
         val logicalType = LogicalTypeTestFactory.cus();
-        RootOid oid = Oid.Factory.root(logicalType, "123");
+        Oid oid = Oid.root(logicalType, "123");
         assertThat(oid.getLogicalTypeName(), is(logicalType.getLogicalTypeName()));
         assertThat(oid.getIdentifier(), is("123"));
     }

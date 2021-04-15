@@ -30,7 +30,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -199,9 +198,9 @@ public class PageParameterUtil {
         return EntityModel.ofMemento(commonContext, memento);
     }
 
-    private static RootOid oidFor(final PageParameters pageParameters) {
+    private static Oid oidFor(final PageParameters pageParameters) {
         final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
+        return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
     }
 
     private static final String NULL_ARG = "$nullArg$";
@@ -233,7 +232,7 @@ public class PageParameterUtil {
         }
 
         try {
-            val rootOid = RootOid.deStringEncoded(encoded);
+            val rootOid = Oid.deStringEncoded(encoded);
             return rootOid.loadObject(mmc).orElse(null);
         } catch (final Exception e) {
             return null;

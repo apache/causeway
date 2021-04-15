@@ -55,18 +55,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class OidMarshallerTest_unmarshal {
 
-    private Oid_Marshaller oidMarshaller;
+    private _OidMarshaller oidMarshaller;
 
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = Oid_Marshaller.INSTANCE;
+        oidMarshaller = _OidMarshaller.INSTANCE;
     }
 
     @Test
     public void persistentRoot() {
         final String oidStr = "CUS:123";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
+        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(rootOid.getLogicalTypeName(), is("CUS"));
         assertThat(rootOid.getIdentifier(), is("123"));
 
@@ -78,7 +78,7 @@ public class OidMarshallerTest_unmarshal {
     public void persistentRootWithFullyQualifiedSpecId() {
         final String oidStr = "com.planchase.ClassName:8";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
+        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(rootOid.getLogicalTypeName(), is("com.planchase.ClassName"));
         assertThat(rootOid.getIdentifier(), is("8"));
 
@@ -99,7 +99,7 @@ public class OidMarshallerTest_unmarshal {
     public void transientRoot() {
         final String oidStr = "!CUS:123";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
+        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(rootOid.getLogicalTypeName(), is("CUS"));
         assertThat(rootOid.getIdentifier(), is("123"));
 
@@ -110,7 +110,7 @@ public class OidMarshallerTest_unmarshal {
 
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
-        oidMarshaller.unmarshal("xxx", RootOid.class);
+        oidMarshaller.unmarshal("xxx", Oid.class);
     }
 
 

@@ -24,23 +24,25 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import lombok.val;
+
 public class OidMarshallerTest_roundtripping {
 
     @Test
     public void rootOid() {
-        RootOid oid = Oid.Factory.root(LogicalTypeTestFactory.cus(), "123");
+        val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
         final String enString = oid.enString();
-        final RootOid deString = RootOid.deString(enString);
+        final Oid deString = Oid.deString(enString);
         assertThat(deString, is(oid));
     }
     
     @Test
     public void rootOid_withLegacyVersionIgnored() {
-        RootOid oid = Oid.Factory.root(LogicalTypeTestFactory.cus(), "123");
+        val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
         final String enString = oid.enString();
-        final RootOid deString = RootOid.deString(enString + "^" + 90807L);
+        final Oid deString = Oid.deString(enString + "^" + 90807L);
         assertThat(deString, is(oid));
     }
     

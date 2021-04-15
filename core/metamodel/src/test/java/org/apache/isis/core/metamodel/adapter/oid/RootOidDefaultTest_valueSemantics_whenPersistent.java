@@ -24,22 +24,22 @@ import java.util.List;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 public class RootOidDefaultTest_valueSemantics_whenPersistent 
-extends ValueTypeContractTestAbstract<RootOid> {
+extends ValueTypeContractTestAbstract<Oid> {
 
     @Override
-    protected List<RootOid> getObjectsWithSameValue() {
+    protected List<Oid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.Factory.root(LogicalTypeTestFactory.cus(), "123"),
-                Oid.Factory.root(LogicalTypeTestFactory.cus(), "123"),
-                Oid.Factory.root(LogicalTypeTestFactory.cus(), "123"));
+                Oid.root(LogicalTypeTestFactory.cus(), "123"),
+                Oid.root(LogicalTypeTestFactory.cus(), "123"),
+                Oid.root(LogicalTypeTestFactory.cus(), "123"));
     }
 
     @Override
-    protected List<RootOid> getObjectsWithDifferentValue() {
+    protected List<Oid> getObjectsWithDifferentValue() {
         return Arrays.asList(
                 //Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.root(LogicalTypeTestFactory.cus(), "124"),
-                Oid.Factory.root(LogicalTypeTestFactory.cux(), "123"));
+                Oid.root(LogicalTypeTestFactory.cus(), "124"),
+                Oid.root(LogicalTypeTestFactory.cux(), "123"));
     }
 
 }

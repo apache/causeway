@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -39,11 +38,11 @@ class ObjectIdentifier_builtinHandlers {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
-            return managedObject.getPojo() instanceof RootOid;
+            return managedObject.getPojo() instanceof Oid;
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
+        public Oid handle(ManagedObject managedObject) {
             throw new IllegalArgumentException("Cannot create a RootOid for pojo, "
                     + "when pojo is instance of RootOid. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
@@ -59,9 +58,9 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
+        public Oid handle(ManagedObject managedObject) {
             final String identifier = SERVICE_IDENTIFIER;
-            return Oid.Factory.root(managedObject.getSpecification().getLogicalType(), identifier);
+            return Oid.root(managedObject.getSpecification().getLogicalType(), identifier);
         }
 
     }
@@ -74,7 +73,7 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
+        public Oid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
             if(pojo==null) {
@@ -87,7 +86,7 @@ class ObjectIdentifier_builtinHandlers {
                 throw _Exceptions.unrecoverable(msg);
             }
             val identifier = entityFacet.identifierFor(spec, pojo);
-            return Oid.Factory.root(spec.getLogicalType(), identifier);
+            return Oid.root(spec.getLogicalType(), identifier);
         }
 
     }
@@ -100,8 +99,8 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
-            return Oid.Factory.value();
+        public Oid handle(ManagedObject managedObject) {
+            return Oid.empty();
         }
 
     }
@@ -114,11 +113,11 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
+        public Oid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
-            return Oid.Factory.root(spec.getLogicalType(), identifier);
+            return Oid.root(spec.getLogicalType(), identifier);
         }
 
     }
@@ -131,10 +130,10 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public RootOid handle(ManagedObject managedObject) {
+        public Oid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val identifier = UUID.randomUUID().toString();
-            return Oid.Factory.root(spec.getLogicalType(), identifier);
+            return Oid.root(spec.getLogicalType(), identifier);
         }
 
     }

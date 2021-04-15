@@ -36,7 +36,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -72,7 +71,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
      * Factory method
      */
     static ObjectMementoWkt createPersistent(
-            RootOid rootOid,
+            Oid rootOid,
             SpecificationLoader specificationLoader) {
 
         return new ObjectMementoWkt(rootOid, specificationLoader);
@@ -231,7 +230,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                             "need an id to lookup an object, got logical-type %s", memento.logicalType);
                 }
 
-                RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
+                Oid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, Oid.class);
                 try {
 
                     log.debug("lookup by rootOid [{}]", rootOid);
@@ -402,7 +401,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = logicalType;
     }
 
-    private ObjectMementoWkt(RootOid rootOid, SpecificationLoader specificationLoader) {
+    private ObjectMementoWkt(Oid rootOid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val logicalTypeName = rootOid.getLogicalTypeName();

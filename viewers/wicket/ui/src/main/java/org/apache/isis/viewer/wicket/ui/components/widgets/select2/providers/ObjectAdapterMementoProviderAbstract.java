@@ -31,7 +31,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -178,7 +178,7 @@ extends ChoiceProvider<ObjectMemento> {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;
         }
-        val rootOid = RootOid.deString(id);
+        val rootOid = Oid.deString(id);
         return getCommonContext().mementoFor(rootOid);
     }
 

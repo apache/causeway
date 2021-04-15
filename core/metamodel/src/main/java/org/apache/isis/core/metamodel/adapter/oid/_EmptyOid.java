@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-final class Oid_Value implements RootOid {
+final class _EmptyOid implements Oid {
 
     private static final long serialVersionUID = 2L;
 
-    static final Oid_Value INSTANCE = new Oid_Value();
+    static final _EmptyOid INSTANCE = new _EmptyOid();
 
     @Override
     public String enString() {
@@ -33,7 +33,7 @@ final class Oid_Value implements RootOid {
     }
 
     @Override
-    public boolean isValue() { 
+    public boolean isEmpty() { 
         return true; 
     }
 
@@ -49,7 +49,7 @@ final class Oid_Value implements RootOid {
 
     @Override
     public String toString() {
-        return "VALUE_OID";
+        return "EMPTY_OID";
     }
 
     @Override

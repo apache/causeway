@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -108,7 +108,7 @@ public interface IResourceContext {
 
     default Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
-        val rootOid = RootOid.deString(oidStrUnencoded);
+        val rootOid = Oid.deString(oidStrUnencoded);
         return rootOid.loadObject(getMetaModelContext());
     }
 

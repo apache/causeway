@@ -35,7 +35,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -68,7 +68,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
+    public ObjectMemento mementoForRootOid(@NonNull Oid rootOid) {
 //        _Probe.errOut("mementoForRootOid %s", rootOid);
         val mementoAdapter = ObjectMementoWkt.createPersistent(rootOid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);

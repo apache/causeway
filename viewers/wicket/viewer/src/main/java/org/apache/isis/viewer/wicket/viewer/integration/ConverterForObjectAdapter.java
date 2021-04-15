@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,7 +49,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        val rootOid = RootOid.deStringEncoded(value);
+        val rootOid = Oid.deStringEncoded(value);
         val spec = objectManager.getMetaModelContext()
                 .getSpecificationLoader()
                 .specForLogicalTypeNameElseFail(rootOid.getLogicalTypeName());

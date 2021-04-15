@@ -54,7 +54,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -377,16 +376,16 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             return ManagedObject.unspecified();
         }
         if(pojo instanceof OidDto) {
-            return adapterFor(Oid.Factory.ofDto((OidDto)pojo));
+            return adapterFor(Oid.forDto((OidDto)pojo));
         }
-        if(pojo instanceof RootOid) {
-            return adapterFor((RootOid) pojo);
+        if(pojo instanceof Oid) {
+            return adapterFor((Oid) pojo);
         }
         // value type
         return ManagedObject.lazy(getSpecificationLoader(), pojo);
     }
 
-    private ManagedObject adapterFor(final RootOid oid) {
+    private ManagedObject adapterFor(final Oid oid) {
         val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
         val loadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
         return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);

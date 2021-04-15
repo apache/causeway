@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import lombok.Getter;
 import lombok.NonNull;
 
-final class Oid_Root implements RootOid {
+final class _RootOid implements Oid {
 
     private static final long serialVersionUID = 3L;
 
@@ -36,13 +36,13 @@ final class Oid_Root implements RootOid {
     
     private final int hashCode;
 
-    public static Oid_Root of(
+    public static _RootOid of(
             final @NonNull String logicalTypeName, 
             final @NonNull String identifier) {
-        return new Oid_Root(logicalTypeName, identifier);
+        return new _RootOid(logicalTypeName, identifier);
     }
 
-    private Oid_Root(
+    private _RootOid(
             final String logicalTypeName, 
             final String identifier) {
 
@@ -54,13 +54,13 @@ final class Oid_Root implements RootOid {
 
     // -- ENCODING 
     
-    public static Oid_Root deStringEncoded(final String urlEncodedOidStr) {
+    public static _RootOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
     }
 
-    public static Oid_Root deString(final String oidStr) {
-        return Oid.unmarshaller().unmarshal(oidStr, Oid_Root.class);
+    public static _RootOid deString(final String oidStr) {
+        return Oid.unmarshaller().unmarshal(oidStr, _RootOid.class);
     }
 
     @Override
@@ -84,10 +84,10 @@ final class Oid_Root implements RootOid {
         if (getClass() != other.getClass()) {
             return false;
         }
-        return equals((Oid_Root) other);
+        return equals((_RootOid) other);
     }
 
-    public boolean equals(final Oid_Root other) {
+    public boolean equals(final _RootOid other) {
         return Objects.equals(logicalTypeName, other.getLogicalTypeName()) 
                 && Objects.equals(identifier, other.getIdentifier());
     }

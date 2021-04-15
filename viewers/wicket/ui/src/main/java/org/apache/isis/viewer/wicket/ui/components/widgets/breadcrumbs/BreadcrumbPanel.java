@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,9 +33,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -83,7 +80,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    final RootOid result = RootOid.deString(oidStr);
+                    final Oid result = Oid.deString(oidStr);
                     return Oid.marshaller().marshal(result);
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);

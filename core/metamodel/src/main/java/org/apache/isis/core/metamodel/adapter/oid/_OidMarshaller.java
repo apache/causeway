@@ -80,11 +80,11 @@ import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
-final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
+final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
-    public static final Oid_Marshaller INSTANCE = new Oid_Marshaller();
+    public static final _OidMarshaller INSTANCE = new _OidMarshaller();
 
-    private Oid_Marshaller(){}
+    private _OidMarshaller(){}
 
     @Deprecated
     private static final String VIEWMODEL_INDICATOR = "*";
@@ -172,9 +172,9 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         if(oneToManyId == null) {
             if(aggregateOidParts.isEmpty()) {
-                ensureCorrectType(oidStr, requestedType, RootOid.class);
+                ensureCorrectType(oidStr, requestedType, Oid.class);
                 return _Casts.uncheckedCast(
-                        Oid_Root.of(rootObjectType, rootIdentifier));
+                        _RootOid.of(rootObjectType, rootIdentifier));
             } else {
                 throw _Exceptions.illegalArgument("Aggregated OIDs are no longer supported");
             }
@@ -220,9 +220,9 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
     // -- marshal
     @Override
-    public final String marshal(RootOid rootOid) {
-        _Assert.assertFalse(rootOid.isValue(), "cannot marshal values");
-        return rootOid.getLogicalTypeName() + SEPARATOR + rootOid.getIdentifier();
+    public final String marshal(Oid oid) {
+        _Assert.assertFalse(oid.isEmpty(), "cannot marshal an empty OID");
+        return oid.getLogicalTypeName() + SEPARATOR + oid.getIdentifier();
     }
 
 }

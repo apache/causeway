@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -61,7 +61,7 @@ public interface ManagedObject {
      * Returns the object id as identified by the ObjectManager. 
      * Entity IDs are considered immutable, hence will be memoized once fetched.
      */
-    Optional<RootOid> getRootOid();
+    Optional<Oid> getRootOid();
     
     boolean isRootOidMemoized();
     
@@ -142,7 +142,7 @@ public interface ManagedObject {
     public static ManagedObject identified(
             @NonNull ObjectSpecification specification, 
             @NonNull Object pojo, 
-            @NonNull RootOid rootOid) {
+            @NonNull Oid rootOid) {
         
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -193,7 +193,7 @@ public interface ManagedObject {
         public static ManagedObject identified(
                 @NonNull  final ObjectSpecification spec, 
                 @Nullable final Object pojo, 
-                @NonNull  final RootOid rootOid) {
+                @NonNull  final Oid rootOid) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
             managedObject.rootOidLazy.set(Optional.of(rootOid));
             return managedObject;
@@ -203,12 +203,12 @@ public interface ManagedObject {
         @Nullable private final Object pojo;
 
         @Override
-        public Optional<RootOid> getRootOid() {
+        public Optional<Oid> getRootOid() {
             return rootOidLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<RootOid>> rootOidLazy = 
+        private final _Lazy<Optional<Oid>> rootOidLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
 
         @Override
@@ -228,12 +228,12 @@ public interface ManagedObject {
         @Getter @NonNull private final Object pojo;
         
         @Override
-        public Optional<RootOid> getRootOid() {
+        public Optional<Oid> getRootOid() {
             return rootOidLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<RootOid>> rootOidLazy = 
+        private final _Lazy<Optional<Oid>> rootOidLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
         
         @Override

@@ -27,11 +27,9 @@ import java.util.Objects;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.val;
-
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
 
@@ -51,7 +49,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         cleanUpGarbage(rootNodes);
 
         final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
-        RootOid oid = BookmarkTreeNode.oidFrom(candidatePP);
+        val oid = BookmarkTreeNode.oidFrom(candidatePP);
         if(oid == null) {
             // ignore
             return;

@@ -40,7 +40,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
@@ -88,7 +88,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
-                .map(RootOid::asBookmark)
+                .map(Oid::asBookmark)
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
         final String actionId = objectAction.getIdentifier().getMemberNameAndParameterClassNamesIdentityString();
@@ -132,7 +132,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
         
         final Bookmark targetBookmark = targetAdapter.getRootOid()
-                .map(RootOid::asBookmark)
+                .map(Oid::asBookmark)
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
         final String propertyId = property.getIdentifier().getMemberName();

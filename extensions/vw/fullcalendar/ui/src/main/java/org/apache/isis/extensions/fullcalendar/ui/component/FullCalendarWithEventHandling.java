@@ -20,7 +20,7 @@ package org.apache.isis.extensions.fullcalendar.ui.component;
 
 import org.apache.wicket.RestartResponseException;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
@@ -61,7 +61,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
             final CalendarResponse response) {
 
         final String oidStr = (String) event.getEvent().getPayload();
-        final RootOid oid = RootOid.deString(oidStr);
+        final Oid oid = Oid.deString(oidStr);
 
         val commonContext = getCommonContext();
                 

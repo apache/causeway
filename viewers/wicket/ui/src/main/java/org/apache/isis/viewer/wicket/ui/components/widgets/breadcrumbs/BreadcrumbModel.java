@@ -29,9 +29,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -104,7 +102,7 @@ public class BreadcrumbModel implements Serializable {
             return null;
         }
         try {
-            final RootOid unmarshal = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
+            final Oid unmarshal = Oid.unmarshaller().unmarshal(oidStr, Oid.class);
             return unmarshal.enString();
         } catch(Exception ex) {
             return null;
@@ -170,7 +168,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        val rootOid = Factory.ofBookmark(bookmark);
+        val rootOid = Oid.forBookmark(bookmark);
         val objectAdapterMemento = commonContext.mementoFor(rootOid);
         return EntityModel.ofMemento(commonContext, objectAdapterMemento);
     }

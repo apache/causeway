@@ -20,28 +20,62 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.schema.common.v2.OidDto;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
- * An immutable identifier for a root object (subtype {@link RootOid}).
+ * An immutable identifier for a root object.
  *
- * <p>
  * @apiNote value objects (strings, ints, {@link Value}s etc) do not have a 
  * semantically meaningful {@link Oid}, but as an implementation detail 
  * might have a placeholder {@link Oid}. 
  */
 public interface Oid extends Serializable {
 
+    // -- FACTORIES
+
+    
+    public static Oid empty() {
+        return _EmptyOid.INSTANCE;
+    }
+
+    public static Oid root(final LogicalType logicalType, final String identifier) {
+        return _RootOid.of(
+                logicalType.getLogicalTypeName(), 
+                identifier);
+    }
+    
+    public static Oid forBookmark(final Bookmark bookmark) {
+        return _RootOid.of(
+                bookmark.getLogicalTypeName(), 
+                bookmark.getIdentifier());
+    }
+    
+    public static Oid forDto(final OidDto oid) {
+        return _RootOid.of(
+                oid.getType(), 
+                oid.getId());
+    }
+    
+    // --
+    
     /**
      * A string representation of this {@link Oid}.
      */
     String enString();
 
-    default boolean isValue() {
+    default boolean isEmpty() {
         return false; // default, only overridden by Oid_Value
     }
     
@@ -54,12 +88,12 @@ public interface Oid extends Serializable {
     // -- MARSHALLING
 
     public static interface Marshaller {
-        String marshal(RootOid rootOid);
+        String marshal(Oid rootOid);
         String joinAsOid(String logicalTypeName, String instanceId);
     }
 
     public static Marshaller marshaller() {
-        return Oid_Marshaller.INSTANCE;
+        return _OidMarshaller.INSTANCE;
     }
 
     // -- UN-MARSHALLING
@@ -70,35 +104,38 @@ public interface Oid extends Serializable {
     }
 
     public static Unmarshaller unmarshaller() {
-        return Oid_Marshaller.INSTANCE;
+        return _OidMarshaller.INSTANCE;
+    }
+    
+    // -- REFACTORING ...
+    
+    String getIdentifier();
+
+    Bookmark asBookmark();
+
+    // -- DECODE FROM STRING
+
+    public static Oid deStringEncoded(final String urlEncodedOidStr) {
+        final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
+        return deString(oidStr);
     }
 
-    // -- FACTORIES
+    public static Oid deString(final String oidStr) {
+        return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
+    }
 
-    /** for convenience*/
-    public static final class Factory {
-
-        public static RootOid value() {
-            return Oid_Value.INSTANCE;
-        }
-
-        public static RootOid ofBookmark(final Bookmark bookmark) {
-            return Oid_Root.of(
-                    bookmark.getLogicalTypeName(), 
-                    bookmark.getIdentifier());
-        }
+    // -- OBJECT LOADING
+    
+    default public Optional<ManagedObject> loadObject(final @NonNull MetaModelContext mmc) {
         
-        public static RootOid ofDto(final OidDto oid) {
-            return Oid_Root.of(
-                    oid.getType(), 
-                    oid.getId());
-        }
-
-        public static RootOid root(final LogicalType logicalType, final String identifier) {
-            return Oid_Root.of(
-                    logicalType.getLogicalTypeName(), 
-                    identifier);
-        }
+        val objectId = this.getIdentifier();
+        val specLoader = mmc.getSpecificationLoader(); 
+        val objManager = mmc.getObjectManager();
+        
+        return specLoader
+                .specForLogicalTypeName(this.getLogicalTypeName())
+                .map(spec->objManager.loadObject(
+                        ObjectLoader.Request.of(spec, objectId)));
         
     }
 

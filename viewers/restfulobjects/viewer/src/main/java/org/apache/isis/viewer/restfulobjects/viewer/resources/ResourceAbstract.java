@@ -36,7 +36,6 @@ import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -127,7 +126,7 @@ public abstract class ResourceAbstract {
     protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        val rootOid = RootOid.deString(oidStrUnencoded);
+        val rootOid = Oid.deString(oidStrUnencoded);
         
         return rootOid
                 .loadObject(metaModelContext)

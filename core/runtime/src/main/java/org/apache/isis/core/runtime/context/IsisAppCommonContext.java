@@ -29,7 +29,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -108,7 +108,7 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMementoService().mementoForParameter(adapter);
     }
     
-    public ObjectMemento mementoFor(RootOid rootOid) {
+    public ObjectMemento mementoFor(Oid rootOid) {
         return getMementoService().mementoForRootOid(rootOid);
     }
     

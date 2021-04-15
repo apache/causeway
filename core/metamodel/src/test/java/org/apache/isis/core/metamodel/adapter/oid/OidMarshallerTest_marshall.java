@@ -26,16 +26,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OidMarshallerTest_marshall {
 
-    private Oid_Marshaller oidMarshaller;
+    private _OidMarshaller oidMarshaller;
 
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = Oid_Marshaller.INSTANCE;
+        oidMarshaller = _OidMarshaller.INSTANCE;
     }
 
     @Test
     public void rootOid() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.root(LogicalTypeTestFactory.cus(),  "123"));
+        final String marshal = oidMarshaller.marshal(Oid.root(LogicalTypeTestFactory.cus(),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 

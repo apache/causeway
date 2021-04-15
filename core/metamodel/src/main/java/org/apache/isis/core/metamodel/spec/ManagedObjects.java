@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -123,18 +123,18 @@ public final class ManagedObjects {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty(); 
     }
     
-    public static Optional<RootOid> identify(@Nullable ManagedObject managedObject) {
+    public static Optional<Oid> identify(@Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? managedObject.getRootOid() : Optional.empty(); 
     }
     
-    public static RootOid identifyElseFail(@Nullable ManagedObject managedObject) {
+    public static Oid identifyElseFail(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
     
     public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
-                .map(RootOid::asBookmark);
+                .map(Oid::asBookmark);
     }
     
     public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
@@ -149,7 +149,7 @@ public final class ManagedObjects {
      */
     public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
-                .map(RootOid::enString);
+                .map(Oid::enString);
     }
     
     public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
@@ -498,7 +498,7 @@ public final class ManagedObjects {
             }
             
             val objectIdentifier = identify(managedObject)
-                    .map(RootOid::getIdentifier);
+                    .map(Oid::getIdentifier);
                     
             if(!objectIdentifier.isPresent()) {
                 return managedObject;

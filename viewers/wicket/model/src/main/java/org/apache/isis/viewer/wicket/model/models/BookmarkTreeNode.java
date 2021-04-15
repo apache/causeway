@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -30,7 +29,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -47,7 +45,7 @@ public class BookmarkTreeNode implements Serializable {
     private final List<BookmarkTreeNode> children = _Lists.newArrayList();
     private final int depth;
 
-    @Getter private final RootOid oidNoVer; //TODO rename field, versions have been removed
+    @Getter private final Oid oidNoVer; //TODO rename field, versions have been removed
     @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
     private final PageType pageType;
 
@@ -63,9 +61,9 @@ public class BookmarkTreeNode implements Serializable {
             final BookmarkableModel bookmarkableModel,
             final int depth) {
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
-        RootOid oid = oidFrom(pageParameters);
+        Oid oid = oidFrom(pageParameters);
         this.oidNoVerStr = Oid.marshaller().marshal(oid);
-        this.oidNoVer = Oid.unmarshaller().unmarshal(oidNoVerStr, RootOid.class);
+        this.oidNoVer = Oid.unmarshaller().unmarshal(oidNoVerStr, Oid.class);
 
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
@@ -246,20 +244,20 @@ public class BookmarkTreeNode implements Serializable {
 
     // //////////////////////////////////////
 
-    public static RootOid oidFrom(final PageParameters pageParameters) {
+    public static Oid oidFrom(final PageParameters pageParameters) {
         String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         if(oidStr == null) {
             return null;
         }
         try {
-            return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
+            return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
         } catch(Exception ex) {
             return null;
         }
     }
 
     public static String oidStrFrom(BookmarkableModel candidateBookmarkableModel) {
-        final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
+        final Oid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
         return oid != null? Oid.marshaller().marshal(oid): null;
     }
 
