@@ -23,11 +23,9 @@ import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 final class Oid_Root implements RootOid {
 
@@ -73,14 +71,6 @@ final class Oid_Root implements RootOid {
     @Override
     public Bookmark asBookmark() {
         return Bookmark.of(logicalTypeName, getIdentifier());
-    }
-
-    @Override
-    public OidDto asOidDto() {
-        val oidDto = new OidDto();
-        oidDto.setType(logicalTypeName);
-        oidDto.setId(getIdentifier());
-        return oidDto;
     }
 
     @Override

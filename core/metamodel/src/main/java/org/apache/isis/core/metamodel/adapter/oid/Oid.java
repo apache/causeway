@@ -100,13 +100,6 @@ public interface Oid extends Serializable {
                     identifier);
         }
         
-        @Deprecated
-        public static RootOid root(final String logicalTypeName, final String identifier) {
-            return Oid_Root.of(
-                    logicalTypeName, 
-                    identifier);
-        }
-        
     }
 
 }

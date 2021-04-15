@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -220,7 +222,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
          */
         LOOKUP {
             @Override
-            public ManagedObject recreateObject(
+            public @Nullable ManagedObject recreateObject(
                     ObjectMementoWkt memento,
                     MetaModelContext mmc) {
 
@@ -233,7 +235,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                 try {
 
                     log.debug("lookup by rootOid [{}]", rootOid);
-                    return rootOid.loadObject(mmc.getSpecificationLoader());
+                    return rootOid.loadObject(mmc).orElse(null);
 
                 } finally {
                     // possibly out-dated insight ...
@@ -315,8 +317,8 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                 // nope
             }
         };
-
-        public abstract ManagedObject recreateObject(
+        
+        public abstract @Nullable ManagedObject recreateObject(
                 ObjectMementoWkt memento,
                 MetaModelContext mmc);
 

@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.schema.common.v2.OidDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 public interface RootOid extends Oid {
@@ -34,8 +35,6 @@ public interface RootOid extends Oid {
     String getIdentifier();
 
     Bookmark asBookmark();
-
-    OidDto asOidDto();
 
     // -- DECODE FROM STRING
 
@@ -50,19 +49,18 @@ public interface RootOid extends Oid {
 
     // -- OBJECT LOADING
     
-    default public ManagedObject loadObject(SpecificationLoader specificationLoader) {
-        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
-
-        val spec = specificationLoader.specForLogicalTypeName(this.getLogicalTypeName()).orElse(null);
-        val objectId = this.getIdentifier();
-
-        val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);
-        val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
+    default public Optional<ManagedObject> loadObject(final @NonNull MetaModelContext mmc) {
         
-        return managedObject;
+        val objectId = this.getIdentifier();
+        val specLoader = mmc.getSpecificationLoader(); 
+        val objManager = mmc.getObjectManager();
+        
+        return specLoader
+                .specForLogicalTypeName(this.getLogicalTypeName())
+        .map(spec->objManager.loadObject(
+                        ObjectLoader.Request.of(spec, objectId)));
+        
     }
-
-    
 
 
 }

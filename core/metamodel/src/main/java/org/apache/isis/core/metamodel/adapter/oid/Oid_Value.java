@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.schema.common.v2.OidDto;
 
 final class Oid_Value implements RootOid {
 
@@ -65,11 +64,6 @@ final class Oid_Value implements RootOid {
 
     @Override
     public Bookmark asBookmark() {
-        return null;
-    }
-
-    @Override
-    public OidDto asOidDto() {
         return null;
     }
 

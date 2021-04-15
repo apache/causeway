@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -130,9 +129,13 @@ public abstract class ResourceAbstract {
         final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
         val rootOid = RootOid.deString(oidStrUnencoded);
         
-        return Optional.ofNullable(rootOid.loadObject(getSpecificationLoader()))
-                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
+        return rootOid
+                .loadObject(metaModelContext)
+                .orElseThrow(()->RestfulObjectsApplicationException
+                        .createWithMessage(HttpStatusCode.NOT_FOUND, 
+                                "Could not determine adapter for OID: '%s:%s'", 
+                                domainType, 
+                                instanceIdUnencoded));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {
