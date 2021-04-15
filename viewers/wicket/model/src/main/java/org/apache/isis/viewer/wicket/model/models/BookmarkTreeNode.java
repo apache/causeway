@@ -62,8 +62,8 @@ public class BookmarkTreeNode implements Serializable {
             final int depth) {
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         Oid oid = oidFrom(pageParameters);
-        this.oidNoVerStr = Oid.marshaller().marshal(oid);
-        this.oidNoVer = Oid.unmarshaller().unmarshal(oidNoVerStr, Oid.class);
+        this.oidNoVerStr = oid.enString();
+        this.oidNoVer = Oid.parse(oidNoVerStr);
 
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
@@ -250,7 +250,7 @@ public class BookmarkTreeNode implements Serializable {
             return null;
         }
         try {
-            return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
+            return Oid.parse(oidStr);
         } catch(Exception ex) {
             return null;
         }
@@ -258,7 +258,9 @@ public class BookmarkTreeNode implements Serializable {
 
     public static String oidStrFrom(BookmarkableModel candidateBookmarkableModel) {
         final Oid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
-        return oid != null? Oid.marshaller().marshal(oid): null;
+        return oid != null
+                ? oid.enString()
+                : null;
     }
 
 }

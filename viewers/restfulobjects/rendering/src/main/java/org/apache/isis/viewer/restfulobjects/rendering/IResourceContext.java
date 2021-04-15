@@ -108,7 +108,7 @@ public interface IResourceContext {
 
     default Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
-        val oid = Oid.deString(oidStrUnencoded);
+        val oid = Oid.parse(oidStrUnencoded);
         return oid.loadObject(getMetaModelContext());
     }
 

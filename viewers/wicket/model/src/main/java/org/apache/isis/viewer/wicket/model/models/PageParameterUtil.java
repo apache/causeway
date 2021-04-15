@@ -200,7 +200,7 @@ public class PageParameterUtil {
 
     private static Oid oidFor(final PageParameters pageParameters) {
         final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
+        return Oid.parse(oidStr);
     }
 
     private static final String NULL_ARG = "$nullArg$";
@@ -232,7 +232,7 @@ public class PageParameterUtil {
         }
 
         try {
-            val oid = Oid.deStringEncoded(encoded);
+            val oid = Oid.parseEncoded(encoded);
             return oid.loadObject(mmc).orElse(null);
         } catch (final Exception e) {
             return null;

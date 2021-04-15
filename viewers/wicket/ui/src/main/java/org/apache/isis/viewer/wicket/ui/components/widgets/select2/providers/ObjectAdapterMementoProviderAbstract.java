@@ -178,7 +178,7 @@ extends ChoiceProvider<ObjectMemento> {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;
         }
-        val oid = Oid.deString(id);
+        val oid = Oid.parse(id);
         return getCommonContext().mementoFor(oid);
     }
 

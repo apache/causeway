@@ -45,27 +45,34 @@ public interface Oid extends Serializable {
 
     // -- FACTORIES
 
-    
     public static Oid empty() {
         return _EmptyOid.INSTANCE;
     }
 
     public static Oid root(final LogicalType logicalType, final String identifier) {
-        return _RootOid.of(
+        return _SimpleOid.of(
                 logicalType.getLogicalTypeName(), 
                 identifier);
     }
     
     public static Oid forBookmark(final Bookmark bookmark) {
-        return _RootOid.of(
+        return _SimpleOid.of(
                 bookmark.getLogicalTypeName(), 
                 bookmark.getIdentifier());
     }
     
     public static Oid forDto(final OidDto oid) {
-        return _RootOid.of(
+        return _SimpleOid.of(
                 oid.getType(), 
                 oid.getId());
+    }
+    
+    public static Oid forLogicalTypeNameAndIdentifier(
+            final String logicalTypeName,
+            final String identifier) {
+        return _SimpleOid.of(
+                logicalTypeName, 
+                identifier);
     }
     
     // --
@@ -73,7 +80,9 @@ public interface Oid extends Serializable {
     /**
      * A string representation of this {@link Oid}.
      */
-    String enString();
+    default String enString() {
+        return _OidMarshaller.marshal(this);
+    }
 
     default boolean isEmpty() {
         return false; // default, only overridden by Oid_Value
@@ -85,43 +94,24 @@ public interface Oid extends Serializable {
      */
     String getLogicalTypeName();
 
-    // -- MARSHALLING
-
-    public static interface Marshaller {
-        String marshal(Oid oid);
-        String joinAsOid(String logicalTypeName, String instanceId);
-    }
-
-    public static Marshaller marshaller() {
-        return _OidMarshaller.INSTANCE;
-    }
-
-    // -- UN-MARSHALLING
-
-    public static interface Unmarshaller {
-        <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType);
-        String splitInstanceId(String oidStr);
-    }
-
-    public static Unmarshaller unmarshaller() {
-        return _OidMarshaller.INSTANCE;
-    }
     
     // -- REFACTORING ...
     
     String getIdentifier();
 
-    Bookmark asBookmark();
-
-    // -- DECODE FROM STRING
-
-    public static Oid deStringEncoded(final String urlEncodedOidStr) {
+    public default Bookmark asBookmark() {
+        return Bookmark.of(getLogicalTypeName(), getIdentifier());
+    }
+    
+    // -- DECODE FROM STRING 
+    
+    public static Oid parseEncoded(final String urlEncodedOidStr) {
         final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
-        return deString(oidStr);
+        return parse(oidStr);
     }
 
-    public static Oid deString(final String oidStr) {
-        return Oid.unmarshaller().unmarshal(oidStr, Oid.class);
+    public static Oid parse(final String oidStr) {
+        return _OidMarshaller.unmarshal(oidStr, _SimpleOid.class);
     }
 
     // -- OBJECT LOADING

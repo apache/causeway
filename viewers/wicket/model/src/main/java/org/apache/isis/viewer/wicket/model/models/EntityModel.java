@@ -149,7 +149,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     private static Oid oidFrom(final PageParameters pageParameters) {
-        return Oid.unmarshaller().unmarshal(oidStr(pageParameters), Oid.class);
+        return Oid.parse(oidStr(pageParameters));
     }
 
 

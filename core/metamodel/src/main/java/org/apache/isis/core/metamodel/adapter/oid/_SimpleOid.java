@@ -21,13 +21,10 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.util.Objects;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-
 import lombok.Getter;
 import lombok.NonNull;
 
-final class _RootOid implements Oid {
+final class _SimpleOid implements Oid {
 
     private static final long serialVersionUID = 3L;
 
@@ -36,13 +33,13 @@ final class _RootOid implements Oid {
     
     private final int hashCode;
 
-    public static _RootOid of(
+    static _SimpleOid of(
             final @NonNull String logicalTypeName, 
             final @NonNull String identifier) {
-        return new _RootOid(logicalTypeName, identifier);
+        return new _SimpleOid(logicalTypeName, identifier);
     }
 
-    private _RootOid(
+    private _SimpleOid(
             final String logicalTypeName, 
             final String identifier) {
 
@@ -52,27 +49,8 @@ final class _RootOid implements Oid {
 
     }
 
-    // -- ENCODING 
+    // -- OBJECT CONTRACT
     
-    public static _RootOid deStringEncoded(final String urlEncodedOidStr) {
-        final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
-        return deString(oidStr);
-    }
-
-    public static _RootOid deString(final String oidStr) {
-        return Oid.unmarshaller().unmarshal(oidStr, _RootOid.class);
-    }
-
-    @Override
-    public String enString() {
-        return Oid.marshaller().marshal(this);
-    }
-
-    @Override
-    public Bookmark asBookmark() {
-        return Bookmark.of(logicalTypeName, getIdentifier());
-    }
-
     @Override
     public boolean equals(final Object other) {
         if (other == null) {
@@ -84,10 +62,10 @@ final class _RootOid implements Oid {
         if (getClass() != other.getClass()) {
             return false;
         }
-        return equals((_RootOid) other);
+        return equals((_SimpleOid) other);
     }
 
-    public boolean equals(final _RootOid other) {
+    public boolean equals(final _SimpleOid other) {
         return Objects.equals(logicalTypeName, other.getLogicalTypeName()) 
                 && Objects.equals(identifier, other.getIdentifier());
     }
@@ -101,7 +79,7 @@ final class _RootOid implements Oid {
     public String toString() {
         return enString();
     }
-
+    
     // -- HELPER
 
     private int calculateHash() {

@@ -80,8 +80,8 @@ extends PanelAbstract<Void, IModel<Void>> {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    final Oid result = Oid.deString(oidStr);
-                    return Oid.marshaller().marshal(result);
+                    final Oid resultOid = Oid.parse(oidStr);
+                    return resultOid.enString();
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;

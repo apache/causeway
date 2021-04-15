@@ -80,11 +80,7 @@ import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
-final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
-
-    public static final _OidMarshaller INSTANCE = new _OidMarshaller();
-
-    private _OidMarshaller(){}
+final class _OidMarshaller {
 
     @Deprecated
     private static final String VIEWMODEL_INDICATOR = "*";
@@ -115,26 +111,16 @@ final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
                             "([\\" + SEPARATOR_VERSION + "].*)?" + // to be compatible with previous patterns, that optionally included version information
                     "$");
 
+    // -- MARSHAL
 
-    // -- join, split
-
-    @Override //implementing Oid.Marshaller
-    public String joinAsOid(String domainType, String instanceId) {
-        return domainType + SEPARATOR + instanceId;
+    static final String marshal(Oid oid) {
+        _Assert.assertFalse(oid.isEmpty(), "cannot marshal an empty OID");
+        return oid.getLogicalTypeName() + SEPARATOR + oid.getIdentifier();
     }
 
-    @Override //implementing Oid.Unarshaller
-    public String splitInstanceId(String oidStr) {
-        final int indexOfSeperator = oidStr.indexOf(SEPARATOR);
-        return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
-    }
+    // -- UNMARSHAL
 
-
-
-    // -- unmarshal
-
-    @Override
-    public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
+    static <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
 
         final Matcher matcher = OIDSTR_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
@@ -174,7 +160,7 @@ final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, Oid.class);
                 return _Casts.uncheckedCast(
-                        _RootOid.of(rootObjectType, rootIdentifier));
+                        _SimpleOid.of(rootObjectType, rootIdentifier));
             } else {
                 throw _Exceptions.illegalArgument("Aggregated OIDs are no longer supported");
             }
@@ -197,7 +183,7 @@ final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
     }
 
 
-    private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, 
+    private static <T> void ensureCorrectType(String oidStr, Class<T> requestedType, 
             final Class<? extends Oid> actualType) {
 
         if(!requestedType.isAssignableFrom(actualType)) {
@@ -208,7 +194,7 @@ final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
         }
     }
 
-    private String getGroup(final Matcher matcher, final int group) {
+    private static String getGroup(final Matcher matcher, final int group) {
         final int groupCount = matcher.groupCount();
         if(group > groupCount) {
             return null;
@@ -218,11 +204,5 @@ final class _OidMarshaller implements Oid.Marshaller, Oid.Unmarshaller {
     }
 
 
-    // -- marshal
-    @Override
-    public final String marshal(Oid oid) {
-        _Assert.assertFalse(oid.isEmpty(), "cannot marshal an empty OID");
-        return oid.getLogicalTypeName() + SEPARATOR + oid.getIdentifier();
-    }
 
 }

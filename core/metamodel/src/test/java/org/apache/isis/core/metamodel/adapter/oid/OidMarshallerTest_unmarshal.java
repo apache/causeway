@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -55,22 +54,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class OidMarshallerTest_unmarshal {
 
-    private _OidMarshaller oidMarshaller;
-
-    @Before
-    public void setUp() throws Exception {
-        oidMarshaller = _OidMarshaller.INSTANCE;
-    }
-
     @Test
     public void persistentRoot() {
         final String oidStr = "CUS:123";
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid.getLogicalTypeName(), is("CUS"));
         assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo(oid2));
     }
 
@@ -78,11 +70,11 @@ public class OidMarshallerTest_unmarshal {
     public void persistentRootWithFullyQualifiedSpecId() {
         final String oidStr = "com.planchase.ClassName:8";
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid.getLogicalTypeName(), is("com.planchase.ClassName"));
         assertThat(oid.getIdentifier(), is("8"));
 
-        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo(oid2));
     }
 
@@ -99,20 +91,19 @@ public class OidMarshallerTest_unmarshal {
     public void transientRoot() {
         final String oidStr = "!CUS:123";
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid.getLogicalTypeName(), is("CUS"));
         assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo(oid2));
     }
 
 
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
-        oidMarshaller.unmarshal("xxx", Oid.class);
+        _OidMarshaller.unmarshal("xxx", Oid.class);
     }
-
 
 
 }

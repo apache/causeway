@@ -61,7 +61,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
             final CalendarResponse response) {
 
         final String oidStr = (String) event.getEvent().getPayload();
-        final Oid oid = Oid.deString(oidStr);
+        final Oid oid = Oid.parse(oidStr);
 
         val commonContext = getCommonContext();
                 

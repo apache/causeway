@@ -230,7 +230,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                             "need an id to lookup an object, got logical-type %s", memento.logicalType);
                 }
 
-                Oid oid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, Oid.class);
+                Oid oid = Oid.parse(memento.persistentOidStr);
                 try {
 
                     log.debug("lookup by oid [{}]", oid);

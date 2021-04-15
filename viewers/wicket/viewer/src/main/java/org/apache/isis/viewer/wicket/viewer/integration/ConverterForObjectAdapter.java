@@ -49,7 +49,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        val oid = Oid.deStringEncoded(value);
+        val oid = Oid.parseEncoded(value);
         val spec = objectManager.getMetaModelContext()
                 .getSpecificationLoader()
                 .specForLogicalTypeNameElseFail(oid.getLogicalTypeName());
