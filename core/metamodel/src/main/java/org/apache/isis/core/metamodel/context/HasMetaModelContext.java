@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.context;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -96,8 +97,12 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getTitleService();
     }
 
-    default ObjectSpecification getSpecification(Class<?> type) {
-        return getMetaModelContext().getSpecification(type);
+    default Optional<ObjectSpecification> specForType(Class<?> type) {
+        return getMetaModelContext().specForType(type);
+    }
+    
+    default ObjectSpecification specForTypeElseFail(Class<?> type) {
+        return getMetaModelContext().specForTypeElseFail(type);
     }
 
     default RepositoryService getRepositoryService() {

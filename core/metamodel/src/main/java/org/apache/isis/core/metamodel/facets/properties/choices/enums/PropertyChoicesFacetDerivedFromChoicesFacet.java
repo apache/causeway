@@ -41,7 +41,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val facetedMethod = (FacetedMethod) getFacetHolder();
-        val methodSpec = getSpecification(facetedMethod.getType());
+        val methodSpec = specForTypeElseFail(facetedMethod.getType());
         val choicesFacet = methodSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();

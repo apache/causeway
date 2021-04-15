@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.context;
 
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -67,8 +70,12 @@ public interface MetaModelContext {
     
     SpecificationLoader getSpecificationLoader();
     
-    public default ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
+    public default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForType(type);
+    }
+    
+    public default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForTypeElseFail(type);
     }
 
     TranslationService getTranslationService();
