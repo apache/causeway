@@ -61,8 +61,8 @@ extends RecreatableObjectFacetAbstract {
         }
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpecification(viewModelPojo);
-        val viewModelAdapter = ManagedObject.of(spec, viewModelPojo); 
+        val viewModelAdapter = objectManager.adapt(viewModelPojo);
+        val spec = viewModelAdapter.getSpecification();
 
         super.getServiceInjector().injectServicesInto(viewModelPojo);
         
@@ -88,7 +88,6 @@ extends RecreatableObjectFacetAbstract {
         final _Mementos.Memento memento = newMemento();
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpecification(viewModelPojo);
         
         /*
          * ManagedObject that holds the ObjectSpecification used for 
@@ -97,7 +96,8 @@ extends RecreatableObjectFacetAbstract {
          * Does _not_ perform dependency injection on the domain object. Also bypasses 
          * caching (if any), that is each call to this method creates a new instance.
          */
-        val ownerAdapter = ManagedObject.of(spec, viewModelPojo);
+        val viewModelAdapter = objectManager.adapt(viewModelPojo);
+        val spec = viewModelAdapter.getSpecification();
 
         final Stream<OneToOneAssociation> properties = spec.streamProperties(MixedIn.EXCLUDED);
 
@@ -108,7 +108,7 @@ extends RecreatableObjectFacetAbstract {
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
             final ManagedObject propertyValue = 
-                    property.get(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
+                    property.get(viewModelAdapter, InteractionInitiatedBy.FRAMEWORK);
             if(propertyValue != null && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());
             }

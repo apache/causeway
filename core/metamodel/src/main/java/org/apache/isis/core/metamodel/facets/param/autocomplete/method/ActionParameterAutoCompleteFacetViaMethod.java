@@ -94,7 +94,7 @@ implements ImperativeFacet {
         if (collectionOrArray == null) {
             return Can.empty();
         }
-        val elementSpec = getObjectManager().loadSpecification(choicesType);
+        val elementSpec = specForTypeElseFail(choicesType);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, collectionOrArray, interactionInitiatedBy);
         

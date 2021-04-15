@@ -69,7 +69,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val elementSpec = getObjectManager().loadSpecification(((FacetedMethod) getFacetHolder()).getType());
+        val elementSpec = specForTypeElseFail(((FacetedMethod) getFacetHolder()).getType());
         val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
 //XXX[ISIS-2383] debugging        
