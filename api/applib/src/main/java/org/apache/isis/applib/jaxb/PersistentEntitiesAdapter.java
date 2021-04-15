@@ -45,7 +45,7 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
 
         List<Object> domainObjects = new ArrayList<>();
         for (val oidDto : oidsDto.getOid()) {
-            val bookmark = Bookmark.from(oidDto);
+            val bookmark = Bookmark.fromOidDto(oidDto);
             val domainObject = bookmarkService.lookup(bookmark);
             domainObjects.add(domainObject);
         }

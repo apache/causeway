@@ -49,7 +49,7 @@ public interface Oid extends Serializable {
         return _EmptyOid.INSTANCE;
     }
 
-    public static Oid root(final LogicalType logicalType, final String identifier) {
+    public static Oid of(final LogicalType logicalType, final String identifier) {
         return _SimpleOid.of(
                 logicalType.getLogicalTypeName(), 
                 identifier);
@@ -61,10 +61,10 @@ public interface Oid extends Serializable {
                 bookmark.getIdentifier());
     }
     
-    public static Oid forDto(final OidDto oid) {
+    public static Oid forDto(final OidDto oidDto) {
         return _SimpleOid.of(
-                oid.getType(), 
-                oid.getId());
+                oidDto.getType(), 
+                oidDto.getId());
     }
     
     public static Oid forLogicalTypeNameAndIdentifier(

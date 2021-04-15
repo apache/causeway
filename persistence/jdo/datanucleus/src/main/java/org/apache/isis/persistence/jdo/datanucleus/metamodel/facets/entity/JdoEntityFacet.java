@@ -126,7 +126,7 @@ implements EntityFacet {
 
         _Assert.assertTrue(entitySpec.isEntity());
 
-        val oid = Oid.root(entitySpec.getLogicalType(), identifier);
+        val oid = Oid.of(entitySpec.getLogicalType(), identifier);
 
         log.debug("fetchEntity; oid={}", oid);
 

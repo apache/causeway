@@ -89,7 +89,7 @@ public class Bookmark implements Serializable {
         return oidDto;
     }
 
-    public static Bookmark from(@NonNull OidDto oidDto) {
+    public static Bookmark fromOidDto(final @NonNull OidDto oidDto) {
         return Bookmark.of(oidDto.getType(), oidDto.getId());
     }
     

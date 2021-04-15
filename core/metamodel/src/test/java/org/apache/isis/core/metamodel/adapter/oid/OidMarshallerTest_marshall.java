@@ -27,7 +27,7 @@ public class OidMarshallerTest_marshall {
 
     @Test
     public void oid() {
-        final String marshal = _OidMarshaller.marshal(Oid.root(LogicalTypeTestFactory.cus(),  "123"));
+        final String marshal = _OidMarshaller.marshal(Oid.of(LogicalTypeTestFactory.cus(),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 

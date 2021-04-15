@@ -29,17 +29,17 @@ extends ValueTypeContractTestAbstract<Oid> {
     @Override
     protected List<Oid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.root(LogicalTypeTestFactory.cus(), "123"),
-                Oid.root(LogicalTypeTestFactory.cus(), "123"),
-                Oid.root(LogicalTypeTestFactory.cus(), "123"));
+                Oid.of(LogicalTypeTestFactory.cus(), "123"),
+                Oid.of(LogicalTypeTestFactory.cus(), "123"),
+                Oid.of(LogicalTypeTestFactory.cus(), "123"));
     }
 
     @Override
     protected List<Oid> getObjectsWithDifferentValue() {
         return Arrays.asList(
                 //Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.root(LogicalTypeTestFactory.cus(), "124"),
-                Oid.root(LogicalTypeTestFactory.cux(), "123"));
+                Oid.of(LogicalTypeTestFactory.cus(), "124"),
+                Oid.of(LogicalTypeTestFactory.cux(), "123"));
     }
 
 }

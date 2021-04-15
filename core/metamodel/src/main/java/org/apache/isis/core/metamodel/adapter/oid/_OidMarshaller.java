@@ -32,6 +32,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
 
+import lombok.NonNull;
+
 /**
  * Factory for subtypes of {@link Oid}, based on their oid str.
  *
@@ -111,14 +113,14 @@ final class _OidMarshaller {
                             "([\\" + SEPARATOR_VERSION + "].*)?" + // to be compatible with previous patterns, that optionally included version information
                     "$");
 
-    // -- MARSHAL
+    // -- MARSHAL / STRINGIFY
 
-    static final String marshal(Oid oid) {
+    static final String marshal(final @NonNull Oid oid) {
         _Assert.assertFalse(oid.isEmpty(), "cannot marshal an empty OID");
         return oid.getLogicalTypeName() + SEPARATOR + oid.getIdentifier();
     }
 
-    // -- UNMARSHAL
+    // -- UNMARSHAL / PARSE
 
     static <T extends Oid> T unmarshal(String oidStr) {
 

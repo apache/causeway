@@ -233,7 +233,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             for (OidDto targetOidDto : targetOidDtos) {
 
-                final Bookmark bookmark = Bookmark.from(targetOidDto);
+                final Bookmark bookmark = Bookmark.fromOidDto(targetOidDto);
                 final Object targetObject = bookmarkService.lookup(bookmark);
 
                 val targetAdapter = adapterFor(targetObject);
