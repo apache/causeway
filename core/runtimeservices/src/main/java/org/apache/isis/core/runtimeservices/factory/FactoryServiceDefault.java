@@ -164,12 +164,7 @@ public class FactoryServiceDefault implements FactoryService {
     // -- HELPER    
     
     private ObjectSpecification loadSpec(final @NonNull Class<?> type) {
-        val spec = specificationLoader.loadSpecification(type);
-        if(spec==null) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recogniced by the framework.",
-                    type);
-        }
-        return spec;
+        return specificationLoader.specForTypeElseFail(type);
     }
     
     private ViewModelFacet getViewModelFacet(final @NonNull ObjectSpecification spec) {
