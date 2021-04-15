@@ -157,18 +157,15 @@ class DomainModelTest_usingBadDomain {
     
     @Test
     void logicalTypeNameClash_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)), 
-                "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                + "mapped to multiple classes: "
-                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantA,"
-                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantB")
-        || validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)), 
-                "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                + "mapped to multiple classes: "
-                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantA,"
-                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantB"));
+        assertTrue(
+            validator.anyMatchesContaining(
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)), 
+                    "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                    + "mapped to multiple classes:")
+            || validator.anyMatchesContaining(
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)), 
+                    "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                    + "mapped to multiple classes:"));
     }
     
     
