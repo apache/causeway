@@ -317,8 +317,7 @@ public final class ManagedObjects {
         val commonSuperClass = commonSuperClassFinder.getCommonSuperclass().orElse(null);
         if(commonSuperClass!=null && commonSuperClass!=firstElement.getSpecification().getCorrespondingClass()) {
             val specificationLoader = firstElementSpec.getMetaModelContext().getSpecificationLoader();
-            val commonSpec = specificationLoader.loadSpecification(commonSuperClass);
-            return Optional.of(commonSpec);
+            return specificationLoader.specForType(commonSuperClass);
         }
         
         return Optional.of(firstElementSpec);
