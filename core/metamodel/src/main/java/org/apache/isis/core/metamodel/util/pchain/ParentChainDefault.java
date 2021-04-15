@@ -19,31 +19,25 @@
 
 package org.apache.isis.core.metamodel.util.pchain;
 
-import java.util.function.Function;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 class ParentChainDefault implements ParentChain {
 
-    private final Function<Class<?>, ObjectSpecification> specificationLookup;
-
-    ParentChainDefault(Function<Class<?>, ObjectSpecification> specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
+    private final SpecificationLoader specificationLoader;
 
     @Override
     public Object parentOf(Object node) {
-        if(node==null)
+
+        if(node==null) {
             return null;
-
-        final Class<?> cls = node.getClass();
-
-        final ObjectSpecification spec = specificationLookup.apply(cls);
-
-        if(spec==null)
-            return null;
-
-        return spec.getNavigableParent(node);
+        }
+        
+        return specificationLoader.specForType(node.getClass())
+        .map(spec->spec.getNavigableParent(node))
+        .orElse(null);
     }
 
 }

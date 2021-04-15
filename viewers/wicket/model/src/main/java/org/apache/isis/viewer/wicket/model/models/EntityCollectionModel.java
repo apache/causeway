@@ -119,7 +119,7 @@ implements
         val specificationLoader = model.getSpecificationLoader();
 
         val elementSpec = commonSuperClassFinder.getCommonSuperclass()
-                .map(specificationLoader::loadSpecification)
+                .flatMap(specificationLoader::specForType)
                 .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
         final int pageSize = (elementSpec != null) 
