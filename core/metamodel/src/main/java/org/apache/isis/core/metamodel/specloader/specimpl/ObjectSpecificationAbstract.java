@@ -291,7 +291,7 @@ implements ObjectSpecification {
             if(isLessThan(upTo)) {
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
-                this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
                 revalidate = true;
             }
             // set to avoid infinite loops
@@ -304,13 +304,13 @@ implements ObjectSpecification {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
-                this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
                 revalidate = true;
             }
             break;
         case MEMBERS_BEING_INTROSPECTED:
             // nothing to do
-        case TYPE_AND_MEMBERS_INTROSPECTED:
+        case FULLY_INTROSPECTED:
             // nothing to do
             break;
 
@@ -678,7 +678,7 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if(contributed.isIncluded()) {
             createMixedInAssociations(); // only if not already
@@ -696,7 +696,7 @@ implements ObjectSpecification {
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
@@ -716,7 +716,7 @@ implements ObjectSpecification {
      */
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
         return streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
@@ -728,7 +728,7 @@ implements ObjectSpecification {
     public Stream<ObjectAction> streamDeclaredActions(
             final ImmutableEnumSet<ActionType> types, 
             final MixedIn contributed) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if(contributed.isIncluded()) { // conditional not strictly required, could instead always go this code path 
             createMixedInActions(); // only if not already
@@ -761,7 +761,7 @@ implements ObjectSpecification {
             final Consumer<ObjectAssociation> onNewMixedInAssociation) {
 
         val specification = getSpecificationLoader().loadSpecification(mixinType,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         if (specification == this) {
             return;
         }
@@ -813,7 +813,7 @@ implements ObjectSpecification {
             final Consumer<ObjectAction> onNewMixedInAction) {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         if (mixinSpec == this) {
             return;
         }

@@ -81,7 +81,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     void classLevelAnnotation_whenEnabling_shouldSetTheDefault() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerEna.class, 
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail
@@ -107,7 +107,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     void classLevelAnnotation_whenDisabling_shouldSetTheDefault() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerDis.class, 
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
@@ -139,7 +139,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     void classLevelAnnotation_whenEnabling_shouldBeOverridable() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class, 
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
@@ -171,7 +171,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     void classLevelAnnotation_whenDisabling_shouldBeOverridable() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class, 
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail

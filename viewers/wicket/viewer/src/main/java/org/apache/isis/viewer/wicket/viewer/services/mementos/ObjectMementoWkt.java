@@ -124,7 +124,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
                 final List<Object> listOfPojos =
                         _Lists.map(memento.list, Functions.toPojo(mmc));
-                return ManagedObject.of(mmc.getSpecificationLoader()::loadSpecification, listOfPojos);
+                return ManagedObject.lazy(mmc.getSpecificationLoader(), listOfPojos);
             }
 
             @Override

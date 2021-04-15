@@ -59,7 +59,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
-        final ManagedObject objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject);
+        final ManagedObject objectAdapter = ManagedObject.lazy(specificationLoader, domainObject);
 
         final PageParameters pageParameters = PageParameterUtil.createPageParametersForObject(objectAdapter);
 

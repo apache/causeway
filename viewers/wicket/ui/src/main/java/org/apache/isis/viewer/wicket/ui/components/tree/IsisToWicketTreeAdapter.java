@@ -253,7 +253,7 @@ class IsisToWicketTreeAdapter {
             this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
             this.pojoToAdapter = pojo ->
-                ManagedObject.of(commonContext.getSpecificationLoader()::loadSpecification, pojo);
+                ManagedObject.lazy(commonContext.getSpecificationLoader(), pojo);
         }
 
         private TreeAdapter wrappedTreeAdapter() {

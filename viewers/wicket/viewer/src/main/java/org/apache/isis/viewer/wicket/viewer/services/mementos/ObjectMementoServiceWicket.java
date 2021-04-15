@@ -146,7 +146,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
+            return ManagedObject.lazy(specificationLoader, listOfPojos);
         }
 
         if(memento instanceof ObjectMementoAdapter) {

@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -132,7 +133,7 @@ public interface ManagedObject {
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
         
         val specLoader = specification.getMetaModelContext().getSpecificationLoader();
-        return ManagedObject.of(specLoader::loadSpecification, pojo);
+        return ManagedObject.lazy(specLoader, pojo);
     }
     
     /**
@@ -160,11 +161,11 @@ public interface ManagedObject {
      * @param specLoader
      * @param pojo
      */
-    public static ManagedObject of(
-            Function<Class<?>, ObjectSpecification> specLoader, 
+    public static ManagedObject lazy(
+            SpecificationLoader specLoader, 
             Object pojo) {
         ManagedObjects.assertPojoNotManaged(pojo);
-        val adapter = new LazyManagedObject(specLoader, pojo);
+        val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
         return adapter;
     }

@@ -118,7 +118,7 @@ class DomainModelTest_usingGoodDomain {
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
      
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         
         val prefixed_action = holderSpec.getActionElseFail("hideMe");
         assertNotNull(prefixed_action);
@@ -129,7 +129,7 @@ class DomainModelTest_usingGoodDomain {
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
 
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
-                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                        IntrospectionState.FULLY_INTROSPECTED);
 
         val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
@@ -185,7 +185,7 @@ class DomainModelTest_usingGoodDomain {
     void titleAndIconName_shouldBeInheritable(Class<?> type) {
 
         val spec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                        IntrospectionState.FULLY_INTROSPECTED);
 
         val titleFacet = spec.getFacet(TitleFacet.class);
         assertNotNull(titleFacet);
@@ -203,7 +203,7 @@ class DomainModelTest_usingGoodDomain {
     void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
 
         val holderSpec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                        IntrospectionState.FULLY_INTROSPECTED);
 
         val action = holderSpec.getActionElseFail("sampleAction");
         assertNotNull(action);
@@ -235,7 +235,7 @@ class DomainModelTest_usingGoodDomain {
         }
 
         val holderSpec = specificationLoader.loadSpecification(type,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
 
         val super_action = holderSpec.getActionElseFail("sampleActionOverride");
         assertNotNull(super_action);
@@ -259,7 +259,7 @@ class DomainModelTest_usingGoodDomain {
         }
 
         val holderSpec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                        IntrospectionState.FULLY_INTROSPECTED);
 
         val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
         assertNotNull(super_property);

@@ -383,7 +383,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             return adapterFor((RootOid) pojo);
         }
         // value type
-        return ManagedObject.of(getSpecificationLoader()::loadSpecification, pojo);
+        return ManagedObject.lazy(getSpecificationLoader(), pojo);
     }
 
     private ManagedObject adapterFor(final RootOid oid) {

@@ -103,8 +103,8 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
 
-        pendingArgs.setParamValue(0, ManagedObject.of(
-                objectManager.getMetaModelContext().getSpecificationLoader()::loadSpecification,
+        pendingArgs.setParamValue(0, ManagedObject.lazy(
+                objectManager.getMetaModelContext().getSpecificationLoader(),
                 Arrays.asList(1L, 2L, 3L)));
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);

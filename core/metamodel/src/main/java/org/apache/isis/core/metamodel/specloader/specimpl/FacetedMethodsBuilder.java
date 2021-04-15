@@ -553,7 +553,7 @@ public class FacetedMethodsBuilder {
         if(mixinFacet==null || mixinFacet.isFallback()) {
             return false;
         }
-        if(inspectedTypeSpec.isLessThan(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED)) {
+        if(inspectedTypeSpec.isLessThan(IntrospectionState.FULLY_INTROSPECTED)) {
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
         }

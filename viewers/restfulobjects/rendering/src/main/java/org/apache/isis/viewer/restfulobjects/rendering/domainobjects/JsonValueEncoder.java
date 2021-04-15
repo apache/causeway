@@ -71,7 +71,7 @@ public class JsonValueEncoder {
         
         //XXX no lombok val here
         Function<Object, ManagedObject> pojoToAdapter = pojo ->
-            ManagedObject.of(specificationLoader::loadSpecification, pojo);
+            ManagedObject.lazy(specificationLoader, pojo);
         
         new JsonValueEncoder_Converters().asList(pojoToAdapter)
             .forEach(this::registerConverter);
