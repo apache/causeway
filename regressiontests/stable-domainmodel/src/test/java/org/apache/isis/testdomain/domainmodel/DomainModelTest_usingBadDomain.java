@@ -54,6 +54,7 @@ import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
@@ -153,6 +154,23 @@ class DomainModelTest_usingBadDomain {
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)), 
                 "Action method overloading is not allowed"));
     }
+    
+    @Test
+    void logicalTypeNameClash_shouldFail() {
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)), 
+                "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                + "mapped to multiple classes: "
+                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantA,"
+                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantB")
+        || validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)), 
+                "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                + "mapped to multiple classes: "
+                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantA,"
+                + "org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash$VariantB"));
+    }
+    
     
     @ParameterizedTest
     @MethodSource("provideAmbiguousMixins")
