@@ -18,13 +18,13 @@
  */
 package org.apache.isis.extensions.commandlog.impl.mixins;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
@@ -52,12 +52,13 @@ public abstract class T_recent<T> {
     }
 
     private List<CommandJdo> findRecent() {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
-        return queryResultsCache.execute(
+        return bookmarkService.bookmarkFor(domainObject)
+        .map(bookmark->queryResultsCache.execute(
                 () -> commandJdoRepository.findRecentByTarget(bookmark)
                 , T_recent.class
                 , "findRecentByTarget"
-                , domainObject);
+                , domainObject))
+        .orElse(Collections.emptyList());
     }
 
     @Inject CommandJdoRepository commandJdoRepository;

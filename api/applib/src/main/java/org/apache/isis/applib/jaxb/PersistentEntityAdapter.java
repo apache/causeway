@@ -45,7 +45,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         if(domainObject == null) {
             return null;
         }
-        val bookmark = bookmarkService.bookmarkForElseThrow(domainObject);
+        val bookmark = bookmarkService.bookmarkForElseFail(domainObject);
         return bookmark.toOidDto();
     }
 

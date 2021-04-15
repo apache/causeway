@@ -60,7 +60,7 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
         }
         val oidsDto = new OidsDto();
         for (val domainObject : domainObjects) {
-            val bookmark = getBookmarkService().bookmarkForElseThrow(domainObject);
+            val bookmark = getBookmarkService().bookmarkForElseFail(domainObject);
             oidsDto.getOid().add(bookmark.toOidDto());
         }
         return oidsDto;

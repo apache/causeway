@@ -57,7 +57,7 @@ public class IsisAsciiDocJdo                                          // <.>
 //tag::class[]
     public String title() {
         return "AsciiDoc JDO entity: " +
-            bookmarkService.bookmarkFor(this).getIdentifier();
+            bookmarkService.bookmarkForElseFail(this).getIdentifier();
     }
 
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")

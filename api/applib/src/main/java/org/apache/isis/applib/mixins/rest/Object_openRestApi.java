@@ -62,7 +62,7 @@ public class Object_openRestApi {
     private final Object holder;
 
     public LocalResourcePath act() {
-        val bookmark = bookmarkService.bookmarkForElseThrow(holder);
+        val bookmark = bookmarkService.bookmarkForElseFail(holder);
         val objType = bookmark.getObjectType();
         val objId = bookmark.getIdentifier();
 

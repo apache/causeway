@@ -64,7 +64,7 @@ public class Object_objectType {
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectType> {}
 
     public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
+        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getObjectType();
     }
 

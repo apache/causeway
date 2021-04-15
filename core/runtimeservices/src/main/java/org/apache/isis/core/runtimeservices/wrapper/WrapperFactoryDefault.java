@@ -623,7 +623,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             if (bookmark == null) {
                 return null;
             }
-            R domainObject = bookmarkService.lookup(bookmark, returnType);
+            R domainObject = bookmarkService.lookup(bookmark, returnType).orElse(null);
             if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
                 domainObject = repositoryService.detach(domainObject);
             }

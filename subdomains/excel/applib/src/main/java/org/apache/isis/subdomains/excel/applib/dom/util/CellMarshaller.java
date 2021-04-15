@@ -254,7 +254,7 @@ final class CellMarshaller {
     }
 
     private void setCellValueForBookmark(final Cell cell, final Object propertyAsObject, final String propertyAsTitle, final CellStyle cellStyle) {
-        Bookmark bookmark = bookmarkService.bookmarkForElseThrow(propertyAsObject);
+        Bookmark bookmark = bookmarkService.bookmarkForElseFail(propertyAsObject);
         setCellComment(cell, bookmark.toString());
         
         cell.setCellValue(propertyAsTitle);
