@@ -45,10 +45,6 @@ public interface Oid extends Serializable {
 
     // -- FACTORIES
 
-    public static Oid empty() {
-        return _EmptyOid.INSTANCE;
-    }
-
     public static Oid of(final LogicalType logicalType, final String identifier) {
         return _SimpleOid.of(
                 logicalType.getLogicalTypeName(), 
@@ -119,12 +115,6 @@ public interface Oid extends Serializable {
                 .map(spec->objManager.loadObject(
                         ObjectLoader.Request.of(spec, objectId)));
         
-    }
-    
-    // -- EMPTY OID 
-    
-    default boolean isEmpty() {
-        return false; // default, only overridden by Oid_Value
     }
     
     // -- CONVERSION

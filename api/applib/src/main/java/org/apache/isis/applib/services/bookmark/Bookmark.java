@@ -95,8 +95,7 @@ public class Bookmark implements Serializable {
     
     /**
      * The canonical form of the {@link Bookmark}, that is 
-     * &quot;{@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
-     *
+     * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
      * <p>
      * This is parseable by the {@link #parse(String)}.
      */

@@ -24,7 +24,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -116,7 +115,6 @@ final class _OidMarshaller {
     // -- MARSHAL / STRINGIFY
 
     static final String marshal(final @NonNull Oid oid) {
-        _Assert.assertFalse(oid.isEmpty(), "cannot marshal an empty OID");
         return oid.getLogicalTypeName() + SEPARATOR + oid.getIdentifier();
     }
 

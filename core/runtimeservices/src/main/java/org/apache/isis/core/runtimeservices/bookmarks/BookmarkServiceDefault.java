@@ -145,7 +145,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
             final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark));
+            return _Casts.uncheckedCast(lookup(valueBookmark).orElse(null));
         }
 
         return _Casts.uncheckedCast(value);

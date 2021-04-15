@@ -100,7 +100,9 @@ class ObjectIdentifier_builtinHandlers {
 
         @Override
         public Oid handle(ManagedObject managedObject) {
-            return Oid.empty();
+            throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
+                    + "as values have no identifier",
+                    managedObject.getSpecification().getCorrespondingClass().getName());
         }
 
     }
