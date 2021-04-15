@@ -75,18 +75,7 @@ public interface Oid extends Serializable {
                 identifier);
     }
     
-    // --
-    
-    /**
-     * A string representation of this {@link Oid}.
-     */
-    default String enString() {
-        return _OidMarshaller.marshal(this);
-    }
-
-    default boolean isEmpty() {
-        return false; // default, only overridden by Oid_Value
-    }
+    // -- PARTS THAT MAKE UP THE OID
     
     /**
      * The logical-type-name of the domain object this instance is representing.
@@ -95,23 +84,26 @@ public interface Oid extends Serializable {
     String getLogicalTypeName();
 
     
-    // -- REFACTORING ...
-    
     String getIdentifier();
-
-    public default Bookmark asBookmark() {
-        return Bookmark.of(getLogicalTypeName(), getIdentifier());
+    
+    // -- STRINGIFY
+    
+    /**
+     * A string representation of this {@link Oid}.
+     */
+    default String stringify() {
+        return _OidMarshaller.marshal(this);
     }
+
+    // -- PARSING 
     
-    // -- DECODE FROM STRING 
-    
-    public static Oid parseEncoded(final String urlEncodedOidStr) {
+    public static Oid parseUrlEncoded(final String urlEncodedOidStr) {
         final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return parse(oidStr);
     }
 
     public static Oid parse(final String oidStr) {
-        return _OidMarshaller.unmarshal(oidStr, _SimpleOid.class);
+        return _OidMarshaller.unmarshal(oidStr);
     }
 
     // -- OBJECT LOADING
@@ -128,5 +120,18 @@ public interface Oid extends Serializable {
                         ObjectLoader.Request.of(spec, objectId)));
         
     }
+    
+    // -- EMPTY OID 
+    
+    default boolean isEmpty() {
+        return false; // default, only overridden by Oid_Value
+    }
+    
+    // -- CONVERSION
+    
+    public default Bookmark asBookmark() {
+        return Bookmark.of(getLogicalTypeName(), getIdentifier());
+    }
+    
 
 }

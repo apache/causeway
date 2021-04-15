@@ -103,7 +103,7 @@ public class BreadcrumbModel implements Serializable {
         }
         try {
             final Oid unmarshal = Oid.parse(oidStr);
-            return unmarshal.enString();
+            return unmarshal.stringify();
         } catch(Exception ex) {
             return null;
         }

@@ -120,7 +120,7 @@ final class _OidMarshaller {
 
     // -- UNMARSHAL
 
-    static <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
+    static <T extends Oid> T unmarshal(String oidStr) {
 
         final Matcher matcher = OIDSTR_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
@@ -158,7 +158,6 @@ final class _OidMarshaller {
 
         if(oneToManyId == null) {
             if(aggregateOidParts.isEmpty()) {
-                ensureCorrectType(oidStr, requestedType, Oid.class);
                 return _Casts.uncheckedCast(
                         _SimpleOid.of(rootObjectType, rootIdentifier));
             } else {
@@ -182,18 +181,6 @@ final class _OidMarshaller {
         }
     }
 
-
-    private static <T> void ensureCorrectType(String oidStr, Class<T> requestedType, 
-            final Class<? extends Oid> actualType) {
-
-        if(!requestedType.isAssignableFrom(actualType)) {
-            throw new IllegalArgumentException(
-                    String.format("OID '%s' was unmarshealled to type '%s' which cannot be assigned "
-                            + "to requested type '%s'",
-                            oidStr, actualType.getSimpleName(), requestedType.getSimpleName()) );
-        }
-    }
-
     private static String getGroup(final Matcher matcher, final int group) {
         final int groupCount = matcher.groupCount();
         if(group > groupCount) {
@@ -202,7 +189,5 @@ final class _OidMarshaller {
         final String val = matcher.group(group);
         return _Strings.emptyToNull(val);
     }
-
-
 
 }

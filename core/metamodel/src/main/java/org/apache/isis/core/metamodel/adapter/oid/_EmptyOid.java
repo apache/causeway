@@ -28,7 +28,7 @@ final class _EmptyOid implements Oid {
     static final _EmptyOid INSTANCE = new _EmptyOid();
 
     @Override
-    public String enString() {
+    public String stringify() {
         return null;
     }
 

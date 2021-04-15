@@ -58,11 +58,11 @@ public class OidMarshallerTest_unmarshal {
     public void persistentRoot() {
         final String oidStr = "CUS:123";
 
-        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid.getLogicalTypeName(), is("CUS"));
         assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid, equalTo(oid2));
     }
 
@@ -70,11 +70,11 @@ public class OidMarshallerTest_unmarshal {
     public void persistentRootWithFullyQualifiedSpecId() {
         final String oidStr = "com.planchase.ClassName:8";
 
-        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid.getLogicalTypeName(), is("com.planchase.ClassName"));
         assertThat(oid.getIdentifier(), is("8"));
 
-        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid, equalTo(oid2));
     }
 
@@ -91,18 +91,18 @@ public class OidMarshallerTest_unmarshal {
     public void transientRoot() {
         final String oidStr = "!CUS:123";
 
-        final Oid oid = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid.getLogicalTypeName(), is("CUS"));
         assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid2 = _OidMarshaller.unmarshal(oidStr, Oid.class);
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
         assertThat(oid, equalTo(oid2));
     }
 
 
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
-        _OidMarshaller.unmarshal("xxx", Oid.class);
+        _OidMarshaller.unmarshal("xxx");
     }
 
 

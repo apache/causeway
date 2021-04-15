@@ -106,7 +106,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             val oid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
             if(oid!=null) {
 
-                final String oidStr = oid.enString();
+                final String oidStr = oid.stringify();
                 event.setId(oidStr + "-" + calendarName);
 
                 event.setClassName("fullCalendar2-event-" + calendarName);

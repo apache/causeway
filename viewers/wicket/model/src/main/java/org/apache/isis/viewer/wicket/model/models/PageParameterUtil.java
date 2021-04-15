@@ -232,7 +232,7 @@ public class PageParameterUtil {
         }
 
         try {
-            val oid = Oid.parseEncoded(encoded);
+            val oid = Oid.parseUrlEncoded(encoded);
             return oid.loadObject(mmc).orElse(null);
         } catch (final Exception e) {
             return null;

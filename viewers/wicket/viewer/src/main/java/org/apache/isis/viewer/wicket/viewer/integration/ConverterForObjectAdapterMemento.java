@@ -53,7 +53,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
         if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
-        val oid = Oid.parseEncoded(value);
+        val oid = Oid.parseUrlEncoded(value);
         return commonContext.mementoFor(oid);
     }
 

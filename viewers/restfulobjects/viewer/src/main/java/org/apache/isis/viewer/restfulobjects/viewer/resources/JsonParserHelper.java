@@ -152,7 +152,7 @@ public class JsonParserHelper {
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
         
-        return Oid.forLogicalTypeNameAndIdentifier(domainType, instanceId).enString();
+        return Oid.forLogicalTypeNameAndIdentifier(domainType, instanceId).stringify();
     }
 
     private static String resourceFor(final ObjectSpecification objectSpec) {

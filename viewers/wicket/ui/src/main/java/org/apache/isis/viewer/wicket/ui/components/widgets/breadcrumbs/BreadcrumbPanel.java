@@ -81,7 +81,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
                     final Oid resultOid = Oid.parse(oidStr);
-                    return resultOid.enString();
+                    return resultOid.stringify();
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;

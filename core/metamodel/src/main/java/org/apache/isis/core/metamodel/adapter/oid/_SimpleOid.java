@@ -77,7 +77,7 @@ final class _SimpleOid implements Oid {
 
     @Override
     public String toString() {
-        return enString();
+        return stringify();
     }
     
     // -- HELPER

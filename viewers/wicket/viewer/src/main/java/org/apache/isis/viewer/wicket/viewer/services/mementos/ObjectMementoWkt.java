@@ -243,7 +243,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                     // we copy this updated oid string into our memento so that, if we retry,
                     // we will succeed second time around
 
-                    memento.persistentOidStr = oid.enString();
+                    memento.persistentOidStr = oid.stringify();
                 }
             }
 
@@ -418,7 +418,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
             return;
         }
 
-        this.persistentOidStr = oid.enString();
+        this.persistentOidStr = oid.stringify();
         requires(persistentOidStr, "persistentOidStr");
 
         this.bookmark = oid.asBookmark();
@@ -446,7 +446,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
         if(spec.isIdentifiable() || spec.isParented() ) {
             val oid = ManagedObjects.identifyElseFail(adapter);
-            persistentOidStr = oid.enString();
+            persistentOidStr = oid.stringify();
             bookmark = oid.asBookmark();
             if(adapter.getPojo() instanceof HintIdProvider) {
                 HintIdProvider provider = (HintIdProvider) adapter.getPojo();

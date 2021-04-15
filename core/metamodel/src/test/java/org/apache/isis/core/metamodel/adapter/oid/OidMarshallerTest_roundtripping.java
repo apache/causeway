@@ -32,7 +32,7 @@ public class OidMarshallerTest_roundtripping {
     public void oid() {
         val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
-        final String enString = oid.enString();
+        final String enString = oid.stringify();
         final Oid deString = Oid.parse(enString);
         assertThat(deString, is(oid));
     }
@@ -41,7 +41,7 @@ public class OidMarshallerTest_roundtripping {
     public void oid_withLegacyVersionIgnored() {
         val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
-        final String enString = oid.enString();
+        final String enString = oid.stringify();
         final Oid deString = Oid.parse(enString + "^" + 90807L);
         assertThat(deString, is(oid));
     }

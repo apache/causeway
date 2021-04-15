@@ -149,7 +149,7 @@ public final class ManagedObjects {
      */
     public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
-                .map(Oid::enString);
+                .map(Oid::stringify);
     }
     
     public static String stringifyElseFail(@Nullable ManagedObject managedObject) {

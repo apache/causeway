@@ -178,7 +178,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     addLinkToSelf();
                 }
                 oidIfAny.ifPresent(oid->{
-                    val oidStr = oid.enString();
+                    val oidStr = oid.stringify();
                     getExtensions().mapPut("oid", oidStr);
                 });
             }
