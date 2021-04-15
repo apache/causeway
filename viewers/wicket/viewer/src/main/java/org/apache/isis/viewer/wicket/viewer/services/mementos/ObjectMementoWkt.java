@@ -71,10 +71,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
      * Factory method
      */
     static ObjectMementoWkt createPersistent(
-            Oid rootOid,
+            Oid oid,
             SpecificationLoader specificationLoader) {
 
-        return new ObjectMementoWkt(rootOid, specificationLoader);
+        return new ObjectMementoWkt(oid, specificationLoader);
     }
 
     private enum Cardinality {
@@ -230,11 +230,11 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                             "need an id to lookup an object, got logical-type %s", memento.logicalType);
                 }
 
-                Oid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, Oid.class);
+                Oid oid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, Oid.class);
                 try {
 
-                    log.debug("lookup by rootOid [{}]", rootOid);
-                    return rootOid.loadObject(mmc).orElse(null);
+                    log.debug("lookup by oid [{}]", oid);
+                    return oid.loadObject(mmc).orElse(null);
 
                 } finally {
                     // possibly out-dated insight ...
@@ -243,7 +243,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                     // we copy this updated oid string into our memento so that, if we retry,
                     // we will succeed second time around
 
-                    memento.persistentOidStr = rootOid.enString();
+                    memento.persistentOidStr = oid.enString();
                 }
             }
 
@@ -401,10 +401,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = logicalType;
     }
 
-    private ObjectMementoWkt(Oid rootOid, SpecificationLoader specificationLoader) {
+    private ObjectMementoWkt(Oid oid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
-        val logicalTypeName = rootOid.getLogicalTypeName();
+        val logicalTypeName = oid.getLogicalTypeName();
         val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
@@ -413,15 +413,15 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = spec.getLogicalType();
         
         if(spec.isEncodeable()) {
-            this.encodableValue = rootOid.getIdentifier();
+            this.encodableValue = oid.getIdentifier();
             this.recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         }
 
-        this.persistentOidStr = rootOid.enString();
+        this.persistentOidStr = oid.enString();
         requires(persistentOidStr, "persistentOidStr");
 
-        this.bookmark = rootOid.asBookmark();
+        this.bookmark = oid.asBookmark();
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
@@ -445,9 +445,9 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         val spec = adapter.getSpecification();
 
         if(spec.isIdentifiable() || spec.isParented() ) {
-            val rootOid = ManagedObjects.identifyElseFail(adapter);
-            persistentOidStr = rootOid.enString();
-            bookmark = rootOid.asBookmark();
+            val oid = ManagedObjects.identifyElseFail(adapter);
+            persistentOidStr = oid.enString();
+            bookmark = oid.asBookmark();
             if(adapter.getPojo() instanceof HintIdProvider) {
                 HintIdProvider provider = (HintIdProvider) adapter.getPojo();
                 this.hintId = provider.hintId();

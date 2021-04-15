@@ -29,7 +29,7 @@ import lombok.val;
 public class OidMarshallerTest_roundtripping {
 
     @Test
-    public void rootOid() {
+    public void oid() {
         val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
         final String enString = oid.enString();
@@ -38,7 +38,7 @@ public class OidMarshallerTest_roundtripping {
     }
     
     @Test
-    public void rootOid_withLegacyVersionIgnored() {
+    public void oid_withLegacyVersionIgnored() {
         val oid = Oid.root(LogicalTypeTestFactory.cus(), "123");
 
         final String enString = oid.enString();

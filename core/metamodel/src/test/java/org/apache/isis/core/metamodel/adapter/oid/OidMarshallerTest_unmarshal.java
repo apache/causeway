@@ -66,24 +66,24 @@ public class OidMarshallerTest_unmarshal {
     public void persistentRoot() {
         final String oidStr = "CUS:123";
 
-        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(rootOid.getLogicalTypeName(), is("CUS"));
-        assertThat(rootOid.getIdentifier(), is("123"));
-
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        assertThat(oid.getLogicalTypeName(), is("CUS"));
+        assertThat(oid.getIdentifier(), is("123"));
+
+        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        assertThat(oid, equalTo(oid2));
     }
 
     @Test
     public void persistentRootWithFullyQualifiedSpecId() {
         final String oidStr = "com.planchase.ClassName:8";
 
-        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(rootOid.getLogicalTypeName(), is("com.planchase.ClassName"));
-        assertThat(rootOid.getIdentifier(), is("8"));
-
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        assertThat(oid.getLogicalTypeName(), is("com.planchase.ClassName"));
+        assertThat(oid.getIdentifier(), is("8"));
+
+        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        assertThat(oid, equalTo(oid2));
     }
 
 // we simply ignore this since 2.0.0    
@@ -99,12 +99,12 @@ public class OidMarshallerTest_unmarshal {
     public void transientRoot() {
         final String oidStr = "!CUS:123";
 
-        final Oid rootOid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(rootOid.getLogicalTypeName(), is("CUS"));
-        assertThat(rootOid.getIdentifier(), is("123"));
-
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        assertThat(oid.getLogicalTypeName(), is("CUS"));
+        assertThat(oid.getIdentifier(), is("123"));
+
+        final Oid oid2 = oidMarshaller.unmarshal(oidStr, Oid.class);
+        assertThat(oid, equalTo(oid2));
     }
 
 

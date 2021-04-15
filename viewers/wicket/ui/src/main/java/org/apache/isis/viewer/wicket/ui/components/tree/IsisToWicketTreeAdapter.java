@@ -414,8 +414,8 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-            val rootOid = id;
-            val objAdapter = rootOid.loadObject(commonContext.getMetaModelContext())
+            val oid = id;
+            val objAdapter = oid.loadObject(commonContext.getMetaModelContext())
                     .orElseThrow(()->new NoSuchElementException(
                             String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id)));
 

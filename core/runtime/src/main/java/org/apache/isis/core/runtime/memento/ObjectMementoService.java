@@ -29,7 +29,7 @@ import lombok.NonNull;
  */
 public interface ObjectMementoService {
 
-    ObjectMemento mementoForRootOid(Oid rootOid);
+    ObjectMemento mementoForRootOid(Oid oid);
 
     ObjectMemento mementoForObject(ManagedObject adapter);
 

@@ -168,7 +168,7 @@ public final class ManagedObjects {
             @Nullable ManagedObject managedObject, 
             @NonNull final String separator) {
         return identify(managedObject)
-                .map(rootOid->rootOid.getLogicalTypeName() + separator + rootOid.getIdentifier());
+                .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
@@ -485,7 +485,7 @@ public final class ManagedObjects {
                 return managedObject;
             }
             
-            // identification (on JDO) fails, when detached object, where rootOid was not previously memoized
+            // identification (on JDO) fails, when detached object, where oid was not previously memoized
             if(EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)

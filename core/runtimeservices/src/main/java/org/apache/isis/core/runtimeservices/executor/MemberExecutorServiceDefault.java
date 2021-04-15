@@ -266,8 +266,8 @@ implements MemberExecutorService {
             getTransactionService().flushTransaction();
         }
         if(entityState.isAttached()) {
-            resultAdapter.getRootOid().ifPresent(rootOid->{
-                val bookmark = rootOid.asBookmark();
+            resultAdapter.getRootOid().ifPresent(oid->{
+                val bookmark = oid.asBookmark();
                 command.updater().setResult(Result.success(bookmark));
             });
         } else {

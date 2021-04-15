@@ -170,15 +170,15 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         if (!(mode.isArgs())) {
 
-            val rootOidIfAny = objectAdapter.getRootOid();
+            val oidIfAny = objectAdapter.getRootOid();
             
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
-                rootOidIfAny.ifPresent(rootOid->{
-                    val oidStr = rootOid.enString();
+                oidIfAny.ifPresent(oid->{
+                    val oidStr = oid.enString();
                     getExtensions().mapPut("oid", oidStr);
                 });
             }
@@ -191,11 +191,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
-                rootOidIfAny.ifPresent(rootOid->{
-                    Optional.ofNullable(rootOid.getLogicalTypeName())
+                oidIfAny.ifPresent(oid->{
+                    Optional.ofNullable(oid.getLogicalTypeName())
                     .ifPresent(domainType->
                         representation.mapPut("domainType", domainType));
-                    representation.mapPut("instanceId", rootOid.getIdentifier());
+                    representation.mapPut("instanceId", oid.getIdentifier());
                 });
             }
         }

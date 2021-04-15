@@ -148,10 +148,10 @@ public class BreadcrumbModel implements Serializable {
     }
 
 
-    void remove(final String rootOid) {
-        Bookmark existingBookmark = bookmarkByOidStr.get(rootOid);
+    void remove(final String oid) {
+        Bookmark existingBookmark = bookmarkByOidStr.get(oid);
         if(existingBookmark != null) {
-            remove(rootOid, existingBookmark);
+            remove(oid, existingBookmark);
         }
     }
 
@@ -168,13 +168,13 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        val rootOid = Oid.forBookmark(bookmark);
-        val objectAdapterMemento = commonContext.mementoFor(rootOid);
+        val oid = Oid.forBookmark(bookmark);
+        val objectAdapterMemento = commonContext.mementoFor(oid);
         return EntityModel.ofMemento(commonContext, objectAdapterMemento);
     }
 
-    private void remove(final String rootOid, final Bookmark bookmark) {
-        bookmarkByOidStr.remove(rootOid);
+    private void remove(final String oid, final Bookmark bookmark) {
+        bookmarkByOidStr.remove(oid);
         oidStrByBookmark.remove(bookmark);
         list.remove(bookmark);
     }

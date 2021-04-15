@@ -103,10 +103,10 @@ public abstract class EventProviderAbstract implements EventProvider {
             val dereferencedManagedObject = 
                     ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
 
-            val rootOid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
-            if(rootOid!=null) {
+            val oid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
+            if(oid!=null) {
 
-                final String oidStr = rootOid.enString();
+                final String oidStr = oid.enString();
                 event.setId(oidStr + "-" + calendarName);
 
                 event.setClassName("fullCalendar2-event-" + calendarName);

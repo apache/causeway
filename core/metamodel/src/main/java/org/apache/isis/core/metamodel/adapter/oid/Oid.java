@@ -88,7 +88,7 @@ public interface Oid extends Serializable {
     // -- MARSHALLING
 
     public static interface Marshaller {
-        String marshal(Oid rootOid);
+        String marshal(Oid oid);
         String joinAsOid(String logicalTypeName, String instanceId);
     }
 

@@ -34,14 +34,14 @@ public class OidMarshallerTest_marshall {
     }
 
     @Test
-    public void rootOid() {
+    public void oid() {
         final String marshal = oidMarshaller.marshal(Oid.root(LogicalTypeTestFactory.cus(),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 
 //deprecated    
 //    @Test
-//    public void rootOid_transient() {
+//    public void oid_transient() {
 //        final String marshal = oidMarshaller.marshal(Oid.Factory.transientOf(ObjectSpecId.of("CUS"),  "123"));
 //        assertThat(marshal, equalTo("!CUS:123"));
 //    }

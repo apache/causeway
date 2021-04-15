@@ -126,9 +126,9 @@ public abstract class ResourceAbstract {
     protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        val rootOid = Oid.deString(oidStrUnencoded);
+        val oid = Oid.deString(oidStrUnencoded);
         
-        return rootOid
+        return oid
                 .loadObject(metaModelContext)
                 .orElseThrow(()->RestfulObjectsApplicationException
                         .createWithMessage(HttpStatusCode.NOT_FOUND, 

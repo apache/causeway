@@ -108,8 +108,8 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMementoService().mementoForParameter(adapter);
     }
     
-    public ObjectMemento mementoFor(Oid rootOid) {
-        return getMementoService().mementoForRootOid(rootOid);
+    public ObjectMemento mementoFor(Oid oid) {
+        return getMementoService().mementoForRootOid(oid);
     }
     
     public ManagedObject reconstructObject(ObjectMemento memento) {

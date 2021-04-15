@@ -193,8 +193,8 @@ public class PageParameterUtil {
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
-        val rootOid = oidFor(pageParameters);
-        val memento = commonContext.mementoFor(rootOid);
+        val oid = oidFor(pageParameters);
+        val memento = commonContext.mementoFor(oid);
         return EntityModel.ofMemento(commonContext, memento);
     }
 
@@ -232,8 +232,8 @@ public class PageParameterUtil {
         }
 
         try {
-            val rootOid = Oid.deStringEncoded(encoded);
-            return rootOid.loadObject(mmc).orElse(null);
+            val oid = Oid.deStringEncoded(encoded);
+            return oid.loadObject(mmc).orElse(null);
         } catch (final Exception e) {
             return null;
         }

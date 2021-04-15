@@ -80,7 +80,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
 
-        return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
+        return ofMemento(commonContext, commonContext.mementoFor(oidFrom(pageParameters)));
     }
     
     public static EntityModel ofAdapter(
@@ -148,7 +148,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 
-    private static Oid rootOidFrom(final PageParameters pageParameters) {
+    private static Oid oidFrom(final PageParameters pageParameters) {
         return Oid.unmarshaller().unmarshal(oidStr(pageParameters), Oid.class);
     }
 

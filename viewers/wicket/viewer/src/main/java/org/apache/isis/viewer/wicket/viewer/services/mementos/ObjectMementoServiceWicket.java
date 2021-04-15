@@ -68,9 +68,9 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForRootOid(@NonNull Oid rootOid) {
-//        _Probe.errOut("mementoForRootOid %s", rootOid);
-        val mementoAdapter = ObjectMementoWkt.createPersistent(rootOid, specificationLoader);
+    public ObjectMemento mementoForRootOid(@NonNull Oid oid) {
+//        _Probe.errOut("mementoForRootOid %s", oid);
+        val mementoAdapter = ObjectMementoWkt.createPersistent(oid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 

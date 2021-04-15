@@ -137,12 +137,12 @@ public interface ManagedObject {
     }
     
     /**
-     * Optimized for cases, when the pojo's specification and rootOid are already available.
+     * Optimized for cases, when the pojo's specification and oid are already available.
      */
     public static ManagedObject identified(
             @NonNull ObjectSpecification specification, 
             @NonNull Object pojo, 
-            @NonNull Oid rootOid) {
+            @NonNull Oid oid) {
         
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -153,7 +153,7 @@ public interface ManagedObject {
                     specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
         ManagedObjects.assertPojoNotManaged(pojo);
-        return SimpleManagedObject.identified(specification, pojo, rootOid);
+        return SimpleManagedObject.identified(specification, pojo, oid);
     }
 
     /**
@@ -193,9 +193,9 @@ public interface ManagedObject {
         public static ManagedObject identified(
                 @NonNull  final ObjectSpecification spec, 
                 @Nullable final Object pojo, 
-                @NonNull  final Oid rootOid) {
+                @NonNull  final Oid oid) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
-            managedObject.rootOidLazy.set(Optional.of(rootOid));
+            managedObject.oidLazy.set(Optional.of(oid));
             return managedObject;
         }
         
@@ -204,16 +204,16 @@ public interface ManagedObject {
 
         @Override
         public Optional<Oid> getRootOid() {
-            return rootOidLazy.get();
+            return oidLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Oid>> rootOidLazy = 
+        private final _Lazy<Optional<Oid>> oidLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
 
         @Override
         public boolean isRootOidMemoized() {
-            return rootOidLazy.isMemoized();
+            return oidLazy.isMemoized();
         }  
         
     }
@@ -229,16 +229,16 @@ public interface ManagedObject {
         
         @Override
         public Optional<Oid> getRootOid() {
-            return rootOidLazy.get();
+            return oidLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Oid>> rootOidLazy = 
+        private final _Lazy<Optional<Oid>> oidLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
         
         @Override
         public boolean isRootOidMemoized() {
-            return rootOidLazy.isMemoized();
+            return oidLazy.isMemoized();
         }  
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
