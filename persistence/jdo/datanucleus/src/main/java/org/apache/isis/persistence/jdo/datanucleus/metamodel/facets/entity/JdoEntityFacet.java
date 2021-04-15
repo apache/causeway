@@ -155,7 +155,7 @@ implements EntityFacet {
             throw new ObjectNotFoundException(""+rootOid);
         }
 
-        val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
+        val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
         return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);

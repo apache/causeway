@@ -137,8 +137,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
-            will(returnValue(objectSpecification));
+            allowing(mockSpecificationLoader).specForType(with(any(Class.class)));
+            will(returnValue(Optional.of(objectSpecification)));
         }});
     }
 

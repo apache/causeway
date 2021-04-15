@@ -44,7 +44,7 @@ class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract 
 
     @Override
     protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-        return reflector.loadSpecification(TestDomainObject.class);
+        return reflector.specForType(TestDomainObject.class).orElse(null);
     }
 
     @Test

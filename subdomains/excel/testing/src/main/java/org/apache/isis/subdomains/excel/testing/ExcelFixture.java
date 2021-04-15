@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -86,7 +87,8 @@ public class ExcelFixture extends FixtureScript {
         for (Class<?> cls : classes) {
 
             val beanSort = Optional.ofNullable(specLoader)
-            .map(sl->sl.loadSpecification(cls))
+            .flatMap(sl->sl.specForType(cls))
+            .filter(_NullSafe::isPresent)
             .map(ObjectSpecification::getBeanSort)
             .orElse(BeanSort.UNKNOWN);
 

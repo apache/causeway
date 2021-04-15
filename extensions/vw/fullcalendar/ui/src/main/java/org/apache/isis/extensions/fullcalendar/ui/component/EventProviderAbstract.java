@@ -33,8 +33,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -103,9 +101,8 @@ public abstract class EventProviderAbstract implements EventProvider {
 
             final Object dereferencedObject = dereference(commonContext, domainObject);
 
-            final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
-            final ObjectSpecification spec = specificationLoader.loadSpecification(dereferencedObject.getClass());
-            final ManagedObject dereferencedManagedObject = ManagedObject.of(spec, dereferencedObject);
+            val dereferencedManagedObject = 
+                    ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
 
             final RootOid rootOid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
             if(rootOid!=null) {
