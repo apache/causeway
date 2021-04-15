@@ -31,12 +31,12 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.Jd
 
 import lombok.val;
 
-abstract class VisitorForClauseAbstract 
+abstract class MetaModelVisitingValidatorForClauseAbstract 
 extends MetaModelVisitingValidatorAbstract {
 
     final String clause;
 
-    VisitorForClauseAbstract(
+    MetaModelVisitingValidatorForClauseAbstract(
             final String clause) {
         
         this.clause = clause;
@@ -63,18 +63,18 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     private void interpretJdoql(
-            final String classNameFromClause,
+            final String typeNameFromClause,
             final ObjectSpecification objectSpec,
             final String query) {
 
-        if (_Strings.isNullOrEmpty(classNameFromClause)) {
+        if (_Strings.isNullOrEmpty(typeNameFromClause)) {
             return;
         }
 
         val cls = objectSpec.getCorrespondingClass();
         
         val fromSpecResult = Result.of(()->getSpecificationLoader()
-                .specForType(_Context.loadClass(classNameFromClause))
+                .specForType(_Context.loadClass(typeNameFromClause))
                 .orElse(null));
             
         if(fromSpecResult.isFailure() 
@@ -91,7 +91,7 @@ extends MetaModelVisitingValidatorAbstract {
             return;
         }
 
-        postInterpretJdoql(classNameFromClause, objectSpec, query);
+        postInterpretJdoql(typeNameFromClause, objectSpec, query);
     }
 
     abstract String deriveClause(final String query);

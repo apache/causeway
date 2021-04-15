@@ -21,15 +21,15 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;
 
-class VisitorForVariablesClause extends VisitorForClauseAbstract {
+class MetaModelVisitingValidatorForClauseAbstractForVariablesClause 
+extends MetaModelVisitingValidatorForClauseAbstract {
 
-    VisitorForVariablesClause() {
+    MetaModelVisitingValidatorForClauseAbstractForVariablesClause() {
         super("VARIABLES");
     }
 
@@ -40,21 +40,19 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
 
     @Override
     void postInterpretJdoql(
-            final String classNameFromClause,
+            final String typeNameFromClause,
             final ObjectSpecification objectSpec,
             final String query) {
 
-
-        val cls = objectSpec.getCorrespondingClass();
-        val objectSpecification = getSpecificationLoader()
-                .loadSpecification(
-                        classNameFromClause, 
-                        IntrospectionState.TYPE_INTROSPECTED);
-        
-        JdoPersistenceCapableFacet persistenceCapableFacet =
-                objectSpecification.getFacet(JdoPersistenceCapableFacet.class);
+        final JdoPersistenceCapableFacet persistenceCapableFacet = getSpecificationLoader()
+                .specForLogicalTypeName(typeNameFromClause)
+                .map(spec->spec.getFacet(JdoPersistenceCapableFacet.class))
+                .orElse(null);
 
         if(persistenceCapableFacet == null) {
+            
+            val cls = objectSpec.getCorrespondingClass();
+            
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),

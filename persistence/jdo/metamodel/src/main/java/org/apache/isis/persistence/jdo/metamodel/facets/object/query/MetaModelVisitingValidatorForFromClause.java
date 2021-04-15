@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
@@ -30,9 +29,10 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-class VisitorForFromClause extends VisitorForClauseAbstract {
+class MetaModelVisitingValidatorForFromClause 
+extends MetaModelVisitingValidatorForClauseAbstract {
 
-    VisitorForFromClause() {
+    MetaModelVisitingValidatorForFromClause() {
         super("FROM");
     }
 
@@ -43,28 +43,29 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
 
     @Override
     void postInterpretJdoql(
-            final String classNameFromClause,
+            final String typeNameFromClause,
             final ObjectSpecification objectSpec,
             final String query) {
 
-        val cls = objectSpec.getCorrespondingClass();
-        if (Objects.equals(classNameFromClause, cls.getName())) {
+        val logicalType = objectSpec.getLogicalType();
+        
+        if (Objects.equals(typeNameFromClause, logicalType.getLogicalTypeName())) {
             return;
         }
 
         val fromSpecResult = Result.of(()->getSpecificationLoader()
-                    .specForType(_Context.loadClass(classNameFromClause))
+                    .specForType(_Context.loadClass(typeNameFromClause))
                     .orElse(null));
                 
         if(fromSpecResult.isFailure() 
                 || !fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
-                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    Identifier.classIdentifier(logicalType),
                     String.format(
                             "%s: error in JDOQL query, "
-                            + "class name after '%s' clause could not be loaded (JDOQL : %s)",
-                            cls.getName(), 
+                            + "logical type name after '%s' clause could not be loaded (JDOQL : %s)",
+                            objectSpec.getCorrespondingClass().getName(), 
                             clause, 
                             query)
                     );
@@ -76,14 +77,15 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if(subclasses.contains(objectSpec)) {
             return;
         }
+        
         ValidationFailure.raise(
                 objectSpec.getSpecificationLoader(),
-                Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                Identifier.classIdentifier(logicalType),
                 String.format(
                         "%s: error in JDOQL query, class name after '%s' "
                         + "clause should be same as class name on which annotated, "
                         + "or one of its supertypes (JDOQL : %s)",
-                        cls.getName(), 
+                        objectSpec.getCorrespondingClass().getName(),
                         clause, 
                         query)
                 );
