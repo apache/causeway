@@ -80,7 +80,7 @@ implements MetaModelRefiner {
         val isValidateVariablesClause = 
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
-            programmingModel.addValidator(new MetaModelVisitingValidatorForClauseAbstractForVariablesClause());
+            programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause());
         }
     }
 

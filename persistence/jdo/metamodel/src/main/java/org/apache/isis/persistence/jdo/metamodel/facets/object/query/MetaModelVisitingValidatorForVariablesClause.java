@@ -26,10 +26,10 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persiste
 
 import lombok.val;
 
-class MetaModelVisitingValidatorForClauseAbstractForVariablesClause 
+class MetaModelVisitingValidatorForVariablesClause 
 extends MetaModelVisitingValidatorForClauseAbstract {
 
-    MetaModelVisitingValidatorForClauseAbstractForVariablesClause() {
+    MetaModelVisitingValidatorForVariablesClause() {
         super("VARIABLES");
     }
 
