@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.confmenu;
+package org.apache.isis.core.webapp.confmenu;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -43,6 +46,7 @@ import org.apache.isis.core.config.IsisConfiguration.Core.Config.ConfigurationPr
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.util.ValueMaskingUtil;
+import org.apache.isis.core.webapp.modules.WebModule;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -52,7 +56,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Service
-@Named("isis.runtimeservices.ConfigurationViewServiceDefault")
+@Named("isis.webapp.ConfigurationViewServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
@@ -64,6 +68,7 @@ implements
 
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
+    private final List<WebModule> webModules;
     
     private final IsisModuleCoreConfig.ConfigProps configProps;
 
@@ -132,6 +137,12 @@ implements
         addSystemProperty("java.vm.version", map);
         addSystemProperty("java.vm.info", map);
 
+        add("Filters", Can.ofCollection(webModules)
+                .stream()
+                .map(WebModule::getName)
+                .collect(Collectors.joining(", ")), 
+                map);
+        
         return map;
     }
 
