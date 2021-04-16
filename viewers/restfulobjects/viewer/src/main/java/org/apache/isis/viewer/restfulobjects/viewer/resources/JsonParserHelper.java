@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -152,7 +152,7 @@ public class JsonParserHelper {
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
         
-        return Oid.forLogicalTypeNameAndIdentifier(domainType, instanceId).stringify();
+        return Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceId).stringify();
     }
 
     private static String resourceFor(final ObjectSpecification objectSpec) {

@@ -32,8 +32,8 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -80,8 +80,14 @@ extends PanelAbstract<Void, IModel<Void>> {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    final Oid resultOid = Oid.parse(oidStr);
-                    return resultOid.stringify();
+                    
+                    return Bookmark.parse(oidStr)
+                    .map(Bookmark::stringify)
+                    .orElseGet(()->{
+                        breadcrumbModel.remove(choice);
+                        return null;
+                    });
+                    
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;

@@ -25,17 +25,16 @@ import javax.inject.Inject;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ManagedObject}s,
- * converting to-and-from their {@link Oid}'s string representation.
+ * Implementation of a <i>Wicket</i> {@link IConverter} for {@link ManagedObject}s,
+ * converting to-and-from their {@link Bookmark}'s string representation.
  */
 public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
 
@@ -44,29 +43,26 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Inject private transient ObjectManager objectManager;
     
     /**
-     * Converts string representation of {@link Oid} to
+     * Converts string representation of {@link Bookmark} to
      * {@link ManagedObject}.
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        val oid = Oid.parseUrlEncoded(value);
-        val spec = objectManager.getMetaModelContext()
-                .getSpecificationLoader()
-                .specForLogicalTypeNameElseFail(oid.getLogicalTypeName());
+        val oid = Bookmark.parseUrlEncoded(value).orElse(null);
         
-        val objectLoadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
-        
-        return objectManager.loadObject(objectLoadRequest);
+        return objectManager.getMetaModelContext()
+        .loadObject(oid)
+        .orElse(null);
     }
 
     /**
-     * Converts {@link ManagedObject} to string representation of {@link Oid}.
+     * Converts {@link ManagedObject} to string representation of {@link Bookmark}.
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
         
         if(!ManagedObjects.isIdentifiable(adapter)) {
-            // eg. values don't have an Oid
+            // eg. values don't have a Bookmark
             return null;
         }
         

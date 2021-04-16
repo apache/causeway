@@ -52,20 +52,6 @@ public interface Oid extends Serializable {
                 identifier);
     }
     
-    public static Oid forDto(final OidDto oidDto) {
-        return _SimpleOid.of(
-                oidDto.getType(), 
-                oidDto.getId());
-    }
-    
-    public static Oid forLogicalTypeNameAndIdentifier(
-            final String logicalTypeName,
-            final String identifier) {
-        return _SimpleOid.of(
-                logicalTypeName, 
-                identifier);
-    }
-    
     // -- PARTS THAT MAKE UP THE OID
     
     /**

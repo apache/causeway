@@ -20,7 +20,7 @@ package org.apache.isis.extensions.fullcalendar.ui.component;
 
 import org.apache.wicket.RestartResponseException;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
@@ -61,7 +61,10 @@ final class FullCalendarWithEventHandling extends FullCalendar {
             final CalendarResponse response) {
 
         final String oidStr = (String) event.getEvent().getPayload();
-        final Oid oid = Oid.parse(oidStr);
+        final Bookmark bookmark = Bookmark.parse(oidStr).orElse(null);
+        if(bookmark==null) {
+            return;
+        }
 
         val commonContext = getCommonContext();
                 
@@ -70,8 +73,8 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final ObjectManager objectManager = commonContext.getObjectManager();
         final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
-        val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
-        val objectId = oid.getIdentifier();
+        val spec = specificationLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
+        val objectId = bookmark.getIdentifier();
         val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
 
         final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
