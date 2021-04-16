@@ -91,7 +91,10 @@ public interface BookmarkService {
     default Bookmark bookmarkForElseFail(@Nullable Object domainObject) {
         return bookmarkFor(domainObject)
                 .orElseThrow(()->_Exceptions.illegalArgument(
-                        "cannot create bookmark for type %s", domainObject.getClass().getName()));
+                        "cannot create bookmark for type %s",
+                        domainObject!=null
+                            ? domainObject.getClass().getName()
+                            : "<null>"));
     }
 
 }
