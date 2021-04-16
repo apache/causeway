@@ -89,7 +89,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             return;
         }
         
-        val oid = objectManager.identifyObject(adapter);
+        val oid = objectManager.bookmarkObject(adapter);
         
         val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), oid.getIdentifier());
         

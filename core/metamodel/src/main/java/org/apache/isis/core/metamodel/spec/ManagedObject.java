@@ -139,7 +139,7 @@ public interface ManagedObject {
     /**
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
-    public static ManagedObject identified(
+    public static ManagedObject bookmarked(
             @NonNull ObjectSpecification specification, 
             @NonNull Object pojo, 
             @NonNull Bookmark bookmark) {

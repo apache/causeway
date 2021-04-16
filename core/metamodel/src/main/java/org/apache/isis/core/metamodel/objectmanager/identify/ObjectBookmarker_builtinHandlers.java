@@ -26,12 +26,12 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier.Handler;
+import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-class ObjectIdentifier_builtinHandlers {
+class ObjectBookmarker_builtinHandlers {
 
     public static final String SERVICE_IDENTIFIER = "1";
 

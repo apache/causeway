@@ -30,9 +30,9 @@ import lombok.val;
 /**
  * @since 2.0
  */
-public interface ObjectIdentifier {
+public interface ObjectBookmarker {
 
-    Bookmark identifyObject(ManagedObject managedObject);
+    Bookmark bookmarkObject(ManagedObject managedObject);
 
     // -- HANDLER
     
@@ -40,15 +40,15 @@ public interface ObjectIdentifier {
 
     // -- FACTORY
     
-    public static ObjectIdentifier createDefault() {
+    public static ObjectBookmarker createDefault() {
         
         val chainOfHandlers = _Lists.of(
-                new ObjectIdentifier_builtinHandlers.GuardAgainstOid(),
-                new ObjectIdentifier_builtinHandlers.BookmarkForServices(),
-                new ObjectIdentifier_builtinHandlers.BookmarkForValues(),
-                new ObjectIdentifier_builtinHandlers.BookmarkForViewModels(),
-                new ObjectIdentifier_builtinHandlers.BookmarkForEntities(),
-                new ObjectIdentifier_builtinHandlers.BookmarkForOthers());
+                new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForOthers());
         
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
         

@@ -102,7 +102,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return Optional.empty();
         }
         return Optional.of(
-                objectManager.identifyObject(adapter));
+                objectManager.bookmarkObject(adapter));
     }
 
     private Object unwrapped(Object domainObject) {

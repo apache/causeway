@@ -158,7 +158,7 @@ implements EntityFacet {
         val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
-        return ManagedObject.identified(actualEntitySpec, entityPojo, bookmark);
+        return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
     }
 
     @Override

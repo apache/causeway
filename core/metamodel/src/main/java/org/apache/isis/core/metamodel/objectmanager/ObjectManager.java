@@ -27,7 +27,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
-import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
+import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
@@ -53,7 +53,7 @@ public interface ObjectManager {
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
-    ObjectIdentifier getObjectIdentifier();
+    ObjectBookmarker getObjectBookmarker();
     ObjectRefresher getObjectRefresher();
     ObjectDetacher getObjectDetacher();
     ObjectSerializer getObjectSerializer();
@@ -84,8 +84,8 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default Bookmark identifyObject(ManagedObject managedObject) {
-        return getObjectIdentifier().identifyObject(managedObject);
+    public default Bookmark bookmarkObject(ManagedObject managedObject) {
+        return getObjectBookmarker().bookmarkObject(managedObject);
     }
     
     /**

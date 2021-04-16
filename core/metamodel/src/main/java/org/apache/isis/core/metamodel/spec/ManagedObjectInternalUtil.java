@@ -70,7 +70,7 @@ final class ManagedObjectInternalUtil {
     
     static Optional<Bookmark> identify(@Nullable ManagedObject adapter) {
         return objectManager(adapter)
-                .map(objectManager->objectManager.identifyObject(adapter)); 
+                .map(objectManager->objectManager.bookmarkObject(adapter)); 
     }
     
     // -- TITLE SUPPORT
