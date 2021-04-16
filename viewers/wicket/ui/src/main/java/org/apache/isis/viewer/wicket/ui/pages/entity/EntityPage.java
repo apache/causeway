@@ -112,9 +112,8 @@ public class EntityPage extends PageAbstract {
     private static EntityModel newEntityModel(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
-        val entityModel = EntityModel.ofAdapter(commonContext, adapter);
-        return entityModel;
+                
+        return EntityModel.ofAdapter(commonContext, adapter);
     }
 
     private EntityPage(
