@@ -208,10 +208,11 @@ public class EntityPage extends PageAbstract {
         // bookmarks and breadcrumbs
         bookmarkPageIfShown(model);
         addBreadcrumbIfShown(model);
-
-        addBookmarkedPages(entityPageContainer);
-
-
+        try {
+            addBookmarkedPages(entityPageContainer);   
+        } catch (Exception e) {
+           log.error("addBookmarkedPages failed",e);
+        }
     }
 
     protected void addWhereAmIIfShown(
