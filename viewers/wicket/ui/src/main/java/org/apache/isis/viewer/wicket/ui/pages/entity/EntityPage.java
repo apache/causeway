@@ -211,7 +211,8 @@ public class EntityPage extends PageAbstract {
         try {
             addBookmarkedPages(entityPageContainer);   
         } catch (Exception e) {
-           log.error("addBookmarkedPages failed",e);
+           System.err.println(e);
+           throw e;
         }
     }
 
