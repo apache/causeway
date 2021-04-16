@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.adapter.oid;
+package org.apache.isis.core.metamodel.specloader;
 
-import org.junit.Test;
+import org.apache.isis.applib.id.LogicalType;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import lombok.val;
-
-public class RootOidTest_create {
-
-    @Test
-    public void create() throws Exception {
-        val logicalType = LogicalTypeTestFactory.cus();
-        Oid oid = Oid.of(logicalType, "123");
-        assertThat(oid.getLogicalTypeName(), is(logicalType.getLogicalTypeName()));
-        assertThat(oid.getIdentifier(), is("123"));
+final class _LogicalTypeTestFactory {
+    
+    public static LogicalType cus() {
+        return LogicalType.lazy(Customer.class, ()->"CUS");
     }
-
+    
+    public static LogicalType cux() {
+        return LogicalType.lazy(Customer.class, ()->"CUX");
+    }
+    
+    public static LogicalType ord() {
+        return LogicalType.lazy(Order.class, ()->"ORD");
+    }
 }
+
+final class Customer {}
+final class Order {}
