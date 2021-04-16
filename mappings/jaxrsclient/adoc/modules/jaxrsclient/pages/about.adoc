@@ -2,4 +2,10 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO
+
+Consider the use case where an Apache Isis app emits "thin" events to an ESB, for example using the xref:mappings:outbox-publisher:about.adoc[Outbox Publisher].
+The ESB then queries back to the Apache Isis app to get extra info in a canonical DTO form in order to continue processing.
+
+TIP: for more on this use case, try searching on "link:https://www.google.com/search?q=fat+vs+thin+events[fat vs thin events]".
+
+This library, then, provides a bit of code to construct the correct `Accept-Type` headers, in a format that is then interpreted by an application-specific implementation of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService].
