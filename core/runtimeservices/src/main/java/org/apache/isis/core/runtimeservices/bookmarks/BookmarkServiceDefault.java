@@ -130,8 +130,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return Optional.empty();
         }
         return specificationLoader.specForType(cls) 
-                .map(ObjectSpecification::getLogicalTypeName)
-                .map(logicalTypeName->Bookmark.of(logicalTypeName, identifier));
+                .map(ObjectSpecification::getLogicalType)
+                .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
 
     // -- SERIALIZING ADAPTER IMPLEMENTATION

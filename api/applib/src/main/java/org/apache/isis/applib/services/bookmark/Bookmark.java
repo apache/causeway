@@ -18,51 +18,84 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * String representation of any persistable or re-createable object managed by the framework.
- *
- * <p>
- * Analogous to the <tt>RootOid</tt>.
+ * String representation of any persistable or re-creatable object managed by the framework.
  * 
  * @since 1.x revised for 2.0 {@index}
  */
-@Value 
-@lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Bookmark implements Serializable {
+@org.apache.isis.applib.annotation.Value
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Bookmark implements Oid {
 
     private static final long serialVersionUID = 3L;
 
-    protected static final String SEPARATOR = ":";
+    @Getter(onMethod_ = {@Override}) private final String logicalTypeName;
+    @Getter(onMethod_ = {@Override}) private final String identifier;
+    @Getter private final @Nullable String hintId;
+    private final int hashCode;
+    
+    // -- FACTORIES
 
-    /**
-     * Corresponds directly to the object's logical-type-name (aka. object-type).
-     * @see RootOid
-     */
-    @NonNull  private final String logicalTypeName;
-    @NonNull  private final String identifier;
-
-    @Nullable private final String hintId;
-
-    public static Bookmark of(String logicalTypeName, String identifier) {
-        return new Bookmark(logicalTypeName, identifier, /*hintId*/ null);
+    public static Bookmark forLogicalTypeNameAndIdentifier(
+            final @NonNull String logicalTypeName,
+            final @NonNull String identifier) {
+        return new Bookmark(
+                logicalTypeName, 
+                identifier, 
+                /*hintId*/null);
+    }
+    
+    public static Bookmark forLogicalTypeAndIdentifier(
+            final @NonNull LogicalType logicalType, 
+            final @NonNull String identifier) {
+        return Bookmark.forLogicalTypeNameAndIdentifier(
+                logicalType.getLogicalTypeName(), 
+                identifier);
+    }
+    
+    public static Bookmark forOidDto(final @NonNull OidDto oidDto) {
+        return Bookmark.forLogicalTypeNameAndIdentifier(
+                oidDto.getType(), 
+                oidDto.getId());
     }
 
+    public Bookmark withHintId(final @Nullable String hintId) {
+        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId); 
+    }
+    
+    // -- CONSTRUCTOR
+    
+    private Bookmark(
+            final String logicalTypeName, 
+            final String identifier,
+            final String hintId) {
+
+        this.logicalTypeName = logicalTypeName;
+        this.identifier = identifier;
+        this.hintId = hintId;
+        this.hashCode = Objects.hash(logicalTypeName, identifier);
+    }
+    
+    // -- PARSE
+    
     /**
-     * Round-trip with {@link #toString()} representation.
+     * Round-trip with {@link #stringify()} representation.
      */
     public static Optional<Bookmark> parse(@Nullable String str) {
 
@@ -72,15 +105,19 @@ public class Bookmark implements Serializable {
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
         if(tokenCount==2) {
-            return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken()));
+            return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
+                    tokenizer.nextToken(), 
+                    tokenizer.nextToken()));
         }
         if(tokenCount>2) {
-            return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken("").substring(1)));
+            return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
+                    tokenizer.nextToken(), 
+                    tokenizer.nextToken("").substring(1)));
         }
         return Optional.empty();
-
-        // ...
     }
+    
+    // -- TO DTO
 
     public OidDto toOidDto() {
         val oidDto = new OidDto();
@@ -89,37 +126,58 @@ public class Bookmark implements Serializable {
         return oidDto;
     }
 
-    public static Bookmark fromOidDto(final @NonNull OidDto oidDto) {
-        return Bookmark.of(oidDto.getType(), oidDto.getId());
+    // -- STRINGIFY
+    
+    @Override
+    public String stringify() {
+        return stringify(identifier);
     }
     
-    /**
-     * The canonical form of the {@link Bookmark}, that is 
-     * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
-     * <p>
-     * This is parseable by the {@link #parse(String)}.
-     */
+    // -- OBJECT CONTRACT // not considering any hintId
+    
+    @Override
+    public boolean equals(final Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other == this) {
+            return true;
+        }
+        if (getClass() != other.getClass()) {
+            return false;
+        }
+        return equals((Bookmark) other);
+    }
+
+    public boolean equals(final Bookmark other) {
+        return Objects.equals(logicalTypeName, other.getLogicalTypeName()) 
+                && Objects.equals(identifier, other.getIdentifier());
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+    
     @Override
     public String toString() {
-        return toStringUsingIdentifier(identifier);
+        return stringify();
     }
-
-    public Bookmark withHintId(@NonNull String hintId) {
-        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId); 
-    }
-
-    public String toStringUsingIdentifier(String id) {
-        return logicalTypeName + SEPARATOR + id;
-    }
-    
-    // -- ALIAS
     
     /**
-     * Alias for {@link #getLogicalTypeName()}.
+     * Analogous to {@link #stringify()}, but replaces the {@code identifier} string with 
+     * the {@code hintId} if present and not empty. 
      */
-    public String getObjectType() {
-        return getLogicalTypeName();
+    public String stringifyHonoringHintIfAny() {
+        return _Strings.isNotEmpty(hintId)
+                ? stringify(hintId)
+                : stringify(identifier);
     }
+
+    // -- HELPER
     
+    private String stringify(String id) {
+        return logicalTypeName + SEPARATOR + id;
+    }
 
 }

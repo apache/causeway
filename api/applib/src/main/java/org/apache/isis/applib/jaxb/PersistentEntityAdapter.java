@@ -35,7 +35,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
 
-        val bookmark = Bookmark.fromOidDto(oidDto);
+        val bookmark = Bookmark.forOidDto(oidDto);
         return bookmarkService.lookup(bookmark).orElse(null);
     }
 

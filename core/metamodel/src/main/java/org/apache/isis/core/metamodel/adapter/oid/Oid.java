@@ -120,7 +120,7 @@ public interface Oid extends Serializable {
     // -- CONVERSION
     
     public default Bookmark asBookmark() {
-        return Bookmark.of(getLogicalTypeName(), getIdentifier());
+        return Bookmark.forLogicalTypeNameAndIdentifier(getLogicalTypeName(), getIdentifier());
     }
     
 

@@ -308,7 +308,7 @@ public class CommandJdo
         setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp()));
 
         setCommandDto(commandDto);
-        setTarget(Bookmark.fromOidDto(commandDto.getTargets().getOid().get(targetIndex)));
+        setTarget(Bookmark.forOidDto(commandDto.getTargets().getOid().get(targetIndex)));
         setLogicalMemberIdentifier(commandDto.getMember().getLogicalMemberIdentifier());
 
         // the hierarchy of commands calling other commands is only available on the primary system, and is

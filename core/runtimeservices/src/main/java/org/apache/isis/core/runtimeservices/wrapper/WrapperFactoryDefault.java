@@ -386,7 +386,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val oidDto = commandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
-        asyncControl.setBookmark(Bookmark.fromOidDto(oidDto));
+        asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(

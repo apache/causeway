@@ -150,7 +150,7 @@ public class Roundtrip {
 
     private static class SampleValues {
 
-        final Bookmark bookmark = Bookmark.of("ORD", "12345");
+        final Bookmark bookmark = Bookmark.forLogicalTypeNameAndIdentifier("ORD", "12345");
         final OidDto reference = new OidDto();
         {
             reference.setId("12345");
@@ -211,7 +211,7 @@ public class Roundtrip {
         final InteractionDto interactionDto = newInteractionDtoWithActionInvocation(
                 UUID.randomUUID().toString(),
                 1,
-                Bookmark.of("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(),
+                Bookmark.forLogicalTypeNameAndIdentifier("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(),
                 "freddyUser"
                 );
 
