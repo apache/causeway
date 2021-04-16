@@ -20,8 +20,9 @@ package org.apache.isis.core.metamodel.objectmanager.identify;
 
 import java.util.UUID;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -34,7 +35,7 @@ class ObjectIdentifier_builtinHandlers {
 
     public static final String SERVICE_IDENTIFIER = "1";
 
-    static class GuardAgainstRootOid implements Handler {
+    static class GuardAgainstOid implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -42,15 +43,15 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
-            throw new IllegalArgumentException("Cannot create a RootOid for pojo, "
-                    + "when pojo is instance of RootOid. You might want to ask "
+        public Bookmark handle(ManagedObject managedObject) {
+            throw new IllegalArgumentException("Cannot create a Bookmark for pojo, "
+                    + "when pojo is instance of Bookmark. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
         }
 
     }
 
-    static class OidForServices implements Handler {
+    static class BookmarkForServices implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -58,14 +59,16 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
+        public Bookmark handle(ManagedObject managedObject) {
             final String identifier = SERVICE_IDENTIFIER;
-            return Oid.of(managedObject.getSpecification().getLogicalType(), identifier);
+            return Bookmark.forLogicalTypeAndIdentifier(
+                    managedObject.getSpecification().getLogicalType(), 
+                    identifier);
         }
 
     }
 
-    static class OidForEntities implements Handler {
+    static class BookmarkForEntities implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -73,7 +76,7 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
+        public Bookmark handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
             if(pojo==null) {
@@ -86,12 +89,12 @@ class ObjectIdentifier_builtinHandlers {
                 throw _Exceptions.unrecoverable(msg);
             }
             val identifier = entityFacet.identifierFor(spec, pojo);
-            return Oid.of(spec.getLogicalType(), identifier);
+            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
     }
 
-    static class OidForValues implements Handler {
+    static class BookmarkForValues implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -99,7 +102,7 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
+        public Bookmark handle(ManagedObject managedObject) {
             throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
                     + "as values have no identifier",
                     managedObject.getSpecification().getCorrespondingClass().getName());
@@ -107,7 +110,7 @@ class ObjectIdentifier_builtinHandlers {
 
     }
 
-    static class OidForViewModels implements Handler {
+    static class BookmarkForViewModels implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -115,16 +118,16 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
+        public Bookmark handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
-            return Oid.of(spec.getLogicalType(), identifier);
+            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
     }
 
-    static class OidForOthers implements Handler {
+    static class BookmarkForOthers implements Handler {
 
         @Override
         public boolean isHandling(ManagedObject managedObject) {
@@ -132,10 +135,10 @@ class ObjectIdentifier_builtinHandlers {
         }
 
         @Override
-        public Oid handle(ManagedObject managedObject) {
+        public Bookmark handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val identifier = UUID.randomUUID().toString();
-            return Oid.of(spec.getLogicalType(), identifier);
+            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
     }

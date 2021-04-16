@@ -41,6 +41,7 @@ import lombok.val;
  * semantically meaningful {@link Oid}, but as an implementation detail 
  * might have a placeholder {@link Oid}. 
  */
+@Deprecated
 public interface Oid extends Serializable {
 
     // -- FACTORIES
@@ -49,12 +50,6 @@ public interface Oid extends Serializable {
         return _SimpleOid.of(
                 logicalType.getLogicalTypeName(), 
                 identifier);
-    }
-    
-    public static Oid forBookmark(final Bookmark bookmark) {
-        return _SimpleOid.of(
-                bookmark.getLogicalTypeName(), 
-                bookmark.getIdentifier());
     }
     
     public static Oid forDto(final OidDto oidDto) {

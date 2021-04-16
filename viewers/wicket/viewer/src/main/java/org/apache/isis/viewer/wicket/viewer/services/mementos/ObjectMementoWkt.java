@@ -31,11 +31,11 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.hint.HintIdProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -71,10 +71,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
      * Factory method
      */
     static ObjectMementoWkt createPersistent(
-            Oid oid,
+            Bookmark bookmark,
             SpecificationLoader specificationLoader) {
 
-        return new ObjectMementoWkt(oid, specificationLoader);
+        return new ObjectMementoWkt(bookmark, specificationLoader);
     }
 
     private enum Cardinality {
@@ -230,11 +230,14 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                             "need an id to lookup an object, got logical-type %s", memento.logicalType);
                 }
 
-                Oid oid = Oid.parse(memento.persistentOidStr);
+                final Bookmark bookmark = Bookmark.parse(memento.persistentOidStr)
+                        .orElseThrow(()->_Exceptions.illegalArgument(
+                                "cannot parse a bookmark from '%s'", 
+                                memento.persistentOidStr));
                 try {
 
-                    log.debug("lookup by oid [{}]", oid);
-                    return oid.loadObject(mmc).orElse(null);
+                    log.debug("lookup by oid [{}]", bookmark);
+                    return mmc.loadObject(bookmark).orElse(null);
 
                 } finally {
                     // possibly out-dated insight ...
@@ -243,7 +246,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                     // we copy this updated oid string into our memento so that, if we retry,
                     // we will succeed second time around
 
-                    memento.persistentOidStr = oid.stringify();
+                    memento.persistentOidStr = bookmark.stringify();
                 }
             }
 
@@ -401,10 +404,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = logicalType;
     }
 
-    private ObjectMementoWkt(Oid oid, SpecificationLoader specificationLoader) {
+    private ObjectMementoWkt(Bookmark bookmark, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
-        val logicalTypeName = oid.getLogicalTypeName();
+        val logicalTypeName = bookmark.getLogicalTypeName();
         val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
@@ -413,15 +416,15 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = spec.getLogicalType();
         
         if(spec.isEncodeable()) {
-            this.encodableValue = oid.getIdentifier();
+            this.encodableValue = bookmark.getIdentifier();
             this.recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         }
 
-        this.persistentOidStr = oid.stringify();
+        this.persistentOidStr = bookmark.stringify();
         requires(persistentOidStr, "persistentOidStr");
 
-        this.bookmark = oid.asBookmark();
+        this.bookmark = bookmark;
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
@@ -445,12 +448,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         val spec = adapter.getSpecification();
 
         if(spec.isIdentifiable() || spec.isParented() ) {
-            val oid = ManagedObjects.identifyElseFail(adapter);
-            persistentOidStr = oid.stringify();
-            bookmark = oid.asBookmark();
+            bookmark = ManagedObjects.bookmarkElseFail(adapter);
+            persistentOidStr = bookmark.stringify();
             if(adapter.getPojo() instanceof HintIdProvider) {
-                HintIdProvider provider = (HintIdProvider) adapter.getPojo();
-                this.hintId = provider.hintId();
+                this.hintId = ((HintIdProvider) adapter.getPojo()).hintId();
             }
             recreateStrategy = RecreateStrategy.LOOKUP;
             return;

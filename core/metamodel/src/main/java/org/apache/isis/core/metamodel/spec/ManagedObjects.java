@@ -45,7 +45,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -123,23 +122,13 @@ public final class ManagedObjects {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty(); 
     }
     
-    public static Optional<Oid> identify(@Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? managedObject.getRootOid() : Optional.empty(); 
-    }
-    
-    public static Oid identifyElseFail(@Nullable ManagedObject managedObject) {
-        return identify(managedObject)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
-    }
-    
     public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
-        return identify(managedObject)
-                .map(Oid::asBookmark);
+        return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty(); 
     }
     
     public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot bookmark %s", managedObject));
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
     
     /**
@@ -148,8 +137,8 @@ public final class ManagedObjects {
      * {@code managedObject}, usually made up of the object's type and its ID.
      */
     public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
-        return identify(managedObject)
-                .map(Oid::stringify);
+        return bookmark(managedObject)
+                .map(Bookmark::stringify);
     }
     
     public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
@@ -167,7 +156,7 @@ public final class ManagedObjects {
     public static Optional<String> stringify(
             @Nullable ManagedObject managedObject, 
             @NonNull final String separator) {
-        return identify(managedObject)
+        return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
@@ -485,30 +474,28 @@ public final class ManagedObjects {
                 return managedObject;
             }
             
+            val spec = managedObject.getSpecification();
+            
             // identification (on JDO) fails, when detached object, where oid was not previously memoized
             if(EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)
-                    && !managedObject.isRootOidMemoized()) {
+                    && !managedObject.isBookmarkMemoized()) {
                 val msg = String.format("entity %s is required to have a memoized ID, "
                         + "otherwise cannot re-attach", 
-                        managedObject.getSpecification().getLogicalTypeName());
+                        spec.getLogicalTypeName());
                 log.error(msg); // in case exception gets swallowed
                 throw _Exceptions.illegalState(msg);
             }
             
-            val objectIdentifier = identify(managedObject)
-                    .map(Oid::getIdentifier);
-                    
-            if(!objectIdentifier.isPresent()) {
-                return managedObject;
-            }
+            val objectManager = managedObject.getObjectManager();
             
-            val objectLoadRequest = ObjectLoader.Request.of(
-                    managedObject.getSpecification(), 
-                    objectIdentifier.get());
-            
-            return managedObject.getObjectManager().loadObject(objectLoadRequest);
+            return bookmark(managedObject)
+            .map(bookmark->objectManager.loadObject(
+                    ObjectLoader.Request.of(
+                                    spec, 
+                                    bookmark.getIdentifier())))
+            .orElse(managedObject);
         }
         
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(

@@ -103,7 +103,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             val dereferencedManagedObject = 
                     ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
 
-            val oid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
+            val oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
             if(oid!=null) {
 
                 final String oidStr = oid.stringify();

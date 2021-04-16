@@ -266,10 +266,10 @@ implements MemberExecutorService {
             getTransactionService().flushTransaction();
         }
         if(entityState.isAttached()) {
-            resultAdapter.getRootOid().ifPresent(oid->{
-                val bookmark = oid.asBookmark();
-                command.updater().setResult(Result.success(bookmark));
-            });
+            resultAdapter.getBookmark()
+            .ifPresent(bookmark->
+                command.updater().setResult(Result.success(bookmark))
+            );
         } else {
             if(entityState.isPersistable()) {
                 log.warn("was unable to get a bookmark for the command result, "

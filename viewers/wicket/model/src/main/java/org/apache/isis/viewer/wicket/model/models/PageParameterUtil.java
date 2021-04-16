@@ -27,9 +27,9 @@ import javax.annotation.Nullable;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -193,14 +193,16 @@ public class PageParameterUtil {
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
-        val oid = oidFor(pageParameters);
-        val memento = commonContext.mementoFor(oid);
+        val memento = bookmarkFor(pageParameters)
+        .map(commonContext::mementoForBookmark)
+        .orElse(null);
+        
         return EntityModel.ofMemento(commonContext, memento);
     }
 
-    private static Oid oidFor(final PageParameters pageParameters) {
+    private static Optional<Bookmark> bookmarkFor(final PageParameters pageParameters) {
         final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return Oid.parse(oidStr);
+        return Bookmark.parse(oidStr);
     }
 
     private static final String NULL_ARG = "$nullArg$";
@@ -232,8 +234,9 @@ public class PageParameterUtil {
         }
 
         try {
-            val oid = Oid.parseUrlEncoded(encoded);
-            return oid.loadObject(mmc).orElse(null);
+            return Bookmark.parseUrlEncoded(encoded)
+                    .flatMap(mmc::loadObject)
+                    .orElse(null);
         } catch (final Exception e) {
             return null;
         }

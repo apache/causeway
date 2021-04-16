@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -51,12 +51,12 @@ final class ManagedObjectInternalUtil {
         }
 
         @Override
-        public Optional<Oid> getRootOid() {
+        public Optional<Bookmark> getBookmark() {
             return Optional.empty();
         }
 
         @Override
-        public boolean isRootOidMemoized() {
+        public boolean isBookmarkMemoized() {
             return false;
         }
         
@@ -68,7 +68,7 @@ final class ManagedObjectInternalUtil {
         .map(MetaModelContext::getObjectManager);
     }
     
-    static Optional<Oid> identify(@Nullable ManagedObject adapter) {
+    static Optional<Bookmark> identify(@Nullable ManagedObject adapter) {
         return objectManager(adapter)
                 .map(objectManager->objectManager.identifyObject(adapter)); 
     }

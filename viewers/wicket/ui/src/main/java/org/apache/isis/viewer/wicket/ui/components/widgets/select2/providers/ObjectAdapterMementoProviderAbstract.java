@@ -23,15 +23,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -174,12 +176,14 @@ extends ChoiceProvider<ObjectMemento> {
 
     // -- HELPER
     
-    private ObjectMemento idToMemento(String id) {
+    private @Nullable ObjectMemento idToMemento(String id) {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;
         }
-        val oid = Oid.parse(id);
-        return getCommonContext().mementoFor(oid);
+        val memento = Bookmark.parse(id)
+                .map(getCommonContext()::mementoForBookmark)
+                .orElse(null);
+        return memento;
     }
 
 

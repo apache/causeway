@@ -24,9 +24,9 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -58,12 +58,12 @@ public interface ManagedObject {
     Object getPojo();
     
     /**
-     * Returns the object id as identified by the ObjectManager. 
-     * Entity IDs are considered immutable, hence will be memoized once fetched.
+     * Returns the object's bookmark as identified by the ObjectManager. 
+     * Bookmarks are considered immutable, hence will be memoized once fetched.
      */
-    Optional<Oid> getRootOid();
+    Optional<Bookmark> getBookmark();
     
-    boolean isRootOidMemoized();
+    boolean isBookmarkMemoized();
     
     // -- TITLE
 
@@ -137,12 +137,12 @@ public interface ManagedObject {
     }
     
     /**
-     * Optimized for cases, when the pojo's specification and oid are already available.
+     * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
     public static ManagedObject identified(
             @NonNull ObjectSpecification specification, 
             @NonNull Object pojo, 
-            @NonNull Oid oid) {
+            @NonNull Bookmark bookmark) {
         
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -153,7 +153,7 @@ public interface ManagedObject {
                     specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
         ManagedObjects.assertPojoNotManaged(pojo);
-        return SimpleManagedObject.identified(specification, pojo, oid);
+        return SimpleManagedObject.identified(specification, pojo, bookmark);
     }
 
     /**
@@ -193,9 +193,9 @@ public interface ManagedObject {
         public static ManagedObject identified(
                 @NonNull  final ObjectSpecification spec, 
                 @Nullable final Object pojo, 
-                @NonNull  final Oid oid) {
+                @NonNull  final Bookmark bookmark) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
-            managedObject.oidLazy.set(Optional.of(oid));
+            managedObject.bookmarkLazy.set(Optional.of(bookmark));
             return managedObject;
         }
         
@@ -203,17 +203,17 @@ public interface ManagedObject {
         @Nullable private final Object pojo;
 
         @Override
-        public Optional<Oid> getRootOid() {
-            return oidLazy.get();
+        public Optional<Bookmark> getBookmark() {
+            return bookmarkLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Oid>> oidLazy = 
+        private final _Lazy<Optional<Bookmark>> bookmarkLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
 
         @Override
-        public boolean isRootOidMemoized() {
-            return oidLazy.isMemoized();
+        public boolean isBookmarkMemoized() {
+            return bookmarkLazy.isMemoized();
         }  
         
     }
@@ -228,17 +228,17 @@ public interface ManagedObject {
         @Getter @NonNull private final Object pojo;
         
         @Override
-        public Optional<Oid> getRootOid() {
-            return oidLazy.get();
+        public Optional<Bookmark> getBookmark() {
+            return bookmarkLazy.get();
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Oid>> oidLazy = 
+        private final _Lazy<Optional<Bookmark>> bookmarkLazy = 
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
         
         @Override
-        public boolean isRootOidMemoized() {
-            return oidLazy.isMemoized();
+        public boolean isBookmarkMemoized() {
+            return bookmarkLazy.isMemoized();
         }  
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);

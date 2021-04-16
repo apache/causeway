@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
@@ -32,23 +32,23 @@ import lombok.val;
  */
 public interface ObjectIdentifier {
 
-    Oid identifyObject(ManagedObject managedObject);
+    Bookmark identifyObject(ManagedObject managedObject);
 
     // -- HANDLER
     
-    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Oid> {}
+    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Bookmark> {}
 
     // -- FACTORY
     
     public static ObjectIdentifier createDefault() {
         
         val chainOfHandlers = _Lists.of(
-                new ObjectIdentifier_builtinHandlers.GuardAgainstRootOid(),
-                new ObjectIdentifier_builtinHandlers.OidForServices(),
-                new ObjectIdentifier_builtinHandlers.OidForValues(),
-                new ObjectIdentifier_builtinHandlers.OidForViewModels(),
-                new ObjectIdentifier_builtinHandlers.OidForEntities(),
-                new ObjectIdentifier_builtinHandlers.OidForOthers());
+                new ObjectIdentifier_builtinHandlers.GuardAgainstOid(),
+                new ObjectIdentifier_builtinHandlers.BookmarkForServices(),
+                new ObjectIdentifier_builtinHandlers.BookmarkForValues(),
+                new ObjectIdentifier_builtinHandlers.BookmarkForViewModels(),
+                new ObjectIdentifier_builtinHandlers.BookmarkForEntities(),
+                new ObjectIdentifier_builtinHandlers.BookmarkForOthers());
         
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
         

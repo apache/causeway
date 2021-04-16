@@ -43,10 +43,10 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -393,7 +393,7 @@ class IsisToWicketTreeAdapter {
     private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
         private static final long serialVersionUID = 1L;
 
-        private final Oid id;
+        private final Bookmark bookmark;
         private final TreePath treePath;
         private final int hashCode;
 
@@ -402,9 +402,9 @@ class IsisToWicketTreeAdapter {
         public LoadableDetachableTreeModel(TreeModel tModel) {
             super(tModel);
             this.treePath = tModel.getTreePath();
-            this.id = ManagedObjects.identifyElseFail(tModel.getObject());
+            this.bookmark = ManagedObjects.bookmarkElseFail(tModel.getObject());
                     
-            this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
+            this.hashCode = Objects.hash(bookmark.hashCode(), treePath.hashCode());
             this.commonContext = tModel.getCommonContext();
         }
 
@@ -414,15 +414,16 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-            val oid = id;
-            val objAdapter = oid.loadObject(commonContext.getMetaModelContext())
+            val oid = bookmark;
+            val objAdapter = commonContext.getMetaModelContext()
+                    .loadObject(oid)
                     .orElseThrow(()->new NoSuchElementException(
-                            String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id)));
+                            String.format("Tree creation: could not recreate TreeModel from Bookmark: '%s'", bookmark)));
 
             final Object pojo = objAdapter.getPojo();
             if(pojo==null) {
                 throw new NoSuchElementException(
-                        String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id));
+                        String.format("Tree creation: could not recreate Pojo from Oid: '%s'", bookmark));
             }
 
             return new TreeModel(commonContext, objAdapter, treePath);
@@ -436,7 +437,7 @@ class IsisToWicketTreeAdapter {
         public boolean equals(Object obj) {
             if (obj instanceof LoadableDetachableTreeModel) {
                 final LoadableDetachableTreeModel other = (LoadableDetachableTreeModel) obj;
-                return treePath.equals(other.treePath) && id.equals(other.id);
+                return treePath.equals(other.treePath) && bookmark.equals(other.bookmark);
             }
             return false;
         }

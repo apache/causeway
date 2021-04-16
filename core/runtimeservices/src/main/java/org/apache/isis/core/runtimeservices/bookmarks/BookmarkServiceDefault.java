@@ -44,8 +44,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -65,6 +66,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Inject private SpecificationLoader specificationLoader;
     @Inject private WrapperFactory wrapperFactory;
     @Inject private ObjectManager objectManager;
+    @Inject private MetaModelContext mmc;
     
     @Override
     public Optional<Object> lookup(final @Nullable BookmarkHolder bookmarkHolder) {
@@ -81,18 +83,9 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
     @Override
     public Optional<Object> lookup(final @Nullable Bookmark bookmark) {
-        if(bookmark == null) {
-            return Optional.empty();
-        }
-        val spec = specificationLoader.specForBookmark(bookmark).orElse(null);
-        if(spec == null) {
-            return Optional.empty();
-        }
         try {
-            val identifier = bookmark.getIdentifier();
-            val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
-            val adapter = objectManager.loadObject(objectLoadRequest);
-            return Optional.ofNullable(adapter.getPojo());
+            return mmc.loadObject(bookmark)
+                    .map(ManagedObject::getPojo);
         } catch(ObjectNotFoundException ex) {   
             return Optional.empty();
         }
@@ -109,8 +102,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return Optional.empty();
         }
         return Optional.of(
-                objectManager.identifyObject(adapter)
-                .asBookmark());
+                objectManager.identifyObject(adapter));
     }
 
     private Object unwrapped(Object domainObject) {

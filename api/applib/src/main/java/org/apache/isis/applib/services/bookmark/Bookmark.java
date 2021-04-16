@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.AccessLevel;
@@ -117,6 +118,12 @@ public final class Bookmark implements Oid {
         return Optional.empty();
     }
     
+    public static Optional<Bookmark> parseUrlEncoded(@Nullable String urlEncodedStr) {
+        return _Strings.isEmpty(urlEncodedStr)
+                ? Optional.empty()
+                : parse(_UrlDecoderUtil.urlDecode(urlEncodedStr));
+    }
+    
     // -- TO DTO
 
     public OidDto toOidDto() {
@@ -179,5 +186,7 @@ public final class Bookmark implements Oid {
     private String stringify(String id) {
         return logicalTypeName + SEPARATOR + id;
     }
+
+    
 
 }

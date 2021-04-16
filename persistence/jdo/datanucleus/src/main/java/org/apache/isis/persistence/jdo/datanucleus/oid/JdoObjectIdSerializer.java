@@ -38,11 +38,11 @@ import javax.jdo.identity.StringIdentity;
 
 import org.datanucleus.identity.DatastoreId;
 
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
 

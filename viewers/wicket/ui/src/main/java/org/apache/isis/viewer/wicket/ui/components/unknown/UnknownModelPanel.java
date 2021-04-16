@@ -60,7 +60,7 @@ extends PanelAbstract<Object, IModel<Object>> {
             EntityModel entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                buf.append("??? objectAdapter oid: " + ManagedObjects.identify(objectAdapter).orElse(null));    
+                buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));    
             } else {
                 buf.append("??? objectAdapter is NULL");
             }

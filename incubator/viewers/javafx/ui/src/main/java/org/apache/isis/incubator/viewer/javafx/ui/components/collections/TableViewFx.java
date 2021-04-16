@@ -24,10 +24,10 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -138,7 +138,7 @@ public class TableViewFx extends VBox {
         _NullSafe.stream(objects)
         .forEach(object->{
 
-            val id = object.getRootOid().orElse(null);
+            val id = object.getBookmark().orElse(null);
             if(id==null) {
                 return;
             }
@@ -168,7 +168,7 @@ public class TableViewFx extends VBox {
                 log.debug("about to get property value for property {}", property.getId());                
                 val targetObject = cellDataFeatures.getValue();
 
-                val cellValue = targetObject.getRootOid()
+                val cellValue = targetObject.getBookmark()
                         .map(id->table.getElement(id, property.getId()))
                         .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
                                 ""+targetObject, 

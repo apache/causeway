@@ -23,12 +23,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -45,7 +47,7 @@ public class BookmarkTreeNode implements Serializable {
     private final List<BookmarkTreeNode> children = _Lists.newArrayList();
     private final int depth;
 
-    @Getter private final Oid oidNoVer; //TODO rename field, versions have been removed
+    @Getter private final Bookmark oidNoVer; //TODO rename field, versions have been removed
     @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
     private final PageType pageType;
 
@@ -60,17 +62,22 @@ public class BookmarkTreeNode implements Serializable {
     private BookmarkTreeNode(
             final BookmarkableModel bookmarkableModel,
             final int depth) {
+        
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
-        Oid oid = oidFrom(pageParameters);
-        this.oidNoVerStr = oid.stringify();
-        this.oidNoVer = Oid.parse(oidNoVerStr);
+        
+        oidNoVer = bookmarkFrom(pageParameters);
+        oidNoVerStr = oidNoVer!=null 
+                ? oidNoVer.stringify()
+                : null;
 
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, getOidNoVerStr());
 
         this.title = bookmarkableModel.getTitle();
-        this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
+        this.pageType = bookmarkableModel instanceof EntityModel 
+                ? PageType.ENTITY 
+                : PageType.ACTION_PROMPT;
         this.depth = depth;
 
     }
@@ -206,7 +213,7 @@ public class BookmarkTreeNode implements Serializable {
             })
             .filter(_NullSafe::isPresent)
             .map(parentAdapter->{
-                final Oid parentOid = ManagedObjects.identify(parentAdapter).orElse(null);
+                final Bookmark parentOid = ManagedObjects.bookmark(parentAdapter).orElse(null);
                 return parentOid;
             })
             .filter(_NullSafe::isPresent)
@@ -244,22 +251,19 @@ public class BookmarkTreeNode implements Serializable {
 
     // //////////////////////////////////////
 
-    public static Oid oidFrom(final PageParameters pageParameters) {
-        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        if(oidStr == null) {
-            return null;
-        }
+    public static @Nullable Bookmark bookmarkFrom(final PageParameters pageParameters) {
+        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         try {
-            return Oid.parse(oidStr);
+            return Bookmark.parse(oidStr).orElse(null);
         } catch(Exception ex) {
             return null;
         }
     }
 
     public static String oidStrFrom(BookmarkableModel candidateBookmarkableModel) {
-        final Oid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
-        return oid != null
-                ? oid.stringify()
+        final Bookmark bookmark = bookmarkFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
+        return bookmark != null
+                ? bookmark.stringify()
                 : null;
     }
 

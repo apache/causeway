@@ -32,10 +32,10 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.primitives._Ints;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -217,15 +217,13 @@ implements IResourceContext {
     }
 
     // -- canEagerlyRender
-    private Set<Oid> rendered = _Sets.newHashSet();
+    private Set<Bookmark> rendered = _Sets.newHashSet();
     @Override
     public boolean canEagerlyRender(ManagedObject objectAdapter) {
-        final Oid oid = ManagedObjects.identify(objectAdapter).orElse(null);
-        return (oid!=null) 
-                ? rendered.add(oid)
-                : true;
+        return ManagedObjects.bookmark(objectAdapter)
+        .map(rendered::add)
+        .orElse(true);
     }
-
 
     // -- configuration settings
 

@@ -25,9 +25,9 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -138,7 +138,7 @@ public class TableViewVaa extends VerticalLayout {
         objects.stream()
         .forEach(object->{
 
-            val id = object.getRootOid().orElse(null);
+            val id = object.getBookmark().orElse(null);
             if(id==null) {
                 return;
             }
@@ -152,7 +152,7 @@ public class TableViewVaa extends VerticalLayout {
         // object link as first column
         objectGrid.addColumn(targetObject->{
             // TODO provide icon with link
-            return "obj. ref ["+targetObject.getRootOid().orElse(null)+"]";
+            return "obj. ref ["+targetObject.getBookmark().orElse(null)+"]";
         });
         
         // property columns

@@ -49,7 +49,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         cleanUpGarbage(rootNodes);
 
         final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
-        val oid = BookmarkTreeNode.oidFrom(candidatePP);
+        val oid = BookmarkTreeNode.bookmarkFrom(candidatePP);
         if(oid == null) {
             // ignore
             return;

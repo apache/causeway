@@ -170,7 +170,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         if (!(mode.isArgs())) {
 
-            val oidIfAny = objectAdapter.getRootOid();
+            val oidIfAny = objectAdapter.getBookmark();
             
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {

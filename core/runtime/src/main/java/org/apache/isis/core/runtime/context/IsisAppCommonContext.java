@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -29,7 +30,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -108,8 +108,8 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMementoService().mementoForParameter(adapter);
     }
     
-    public ObjectMemento mementoFor(Oid oid) {
-        return getMementoService().mementoForRootOid(oid);
+    public ObjectMemento mementoForBookmark(Bookmark bookmark) {
+        return getMementoService().mementoForBookmark(bookmark);
     }
     
     public ManagedObject reconstructObject(ObjectMemento memento) {
