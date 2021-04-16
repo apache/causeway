@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.webapp.confmenu;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -39,6 +42,7 @@ import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -69,8 +73,11 @@ implements
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
     private final List<WebModule> webModules;
+    private final List<DataSource> dataSources;
     
     private final IsisModuleCoreConfig.ConfigProps configProps;
+    
+    private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 
     @Override
     public Set<ConfigurationProperty> getEnvironmentProperties() {
@@ -84,7 +91,8 @@ implements
 
     @PostConstruct
     public void postConstruct() {
-       log.info("\n\n" + toStringFormatted());
+        startupTime = LocalDateTime.now(); 
+        log.info("\n\n" + toStringFormatted());
     }
 
 
@@ -137,12 +145,16 @@ implements
         addSystemProperty("java.vm.version", map);
         addSystemProperty("java.vm.info", map);
 
-        add("Filters", Can.ofCollection(webModules)
+        add("Web Modules", Can.ofCollection(webModules)
                 .stream()
                 .map(WebModule::getName)
                 .collect(Collectors.joining(", ")), 
                 map);
         
+        add("Startup Time", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                .format(startupTime),
+                map);
+                
         return map;
     }
 
@@ -155,6 +167,16 @@ implements
             configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
             configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
             configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
+            
+            val index = _Refs.intRef(0);
+            
+            Can.ofCollection(dataSources)
+            .forEach(dataSource->{
+                index.inc();
+                add(String.format("Data Source (%d)", index.getValue()), dataSource.getClass().getName(), map);
+            });
+            
+            
         } else {
             // if properties are not visible, show at least the policy
             add("Configuration Property Visibility Policy",
