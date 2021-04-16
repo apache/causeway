@@ -46,7 +46,7 @@ public class CommandJdo_openTargetObject {
     }
 
     public Object act() {
-        val targetBookmark = bookmarkService.lookup(commandJdo.getTarget());
+        val targetBookmark = bookmarkService.lookup(commandJdo.getTarget()).orElse(null);
         if(targetBookmark == null) {
             messageService.warnUser("Object not found - has it since been deleted?");
             return null;

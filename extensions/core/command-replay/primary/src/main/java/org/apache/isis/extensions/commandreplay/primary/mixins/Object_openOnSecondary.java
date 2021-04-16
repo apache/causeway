@@ -64,7 +64,7 @@ public class Object_openOnSecondary {
 
     public URL act() {
         val baseUrlPrefix = lookupBaseUrlPrefix();
-        val urlSuffix = bookmarkService.bookmarkFor(object).toString();
+        val urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
 
         try {
             return new URL(baseUrlPrefix + urlSuffix);
