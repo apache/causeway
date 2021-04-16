@@ -98,7 +98,7 @@ implements
         val sb = new StringBuilder();
 
         String head = String.format("APACHE ISIS %s (%s) ",
-                IsisSystemEnvironment.VERSION,
+                configuration.getViewer().getWicket().getApplication().getVersion(),
                 systemEnvironment.getDeploymentType().name());
 
         final Map<String, ConfigurationProperty> map = config.get();
@@ -127,7 +127,7 @@ implements
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Isis Version", IsisSystemEnvironment.VERSION, map);
+        add("Isis Version", configuration.getViewer().getWicket().getApplication().getVersion(), map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
         add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 

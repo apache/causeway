@@ -23,11 +23,11 @@ import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lombok.val;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import demoapp.dom._infra.resources.MarkupVariableResolverService;
-import demoapp.dom._infra.resources.ResourceReaderService;
+import org.apache.isis.core.config.IsisConfiguration;
+
+import lombok.val;
 
 class ResourceReaderService_Test {
 
@@ -36,7 +36,8 @@ class ResourceReaderService_Test {
     @BeforeEach
     void setUp() {
         resourceReaderService = new ResourceReaderService();
-        resourceReaderService.markupVariableResolverService = new MarkupVariableResolverService();
+        resourceReaderService.markupVariableResolverService = 
+                new MarkupVariableResolverService(new IsisConfiguration(null));
     }
 
     @Test
