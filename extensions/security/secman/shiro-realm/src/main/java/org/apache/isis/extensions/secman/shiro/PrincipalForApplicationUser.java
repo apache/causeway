@@ -54,9 +54,6 @@ import lombok.val;
  *     creating an adapter object for the appropriate Shiro API.
  * </p>
  *
- * TODO: this should probably implement java.security.Principal so that it doesn't get wrapped in a
- * ShiroHttpServletRequest.ObjectPrincipal. 
- * Such a change would need some testing to avoid regressions, though.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class PrincipalForApplicationUser implements AuthorizationInfo {
@@ -75,8 +72,8 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
                 .map(ApplicationRole::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
         val permissionSet = applicationUser.getPermissionSet();
-        
-        return new PrincipalForApplicationUser(username, encryptedPassword, accountType, 
+
+        return new PrincipalForApplicationUser(username, encryptedPassword, accountType,
                 applicationUser.getStatus(), roles, permissionSet);
     }
 
@@ -86,7 +83,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     @Getter(value = AccessLevel.PACKAGE) private final ApplicationUserStatus status;
     @Getter(value = AccessLevel.PUBLIC)  private final Set<String> roles;
     @Getter(value = AccessLevel.PACKAGE) private final ApplicationPermissionValueSet permissionSet;
-    
+
     public boolean isDisabled() {
         return getStatus() == ApplicationUserStatus.DISABLED;
     }
@@ -95,7 +92,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     public Collection<String> getStringPermissions() {
         return Collections.emptyList();
     }
-    
+
     @Override
     public Collection<Permission> getObjectPermissions() {
         return objectPermissions.get();
@@ -103,31 +100,27 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
 
     /**
      * When wrapped by ShiroHttpServletRequest.ObjectPrincipal, the principal's name is derived by calling toString().
-     *
-     *  TODO: this should probably implement java.security.Principal so that it doesn't get wrapped in a
-     *  ShiroHttpServletRequest.ObjectPrincipal.  Such a change would need some testing to avoid regressions, though.
-     *
      */
     @Override
     public String toString() {
         return getUsername();
     }
-    
+
     // -- HELPER
-    
-    private final transient _Lazy<Collection<Permission>> objectPermissions = 
+
+    private final transient _Lazy<Collection<Permission>> objectPermissions =
             _Lazy.threadSafe(this::createObjectPermissions);
-    
+
     private Collection<Permission> createObjectPermissions() {
         val permission = Permission_backedByPermissionSet.of(getPermissionSet());
         return Collections.singleton(permission);
     }
-    
+
     @RequiredArgsConstructor(staticName = "of")
     private static class Permission_backedByPermissionSet implements Permission {
-        
+
         @NonNull private final ApplicationPermissionValueSet permissionSet;
-        
+
         @Override
         public boolean implies(Permission p) {
             if (!(p instanceof PermissionForMember)) {
@@ -135,9 +128,9 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
             }
             val permissionForMember = (PermissionForMember) p;
             return permissionSet.grants(
-                    permissionForMember.getFeatureId(), 
+                    permissionForMember.getFeatureId(),
                     permissionForMember.getMode());
         }
     }
-    
+
 }

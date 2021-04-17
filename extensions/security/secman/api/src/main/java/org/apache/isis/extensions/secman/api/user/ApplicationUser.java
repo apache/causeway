@@ -80,8 +80,35 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     String getName();
 
+    /**
+     * Only used for {@link #getAccountType() local} users, stores the
+     * password in encrypted form.
+     *
+     * <p>
+     *     The password will have been encrypted by the configured
+     *     {@link org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService}.
+     * </p>
+     *
+     * @see org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService
+     */
     String getEncryptedPassword();
 
+    /**
+     * Determines how to authenticate this user.
+     *
+     * <p>
+     *     {@link AccountType#LOCAL local} users are authenticated directly
+     *     against the {@link #getEncryptedPassword() password}.
+     * </p>
+     *
+     * <p>
+     *     {@link AccountType#DELEGATED delegated} users are authenticated by
+     *     some other authentication mechanism.  For example, Secman's
+     *     Shiro realm allows a delegate realm to be configured, and will
+     *     call that delegate realm for delegated users rather than
+     *     authenticating locally.
+     * </p>
+     */
     AccountType getAccountType();
     void setAccountType(AccountType accountType);
 

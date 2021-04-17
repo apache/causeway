@@ -1,0 +1,288 @@
+= Setting up
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This section describes how to setup and configure SecMan for use in your Apache Isis application.
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+In addition, add a section for secman's own BOM:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-persistence-XXX</artifactId> <!--.-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-shiro-realm</artifactId>
+        </dependency>
+</dependencies>
+----
+<.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+
+
+[[_update-appmanifest]]
+== Update AppManifest
+
+=== Import modules
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the SecMan modules.
+You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecurityShiro.class,                  // <.>
+        ...
+        IsisModuleExtSecmanApi.class,                   // <.>
+        IsisModuleExtSecmanModel.class,
+        IsisModuleExtSecmanPersistenceJpa.class,
+        IsisModuleExtSecmanRealmShiro.class,
+        IsisModuleExtSecmanEncryptionJbcrypt.class,
+
+        IsisModuleTestingFixturesApplib.class,          // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> enable Shiro for security.
++
+Ensure that no other `IsisModuleSecurityXxx` module is imported.
+<.> SecMan dependencies
+<.> fixture script support
+
+
+[#configure-services]
+=== Configure Services
+
+It is also necessary to configure some aspects of SecMan.
+This is most easily done using `Bean` definitions within the `AppManifest`:
+
+[source,java]
+.AppManifest.java
+----
+//...
+public class AppManifest {
+
+    @Bean
+    public SecmanConfiguration secmanConfiguration() {
+        return SecmanConfiguration.builder()
+                .adminUserName("sven").adminPassword("pass")      // <.>
+                .adminRoleName("isis-ext-secman-admin-role")      // <.>
+                .regularUserRoleName("isis-ext-secman-user-role") // <.>
+                .build();
+    }
+
+    @Bean
+    public PermissionsEvaluationService permissionsEvaluationService() {
+        return new PermissionsEvaluationServiceAllowBeatsVeto();    // <.>
+    }
+
+    @Bean
+    public SecurityRealmService securityRealmService() {
+        return new SecurityRealmService() {
+            @Override
+            public SecurityRealm getCurrentRealm() {
+                return () ->
+                    EnumSet.noneOf(SecurityRealmCharacteristic.class); // <.>
+            }
+        };
+    }
+}
+----
+<.> indicates the security super-user and password
+<.> indicates the name of the role granted to this security super-user.
+This can be any name.
+<.> indicates the name of the role that should be granted to regular users of the application.
++
+IMPORTANT: This role grants regular users the ability to logout (among other things).
+<.> indicates that only local users are supported (no delegate realm is in used).
++
+See <<delegate-realms,below>> to configure for a delegate realm.
+
+
+
+== Shiro Realm
+
+SecMan's Shiro realm is configured using the `shiro.ini` file:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+
+authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
+
+securityManager.authenticator.authenticationStrategy = $authenticationStrategy
+securityManager.realms = $isisModuleSecurityRealm
+
+[users]
+[roles]
+----
+
+The `[users]` and `[roles]` sections are required but are unused.
+
+
+[#delegate-realms]
+== Delegate Realms
+
+If a delegate realm is to be used, then there are two changes required.
+
+* first, in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Bean
+public SecurityRealmService securityRealmService() {
+    return new SecurityRealmService() {
+        @Override
+        public SecurityRealm getCurrentRealm() {
+            return () -> EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
+        }
+    };
+}
+----
+
+* second, specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the semcan realm.
++
+For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
++
+[source,ini]
+.shiro.ini
+----
+[main]
+
+...
+ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
+ldapRealm.xxx=...                                                            #<.>
+ldapRealm.yyy=...
+
+isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+
+...
+----
+<.> instantiate the LDAP realm
+<.> configure the LDAP realm as required
+<.> specify the LDAP realm as the delegate realm for SecMan's own realm.
+
+
+
+
+== Seed Users and Roles
+
+With SecMan enabled, it will automatically set up a security super-user (as described <<configure-services,above>>) and a regular role.
+
+Creating regular applications users thereafter can be done manually, but if prototyping with an in-memory database then you will most likely want to set up some fixure scripts to automatically set up application users.
+
+SecMan provides a number of convenience fixture scripts to inherit from.
+For example, these scripts can be used to set up access to the domain objects in the xref:docs:starters:helloworld.adoc[HelloWorld] starter app:
+
+* to set up a "user-rw" role with access to everything under the "hello" namespace:
++
+[source,java]
+.RoleAndPerms__UserRw.java
+----
+public class RoleAndPerms__UserRw extends AbstractRoleAndPermissionsFixtureScript {
+
+    public static final String ROLE_NAME = "user-rw";
+
+    public RoleAndPerms__UserRw() {
+        super(ROLE_NAME, "Read-write access to entire application");
+    }
+
+    @Override
+    protected void execute(ExecutionContext ec) {
+        newPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.CHANGING,
+                Can.of(ApplicationFeatureId.newNamespace("hello"))
+        );
+    }
+}
+----
+
+* to set up a "no-delete" role that vetoes the ability to delete objects:
++
+[source,java]
+.RoleAndPerms__UserRw.java
+----
+public class RoleAndPerms__NoDelete extends AbstractRoleAndPermissionsFixtureScript {
+
+    public static final String ROLE_NAME = "no-delete";
+
+    public RoleAndPerms__NoDelete() {
+        super(ROLE_NAME, "Veto access to deleting HelloWorld objects");
+    }
+
+    @Override
+    protected void execute(ExecutionContext ec) {
+        newPermissions(
+                ApplicationPermissionRule.VETO,
+                ApplicationPermissionMode.VIEWING,
+                Can.of(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "hello.HelloWorldObject#delete"))
+        );
+    }
+}
+----
+
+* to set up a user "joe" with the "user-rw" and "no-delete" role:
++
+[source,java]
+.UserToRole__bob_UserRw.java
+----
+public class UserToRole__bob_UserRw extends AbstractUserAndRolesFixtureScript {
+
+    public UserToRole__bob_UserRw() {
+        super("joe", "pass", "bob@world.com",
+                "/ITA",
+                AccountType.LOCAL,
+                Can.of(
+                   RoleAndPerms__UserRw.ROLE_NAME,
+                   RoleAndPerms__NoDelete.ROLE_NAME
+                ));
+    }
+}
+----

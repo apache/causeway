@@ -45,9 +45,42 @@ public interface ApplicationTenancyEvaluator {
      */
     boolean handles(Class<?> cls);
 
+    /**
+     * Whether this domain object should not be visible to the specified
+     * {@link ApplicationUser user}.
+     *
+     * <p>
+     *     The domain object will be one that is handled by this evaluator,
+     *     in other words that {@link #handles(Class)} was previously called
+     *     and the evaluator returned <code>true</code>.
+     * </p>
+     * <p>
+     *     A non-null return value means that the object should be hidden.
+     * </p>
+     */
     String hides(Object domainObject, ApplicationUser applicationUser);
 
+    /**
+     * Whether the object members of this domain object should be
+     * disabled/read-only for the specified {@link ApplicationUser user}.
+     *
+     * <p>
+     *     The domain object will be one that is handled by this evaluator,
+     *     in other words that {@link #handles(Class)} was previously called
+     *     and the evaluator returned <code>true</code>.
+     * </p>
+     *
+     * <p>
+     *     This method is only called after
+     *     {@link #hides(Object, ApplicationUser)} and only if that method
+     *     returned <code>false</code>.
+     * </p>
+     *
+     * <p>
+     *     A non-null return value means that the object should be disabled,
+     *     and is used as the reason why the object member is disabled.
+     * </p>
+     */
     String disables(Object domainObject, ApplicationUser applicationUser);
-
 
 }

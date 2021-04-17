@@ -5,3 +5,5 @@
 
 WARNING: TODO: v2 - to document
 
+
+See xref:refguide:extensions:index/modelannotation/applib/annotation/Model.adoc[]
