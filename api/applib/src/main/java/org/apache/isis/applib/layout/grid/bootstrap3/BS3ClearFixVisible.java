@@ -68,8 +68,9 @@ public class BS3ClearFixVisible extends BS3ClearFix {
     @Override
     public String toCssClass() {
         return "clearfix "
-                + "visible-" + getSize().toCssClassFragment() + "-" + getCssDisplay().toCssClassFragment() +
-                (getCssClass() != null? " " + getCssClass(): "");
+                + getSize().toCssDBlockClassFragment() 
+                // + "-" + getCssDisplay().toCssClassFragment() 
+                + (getCssClass() != null? " " + getCssClass(): "");
     }
 
 }

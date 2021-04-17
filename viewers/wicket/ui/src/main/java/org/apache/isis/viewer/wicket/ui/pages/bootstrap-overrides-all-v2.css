@@ -43,7 +43,11 @@ header.navbar-fixed-top {
     left: initial;
 }
 
-.card-default .card-header {
+.card {
+	margin-bottom: 21px;
+}
+
+.card .card-header {
 	padding: 3px 15px;
 	display: flex;
 	align-items: center;
