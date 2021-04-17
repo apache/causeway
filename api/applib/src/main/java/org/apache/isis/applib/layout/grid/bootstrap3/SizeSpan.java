@@ -96,9 +96,10 @@ public class SizeSpan implements Serializable {
         if(buf.length() > 0) {
             buf.append(" ");
         }
-        buf.append("col-")
-        .append(size.toCssClassFragment())
-        .append("-")
+        buf
+        // .append("col-")
+        // .append(size.toCssClassFragment())
+        // .append("-")
         .append(offset != null && offset ? "offset-": "")
         .append(span);
         return buf;

@@ -90,7 +90,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     }
 
     /**
-     * Most other components require 'form-control input-sm' on the owning inline prompt link.
+     * Most other components require 'form-control form-control-sm' on the owning inline prompt link.
      * For this component, however, which uses a textarea, this instead appears on the textarea itself.
      */
     @Override

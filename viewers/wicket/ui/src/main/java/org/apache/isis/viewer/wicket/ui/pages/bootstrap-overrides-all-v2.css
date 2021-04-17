@@ -43,12 +43,12 @@ header.navbar-fixed-top {
     left: initial;
 }
 
-.panel-default .panel-heading {
+.card-default .card-header {
 	padding: 3px 15px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 3em; /* for panel-headings that contain no buttons, to make them same height */
+	min-height: 3em; /* for card-headers that contain no buttons, to make them same height */
 }
 
 .table .form-control:disabled {
@@ -502,10 +502,10 @@ span.containedButtonPanel {
 /* from entityPropertiesPanel */
 
 
-.entityPropertiesPanel .properties.panel-body {
+.entityPropertiesPanel .properties.card-body {
     padding-bottom: 5px;
 }
-.entityPropertiesPanel .collection.panel-body {
+.entityPropertiesPanel .collection.card-body {
     padding-bottom: 0px;
 }
 
@@ -560,11 +560,11 @@ div.additionalLinkList {
     /*margin-top: -0.3em;*/
 }
 
-.collection.panel-body {
+.collection.card-body {
     padding-top: 0px;
 }
 
-.collectionPanel .well {
+.collectionPanel .card.card-body {
     background-color: transparent;
     margin-bottom: 0px;
 }
@@ -587,12 +587,11 @@ th > a > div > strong {
     margin-bottom: 0;
 }
 
-
 div.label-left.form-group {
     width: 100%;
 }
 
-div.label-left label.control-label {
+div.label-left label.col-form-label {
     width: 30%;
     float: left;
     padding-top: 2px;
@@ -600,17 +599,17 @@ div.label-left label.control-label {
     text-align: left;
 }
 
-.propertyEditForm .label-left label.control-label,
-.actionParametersForm .label-left label.control-label {
+.propertyEditForm .label-left label.col-form-label,
+.actionParametersForm .label-left label.col-form-label {
     padding-left: 10px;
 }
 
-div.label-top label.control-label {
+div.label-top label.col-form-label {
     /*padding-left: 10px;*/
     /*padding-bottom: 4px;*/
 }
 
-div.label-none label.control-label {
+div.label-none label.col-form-label {
     display: none;
 }
 
@@ -628,7 +627,7 @@ div.label-left.actions-right .scalarValueWrapper {
     /*width: 3%;*/
 }
 
-.pull-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
+.float-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
     text-align: inherit;
 }
 
@@ -673,7 +672,7 @@ div.label-right .scalarValueWrapper {
     padding-left: 30%;
 }
 
-div.label-right .scalarValueWrapper .control-label{
+div.label-right .scalarValueWrapper .col-form-label{
     vertical-align: sub;
 }
 
@@ -728,7 +727,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     height: 20px;
 }
 
-.referencePanel .form-group.label-left .scalarName.control-label {
+.referencePanel .form-group.label-left .scalarName.col-form-label {
     padding-right: 10px;
 }
 
@@ -746,23 +745,23 @@ div.referencePanel.scalarNameAndValueComponentType {
     padding-top: 20px;
 }
 
-.entityCollectionsPanel .panel-heading {
+.entityCollectionsPanel .card-header {
     padding-bottom: 10px;
 }
-.standaloneCollectionPanel .panel-heading {
+.standaloneCollectionPanel .card-header {
     padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
 }
 
-.additionalLinks.pull-right {
+.additionalLinks.float-right {
     /*margin-right: 5px;*/
 }
 
-.additionalLinks.pull-right div {
+.additionalLinks.float-right div {
     /* display: inline-block; */
     /*margin-left: 5px;*/
 }
 
-.additionalLinks.pull-right div .additionalLinkListDropDown {
+.additionalLinks.float-right div .additionalLinkListDropDown {
     margin-left: 10px;
     margin-right: 0px;
 }
@@ -776,15 +775,15 @@ div.referencePanel.scalarNameAndValueComponentType {
     /*padding-bottom: 5px;*/
 }
 
-.scalarValueWrapper .help-block {
+.scalarValueWrapper .form-text {
     margin-bottom: 5px;
 }
 
-.scalarValueWrapper .help-block ul {
+.scalarValueWrapper .form-text ul {
     margin-bottom: 0px;
 }
 
-.scalarValueWrapper .help-block .alert {
+.scalarValueWrapper .form-text .alert {
     margin-bottom: 0px;
 }
 

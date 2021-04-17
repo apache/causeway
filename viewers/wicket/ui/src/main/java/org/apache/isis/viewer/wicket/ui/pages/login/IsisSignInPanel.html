@@ -29,14 +29,14 @@
                     <label wicket:for="password"><wicket:message key="passwordLabel"/></label>
                     <input type="password" class="form-control isis-password" wicket:id="password" placeholder="Enter password"/>
                 </div>
-                <div class="checkbox" wicket:id="rememberMeContainer">
+                <div class="form-check" wicket:id="rememberMeContainer">
                     <label>
                         <input type="checkbox" wicket:id="rememberMe"/> <wicket:message key="rememberMeLabel"/>
                     </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary"><wicket:message key="signInButtonLabel"/></button>
-                <button type="reset" class="btn btn-default"><wicket:message key="resetButtonLabel"/></button>
+                <button type="reset" class="btn btn-secondary"><wicket:message key="resetButtonLabel"/></button>
 
                 <div class="form-group">
                     <a wicket:id="passwdResetLink" class="btn btn-block btn-link"><wicket:message key="forgotPasswordLinkLabel"/></a>
