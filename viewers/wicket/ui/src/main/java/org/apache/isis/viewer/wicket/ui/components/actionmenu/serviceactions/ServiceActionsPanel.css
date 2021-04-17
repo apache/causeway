@@ -233,12 +233,12 @@
     list-style:none;
 }
 
-.entityCollectionsPanel .panel-heading .additionalLinkList {
+.entityCollectionsPanel .card-header .additionalLinkList {
     /*margin-right: 10px;*/
 }
 
 
-.pull-right .additionalLinkListDropDown {
+.float-right .additionalLinkListDropDown {
     margin-left: 0px;
 }
 
@@ -265,7 +265,7 @@
 .entityPropertiesPanel .additionalLinkList li {
     margin-right:0px;
 }
-.entityPropertiesPanel .properties .panel-heading .additionalLinkList {
+.entityPropertiesPanel .properties .card-header .additionalLinkList {
     margin-right: -5px;
 }
 

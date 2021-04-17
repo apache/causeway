@@ -36,12 +36,17 @@ import de.agilecoders.wicket.jquery.IKey;
 
 /**
  * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
- * Provides settings for <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
+ * Provides settings for <a href="https://github.com/tempusdominus/bootstrap-4">Tempus Dominus Bootstrap 4 Datetime Picker</a>
  * JavaScript widget
  */
 public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The earliest date that may be selected; all earlier dates will be disabled.
+     */
+    private static final IKey<Boolean> KeepOpen = newKey("keepOpen", false);    
+    
     /**
      * The earliest date that may be selected; all earlier dates will be disabled.
      */
@@ -180,6 +185,17 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public boolean isDefaultLanguageSet() {
         return Language.isDefaultValue(getLanguage());
+    }
+    
+    /**
+     * Will cause the date picker to stay open after selecting a date.
+     * 
+     * @param keepOpen whether to keep open
+     * @return this instance for chaining
+     */
+    public DateTimeConfig keepOpen(final boolean keepOpen) {
+        put(KeepOpen, keepOpen);
+        return this;
     }
 
     /**

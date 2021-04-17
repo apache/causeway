@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
+// import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -83,8 +83,8 @@ public class ServiceActionsPanel extends MenuActionPanel {
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
 
-        response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
-        response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
+        // response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
+        // response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
 
         SSESupport.renderHead(response);
 

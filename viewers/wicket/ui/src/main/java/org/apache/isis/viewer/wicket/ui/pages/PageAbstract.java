@@ -83,6 +83,7 @@ import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
+// import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -307,9 +308,13 @@ implements ActionPromptProvider {
      */
     private void addBootLint(final IHeaderResponse response) {
         // rather than using the default BootlintHeaderItem.INSTANCE;
-        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
+        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)    	
+    	
+    	// Bootlint not available for BS4 (as for now)
+    	/*
         response.render(new BootlintHeaderItem(
                 "bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
+                */
     }
 
     /**
