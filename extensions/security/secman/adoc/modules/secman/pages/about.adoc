@@ -160,6 +160,27 @@ For this reason, the xref:refguide:extensions:index/secman/api/user/ApplicationU
 TIP: Another implementation of xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:demo:about.adoc[Demo App]..
 
 
+.Apache Isis' multi-tenancy is only skin deep
+****
+It's important to realize that Apache Isis' multi-tenancy support is only skin deep.
+What we mean by that is that the restricting of access to data is only performed at the presentation layer.
+If a user is not permitted to view/edit an object, then it is only the viewer component prevents them from doing so; the restricted object could still have been retrieved into memory from the database.
+
+You may therefore wish to implement multi-tenancy at a "deeper" level, at the persistence layer).
+This would prevent the object from being retrieved into memory in the first place, almost certainly more performant and obviously also secure because the viewer cannot render an object that hasn't been retrieved.
+One implementation (for multi-tenancy at the persistence layer) is to use capabilities of the ORM.
+
+* xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] supports link:link:https://www.datanucleus.org/products/accessplatform/jdo/persistence.html#multitenancy[multi-tenancy] through the link:https://www.datanucleus.org/products/accessplatform_5_1/jdo/annotations.html#MultiTenant_Class[@MultiTenant] annotation and `datanucleus.tenantId` or `datanucleus.tenantProvider` configuration properties.
+* xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] supports 3 different types of multi-tenancy, described in the documentation for the link https://www.eclipse.org/eclipselink/documentation/2.4/jpa/extensions/a_multitenant.htm[@Multitenant] annotation.
+
+Another alternative is to move the responsibility for managing tenancy into the relational database itself.
+This will obviously vary by vendor.
+
+Another option again is rather simple: just run multiple instances of the application, one per tenancy.
+****
+
+
+
 [#shiro-integration]
 == Shiro Integration
 
