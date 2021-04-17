@@ -19,18 +19,33 @@
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
 /**
- * As per <a href="http://getbootstrap.com/css/#grid-options">grid options</a>, also used in
- * <a href="http://getbootstrap.com/css/#responsive-utilities">responsive utility</a> classes.
+ * As per <a href="https://getbootstrap.com/docs/5.0/layout/grid/#grid-options">grid options</a>
  *
  * @since 1.x {@index}
  */
 public enum Size {
-    XS,
-    SM,
-    MD,
-    LG;
+    XS(""),
+    SM("sm-"),
+    MD("md-"),
+    LG("lg-"),
+    XL("xl-"),
+    XXL("xxl-");
+	
+	final String bsPrefix;
+	private Size(String bsPrefix) {
+		this.bsPrefix = bsPrefix;
+	}
 
-    public String toCssClassFragment() {
-        return name().toLowerCase();
+    public String toCssSpanClassFragment(int span) {
+        return String.format("%s%d", bsPrefix, span);
     }
+    
+    public String toCssDNoneClassFragment() {
+        return String.format("d-%snone", bsPrefix);    	
+    }
+
+    public String toCssDBlockClassFragment() {
+        return String.format("d-%sblock", bsPrefix);    	
+    }
+
 }
