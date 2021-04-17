@@ -43,9 +43,7 @@ public class BS3ClearFixHidden extends BS3ClearFix {
 
     @Override
     public String toCssClass() {
-        return "clearfix "
-                + getSize().toCssDNoneClassFragment()  +
-                (getCssClass() != null? " " + getCssClass(): "");
+        return "clearfix " + getDisplayFragment(CssDisplay.NONE, getSize())
+                + (getCssClass() != null? " " + getCssClass(): "");
     }
-
 }

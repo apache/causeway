@@ -24,28 +24,15 @@ package org.apache.isis.applib.layout.grid.bootstrap3;
  * @since 1.x {@index}
  */
 public enum Size {
-    XS(""),
-    SM("sm-"),
-    MD("md-"),
-    LG("lg-"),
-    XL("xl-"),
-    XXL("xxl-");
+    XS,
+    SM,
+    MD,
+    LG,
+    XL,
+    XXL;
 	
-	final String bsPrefix;
-	private Size(String bsPrefix) {
-		this.bsPrefix = bsPrefix;
-	}
-
-    public String toCssSpanClassFragment(int span) {
-        return String.format("%s%d", bsPrefix, span);
+    public String toCssClassFragment() {
+        return name().toLowerCase();
     }
-    
-    public String toCssDNoneClassFragment() {
-        return String.format("d-%snone", bsPrefix);    	
-    }
-
-    public String toCssDBlockClassFragment() {
-        return String.format("d-%sblock", bsPrefix);    	
-    }
-
+	
 }
