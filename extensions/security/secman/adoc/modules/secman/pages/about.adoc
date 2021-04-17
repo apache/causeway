@@ -135,21 +135,55 @@ public class ApplicationTenancyEvaluatorUsingAtPath implements ApplicationTenanc
 <.> SecMan provides the xref:refguide:extensions:index/secman/api/tenancy/HasAtPath.adoc[HasAtPath] interface to standardize the way in which domain objects expose their "tag" (atPath) to the evaluator.
 <.> can view all objects (above and below) within the user's hierarchy
 +
-for example:
+For example:
 +
-* obj = '/', user = '/ITA' : visible
-* obj = '/ITA', user = '/ITA' : visible
-* obj = '/ITA/MIL', user = '/ITA' : visible
-* obj = '/FRA', user = '/ITA' : not visible
+[cols="2m,2m,2a"]
+|===
+| Object atPath | User atPath | Visibility
+
+|/
+|/ITA
+|visible
+
+|/ITA
+|/ITA
+|visible
+
+|/ITA/MIL
+|/ITA
+|visible
+
+|/FRA
+|/ITA
+|not visible
+
+|===
 
 <.> can edit only objects at or below the user's hierarchy
 +
-for example:
+For example:
 +
-* obj = '/', user = '/ITA' : not editable
-* obj = '/ITA', user = '/ITA' : editable
-* obj = '/ITA/MIL', user = '/ITA' : editable
-* obj = '/FRA', user = '/ITA' : not editable
+[cols="2m,2m,2a"]
+|===
+| Object atPath | User atPath | Outcome
+
+|/
+|/ITA
+|disabled
+
+|/ITA
+|/ITA
+|enabled
+
+|/ITA/MIL
+|/ITA
+|enabled
+
+|/FRA
+|/ITA
+|n/a (not visible)
+
+|===
 
 More complex implementations are possible: ultimately the "atPath" properties are just strings and so can be interpreted in whatever way makes sense.
 For example, to allow a user to be able to access objects from multiple countries, we could use a format such as "/ITA;/BEL".

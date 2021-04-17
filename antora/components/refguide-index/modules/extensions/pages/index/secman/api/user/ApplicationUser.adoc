@@ -16,8 +16,8 @@ interface ApplicationUser {
   String title()     // <.>
   String iconName()
   String getName()
-  String getEncryptedPassword()
-  AccountType getAccountType()
+  String getEncryptedPassword()     // <.>
+  AccountType getAccountType()     // <.>
   void setAccountType(AccountType accountType)
   ApplicationPermissionValueSet getPermissionSet()
   Set<? extends ApplicationRole> getRoles()
@@ -49,6 +49,16 @@ interface ApplicationUser {
 --
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 --
+<.> xref:#getEncryptedPassword__[getEncryptedPassword()]
++
+--
+Only used for _#getAccountType() local_ users, stores the password in encrypted form.
+--
+<.> xref:#getAccountType__[getAccountType()]
++
+--
+Determines how to authenticate this user.
+--
 
 == Members
 
@@ -56,3 +66,19 @@ having a title() method (rather than using @Title annotation) is necessary as a 
 === title()
 
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+
+[#getEncryptedPassword__]
+=== getEncryptedPassword()
+
+Only used for _#getAccountType() local_ users, stores the password in encrypted form.
+
+The password will have been encrypted by the configured _org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService_ .
+
+[#getAccountType__]
+=== getAccountType()
+
+Determines how to authenticate this user.
+
+_AccountType#LOCAL local_ users are authenticated directly against the _#getEncryptedPassword() password_ .
+
+_AccountType#DELEGATED delegated_ users are authenticated by some other authentication mechanism. For example, Secman's Shiro realm allows a delegate realm to be configured, and will call that delegate realm for delegated users rather than authenticating locally.
