@@ -697,7 +697,7 @@ implements ScalarModelSubscriber {
     }
 
     protected String obtainInlinePromptLinkCssIfAny() {
-        return "form-control input-sm";
+        return "form-control form-control-sm";
     }
 
     protected Component createInlinePromptComponent(

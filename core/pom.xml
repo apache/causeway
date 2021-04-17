@@ -182,7 +182,7 @@
 		<vaadin.version>19.0.4</vaadin.version>
 
 		<wicket.version>8.11.0</wicket.version>
-		<wicket-bootstrap.version>2.0.14</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+		<wicket-bootstrap.version>3.0.0-M17</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
@@ -562,10 +562,10 @@
 						<jswarn>false</jswarn>
 						<suffix>.min</suffix>
 						<excludes>
-							<exclude>**/moment.js</exclude>
-							<exclude>**/moment.min.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.min.js</exclude>
+							<exclude>**/moment-with-locales.js</exclude>
+							<exclude>**/moment-with-locales.min.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.min.js</exclude>
 							<exclude>**/bootstrap-growl.js</exclude>
 							<exclude>**/bootstrap-growl.min.js</exclude>
 						</excludes>

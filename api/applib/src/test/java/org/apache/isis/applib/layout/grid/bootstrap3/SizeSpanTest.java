@@ -55,7 +55,7 @@ public class SizeSpanTest {
 
         final String s = ss.toCssClassFragment();
 
-        assertThat(s, is(equalTo("col-sm-offset-0")));
+        assertThat(s, is(equalTo("offset-0")));
 
     }
 

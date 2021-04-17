@@ -58,6 +58,6 @@ public class BS3ColTest {
         bs3Col.getSizeSpans().add(SizeSpan.with(Size.MD, 5));
         bs3Col.getSizeSpans().add(SizeSpan.offset(Size.MD, 2));
 
-        assertThat(bs3Col.toCssClass(), is(equalTo("col-sm-6 col-md-5 col-md-offset-2")));
+        assertThat(bs3Col.toCssClass(), is(equalTo("col-sm-6 col-md-5 offset-2")));
     }
 }
