@@ -59,6 +59,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
@@ -255,6 +256,10 @@ implements
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
 
+            if(configuration.getViewer().getWicket().isUseJqueryV3()) {
+            	this.getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+            }
+            
             this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
             configureSecurity(configuration);
