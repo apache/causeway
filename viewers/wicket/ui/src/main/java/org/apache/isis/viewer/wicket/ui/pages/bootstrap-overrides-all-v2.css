@@ -1154,3 +1154,6 @@ ul.tertiary li.dropdown ul.dropdown-menu {
     min-width: 0px;
 }
 
+.fs-15em {
+	font-size: 1.5em;
+}
