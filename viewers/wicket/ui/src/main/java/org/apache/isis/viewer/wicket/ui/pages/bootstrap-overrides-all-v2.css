@@ -482,17 +482,17 @@ span.containedButtonPanel {
 
 
 
-.navbar .powered-by {
-    margin-top: 23px;
+.navbar-text .powered-by {
+    /* margin-top: 23px; */
     margin-right: 10px;
     font-size: small;
     font-style: italic;
-    vertical-align: middle;
+    /* vertical-align: middle; */
 }
 
 .navbar .creditName {
     padding-left: 2px;
-    padding-right: 10px;
+    /* padding-right: 10px; */
     vertical-align: middle;
 }
 

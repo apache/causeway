@@ -19,7 +19,7 @@
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
 /**
- * As per <a href="https://getbootstrap.com/docs/5.0/layout/grid/#grid-options">grid options</a>
+ * As per <a href="https://getbootstrap.com/docs/4.6/layout/grid/#grid-options">grid options</a>
  *
  * @since 1.x {@index}
  */
@@ -28,8 +28,7 @@ public enum Size {
     SM,
     MD,
     LG,
-    XL,
-    XXL;
+    XL;
 	
     public String toCssClassFragment() {
         return name().toLowerCase();
