@@ -87,7 +87,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('.navbar.navbar-fixed-top').height()-5);"));
+        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('nav.navbar.fixed-top')[0].offsetHeight - 5);"));
     }
 
     private void buildGui() {
