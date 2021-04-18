@@ -43,6 +43,12 @@ header.navbar-fixed-top {
     left: initial;
 }
 
+/* emulate .dropdown-menu-right for secondary dropdown menus */
+.navbar-nav.secondary .dropdown-menu {
+	right: 0;
+	left: auto;
+}
+
 .card {
 	margin-bottom: 21px;
 }
@@ -53,6 +59,10 @@ header.navbar-fixed-top {
 	align-items: center;
 	justify-content: space-between;
 	min-height: 3em; /* for card-headers that contain no buttons, to make them same height */
+}
+
+.card .card-header .card-title {
+	margin-bottom: 0rem;
 }
 
 .table .form-control:disabled {
@@ -513,7 +523,10 @@ span.containedButtonPanel {
     padding-bottom: 0px;
 }
 
-
+/* add some space between an FA icon and the text on the right */
+.btn .fa {
+	margin-right: 2px;
+}
 
 /* from additionalLinksPanel.css */
 

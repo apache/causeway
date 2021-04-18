@@ -33,14 +33,14 @@
                         <img alt="Brand" wicket:id="brandLogo"/>
                     </a>
                 </div>
-                <div class="navbar-collapse app-actions collapse navbar-left">
+                <div class="navbar-collapse app-actions collapse mr-auto">
                     <ul class="navbar-nav" wicket:id="primaryMenuBar"></ul>
                 </div>
-                <div class="navbar-collapse app-actions collapse navbar-right">
+                <div class="navbar-collapse app-actions collapse flex-grow-0">
                     <ul class="navbar-nav" wicket:id="secondaryMenuBar"></ul>
                     <ul class="navbar-nav tertiary">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom: 5px;">
+                        <li class="nav-item dropdown">                        	
+                            <a href="#" class="nav-link dropdown-toggle" id="tertiaryDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span wicket:id="userIcon">
                                     <i class="fa fa-fw fa-user"></i>
                                 </span>
@@ -48,8 +48,8 @@
                                 <span class="userName" wicket:id="userName"></span>
                                 <span class="caret"></span>
                             </a>
-                            <ul wicket:id="tertiaryMenuBar" class="dropdown-menu" role="menu" style="min-width: 0px;">
-                            </ul>
+                            <ul wicket:id="tertiaryMenuBar" class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tertiaryDropdownMenuLink">
+                            </ul>                            
                         </li>
                     </ul>
                 </div>
