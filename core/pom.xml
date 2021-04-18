@@ -187,6 +187,8 @@
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.19</wicket-webjars.version>
 
+		<popper-js.version>1.16.0</popper-js.version>
+
 		<wicketstuff.version>8.11.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
@@ -972,6 +974,11 @@
 				<type>pom</type>
 			</dependency>
 
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>popper.js</artifactId>		    
+				<version>${popper-js.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>

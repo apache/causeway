@@ -94,6 +94,11 @@
             </exclusions>
         </dependency>
 
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>popper.js</artifactId>		    
+		</dependency>
+
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
