@@ -203,6 +203,10 @@
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
             <exclusions>
+				<exclusion>
+				    <groupId>org.webjars</groupId>
+				    <artifactId>popper.js</artifactId>
+				</exclusion>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
                     <artifactId>wicket-util</artifactId>
@@ -286,6 +290,10 @@
                 <exclusion>
                     <groupId>com.google.javascript</groupId>
                     <artifactId>closure-compiler</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.javascript</groupId>
+                    <artifactId>closure-compiler-unshaded</artifactId>
                 </exclusion>
             	<exclusion>
             		<groupId>org.webjars.bower</groupId>
