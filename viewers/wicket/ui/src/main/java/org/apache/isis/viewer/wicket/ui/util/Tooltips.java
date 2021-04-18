@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
 import lombok.NonNull;
 import lombok.val;
@@ -102,7 +103,8 @@ public class Tooltips {
     }
     
     private static PopoverConfig createTooltipConfig() {
-        return new PopoverConfig()
+        return new ExtendedPopoverConfig()
+        		.withBoundary(PopoverBoundary.viewport)
                 .withTrigger(OpenTrigger.hover)
                 .withPlacement(Placement.bottom)
                 .withAnimation(true);
