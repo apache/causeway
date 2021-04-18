@@ -41,6 +41,6 @@ a.scalarValueInlinePromptLink:focus textarea,
 }
 
 /* ISIS-2092 fixing Darkly Theme: buttons and fieldset-headers have same background-color */
-.panel-default > .card-header {
+.card > .card-header {
     background-color: #515050;
 }

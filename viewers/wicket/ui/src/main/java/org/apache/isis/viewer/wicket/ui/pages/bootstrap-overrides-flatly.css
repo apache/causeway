@@ -27,6 +27,12 @@
     background-color: #ecf0f1;
 }
 
+header nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+header .navbar-header .navbar-brand {
+	padding-bottom: 0px;
+}
 
 .sidebar-panel :focus,
 h4.iconAndTitle a:focus,
