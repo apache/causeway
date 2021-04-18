@@ -1865,6 +1865,12 @@ public class IsisConfiguration {
              * Whether the Ajax debug should be shown, by default this is disabled.
              */
             private boolean ajaxDebugMode = false;
+            
+            /**
+             * Whether the viewer should use JQuery V3, default is V2.
+             * @see org.apache.wicket.resource.JQueryResourceReference 
+             */
+            private boolean useJqueryV3 = false;
 
             /**
              * The base path at which the Wicket viewer is mounted.
