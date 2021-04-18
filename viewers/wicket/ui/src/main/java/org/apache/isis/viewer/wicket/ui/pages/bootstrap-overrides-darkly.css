@@ -17,6 +17,13 @@
  *  under the License.
  */
 
+header nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+header .navbar-header .navbar-brand {
+	padding-bottom: 0px;
+}
+
 .bootstrap-datetimepicker-widget {
     background-color: #ffffff;
     color: #000000;
