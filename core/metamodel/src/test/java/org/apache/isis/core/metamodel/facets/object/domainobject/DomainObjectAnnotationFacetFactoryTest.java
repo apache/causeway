@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
@@ -67,7 +68,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
         facetFactory.setMetaModelContext(super.metaModelContext);
     }
 

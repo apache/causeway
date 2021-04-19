@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -31,8 +30,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+
+import lombok.val;
 
 public class MethodFinderUtilsTest {
 
@@ -47,8 +48,9 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenExists() throws Exception {
 
-        final Map<Class<?>, Optional<Method>> cache = _Maps.newHashMap();
-        final Method method = MethodFinderUtils.findAnnotatedMethod(new WithPostConstruct(), PostConstruct.class, cache);
+        val cache = new MethodByClassMap();
+        final Method method = MethodFinderUtils
+                .findAnnotatedMethod(new WithPostConstruct(), PostConstruct.class, cache );
 
         assertThat(method, is(not(nullValue())));
         final Optional<Method> actual = cache.get(WithPostConstruct.class);
@@ -60,8 +62,9 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenDoesNotExist() throws Exception {
 
-        final Map<Class<?>, Optional<Method>> cache = _Maps.newHashMap();
-        final Method method = MethodFinderUtils.findAnnotatedMethod(new NoPostConstruct(), PostConstruct.class, cache);
+        val cache = new MethodByClassMap();
+        final Method method = MethodFinderUtils
+                .findAnnotatedMethod(new NoPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(nullValue()));
         final Optional<Method> actual = cache.get(NoPostConstruct.class);

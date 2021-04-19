@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -72,6 +70,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.Rec
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -81,6 +80,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class DomainObjectAnnotationFacetFactory 
@@ -93,8 +93,10 @@ implements
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
-    public DomainObjectAnnotationFacetFactory() {
+    public DomainObjectAnnotationFacetFactory(
+            final @NonNull MethodByClassMap postConstructMethodsCache) {
         super(FeatureType.OBJECTS_ONLY);
+        this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
     @Override
@@ -535,11 +537,11 @@ implements
 
     // //////////////////////////////////////
 
-    private final Map<Class<?>, Optional<Method>> postConstructMethods = _Maps.newHashMap();
+    private final MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
+        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethodsCache);
     }
 
 

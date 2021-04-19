@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -39,7 +40,7 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
     }
 
     @Test

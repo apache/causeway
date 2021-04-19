@@ -140,10 +140,13 @@ import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStamp
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
+
+import lombok.val;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
@@ -232,11 +235,13 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HiddenObjectFacetViaMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisabledObjectFacetViaMethodFactory.class);
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, RecreatableObjectFacetFactory.class);
+        val postConstructMethodsCache = new MethodByClassMap();
+        
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
 
         // must come after RecreatableObjectFacetFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DomainObjectAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DomainObjectAnnotationFacetFactory(postConstructMethodsCache));
 
         // must come after the property/collection accessor+mutator facet factories
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionAnnotationFacetFactory.class);
