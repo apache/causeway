@@ -63,6 +63,18 @@ public interface MethodRemover {
 
     void removeMethod(Method method);
     
+    // -- NOOP IMPLEMENTATION
+    
+    public static final MethodRemover NOOP = new MethodRemover() {
 
+        @Override
+        public void removeMethod(final Method method) {
+        }
+
+        @Override
+        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        }
+
+    };
 
 }

@@ -83,9 +83,12 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-
-public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
+public class DomainObjectAnnotationFacetFactory 
+extends FacetFactoryAbstract
+implements 
+    MetaModelRefiner, 
+    PostConstructMethodCache, 
+    ObjectSpecIdFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");

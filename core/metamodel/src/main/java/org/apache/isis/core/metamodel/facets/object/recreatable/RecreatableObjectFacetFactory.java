@@ -43,8 +43,11 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-implements MetaModelRefiner, PostConstructMethodCache {
+public class RecreatableObjectFacetFactory
+extends FacetFactoryAbstract
+implements 
+    MetaModelRefiner, 
+    PostConstructMethodCache {
 
     public RecreatableObjectFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
