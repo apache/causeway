@@ -103,7 +103,7 @@
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
-		<datanucleus-api-jdo.version>5.2.5</datanucleus-api-jdo.version>
+		<datanucleus-api-jdo.version>5.2.6</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.7</datanucleus-core.version>
 		<datanucleus-jdo-api.version>3.2.0-m13</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
