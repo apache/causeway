@@ -30,7 +30,7 @@ public class ApplicationUserManager {
 //    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     public String title() {
-        return "ApplicationUserManager"; 
+        return "Application User Manager"; 
     }
 
 //XXX provided via mixins, that is one specific to JPA the other specific to JDO    
