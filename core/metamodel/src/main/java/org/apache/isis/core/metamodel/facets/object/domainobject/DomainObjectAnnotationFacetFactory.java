@@ -494,7 +494,8 @@ implements
 
                     @Override
                     public void validate(ObjectSpecification objSpec) {
-                        if(objSpec.isManagedBean()) {
+                        if(objSpec.isManagedBean()
+                                || objSpec.isAbstract()) {
                             return;
                         }
                         collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);

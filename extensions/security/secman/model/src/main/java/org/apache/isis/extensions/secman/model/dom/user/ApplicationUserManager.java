@@ -34,10 +34,13 @@ public class ApplicationUserManager {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
+    public String title() {
+        return "ApplicationUserManager"; 
+    }
+    
     @Collection
     public java.util.Collection<? extends ApplicationUser> getAllUsers() {
         return applicationUserRepository.allUsers();
     }
-    
     
 }
