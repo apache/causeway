@@ -22,9 +22,9 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Row
 import org.apache.isis.client.kroviz.ui.kv.MenuFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.core.FlexWrap
-import pl.treksoft.kvision.panel.*
+import io.kvision.core.*
+import io.kvision.core.FlexWrap
+import io.kvision.panel.*
 
 class RowBuilder {
 

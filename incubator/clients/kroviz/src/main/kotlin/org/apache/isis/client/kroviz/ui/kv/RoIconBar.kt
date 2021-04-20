@@ -27,14 +27,14 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.kv.MenuFactory.buildForTitle
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Utils
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.core.Widget
-import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.panel.VPanel
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.core.Widget
+import io.kvision.dropdown.DropDown
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.panel.SimplePanel
+import io.kvision.panel.VPanel
 
 object RoIconBar : SimplePanel() {
 

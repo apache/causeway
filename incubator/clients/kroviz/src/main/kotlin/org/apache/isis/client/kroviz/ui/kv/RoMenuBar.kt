@@ -26,16 +26,16 @@ import org.apache.isis.client.kroviz.ui.samples.SvgInline
 import org.apache.isis.client.kroviz.ui.samples.SvgMap
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.dropdown.ddLink
-import pl.treksoft.kvision.dropdown.dropDown
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.navbar.*
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.panel.vPanel
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.ddLink
+import io.kvision.dropdown.dropDown
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.navbar.*
+import io.kvision.panel.SimplePanel
+import io.kvision.panel.vPanel
 import kotlin.browser.window
 
 object RoMenuBar : SimplePanel() {

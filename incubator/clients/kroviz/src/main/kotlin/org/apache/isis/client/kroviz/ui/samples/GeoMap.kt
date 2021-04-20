@@ -21,14 +21,14 @@ package org.apache.isis.client.kroviz.ui.samples
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.RoIconBar
 import org.apache.isis.client.kroviz.utils.IconManager
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.maps.LatLng
-import pl.treksoft.kvision.maps.maps
-import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.utils.pc
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.maps.LatLng
+import io.kvision.maps.maps
+import io.kvision.panel.HPanel
+import io.kvision.utils.pc
 
 /**
  * Sample to be called from RoMenuBar

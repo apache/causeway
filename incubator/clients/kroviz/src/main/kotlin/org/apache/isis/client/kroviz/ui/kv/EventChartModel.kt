@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import pl.treksoft.kvision.chart.DataSets
-import pl.treksoft.kvision.core.Color
+import io.kvision.chart.DataSets
+import io.kvision.core.Color
 import kotlin.js.Date
 
 class EventChartModel(log: List<LogEntry>) : ChartModel {

@@ -21,14 +21,14 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.core.model.ListDM
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.tabulator.Align
-import pl.treksoft.kvision.tabulator.ColumnDefinition
-import pl.treksoft.kvision.tabulator.Editor
-import pl.treksoft.kvision.tabulator.Formatter
-import pl.treksoft.kvision.tabulator.js.Tabulator
-import pl.treksoft.kvision.utils.obj
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.tabulator.Align
+import io.kvision.tabulator.ColumnDefinition
+import io.kvision.tabulator.Editor
+import io.kvision.tabulator.Formatter
+import io.kvision.tabulator.js.Tabulator
+import io.kvision.utils.obj
 
 /**
  * Create ColumnDefinitions for Tabulator tables

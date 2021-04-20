@@ -20,13 +20,13 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.form.formPanel
-import pl.treksoft.kvision.form.select.AjaxOptions
-import pl.treksoft.kvision.form.select.Select
-import pl.treksoft.kvision.utils.obj
-import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.pc
+import io.kvision.form.formPanel
+import io.kvision.form.select.AjaxOptions
+import io.kvision.form.select.Select
+import io.kvision.utils.obj
+import io.kvision.utils.px
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.pc
 import kotlin.js.Date
 
 @Serializable

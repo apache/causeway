@@ -18,9 +18,9 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.perc
+import io.kvision.panel.HPanel
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.perc
 
 object RoApp : SimplePanel() {
     init {

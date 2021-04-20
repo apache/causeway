@@ -22,12 +22,12 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.Displayable
 import org.apache.isis.client.kroviz.ui.builder.LayoutBuilder
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.FontStyle
-import pl.treksoft.kvision.core.FontWeight
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.panel.VPanel
+import io.kvision.core.CssSize
+import io.kvision.core.FontStyle
+import io.kvision.core.FontWeight
+import io.kvision.core.UNIT
+import io.kvision.dropdown.DropDown
+import io.kvision.panel.VPanel
 
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 

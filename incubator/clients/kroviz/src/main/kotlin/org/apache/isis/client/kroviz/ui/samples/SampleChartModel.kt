@@ -19,9 +19,9 @@
 package org.apache.isis.client.kroviz.ui.samples
 
 import org.apache.isis.client.kroviz.ui.kv.ChartModel
-import pl.treksoft.kvision.chart.DataSets
-import pl.treksoft.kvision.core.Color
-import pl.treksoft.kvision.i18n.I18n
+import io.kvision.chart.DataSets
+import io.kvision.core.Color
+import io.kvision.i18n.I18n
 
 @Deprecated("simple sample")
 class SampleChartModel() : ChartModel {

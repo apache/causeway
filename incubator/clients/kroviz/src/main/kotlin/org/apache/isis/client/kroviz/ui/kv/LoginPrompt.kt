@@ -23,8 +23,8 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.Point
-import pl.treksoft.kvision.form.text.Password
-import pl.treksoft.kvision.form.text.Text
+import io.kvision.form.text.Password
+import io.kvision.form.text.Text
 
 class LoginPrompt : Command() {
 

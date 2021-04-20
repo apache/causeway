@@ -24,8 +24,8 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ReplayEvent
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
-import pl.treksoft.kvision.core.StringPair
-import pl.treksoft.kvision.form.select.SimpleSelect
+import io.kvision.core.StringPair
+import io.kvision.form.select.SimpleSelect
 
 class EventExportDialog() : Command() {
 

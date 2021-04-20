@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.to.bs3.FieldSet
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
-import pl.treksoft.kvision.form.FormPanel
+import io.kvision.form.FormPanel
 
 class FieldSetBuilder {
 

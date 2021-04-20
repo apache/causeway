@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TransferObject
-import pl.treksoft.kvision.state.observableListOf
+import io.kvision.state.observableListOf
 
 class ListDM(override val title: String) : DisplayModelWithLayout() {
     var data = observableListOf<Exposer>()
