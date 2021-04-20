@@ -39,3 +39,35 @@ Module `IsisModuleExtModelAnnotation` was removed and is no longer required.
 
 Service `BookmarkService` has been improved, such that its methods return `Optional<?>` instead of nullable objects. 
 
+== Extensions
+
+=== SecMan
+
+Following menu actions for User Management have been removed:
+
+[source,xml]
+.menubars.layout.xml
+----
+<!--
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newLocalUser">
+    <cpt:named>New Local User</cpt:named>
+</mb3:serviceAction>
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="allUsers">
+    <cpt:named>All Users</cpt:named>
+</mb3:serviceAction>
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newDelegateUser">
+    <cpt:named>New Delegate User</cpt:named>
+</mb3:serviceAction>
+-->
+----
+
+Use the new User Manager View Model instead:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager">
+    <cpt:named>User Manager</cpt:named>
+</mb3:serviceAction>
+----                
+                
