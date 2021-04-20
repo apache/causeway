@@ -16,27 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.jdo.dom.user;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import java.util.Collection;
 
-@DomainObject(
-        nature = Nature.VIEW_MODEL,
-        objectType = "isis.ext.secman.ApplicationUserManager"
-        )
-public class ApplicationUserManager {
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
 
-//    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+import lombok.RequiredArgsConstructor;
 
-    public String title() {
-        return "ApplicationUserManager"; 
+@org.apache.isis.applib.annotation.Collection
+@RequiredArgsConstructor
+public class ApplicationUserManager_allUsers
+extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_allUsers<ApplicationUser>{
+    
+    @SuppressWarnings("unused")
+    private final ApplicationUserManager target;
+    
+    @MemberSupport
+    public Collection<ApplicationUser> coll() {
+        return super.doColl();        
     }
 
-//XXX provided via mixins, that is one specific to JPA the other specific to JDO    
-//    @Collection
-//    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
-//        return applicationUserRepository.allUsers();
-//    }
-    
 }

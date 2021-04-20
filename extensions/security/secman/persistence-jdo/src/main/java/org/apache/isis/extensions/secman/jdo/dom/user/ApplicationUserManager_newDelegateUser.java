@@ -37,11 +37,10 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUserManager_newDelegateUser
 extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_newDelegateUser<ApplicationRole>{
     
-    @SuppressWarnings("unused")
     private final ApplicationUserManager target;
     
     @MemberSupport
-    public ApplicationUser act(
+    public ApplicationUserManager act(
             
           @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
           @ParameterLayout(named = "Name")
@@ -57,7 +56,8 @@ extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_
             
             ) {
         
-        return super.doAct(username, initialRole, enabled);
+        super.doAct(username, initialRole, enabled);
+        return target; 
     }
     
     @MemberSupport

@@ -38,11 +38,10 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUserManager_newLocalUser
 extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_newLocalUser<ApplicationRole> {
     
-    @SuppressWarnings("unused")
     private final ApplicationUserManager target;
     
     @MemberSupport
-    public ApplicationUser act(
+    public ApplicationUserManager act(
           @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
           @ParameterLayout(named = "Name")
           final String username,
@@ -66,7 +65,9 @@ extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Email Address")
           final String emailAddress) {
-        return super.doAct(username, password, passwordRepeat, initialRole, enabled, emailAddress);
+        
+        super.doAct(username, password, passwordRepeat, initialRole, enabled, emailAddress);
+        return target; 
     }
     
     @MemberSupport
