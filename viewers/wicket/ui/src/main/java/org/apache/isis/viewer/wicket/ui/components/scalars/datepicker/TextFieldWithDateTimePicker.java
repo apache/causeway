@@ -91,8 +91,11 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         config.minDate(datePickerMinDate);
         config.maxDate(datePickerMaxDate);
-
-        config.keepOpen(true);
+        
+        boolean enabled = this.isEnabled();
+        
+        // config.keepOpen(true);
+        config.readonly(! enabled);
         
         this.config = config;
     }
@@ -137,6 +140,8 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         Attributes.addClass(tag, "datetimepicker-input");
         Attributes.set(tag, "data-toggle", "datetimepicker");
         Attributes.set(tag, "data-target", getMarkupId());
+        
+        Attributes.set(tag, "autocomplete", "off");
     }
 
     @Override
@@ -149,6 +154,8 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment-with-locales.js")));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/tempusdominus-bootstrap-4.js")));
 
+        config.readonly(! isEnabled());
+        
         response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
     }
 
