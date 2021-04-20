@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -33,7 +34,7 @@ public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest 
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new RecreatableObjectFacetFactory();
+        facetFactory = new RecreatableObjectFacetFactory(new MethodByClassMap());
     }
 
     @Override

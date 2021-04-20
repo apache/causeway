@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -35,7 +36,7 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainObjectAnnotationFacetFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
     }
 
     @Override

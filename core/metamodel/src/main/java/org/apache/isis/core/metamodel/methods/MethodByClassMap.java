@@ -16,26 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.methods;
 
 import java.lang.reflect.Method;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+public final class MethodByClassMap 
+extends ConcurrentHashMap<Class<?>, Optional<Method>> {
 
-public class MethodRemoverConstants {
-
-    public static final MethodRemover NOOP = new MethodRemover() {
-
-        @Override
-        public void removeMethod(final Method method) {
-        }
-
-        @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
-        }
-
-    };
+    private static final long serialVersionUID = 1L;
+    
 }

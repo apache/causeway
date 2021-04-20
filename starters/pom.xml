@@ -42,7 +42,7 @@
 		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
 		<spring-boot.version>2.4.5</spring-boot.version>
-		<approvaltests.version>10.4.0</approvaltests.version>
+		<approvaltests.version>10.4.1</approvaltests.version>
 
 		<resteasy.version>4.4.1.Final</resteasy.version>
 
@@ -163,8 +163,8 @@
 			<properties>
 
 				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>5.2.5</datanucleus-api-jdo.version>
-				<datanucleus-core.version>5.2.6</datanucleus-core.version>
+				<datanucleus-api-jdo.version>5.2.6</datanucleus-api-jdo.version>
+				<datanucleus-core.version>5.2.7</datanucleus-core.version>
 				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 

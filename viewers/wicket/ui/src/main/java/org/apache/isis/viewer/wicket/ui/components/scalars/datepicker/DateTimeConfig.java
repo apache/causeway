@@ -60,6 +60,11 @@ public class DateTimeConfig extends AbstractConfig {
     /**
      * The earliest date that may be selected; all earlier dates will be disabled.
      */
+    private static final IKey<Boolean> KeepOpen = newKey("keepOpen", false);    
+    
+    /**
+     * The earliest date that may be selected; all earlier dates will be disabled.
+     */
     private static final IKey<String> StartDate = newKey("startDate", null);
 
     /**
@@ -207,7 +212,7 @@ public class DateTimeConfig extends AbstractConfig {
         put(KeepOpen, keepOpen);
         return this;
     }
-    
+  
     public DateTimeConfig ignoreReadonly(final boolean ignoreReadonly) {
     	put(IgnoreReadonly, ignoreReadonly);
     	return this;

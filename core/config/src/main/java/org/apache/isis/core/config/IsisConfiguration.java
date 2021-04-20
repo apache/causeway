@@ -1867,10 +1867,10 @@ public class IsisConfiguration {
             private boolean ajaxDebugMode = false;
             
             /**
-             * Whether the viewer should use JQuery V3, default is V2.
+             * Which major JQuery version the <i>Wicket Viewer</i> should use, default is 3.
              * @see org.apache.wicket.resource.JQueryResourceReference 
              */
-            private boolean useJqueryV3 = false;
+            private int jQueryVersion = 3;
 
             /**
              * The base path at which the Wicket viewer is mounted.
