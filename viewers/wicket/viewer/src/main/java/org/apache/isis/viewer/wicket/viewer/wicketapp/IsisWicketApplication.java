@@ -67,8 +67,8 @@ import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -250,15 +250,12 @@ implements
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
-
-            if(configuration.getViewer().getWicket().isUseJqueryV3()) {
-            	this.getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
-            }
+            
+            setupJQuery();
             
             this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
@@ -622,6 +619,17 @@ implements
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
+    }
+    
+    protected void setupJQuery() {
+        switch(configuration.getViewer().getWicket().getJQueryVersion()) {
+        case 2: 
+            getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
+            break;
+        default: 
+            getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+            break;
+        }
     }
 
 }
