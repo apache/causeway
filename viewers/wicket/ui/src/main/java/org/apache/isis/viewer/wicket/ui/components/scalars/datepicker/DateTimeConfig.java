@@ -43,7 +43,17 @@ public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The earliest date that may be selected; all earlier dates will be disabled.
+     * 
+     */
+    private static final IKey<Boolean> Readonly = newKey("readonly", false);
+
+    /**
+     * 
+     */
+    private static final IKey<Boolean> IgnoreReadonly = newKey("ignoreReadonly", false);
+    
+    /**
+     * 
      */
     private static final IKey<Boolean> KeepOpen = newKey("keepOpen", false);    
     
@@ -196,6 +206,16 @@ public class DateTimeConfig extends AbstractConfig {
     public DateTimeConfig keepOpen(final boolean keepOpen) {
         put(KeepOpen, keepOpen);
         return this;
+    }
+    
+    public DateTimeConfig ignoreReadonly(final boolean ignoreReadonly) {
+    	put(IgnoreReadonly, ignoreReadonly);
+    	return this;
+    }
+
+    public DateTimeConfig readonly(final boolean readonly) {
+    	put(Readonly, readonly);
+    	return this;
     }
 
     /**

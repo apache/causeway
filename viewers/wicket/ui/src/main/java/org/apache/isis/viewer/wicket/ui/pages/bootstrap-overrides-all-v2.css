@@ -515,7 +515,7 @@ span.containedButtonPanel {
 
 /* add some space between an FA icon and the text on the right */
 .btn .fa {
-	margin-right: 2px;
+	margin-right: 4px;
 }
 
 /* from additionalLinksPanel.css */
@@ -552,8 +552,14 @@ div.additionalLinkList {
 
 }
 
-
-
+/* removes the caret (arrow down) from the additional links selector dropdowns */
+.additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
+	content: none;
+}
+/* removes default margin right after fa-icon in dropdown-toggles */
+.additionalLinkList .btn.btn-secondary.dropdown-toggle .fa {
+	margin-right: 0px;
+}
 
 
 
@@ -576,7 +582,9 @@ div.additionalLinkList {
     margin-bottom: 0px;
 }
 
-
+.btn[disabled="disabled"] {
+	cursor: unset!important;
+}
 
 .nav > li > a {
     padding-left: 10px;
@@ -586,6 +594,12 @@ div.additionalLinkList {
 /* fix for Firefox */
 th > a > div > strong {
     float: left;
+}
+
+/* makes disabled fields darker */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e6e6e6;
+    opacity: 1;
 }
 
 /* Labels on the left/top/none START */
