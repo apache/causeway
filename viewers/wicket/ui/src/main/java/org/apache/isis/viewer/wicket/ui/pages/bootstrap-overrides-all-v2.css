@@ -979,6 +979,10 @@ li.select2-results__option {
     padding-right: 15px;
 }
 
+.multiLineStringPanel .scalarValueInlinePromptLink textarea {
+    background-color: white;
+}
+
 .booleanPanel .form-control.scalarValueInlinePromptLink,
 .referencePanel .form-control.scalarValueInlinePromptLink {
     display: inline-flex;
