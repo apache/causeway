@@ -126,12 +126,6 @@
 					<groupId>org.codehaus.woodstox</groupId>
 					<artifactId>stax2-api</artifactId>
 				</exclusion>
-				<exclusion>
-					<!-- depends on org.glassfish.gmbal:gmbal-api-only:4.0.3 
-						which is not released (as of April 2021) -->
-					<groupId>org.glassfish.gmbal</groupId>
-					<artifactId>gmbal-api-only</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -150,11 +144,7 @@
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.sdo</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.glassfish.gmbal</groupId>
-			<artifactId>gmbal-api-only</artifactId>
-			<version>4.0.2</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
