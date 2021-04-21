@@ -25,13 +25,13 @@ import org.apache.isis.client.kroviz.ui.DiagramDialog
 import org.apache.isis.client.kroviz.ui.NotificationDialog
 import org.apache.isis.client.kroviz.ui.UmlDiagram
 import org.apache.isis.client.kroviz.utils.IconManager
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.navbar.Nav
-import pl.treksoft.kvision.navbar.Navbar
-import pl.treksoft.kvision.navbar.NavbarType
-import pl.treksoft.kvision.panel.SimplePanel
+import io.kvision.core.*
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.navbar.Nav
+import io.kvision.navbar.Navbar
+import io.kvision.navbar.NavbarType
+import io.kvision.panel.SimplePanel
 
 object RoStatusBar {
     val navbar = Navbar(

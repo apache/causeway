@@ -26,9 +26,9 @@ import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Utils
-import pl.treksoft.kvision.core.StringPair
-import pl.treksoft.kvision.form.select.SimpleSelect
-import pl.treksoft.kvision.form.text.TextArea
+import io.kvision.core.StringPair
+import io.kvision.form.select.SimpleSelect
+import io.kvision.form.text.TextArea
 
 class ActionPrompt(val action: Action) : Command() {
 

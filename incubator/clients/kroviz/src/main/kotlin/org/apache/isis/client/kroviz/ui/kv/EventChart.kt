@@ -18,11 +18,11 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import pl.treksoft.kvision.chart.*
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.obj
-import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.utils.pc
+import io.kvision.chart.*
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.obj
+import io.kvision.utils.px
+import io.kvision.utils.pc
 
 //IMPROVE https://github.com/datavisyn/chartjs-chart-box-and-violin-plot
 class EventChart(model: ChartModel) : SimplePanel() {
@@ -38,7 +38,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
         }
     })
 
-    private val tickFormatter = "function(tick) {return tick.split('\\n')[1]}"
+    val tickFormatter:String = "function(tick) {return tick.split('\\n')[1]}"
 
     private val xAxes = listOf(obj {
         scaleLabel = { ScaleTitleOptions(display = true, labelString = "start offset (sec)", fontFamily = font) }
@@ -48,7 +48,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
             fontFamily = font
             fontSize = 11.px
             //WHAT A HACK
-            callback = js(tickFormatter)
+//            callback = js(tickFormatter)
         }
     })
 

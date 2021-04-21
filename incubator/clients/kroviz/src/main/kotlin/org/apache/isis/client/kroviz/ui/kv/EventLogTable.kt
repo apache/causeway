@@ -21,14 +21,14 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.EventLogDetail
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.panel.hPanel
-import pl.treksoft.kvision.tabulator.*
-import pl.treksoft.kvision.utils.obj
-import pl.treksoft.kvision.utils.px
+import io.kvision.core.*
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.panel.VPanel
+import io.kvision.panel.hPanel
+import io.kvision.tabulator.*
+import io.kvision.utils.obj
+import io.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
     val tabulator: Tabulator<LogEntry>

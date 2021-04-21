@@ -20,16 +20,16 @@
 package org.apache.isis.client.kroviz.ui.samples
 
 import org.apache.isis.client.kroviz.utils.UmlUtils
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.form.text.TextArea
-import pl.treksoft.kvision.html.Button
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.Direction
-import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.panel.splitPanel
-import pl.treksoft.kvision.panel.vPanel
-import pl.treksoft.kvision.utils.px
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.form.text.TextArea
+import io.kvision.html.Button
+import io.kvision.html.ButtonStyle
+import io.kvision.panel.Direction
+import io.kvision.panel.VPanel
+import io.kvision.panel.splitPanel
+import io.kvision.panel.vPanel
+import io.kvision.utils.px
 
 @Deprecated("Useful as FlexSample")
 object PlantumlPanel : VPanel() {

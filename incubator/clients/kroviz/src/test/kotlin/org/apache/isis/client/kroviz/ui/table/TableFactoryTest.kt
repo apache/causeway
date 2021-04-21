@@ -23,8 +23,8 @@ import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
-import pl.treksoft.kvision.state.ObservableList
-import pl.treksoft.kvision.state.observableListOf
+import io.kvision.state.ObservableList
+import io.kvision.state.observableListOf
 
 
 class TableFactoryTest {

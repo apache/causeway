@@ -19,9 +19,9 @@
 package org.apache.isis.client.kroviz.ui.samples
 
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import pl.treksoft.kvision.maps.*
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.pc
+import io.kvision.maps.*
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.pc
 
 class SvgMap : SimplePanel() {
 

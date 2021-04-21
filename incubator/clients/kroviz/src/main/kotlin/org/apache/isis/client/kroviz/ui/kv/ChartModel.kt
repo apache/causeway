@@ -18,8 +18,8 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import pl.treksoft.kvision.chart.DataSets
-import pl.treksoft.kvision.core.Color
+import io.kvision.chart.DataSets
+import io.kvision.core.Color
 
 interface ChartModel {
 

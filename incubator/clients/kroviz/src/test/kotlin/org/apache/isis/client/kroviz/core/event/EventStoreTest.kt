@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.utils.XmlHelper
-import pl.treksoft.kvision.panel.VPanel
+import io.kvision.panel.VPanel
 import kotlin.test.*
 
 class EventStoreTest : IntegrationTest() {

@@ -20,8 +20,8 @@ package org.apache.isis.client.kroviz.ui.kv
 
 /* (!) copied from kvision KVManagerBootstrap in order to make Dialogs transparent on move */
 
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.utils.isIE11
+import io.kvision.core.Component
+import io.kvision.utils.isIE11
 
 internal val roManagerBootstrapInit = RoManagerBootstrap.init()
 
@@ -30,11 +30,11 @@ internal val roManagerBootstrapInit = RoManagerBootstrap.init()
  */
 internal object RoManagerBootstrap {
     init {
-        pl.treksoft.kvision.require("bootstrap/dist/js/bootstrap.bundle.min.js")
-        pl.treksoft.kvision.require("awesome-bootstrap-checkbox")
+        io.kvision.require("bootstrap/dist/js/bootstrap.bundle.min.js")
+        io.kvision.require("awesome-bootstrap-checkbox")
     }
 
-    private val elementResizeEvent = pl.treksoft.kvision.require("element-resize-event")
+    private val elementResizeEvent = io.kvision.require("element-resize-event")
 
     @Suppress("UnsafeCastFromDynamic")
     internal fun setResizeEvent(component: Component, callback: () -> Unit) {

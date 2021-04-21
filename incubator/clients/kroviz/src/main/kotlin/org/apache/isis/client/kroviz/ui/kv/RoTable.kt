@@ -21,15 +21,15 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.utils.Utils
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.table.TableType
-import pl.treksoft.kvision.tabulator.Layout
-import pl.treksoft.kvision.tabulator.Tabulator
-import pl.treksoft.kvision.tabulator.TabulatorOptions
-import pl.treksoft.kvision.utils.set
+import io.kvision.core.Container
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.panel.SimplePanel
+import io.kvision.table.TableType
+import io.kvision.tabulator.Layout
+import io.kvision.tabulator.Tabulator
+import io.kvision.tabulator.TabulatorOptions
+import io.kvision.utils.set
 
 /**
  * access attributes from dynamic (JS) objects with varying

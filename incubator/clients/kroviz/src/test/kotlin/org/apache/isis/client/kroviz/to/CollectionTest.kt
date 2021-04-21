@@ -41,7 +41,7 @@ class CollectionTest : IntegrationTest() {
 
         assertEquals("list", collection.extensions.collectionSemantics)
 
-        val valueList = collection.value as List<Link>
+        val valueList = collection.value
         assertEquals(2, valueList.size)
 
         assertEquals("Immutable", collection.disabledReason)

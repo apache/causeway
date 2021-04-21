@@ -22,8 +22,8 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.UiManager
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.state.observableListOf
+import io.kvision.panel.SimplePanel
+import io.kvision.state.observableListOf
 
 /**
  * Keeps a log of remote invocations and the responses.

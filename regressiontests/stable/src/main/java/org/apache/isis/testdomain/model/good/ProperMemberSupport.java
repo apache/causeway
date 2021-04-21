@@ -45,7 +45,7 @@ import lombok.Setter;
  * default         x             x
  * disable     x   x    x    x   
  * hide            x    x    x   
- * validate    x             x   x
+ * validate        x         x   x
  * </pre>
  *
  */
@@ -165,6 +165,11 @@ public class ProperMemberSupport {
     @MemberSupport
     public boolean hideMyProp() {
         return false;
+    }
+    
+    @MemberSupport
+    public String validateMyProp(String x) {
+        return "think twice";
     }
 
     // -- PROPER COLLECTION

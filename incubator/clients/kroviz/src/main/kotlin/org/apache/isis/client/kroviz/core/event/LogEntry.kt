@@ -28,7 +28,7 @@ import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
-import pl.treksoft.kvision.html.ButtonStyle
+import io.kvision.html.ButtonStyle
 import kotlin.js.Date
 
 // use color codes from css instead?

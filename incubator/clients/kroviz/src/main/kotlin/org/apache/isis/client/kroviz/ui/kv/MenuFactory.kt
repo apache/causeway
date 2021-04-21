@@ -28,12 +28,12 @@ import org.apache.isis.client.kroviz.to.mb.MenuEntry
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Utils
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.dropdown.separator
-import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.utils.set
-import pl.treksoft.kvision.html.Link as KvisionHtmlLink
+import io.kvision.core.Component
+import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.separator
+import io.kvision.html.ButtonStyle
+import io.kvision.utils.set
+import io.kvision.html.Link as KvisionHtmlLink
 
 object MenuFactory {
 

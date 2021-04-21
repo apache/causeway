@@ -19,10 +19,10 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.utils.IconManager
-import pl.treksoft.kvision.core.BsBorder
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.addBsBorder
-import pl.treksoft.kvision.panel.SimplePanel
+import io.kvision.core.BsBorder
+import io.kvision.core.Component
+import io.kvision.core.addBsBorder
+import io.kvision.panel.SimplePanel
 
 /**
  * Area between menu bar at the top and the status bar at the bottom.
@@ -39,7 +39,8 @@ object RoView {
         panel.addBsBorder(BsBorder.BORDER)
         val index = tabPanel.findTab(title)
         if (index != null) {
-            val tab = tabPanel.getChildComponent(index) as SimplePanel
+            val tabs = tabPanel.getTabs()
+            val tab = tabs.get(index) as SimplePanel
             removeTab(tab)
             tabPanel.removeTab(index)
         }
@@ -64,7 +65,8 @@ object RoView {
     fun findActive(): SimplePanel? {
         val index = tabPanel.activeIndex
         if (index > 0) {
-            val tab = tabPanel.getChildComponent(index) as SimplePanel
+            val tabs = tabPanel.getTabs()
+            val tab = tabs.get(index) as SimplePanel
             return (tab)
         }
         return null

@@ -20,9 +20,9 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import pl.treksoft.kvision.maps.*
-import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.utils.pc
+import io.kvision.maps.*
+import io.kvision.panel.HPanel
+import io.kvision.utils.pc
 
 class MapPanel : HPanel() {
 

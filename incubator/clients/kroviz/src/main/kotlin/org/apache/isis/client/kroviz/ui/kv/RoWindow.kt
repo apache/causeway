@@ -18,21 +18,21 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-/* (!) copied from pl.treksoft.kvision.window.Window in order to make Dialogs transparent on move */
+/* (!) copied from io.kvision.window.Window in order to make Dialogs transparent on move */
 
 import com.github.snabbdom.VNode
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.html.Icon
-import pl.treksoft.kvision.html.TAG
-import pl.treksoft.kvision.html.Tag
-import pl.treksoft.kvision.modal.CloseIcon
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.obj
-import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.window.MaximizeIcon
-import pl.treksoft.kvision.window.MinimizeIcon
+import io.kvision.core.*
+import io.kvision.html.Icon
+import io.kvision.html.TAG
+import io.kvision.html.Tag
+import io.kvision.modal.CloseIcon
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.obj
+import io.kvision.utils.px
+import io.kvision.window.MaximizeIcon
+import io.kvision.window.MinimizeIcon
 
 internal const val DEFAULT_Z_INDEX = 900
 internal const val WINDOW_HEADER_HEIGHT = 40
@@ -387,7 +387,7 @@ open class RoWindow(
     /**
      * Makes the current window focused.
      */
-    open fun focus() {
+    override fun focus() {
         getElementJQuery()?.focus()
     }
 

@@ -33,14 +33,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.Category;
-import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.MessageBroker;
@@ -98,10 +96,10 @@ implements FormExecutor {
             final Form<?> feedbackFormIfAny,
             final boolean withinPrompt) {
 
-        Command command = null;
         ManagedObject targetAdapter = null;
 
         final EntityModel targetEntityModel = model.getParentUiModel();
+        val commonContext = targetEntityModel.getCommonContext();
 
         try {
 
@@ -115,10 +113,8 @@ implements FormExecutor {
             final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny.get());
-                return false;
+                return false; // invalid args, stay on page
             }
-
-            val commonContext = targetEntityModel.getCommonContext();
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -185,46 +181,26 @@ implements FormExecutor {
 
             }
 
-            return true;
+            return true; // valid args, allow redirect
 
         } catch (Throwable ex) {
 
             // there's no need to set the abort cause on the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
 
+            // if inline prompt then redirect to error page
+            if (withinPrompt) {
+                // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
+                throw ex; // redirect to the error page.                
+            }
+            
             // attempt to recognize this exception using the ExceptionRecognizers
-            val messageWhenRecognized = recognizeException(ex, targetIfAny, feedbackFormIfAny)
-                        .map(recog->recog.toMessage(getTranslationService()));
-
-            // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
-            if (messageWhenRecognized.isPresent() && !withinPrompt) {
-                // ... display as growl pop-up
-
-                currentMessageBroker().ifPresent(messageBroker->{
-                    messageBroker.setApplicationError(messageWhenRecognized.get());
-                });
-
-                //TODO [2089] hotfix to render the error on the same page instead of redirecting;
-                // previous behavior was to fall through and re-throw, which lead to the error never shown
-                return false;
-                //--
+            if(recognizeExceptionThenRaise(ex, targetIfAny, feedbackFormIfAny).isPresent()) {
+                return false; // invalid args, stay on page    
             }
 
-            // irrespective, capture error in the Command, and propagate
-            if (command != null) {
+            throw ex; // redirect to the error page.
 
-                //TODO (dead code) should happen at a more fundamental level
-                // should not be a responsibility of the viewer
-
-                command.updater().setResult(Result.failure(ex));
-
-                //XXX legacy of
-                //command.internal().setException(Throwables.getStackTraceAsString(ex));
-            }
-
-            // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
-            // which will redirect to the error page.
-            throw ex;
         }
     }
 
@@ -297,24 +273,6 @@ implements FormExecutor {
         });
         return hasBlobsOrClobs != null;
     }
-
-//    private void forwardOnConcurrencyException(
-//            final ManagedObject targetAdapter) {
-//
-//        // this will not preserve the URL (because pageParameters are not copied over)
-//        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-//        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
-//
-//        // force any changes in state etc to happen now prior to the redirect;
-//        // in the case of an object being returned, this should cause our page mementos
-//        // (eg EntityModel) to hold the correct state.  I hope.
-//        getCommonContext().getTransactionService().flushTransaction();
-//
-//        // "redirect-after-post"
-//        val requestCycle = RequestCycle.get();
-//        requestCycle.setResponsePage(entityPage);
-//    }
-
 
     private static boolean shouldRedraw(final Component component) {
 
@@ -397,7 +355,7 @@ implements FormExecutor {
         }
     }
 
-    private Optional<Recognition> recognizeException(
+    private Optional<Recognition> recognizeExceptionThenRaise(
             final Throwable ex,
             final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
@@ -412,16 +370,16 @@ implements FormExecutor {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
+        //[ISIS-2419] for a consistent user experience with action dialog validation messages,
+        //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
+        val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
+                ? recognition.toMessageNoCategory(getTranslationService())
+                : recognition.toMessage(getTranslationService());
+        
         if(targetIfAny != null && feedbackFormIfAny != null) {
-            //[ISIS-2419] for a consistent user experience with action dialog validation messages,
-            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
-            val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
-                    ? recognition.toMessageNoCategory(getTranslationService())
-                    : recognition.toMessage(getTranslationService());
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(errorMsg);
         } else {
-            val errorMsg = recognition.toMessage(getTranslationService());
             getMessageService().warnUser(errorMsg);
         }
     }

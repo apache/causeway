@@ -21,10 +21,10 @@ package org.apache.isis.client.kroviz.ui.builder
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Tab
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.panel.SimplePanel
+import io.kvision.core.Component
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.panel.SimplePanel
 
 class TabBuilder {
 

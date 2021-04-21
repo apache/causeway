@@ -33,10 +33,10 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
-import pl.treksoft.kvision.core.Widget
-import pl.treksoft.kvision.dropdown.ContextMenu
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.ESC_KEY
+import io.kvision.core.Widget
+import io.kvision.dropdown.ContextMenu
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.ESC_KEY
 
 /**
  * Single point of contact for view components consisting of:

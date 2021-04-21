@@ -95,7 +95,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     public BS3Grid defaultGrid(final Class<?> domainClass) {
 
         try {
-            final String content = _Resources.loadAsStringUtf8(getClass(), "DefaultGrid.layout.xml");
+            final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
                     .map(xml -> gridReader.loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)

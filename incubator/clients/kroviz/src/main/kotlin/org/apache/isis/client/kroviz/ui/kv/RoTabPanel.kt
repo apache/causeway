@@ -18,12 +18,12 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.panel.TabPanel
-import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.utils.perc
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.panel.SimplePanel
+import io.kvision.panel.TabPanel
+import io.kvision.panel.VPanel
+import io.kvision.utils.perc
 
 class RoTabPanel : TabPanel() {
 
@@ -33,13 +33,13 @@ class RoTabPanel : TabPanel() {
     }
 
     override fun removeTab(index: Int): TabPanel {
-        val tab = getChildComponent(index)
+        val tab = getTabs().get(index)
         RoView.removeTab(tab as SimplePanel)
         return super.removeTab(index)
     }
 
     fun findTab(title: String): Int? {
-        getChildren().forEachIndexed { index, component ->
+        getTabs().forEachIndexed { index, component ->
             if ((component is VPanel) && (component.title == title)) {
                 return index
             }

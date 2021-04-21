@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
@@ -48,6 +48,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.util.ValueMaskingUtil;
 import org.apache.isis.core.webapp.modules.WebModule;
@@ -70,10 +71,15 @@ public class ConfigurationViewServiceDefault
 implements
     ConfigurationViewService {
 
+    private final Environment springEnvironment;
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
+    private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
-    private final List<DataSource> dataSources;
+    //private final List<DataSource> dataSources;
+    
+//    @org.springframework.beans.factory.annotation.Value("${spring.profiles.active}")
+//    private String activeProfiles;
     
     private final IsisModuleCoreConfig.ConfigProps configProps;
     
@@ -163,17 +169,27 @@ implements
     private Map<String, ConfigurationProperty> loadConfiguration() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
+
+            
+            val activeProfiles = Can.ofArray(springEnvironment.getActiveProfiles())
+            .stream()
+            .collect(Collectors.joining(", "));
+            
+            add("Active Spring Profiles", activeProfiles, map);
+            
             configProps.getIsis().forEach((k, v)->add("isis." + k, v, map));
             configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
             configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
             configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
             
             val index = _Refs.intRef(0);
+            val dsInfos = Can.ofStream(datasourceInfoService.streamDataSourceInfos());
             
-            Can.ofCollection(dataSources)
-            .forEach(dataSource->{
+            dsInfos.forEach(dataSourceInfo->{
                 index.inc();
-                add(String.format("Data Source (%d)", index.getValue()), dataSource.getClass().getName(), map);
+                add(String.format("Data Source (%d/%d)", index.getValue(), dsInfos.size()), 
+                        dataSourceInfo.getJdbcUrl(), 
+                        map);
             });
             
             
