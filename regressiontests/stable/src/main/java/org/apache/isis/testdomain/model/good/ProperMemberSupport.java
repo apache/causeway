@@ -166,6 +166,11 @@ public class ProperMemberSupport {
     public boolean hideMyProp() {
         return false;
     }
+    
+    @MemberSupport
+    public String validateMyProp(String x) {
+        return "think twice";
+    }
 
     // -- PROPER COLLECTION
 
