@@ -39,7 +39,7 @@ object RoView {
         panel.addBsBorder(BsBorder.BORDER)
         val index = tabPanel.findTab(title)
         if (index != null) {
-            val tabs = tabPanel.getChildren()
+            val tabs = tabPanel.getTabs()
             val tab = tabs.get(index) as SimplePanel
             removeTab(tab)
             tabPanel.removeTab(index)
@@ -65,7 +65,7 @@ object RoView {
     fun findActive(): SimplePanel? {
         val index = tabPanel.activeIndex
         if (index > 0) {
-            val tabs = tabPanel.getChildren()
+            val tabs = tabPanel.getTabs()
             val tab = tabs.get(index) as SimplePanel
             return (tab)
         }

@@ -33,13 +33,13 @@ class RoTabPanel : TabPanel() {
     }
 
     override fun removeTab(index: Int): TabPanel {
-        val tab = getChildren().first()
+        val tab = getTabs().get(index)
         RoView.removeTab(tab as SimplePanel)
         return super.removeTab(index)
     }
 
     fun findTab(title: String): Int? {
-        getChildren().forEachIndexed { index, component ->
+        getTabs().forEachIndexed { index, component ->
             if ((component is VPanel) && (component.title == title)) {
                 return index
             }
