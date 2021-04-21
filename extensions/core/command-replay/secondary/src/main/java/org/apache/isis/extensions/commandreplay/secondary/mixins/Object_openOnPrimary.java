@@ -24,9 +24,13 @@ import java.net.URL;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
@@ -38,9 +42,17 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
-    semantics = SemanticsOf.SAFE,
-    domainEvent = Object_openOnPrimary.ActionDomainEvent.class,
-    restrictTo = RestrictTo.PROTOTYPING
+        domainEvent = Object_openOnPrimary.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
+)
+@ActionLayout(
+        cssClassFa = "fa-external-link-alt",
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "750.2"
 )
 @RequiredArgsConstructor
 public class Object_openOnPrimary {
@@ -52,7 +64,7 @@ public class Object_openOnPrimary {
 
     public URL act() {
         val baseUrlPrefix = lookupBaseUrlPrefix();
-        val urlSuffix = bookmarkService.bookmarkFor(object).toString();
+        val urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
 
         try {
             return new URL(baseUrlPrefix + urlSuffix);

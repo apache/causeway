@@ -21,21 +21,28 @@ package org.apache.isis.viewer.common.model;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.viewer.common.applib.mixins.Object_impersonate;
+import org.apache.isis.viewer.common.applib.mixins.Object_impersonateWithRoles;
+import org.apache.isis.viewer.common.applib.mixins.Object_stopImpersonating;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.common.model.menu.MenuUiModelProvider;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProviderDefault;
 
 @Configuration
 @Import({
 
     // @Service's
     BrandingUiModelProvider.class,
-    UserProfileUiModelProvider.class,
+    UserProfileUiModelProviderDefault.class,
     MenuUiModelProvider.class,
     HeaderUiModelProvider.class,
-    
-    
+
+    // @Mixin's
+    Object_impersonate.class,
+    Object_impersonateWithRoles.class,
+    Object_stopImpersonating.class,
+
 })
 public class IsisModuleViewerCommon {
 }

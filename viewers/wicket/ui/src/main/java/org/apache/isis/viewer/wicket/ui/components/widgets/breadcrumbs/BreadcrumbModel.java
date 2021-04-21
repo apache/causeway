@@ -28,10 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -104,8 +101,9 @@ public class BreadcrumbModel implements Serializable {
             return null;
         }
         try {
-            final RootOid unmarshal = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
-            return unmarshal.enString();
+            return Bookmark.parse(oidStr)
+            .map(Bookmark::stringify)
+            .orElse(null);
         } catch(Exception ex) {
             return null;
         }
@@ -150,10 +148,10 @@ public class BreadcrumbModel implements Serializable {
     }
 
 
-    void remove(final String rootOid) {
-        Bookmark existingBookmark = bookmarkByOidStr.get(rootOid);
+    void remove(final String oid) {
+        Bookmark existingBookmark = bookmarkByOidStr.get(oid);
         if(existingBookmark != null) {
-            remove(rootOid, existingBookmark);
+            remove(oid, existingBookmark);
         }
     }
 
@@ -170,13 +168,12 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        val rootOid = Factory.ofBookmark(bookmark);
-        val objectAdapterMemento = commonContext.mementoFor(rootOid);
+        val objectAdapterMemento = commonContext.mementoForBookmark(bookmark);
         return EntityModel.ofMemento(commonContext, objectAdapterMemento);
     }
 
-    private void remove(final String rootOid, final Bookmark bookmark) {
-        bookmarkByOidStr.remove(rootOid);
+    private void remove(final String oid, final Bookmark bookmark) {
+        bookmarkByOidStr.remove(oid);
         oidStrByBookmark.remove(bookmark);
         list.remove(bookmark);
     }

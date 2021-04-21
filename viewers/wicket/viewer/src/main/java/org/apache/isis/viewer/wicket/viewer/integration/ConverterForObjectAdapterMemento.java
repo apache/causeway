@@ -23,9 +23,9 @@ import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
@@ -54,13 +54,14 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
         if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
-        val rootOid = RootOid.deStringEncoded(value);
-        return commonContext.mementoFor(rootOid);
+        return Bookmark.parseUrlEncoded(value)
+        .map(commonContext::mementoForBookmark)
+        .orElse(null);
     }
 
     /**
      * Converts {@link ObjectMemento} to string representation of
-     * {@link RootOid}.
+     * {@link Oid}.
      */
     @Override
     public String convertToString(final ObjectMemento memento, final Locale locale) {

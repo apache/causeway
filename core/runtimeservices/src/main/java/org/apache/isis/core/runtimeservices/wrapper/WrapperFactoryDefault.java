@@ -172,7 +172,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // skip in support of JUnit tests, that don't inject a SpecificationLoader
         if(specificationLoader!=null) {
-            val spec = specificationLoader.loadSpecification(domainObject.getClass());
+            val spec = specificationLoader.specForTypeElseFail(domainObject.getClass());
             if(spec.isMixin()) {
                 throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                         + "use WrapperFactory.wrapMixin(...) instead");
@@ -386,7 +386,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val oidDto = commandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
-        asyncControl.setBookmark(Bookmark.from(oidDto));
+        asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(
@@ -437,23 +437,22 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // find corresponding action of the mixedIn (this is the 'real' target).
         val mixedInClass = mixedIn.getClass();
-        val mixedInSpec = specificationLoader.loadSpecification(mixedInClass);
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamActions(MixedIn.INCLUDED)
+        final ObjectActionMixedIn targetAction = specificationLoader
+        .specForType(mixedInClass)
+        .flatMap(mixedInSpec->mixedInSpec.streamActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))
-                .findFirst();
+                .findFirst()
+        )
+        .orElseThrow(()->new UnsupportedOperationException(String.format(
+                "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
+                mixinMember.getId(), mixedInClass.getName())));
 
-        if(!targetActionIfAny.isPresent()) {
-            throw new UnsupportedOperationException(String.format(
-                    "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
-                    mixinMember.getId(), mixedInClass.getName()));
-        }
-
-        return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
+        return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixedIn), method);
     }
 
     private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
@@ -623,7 +622,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             if (bookmark == null) {
                 return null;
             }
-            R domainObject = bookmarkService.lookup(bookmark, returnType);
+            R domainObject = bookmarkService.lookup(bookmark, returnType).orElse(null);
             if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
                 domainObject = repositoryService.detach(domainObject);
             }

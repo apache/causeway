@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
@@ -53,8 +54,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -234,8 +233,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             for (OidDto targetOidDto : targetOidDtos) {
 
-                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                final Object targetObject = bookmarkService.lookup(bookmark);
+                final Bookmark bookmark = Bookmark.forOidDto(targetOidDto);
+                final Object targetObject = bookmarkService.lookup(bookmark).orElse(null);
 
                 val targetAdapter = adapterFor(targetObject);
 
@@ -377,16 +376,16 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             return ManagedObject.unspecified();
         }
         if(pojo instanceof OidDto) {
-            return adapterFor(Oid.Factory.ofDto((OidDto)pojo));
+            return adapterForOid(Bookmark.forOidDto((OidDto)pojo));
         }
-        if(pojo instanceof RootOid) {
-            return adapterFor((RootOid) pojo);
+        if(pojo instanceof Oid) {
+            return adapterForOid((Oid) pojo);
         }
         // value type
-        return ManagedObject.of(getSpecificationLoader()::loadSpecification, pojo);
+        return ManagedObject.lazy(getSpecificationLoader(), pojo);
     }
 
-    private ManagedObject adapterFor(final RootOid oid) {
+    private ManagedObject adapterForOid(final Oid oid) {
         val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
         val loadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
         return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);

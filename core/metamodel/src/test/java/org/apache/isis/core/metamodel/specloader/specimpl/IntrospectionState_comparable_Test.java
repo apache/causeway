@@ -32,15 +32,15 @@ public class IntrospectionState_comparable_Test {
     public void all_of_em() throws Exception {
         assertComparison(IntrospectionState.NOT_INTROSPECTED, IntrospectionState.NOT_INTROSPECTED, equal());
         assertComparison(IntrospectionState.NOT_INTROSPECTED, IntrospectionState.MEMBERS_BEING_INTROSPECTED, negative());
-        assertComparison(IntrospectionState.NOT_INTROSPECTED, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, negative());
+        assertComparison(IntrospectionState.NOT_INTROSPECTED, IntrospectionState.FULLY_INTROSPECTED, negative());
 
         assertComparison(IntrospectionState.MEMBERS_BEING_INTROSPECTED, IntrospectionState.NOT_INTROSPECTED, positive());
         assertComparison(IntrospectionState.MEMBERS_BEING_INTROSPECTED, IntrospectionState.MEMBERS_BEING_INTROSPECTED, equal());
-        assertComparison(IntrospectionState.MEMBERS_BEING_INTROSPECTED, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, negative());
+        assertComparison(IntrospectionState.MEMBERS_BEING_INTROSPECTED, IntrospectionState.FULLY_INTROSPECTED, negative());
 
-        assertComparison(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, IntrospectionState.NOT_INTROSPECTED, positive());
-        assertComparison(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, IntrospectionState.MEMBERS_BEING_INTROSPECTED, positive());
-        assertComparison(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED, equal());
+        assertComparison(IntrospectionState.FULLY_INTROSPECTED, IntrospectionState.NOT_INTROSPECTED, positive());
+        assertComparison(IntrospectionState.FULLY_INTROSPECTED, IntrospectionState.MEMBERS_BEING_INTROSPECTED, positive());
+        assertComparison(IntrospectionState.FULLY_INTROSPECTED, IntrospectionState.FULLY_INTROSPECTED, equal());
     }
 
     private Matcher<Integer> equal() {

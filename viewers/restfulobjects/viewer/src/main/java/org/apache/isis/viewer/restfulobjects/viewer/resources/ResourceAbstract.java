@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -33,11 +32,10 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -126,13 +124,14 @@ public abstract class ResourceAbstract {
     // -- ISIS INTEGRATION
 
     protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
-        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        val rootOid = RootOid.deString(oidStrUnencoded);
-        
-        return Optional.ofNullable(rootOid.loadObject(getSpecificationLoader()))
-                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
+        final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
+
+        val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
+        return metaModelContext.loadObject(bookmark)
+                .orElseThrow(()->RestfulObjectsApplicationException
+                        .createWithMessage(HttpStatusCode.NOT_FOUND, 
+                                "Could not determine adapter for bookmark: '%s'", 
+                                bookmark));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {

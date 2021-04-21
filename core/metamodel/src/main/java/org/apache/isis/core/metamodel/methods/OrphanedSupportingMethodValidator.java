@@ -44,11 +44,6 @@ public class OrphanedSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
     
     @Override
-    public boolean isEnabled() {
-        return !getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
-    }
-    
-    @Override
     public void validate(@NonNull ObjectSpecification spec) {
             
         if(!(spec instanceof ObjectSpecificationAbstract)) {
@@ -103,8 +98,8 @@ extends MetaModelVisitingValidatorAbstract {
 
         val unmetContraints = _Lists.<String>newArrayList();
 
-        unmetContraints.add("misspelled prefix or unsupported method signature or "
-                + "orphaned (not associated with an action)");
+        unmetContraints.add("unsupported method signature or "
+                + "orphaned (not associated with a member)");
         return unmetContraints;
 
     }

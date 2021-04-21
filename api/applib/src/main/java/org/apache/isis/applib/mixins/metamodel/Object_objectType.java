@@ -48,7 +48,11 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Property
-@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
+@PropertyLayout(
+        hidden = Where.ALL_TABLES,
+        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        sequence = "700.1"
+)
 @RequiredArgsConstructor
 public class Object_objectType {
 
@@ -60,7 +64,7 @@ public class Object_objectType {
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectType> {}
 
     public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
+        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getObjectType();
     }
 

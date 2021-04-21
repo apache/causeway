@@ -180,7 +180,7 @@ public final class CanonicalParameterUtil {
                     final String expected = parameterType.getName();
                     final String actual = parameterValueTypeLiteral;
                     
-                    sb.append(String.format("param-type[%d]: '%s', got '%s'\n",
+                    sb.append(String.format("param-type[%d]: expected '%s', got '%s'\n",
                         j, expected, actual));
                 }
             }

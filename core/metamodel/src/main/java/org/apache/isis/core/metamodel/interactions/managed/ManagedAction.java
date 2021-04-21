@@ -133,7 +133,7 @@ public final class ManagedAction extends ManagedMember {
     // -- POJO WRAPPING
     
     private ManagedObject toManagedObject(Object pojo) {
-        return ManagedObject.of(mmc().getSpecificationLoader()::loadSpecification, pojo); 
+        return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo); 
     }
     
     // -- ACTION RESULT ROUTING

@@ -144,7 +144,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     @ToString.Include(name = "target")
     public Bookmark getTarget() {
         return commandDto != null
-                ? Bookmark.from(commandDto.getTargets().getOid().get(0))
+                ? Bookmark.forOidDto(commandDto.getTargets().getOid().get(0))
                 : null;
     }
 

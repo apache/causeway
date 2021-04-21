@@ -86,7 +86,16 @@ public final class UserMemento implements Serializable {
     public static UserMemento ofNameAndRoleNames(
             final @NonNull String name,
             final String... roleNames) {
-        return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
+        return ofNameAndRoleNames(name, Stream.of(roleNames));
+    }
+
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name,
+            final @NonNull List<String> roleNames) {
+        return ofNameAndRoleNames(name, roleNames.stream());
     }
 
     /**
@@ -138,6 +147,7 @@ public final class UserMemento implements Serializable {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "1.3")
     @Getter
+    @Nullable
     private URL avatarUrl;
 
     @Programmatic
@@ -145,6 +155,17 @@ public final class UserMemento implements Serializable {
         val userMemento = copy();
         userMemento.avatarUrl = avatarUrl;
         return userMemento;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.4")
+    @Getter
+    private boolean impersonating;
+
+    public UserMemento withImpersonating() {
+        final UserMemento copy = copy();
+        copy.impersonating = true;
+        return copy;
     }
 
     private UserMemento copy() {
@@ -155,9 +176,9 @@ public final class UserMemento implements Serializable {
         val userMemento = new UserMemento(this.name, roles.stream());
         userMemento.realName = this.realName;
         userMemento.avatarUrl = this.avatarUrl;
+        userMemento.impersonating = this.impersonating;
         return userMemento;
     }
-
 
 
     /**

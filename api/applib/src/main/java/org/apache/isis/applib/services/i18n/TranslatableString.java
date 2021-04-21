@@ -190,11 +190,10 @@ public final class TranslatableString {
      */
     public String translate(final TranslationService translationService, final TranslationContext context) {
 
-        final String translatedText =
-                !isPluralForm()
+        final String translatedText = !isPluralForm()
                 ? translationService.translate(context, getSingularText())
-                        : translationService.translate(context, getSingularText(), getPluralText(), number);
-                return translated(translatedText);
+                : translationService.translate(context, getSingularText(), getPluralText(), number);
+        return translated(translatedText);
     }
 
     /**

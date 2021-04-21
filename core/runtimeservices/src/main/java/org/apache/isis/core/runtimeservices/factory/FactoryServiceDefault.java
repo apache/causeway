@@ -106,6 +106,9 @@ public class FactoryServiceDefault implements FactoryService {
         if(mixinFacet == null) {
             throw _Exceptions.illegalArgument("Class '%s' is not a mixin", mixinClass.getName());
         }
+        if(mixinSpec.isAbstract()) {
+            throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin", mixinClass.getName());
+        }
         if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
             throw _Exceptions.illegalArgument("Mixin class '%s' is not a mixin for supplied object '%s'",
                     mixinClass.getName(), mixedIn);
@@ -164,12 +167,7 @@ public class FactoryServiceDefault implements FactoryService {
     // -- HELPER    
     
     private ObjectSpecification loadSpec(final @NonNull Class<?> type) {
-        val spec = specificationLoader.loadSpecification(type);
-        if(spec==null) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recogniced by the framework.",
-                    type);
-        }
-        return spec;
+        return specificationLoader.specForTypeElseFail(type);
     }
     
     private ViewModelFacet getViewModelFacet(final @NonNull ObjectSpecification spec) {

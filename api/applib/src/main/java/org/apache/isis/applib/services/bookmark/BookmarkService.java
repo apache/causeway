@@ -18,13 +18,13 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
-import lombok.val;
+import lombok.NonNull;
 
 /**
  * This service provides a serializable 'bookmark' for any entity, and
@@ -35,62 +35,66 @@ import lombok.val;
 public interface BookmarkService {
 
     /**
-     * Returns the {@link Bookmark} for the given domain object.
+     * Optionally returns the {@link Bookmark} for the given domain object, 
+     * based on whether can create a bookmark for it.
      *
      * <p>
-     * <b>Note</b>: Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
+     * <b>Note</b>: Not every domain object is bookmark-able: 
+     * only entities, view models and services (NOT values or collections)
      * </p>
      *
      * @param domainObject - domain object (if any) to return a bookmark for
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
-    Bookmark bookmarkFor(@Nullable Object domainObject);
+    Optional<Bookmark> bookmarkFor(@Nullable Object domainObject);
 
     /**
-     * As per {@link #bookmarkFor(Object)}, but requires that a non-null {@link Bookmark} is returned.
-     *
-     * @param domainObject - that can be bookmarked
-     * @return a (non-null) {@link Bookmark} for the provided domain object.
-     */
-    default Bookmark bookmarkForElseThrow(Object domainObject) {
-
-        requires(domainObject, "domainObject");
-        val bookmark = bookmarkFor(domainObject);
-        if(bookmark!=null) {
-            return bookmark;
-        }
-        throw _Exceptions.illegalArgument(
-                "cannot create bookmark for type %s", domainObject.getClass().getName());
-    }
-
-    /**
-     * Utility method that creates a {@link Bookmark} from the constituent parts.
+     * Optionally returns a {@link Bookmark} created from the constituent parts, 
+     * based on whether can create a bookmark from these.
      *
      * @return - {@link Bookmark} for provided class and identifier
      */
-    Bookmark bookmarkFor(Class<?> cls, String identifier);
+    Optional<Bookmark> bookmarkFor(@Nullable Class<?> cls, @Nullable String identifier);
 
     /**
      * @see #lookup(Bookmark)
      *
      * @param bookmarkHolder - from which the {@link Bookmark} is obtained
-     * @return - corresponding domain object
+     * @return - optionally, the corresponding domain object
      */
-    Object lookup(BookmarkHolder bookmarkHolder);
+    Optional<Object> lookup(@Nullable BookmarkHolder bookmarkHolder);
 
     /**
      * Reciprocal of {@link #bookmarkFor(Object)}
      *
      * @param bookmark - representing a domain object
-     * @return - the corresponding domain object
+     * @return - optionally, the corresponding domain object
      */
-    Object lookup(Bookmark bookmark);
+    Optional<Object> lookup(@Nullable Bookmark bookmark);
 
+    // -- SHORTCUTS
+    
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    default <T> T lookup(Bookmark bookmark, Class<T> cls) {
-        return cls.cast(lookup(bookmark));
+    default <T> Optional<T> lookup(@Nullable Bookmark bookmark, @NonNull Class<T> cls) {
+        return lookup(bookmark)
+                .map(t->cls.cast(t));
+    }
+    
+    /**
+     * As per {@link #bookmarkFor(Object)}, but requires that a non-null {@link Bookmark} is returned.
+     *
+     * @param domainObject - to be bookmarked
+     * @return a (non-null) {@link Bookmark} for the provided domain object.
+     */
+    default Bookmark bookmarkForElseFail(@Nullable Object domainObject) {
+        return bookmarkFor(domainObject)
+                .orElseThrow(()->_Exceptions.illegalArgument(
+                        "cannot create bookmark for type %s",
+                        domainObject!=null
+                            ? domainObject.getClass().getName()
+                            : "<null>"));
     }
 
 }

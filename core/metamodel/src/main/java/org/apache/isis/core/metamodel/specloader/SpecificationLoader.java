@@ -36,7 +36,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-import static org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+import static org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState.FULLY_INTROSPECTED;
+import static org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState.TYPE_INTROSPECTED;
 
 import lombok.NonNull;
 import lombok.val;
@@ -141,7 +142,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalTypeName(
             final @Nullable String logicalTypeName) {
         return Optional.ofNullable(
-                loadSpecification(logicalTypeName, TYPE_AND_MEMBERS_INTROSPECTED));
+                loadSpecification(logicalTypeName, FULLY_INTROSPECTED));
     }
     
     default Optional<ObjectSpecification> specForLogicalType(
@@ -154,7 +155,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
-                loadSpecification(domainType, TYPE_AND_MEMBERS_INTROSPECTED));
+                loadSpecification(domainType, FULLY_INTROSPECTED));
     }
 
     default Optional<ObjectSpecification> specForBookmark(
@@ -200,10 +201,9 @@ public interface SpecificationLoader {
     
     // -- CAUTION! (use only during meta-model initialization)
     
-    @Nullable
-    default ObjectSpecification loadSpecification(
+    default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
+        return loadSpecification(domainType, TYPE_INTROSPECTED);
     }
     
 }

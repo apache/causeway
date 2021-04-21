@@ -340,7 +340,7 @@ public class CommandJdoRepository {
         commandJdo.setReplayState(ReplayState.PENDING);
 
         final OidDto firstTarget = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.from(firstTarget));
+        commandJdo.setTarget(Bookmark.forOidDto(firstTarget));
         commandJdo.setCommandDto(dto);
         commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
 

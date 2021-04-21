@@ -45,7 +45,7 @@ import lombok.val;
 public class JpaInventoryResource {
 
     @Inject private RepositoryService repository;
-    
+
     @Action
     public List<JpaProduct> listProducts() {
         return repository.allInstances(JpaProduct.class);
@@ -65,14 +65,14 @@ public class JpaInventoryResource {
 
     @Action
     public List<JpaBook> multipleBooks(
-            
+
             @ParameterLayout(named = "")
             int nrOfBooks
-            
+
             ) {
-        
+
         val books = _Lists.<JpaBook>newArrayList();
-        
+
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JpaBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
@@ -80,21 +80,23 @@ public class JpaInventoryResource {
         }
         return books;
     }
-    
+
     @Action //TODO improve the REST client such that the param can be of type Book
-    public JpaBook storeBook(String newBook) throws JAXBException { 
+    public JpaBook storeBook(String newBook) throws JAXBException {
         JpaBook book = JpaBookDto.decode(newBook).toBook();
         return repository.persist(book);
     }
-    
+
     // -- NON - ENTITIES
-    
+
     @Action
     public String httpSessionInfo() {
-        
+
         // when running with basic-auth strategy, we don't want to create HttpSessions at all
-        
-        val servletRequestAttributes = 
+        // however, this isn't the case if UserServiceDefault is in use, as that _dpes_
+        // use HttpSession to hold any impersonated user.
+
+        val servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         val httpSession = servletRequestAttributes.getRequest().getSession(false);
         if(httpSession==null) {
@@ -102,10 +104,10 @@ public class JpaInventoryResource {
         }
         val sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
         .collect(Collectors.joining(","));
-        
+
         return String.format("http-session attribute names: {%s}", sessionAttributeNames);
     }
-    
+
     @Action
     public JpaBookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
@@ -115,14 +117,14 @@ public class JpaInventoryResource {
 
     @Action
     public List<JpaBookDto> multipleBooksAsDto(
-            
+
             @ParameterLayout(named = "")
             int nrOfBooks
-            
+
             ) {
-        
+
         val books = _Lists.<JpaBookDto>newArrayList();
-        
+
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JpaBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
@@ -130,6 +132,6 @@ public class JpaInventoryResource {
         }
         return books;
     }
-    
+
 
 }

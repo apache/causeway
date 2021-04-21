@@ -87,7 +87,7 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
      */
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ManagedObject adapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject);
+        final ManagedObject adapter = ManagedObject.lazy(specificationLoader, domainObject);
         return new XmlSnapshot(adapter);
     }
 

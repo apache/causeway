@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.viewer.services;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -33,9 +32,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -95,7 +94,7 @@ public class HintStoreUsingWicketSession implements HintStore {
     protected Map<String, String> hintsFor(final Bookmark bookmark) {
         final String sessionAttribute = sessionAttributeFor(bookmark);
         LinkedHashMap<String, String> hints =
-                (LinkedHashMap<String, String>) Session.get().getAttribute(sessionAttribute);
+                _Casts.uncheckedCast(Session.get().getAttribute(sessionAttribute));
         if(hints == null) {
             hints = _Maps.newLinkedHashMap();
             Session.get().setAttribute(sessionAttribute, hints);
@@ -104,11 +103,7 @@ public class HintStoreUsingWicketSession implements HintStore {
     }
 
     protected String sessionAttributeFor(final Bookmark bookmark) {
-        
-        val id = Optional.ofNullable(bookmark.getHintId())
-                    .orElse(bookmark.getIdentifier());
-        
-        return "hint-" + bookmark.toStringUsingIdentifier(id);
+        return "hint-" + bookmark.stringifyHonoringHintIfAny();
     }
 
 }

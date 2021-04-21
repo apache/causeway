@@ -95,7 +95,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     public BS3Grid defaultGrid(final Class<?> domainClass) {
 
         try {
-            final String content = _Resources.loadAsStringUtf8(getClass(), "DefaultGrid.layout.xml");
+            final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
                     .map(xml -> gridReader.loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)
@@ -172,7 +172,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Class<?> domainClass) {
 
         val bs3Grid = (BS3Grid) grid;
-        val objectSpec = specificationLoader.loadSpecification(domainClass);
+        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));

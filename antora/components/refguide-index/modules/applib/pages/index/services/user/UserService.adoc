@@ -16,6 +16,11 @@ interface UserService {
   UserMemento currentUserElseFail()     // <.>
   Optional<String> currentUserName()     // <.>
   String currentUserNameElseNobody()     // <.>
+  void impersonateUser(final String userName, final List<String> roles)     // <.>
+  void stopImpersonating()     // <.>
+  boolean supportsImpersonation()     // <.>
+  Optional<UserMemento> getImpersonatedUser()     // <.>
+  boolean isImpersonating()     // <.>
 }
 ----
 
@@ -44,6 +49,31 @@ Optionally gets the the current user's name, based on whether an xref:refguide:a
 --
 Returns either the current user's name or else _Nobody_ .
 --
+<.> xref:#impersonateUser__String_List[impersonateUser(String, List)]
++
+--
+Allows implementations to override the current user with another user.
+--
+<.> xref:#stopImpersonating__[stopImpersonating()]
++
+--
+For implementations that support impersonation, this is to programmatically stop impersonating a user
+--
+<.> xref:#supportsImpersonation__[supportsImpersonation()]
++
+--
+Whether this implementation supports impersonation.
+--
+<.> xref:#getImpersonatedUser__[getImpersonatedUser()]
++
+--
+The impersonated user, if it has previously been set.
+--
+<.> xref:#isImpersonating__[isImpersonating()]
++
+--
+Whether or not the user currently reported (in _#currentUser()_ and similar) is actually an impersonated user.
+--
 
 == Members
 
@@ -71,6 +101,35 @@ Optionally gets the the current user's name, based on whether an xref:refguide:a
 === currentUserNameElseNobody()
 
 Returns either the current user's name or else _Nobody_ .
+
+[#impersonateUser__String_List]
+=== impersonateUser(String, List)
+
+Allows implementations to override the current user with another user.
+
+This is intended for non-production environments only, where it can be invaluable (from a support perspective) to be able to quickly use the application "as if" logged in as another user.
+
+[#stopImpersonating__]
+=== stopImpersonating()
+
+For implementations that support impersonation, this is to programmatically stop impersonating a user
+
+Intended to be called at some point after _#impersonateUser(String, List)_ would have been called.
+
+[#supportsImpersonation__]
+=== supportsImpersonation()
+
+Whether this implementation supports impersonation.
+
+[#getImpersonatedUser__]
+=== getImpersonatedUser()
+
+The impersonated user, if it has previously been set.
+
+[#isImpersonating__]
+=== isImpersonating()
+
+Whether or not the user currently reported (in _#currentUser()_ and similar) is actually an impersonated user.
 
 include::hooks/UserService_010-implementation.adoc[]
 

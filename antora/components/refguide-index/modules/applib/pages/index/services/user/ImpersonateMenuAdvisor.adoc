@@ -1,0 +1,57 @@
+= ImpersonateMenuAdvisor _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Enables _ImpersonateMenu#impersonateWithRoles(String, List)_ , which provides choices for user and roles.
+
+This is in addition to the simpler _ImpersonateMenu#impersonate(String)_ (which simply allows a username to be specified, with no roles).
+
+== API
+
+[source,java]
+.ImpersonateMenuAdvisor.java
+----
+interface ImpersonateMenuAdvisor {
+  List<String> allUserNames()     // <.>
+  List<String> allRoleNames()     // <.>
+  List<String> roleNamesFor(final String username)     // <.>
+}
+----
+
+<.> xref:#allUserNames__[allUserNames()]
++
+--
+Returns the names of all known users.
+--
+<.> xref:#allRoleNames__[allRoleNames()]
++
+--
+Returns the names of all known roles.
+--
+<.> xref:#roleNamesFor__String[roleNamesFor(String)]
++
+--
+Returns the names of the roles of the specified username.
+--
+
+== Members
+
+[#allUserNames__]
+=== allUserNames()
+
+Returns the names of all known users.
+
+The xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu] uses this to provide a choices (drop-down) for the username (string) argument of _ImpersonateMenu#impersonateWithRoles(String, List)_ .
+
+[#allRoleNames__]
+=== allRoleNames()
+
+Returns the names of all known roles.
+
+The xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu] uses this to provide a choices (drop-down) for the rolenames (list) argument of _ImpersonateMenu#impersonateWithRoles(String, List)_ .
+
+[#roleNamesFor__String]
+=== roleNamesFor(String)
+
+Returns the names of the roles of the specified username.
+
+The xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu] uses this to select the defaults for the rolenames (list) argument of _ImpersonateMenu#impersonateWithRoles(String, List)_ .

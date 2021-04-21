@@ -33,8 +33,8 @@ public class IsisOidDtoConverter implements TypeConverter<OidDto, String>{
     @Override
     public String toDatastoreType(final OidDto memberValue) {
         return memberValue != null
-                ? Bookmark.from(memberValue).toString()
-                        : null;
+                ? Bookmark.forOidDto(memberValue).toString()
+                : null;
     }
 
     @Override

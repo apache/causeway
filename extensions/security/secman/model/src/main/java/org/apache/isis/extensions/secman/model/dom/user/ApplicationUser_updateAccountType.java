@@ -49,14 +49,14 @@ public class ApplicationUser_updateAccountType {
     }
     
     @MemberSupport
-    public String disableUpdateAccountType() {
+    public String disableAct() {
         return applicationUserRepository.isAdminUser(target)
                 ? "Cannot change account type for admin user"
                         : null;
     }
     
     @MemberSupport
-    public AccountType default0UpdateAccountType() {
+    public AccountType default0Act() {
         return target.getAccountType();
     }
 

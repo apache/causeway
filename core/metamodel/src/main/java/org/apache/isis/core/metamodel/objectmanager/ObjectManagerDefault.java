@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
-import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
+import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
@@ -57,7 +57,7 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod = @__(@Override)) private ObjectLoader objectLoader;
     @Getter(onMethod = @__(@Override)) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod = @__(@Override)) private ObjectCreator objectCreator;
-    @Getter(onMethod = @__(@Override)) private ObjectIdentifier objectIdentifier;
+    @Getter(onMethod = @__(@Override)) private ObjectBookmarker objectBookmarker;
     @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
     @Getter(onMethod = @__(@Override)) private ObjectDetacher objectDetacher;
     @Getter(onMethod = @__(@Override)) private ObjectSerializer objectSerializer;
@@ -67,7 +67,7 @@ public class ObjectManagerDefault implements ObjectManager {
         objectCreator = ObjectCreator.createDefault(metaModelContext);
         objectLoader = ObjectLoader.createDefault(metaModelContext);
         objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
-        objectIdentifier = ObjectIdentifier.createDefault();
+        objectBookmarker = ObjectBookmarker.createDefault();
         objectRefresher = ObjectRefresher.createDefault();
         objectDetacher = ObjectDetacher.createDefault(metaModelContext);
         objectSerializer = ObjectSerializer.createDefault(metaModelContext);

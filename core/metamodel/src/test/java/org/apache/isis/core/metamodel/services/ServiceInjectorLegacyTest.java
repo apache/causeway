@@ -26,8 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.Data;
 
@@ -39,11 +37,6 @@ class ServiceInjectorLegacyTest {
     @Configuration
     @Profile("test")
     static class Producers {
-
-        @Bean
-        InjectorMethodEvaluator getInjectorMethodEvaluator() {
-            return new InjectorMethodEvaluatorDefault();
-        }
 
         @Bean
         SomeDomainObject mockDomainObject() {

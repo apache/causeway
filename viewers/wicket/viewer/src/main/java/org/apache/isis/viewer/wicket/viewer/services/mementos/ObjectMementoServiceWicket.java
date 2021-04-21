@@ -35,7 +35,6 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -68,9 +67,9 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
-//        _Probe.errOut("mementoForRootOid %s", rootOid);
-        val mementoAdapter = ObjectMementoWkt.createPersistent(rootOid, specificationLoader);
+    public ObjectMemento mementoForBookmark(@NonNull Bookmark bookmark) {
+//        _Probe.errOut("mementoForRootOid %s", oid);
+        val mementoAdapter = ObjectMementoWkt.createPersistent(bookmark, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
@@ -146,7 +145,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            return ManagedObject.of(specificationLoader::loadSpecification, listOfPojos);
+            return ManagedObject.lazy(specificationLoader, listOfPojos);
         }
 
         if(memento instanceof ObjectMementoAdapter) {

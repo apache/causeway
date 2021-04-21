@@ -4,7 +4,7 @@
 
 === Command Processing
 
-Every property edit (and xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
+Every property edit (and xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete xref:refguide:applib:index/services/command/Command.adoc[Command] object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 
@@ -37,23 +37,23 @@ public interface CommandDtoProcessor {
 ----
 <.> The returned `CommandDto`.
 This will typically be the `CommandDto` passed in, but may be supplemented in some way.
-<.> The `CommandDto` obtained already from the `Command`.
+<.> The `CommandDto` obtained already from the xref:refguide:applib:index/services/command/Command.adoc[Command].
 
-This interface is used by the framework-provided implementations of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
+This interface is used by the framework-provided implementations of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing xref:refguide:applib:index/services/command/Command.adoc[Command]s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
 The primary use case for this capability is in support of primary/secondary replication.
 
-* on the primary, ``Command``s are serialized to XML.
+* on the primary, xref:refguide:applib:index/services/command/Command.adoc[Command]s are serialized to XML.
 This includes the identity of the target object and the argument values of all parameters.
 
 +
 [IMPORTANT]
 ====
 Any ``Blob``s and ``Clob``s are deliberately excluded from this XML (they are instead stored as references).
-This is to prevent the storage requirements for `Command` from becoming excessive.
+This is to prevent the storage requirements for xref:refguide:applib:index/services/command/Command.adoc[Command] from becoming excessive.
 A `CommandDtoProcessor` can be provided to re-attach blob information if required.
 ====
 
-* replaying ``Command``s requires this missing parameter information to be reinstated.
+* replaying xref:refguide:applib:index/services/command/Command.adoc[Command]s requires this missing parameter information to be reinstated.
 The `CommandDtoProcessor` therefore offers a hook to dynamically re-attach the missing `Blob` or `Clob` argument.
 
 As a special case, returning `null` means that the command's DTO is effectively excluded when retrieving the list of commands.

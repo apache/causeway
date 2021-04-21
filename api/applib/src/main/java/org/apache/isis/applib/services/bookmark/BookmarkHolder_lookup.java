@@ -45,7 +45,7 @@ public class BookmarkHolder_lookup {
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<BookmarkHolder_lookup> {}
 
     public Object act() {
-        return bookmarkService.lookup(bookmarkHolder);
+        return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 
     // -- DEPENDENCIES

@@ -84,7 +84,7 @@ public interface PdfJsViewerAdvisor {
 
         @Programmatic
         public Bookmark asBookmark() {
-            return Bookmark.of(typeKey.objectType, identifier);
+            return Bookmark.forLogicalTypeNameAndIdentifier(typeKey.objectType, identifier);
         }
 
         @Override

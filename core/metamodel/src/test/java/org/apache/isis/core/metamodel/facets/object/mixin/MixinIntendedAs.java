@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.methods.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
@@ -97,7 +96,7 @@ abstract class MixinIntendedAs {
         val processClassContext =
                 new FacetFactory.ProcessClassContext(
                         type,
-                        MethodRemoverConstants.NOOP,
+                        MethodRemover.NOOP,
                         facetHolder);
 
         programmingModel.streamFactories()
@@ -124,7 +123,7 @@ abstract class MixinIntendedAs {
                         owningType,
                         actionMethod,
                         paramIndex,
-                        MethodRemoverConstants.NOOP,
+                        MethodRemover.NOOP,
                         facetedMethodParameter);
 
         programmingModel.streamFactories()

@@ -24,14 +24,14 @@ import java.util.List;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public enum PageParameterNames {
 
     /**
-     * The object's {@link Oid}.
+     * The object's {@link Bookmark}.
      *
      * <p>
      * Also encodes the object's spec, and whether the object is persistent or not.
@@ -47,7 +47,7 @@ public enum PageParameterNames {
      * Owning type of an action.
      *
      * <p>
-     * Whereas {@link #OBJECT_SPEC} is the concrete runtime type of the adapter,
+     * Whereas {@link #OBJECT_OID} is the concrete runtime type of the adapter,
      * the owning type could be some superclass if the action has been
      * inherited.
      */

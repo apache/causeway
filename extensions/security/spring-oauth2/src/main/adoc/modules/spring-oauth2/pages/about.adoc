@@ -1,0 +1,218 @@
+= Spring Security OAuth2
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This guide describes the integration of Spring security's OAuth2 client.
+
+WARNING: Using this extension with the REST API may fail.
+See <<caveats,below>> for more details.
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+
+== Dependency
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-spring-security-oauth2</artifactId>
+    </dependency>
+</dependencies>
+----
+
+[[_update-appmanifest]]
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleExtSpringSecurityOAuth2` module.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleExtSpringSecurityOAuth2.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+This module brings in a transitive dependency on `IsisModuleSecuritySpring`, so if that is referenced in the `AppManifest` then it can be removed.
+Make sure though that no other `IsisModuleSecurityXxx` module is imported.
+
+
+== Design
+
+The module brings in a transitive dependency to `org.springframework.boot:spring-boot-starter-oauth2-client`.
+Using this, it provides an implementation of the xref:security:spring:about.adoc#authenticatorconverter-spi[AuthenticatorConverter SPI] that recognises the `OAuth2` principal provided by the Spring OAuth2 client.
+
+[#caveats]
+=== Caveats
+
+Using this extension with the REST API may fail.
+That's because, (at the time of writing) this module has a dependency convergence conflict with `org.jboss.resteasy:resteasy-spring-boot-starter` specifically the `org.ow2.asm:asm` shared dependency:
+
+[source]
+----
+Dependency convergence error for org.ow2.asm:asm:9.0 paths to dependency are:
++-org.apache.isis.viewer:isis-viewer-restfulobjects-jaxrsresteasy4:2.0.0-SNAPSHOT
+  +-org.jboss.resteasy:resteasy-spring-boot-starter:4.8.0.Final
+    +-org.ow2.asm:asm:9.0
+and
++-org.apache.isis.extensions:isis-extensions-spring-security-oauth2:2.0.0-SNAPSHOT
+  +-org.springframework.boot:spring-boot-starter-oauth2-client:2.4.4
+    +-org.springframework.security:spring-security-oauth2-client:5.4.5
+      +-com.nimbusds:oauth2-oidc-sdk:8.36.1
+        +-net.minidev:json-smart:2.3
+          +-net.minidev:accessors-smart:1.2
+            +-org.ow2.asm:asm:5.0.4
+----
+
+
+
+[#walk-through-oauth2]
+== Walk-through
+
+Using Spring Security we can configure your app with various authentication providers.
+In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use link:https://github.com[github] as an OAuth2 provider.
+The steps here are based on link:https://spring.io/guides/tutorials/spring-boot-oauth2/[this Spring tutorial].
+
+
+=== Code Changes
+
+The OAuth2 integration provided by Spring (seemingly) forwards onto an "/login" endpoint immediately after the user has logged into github, but with an authenticated principal.
+We therefore use a controller to simply forward directly onto the xref:vw::about.adoc[Wicket Viewer]:
+
+* create this page to redirect:
++
+[source,html]
+.templates/redirect-immediately.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="refresh" content="0;url=/wicket/" />
+    </head>
+    <body>
+        <div id="wrapper">
+        </div>
+    </body>
+</html>
+----
+
+* define this controller for `/login`:
++
+[source,java]
+.LoginController.java
+----
+@Controller
+@RequestMapping({"/login"})
+public class LoginController {
+
+    @RequestMapping(
+        produces = {"text/html"}
+    )
+    public String login(HttpServletRequest request, HttpServletResponse response) {
+        return "redirect-immediately";
+    }
+}
+----
+
+Next, add in `LoginController` to the `AppManifest`.
+
+[source,java]
+.AppManifest.java
+----
+public class AppManifest {
+}
+@Configuration
+@Import({
+        ...
+        IsisModuleExtSpringOAuth2.class,
+        LoginController.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+Lastly (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+
+[source,html]
+.static/index.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="refresh" content="0;url=/wicket/" />
+</head>
+<body>
+<div id="wrapper">
+    <!-- we just redirect immediately, because swagger/restful API not configured to use spring security -->
+</div>
+</body>
+</html>
+----
+
+=== Configuration
+
+We are now ready to configure the app.
+As described in the link:https://spring.io/guides/tutorials/spring-boot-oauth2/[this Spring tutorial]:
+
+* register the app on link:https://github.com[github]:
++
+image::register-github-oauth-app.png[width=500px]
+
+* obtain the clientId and create a new client secret:
++
+image::github-client-id.png[width=600px]
+
+* update the configuration:
++
+[source,properties]
+.config/application-github-example.properties
+----
+spring.security.oauth2.client.registration.github.clientId=XXXX
+spring.security.oauth2.client.registration.github.clientSecret=XXXXXXXX
+----
+
+=== Run the application
+
+You should now be able to run the application, setting the "github-example" profile using this JVM argument:
+
+    -Dspring.profiles.active=github-example
+
+If you are already signed into github:
+
+image::github-already-signed-in.png[width=300px]
+
+then you should be logged in directly; the app will show your user name:
+
+image::helloworld-shows-username.png[width=300px]
+
+On the other hand, if you are not signed in then you will be redirected to the github login page:
+
+image::github-login-page.png[width=300px]
+
+If you have 2FA enabled, then this also works:
+
+image::github-2fa.png[width=300px]
+
+and then, once again, you will be redirected to the app and it will show your user name:
+
+image::helloworld-shows-username.png[width=250px]
+
+Finally, if you log out then Spring will show a page to allow you to trigger the login process:
+
+image::github-sign-in-again.png[width=600px]
+

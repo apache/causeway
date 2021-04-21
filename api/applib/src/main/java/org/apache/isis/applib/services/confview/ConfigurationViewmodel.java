@@ -18,9 +18,10 @@
  */
 package org.apache.isis.applib.services.confview;
 
+import java.util.Collections;
 import java.util.Set;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -31,7 +32,8 @@ import org.apache.isis.applib.annotation.Nature;
         objectType = "isis.applib.ConfigurationViewmodel")
 public class ConfigurationViewmodel {
     
-    @Inject private ConfigurationViewService configurationService;
+    @Autowired(required = false) 
+    private ConfigurationViewService configurationService;
 
     public String title() {
         return "Configuration";
@@ -39,12 +41,16 @@ public class ConfigurationViewmodel {
     
     @Collection
     public Set<ConfigurationProperty> getEnvironment(){
-        return configurationService.getEnvironmentProperties();
+        return configurationService!=null
+                ? configurationService.getEnvironmentProperties()
+                : Collections.emptySet();
     }
     
     @Collection
     public Set<ConfigurationProperty> getConfiguration(){
-        return configurationService.getVisibleConfigurationProperties();
+        return configurationService!=null
+                ? configurationService.getVisibleConfigurationProperties()
+                : Collections.emptySet();
     }
     
 }

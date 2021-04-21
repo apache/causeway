@@ -20,15 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -37,17 +34,24 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-implements MetaModelRefiner, PostConstructMethodCache {
+public class RecreatableObjectFacetFactory
+extends FacetFactoryAbstract
+implements 
+    MetaModelRefiner, 
+    PostConstructMethodCache {
 
-    public RecreatableObjectFacetFactory() {
+    public RecreatableObjectFacetFactory(
+            final @NonNull MethodByClassMap postConstructMethodsCache) {
         super(FeatureType.OBJECTS_ONLY);
+        this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
     /**
@@ -118,11 +122,11 @@ implements MetaModelRefiner, PostConstructMethodCache {
 
     // //////////////////////////////////////
 
-    private final Map<Class<?>, Optional<Method>> postConstructMethods = _Maps.newHashMap();
+    private final MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
+        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethodsCache);
     }
 
 

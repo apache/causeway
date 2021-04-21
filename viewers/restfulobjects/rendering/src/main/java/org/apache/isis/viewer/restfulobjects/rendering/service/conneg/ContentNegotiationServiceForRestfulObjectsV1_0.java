@@ -221,8 +221,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
                 final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
 
-                val listSpec = resourceContext.getSpecificationLoader().loadSpecification(list.getClass());
-                adapter = ManagedObject.of(listSpec, list);
+                adapter = ManagedObject.lazy(resourceContext.getSpecificationLoader(), list);
 
             } else {
                 adapter = objectAndActionInvocation.getReturnedAdapter();
@@ -318,7 +317,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
         return typeOfFacet != null
                 ? typeOfFacet.valueSpec()
-                        : specificationLoader.loadSpecification(Object.class) ;
+                : specificationLoader.specForType(Object.class).orElse(null);
     }
 
     private Collection<ManagedObject> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
@@ -328,7 +327,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
         return collectionFacet != null
                 ? collectionFacet.stream(returnedAdapter).collect(Collectors.toList())
-                        : null;
+                : null;
     }
 
     /**

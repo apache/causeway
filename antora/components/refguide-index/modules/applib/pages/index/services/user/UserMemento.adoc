@@ -14,10 +14,14 @@ class UserMemento {
   UserMemento ofName(final String name)     // <.>
   UserMemento ofNameAndRoles(final String name, final RoleMemento... roles)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final String... roleNames)     // <.>
+  UserMemento ofNameAndRoleNames(final String name, final List<String> roleNames)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final Stream<String> roleNames)     // <.>
-  UserMemento withRole(String role)
   String title()
+  UserMemento withRealName(final String realName)
+  UserMemento withAvatarUrl(final URL avatarUrl)
+  UserMemento withImpersonating()
   List<RoleMemento> getRoles()
+  UserMemento withRole(String role)
   boolean isCurrentUser(final String userName)     // <.>
   Stream<String> streamRoleNames()
   boolean hasRoleName(final String roleName)
@@ -48,6 +52,11 @@ Creates a new user with the specified name and no roles.
 Creates a new user with the specified name and assigned roles.
 --
 <.> xref:#ofNameAndRoleNames__String_String[ofNameAndRoleNames(String, String)]
++
+--
+Creates a new user with the specified name and assigned role names.
+--
+<.> xref:#ofNameAndRoleNames__String_List[ofNameAndRoleNames(String, List)]
 +
 --
 Creates a new user with the specified name and assigned role names.
@@ -87,6 +96,11 @@ Creates a new user with the specified name and assigned roles.
 
 [#ofNameAndRoleNames__String_String]
 === ofNameAndRoleNames(String, String)
+
+Creates a new user with the specified name and assigned role names.
+
+[#ofNameAndRoleNames__String_List]
+=== ofNameAndRoleNames(String, List)
 
 Creates a new user with the specified name and assigned role names.
 

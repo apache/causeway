@@ -190,7 +190,7 @@ public final class MethodFinderUtils {
     public static Method findAnnotatedMethod(
             final Object pojo,
             final Class<? extends Annotation> annotationClass,
-            final Map<Class<?>, Optional<Method>> methods) {
+            final MethodByClassMap methods) {
 
         val clz = pojo.getClass();
         val annotatedMethodIfAny = 

@@ -62,10 +62,9 @@ extends MetaModelValidatorAbstract {
                 
                 val deficiencyOrigin = Identifier.classIdentifier(
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
-                val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
                 ValidationFailure.raise(
-                        facetHolder.getSpecificationLoader(), 
+                        specificationLoader, 
                         deficiencyOrigin, 
                         String.format(
                                 "Failed to get instance of service bean %s", 
@@ -85,10 +84,9 @@ extends MetaModelValidatorAbstract {
                 
                 val deficiencyOrigin = Identifier.classIdentifier(
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
-                val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
                 ValidationFailure.raise(
-                        facetHolder.getSpecificationLoader(), 
+                        specificationLoader, 
                         deficiencyOrigin, 
                         String.format(
                                 "Failed to get title for service bean %s", 
@@ -160,7 +158,7 @@ extends MetaModelValidatorAbstract {
 
             } catch (Exception e) {
 
-                val spec = specificationLoader.loadSpecification(MessageRegistry.class);
+                val spec = specificationLoader.specForTypeElseFail(MessageRegistry.class);
                 val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
                 ValidationFailure.raise(

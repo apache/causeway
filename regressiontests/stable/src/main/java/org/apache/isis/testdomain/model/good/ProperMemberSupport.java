@@ -45,7 +45,7 @@ import lombok.Setter;
  * default         x             x
  * disable     x   x    x    x   
  * hide            x    x    x   
- * validate    x             x   x
+ * validate        x         x   x
  * </pre>
  *
  */
@@ -129,6 +129,12 @@ public class ProperMemberSupport {
     public String validate1MyAction(String p1) {
         return null;
     }
+    
+    // [ISIS-2561] should be detected as Action (despite the prefix, which normally suggests otherwise)
+    @Action
+    public String hideMe() {
+        return null;
+    }
 
     // -- PROPER PROPERTY
 
@@ -159,6 +165,11 @@ public class ProperMemberSupport {
     @MemberSupport
     public boolean hideMyProp() {
         return false;
+    }
+    
+    @MemberSupport
+    public String validateMyProp(String x) {
+        return "think twice";
     }
 
     // -- PROPER COLLECTION

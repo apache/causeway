@@ -31,4 +31,11 @@ public class InvalidOrphanedCollectionSupport {
         return false;
     }
     
+    // [ISIS-2561] should be detected as an orphaned supporting method as well
+    // with the reasoning, that if reserved prefixes are used with action names,
+    // the @Action annotation becomes mandatory
+    public String hideMe() {
+        return null;
+    }
+    
 }

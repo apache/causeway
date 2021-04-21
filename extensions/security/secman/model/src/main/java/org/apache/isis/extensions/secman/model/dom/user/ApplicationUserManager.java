@@ -18,13 +18,8 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -32,12 +27,16 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
         )
 public class ApplicationUserManager {
 
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+//    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
-    @Collection
-    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
-        return applicationUserRepository.allUsers();
+    public String title() {
+        return "Application User Manager"; 
     }
-    
+
+//XXX provided via mixins, that is one specific to JPA the other specific to JDO    
+//    @Collection
+//    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
+//        return applicationUserRepository.allUsers();
+//    }
     
 }

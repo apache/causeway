@@ -130,6 +130,9 @@ content:
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
       branches: HEAD
+    - url: .
+      start_path: extensions/security/spring-oauth2/src/main/adoc # security
+      branches: HEAD
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro

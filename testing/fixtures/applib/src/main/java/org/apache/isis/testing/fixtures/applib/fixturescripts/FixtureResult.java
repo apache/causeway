@@ -76,11 +76,11 @@ public class FixtureResult {
     @PropertyLayout(named="Result")
     @Title(sequence="2")
     public Object getObject() {
-        return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null));
+        return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null)).orElse(null);
     }
 
     public void setObject(Object object) {
-        this.objectBookmark = bookmarkService.bookmarkFor(object).toString();
+        this.objectBookmark = bookmarkService.bookmarkForElseFail(object).toString();
     }
 
     @PropertyLayout(named="Result class", sequence="3")

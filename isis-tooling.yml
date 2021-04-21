@@ -41,15 +41,17 @@ commands:
       Bypass: "org.apache.isis.security:isis-security-bypass.*"
       Keycloak: "org.apache.isis.security:isis-security-keycloak.*"
       Shiro: "org.apache.isis.security:isis-security-shiro.*"
+      Spring: "org.apache.isis.security:isis-security-spring.*"
 
       Viewer: org.apache.isis.viewer
+      "Common": "org.apache.isis.viewer:isis-viewer-common.*"
       "Restful Objects": "org.apache.isis.viewer:isis-viewer-restfulobjects.*"
       Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
 
       Valuetypes: org.apache.isis.valuetypes.*
       "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
       "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
-      "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
+      "SSE": "org.apache.isis.valuetypes:isis-valuetypes-sse.*"
 
       Mappings: org.apache.isis.mappings
       #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*

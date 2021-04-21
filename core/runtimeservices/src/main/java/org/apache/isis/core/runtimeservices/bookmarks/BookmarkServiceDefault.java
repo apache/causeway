@@ -20,8 +20,10 @@ package org.apache.isis.core.runtimeservices.bookmarks;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,12 +40,15 @@ import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
@@ -61,60 +66,64 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Inject private SpecificationLoader specificationLoader;
     @Inject private WrapperFactory wrapperFactory;
     @Inject private ObjectManager objectManager;
+    @Inject private MetaModelContext mmc;
     
     @Override
-    public Object lookup(BookmarkHolder bookmarkHolder) {
+    public Optional<Object> lookup(final @Nullable BookmarkHolder bookmarkHolder) {
+        if(bookmarkHolder == null) {
+            return Optional.empty();
+        }
         val bookmark = bookmarkHolder.bookmark();
         return bookmark != null
                 ? lookup(bookmark)
-                : null;
+                : Optional.empty();
     }
 
     // why would we ever store Service Beans as Bookmarks?
     // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
     @Override
-    public Object lookup(Bookmark bookmark) {
-        if(bookmark == null) {
-            return null;
-        }
+    public Optional<Object> lookup(final @Nullable Bookmark bookmark) {
         try {
-            val spec = specificationLoader.specForBookmark(bookmark).orElse(null);
-            val identifier = bookmark.getIdentifier();
-            val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
-            
-            val adapter = objectManager.loadObject(objectLoadRequest);
-            
-            return adapter.getPojo();
-            
-        } catch(ObjectNotFoundException ex) {
-            return null;
+            return mmc.loadObject(bookmark)
+                    .map(ManagedObject::getPojo);
+        } catch(ObjectNotFoundException ex) {   
+            return Optional.empty();
         }
     }
 
     @Override
-    public Bookmark bookmarkFor(final Object domainObject) {
+    public Optional<Bookmark> bookmarkFor(final @Nullable Object domainObject) {
         if(domainObject == null) {
-            return null;
+            return Optional.empty();
         }
         val adapter = objectManager.adapt(unwrapped(domainObject)); 
         if(!ManagedObjects.isIdentifiable(adapter)){
             // eg values cannot be bookmarked
-            return null;
+            return Optional.empty();
         }
-        return objectManager.identifyObject(adapter)
-                .asBookmark();
+        return Optional.of(
+                objectManager.bookmarkObject(adapter));
     }
 
     private Object unwrapped(Object domainObject) {
-        return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
+        return wrapperFactory != null 
+                ? wrapperFactory.unwrap(domainObject)
+                : domainObject;
     }
 
 
     @Override
-    public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        val spec = specificationLoader.loadSpecification(cls);
-        val objectType = spec.getLogicalTypeName();
-        return Bookmark.of(objectType, identifier);
+    public Optional<Bookmark> bookmarkFor(
+            final @Nullable Class<?> cls, 
+            final @Nullable String identifier) {
+
+        if(_Strings.isNullOrEmpty(identifier)
+                || cls==null) {
+            return Optional.empty();
+        }
+        return specificationLoader.specForType(cls) 
+                .map(ObjectSpecification::getLogicalType)
+                .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
 
     // -- SERIALIZING ADAPTER IMPLEMENTATION
@@ -128,7 +137,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
             final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark));
+            return _Casts.uncheckedCast(lookup(valueBookmark).orElse(null));
         }
 
         return _Casts.uncheckedCast(value);
@@ -139,8 +148,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         if(isPredefinedSerializable(value.getClass())) {
             return (Serializable) value;
         } else {
-            val valueBookmark = bookmarkFor(value);
-            return valueBookmark;
+            return bookmarkForElseFail(value);
         }
     }
 

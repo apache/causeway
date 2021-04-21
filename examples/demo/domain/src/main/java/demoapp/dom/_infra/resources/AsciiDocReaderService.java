@@ -23,7 +23,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
@@ -55,7 +55,8 @@ public class AsciiDocReaderService {
 
     private String readResourceAndReplaceProperties(Class<?> aClass, String adocResourceName) {
         val adoc = resourceReaderService.readResource(aClass, adocResourceName);
-        return adoc.replace("{isis-version}", IsisSystemEnvironment.VERSION);
+        return adoc.replace("{isis-version}", 
+                configuration.getViewer().getWicket().getApplication().getVersion());
     }
 
     @Inject
@@ -63,5 +64,8 @@ public class AsciiDocReaderService {
 
     @Inject
     ResourceReaderService resourceReaderService;
+    
+    @Inject
+    IsisConfiguration configuration;
 
 }

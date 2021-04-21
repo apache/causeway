@@ -45,7 +45,6 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -54,6 +53,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+
+import lombok.val;
 
 public class BookmarkedPagesPanel 
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
@@ -164,7 +165,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
                     ObjectSpecification objectSpec = null;
-                    RootOid oid = node.getOidNoVer();
+                    val oid = node.getOidNoVer();
                     if(oid != null) {
                         objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
                                 .orElse(null);

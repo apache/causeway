@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersis
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * Corresponds to the property with the {@link NotPersistent} annotation.
  * <p>
  * The JDO {@link NotPersistent} annotation is used internally the JDO object store to
- * create the {@link Oid}.
+ * create the {@link Bookmark}.
  */
 public interface JdoNotPersistentFacet extends Facet {
 

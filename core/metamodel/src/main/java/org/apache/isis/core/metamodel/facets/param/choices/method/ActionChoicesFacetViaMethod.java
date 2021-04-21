@@ -93,7 +93,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Class<?> parameterType,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val elementSpec = getObjectManager().loadSpecification(parameterType);
+        val elementSpec = specForTypeElseFail(parameterType);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(
                         elementSpec, collectionOrArray, interactionInitiatedBy);

@@ -60,7 +60,6 @@ public interface FactoryService {
      * life-cycle callback processed.
      * @param requiredType
      * @param <T>
-     * @return
      */
     <T> T getOrCreate(@NonNull Class<T> requiredType);
 

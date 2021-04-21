@@ -13,8 +13,8 @@ class DomainModelValidator {
   void throwIfInvalid()     // <.>
   Set<ValidationFailure> getFailures()
   Stream<ValidationFailure> streamFailures(Predicate<Identifier> filter)
-  Stream<ValidationFailure> streamFailuresMatchingOriginatingClass(Class<?> cls)
-  boolean anyMatchesContaining(Class<?> cls, String messageSnippet)     // <.>
+  Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(final Identifier identifier)
+  boolean anyMatchesContaining(final Identifier identifier, final String messageSnippet)     // <.>
 }
 ----
 
@@ -28,7 +28,7 @@ Typical usage in integration tests.
 --
 Alternative way of checking
 --
-<.> xref:#anyMatchesContaining__Class_String[anyMatchesContaining(Class, String)]
+<.> xref:#anyMatchesContaining__Identifier_String[anyMatchesContaining(Identifier, String)]
 +
 --
 primarily used for testing
@@ -46,7 +46,7 @@ Typical usage in integration tests.
 
 Alternative way of checking
 
-[#anyMatchesContaining__Class_String]
-=== anyMatchesContaining(Class, String)
+[#anyMatchesContaining__Identifier_String]
+=== anyMatchesContaining(Identifier, String)
 
 primarily used for testing

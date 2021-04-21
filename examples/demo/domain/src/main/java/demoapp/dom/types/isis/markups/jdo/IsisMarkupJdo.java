@@ -57,7 +57,7 @@ public class IsisMarkupJdo                                          // <.>
 //tag::class[]
     public String title() {
         return "Markup JDO entity: " +
-            bookmarkService.bookmarkFor(this).getIdentifier();
+            bookmarkService.bookmarkForElseFail(this).getIdentifier();
     }
 
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")

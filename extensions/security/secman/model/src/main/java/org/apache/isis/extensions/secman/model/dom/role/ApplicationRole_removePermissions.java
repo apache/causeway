@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -40,7 +41,10 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = RemovePermissionDomainEvent.class, 
         associateWith = "permissions")
-@ActionLayout(named="Remove", sequence = "10")
+@ActionLayout(
+		named="Remove",
+		sequence = "10",
+		promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {
 

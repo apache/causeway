@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -28,9 +29,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -46,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -81,7 +82,11 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
 
-        return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
+        val memento = bookmarkFrom(pageParameters)
+                .map(commonContext::mementoForBookmark)
+                .orElse(null);
+        
+        return ofMemento(commonContext, memento);
     }
     
     public static EntityModel ofAdapter(
@@ -93,16 +98,16 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     public static EntityModel ofMemento(
-            IsisAppCommonContext commonContext,
-            ObjectMemento adapterMemento) {
+            final @NonNull IsisAppCommonContext commonContext,
+            final @Nullable ObjectMemento adapterMemento) {
         
         return ofMemento(commonContext, adapterMemento, /*propertyScalarModels*/null);
     }
 
     private static EntityModel ofMemento(
-            IsisAppCommonContext commonContext,
-            ObjectMemento adapterMemento,
-            @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
+            final @NonNull IsisAppCommonContext commonContext,
+            final @Nullable ObjectMemento adapterMemento,
+            final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
         
         return new EntityModel(commonContext, adapterMemento, propertyScalarModels, 
                 Mode.VIEW, RenderingHint.REGULAR);
@@ -130,9 +135,9 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     private EntityModel(
-            IsisAppCommonContext commonContext,
-            ObjectMemento adapterMemento,
-            @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
+            final @NonNull IsisAppCommonContext commonContext,
+            final @Nullable ObjectMemento adapterMemento,
+            final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
             Mode mode,
             RenderingHint renderingHint) {
         
@@ -149,8 +154,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 
-    private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return Oid.unmarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
+    private static Optional<Bookmark> bookmarkFrom(final PageParameters pageParameters) {
+        return Bookmark.parse(oidStr(pageParameters));
     }
 
 

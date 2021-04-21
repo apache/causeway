@@ -148,7 +148,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(getPropertyNoAnnotation() + amount);
         return this;
     }
-    public int default0IncrementNoAnnotation() {
+    public int default0IncrementByAmountNoAnnotation() {
         return 1;
     }
 //end::action-no-annotation[]
@@ -318,7 +318,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(value);
         return this;
     }
-    public int default0UpdateMetaAnnotated() {
+    public int default0SetToValueMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -340,7 +340,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(val);
         return this;
     }
-    public int default0UpdateMetaAnnotatedOverridden() {
+    public int default0SetToValueMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtimeservices.repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -168,7 +169,12 @@ public class RepositoryServiceDefault implements RepositoryService {
     <T> List<T> submitQuery(final Query<T> query) {
         val resultTypeSpec = objectManager.getMetaModelContext()
                 .getSpecificationLoader()
-                .loadSpecification(query.getResultType());
+                .specForType(query.getResultType())
+                .orElse(null);
+        
+        if(resultTypeSpec==null) {
+            return Collections.emptyList();
+        }
         
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);

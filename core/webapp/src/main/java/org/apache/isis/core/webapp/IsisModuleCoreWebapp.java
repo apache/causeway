@@ -27,6 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
+import org.apache.isis.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources;
@@ -38,10 +39,12 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
         IsisModuleCoreRuntime.class,
 
         // @Service's
+        ConfigurationViewServiceDefault.class,
         WebModuleLogOnExceptionLogger.class,
         WebModuleTemplateResources.class,
 
         // @Component's
+        
         HealthIndicatorUsingHealthCheckService.class,
 
         // (not annotated)

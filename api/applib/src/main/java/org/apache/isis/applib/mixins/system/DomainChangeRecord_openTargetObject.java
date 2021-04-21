@@ -52,7 +52,7 @@ public class DomainChangeRecord_openTargetObject {
     public Object openTargetObject() {
         try {
             return bookmarkService != null
-                    ? bookmarkService.lookup(domainChangeRecord.getTarget())
+                    ? bookmarkService.lookup(domainChangeRecord.getTarget()).orElse(null)
                     : null;
         } catch(RuntimeException ex) {
             if(ex.getClass().getName().contains("ObjectNotFoundException")) {

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ public interface UserService {
         return currentUser().orElse(null);
     }
 
-    // -- UTILITIES
+
 
     /**
      * Gets the details about the current user.
@@ -82,6 +83,83 @@ public interface UserService {
     default String currentUserNameElseNobody() {
         return currentUserName()
                 .orElse("Nobody");
+    }
+
+    /**
+     * Allows implementations to override the current user with another user.
+     *
+     * <p>
+     *     This is intended for non-production environments only, where it can
+     *     be invaluable (from a support perspective) to be able to quickly
+     *     use the application &quot;as if&quot; logged in as another user.
+     * </p>
+     *
+     * @see #supportsImpersonation()
+     * @see #getImpersonatedUser()
+     * @see #isImpersonating()
+     * @see #stopImpersonating()
+     *
+     * @param userName
+     * @param roles
+     */
+    default void impersonateUser(final String userName, final List<String> roles) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    /**
+     * For implementations that support impersonation, this is to
+     * programmatically stop impersonating a user
+     *
+     * <p>
+     *     Intended to be called at some point after
+     *     {@link #impersonateUser(String, List)} would have been called.
+     * </p>
+     *
+     * @see #supportsImpersonation()
+     * @see #impersonateUser(String, List)
+     * @see #getImpersonatedUser()
+     * @see #isImpersonating()
+     */
+    default void stopImpersonating() {
+        throw new RuntimeException("Not implemented");
+    }
+
+    /**
+     * Whether this implementation supports impersonation.
+     *
+     * @see #impersonateUser(String, List)
+     * @see #getImpersonatedUser()
+     * @see #isImpersonating()
+     * @see #stopImpersonating()
+     */
+    default boolean supportsImpersonation() {
+        return false;
+    }
+
+    /**
+     * The impersonated user, if it has previously been set.
+     *
+     * @see #supportsImpersonation()
+     * @see #impersonateUser(String, List)
+     * @see #isImpersonating()
+     * @see #stopImpersonating()
+     */
+    default Optional<UserMemento> getImpersonatedUser() {
+        return Optional.empty();
+    }
+
+    /**
+     * Whether or not the user currently reported (in {@link #currentUser()}
+     * and similar) is actually an impersonated user.
+     *
+     * @see #currentUser()
+     * @see #supportsImpersonation()
+     * @see #impersonateUser(String, List)
+     * @see #getImpersonatedUser()
+     * @see #stopImpersonating()
+     */
+    default boolean isImpersonating() {
+        return getImpersonatedUser().isPresent();
     }
 
 }

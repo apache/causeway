@@ -40,6 +40,8 @@ import org.apache.isis.viewer.wicket.model.models.PageParameterUtil;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
@@ -48,16 +50,17 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 @Named("isis.viewer.wicket.DeepLinkServiceWicket")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeepLinkServiceWicket implements DeepLinkService {
 
-    @Inject private PageClassRegistry pageClassRegistry;
-    @Inject private SpecificationLoader specificationLoader;
+    private final PageClassRegistry pageClassRegistry;
+    private final SpecificationLoader specificationLoader;
 
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
-        final ManagedObject objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject); 
-                
+        final ManagedObject objectAdapter = ManagedObject.lazy(specificationLoader, domainObject);
+
         final PageParameters pageParameters = PageParameterUtil.createPageParametersForObject(objectAdapter);
 
         final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);

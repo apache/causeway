@@ -271,7 +271,7 @@ implements FacetHolder {
 
     @Override
     public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
                 streamDeclaredActions(
@@ -307,7 +307,7 @@ implements FacetHolder {
 
     @Override
     public Optional<? extends ObjectMember> getMember(final Method method) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();

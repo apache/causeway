@@ -19,14 +19,16 @@
 package demoapp.dom._infra.resources;
 
 import java.util.Map;
+import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.val;
 
@@ -34,12 +36,19 @@ import lombok.val;
 @Named("demo.MarkupVariableResolverService")
 public class MarkupVariableResolverService {
 
-    private final Map<String, String> constants = _Maps.unmodifiable(
-        "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
-        "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
-        "ISSUES_DEMO", "https://issues.apache.org/jira/",
-        "ISIS_VERSION", IsisSystemEnvironment.VERSION
-    );
+    private final Map<String, String> constants;
+    
+    @Inject
+    public MarkupVariableResolverService(IsisConfiguration configuration) {
+        constants = _Maps.unmodifiable(
+                "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
+                "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
+                "ISSUES_DEMO", "https://issues.apache.org/jira/",
+                "ISIS_VERSION", Optional.ofNullable(
+                        configuration.getViewer().getWicket().getApplication().getVersion())
+                        .orElse("unkown-version")
+            );
+    }
 
     /**
      * For the given {@code input} replaces '${var-name}' with the variable's value.
@@ -56,5 +65,5 @@ public class MarkupVariableResolverService {
     private String var(String name) {
         return String.format("${%s}", name);
     }
-
+    
 }

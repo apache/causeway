@@ -18,8 +18,12 @@
  */
 package org.apache.isis.core.metamodel.context;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -32,12 +36,15 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+
+import lombok.val;
 
 /**
  * 
@@ -67,8 +74,12 @@ public interface MetaModelContext {
     
     SpecificationLoader getSpecificationLoader();
     
-    public default ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
+    public default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForType(type);
+    }
+    
+    public default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForTypeElseFail(type);
     }
 
     TranslationService getTranslationService();
@@ -96,6 +107,19 @@ public interface MetaModelContext {
     ManagedObject lookupServiceAdapterById(String serviceId);
     
     <T> T getSingletonElseFail(Class<T> type);
+    
+    default Optional<ManagedObject> loadObject(final @Nullable Oid oid) {
+        if(oid==null) {
+            return Optional.empty();
+        }
+        val objectId = oid.getIdentifier();
+        val specLoader = getSpecificationLoader(); 
+        val objManager = getObjectManager();
+        return specLoader
+                .specForLogicalTypeName(oid.getLogicalTypeName())
+                .map(spec->objManager.loadObject(
+                        ObjectLoader.Request.of(spec, objectId)));
+    }
     
     // -- EXTRACTORS
     

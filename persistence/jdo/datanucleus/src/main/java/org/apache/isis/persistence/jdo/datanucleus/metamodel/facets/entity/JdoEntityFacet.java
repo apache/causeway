@@ -33,6 +33,7 @@ import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -44,7 +45,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -126,13 +126,13 @@ implements EntityFacet {
 
         _Assert.assertTrue(entitySpec.isEntity());
 
-        val rootOid = Oid.Factory.root(entitySpec.getLogicalType(), identifier);
+        val bookmark = Bookmark.forLogicalTypeAndIdentifier(entitySpec.getLogicalType(), identifier);
 
-        log.debug("fetchEntity; rootOid={}", rootOid);
+        log.debug("fetchEntity; bookmark={}", bookmark);
 
         Object entityPojo;
         try {
-            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, rootOid);
+            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
             val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();
             val fetchPlan = persistenceManager.getFetchPlan();
@@ -144,7 +144,7 @@ implements EntityFacet {
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
-                    throw new ObjectNotFoundException(""+rootOid, e);
+                    throw new ObjectNotFoundException(""+bookmark, e);
                 }
             }
 
@@ -152,13 +152,13 @@ implements EntityFacet {
         }
 
         if (entityPojo == null) {
-            throw new ObjectNotFoundException(""+rootOid);
+            throw new ObjectNotFoundException(""+bookmark);
         }
 
-        val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
+        val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
-        return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);
+        return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
     }
 
     @Override

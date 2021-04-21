@@ -277,10 +277,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
 
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
-        introspect(Can.ofCollection(valueTypeSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(Can.ofCollection(valueTypeSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
-        introspect(Can.ofCollection(mixinSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
         
         log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
 //        log.info(" - introspecting {}/{} entities (JDO/JPA)",
@@ -290,15 +290,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} entities (JDO+JPA)",
                 isisBeanTypeRegistry.getEntityTypes().size());
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
-        introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
         SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);
 
         if(isFullIntrospect()) {
             val snapshot = cache.snapshotSpecs();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
+            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
         }
         
         log.info(" - running remaining validators");
@@ -347,7 +347,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Override
     public void reloadSpecification(Class<?> domainType) {
         invalidateCache(domainType);
-        loadSpecification(domainType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        loadSpecification(domainType, IntrospectionState.FULLY_INTROSPECTED);
     }
 
     @Override
@@ -640,7 +640,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
 
         ObjectSpecification spec = 
-                loadSpecification(substitute.apply(cls), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                loadSpecification(substitute.apply(cls), IntrospectionState.FULLY_INTROSPECTED);
         
         while(spec != null) {
             val type = spec.getCorrespondingClass();

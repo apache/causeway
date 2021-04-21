@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
@@ -61,11 +62,13 @@ import lombok.val;
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        commandPublishing = Publishing.DISABLED
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
 )
 @ActionLayout(
         cssClassFa = "fa-circle",
-        position = ActionLayout.Position.PANEL_DROPDOWN, 
+        position = ActionLayout.Position.PANEL,
         sequence = "400.1"
 )
 @RequiredArgsConstructor
@@ -78,7 +81,7 @@ public class Object_clearHints {
 
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
-            val bookmark = bookmarkService.bookmarkForElseThrow(holder);
+            val bookmark = bookmarkService.bookmarkForElseFail(holder);
             val hintStore = getHintStoreUsingWicketSession();
             if(hintStore!=null) { // just in case
                 hintStore.removeAll(bookmark);

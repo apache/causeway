@@ -33,15 +33,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.adapter.oid.LogicalTypeTestFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 public class SpecificationCacheDefaultTest {
     
-    private LogicalType cus = LogicalTypeTestFactory.cus();
-    private LogicalType ord = LogicalTypeTestFactory.ord();
+    private LogicalType cus = _LogicalTypeTestFactory.cus();
+    private LogicalType ord = _LogicalTypeTestFactory.ord();
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);

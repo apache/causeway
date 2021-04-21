@@ -318,7 +318,7 @@ public final class CommonDtoUtils {
             final Bookmark bookmark = pojo instanceof Bookmark
                     ? (Bookmark) pojo
                     : bookmarkService!=null
-                            ? bookmarkService.bookmarkFor(pojo)
+                            ? bookmarkService.bookmarkFor(pojo).orElse(null)
                             : null;
 
             if (bookmark != null) {

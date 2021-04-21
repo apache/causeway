@@ -22,40 +22,39 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.NewLocalUserDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
-import lombok.RequiredArgsConstructor;
-
-@Action(
-        domainEvent = NewLocalUserDomainEvent.class, 
-        associateWith = "allUsers")
-@RequiredArgsConstructor
-public class ApplicationUserManager_newLocalUser {
+/**
+ * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
+ * since action's type parameters are inspected for their compile time types 
+ * and the ApplicationRole here is just an interface that the framework has not much 
+ * meta-model information to derive UI behavior from.
+ * 
+ * @implNote due to current limitations, both the main and its supporting methods have to be
+ * overridden with the concrete subclasses. 
+ * 
+ */
+public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationRole> {
     
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private SecmanConfiguration configBean;
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
     
-    @SuppressWarnings("unused")
-    private final ApplicationUserManager target;
-
-    @MemberSupport
-    public ApplicationUser act(
+    protected ApplicationUser doAct(
             final String username,
             final Password password,
             final Password passwordRepeat,
-            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
+            final R initialRole,
             final Boolean enabled,
             final String emailAddress) {
         
@@ -75,12 +74,11 @@ public class ApplicationUserManager_newLocalUser {
         return user;
     }
 
-    @MemberSupport
-    public String validateAct(
+    protected String doValidate(
             final String username,
             final Password newPassword,
             final Password newPasswordRepeat,
-            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
+            final R initialRole,
             final Boolean enabled,
             final String emailAddress) {
         
@@ -89,8 +87,13 @@ public class ApplicationUserManager_newLocalUser {
         }
 
         return null;
-
     }
     
+    protected R doDefault3() {
+        return applicationRoleRepository
+                .findByNameCached(configBean.getRegularUserRoleName())
+                .orElse(null);
+    }
+   
 
 }

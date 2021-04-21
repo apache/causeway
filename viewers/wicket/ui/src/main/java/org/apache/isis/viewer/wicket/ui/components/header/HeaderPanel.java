@@ -18,19 +18,23 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.header;
 
+import java.util.Objects;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
@@ -43,12 +47,14 @@ import lombok.val;
 /**
  * A panel for the default page header
  */
-public class HeaderPanel 
+public class HeaderPanel
 extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ID_USER_NAME = "userName";
+    private static final String ID_USER_ICON = "userIcon";
+    private static final String ID_USER_AVATAR = "userAvatar";
     private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
     private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
     private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
@@ -67,7 +73,7 @@ extends PanelAbstract<String, Model<String>> {
         super.onInitialize();
 
         val headerUiModel = super.getHeaderModel();
-        
+
         addApplicationName(headerUiModel.getBranding());
         addUserName(headerUiModel.getUserProfile());
         addServiceActionMenuBars(headerUiModel);
@@ -92,8 +98,15 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addUserName(UserProfileUiModel userProfile) {
-        val userName = new Label(ID_USER_NAME, userProfile.getUserProfileName());
-        add(userName);
+        add(new MarkupContainer(ID_USER_ICON){
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(! userProfile.avatarUrl().isPresent());
+            }
+        });
+        add(new AvatarImage(ID_USER_AVATAR, userProfile));
+        add(new Label(ID_USER_NAME, userProfile.getUserProfileName()));
     }
 
     protected void addServiceActionMenuBars(HeaderUiModel headerUiModel) {
@@ -111,7 +124,7 @@ extends PanelAbstract<String, Model<String>> {
     private void addMenuBar(
             final String id,
             final MenuUiModel menuUiModel) {
-        
+
         final MarkupContainer container = this;
         val menuModel = new ServiceActionsModel(super.getCommonContext(), menuUiModel);
         val menuBarComponent = getComponentFactoryRegistry()
@@ -119,7 +132,7 @@ extends PanelAbstract<String, Model<String>> {
         menuBarComponent.add(new CssClassAppender(menuUiModel.getCssClass()));
         container.add(menuBarComponent);
     }
-    
+
 
 
 }

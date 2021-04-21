@@ -33,6 +33,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -151,13 +153,16 @@ class ExcelConverter {
             final WorksheetSpec.RowFactory<?> factory,
             final String sheetName) throws IOException {
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
-
-        final List<ManagedObject> adapters = domainObjects.stream().map(objectManager::adapt).collect(Collectors.toList());
-
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
-                                                        .filter(VISIBLE_PROPERTIES)
-                                                        .collect(Collectors.toList());
+        final List<ManagedObject> adapters = domainObjects.stream()
+                .map(objectManager::adapt)
+                .collect(Collectors.toList());
+        
+        final List<ObjectAssociation> propertyList = _Lists.newArrayList();
+        
+        specificationLoader.specForType(factory.getCls())
+        .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
+                .filter(VISIBLE_PROPERTIES)
+                .forEach(propertyList::add));
 
         List<ObjectAssociation> annotatedAsHyperlink = new ArrayList<>();
         for (Field f : fieldsAnnotatedWith(factory.getCls(), HyperLink.class)){
@@ -245,11 +250,12 @@ class ExcelConverter {
             final WorksheetSpec.RowFactory<?> factory,
             final String sheetName) throws IOException {
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
-
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> propertyList = _Lists.newArrayList();
+                
+        specificationLoader.specForType(factory.getCls())
+        .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
-                .collect(Collectors.toList());
+                .forEach(propertyList::add));
 
         // Validate the annotations for pivot
         validateAnnotations(propertyList, factory.getCls());
@@ -403,7 +409,7 @@ class ExcelConverter {
         boolean header = true;
         final Map<Integer, Property> propertyByColumn = _Maps.newHashMap();
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(cls);
+        final ObjectSpecification objectSpec = specificationLoader.specForType(cls).orElse(null);
 
         T previousRow = null;
         for (final Row row : sheet) {
@@ -543,8 +549,12 @@ class ExcelConverter {
     }
 
     private static OneToOneAssociation getAssociation(
-            final ObjectSpecification objectSpec, 
+            final @Nullable ObjectSpecification objectSpec, 
             final String propertyNameOrId) {
+        
+        if(objectSpec==null) {
+            return null;
+        }
         
         return objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())

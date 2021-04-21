@@ -17,7 +17,7 @@ See the xref:userguide:fun:overview.adoc#mixins[user guide] for a discussion of 
 
 The framework provides a number of mixins that contributes to `java.lang.Object` (in other words, to every domain object):
 
-* layout
+* Layout
 ** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
 
 * Metamodel
@@ -27,11 +27,15 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 ** xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier] (property)
 
 * Wicket viewer:
-
 ** xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
 
-* REST viewer:
+* All viewers:
+** xref:refguide:viewer:index/common/applib/mixins/Object_impersonate.adoc[Object_impersonate]
+** xref:refguide:viewer:index/common/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles]
+** xref:refguide:viewer:index/common/applib/mixins/Object_stopImpersonating.adoc[Object_stopImpersonating]
 ** xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi]
+
+
 
 
 
