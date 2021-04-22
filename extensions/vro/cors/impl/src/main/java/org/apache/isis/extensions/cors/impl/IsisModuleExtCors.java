@@ -19,9 +19,7 @@
 package org.apache.isis.extensions.cors.impl;
 
 import java.util.Collections;
-import java.util.Map;
 
-import javax.inject.Named;
 import javax.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,10 +41,9 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Configuration
-@Named("isis.ext.cors.WebModuleServerCors")
 @Qualifier("CORS")
 @Log4j2
-public class IsisModuleExtCorsImpl {
+public class IsisModuleExtCors {
 
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(

@@ -23,12 +23,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+
+import lombok.val;
 
 /**
  * Designed to simply filter out any synthetic methods.
@@ -73,6 +77,9 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         Class<?> cls = processClassContext.getCls();
         Method[] methods = cls.getMethods();
 
+        val config = processClassContext.getFacetHolder().getMetaModelContext().getConfiguration();
+        val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
+        
         for (Method method : methods) {
             // removeSyntheticOrAbstractMethods(processClassContext);
             if (method.isSynthetic() || Modifier.isAbstract(method.getModifiers())) {
@@ -82,6 +89,19 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             // removeJavaLangComparable(processClassContext);
             if(method.getName().equals("compareTo")) {
                 processClassContext.removeMethod(method);
+            }
+            
+            // remove property setter, if has not explicitly an @Action annotation
+            // this code block is not required, if @Action annotations are explicit per config
+            if(!isExplicitAction       
+                    // further predicates not strictly required, just an optimization
+                    && method.getParameterCount() == 1
+                    && method.getName().startsWith("set")
+                    && method.getName().length() > 3) {
+                
+                if(!_Annotations.synthesize(method, Action.class).isPresent()) {
+                    processClassContext.removeMethod(method);    
+                }
             }
 
         }

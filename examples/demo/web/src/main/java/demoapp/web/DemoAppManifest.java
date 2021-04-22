@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
-import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
+import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -73,7 +73,7 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
-    IsisModuleExtCorsImpl.class,
+    IsisModuleExtCors.class,
     
     IsisModuleTestingH2ConsoleUi.class, // enables the H2 console menu item
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
