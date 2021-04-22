@@ -18,14 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.samples.GeoMap
-import org.apache.isis.client.kroviz.ui.samples.SampleChartModel
-import org.apache.isis.client.kroviz.ui.samples.SvgInline
-import org.apache.isis.client.kroviz.ui.samples.SvgMap
-import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.Point
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
@@ -36,7 +28,15 @@ import io.kvision.html.ButtonStyle
 import io.kvision.navbar.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
-import kotlin.browser.window
+import kotlinx.browser.window
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.samples.GeoMap
+import org.apache.isis.client.kroviz.ui.samples.SampleChartModel
+import org.apache.isis.client.kroviz.ui.samples.SvgInline
+import org.apache.isis.client.kroviz.ui.samples.SvgMap
+import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.Point
 
 object RoMenuBar : SimplePanel() {
     lateinit var navbar: Navbar
@@ -120,7 +120,7 @@ object RoMenuBar : SimplePanel() {
             ).onClick {
                 UiManager.add(searchTitle, DropdownSearch())
             }
-            
+
             val aboutTitle = "About"
             ddLink(aboutTitle,
                     icon = IconManager.find(aboutTitle)

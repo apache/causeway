@@ -18,17 +18,14 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
+import io.kvision.html.ButtonStyle
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
-import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
-import io.kvision.html.ButtonStyle
 import kotlin.js.Date
 
 // use color codes from css instead?
@@ -46,7 +43,9 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     // encapsulate access with managers?
 }
 
+@OptIn(ExperimentalJsExport::class)
 @Serializable
+@JsExport
 data class LogEntry(
         val url: String,
         val method: String? = "",
@@ -62,7 +61,7 @@ data class LogEntry(
     init {
         state = EventState.RUNNING
         title = url // stripHostPort(url)
-        requestLength = request.length
+        requestLength = request?.length ?: 0 // if this is simplyfied to request.length Tabulator.js goes in ERROR and EventLogTable shows no entries
     }
 
     @Contextual
@@ -85,6 +84,7 @@ data class LogEntry(
     var obj: Any? = null
 
     // alternative constructor for UI events (eg. from user interaction)
+    @JsName("secondaryConstructor")
     constructor(title: String, aggregator: BaseAggregator) : this("", "", "") {
         this.title = title
         this.addAggregator(aggregator)

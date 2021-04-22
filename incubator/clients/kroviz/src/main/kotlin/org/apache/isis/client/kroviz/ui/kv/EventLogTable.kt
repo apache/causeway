@@ -18,9 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.EventLogDetail
 import io.kvision.core.*
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -29,6 +26,9 @@ import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
 import io.kvision.utils.obj
 import io.kvision.utils.px
+import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.EventLogDetail
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
     val tabulator: Tabulator<LogEntry>
@@ -41,11 +41,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     width = "50",
                     headerMenu = EventLogTableMgr().buildTableMenu(this),
                     hozAlign = Align.CENTER,
-                    formatterComponentFunction = { _, _, data ->
-                        buildActionButton(data).onClick { EventLogDetail(data).open() }.apply {
-                            margin = CssSize(-10, UNIT.px)
-                        }
-                    }
+                    formatterComponentFunction = { _, _, data -> buildActionButton(data) }
             ),
             ColumnDefinition<LogEntry>(
                     download = false,
@@ -102,6 +98,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 text = "",
                 icon = "fa fa-info-circle",
                 style = data.state.style)
+        b.onClick { EventLogDetail(data).open() }
+        b.margin = CssSize(-10, UNIT.px)
         return b
     }
 
