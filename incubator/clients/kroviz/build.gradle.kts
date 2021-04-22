@@ -20,10 +20,6 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
-buildscript {
-    extra.set("production", (findProperty("prod") ?: findProperty("production") ?: "false") == "true")
-}
-
 plugins {
     val kotlinVersion: String by System.getProperties()
     id("kotlinx-serialization") version kotlinVersion
@@ -35,19 +31,7 @@ group = "org.apache.isis.client"
 
 repositories {
     mavenCentral()
-//    mavenLocal()    for SNAPSHOTS it should up front
     jcenter()
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
-    maven {
-        url = uri("https://dl.bintray.com/gbaldeck/kotlin")
-        metadataSources {
-            mavenPom()
-            artifact()
-        }
-    }
-    maven { url = uri("https://dl.bintray.com/rjaros/kotlin") }
     mavenLocal()
 }
 
@@ -55,9 +39,7 @@ repositories {
 val kotlinVersion: String by System.getProperties()
 val kvisionVersion: String by System.getProperties()
 
-// Custom Properties
 val webDir = file("src/main/web")
-val isProductionBuild = project.extra.get("production") as Boolean
 
 kotlin {
     js {
@@ -66,13 +48,13 @@ kotlin {
                 outputFileName = "main.bundle.js"
                 sourceMaps = false
                 devServer = KotlinWebpackConfig.DevServer(
-                    open = false,
-                    port = 3000,
-                    proxy = mapOf(
-                        "/kv/*" to "http://localhost:8080",
-                        "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
-                    ),
-                    contentBase = listOf("$buildDir/processedResources/js/main")
+                        open = false,
+                        port = 3000,
+                        proxy = mapOf(
+                                "/kv/*" to "http://localhost:8080",
+                                "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
+                        ),
+                        contentBase = listOf("$buildDir/processedResources/js/main")
                 )
             }
             webpackTask {
@@ -110,16 +92,15 @@ kotlin {
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
         implementation("io.kvision:kvision-testutils:$kvisionVersion")
-        implementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     }
     sourceSets["main"].resources.srcDir(webDir)
 }
 
 fun getNodeJsBinaryExecutable(): String {
-    val nodeDir = NodeJsRootPlugin.apply(project).nodeJsSetupTaskProvider.get().destination
+    val nodeDir = NodeJsRootPlugin.apply(rootProject).nodeJsSetupTaskProvider.get().destination
     val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     val nodeBinDir = if (isWindows) nodeDir else nodeDir.resolve("bin")
-    val command = NodeJsRootPlugin.apply(project).nodeCommand
+    val command = NodeJsRootPlugin.apply(rootProject).nodeCommand
     val finalCommand = if (isWindows && command == "node") "node.exe" else command
     return nodeBinDir.resolve(finalCommand).absolutePath
 }
@@ -145,9 +126,9 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                            "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
-                            it.absolutePath,
-                            "${it.parent}/${it.nameWithoutExtension}.json"
+                                "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
+                                it.absolutePath,
+                                "${it.parent}/${it.nameWithoutExtension}.json"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -160,7 +141,7 @@ afterEvaluate {
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
-                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                    project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }
