@@ -30,4 +30,4 @@ This committers' guide is for committers of Apache Isis itself who want guidance
 //
 //include::pmc-notes.adoc[leveloffset=+1]
 
-
+//include::starter-apps.adoc[leveloffset=+1]
