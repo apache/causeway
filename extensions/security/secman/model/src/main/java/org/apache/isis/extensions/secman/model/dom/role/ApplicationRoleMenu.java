@@ -36,6 +36,8 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isis.ext.secman.ApplicationRoleMenu"
@@ -44,16 +46,16 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
-public class  ApplicationRoleMenu {
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ApplicationRoleMenu {
 
     // -- domain event classes
     public static class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRoleMenu, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRoleMenu, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRoleMenu> {}
 
-    
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    
+    private final ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+
 
     // -- iconName
     public String iconName() {

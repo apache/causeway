@@ -53,11 +53,6 @@ import lombok.val;
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
  */
-//@MemberGroupLayout(
-//        columnSpans = {6,0,6,12},
-//        left = {"Id", "Data Type", "Metadata"},
-//        right= {"Parent", "Contributed", "Detail"}
-//)
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}
@@ -86,8 +81,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         case TYPE:
             return ApplicationType.class;
         case MEMBER:
-            
-            val memberSort = 
+
+            val memberSort =
             Optional.ofNullable(applicationFeatureRepository.findFeature(featureId))
                 .flatMap(ApplicationFeature::getMemberSort)
                 .orElse(null);
@@ -182,7 +177,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE,
-            fieldSetId="Id", 
+            fieldSetId="Id",
             sequence = "2.2")
     public String getNamespaceName() {
         return getFeatureId().getNamespace();
@@ -201,7 +196,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME,
-            fieldSetId="Id", 
+            fieldSetId="Id",
             sequence = "2.3")
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
@@ -222,7 +217,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME,
-            fieldSetId="Id", 
+            fieldSetId="Id",
             sequence = "2.4")
     public String getMemberName() {
         return getFeatureId().getMemberName();
@@ -243,7 +238,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @PropertyLayout(
             navigable = Navigable.PARENT,
             hidden = Where.ALL_TABLES,
-            fieldSetId = "Parent", 
+            fieldSetId = "Parent",
             sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
@@ -257,7 +252,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         if (feature == null) {
             return null;
         }
-        final Class<? extends ApplicationFeatureViewModel> cls = 
+        final Class<? extends ApplicationFeatureViewModel> cls =
                 viewModelClassFor(parentId, featureRepository);
         return factory.viewModel(cls, parentId.asEncodedString());
     }
@@ -332,16 +327,16 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         private Functions(){}
 
         public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> asViewModelForId(
-                final ApplicationFeatureRepository applicationFeatureRepository, 
+                final ApplicationFeatureRepository applicationFeatureRepository,
                 final FactoryService factoryService) {
 
-            return (ApplicationFeatureId input) -> 
+            return (ApplicationFeatureId input) ->
             _Casts.uncheckedCast(ApplicationFeatureViewModel
                     .newViewModel(input, applicationFeatureRepository, factoryService));
 
         }
         public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeature, T> asViewModel(
-                final ApplicationFeatureRepository applicationFeatureRepository, 
+                final ApplicationFeatureRepository applicationFeatureRepository,
                 final FactoryService factoryService) {
 
             return (ApplicationFeature input) ->

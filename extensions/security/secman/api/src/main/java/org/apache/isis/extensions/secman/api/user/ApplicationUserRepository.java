@@ -65,6 +65,14 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
 
     U newUser(String username, AccountType accountType, Consumer<U> beforePersist);
 
+    default U upsertLocal(
+            @NonNull String username,
+            @Nullable Password password,
+            @NonNull ApplicationUserStatus status) {
+        return findByUsername(username)
+                .orElseGet(() -> newLocalUser(username, password, status));
+    }
+
     default U newLocalUser(
             @NonNull String username,
             @Nullable Password password,

@@ -31,23 +31,28 @@ import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepos
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
+    // modules
+    IsisModuleExtSecmanModel.class,
+
+    // services
     ApplicationPermissionRepository.class,
     ApplicationRoleRepository.class,
     ApplicationTenancyRepository.class,
     ApplicationUserRepository.class,
-
-    ApplicationPermission.class,
-    ApplicationRole.class,
-    ApplicationTenancy.class,
-    ApplicationUser.class,
-
     SeedSecurityModuleService.class,
+
+    // pretty sure we don't need to import/register these view models
+//    ApplicationPermission.class,
+//    ApplicationRole.class,
+//    ApplicationTenancy.class,
+//    ApplicationUser.class,
 
 })
 @EntityScan(basePackageClasses = {
