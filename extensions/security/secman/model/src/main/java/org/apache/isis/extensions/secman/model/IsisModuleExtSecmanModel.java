@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.model;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -29,7 +28,9 @@ import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermiss
 import org.apache.isis.extensions.secman.model.dom.role.ApplicationRoleMenu;
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancyMenu;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
+import org.apache.isis.extensions.secman.model.dom.user.MeService;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory;
+import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSecman;
 
 /**
  * @since 2.0 {@index}
@@ -46,6 +47,9 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationRoleMenu.class,
         ApplicationTenancyMenu.class,
         ApplicationUserMenu.class,
+        
+        //ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
+        MeService.class,
 
         // @Component
         TenantedAuthorizationFacetFactory.Register.class,
