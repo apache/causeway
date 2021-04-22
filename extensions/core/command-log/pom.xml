@@ -40,7 +40,8 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>impl</module>
+		<module>jdo</module>
+		<module>jpa</module>
 	</modules>
 
 </project>
