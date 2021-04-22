@@ -94,7 +94,6 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             // remove property setter, if has not explicitly an @Action annotation
             // this code block is not required, if @Action annotations are explicit per config
             if(!isExplicitAction       
-                    // further predicates not strictly required, just an optimization
                     && method.getParameterCount() == 1
                     && method.getName().startsWith("set")
                     && method.getName().length() > 3) {
