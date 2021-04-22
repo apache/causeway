@@ -21,10 +21,14 @@ package org.apache.isis.extensions.secman.jdo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
+import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy;
+import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
@@ -43,13 +47,14 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationUserRepository.class,
         SeedSecurityModuleService.class,
 
-        // pretty sure we don't need to import/register these view models
-//        ApplicationPermission.class,
-//        ApplicationRole.class,
-//        ApplicationTenancy.class,
-//        ApplicationUser.class,
-
-
+        // JDO entities
+        // required to be listed in order for Spring to pick them up, 
+        // such that as a side-effect these get eagerly introspected by the framework;
+        // whereas the JPA counterpart makes use of the @EntityScan annotation instead
+        ApplicationPermission.class,
+        ApplicationRole.class,
+        ApplicationTenancy.class,
+        ApplicationUser.class,
 })
 public class IsisModuleExtSecmanPersistenceJdo {
 
