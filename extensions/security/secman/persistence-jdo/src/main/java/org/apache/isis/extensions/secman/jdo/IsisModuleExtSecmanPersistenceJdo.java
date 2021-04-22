@@ -28,6 +28,9 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_allUsers;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_newDelegateUser;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -55,6 +58,11 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationRole.class,
         ApplicationTenancy.class,
         ApplicationUser.class,
+        
+        // mixins
+        ApplicationUserManager_allUsers.class,
+        ApplicationUserManager_newDelegateUser.class,
+        ApplicationUserManager_newLocalUser.class,
 })
 public class IsisModuleExtSecmanPersistenceJdo {
 
