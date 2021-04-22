@@ -18,18 +18,16 @@
  */
 package demoapp.dom.domain._commands;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 //tag::class[]
 @Collection
@@ -41,8 +39,7 @@ public class ExposePersistedCommands_commands {
     private final ExposePersistedCommands exposePersistedCommands;
 
     //tag::class[]
-    public List<CommandJdo> coll() {
-        val list = new LinkedList<CommandJdo>();
+    public List<? extends CommandModel> coll() {
         return commandJdoRepository.findCompleted();
     }
 

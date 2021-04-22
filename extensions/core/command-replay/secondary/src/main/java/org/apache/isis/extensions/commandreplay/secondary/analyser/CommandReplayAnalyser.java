@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.analyser;
 
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 
 /**
  * @since 2.0 {@index}
@@ -30,6 +30,6 @@ public interface CommandReplayAnalyser {
      * @param commandJdo
      * @return - if not <code>null</code>, indicates the reason that there was an issue replaying the command.
      */
-    String analyzeReplay(final CommandJdo commandJdo);
+    String analyzeReplay(final CommandModel commandJdo);
 
 }

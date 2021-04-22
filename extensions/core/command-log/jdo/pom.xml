@@ -46,25 +46,10 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-config</artifactId>
-        </dependency>
-
-        <dependency>
-	    	<groupId>org.apache.isis.testing</groupId>
-        	<artifactId>isis-testing-fixtures-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtimeservices</artifactId>
-        </dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.extensions</groupId>
+	        <artifactId>isis-extensions-command-log-model</artifactId>
+	    </dependency>
 
         <!-- PERSISTENCE -->
 

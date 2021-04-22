@@ -14,6 +14,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
 
     <persistence-unit name="org-apache-isis-extensions-commandlog">
-        <class>org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo</class>
+        <class>org.apache.isis.extensions.commandlog.jdo.entities.CommandModel</class>
     </persistence-unit>
 </persistence>
