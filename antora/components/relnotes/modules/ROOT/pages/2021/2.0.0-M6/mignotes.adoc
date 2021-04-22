@@ -35,9 +35,13 @@ there is no counterpart for _Collection_
 
 == Other Changes
 
+Module `IsisModuleExtCorsImpl` was renamed to `IsisModuleExtCors`. 
+
 Module `IsisModuleExtModelAnnotation` was removed and is no longer required.
 
 Service `BookmarkService` has been improved, such that its methods return `Optional<?>` instead of nullable objects. 
+
+
 
 == Extensions
 
