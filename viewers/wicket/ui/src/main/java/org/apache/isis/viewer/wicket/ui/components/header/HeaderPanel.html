@@ -21,24 +21,22 @@
     <body>
         <wicket:panel>
         	<header>
-            <nav class="navbar navbar-expand-xl fixed-top bg-dark navbar-dark" role="navigation">
+            <nav class="navbar navbar-expand-xl fixed-top navbar-dark bg-primary" role="navigation">
 
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target=".navbar-collapse.app-actions" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <a class="navbar-brand mr-1 ml-n2 mb-n2" wicket:id="applicationName">
-                        <span wicket:id="brandText"></span>
-                        <img alt="Brand" wicket:id="brandLogo"/>
-                    </a>
-                </div>
+                <a class="navbar-brand mr-1 ml-n2 mb-n2" wicket:id="applicationName">
+                    <span wicket:id="brandText"></span>
+                    <img alt="Brand" wicket:id="brandLogo"/>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse.app-actions" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse app-actions mr-auto">
                     <ul class="navbar-nav" wicket:id="primaryMenuBar"></ul>
                 </div>
                 <div class="navbar collapse navbar-collapse app-actions p-0 flex-grow-0">
                     <ul class="navbar-nav" wicket:id="secondaryMenuBar"></ul>
-                    <ul class="navbar-nav tertiary show">
+                    <ul class="navbar-nav tertiary">
                         <li class="nav-item dropdown">                        	
                             <a href="#" class="nav-link dropdown-toggle" id="tertiaryDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span wicket:id="userIcon">

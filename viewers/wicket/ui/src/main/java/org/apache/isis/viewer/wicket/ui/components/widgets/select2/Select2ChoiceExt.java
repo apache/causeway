@@ -51,6 +51,8 @@ implements ChoiceExt {
         logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
+        getSettings().setWidth("auto");
+        getSettings().setDropdownAutoWidth(true);
 
         setOutputMarkupPlaceholderTag(true);
     }

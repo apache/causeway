@@ -1149,10 +1149,13 @@ ul.tertiary li.dropdown img.avatar {
     padding-right: 5px;
 }
 
+/* disabled, as it was changing the baseline of the tertiary menu */
+/*
 ul.tertiary li.dropdown a.dropdown-toggle {
     padding-bottom: 13px;
     margin-bottom: 0px;
 }
+*/
 
 ul.tertiary li.dropdown ul.dropdown-menu {
     min-width: 0px;
