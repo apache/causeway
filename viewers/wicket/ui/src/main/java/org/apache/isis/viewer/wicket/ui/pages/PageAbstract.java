@@ -156,21 +156,21 @@ implements ActionPromptProvider {
             Component debugBar = devUtilitiesEnabled
                     ? newDebugBar("debugBar")
                             : new EmptyPanel("debugBar").setVisible(false);
-                    add(debugBar);
+            add(debugBar);
 
-                    MarkupContainer header = createPageHeader("header");
-                    themeDiv.add(header);
+            MarkupContainer header = createPageHeader("header");
+            themeDiv.add(header);
 
-                    MarkupContainer footer = createPageFooter("footer");
-                    themeDiv.add(footer);
+            MarkupContainer footer = createPageFooter("footer");
+            themeDiv.add(footer);
 
-                    addActionPromptModalWindow(themeDiv);
-                    addActionPromptSidebar(themeDiv);
+            addActionPromptModalWindow(themeDiv);
+            addActionPromptSidebar(themeDiv);
 
-                    this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
-                    // ensure that all collected JavaScript contributions are loaded at the page footer
-                    add(new HeaderResponseContainer("footerJS", "footerJS"));
+            // ensure that all collected JavaScript contributions are loaded at the page footer
+            add(new HeaderResponseContainer("footerJS", "footerJS"));
 
         } catch(final RuntimeException ex) {
 

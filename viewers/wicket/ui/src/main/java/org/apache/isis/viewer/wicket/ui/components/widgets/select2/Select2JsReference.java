@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -33,11 +34,15 @@ import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceR
  * A JavaScript reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.js</a>
  * <p>Depends on JQuery.</p>
  */
-public class Select2JsReference extends WebjarsJavaScriptResourceReference {
+public class Select2JsReference 
+	// extends WebjarsJavaScriptResourceReference
+	extends JavaScriptResourceReference
+{
     private static final long serialVersionUID = 1L;
 
     public Select2JsReference() {
-        super("/select2/current/select2.js");
+        // super("/select2/current/select2.js");
+    	super(Select2JsReference.class, "res/js/select2.full.js");
     }
 
     @Override

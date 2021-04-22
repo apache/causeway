@@ -106,6 +106,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBe
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
@@ -374,7 +375,8 @@ implements
     private void configureWicketSelect2() {
         ApplicationSettings select2Settings = ApplicationSettings.get();
         select2Settings.setCssReference(new Select2BootstrapCssReference());
-        select2Settings.setJavaScriptReference(new Select2JsReference());
+        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
+        select2Settings.setIncludeJavascriptFull(true);
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
@@ -627,7 +629,13 @@ implements
             getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
             break;
         default: 
-            getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+            // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+        	/*
+        	 * downgrading to jquery 3.5.1 because of this issue:
+        	 * 
+        	 * https://github.com/select2/select2/issues/5993
+        	 */
+        	getJavaScriptLibrarySettings().setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
             break;
         }
     }
