@@ -33,12 +33,12 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     // -- CONSTANTS
 
-    public static final int MAX_LENGTH_USERNAME = 30;
-    public static final int MAX_LENGTH_FAMILY_NAME = 50;
-    public static final int MAX_LENGTH_GIVEN_NAME = 50;
-    public static final int MAX_LENGTH_KNOWN_AS = 20;
-    public static final int MAX_LENGTH_EMAIL_ADDRESS = 50;
-    public static final int MAX_LENGTH_PHONE_NUMBER = 25;
+    public static final int MAX_LENGTH_USERNAME = 120;
+    public static final int MAX_LENGTH_FAMILY_NAME = 120;
+    public static final int MAX_LENGTH_GIVEN_NAME = 120;
+    public static final int MAX_LENGTH_KNOWN_AS = 120;
+    public static final int MAX_LENGTH_EMAIL_ADDRESS = 120;
+    public static final int MAX_LENGTH_PHONE_NUMBER = 120;
 
     // -- DOMAIN EVENTS
 
