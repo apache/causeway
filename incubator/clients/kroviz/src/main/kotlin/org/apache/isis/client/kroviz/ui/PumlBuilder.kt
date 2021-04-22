@@ -84,11 +84,15 @@ class PumlBuilder {
         return pumlCode
     }
 
-    fun withLogEntry(rootLE: LogEntry): String {
+    fun with(rootLE: LogEntry): String {
         var code = "$Q@startuml$NL"
         code += iterateOverChildren(rootLE)
         code += "@enduml$Q"
         return code
+    }
+
+    fun asJsonDiagram(json: String): String {
+        return "@startjson" + "\n" + json + "\n" + "@endjson"
     }
 
     private fun iterateOverChildren(logEntry: LogEntry): String {

@@ -33,9 +33,20 @@ object UmlUtils {
         args["diagram_type"] = Argument(key = "\"diagram_type\"", value = "\"plantuml\"")
         args["output_format"] = Argument(key = "\"output_format\"", value = "\"svg\"")
 
-        val link = Link(href = Constants.plantUmlUrl, method = Method.POST.operation, args = args)
+        console.log("[UmlUtils.generateDiagram]")
+        console.log(args)
+
+        val link = Link(href = Constants.krokiUrl, method = Method.POST.operation, args = args)
         val agr = SvgDispatcher(callBack)
+
+
         RoXmlHttpRequest().invokeAnonymous(link, agr)
     }
+
+    fun generateJsonDiagram(pumlCode: String, callBack: Any) {
+        val agr = SvgDispatcher(callBack)
+        RoXmlHttpRequest().invokeKroki(pumlCode, agr)
+    }
+
 
 }

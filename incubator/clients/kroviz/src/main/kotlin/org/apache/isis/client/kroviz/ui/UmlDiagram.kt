@@ -51,7 +51,7 @@ object UmlDiagram {
             le.url.endsWith("/restful/")
         }
         if (first != null) {
-            return PumlBuilder().withLogEntry(first)
+            return PumlBuilder().with(first)
         }
         return null
     }

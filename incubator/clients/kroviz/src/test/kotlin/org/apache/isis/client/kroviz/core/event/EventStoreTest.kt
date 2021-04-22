@@ -217,7 +217,7 @@ class EventStoreTest : IntegrationTest() {
         // given
         EventStore.reset()
         val method = Method.POST.operation
-        val url = Constants.plantUmlUrl
+        val url = Constants.krokiUrl
         val rs = ResourceSpecification(url)
         // when
         EventStore.start(rs, method, body = "first invocation")

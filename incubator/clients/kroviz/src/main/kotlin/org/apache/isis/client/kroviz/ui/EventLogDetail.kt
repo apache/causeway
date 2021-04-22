@@ -50,11 +50,20 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 caption = "Details :" + logEntry.title,
                 items = formItems,
                 command = this,
-                defaultAction = "Console",
+                defaultAction = "Diagram",
                 widthPerc = 60).open()
     }
 
+
     override fun execute() {
+        if (logEntry.subType != Constants.subTypeXml) {
+            val responseStr = logEntry.response
+            val pumlCode = PumlBuilder().asJsonDiagram(responseStr)
+            DiagramDialog("Json Diagram", pumlCode).open()
+        }
+    }
+
+    fun executeConsole() {
         console.log(logEntry)
     }
 

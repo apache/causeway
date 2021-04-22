@@ -27,8 +27,8 @@ object Constants {
     const val subTypeJson = "json"
     const val subTypeXml = "xml"
 
-    //const val plantUmlUrl = "https://kroki.io/" //see: https://github.com/yuzutech/kroki
-    const val plantUmlUrl = "http://localhost:8080/"
+    //const val krokiUrl = "https://kroki.io/" //see: https://github.com/yuzutech/kroki
+    const val krokiUrl = "http://localhost:8000/"
     //host:port depend on how docker is started
     // docker run -d --name kroki -p 8080:8000 yuzutech/kroki
 

@@ -61,7 +61,7 @@ data class LogEntry(
     init {
         state = EventState.RUNNING
         title = url // stripHostPort(url)
-        requestLength = request?.length ?: 0 // if this is simplyfied to request.length Tabulator.js goes in ERROR and EventLogTable shows no entries
+        requestLength = request?.length ?: 0 // if this is simplyfied to request.length, Tabulator.js goes in ERROR and EventLogTable shows no entries
     }
 
     @Contextual

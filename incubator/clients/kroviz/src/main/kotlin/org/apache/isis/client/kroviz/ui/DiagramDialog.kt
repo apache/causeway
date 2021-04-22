@@ -32,7 +32,9 @@ class DiagramDialog(
 
     fun open() {
         dialog.open()
-        UmlUtils.generateDiagram(pumlCode, callBack)
+        console.log("[DiagramDialog.open]")
+        console.log(pumlCode)
+        UmlUtils.generateJsonDiagram(pumlCode, callBack)
     }
 
     init {
