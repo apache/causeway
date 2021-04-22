@@ -35,7 +35,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    
+
     private final String roleName;
     private final String roleDescription;
 
@@ -66,12 +66,10 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             return;
         }
 
-        ApplicationRole securityRole = applicationRoleRepository.findByName(roleName).orElse(null);
-        if(securityRole == null) {
-            securityRole = applicationRoleRepository.newRole(roleName, roleDescription);
-        }
-        
-        for(ApplicationFeatureId featureId : featureIds) {
+        val securityRole = applicationRoleRepository.findByName(roleName)
+                .orElseGet(() -> applicationRoleRepository.newRole(roleName, roleDescription));
+
+        for(val featureId : featureIds) {
             val featureFqn = featureId.getFullyQualifiedName();
 
             // can't use role#addPackage because that does a check for existence of the package, which is
@@ -82,7 +80,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
                     (org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
-                    featureId.getSort(), 
+                    featureId.getSort(),
                     featureFqn);
         }
     }

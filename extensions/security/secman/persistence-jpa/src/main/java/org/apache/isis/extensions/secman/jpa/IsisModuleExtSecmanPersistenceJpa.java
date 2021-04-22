@@ -29,25 +29,38 @@ import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_allUsers;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_newDelegateUser;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
+    // modules
+    IsisModuleExtSecmanModel.class,
+
+    // services
     ApplicationPermissionRepository.class,
     ApplicationRoleRepository.class,
     ApplicationTenancyRepository.class,
     ApplicationUserRepository.class,
-
-    ApplicationPermission.class,
-    ApplicationRole.class,
-    ApplicationTenancy.class,
-    ApplicationUser.class,
-
     SeedSecurityModuleService.class,
+
+    // pretty sure we don't need to import/register these view models
+//    ApplicationPermission.class,
+//    ApplicationRole.class,
+//    ApplicationTenancy.class,
+//    ApplicationUser.class,
+    
+    // mixins
+    ApplicationUserManager_allUsers.class,
+    ApplicationUserManager_newDelegateUser.class,
+    ApplicationUserManager_newLocalUser.class,
 
 })
 @EntityScan(basePackageClasses = {
