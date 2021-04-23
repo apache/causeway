@@ -86,96 +86,96 @@ import lombok.val;
     @javax.jdo.annotations.Query(
             name="findByInteractionIdStr",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE interactionIdStr == :interactionIdStr "),
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE interactionIdStr == :interactionIdStr "),
     @javax.jdo.annotations.Query(
             name="findByParent",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE parent == :parent "),
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE parent == :parent "),
     @javax.jdo.annotations.Query(
             name="findCurrent",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE completedAt == null "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE completedAt == null "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findCompleted",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE completedAt != null "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE completedAt != null "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findRecentByTarget",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE target == :target "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE target == :target "
                     + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,30"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBetween",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE target == :target "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE target == :target "
                     + "&& timestamp >= :from "
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampAfter",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE target == :target "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE target == :target "
                     + "&& timestamp >= :from "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBefore",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE target == :target "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE target == :target "
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTarget",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE target == :target "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE target == :target "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTimestampBetween",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp >= :from "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE timestamp >= :from "
                     + "&&    timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTimestampAfter",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp >= :from "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE timestamp >= :from "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findByTimestampBefore",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp <= :to "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="find",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "ORDER BY this.timestamp DESC"),
+                    + "FROM " + CommandJdo.FQCN
+                    + " ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findRecentByUsername",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE username == :username "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE username == :username "
                     + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,30"),
     @javax.jdo.annotations.Query(
             name="findFirst",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE startedAt   != null "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE startedAt   != null "
                     + "   && completedAt != null "
                     + "ORDER BY this.timestamp ASC "
                     + "RANGE 0,2"),
@@ -184,8 +184,8 @@ import lombok.val;
     @javax.jdo.annotations.Query(
             name="findSince",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp > :timestamp "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE timestamp > :timestamp "
                     + "   && startedAt != null "
                     + "   && completedAt != null "
                     + "ORDER BY this.timestamp ASC"),
@@ -195,8 +195,8 @@ import lombok.val;
     @javax.jdo.annotations.Query(
             name="findMostRecentReplayed",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE (replayState == 'OK' || replayState == 'FAILED') "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE (replayState == 'OK' || replayState == 'FAILED') "
                     + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                     // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
@@ -206,8 +206,8 @@ import lombok.val;
     @javax.jdo.annotations.Query(
             name="findMostRecentCompleted",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE startedAt   != null "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE startedAt   != null "
                     + "   && completedAt != null "
                     + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,2"),
@@ -216,22 +216,22 @@ import lombok.val;
     @javax.jdo.annotations.Query(
             name="findNotYetReplayed",
             value="SELECT "
-                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE replayState == 'PENDING' "
+                    + "FROM " + CommandJdo.FQCN
+                    + " WHERE replayState == 'PENDING' "
                     + "ORDER BY this.timestamp ASC "
                     + "RANGE 0,10"),    // same as batch size
 //        @javax.jdo.annotations.Query(
 //                name="findReplayableInErrorMostRecent",
 //                value="SELECT "
-//                        + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-//                        + "WHERE replayState == 'FAILED' "
+//                        + "FROM " + CommandJdo.FQCN
+//                        + " WHERE replayState == 'FAILED' "
 //                        + "ORDER BY this.timestamp DESC "
 //                        + "RANGE 0,2"),
 //    @javax.jdo.annotations.Query(
 //            name="findReplayableMostRecentStarted",
 //            value="SELECT "
-//                    + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-//                    + "WHERE replayState = 'PENDING' "
+//                    + "FROM " + CommandJdo.FQCN
+//                    + " WHERE replayState = 'PENDING' "
 //                    + "ORDER BY this.timestamp DESC "
 //                    + "RANGE 0,20"),
 })
@@ -260,6 +260,7 @@ implements
     DomainChangeRecord, 
     Comparable<CommandJdo> {
 
+    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo"; 
 
     /**
      * Intended for use on primary system.

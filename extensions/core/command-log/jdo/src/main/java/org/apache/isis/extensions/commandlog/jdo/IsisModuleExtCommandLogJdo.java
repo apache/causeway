@@ -41,6 +41,9 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // @Service's
         , CommandJdo.TableColumnOrderDefault.class
+        
+        // entities
+        , CommandJdo.class
 })
 @ComponentScan(
         basePackageClasses= {
