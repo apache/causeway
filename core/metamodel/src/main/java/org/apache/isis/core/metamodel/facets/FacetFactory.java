@@ -33,11 +33,32 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Responsible for processing elements of the metamodel, registered to the
+ * {@link org.apache.isis.core.metamodel.progmodel.ProgrammingModel} using
+ * {@link org.apache.isis.core.metamodel.progmodel.ProgrammingModel#addFactory(ProgrammingModel.FacetProcessingOrder, FacetFactory, ProgrammingModel.Marker...)}.
+ *
+ * <p>
+ *     IMPORTANT: with respect to mixed-in members, {@link FacetFactory}s are
+ *     only run against those members in their original form as an action of
+ *     a mixin class, <i>not</i> as contributed mixin methods of the mixee type.
+ *     This is because they actually run against {@link FacetedMethod}s, which
+ *     are the peer object that is wrapped by (the respective subclasses of)
+ *     {@link org.apache.isis.core.metamodel.spec.feature.ObjectMember}.
+ * </p>
+ *
+ * <p>
+ *     To process a mixin member in the context of it actually being a mixin
+ *     member (for example, authorization or translations), instead use the
+ *     {@link org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor} interface.
+ * </p>
+ */
 public interface FacetFactory {
 
     static class AbstractProcessContext<T extends FacetHolder> {
@@ -68,29 +89,29 @@ public interface FacetFactory {
         public Class<?> getCls() {
             return cls;
         }
-        
-        /** 
+
+        /**
          * Annotation lookup on this context's type (cls).
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnType(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(cls, annotationType);
         }
-        
+
     }
 
-    static class AbstractProcessWithMethodContext<T extends FacetHolder> 
+    static class AbstractProcessWithMethodContext<T extends FacetHolder>
     extends AbstractProcessWithClsContext<T> implements MethodRemover{
 
         private final Method method;
         protected final MethodRemover methodRemover;
 
         AbstractProcessWithMethodContext(
-                final Class<?> cls, 
-                final Method method, 
-                final MethodRemover methodRemover, 
+                final Class<?> cls,
+                final Method method,
+                final MethodRemover methodRemover,
                 final T facetHolder) {
-            
+
             super(cls, facetHolder);
             this.method = method;
             this.methodRemover = methodRemover;
@@ -136,7 +157,7 @@ public interface FacetFactory {
      * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the
      * number of {@link FacetFactory factory}s that are queried when building up
      * the meta-model.
-     * 
+     *
      */
     ImmutableEnumSet<FeatureType> getFeatureTypes();
 
@@ -145,10 +166,10 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext 
-    extends AbstractProcessWithClsContext<FacetHolder> 
+    public static class ProcessClassContext
+    extends AbstractProcessWithClsContext<FacetHolder>
     implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
-        
+
         private final MethodRemover methodRemover;
 
         /**
@@ -182,27 +203,27 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext 
-    extends AbstractProcessWithMethodContext<FacetedMethod> 
+    public static class ProcessMethodContext
+    extends AbstractProcessWithMethodContext<FacetedMethod>
     implements ProcessContextWithMetadataProperties<FacetedMethod> {
-        
+
         @Getter private final FeatureType featureType;
         /**
-         * Whether we are currently processing a mixin type AND this context's method can be identified 
-         * as the main method of the processed mixin class. 
+         * Whether we are currently processing a mixin type AND this context's method can be identified
+         * as the main method of the processed mixin class.
          * @since 2.0
          */
         @Getter private final boolean mixinMain;
 
         /**
-         * 
+         *
          * @param cls
          * @param featureType
          * @param method
          * @param methodRemover
          * @param facetedMethod
          * @param isMixinMain
-         *       - Whether we are currently processing a mixin type AND this context's method can be identified 
+         *       - Whether we are currently processing a mixin type AND this context's method can be identified
          *         as the main method of the processed mixin class. (since 2.0)
          */
         public ProcessMethodContext(
@@ -212,12 +233,12 @@ public interface FacetFactory {
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod,
                 final boolean isMixinMain) {
-            
+
             super(cls, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.mixinMain = isMixinMain;
         }
-        
+
         /** JUnit support, historically not using 'isMixinMain' */
         public ProcessMethodContext(
                 final Class<?> cls,
@@ -228,45 +249,45 @@ public interface FacetFactory {
             this(cls, featureType, method, methodRemover, facetedMethod, false);
         }
 
-        
-        /** 
+
+        /**
          * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(getMethod(), annotationType);
         }
-        
-        /** 
-         * Annotation lookup on this context's method, if not found, extends search to type in case 
+
+        /**
+         * Annotation lookup on this context's method, if not found, extends search to type in case
          * the predicate {@link #isMixinMain} evaluates {@code true}.
          * <p>
-         * As of [ISIS-2604] we also make sure the annotation type does not appear in both places 
-         * (method and type). Hence the 2nd parameter is a callback that fires if the annotation 
-         * is found in both places. 
-         * 
+         * As of [ISIS-2604] we also make sure the annotation type does not appear in both places
+         * (method and type). Hence the 2nd parameter is a callback that fires if the annotation
+         * is found in both places.
+         *
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(
                 final @NonNull Class<A> annotationType,
                 final @NonNull Runnable onAmbiguity) {
-            
-            
+
+
             val onMethod = synthesizeOnMethod(annotationType);
             val onType = synthesizeOnType(annotationType);
-            
+
             if(onMethod.isPresent()) {
                 if(onType.isPresent()) {
-                    onAmbiguity.run();    
+                    onAmbiguity.run();
                 }
                 return onMethod;
             }
             return onType;
         }
-        
+
     }
-    
-    
+
+
     /**
      * Process the method, and return the correctly setup annotation if present.
      */
@@ -274,12 +295,12 @@ public interface FacetFactory {
 
     // -- PROCESS PARAM
 
-    public static class ProcessParameterContext 
+    public static class ProcessParameterContext
     extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
-        
+
         private final int paramNum;
         private final Class<?> paramType;
-        private final Parameter parameter; 
+        private final Parameter parameter;
 
         public ProcessParameterContext(
                 final Class<?> cls,
@@ -287,7 +308,7 @@ public interface FacetFactory {
                 final int paramNum,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
-            
+
             super(cls, method, methodRemover, facetedMethodParameter);
             if(paramNum>=method.getParameterCount()) {
                 throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
@@ -300,8 +321,8 @@ public interface FacetFactory {
         public int getParamNum() {
             return paramNum;
         }
-        
-        /** 
+
+        /**
          * Annotation lookup on this context's method parameter.
          * @since 2.0
          */
@@ -315,7 +336,7 @@ public interface FacetFactory {
         public Class<?> getParameterType() {
             return this.paramType;
         }
-        
+
         /**
          * @since 2.0
          */
@@ -330,5 +351,5 @@ public interface FacetFactory {
      */
     void processParams(ProcessParameterContext processParameterContext);
 
-    
+
 }
