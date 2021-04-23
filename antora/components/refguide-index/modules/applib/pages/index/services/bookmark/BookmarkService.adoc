@@ -9,29 +9,24 @@ This service provides a serializable 'bookmark' for any entity, and conversely t
 .BookmarkService.java
 ----
 interface BookmarkService {
-  Bookmark bookmarkFor(Object domainObject)     // <.>
-  Bookmark bookmarkForElseThrow(Object domainObject)     // <.>
-  Bookmark bookmarkFor(Class<?> cls, String identifier)     // <.>
-  Object lookup(BookmarkHolder bookmarkHolder)     // <.>
-  Object lookup(Bookmark bookmark)     // <.>
-  T lookup(Bookmark bookmark, Class<T> cls)     // <.>
+  Optional<Bookmark> bookmarkFor(Object domainObject)     // <.>
+  Optional<Bookmark> bookmarkFor(Class<?> cls, String identifier)     // <.>
+  Optional<Object> lookup(BookmarkHolder bookmarkHolder)     // <.>
+  Optional<Object> lookup(Bookmark bookmark)     // <.>
+  Optional<T> lookup(Bookmark bookmark, Class<T> cls)     // <.>
+  Bookmark bookmarkForElseFail(Object domainObject)     // <.>
 }
 ----
 
 <.> xref:#bookmarkFor__Object[bookmarkFor(Object)]
 +
 --
-Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
---
-<.> xref:#bookmarkForElseThrow__Object[bookmarkForElseThrow(Object)]
-+
---
-As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+Optionally returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object, based on whether can create a bookmark for it.
 --
 <.> xref:#bookmarkFor__Class_String[bookmarkFor(Class, String)]
 +
 --
-Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+Optionally returns a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] created from the constituent parts, based on whether can create a bookmark from these.
 --
 <.> xref:#lookup__BookmarkHolder[lookup(BookmarkHolder)]
 <.> xref:#lookup__Bookmark[lookup(Bookmark)]
@@ -44,25 +39,25 @@ Reciprocal of _#bookmarkFor(Object)_
 --
 As _#lookup(Bookmark)_ , but down-casting to the specified type.
 --
+<.> xref:#bookmarkForElseFail__Object[bookmarkForElseFail(Object)]
++
+--
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+--
 
 == Members
 
 [#bookmarkFor__Object]
 === bookmarkFor(Object)
 
-Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
+Optionally returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object, based on whether can create a bookmark for it.
 
  *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
-
-[#bookmarkForElseThrow__Object]
-=== bookmarkForElseThrow(Object)
-
-As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 
 [#bookmarkFor__Class_String]
 === bookmarkFor(Class, String)
 
-Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+Optionally returns a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] created from the constituent parts, based on whether can create a bookmark from these.
 
 [#lookup__BookmarkHolder]
 === lookup(BookmarkHolder)
@@ -76,6 +71,11 @@ Reciprocal of _#bookmarkFor(Object)_
 === lookup(Bookmark, Class)
 
 As _#lookup(Bookmark)_ , but down-casting to the specified type.
+
+[#bookmarkForElseFail__Object]
+=== bookmarkForElseFail(Object)
+
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 
 include::hooks/BookmarkService_010-implementation.adoc[]
 
