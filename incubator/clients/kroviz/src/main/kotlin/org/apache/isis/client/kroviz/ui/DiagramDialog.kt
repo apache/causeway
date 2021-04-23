@@ -19,12 +19,15 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
+import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.*
 
 class DiagramDialog(
-        var label: String,
-        private var pumlCode: String) : Command() {
+    var label: String,
+    private var pumlCode: String
+) : Command() {
 
     private var callBack: Any = UUID()
     private var dialog: RoDialog
@@ -42,10 +45,26 @@ class DiagramDialog(
         formItems.add(fi)
 
         dialog = RoDialog(
-                widthPerc = 80,
-                caption = "Diagram",
-                items = formItems,
-                command = this)
+            widthPerc = 80,
+            caption = "Diagram",
+            items = formItems,
+            command = this,
+            defaultAction = "Pin"
+        )
+    }
+
+    override fun execute() {
+        val newFormItems = mutableListOf<FormItem>()
+        val newCallBack = UUID()
+        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = newCallBack)
+        newFormItems.add(newFi)
+        val panel = FormPanelFactory(newFormItems)
+        UiManager.add("Diagram", panel)
+        val uuid = callBack as UUID
+        val oldElement = DomUtil.getById(uuid.value)!!
+        val oldStr = oldElement.innerHTML
+        val newImage = ScalableVectorGraphic(oldStr)
+        DomUtil.replaceWith(newCallBack, newImage)
     }
 
     @Deprecated("use leaflet/svg")
