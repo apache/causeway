@@ -135,46 +135,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(collection->{
 
-            // ... see if any of its actions has a collection parameter of the same type
-            //
-            // eg Order#getItems() and Order#removeItems(List<OrderItem>)
-            //
-            final ObjectSpecification specification = collection.getSpecification();
-
-            final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
-                    new ObjectActionParameter.Predicates.CollectionParameter(specification);
-
-            final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
-                    new ObjectActionParameter.Predicates.ScalarParameter(specification);
-
-            objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.associatedWith(collection))
-            .forEach(action->{
-
-                val parameters = action.getParameters();
-
-                val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
-                val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
-
-                // for collection parameters, install an defaults facet (if there isn't one already)
-                // this will cause the UI to render the collection with toggleboxes
-                // with a thread-local used to provide the selected objects
-                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    addCollectionParamDefaultsFacetIfNoneAlready(collectionParam);
-                }
-
-                // for compatible collection parameters, install a choices facet (if there isn't one already)
-                // using the associated collection for its values
-                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    addCollectionParamChoicesFacetIfNoneAlready(collection, collectionParam);
-                }
-
-                // similarly for compatible scalar parameters, install a choices facet (if there isn't one already)
-                // using the associated collection for its values.
-                for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
-                    addCollectionParamChoicesFacetIfNoneAlready(collection, scalarParam);
-                }
-            });
             deriveCollectionDomainEventForMixins(objectSpecification, collection);
         });
         deriveProjectionFacets(objectSpecification);
@@ -315,30 +275,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-
-
-
-    private static void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
-        if(collectionParam.getNumber()!=0) {
-            return; // with current programming model this can only be the first parameter of an action dialog
-        }
-        if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
-            return;
-        }
-        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
-    }
-
-    private static void addCollectionParamChoicesFacetIfNoneAlready(
-            final OneToManyAssociation otma,
-            final ObjectActionParameter scalarOrCollectionParam) {
-        if (scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterChoicesFacet.class) ||
-                scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class)) {
-            return;
-        }
-
-        FacetUtil.addFacet(new ActionParameterChoicesFacetFromParentedCollection(
-                        scalarOrCollectionParam, otma));
-    }
 
     private static boolean canOverwrite(final Facet facet) {
         return facet == null || facet.isFallback() || facet.isDerived();

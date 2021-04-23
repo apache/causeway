@@ -143,6 +143,7 @@ import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSup
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveChoicesFromExistingChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDefaultFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DerivePropertyDisabledFromViewModelPostProcessor;
@@ -365,6 +366,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DerivePropertyDisabledFromViewModelPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
