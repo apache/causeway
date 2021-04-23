@@ -22,6 +22,7 @@ interface ApplicationUserRepository<U> {
   boolean isPasswordFeatureEnabled(ApplicationUser holder)
   boolean updatePassword(ApplicationUser user, String password)
   U newUser(String username, AccountType accountType, Consumer<U> beforePersist)
+  U upsertLocal(String username, Password password, ApplicationUserStatus status)
   U newLocalUser(String username, Password password, ApplicationUserStatus status)
   U newDelegateUser(String username, ApplicationUserStatus status)
 }
