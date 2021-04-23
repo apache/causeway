@@ -107,7 +107,7 @@ import lombok.val;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class DeriveFacetsPostProcessor
+public class DeriveProjectionFacetsPostProcessor
 implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
     @Setter(onMethod = @__(@Override))

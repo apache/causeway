@@ -147,7 +147,7 @@ import org.apache.isis.core.metamodel.postprocessors.DeriveCollectionParamDefaul
 import org.apache.isis.core.metamodel.postprocessors.DeriveDefaultFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DerivePropertyDisabledFromViewModelPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.DeriveFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveTypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.TweakDomainEventsForMixinPostProcessor;
@@ -360,7 +360,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
 
         addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
@@ -369,6 +368,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
