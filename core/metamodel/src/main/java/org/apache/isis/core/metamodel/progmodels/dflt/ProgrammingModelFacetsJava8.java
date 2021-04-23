@@ -364,6 +364,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DerivePropertyDisabledFromViewModelPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());

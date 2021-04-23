@@ -130,7 +130,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         });
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
         });
 
@@ -317,37 +316,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     }
 
 
-
-    /**
-     * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
-     */
-    private static void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(DisabledFacet.class)) {
-            return;
-        }
-
-        val typeSpec = property.getOnType();
-
-        typeSpec
-        .lookupNonFallbackFacet(ImmutableFacet.class)
-        .ifPresent(immutableFacet->{
-
-            if(immutableFacet instanceof ImmutableFacetFromConfiguration) {
-
-                val isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
-                        .isPresent();
-
-                if(isEditingEnabledOnType) {
-                    // @DomainObject(editing=ENABLED)
-                    return;
-                }
-
-            }
-
-            FacetUtil.addFacet(DisabledFacetOnPropertyDerivedFromImmutable
-                            .forImmutable(facetedMethodFor(property), immutableFacet));
-        });
-    }
 
 
     private static void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
