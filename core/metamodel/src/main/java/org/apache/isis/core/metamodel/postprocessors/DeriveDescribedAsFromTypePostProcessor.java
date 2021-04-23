@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.postprocessors.param;
+package org.apache.isis.core.metamodel.postprocessors;
 
 import java.util.stream.Stream;
 

@@ -142,9 +142,9 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
-import org.apache.isis.core.metamodel.postprocessors.param.DeriveDescribedAsFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.param.DeriveMixinMembersPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveDescribedAsFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 

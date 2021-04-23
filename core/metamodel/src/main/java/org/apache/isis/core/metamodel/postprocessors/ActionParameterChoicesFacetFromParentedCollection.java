@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.postprocessors.param;
+package org.apache.isis.core.metamodel.postprocessors;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetFromParentedCollection 
+public class ActionParameterChoicesFacetFromParentedCollection
 extends ActionParameterChoicesFacetAbstract {
 
     private final OneToManyAssociation otma;
@@ -56,7 +56,7 @@ extends ActionParameterChoicesFacetAbstract {
         return CollectionFacet.streamAdapters(collectionAdapter).collect(Can.toCan());
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("oneToManyAssociation", otma);
