@@ -122,11 +122,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         val actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
-        // for each action, ...
-        objectActions.flatMap(ObjectAction::streamParameters)
-            .forEach(parameter -> {
-                deriveParameterChoicesFromExistingChoices(parameter);
-            });
 
         // for each action, ...
         objectActions.forEach(objectAction -> {
@@ -140,7 +135,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         });
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            derivePropertyChoicesFromExistingChoices(property);
             derivePropertyDisabledFromViewModel(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
@@ -327,34 +321,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             }
         }
     }
-
-
-    /**
-     * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}.
-     */
-    private static void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
-            return;
-        }
-        parameter.getSpecification()
-        .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(choicesFacet -> FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                                    peerFor(parameter))));
-    }
-
-
-    /**
-     * Replaces {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
-     */
-    private static void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
-            return;
-        }
-        property.getSpecification()
-        .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(
-                                    facetedMethodFor(property))));
-   }
 
 
     /**

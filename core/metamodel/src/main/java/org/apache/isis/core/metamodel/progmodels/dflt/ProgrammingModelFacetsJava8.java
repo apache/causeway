@@ -142,6 +142,7 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
+import org.apache.isis.core.metamodel.postprocessors.DeriveChoicesFromExistingChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDefaultFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveFacetsPostProcessor;
@@ -360,6 +361,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
