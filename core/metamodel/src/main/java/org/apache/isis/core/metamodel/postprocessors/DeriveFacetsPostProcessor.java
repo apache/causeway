@@ -125,7 +125,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         // for each action, ...
         objectActions.flatMap(ObjectAction::streamParameters)
             .forEach(parameter -> {
-                deriveParameterDefaultFacetFromType(parameter);
                 deriveParameterChoicesFromExistingChoices(parameter);
             });
 
@@ -142,7 +141,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
             derivePropertyChoicesFromExistingChoices(property);
-            derivePropertyDefaultsFromType(property);
             derivePropertyDisabledFromViewModel(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
@@ -332,31 +330,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
 
     /**
-     * Replaces {@link ActionParameterDefaultFacetDerivedFromTypeFactory}
-     */
-    private static void deriveParameterDefaultFacetFromType(final ObjectActionParameter parameter) {
-
-        if (parameter.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
-            return;
-        }
-
-        // this loop within the outer loop (for every param) is really weird,
-        // but arises from porting the old facet factory
-        final ObjectAction objectAction = parameter.getAction();
-        val parameterSpecs = objectAction.getParameterTypes();
-        final DefaultedFacet[] parameterTypeDefaultedFacets = new DefaultedFacet[parameterSpecs.size()];
-        boolean hasAtLeastOneDefault = false;
-        for (int i = 0; i < parameterSpecs.size(); i++) {
-            final ObjectSpecification parameterSpec = parameterSpecs.getElseFail(i);
-            parameterTypeDefaultedFacets[i] = parameterSpec.getFacet(DefaultedFacet.class);
-            hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
-        }
-        if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
-        }
-    }
-
-    /**
      * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}.
      */
     private static void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
@@ -382,19 +355,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(
                                     facetedMethodFor(property))));
    }
-
-    /**
-     * Replaces {@link PropertyDefaultFacetDerivedFromTypeFactory}
-     */
-    private static void derivePropertyDefaultsFromType(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
-            return;
-        }
-        property.getSpecification()
-        .lookupNonFallbackFacet(DefaultedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                                    specFacet, facetedMethodFor(property))));
-    }
 
 
     /**
