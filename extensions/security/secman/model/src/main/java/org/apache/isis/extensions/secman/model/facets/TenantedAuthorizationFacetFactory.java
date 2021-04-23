@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
@@ -78,35 +79,36 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(createFacet(cls, facetHolder));
     }
 
-    
+
     public static class QueryResultsCacheProviderHolder {
         @Inject @Getter private Provider<QueryResultsCache> queryResultsCacheProvider;
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private TenantedAuthorizationFacetDefault createFacet(
-            final Class<?> cls, 
+            final Class<?> cls,
             final FacetHolder holder) {
 
         val serviceRegistry = super.getServiceRegistry();
 
+        final boolean mixinClass = serviceRegistry.lookupService(SpecificationLoader.class).map(x -> x.loadSpecification(cls)).map(x -> x.isMixin()).isPresent();
         val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)
                 .stream()
-                .filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
+                .filter(applicationTenancyEvaluator-> mixinClass || applicationTenancyEvaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         if(evaluators.isEmpty()) {
             return null;
         }
-        
+
         val applicationUserRepository =
                 serviceRegistry.lookupService(ApplicationUserRepository.class).orElse(null);
         val queryResultsCacheProvider =
                 super.getServiceInjector()
                 .injectServicesInto(new QueryResultsCacheProviderHolder())
                 .getQueryResultsCacheProvider();
-        val userService = 
+        val userService =
                 serviceRegistry.lookupService(UserService.class).orElse(null);
 
         return new TenantedAuthorizationFacetDefault(

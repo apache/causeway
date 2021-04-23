@@ -143,6 +143,7 @@ import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSup
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
@@ -236,7 +237,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisabledObjectFacetViaMethodFactory.class);
 
         val postConstructMethodsCache = new MethodByClassMap();
-        
+
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
 
@@ -256,7 +257,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
 
-        
+
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
         // must come before DomainObjectLayoutFacetFactory
@@ -327,7 +328,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ZonedDateTimeValueFacetUsingSemanticsProviderFactory.class);
 
-        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, AuthorizationFacetFactory.class);
+        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, AuthorizationFacetFactory.class); // TODO: reimplement as a PostProcessor
 
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
@@ -346,12 +347,14 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, FacetsFacetAnnotationFactory.class);
 
         // must be after all named facets and description facets have been installed
-        addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class); // TODO: reimplement as a PostProcessor
+
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
 
+        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
-        
+
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
