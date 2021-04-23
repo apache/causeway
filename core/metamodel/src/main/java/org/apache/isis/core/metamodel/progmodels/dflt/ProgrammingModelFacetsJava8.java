@@ -145,6 +145,7 @@ import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveTypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
@@ -356,6 +357,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());

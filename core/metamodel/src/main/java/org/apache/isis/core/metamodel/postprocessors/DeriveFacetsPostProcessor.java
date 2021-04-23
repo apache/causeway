@@ -127,7 +127,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             .forEach(parameter -> {
                 deriveParameterDefaultFacetFromType(parameter);
                 deriveParameterChoicesFromExistingChoices(parameter);
-                deriveParameterTypicalLengthFromType(parameter);
             });
 
         // for each action, ...
@@ -144,7 +143,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
             derivePropertyChoicesFromExistingChoices(property);
             derivePropertyDefaultsFromType(property);
-            derivePropertyTypicalLengthFromType(property);
             derivePropertyDisabledFromViewModel(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
@@ -373,19 +371,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
 
     /**
-     * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
-     */
-    private static void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
-            return;
-        }
-        parameter.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
-                                    peerFor(parameter))));
-    }
-
-    /**
      * Replaces {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
      */
     private static void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
@@ -409,20 +394,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         .lookupNonFallbackFacet(DefaultedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
                                     specFacet, facetedMethodFor(property))));
-    }
-
-    /**
-     * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
-     */
-    private static void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
-            return;
-        }
-        property.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnPropertyDerivedFromType(
-                                    specFacet, facetedMethodFor(property))));
-
     }
 
 
