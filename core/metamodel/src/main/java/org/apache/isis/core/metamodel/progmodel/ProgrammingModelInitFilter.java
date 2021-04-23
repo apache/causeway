@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
@@ -32,30 +33,30 @@ import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 public interface ProgrammingModelInitFilter {
 
     boolean acceptFactoryType(
-            Class<? extends FacetFactory> factoryType, 
+            Class<? extends FacetFactory> factoryType,
             ProgrammingModel.Marker[] markersIfAny);
-    
+
     boolean acceptValidator(
             Class<? extends MetaModelValidator> validatorType,
             ProgrammingModel.Marker[] markersIfAny);
-    
+
     boolean acceptPostProcessor(
-            Class<? extends ObjectSpecificationPostProcessor> postProcessorType, 
-            ProgrammingModel.Marker[] markersIfAny);    
-    
+            Class<? extends ObjectSpecificationPostProcessor> postProcessorType,
+            ProgrammingModel.Marker[] markersIfAny);
+
     // -- PREDEFINED PREDICATES
-    
+
     public static Predicate<ProgrammingModel.Marker[]> excludingNone() {
         return _Predicates.alwaysTrue();
     }
-    
+
     public static Predicate<ProgrammingModel.Marker[]> excluding(@Nullable EnumSet<ProgrammingModel.Marker> excludingMarkers) {
         if(excludingMarkers==null) {
             return excludingNone();

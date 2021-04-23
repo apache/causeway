@@ -25,58 +25,67 @@ import javax.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.Getter;
 import lombok.val;
 
-public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
+public class TenantedAuthorizationPostProcessor
+        extends ObjectSpecificationPostProcessorAbstract {
 
     @Component
     public static class Register implements MetaModelRefiner {
-
         @Override
         public void refineProgrammingModel(ProgrammingModel programmingModel) {
-            programmingModel.addFactory(
-                    ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
-                    TenantedAuthorizationFacetFactory.class);
+            programmingModel.addPostProcessor(
+                    ProgrammingModel.PostProcessingOrder.A2_AFTER_BUILTIN,
+                    TenantedAuthorizationPostProcessor.class);
         }
     }
 
-    public TenantedAuthorizationFacetFactory() {
-        super(FeatureType.EVERYTHING);
+    @Override
+    public void doPostProcess(ObjectSpecification objectSpecification) {
+        FacetUtil.addFacet(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-
-        FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(createFacet(cls, facetHolder));
+    protected void doPostProcess(ObjectAction act) {
+        addFacetTo(act);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        final Class<?> cls = processMethodContext.getCls();
-        FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(createFacet(cls, facetHolder));
+    protected void doPostProcess(ObjectActionParameter param) {
+        // no-op
     }
 
     @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-        final Class<?> cls = processParameterContext.getCls();
-        FacetHolder facetHolder = processParameterContext.getFacetHolder();
-        FacetUtil.addFacet(createFacet(cls, facetHolder));
+    protected void doPostProcess(OneToOneAssociation prop) {
+        addFacetTo(prop);
+    }
+
+    @Override
+    protected void doPostProcess(OneToManyAssociation coll) {
+        addFacetTo(coll);
+    }
+
+    private void addFacetTo(ObjectFeature objectFeature) {
+        FacetUtil.addFacet(createFacet(objectFeature.getSpecification().getCorrespondingClass(), objectFeature));
     }
 
 
@@ -89,31 +98,29 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val serviceRegistry = super.getServiceRegistry();
-
-        final boolean mixinClass = serviceRegistry.lookupService(SpecificationLoader.class).map(x -> x.loadSpecification(cls)).map(x -> x.isMixin()).isPresent();
         val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)
                 .stream()
-                .filter(applicationTenancyEvaluator-> mixinClass || applicationTenancyEvaluator.handles(cls))
+                .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         if(evaluators.isEmpty()) {
             return null;
         }
 
-        val applicationUserRepository =
-                serviceRegistry.lookupService(ApplicationUserRepository.class).orElse(null);
         val queryResultsCacheProvider =
-                super.getServiceInjector()
+                serviceInjector
                 .injectServicesInto(new QueryResultsCacheProviderHolder())
                 .getQueryResultsCacheProvider();
-        val userService =
-                serviceRegistry.lookupService(UserService.class).orElse(null);
 
         return new TenantedAuthorizationFacetDefault(
                 evaluators, applicationUserRepository, queryResultsCacheProvider, userService, holder);
     }
+
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject UserService userService;
 
 
 }

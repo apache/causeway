@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.progmodel;
+package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

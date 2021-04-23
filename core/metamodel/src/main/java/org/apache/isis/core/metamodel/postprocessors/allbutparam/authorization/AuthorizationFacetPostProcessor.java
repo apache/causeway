@@ -19,53 +19,43 @@
 
 package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
-import java.util.stream.Stream;
-
-import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.Setter;
-import lombok.val;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class AuthorizationFacetPostProcessor
-    implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+    extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(ObjectSpecification objectSpecification) {
-
-        objectSpecification.addFacet(createFacet(objectSpecification));
-
-        val actionTypes = inferActionTypes();
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-                .forEach(act -> act.addFacet(createFacet(act)));
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED).
-                forEach(prop -> {prop.addFacet(createFacet(prop));});
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED).
-                forEach(coll -> {coll.addFacet(createFacet(coll));});
-
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
+        addFacet(objectSpecification);
     }
 
-    private AuthorizationFacetImpl createFacet(final FacetHolder holder) {
-        return new AuthorizationFacetImpl(holder);
+    @Override
+    protected void doPostProcess(ObjectAction act) {
+        addFacet(act);
     }
 
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
+    @Override
+    protected void doPostProcess(ObjectActionParameter param) {
+    }
+
+    @Override
+    protected void doPostProcess(OneToOneAssociation prop) {
+        addFacet(prop);
+    }
+
+    @Override
+    protected void doPostProcess(OneToManyAssociation coll) {
+        addFacet(coll);
+    }
+
+    private static void addFacet(FacetHolder facetHolder) {
+        facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder));
     }
 
 }

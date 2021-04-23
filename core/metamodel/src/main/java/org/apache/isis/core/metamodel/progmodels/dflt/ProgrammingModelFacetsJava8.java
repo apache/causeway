@@ -370,7 +370,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
 
-
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
@@ -378,6 +377,5 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addValidator(new ActionOverloadingValidator());
 
     }
-
 
 }
