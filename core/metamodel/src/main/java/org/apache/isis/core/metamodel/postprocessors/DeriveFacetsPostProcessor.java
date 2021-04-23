@@ -122,25 +122,16 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         val actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
-        // and all the collections of this type
-        final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(MixedIn.INCLUDED);
-
-        // and all the properties of this type
-        final Stream<OneToOneAssociation> properties = objectSpecification.streamProperties(MixedIn.INCLUDED);
-
         // for each action, ...
-        objectActions.forEach(objectAction -> {
-
-            // ... for each action parameter
-            val parameters = objectAction.getParameters();
-
-            for (final ObjectActionParameter parameter : parameters) {
-
+        objectActions.flatMap(ObjectAction::streamParameters)
+            .forEach(parameter -> {
                 deriveParameterDefaultFacetFromType(parameter);
                 deriveParameterChoicesFromExistingChoices(parameter);
                 deriveParameterTypicalLengthFromType(parameter);
-            }
+            });
 
+        // for each action, ...
+        objectActions.forEach(objectAction -> {
 
             // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
             // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
@@ -150,8 +141,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         });
 
-        // for each property, ...
-        properties.forEach(property -> {
+        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
             derivePropertyChoicesFromExistingChoices(property);
             derivePropertyDefaultsFromType(property);
             derivePropertyTypicalLengthFromType(property);
@@ -160,9 +150,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             tweakPropertyMixinDomainEvent(objectSpecification, property);
         });
 
-
-        // for each collection, ...
-        collections.forEach(collection->{
+        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(collection->{
 
             // ... see if any of its actions has a collection parameter of the same type
             //

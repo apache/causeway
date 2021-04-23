@@ -66,14 +66,10 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
         objectActions
-                .flatMap(objectAction -> objectAction.streamParameters())
-                .forEach(parameter -> {
-                    deriveParameterDescribedAsFromType(parameter);
-                });
+                .flatMap(ObjectAction::streamParameters)
+                .forEach(this::deriveParameterDescribedAsFromType);
 
-        objectActions.forEach(objectAction -> {
-            deriveActionDescribedAsFromType(objectAction);
-        });
+        objectActions.forEach(this::deriveActionDescribedAsFromType);
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(this::derivePropertyOrCollectionDescribedAsFromType);
 
