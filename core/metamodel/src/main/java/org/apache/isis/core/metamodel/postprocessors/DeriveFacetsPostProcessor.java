@@ -209,31 +209,27 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         deriveProjectionFacets(objectSpecification);
     }
 
-    private void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
+    private static void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
         val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
         if (projectionFacet == null) {
             return;
         }
-        this.addFacet(projectionFacet);
+        FacetUtil.addFacet(projectionFacet);
         val titleFacet = objectSpecification.getFacet(TitleFacet.class);
         if(canOverwrite(titleFacet)) {
-            this.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val iconFacet = objectSpecification.getFacet(IconFacet.class);
         if(canOverwrite(iconFacet)) {
-            this.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
-            this.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
     }
 
-    private static boolean canOverwrite(final Facet facet) {
-        return facet == null || facet.isFallback() || facet.isDerived();
-    }
-
-    private void tweakActionDomainEventForMixin(
+    private static void tweakActionDomainEventForMixin(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction) {
         if(objectAction instanceof ObjectActionMixedIn) {
@@ -256,7 +252,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-    private void deriveCollectionDomainEventForMixins(
+    private static void deriveCollectionDomainEventForMixins(
             final ObjectSpecification objectSpecification,
             final OneToManyAssociation collection) {
 
@@ -283,7 +279,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                     final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
                             new CollectionDomainEventFacetForCollectionAnnotation(
                                     collectionDomainEventType, collection);
-                    this.addFacet(collectionDomainEventFacet);
+                    FacetUtil.addFacet(collectionDomainEventFacet);
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
@@ -302,7 +298,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-    private void tweakPropertyMixinDomainEvent(
+    private static void tweakPropertyMixinDomainEvent(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation property) {
 
@@ -330,7 +326,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                     final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
                             new PropertyDomainEventFacetForPropertyAnnotation(
                                     propertyDomainEventType, getterFacetIfAny, property);
-                    this.addFacet(propertyDomainEventFacet);
+                    FacetUtil.addFacet(propertyDomainEventFacet);
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
@@ -348,28 +344,11 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-    static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
-        return facet.isImplicitlyImmutable() ?
-                DisabledFacetAbstract.Semantics.DISABLED :
-                    DisabledFacetAbstract.Semantics.ENABLED;
-    }
-
-    private FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
-        return objectActionImpl.getFacetedMethod();
-    }
-    private TypedHolder peerFor(final ObjectActionParameter param) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        final ObjectActionParameterAbstract objectActionImpl = (ObjectActionParameterAbstract) param;
-        return objectActionImpl.getPeer();
-    }
-
 
     /**
      * Replaces {@link ActionParameterDefaultFacetDerivedFromTypeFactory}
      */
-    private void deriveParameterDefaultFacetFromType(final ObjectActionParameter parameter) {
+    private static void deriveParameterDefaultFacetFromType(final ObjectActionParameter parameter) {
 
         if (parameter.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
             return;
@@ -387,85 +366,74 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            this.addFacet(
-                    new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
+            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
         }
     }
 
     /**
      * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}.
      */
-    private void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
+    private static void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
         parameter.getSpecification()
         .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(choicesFacet->
-            this.addFacet(
-                    new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                            peerFor(parameter))));
+        .ifPresent(choicesFacet -> FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
+                                    peerFor(parameter))));
     }
 
 
     /**
      * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
      */
-    private void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
+    private static void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
         parameter.getSpecification()
         .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
-                            peerFor(parameter))));
+        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
+                                    peerFor(parameter))));
     }
 
     /**
      * Replaces {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
      */
-    private void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
+    private static void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
         property.getSpecification()
         .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new PropertyChoicesFacetDerivedFromChoicesFacet(
-                            facetedMethodFor(property))));
+        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(
+                                    facetedMethodFor(property))));
    }
 
     /**
      * Replaces {@link PropertyDefaultFacetDerivedFromTypeFactory}
      */
-    private void derivePropertyDefaultsFromType(final OneToOneAssociation property) {
+    private static void derivePropertyDefaultsFromType(final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
         }
         property.getSpecification()
         .lookupNonFallbackFacet(DefaultedFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                            specFacet, facetedMethodFor(property))));
+        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
+                                    specFacet, facetedMethodFor(property))));
     }
 
     /**
      * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
      */
-    private void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
+    private static void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
         property.getSpecification()
         .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new TypicalLengthFacetOnPropertyDerivedFromType(
-                            specFacet, facetedMethodFor(property))));
+        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnPropertyDerivedFromType(
+                                    specFacet, facetedMethodFor(property))));
 
     }
 
@@ -474,23 +442,21 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces {@link DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}
      * @param property
      */
-    private void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
+    private static void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
         property.getOnType()
         .lookupNonFallbackFacet(ViewModelFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new DisabledFacetOnPropertyDerivedFromRecreatableObject(
-                            facetedMethodFor(property), inferSemanticsFrom(specFacet))));
+        .ifPresent(specFacet -> FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(
+                                    facetedMethodFor(property), inferSemanticsFrom(specFacet))));
     }
 
 
     /**
      * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
      */
-    private void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
+    private static void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
@@ -513,24 +479,23 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
             }
 
-            this.addFacet(
-                    DisabledFacetOnPropertyDerivedFromImmutable
-                        .forImmutable(facetedMethodFor(property), immutableFacet));
+            FacetUtil.addFacet(DisabledFacetOnPropertyDerivedFromImmutable
+                            .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }
 
 
-    private void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
+    private static void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
         if(collectionParam.getNumber()!=0) {
             return; // with current programming model this can only be the first parameter of an action dialog
         }
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
-        this.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
+        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
     }
 
-    private void addCollectionParamChoicesFacetIfNoneAlready(
+    private static void addCollectionParamChoicesFacetIfNoneAlready(
             final OneToManyAssociation otma,
             final ObjectActionParameter scalarOrCollectionParam) {
         if (scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterChoicesFacet.class) ||
@@ -538,20 +503,36 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             return;
         }
 
-        this.addFacet(
-                new ActionParameterChoicesFacetFromParentedCollection(
+        FacetUtil.addFacet(new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
     }
 
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        if (metaModelContext.getSystemEnvironment().isPrototyping()) {
-            return ActionType.USER_AND_PROTOTYPE;
-        }
-        return ActionType.USER_ONLY;
+    private static boolean canOverwrite(final Facet facet) {
+        return facet == null || facet.isFallback() || facet.isDerived();
     }
 
-    private void addFacet(Facet facet) {
-        FacetUtil.addFacet(facet);
+    private ImmutableEnumSet<ActionType> inferActionTypes() {
+        return metaModelContext.getSystemEnvironment().isPrototyping()
+                ? ActionType.USER_AND_PROTOTYPE
+                : ActionType.USER_ONLY;
     }
+
+    static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
+        return facet.isImplicitlyImmutable() ?
+                DisabledFacetAbstract.Semantics.DISABLED :
+                DisabledFacetAbstract.Semantics.ENABLED;
+    }
+
+    private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
+        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
+        final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
+        return objectActionImpl.getFacetedMethod();
+    }
+    private static TypedHolder peerFor(final ObjectActionParameter param) {
+        // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
+        final ObjectActionParameterAbstract objectActionImpl = (ObjectActionParameterAbstract) param;
+        return objectActionImpl.getPeer();
+    }
+
 
 }
