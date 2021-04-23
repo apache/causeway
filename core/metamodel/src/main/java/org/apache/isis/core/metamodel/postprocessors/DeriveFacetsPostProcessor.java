@@ -116,14 +116,9 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
 
-        //XXX in principle it would be sufficient to just process declared members; can optimize if worth the effort
-
-        // all the actions of this type
         val actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
-
-        // for each action, ...
         objectActions.forEach(objectAction -> {
 
             // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
@@ -135,7 +130,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         });
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            derivePropertyDisabledFromViewModel(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
         });
@@ -322,20 +316,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-
-    /**
-     * Replaces {@link DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}
-     * @param property
-     */
-    private static void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(DisabledFacet.class)){
-            return;
-        }
-        property.getOnType()
-        .lookupNonFallbackFacet(ViewModelFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(
-                                    facetedMethodFor(property), inferSemanticsFrom(specFacet))));
-    }
 
 
     /**
