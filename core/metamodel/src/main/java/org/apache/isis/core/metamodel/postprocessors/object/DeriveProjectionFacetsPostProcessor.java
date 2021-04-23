@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.postprocessors;
+package org.apache.isis.core.metamodel.postprocessors.object;
 
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
@@ -107,7 +107,7 @@ import lombok.val;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class DeriveTypicalLengthFromTypePostProcessor
+public class DeriveProjectionFacetsPostProcessor
 implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
     @Setter(onMethod = @__(@Override))
@@ -116,67 +116,31 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
 
-        //XXX in principle it would be sufficient to just process declared members; can optimize if worth the effort
-
-        // all the actions of this type
-        val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
-
-        // for each action, ...
-        objectActions.flatMap(ObjectAction::streamParameters)
-            .forEach(parameter -> {
-                deriveParameterTypicalLengthFromType(parameter);
-            });
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            derivePropertyTypicalLengthFromType(property);
-        });
+        deriveProjectionFacets(objectSpecification);
     }
 
-
-    /**
-     * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
-     */
-    private static void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
+    private static void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
+        val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
+        if (projectionFacet == null) {
             return;
         }
-        parameter.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
-                                    peerFor(parameter))));
-    }
-
-    /**
-     * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
-     */
-    private static void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
-            return;
+        FacetUtil.addFacet(projectionFacet);
+        val titleFacet = objectSpecification.getFacet(TitleFacet.class);
+        if(canOverwrite(titleFacet)) {
+            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
-        property.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new TypicalLengthFacetOnPropertyDerivedFromType(
-                                    specFacet, facetedMethodFor(property))));
-
+        val iconFacet = objectSpecification.getFacet(IconFacet.class);
+        if(canOverwrite(iconFacet)) {
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+        }
+        val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+        if(canOverwrite(cssClassFacet)) {
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+        }
     }
 
-
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-    }
-
-    private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
-        return objectActionImpl.getFacetedMethod();
-    }
-    private static TypedHolder peerFor(final ObjectActionParameter param) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        final ObjectActionParameterAbstract objectActionImpl = (ObjectActionParameterAbstract) param;
-        return objectActionImpl.getPeer();
+    private static boolean canOverwrite(final Facet facet) {
+        return facet == null || facet.isFallback() || facet.isDerived();
     }
 
 

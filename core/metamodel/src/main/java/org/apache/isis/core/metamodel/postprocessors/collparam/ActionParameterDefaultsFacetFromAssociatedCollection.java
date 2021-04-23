@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.postprocessors;
+package org.apache.isis.core.metamodel.postprocessors.collparam;
 
 import java.util.function.Function;
 
