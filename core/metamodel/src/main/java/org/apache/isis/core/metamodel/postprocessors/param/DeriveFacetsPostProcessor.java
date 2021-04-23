@@ -123,7 +123,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     public void postProcess(final ObjectSpecification objectSpecification) {
 
         //XXX in principle it would be sufficient to just process declared members; can optimize if worth the effort
-        
+
         // all the actions of this type
         val actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
@@ -144,11 +144,9 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
                 deriveParameterDefaultFacetFromType(parameter);
                 deriveParameterChoicesFromExistingChoices(parameter);
-                deriveParameterDescribedAsFromType(parameter);
                 deriveParameterTypicalLengthFromType(parameter);
             }
 
-            deriveActionDescribedAsFromType(objectAction);
 
             // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
             // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
@@ -163,7 +161,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             derivePropertyChoicesFromExistingChoices(property);
             derivePropertyDefaultsFromType(property);
             derivePropertyTypicalLengthFromType(property);
-            derivePropertyOrCollectionDescribedAsFromType(property);
             derivePropertyDisabledFromViewModel(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
@@ -172,8 +169,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         // for each collection, ...
         collections.forEach(collection->{
-
-            derivePropertyOrCollectionDescribedAsFromType(collection);
 
             // ... see if any of its actions has a collection parameter of the same type
             //
@@ -376,21 +371,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         return objectActionImpl.getPeer();
     }
 
-    /**
-     * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory}.
-     */
-    private void deriveActionDescribedAsFromType(final ObjectAction objectAction) {
-        if(objectAction.containsNonFallbackFacet(DescribedAsFacet.class)) {
-            return;
-        }
-        objectAction.getReturnType()
-        .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new DescribedAsFacetOnMemberDerivedFromType(specFacet,
-                            facetedMethodFor(objectAction))));
-
-    }
 
     /**
      * Replaces {@link ActionParameterDefaultFacetDerivedFromTypeFactory}
@@ -433,22 +413,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                             peerFor(parameter))));
     }
 
-    /**
-     * Replaces {@link DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory}
-     */
-    private void deriveParameterDescribedAsFromType(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(DescribedAsFacet.class)) {
-            return;
-        }
-        final ObjectSpecification paramSpec = parameter.getSpecification();
-        final DescribedAsFacet specFacet = paramSpec.getFacet(DescribedAsFacet.class);
-
-        //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
-        //if(existsAndIsDoOp(specFacet)) {
-        if(specFacet != null) {
-            this.addFacet(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
-        }
-    }
 
     /**
      * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
@@ -511,20 +475,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
     }
 
-    /**
-     * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory}.
-     */
-    private void derivePropertyOrCollectionDescribedAsFromType(final ObjectAssociation objectAssociation) {
-        if(objectAssociation.containsNonFallbackFacet(DescribedAsFacet.class)) {
-            return;
-        }
-        objectAssociation.getSpecification()
-        .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new DescribedAsFacetOnMemberDerivedFromType(
-                            specFacet, facetedMethodFor(objectAssociation))));
-    }
 
     /**
      * Replaces {@link DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}

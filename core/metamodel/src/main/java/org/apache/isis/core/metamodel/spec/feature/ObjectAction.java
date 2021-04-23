@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -117,8 +118,8 @@ public interface ObjectAction extends ObjectMember {
      * Invokes the action's method on the target object given the specified set
      * of parameters.
      *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  
-     * When a mixin action invokes its underlying mixedIn action, then will be populated 
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.
+     * When a mixin action invokes its underlying mixedIn action, then will be populated
      * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject execute(
@@ -187,7 +188,7 @@ public interface ObjectAction extends ObjectMember {
 
     ActionInteractionHead interactionHead(
             @NonNull ManagedObject actionOwner);
-    
+
     // -- Parameters (declarative)
 
     /**
@@ -202,6 +203,16 @@ public interface ObjectAction extends ObjectMember {
      * Implementations may build this array lazily or eagerly as required.
      */
     Can<ObjectActionParameter> getParameters();
+
+    /**
+     * Returns a {@link Stream} of {@link ObjectActionParameter} as per
+     * {@link #getParameters()}.
+     *
+     * @return
+     */
+    default Stream<ObjectActionParameter> streamParameters() {
+        return getParameters().stream();
+    }
 
     /**
      * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
@@ -254,14 +265,14 @@ public interface ObjectAction extends ObjectMember {
         final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
-    
+
     // -- UTIL
-    
+
     public static final class Util {
 
         private Util() {
         }
-        
+
         private static boolean isPrototyping(ManagedObject adapter) {
             return MetaModelContext.from(adapter).getSystemEnvironment().isPrototyping();
         }
@@ -336,7 +347,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static List<ObjectAction> findTopLevel(
                 final ManagedObject adapter) {
-            
+
             val topLevelActions = _Lists.<ObjectAction>newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
@@ -355,7 +366,7 @@ public interface ObjectAction extends ObjectMember {
 
             spec.streamDeclaredActions(actionType, MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec))
-            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter, 
+            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
                     InteractionInitiatedBy.USER, Where.ANYWHERE))
             .filter(ObjectAction.Predicates.excludeWizardActions(spec))
             .forEach(topLevelActions::add);
@@ -381,7 +392,7 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject adapter,
                 final ActionType type,
                 final ObjectAssociation association, final List<ObjectAction> associatedActions) {
-            
+
             val objectSpecification = adapter.getSpecification();
 
             objectSpecification.streamDeclaredActions(type, MixedIn.INCLUDED)
@@ -463,14 +474,14 @@ public interface ObjectAction extends ObjectMember {
                     return false;
                 }
                 val memberOrderNameLowerCase = associatedMemberName.toLowerCase();
-                return equalWhenLowerCase(memberName, memberOrderNameLowerCase) 
+                return equalWhenLowerCase(memberName, memberOrderNameLowerCase)
                         || equalWhenLowerCase(memberId, memberOrderNameLowerCase);
             }
-            
+
             private boolean equalWhenLowerCase(@Nullable String string, String lowerCaseString) {
                 return string != null && Objects.equals(string.toLowerCase(), lowerCaseString);
             }
-            
+
         }
 
         public static class HasParameterMatching implements Predicate<ObjectAction> {
@@ -494,7 +505,7 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            
+
             return (ObjectAction objectAction) -> {
                 final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                 return visible.isAllowed();
@@ -519,7 +530,7 @@ public interface ObjectAction extends ObjectMember {
             final String assocName = association.getName();
             final String assocId = association.getId();
             return (ObjectAction objectAction) -> {
-                
+
                 val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
                     return false;
@@ -528,14 +539,14 @@ public interface ObjectAction extends ObjectMember {
                 if (_Strings.isNullOrEmpty(fieldSetId)) {
                     return false;
                 }
-                return fieldSetId.equalsIgnoreCase(assocName) 
+                return fieldSetId.equalsIgnoreCase(assocName)
                         || fieldSetId.equalsIgnoreCase(assocId);
             };
         }
 
         public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
-            final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
+            final Set<String> associationNamesAndIds = _Sets.newHashSet();
 
             adapterSpec.streamAssociations(MixedIn.INCLUDED)
             .forEach(ass->{
@@ -544,7 +555,7 @@ public interface ObjectAction extends ObjectMember {
             });
 
             return (ObjectAction objectAction) -> {
-                
+
                 val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
                     return true;
