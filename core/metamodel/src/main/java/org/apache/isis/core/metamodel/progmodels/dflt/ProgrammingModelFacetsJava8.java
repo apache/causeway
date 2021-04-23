@@ -18,7 +18,7 @@
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
+import org.apache.isis.core.metamodel.facets.allbutparam.authorization.AuthorizationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;

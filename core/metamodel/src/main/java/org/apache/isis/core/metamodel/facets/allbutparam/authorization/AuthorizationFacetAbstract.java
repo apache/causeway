@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.authorization.standard;
+package org.apache.isis.core.metamodel.facets.allbutparam.authorization;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -49,35 +49,35 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
 
     @Override
     public String hides(VisibilityContext ic) {
-        
+
         val hides = authorizationManager
                 .isVisible(
-                        authenticationContext.currentAuthenticationElseFail(), 
-                        ic.getIdentifier()) 
-                ? null 
+                        authenticationContext.currentAuthenticationElseFail(),
+                        ic.getIdentifier())
+                ? null
                 : "Not authorized to view";
-        
+
         if(hides!=null && log.isDebugEnabled()) {
             log.debug("hides[{}] -> {}", ic.getIdentifier(), hides);
         }
-        
+
         return hides;
     }
 
     @Override
     public String disables(UsabilityContext ic) {
-        
+
         val disables = authorizationManager
                 .isUsable(
-                        authenticationContext.currentAuthenticationElseFail(), 
-                        ic.getIdentifier()) 
-                ? null 
+                        authenticationContext.currentAuthenticationElseFail(),
+                        ic.getIdentifier())
+                ? null
                 : "Not authorized to edit";
-        
+
         if(disables!=null && log.isDebugEnabled()) {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
         }
-        
+
         return disables;
     }
 
