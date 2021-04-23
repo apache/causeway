@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.postprocessors.object;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -29,28 +27,21 @@ import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFr
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetDerivedFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.Setter;
 import lombok.val;
 
-/**
- * Sets up all the {@link Facet}s for an action in a single shot.
- */
 public class DeriveProjectionFacetsPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
+extends ObjectSpecificationPostProcessorAbstract {
 
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
-
-        deriveProjectionFacets(objectSpecification);
-    }
-
-    private static void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
         val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
         if (projectionFacet == null) {
             return;
@@ -68,6 +59,22 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(canOverwrite(cssClassFacet)) {
             FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
     }
 
     private static boolean canOverwrite(final Facet facet) {

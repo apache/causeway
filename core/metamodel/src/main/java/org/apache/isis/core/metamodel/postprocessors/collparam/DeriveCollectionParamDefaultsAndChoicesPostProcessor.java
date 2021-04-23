@@ -19,84 +19,89 @@
 
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
-import java.util.stream.Stream;
-
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.Setter;
 import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
 public class DeriveCollectionParamDefaultsAndChoicesPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation collection) {
 
         val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
-        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(collection->{
+        // ... see if any of its actions has a collection parameter of the same type
+        //
+        // eg Order#getItems() and Order#removeItems(List<OrderItem>)
+        //
+        final ObjectSpecification specification = collection.getSpecification();
 
-            // ... see if any of its actions has a collection parameter of the same type
-            //
-            // eg Order#getItems() and Order#removeItems(List<OrderItem>)
-            //
-            final ObjectSpecification specification = collection.getSpecification();
+        final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
+                new ObjectActionParameter.Predicates.CollectionParameter(specification);
 
-            final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
-                    new ObjectActionParameter.Predicates.CollectionParameter(specification);
+        final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
+                new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
-                    new ObjectActionParameter.Predicates.ScalarParameter(specification);
+        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
+        .filter(ObjectAction.Predicates.associatedWith(collection))
+        .forEach(action->{
 
-            objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.associatedWith(collection))
-            .forEach(action->{
+            val parameters = action.getParameters();
 
-                val parameters = action.getParameters();
+            val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
+            val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
-                val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
-                val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
+            // for collection parameters, install an defaults facet (if there isn't one already)
+            // this will cause the UI to render the collection with toggleboxes
+            // with a thread-local used to provide the selected objects
+            for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
+                addCollectionParamDefaultsFacetIfNoneAlready(collectionParam);
+            }
 
-                // for collection parameters, install an defaults facet (if there isn't one already)
-                // this will cause the UI to render the collection with toggleboxes
-                // with a thread-local used to provide the selected objects
-                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    addCollectionParamDefaultsFacetIfNoneAlready(collectionParam);
-                }
+            // for compatible collection parameters, install a choices facet (if there isn't one already)
+            // using the associated collection for its values
+            for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
+                addCollectionParamChoicesFacetIfNoneAlready(collection, collectionParam);
+            }
 
-                // for compatible collection parameters, install a choices facet (if there isn't one already)
-                // using the associated collection for its values
-                for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
-                    addCollectionParamChoicesFacetIfNoneAlready(collection, collectionParam);
-                }
-
-                // similarly for compatible scalar parameters, install a choices facet (if there isn't one already)
-                // using the associated collection for its values.
-                for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
-                    addCollectionParamChoicesFacetIfNoneAlready(collection, scalarParam);
-                }
-            });
+            // similarly for compatible scalar parameters, install a choices facet (if there isn't one already)
+            // using the associated collection for its values.
+            for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
+                addCollectionParamChoicesFacetIfNoneAlready(collection, scalarParam);
+            }
         });
     }
 
@@ -121,12 +126,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         FacetUtil.addFacet(new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
-    }
-
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
     }
 
 

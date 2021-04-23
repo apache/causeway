@@ -148,7 +148,7 @@ import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFrom
 import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.object.DeriveMixinMembersPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
@@ -358,6 +358,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
 
         addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
+
+        // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
+
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);

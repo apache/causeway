@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.postprocessors.properties;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -29,37 +26,36 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
-import lombok.Setter;
 
 /**
- * Sets up all the {@link Facet}s for an action in a single shot.
+ * Replaces {@link DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}
  */
 public class DeriveDisabledFromViewModelPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-                .forEach(DeriveDisabledFromViewModelPostProcessor::derivePropertyDisabledFromViewModel);
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    }
 
-    /**
-     * Replaces {@link DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}
-     * @param property
-     */
-    private static void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    }
+
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
@@ -69,6 +65,9 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                                     facetedMethodFor(property), inferSemanticsFrom(specFacet))));
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    }
 
     static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
         return facet.isImplicitlyImmutable() ?

@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.postprocessors.properties;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -30,41 +27,41 @@ import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFace
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
-import lombok.Setter;
 import lombok.val;
 
+
 /**
- * Sets up all the {@link Facet}s for an action in a single shot.
+ * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
  */
 public class DeriveDisabledFromImmutablePostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
         // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
         // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
         // properties and collections, so no point in copying over.
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-                .forEach(DeriveDisabledFromImmutablePostProcessor::derivePropertyDisabledFromImmutable);
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    }
 
-    /**
-     * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
-     */
-    private static void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
@@ -92,12 +89,15 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         });
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+
+    }
 
     private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
         final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
         return objectActionImpl.getFacetedMethod();
     }
-
 
 }

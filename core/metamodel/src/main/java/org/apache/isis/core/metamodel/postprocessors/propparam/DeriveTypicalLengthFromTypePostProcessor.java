@@ -19,12 +19,6 @@
 
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
-import java.util.stream.Stream;
-
-import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -33,54 +27,33 @@ import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLe
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
-import lombok.Setter;
-import lombok.val;
-
 /**
- * Sets up all the {@link Facet}s for an action in a single shot.
+ * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
+ * and {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
  */
 public class DeriveTypicalLengthFromTypePostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
-
-        //XXX in principle it would be sufficient to just process declared members; can optimize if worth the effort
-
-        // all the actions of this type
-        val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
-
-        // for each action, ...
-        objectActions.flatMap(ObjectAction::streamParameters)
-            .forEach(parameter -> {
-                deriveParameterTypicalLengthFromType(parameter);
-            });
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            derivePropertyTypicalLengthFromType(property);
-        });
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    }
 
-    /**
-     * Replaces {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
-     */
-    private static void deriveParameterTypicalLengthFromType(final ObjectActionParameter parameter) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
@@ -90,10 +63,8 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                                     peerFor(parameter))));
     }
 
-    /**
-     * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
-     */
-    private static void derivePropertyTypicalLengthFromType(final OneToOneAssociation property) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
@@ -104,12 +75,10 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
     }
 
-
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
     }
+
 
     private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.

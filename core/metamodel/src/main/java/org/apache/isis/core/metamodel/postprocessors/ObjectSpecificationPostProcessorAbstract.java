@@ -30,13 +30,15 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
 public abstract class ObjectSpecificationPostProcessorAbstract
     implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
-    @Setter(onMethod = @__(@Override))
+    @Getter(AccessLevel.PROTECTED) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
 
     @Override
@@ -46,28 +48,30 @@ public abstract class ObjectSpecificationPostProcessorAbstract
 
         val actionTypes = inferActionTypes();
         objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-                .flatMap(ObjectAction::streamParameters)
-                .forEach(this::doPostProcess);
+                .forEach(objectAction -> {
+                    objectAction.streamParameters()
+                    .forEach(param -> doPostProcess(objectSpecification, objectAction, param));
+                });
 
         objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-                .forEach(this::doPostProcess);
+                .forEach(act -> doPostProcess(objectSpecification, act));
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).
-                forEach(this::doPostProcess);
+                forEach(prop -> doPostProcess(objectSpecification, prop));
 
         objectSpecification.streamCollections(MixedIn.INCLUDED).
-                forEach(this::doPostProcess);
+                forEach(coll -> doPostProcess(objectSpecification, coll));
 
     }
 
     protected abstract void doPostProcess(ObjectSpecification objectSpecification);
-    protected abstract void doPostProcess(ObjectAction act);
-    protected abstract void doPostProcess(ObjectActionParameter param);
-    protected abstract void doPostProcess(OneToOneAssociation prop);
-    protected abstract void doPostProcess(OneToManyAssociation coll);
+    protected abstract void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act);
+    protected abstract void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param);
+    protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop);
+    protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll);
 
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
+    protected final ImmutableEnumSet<ActionType> inferActionTypes() {
+        return getMetaModelContext().getSystemEnvironment().isPrototyping()
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;
     }

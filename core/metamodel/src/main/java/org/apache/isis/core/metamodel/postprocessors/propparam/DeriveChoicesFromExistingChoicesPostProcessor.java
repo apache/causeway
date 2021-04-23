@@ -19,17 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
-import java.util.stream.Stream;
-
-import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacet;
@@ -37,48 +29,33 @@ import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameter
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFactory;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
-import lombok.Setter;
-import lombok.val;
-
 /**
- * Sets up all the {@link Facet}s for an action in a single shot.
+ * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}
+ * and {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
  */
 public class DeriveChoicesFromExistingChoicesPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
-
-        val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
-
-        objectActions.flatMap(ObjectAction::streamParameters)
-            .forEach(DeriveChoicesFromExistingChoicesPostProcessor::deriveParameterChoicesFromExistingChoices);
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-                .forEach(DeriveChoicesFromExistingChoicesPostProcessor::derivePropertyChoicesFromExistingChoices);
-
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    }
 
-    /**
-     * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}.
-     */
-    private static void deriveParameterChoicesFromExistingChoices(final ObjectActionParameter parameter) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
@@ -88,11 +65,8 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                                     peerFor(parameter))));
     }
 
-
-    /**
-     * Replaces {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
-     */
-    private static void derivePropertyChoicesFromExistingChoices(final OneToOneAssociation property) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
@@ -102,18 +76,10 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
                                     facetedMethodFor(property))));
    }
 
-
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
     }
 
-    static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
-        return facet.isImplicitlyImmutable() ?
-                DisabledFacetAbstract.Semantics.DISABLED :
-                DisabledFacetAbstract.Semantics.ENABLED;
-    }
 
     private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.

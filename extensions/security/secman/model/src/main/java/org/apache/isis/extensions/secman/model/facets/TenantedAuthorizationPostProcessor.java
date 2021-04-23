@@ -65,27 +65,27 @@ public class TenantedAuthorizationPostProcessor
     }
 
     @Override
-    protected void doPostProcess(ObjectAction act) {
-        addFacetTo(act);
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+        addFacetTo(objectSpecification, act);
     }
 
     @Override
-    protected void doPostProcess(ObjectActionParameter param) {
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
         // no-op
     }
 
     @Override
-    protected void doPostProcess(OneToOneAssociation prop) {
-        addFacetTo(prop);
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+        addFacetTo(objectSpecification, prop);
     }
 
     @Override
-    protected void doPostProcess(OneToManyAssociation coll) {
-        addFacetTo(coll);
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+        addFacetTo(objectSpecification, coll);
     }
 
-    private void addFacetTo(ObjectFeature objectFeature) {
-        FacetUtil.addFacet(createFacet(objectFeature.getSpecification().getCorrespondingClass(), objectFeature));
+    private void addFacetTo(ObjectSpecification specification, ObjectFeature objectFeature) {
+        FacetUtil.addFacet(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
 
@@ -113,14 +113,17 @@ public class TenantedAuthorizationPostProcessor
                 .injectServicesInto(new QueryResultsCacheProviderHolder())
                 .getQueryResultsCacheProvider();
 
-        return new TenantedAuthorizationFacetDefault(
-                evaluators, applicationUserRepository, queryResultsCacheProvider, userService, holder);
+        return serviceRegistry.lookupService(ApplicationUserRepository.class)
+                .map(userRepository ->
+                        new TenantedAuthorizationFacetDefault(
+                                evaluators, userRepository,
+                                queryResultsCacheProvider, userService,
+                                holder))
+                .orElse(null);
     }
 
     @Inject ServiceRegistry serviceRegistry;
     @Inject ServiceInjector serviceInjector;
-    @Inject ApplicationUserRepository applicationUserRepository;
     @Inject UserService userService;
-
 
 }

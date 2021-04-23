@@ -20,18 +20,13 @@
 package org.apache.isis.core.metamodel.postprocessors.members;
 
 import java.lang.reflect.Method;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -48,51 +43,27 @@ import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotat
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
-import lombok.Setter;
-import lombok.val;
-
-/**
- * Sets up all the {@link Facet}s for an action in a single shot.
- */
 public class TweakDomainEventsForMixinPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
-    public void postProcess(final ObjectSpecification objectSpecification) {
-
-        val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
-
-        objectActions.forEach(objectAction -> {
-            tweakActionDomainEventForMixin(objectSpecification, objectAction);
-        });
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED).forEach(property -> {
-            tweakPropertyMixinDomainEvent(objectSpecification, property);
-        });
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED).forEach(collection->{
-            deriveCollectionDomainEventForMixins(objectSpecification, collection);
-        });
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
+        // no-op
     }
 
-    private static void tweakActionDomainEventForMixin(
-            final ObjectSpecification objectSpecification,
-            final ObjectAction objectAction) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+
         if(objectAction instanceof ObjectActionMixedIn) {
             // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
             // have been created in the ActionAnnotationFacetFactory
@@ -113,55 +84,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
-    private static void deriveCollectionDomainEventForMixins(
-            final ObjectSpecification objectSpecification,
-            final OneToManyAssociation collection) {
-
-        if(collection instanceof OneToManyAssociationMixedIn) {
-            final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
-            final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
-            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
-
-            if(method != null) {
-                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Isis v2
-
-                final Collection collectionAnnot =
-                        _Annotations.synthesizeInherited(method, Collection.class)
-                        .orElse(null);
-
-//                _Assert.assertEquals("expected same", collectionAnnot,
-//                        Annotations.getAnnotation(method, Collection.class));
-
-                if(collectionAnnot != null) {
-                    final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
-                            CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
-                                    objectSpecification, collectionAnnot.domainEvent());
-                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
-                            new CollectionDomainEventFacetForCollectionAnnotation(
-                                    collectionDomainEventType, collection);
-                    FacetUtil.addFacet(collectionDomainEventFacet);
-                }
-
-                final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
-                        objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                if(collectionDomainEventDefaultFacet != null) {
-                    final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
-                    if (collectionFacet instanceof CollectionDomainEventFacetAbstract) {
-                        final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
-                        if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
-                            final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
-                            existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
-                        }
-                    }
-                }
-            }
-        }
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+        // no-op
     }
 
-    private static void tweakPropertyMixinDomainEvent(
-            final ObjectSpecification objectSpecification,
-            final OneToOneAssociation property) {
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
         if(property instanceof OneToOneAssociationMixedIn) {
             final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
@@ -205,11 +134,49 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
     }
 
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
-    private ImmutableEnumSet<ActionType> inferActionTypes() {
-        return metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
+        if(collection instanceof OneToManyAssociationMixedIn) {
+            final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
+            final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
+            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
+
+            if(method != null) {
+                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
+                // ignoring stuff which is deprecated for Isis v2
+
+                final Collection collectionAnnot =
+                        _Annotations.synthesizeInherited(method, Collection.class)
+                                .orElse(null);
+
+//                _Assert.assertEquals("expected same", collectionAnnot,
+//                        Annotations.getAnnotation(method, Collection.class));
+
+                if(collectionAnnot != null) {
+                    final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
+                            CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
+                                    objectSpecification, collectionAnnot.domainEvent());
+                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
+                            new CollectionDomainEventFacetForCollectionAnnotation(
+                                    collectionDomainEventType, collection);
+                    FacetUtil.addFacet(collectionDomainEventFacet);
+                }
+
+                final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
+                        objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                if(collectionDomainEventDefaultFacet != null) {
+                    final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
+                    if (collectionFacet instanceof CollectionDomainEventFacetAbstract) {
+                        final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
+                        if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
+                            final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
+                            existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
