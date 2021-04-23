@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.allbutparam.authorization;
+package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-/**
- * Optionally hide or disable an object, property, collection or action
- * depending on the authorization.
- */
-public interface AuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
+
+    public AuthorizationFacetImpl(final FacetHolder holder) {
+        super(holder);
+    }
 
 }

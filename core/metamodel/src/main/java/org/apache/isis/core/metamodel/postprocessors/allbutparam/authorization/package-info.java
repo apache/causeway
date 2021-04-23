@@ -30,4 +30,4 @@
  *     that is, enforcing authorization by delegating to the "server-side".</li>
  * </ul>
  */
-package org.apache.isis.core.metamodel.facets.allbutparam.authorization;
+package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;

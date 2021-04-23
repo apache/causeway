@@ -57,7 +57,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
     @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    private ObjectAction objectAction;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -87,7 +86,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
      * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory}.
      */
     private void deriveActionDescribedAsFromType(final ObjectAction objectAction) {
-        this.objectAction = objectAction;
         if(objectAction.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
@@ -95,7 +93,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         .lookupNonFallbackFacet(DescribedAsFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet,
                                     facetedMethodFor(objectAction))));
-
     }
 
     /**
@@ -139,6 +136,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
         return objectActionImpl.getFacetedMethod();
     }
+
     private static TypedHolder peerFor(final ObjectActionParameter param) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
         final ObjectActionParameterAbstract objectActionImpl = (ObjectActionParameterAbstract) param;

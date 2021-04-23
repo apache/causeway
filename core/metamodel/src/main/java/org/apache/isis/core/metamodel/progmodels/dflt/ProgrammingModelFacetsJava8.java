@@ -18,7 +18,7 @@
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.facets.allbutparam.authorization.AuthorizationFacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -335,8 +335,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ZonedDateTimeValueFacetUsingSemanticsProviderFactory.class);
 
-        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, AuthorizationFacetFactory.class); // TODO: reimplement as a PostProcessor
-
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
@@ -369,6 +367,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
+
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
+
 
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
