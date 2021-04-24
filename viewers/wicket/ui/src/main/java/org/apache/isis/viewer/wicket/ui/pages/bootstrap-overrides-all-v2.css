@@ -561,10 +561,9 @@ div.additionalLinkList {
 	margin-right: 0px;
 }
 
-
-
-
-
+.additionalLinkList.additionalLinkListDropDown li.dropdown-item.additionalLinkItem {
+	padding: 0px;
+}
 
 .col .additionalLinks,
 .col .additionalLinksAndSelectorDropDown,
