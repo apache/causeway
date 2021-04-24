@@ -18,10 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.FormItem
-import org.apache.isis.client.kroviz.utils.DateHelper
-import org.apache.isis.client.kroviz.utils.UUID
 import io.kvision.core.Component
 import io.kvision.core.Overflow
 import io.kvision.core.StringPair
@@ -43,10 +39,13 @@ import io.kvision.html.Image
 import io.kvision.html.image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
-import io.kvision.require
 import io.kvision.utils.auto
 import io.kvision.utils.perc
 import io.kvision.utils.px
+import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.FormItem
+import org.apache.isis.client.kroviz.utils.DateHelper
+import org.apache.isis.client.kroviz.utils.UUID
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
@@ -166,8 +165,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     // TODO passing url as string does not work:
                     // require resolves string to url and `compiles` it into the binary
                     // working with remote resources allows to me more dynamic
-                    image(
-                            require("img/kroviz-logo.svg"))
+                    //image(require("img/kroviz-logo.svg"))
                 }
                 else -> {
                 }

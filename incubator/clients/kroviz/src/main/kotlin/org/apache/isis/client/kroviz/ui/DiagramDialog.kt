@@ -60,6 +60,7 @@ class DiagramDialog(
         newFormItems.add(newFi)
         val panel = FormPanelFactory(newFormItems)
         UiManager.add("Diagram", panel)
+        // Timing critical: Panel has to be added first, then extract from old location.
         val uuid = callBack as UUID
         val oldElement = DomUtil.getById(uuid.value)!!
         val oldStr = oldElement.innerHTML
