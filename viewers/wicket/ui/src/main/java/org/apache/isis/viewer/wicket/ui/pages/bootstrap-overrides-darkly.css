@@ -23,6 +23,9 @@ header nav.navbar {
 header .navbar-header .navbar-brand {
 	padding-bottom: 0px;
 }
+footer nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
 
 .bootstrap-datetimepicker-widget {
     background-color: #ffffff;
@@ -62,4 +65,8 @@ a.scalarValueInlinePromptLink:focus textarea,
 	color: rgba(255,255,255,0.5)!important;
 }
 
+/* setting the select2 dropdown background to secondary theme color */
+.select2-container.select2-container--default.select2-container--open .select2-dropdown {
+	background-color: #444!important
+}
 

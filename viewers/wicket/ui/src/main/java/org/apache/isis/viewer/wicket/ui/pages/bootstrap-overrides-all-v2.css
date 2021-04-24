@@ -430,7 +430,7 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 }
 
 .entityHeaderPanel .entityTitle {
-    font-size: 1.8em;
+    font-size: 1.52em;
     font-weight:normal;
     text-decoration:none;
     padding-right: 30px;
@@ -442,6 +442,10 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 .breadcrumbPanel {
     display: inline-block;
     width: 300px;
+}
+
+footer nav.navbar .breadcrumbPanel {
+    vertical-align: middle;
 }
 
 
@@ -561,10 +565,9 @@ div.additionalLinkList {
 	margin-right: 0px;
 }
 
-
-
-
-
+.additionalLinkList.additionalLinkListDropDown li.dropdown-item.additionalLinkItem {
+	padding: 0px;
+}
 
 .col .additionalLinks,
 .col .additionalLinksAndSelectorDropDown,
@@ -1163,4 +1166,8 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 
 .fs-15em {
 	font-size: 1.5em;
+}
+
+@media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu{ margin-top:0; margin-bottom:0; }
 }
