@@ -444,6 +444,10 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
     width: 300px;
 }
 
+footer nav.navbar .breadcrumbPanel {
+    vertical-align: middle;
+}
+
 
 /* from ContainedButtonPanel */
 
