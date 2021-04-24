@@ -38,9 +38,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 
@@ -93,24 +93,29 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        Authentication isisAuthSession = authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
-        assertThat(isisAuthSession, is(not(nullValue())));
-        assertThat(isisAuthSession.getUserName(), is("lonestarr"));
-        assertThat(isisAuthSession.getValidationCode(), is("test code"));
+        assertThat(authentication, is(not(nullValue())));
+        assertThat(authentication.getUserName(), is("lonestarr"));
+        assertThat(authentication.getValidationCode(), is("test code"));
 
-        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
+        assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
-        Identifier changeEmailIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeEmail", String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeEmailIdentifier), is(true));
+        Identifier changeEmailIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeEmail", String.class);
+        assertThat(authorizor.isVisible(authentication, changeEmailIdentifier), is(true));
 
-        Identifier submitOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "submit");
-        assertThat(authorizor.isVisibleInAnyRole(submitOrderIdentifier), is(true));
+        Identifier submitOrderIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.order(), "submit");
+        assertThat(authorizor.isVisible(authentication, submitOrderIdentifier), is(true));
 
-        Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
-        assertThat(authorizor.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
+        Identifier cancelOrderIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.order(), "cancel");
+        assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }
 
+    
 
 }

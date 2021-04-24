@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.api.user;
 
 import java.util.Set;
 
-import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;

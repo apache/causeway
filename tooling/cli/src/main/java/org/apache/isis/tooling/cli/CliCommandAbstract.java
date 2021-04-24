@@ -37,8 +37,11 @@ abstract class CliCommandAbstract implements Callable<Integer> {
         return _Context.getElseFail(Cli.class).getProjectRoot();
     }
 
-    public File getOutputPath() {
-        return _Context.getElseFail(Cli.class).getOutputPath();
+    public File getOverviewPath() {
+        return _Context.getElseFail(Cli.class).getOverviewPath();
+    }
+    public File getIndexPath() {
+        return _Context.getElseFail(Cli.class).getIndexPath();
     }
 
     /**
@@ -46,8 +49,11 @@ abstract class CliCommandAbstract implements Callable<Integer> {
      * @param mode
      */
     protected void generateAsciidoc(ProjectDocModel.Mode mode) {
-        if (getOutputPath() != null) {
-            getConfig().getGlobal().setOutputRootFolder(getOutputPath());
+        if (getOverviewPath() != null) {
+            getConfig().getCommands().getOverview().setRootFolder(getOverviewPath());
+        }
+        if (getIndexPath() != null) {
+            getConfig().getCommands().getIndex().setRootFolder(getIndexPath());
         }
 
         val projTree = ProjectNodeFactory.maven(getProjectRoot());

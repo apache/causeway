@@ -18,13 +18,12 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 
 public interface HasEnlistedEntityChanges {
 
-    @Nullable
-    EntityChanges getEntityChanges(java.sql.Timestamp timestamp, String userName);
+    Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName);
     
 }

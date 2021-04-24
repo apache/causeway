@@ -1,0 +1,91 @@
+= Setup and Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+This section describes how to include the JPA module and setup its configuration properties.
+
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-jpa.adoc[leveloffset=+1]
+
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleJpaEclipselink.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+== DataSource
+
+The JPA object store uses Spring to provide a `javax.sql.DataSource`.
+Normally this is done by setting the `spring.datasource` configuration properties, as described in the
+link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-connect-to-production-database-configuration[Spring Boot] documentation.
+
+For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app defines these:
+
+* for H2 (in-memory):
++
+[source,properties]
+.app.properties
+----
+spring.datasource.platform=h2
+spring.datasource.url=jdbc:h2:mem:simple
+spring.datasource.driver-class-name=org.h2.Driver
+----
+
+* for SQL Server:
++
+[source,properties]
+.app.properties
+----
+spring.datasource.platform=sqlserver
+spring.datasource.url=jdbc:sqlserver://localhost;databaseName=simpleapp
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.username=simpleapp
+spring.datasource.password=simpleapp
+----
+
+It is also possible to programmatically define a `DataSource`; see the link:https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-data-access[Spring docs] for details.
+
+
+
+== EclipseLink Configuration Properties
+
+The following configuration properties are fixed and cannot (as of this release) be overridden:
+
+* link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving[eclipselink.weaving]
++
+is set to `false`
+
+* link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABHEJJI[eclipselink.ddl-generation]
++
+is set to `create-or-extend-tables`
+
+* `javax.persistence.bean.manager`
++
+is set to an Apache Isis implementation, to assist with dependency injection into entities.
+
+To set other EclipseLink configuration properties is possible though not convenient: use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[] and override `getVendorProperties()`.
+
+
+== Other Configuration Properties
+
+The JPA object store also supports the following configuration properties:
+
+* xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.additional-orm-files[isis.persistence.schema.additional-orm-files]
++
+Lookup additional "mapping-files" in `META-INF/orm-_name_.xml` (equivalent to "mapping-file" entries in `persistence.xml`) and adds these to those that are already configured the _Spring Data_ way (if any).
+
+

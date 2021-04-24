@@ -38,6 +38,8 @@ public interface ConfigurationViewService {
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
      * Mask sensitive values if required.
      */
-    Set<ConfigurationProperty> allProperties();
+    Set<ConfigurationProperty> getVisibleConfigurationProperties();
 
+    Set<ConfigurationProperty> getEnvironmentProperties();
+    
 }

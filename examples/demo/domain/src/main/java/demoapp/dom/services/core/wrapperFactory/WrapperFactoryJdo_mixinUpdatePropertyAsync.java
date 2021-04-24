@@ -33,10 +33,10 @@ import lombok.val;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyAsync"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Mixin Update Property"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class WrapperFactoryJdo_mixinUpdatePropertyAsync {

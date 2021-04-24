@@ -20,7 +20,6 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 
 import java.time.LocalDate;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -31,7 +30,8 @@ import lombok.RequiredArgsConstructor;
 @RenderDayMetaAnnotationEndDateExclusive            // <.>
 @PropertyLayout(
     describedAs =
-        "@RenderDayMetaAnnotationEndDateExclusive"
+        "@RenderDayMetaAnnotationEndDateExclusive",
+    fieldSetId = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation {
@@ -40,7 +40,6 @@ public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation {
 
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
-    @MemberOrder(name = "meta-annotated", sequence = "2")
     public LocalDate prop() {
         return propertyLayoutRenderDayVm.getEndDate();
     }

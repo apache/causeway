@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 
@@ -102,7 +101,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
 
         final ObjectSpecIdFacet discriminatorValueFacet = facetHolder.getFacet(ObjectSpecIdFacet.class);
-        assertEquals(ObjectSpecId.of("CUS"), discriminatorValueFacet.value());
+        assertEquals("CUS", discriminatorValueFacet.value());
     }
 
     public void testNoMethodsRemoved() {

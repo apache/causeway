@@ -18,14 +18,11 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * <dt>CUS:123</dt>
@@ -57,35 +54,28 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  */
 public class OidMarshallerTest_unmarshal {
 
-    private Oid_Marshaller oidMarshaller;
-
-    @Before
-    public void setUp() throws Exception {
-        oidMarshaller = Oid_Marshaller.INSTANCE;
-    }
-
     @Test
     public void persistentRoot() {
         final String oidStr = "CUS:123";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
-        assertThat(rootOid.getIdentifier(), is("123"));
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid.getLogicalTypeName(), is("CUS"));
+        assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid, equalTo(oid2));
     }
 
     @Test
     public void persistentRootWithFullyQualifiedSpecId() {
         final String oidStr = "com.planchase.ClassName:8";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("com.planchase.ClassName")));
-        assertThat(rootOid.getIdentifier(), is("8"));
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid.getLogicalTypeName(), is("com.planchase.ClassName"));
+        assertThat(oid.getIdentifier(), is("8"));
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid, equalTo(oid2));
     }
 
 // we simply ignore this since 2.0.0    
@@ -101,20 +91,19 @@ public class OidMarshallerTest_unmarshal {
     public void transientRoot() {
         final String oidStr = "!CUS:123";
 
-        final RootOid rootOid = oidMarshaller.unmarshal(oidStr, RootOid.class);
-        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
-        assertThat(rootOid.getIdentifier(), is("123"));
+        final Oid oid = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid.getLogicalTypeName(), is("CUS"));
+        assertThat(oid.getIdentifier(), is("123"));
 
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)rootOid));
+        final Oid oid2 = _OidMarshaller.unmarshal(oidStr);
+        assertThat(oid, equalTo(oid2));
     }
 
 
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
-        oidMarshaller.unmarshal("xxx", RootOid.class);
+        _OidMarshaller.unmarshal("xxx");
     }
-
 
 
 }

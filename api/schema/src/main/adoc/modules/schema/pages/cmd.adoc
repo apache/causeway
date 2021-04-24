@@ -132,7 +132,7 @@ The `paramsDto` type is defined xref:refguide:schema:cmd/ancillary.adoc[below].
 
 In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
 
-Note also that there is a corresponding xref:refguide:schema:ixn/memberExecutionDto.adoc[`memberExecutionDto`]
+Note also that there is a corresponding xref:refguide:schema:ixn/memberExecutionDto.adoc[memberExecutionDto]
 complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the return value if an action invocation).
 
 

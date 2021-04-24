@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -48,9 +49,6 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 public class OneToManyAssociationDefaultTest {
 
     private static final String COLLECTION_ID = "orders";
-
-    public static class Customer {
-    }
 
     public static class Order {
     }
@@ -123,7 +121,8 @@ public class OneToManyAssociationDefaultTest {
         context.checking(new Expectations() {
             {
                 oneOf(mockPeer).getIdentifier();
-                will(returnValue(Identifier.propertyOrCollectionIdentifier(Customer.class, COLLECTION_ID)));
+                will(returnValue(Identifier.propertyOrCollectionIdentifier(
+                        TypeIdentifierTestFactory.newCustomer(), COLLECTION_ID)));
             }
         });
     }

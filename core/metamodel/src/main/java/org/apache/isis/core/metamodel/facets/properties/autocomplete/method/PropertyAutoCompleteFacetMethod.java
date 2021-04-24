@@ -34,7 +34,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
-public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAbstract implements ImperativeFacet {
+public class PropertyAutoCompleteFacetMethod 
+extends PropertyAutoCompleteFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesClass;

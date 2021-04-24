@@ -65,6 +65,75 @@ public @interface PropertyLayout {
     String describedAs()
             default "";
 
+    
+    /**
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.
+     * 
+     * <p>
+     * A <i>FieldSet</i> is a layout component for property grouping, that can either be specified via
+     * a <code>Xxx.layout.xml</code> file (with <code>Xxx</code> the domain object name) or is 
+     * inferred by the framework via annotations (aka the programming model). 
+     * <i>FieldSet</i>s are represented in-memory and requires a framework internal unique id per domain 
+     * object type.
+     * </p>
+     * <p>
+     * Following 2 scenarios have slightly different behavior:
+     * </p>
+     * 
+     * <h1>XML layout is present</h1>
+     * <p>
+     * When a XML layout is present, every <i>FieldSet</i> <b>id</b> is either explicitly specified in 
+     * the file or may be inferred from a non-empty <b>name</b>.
+     * If the <b>name</b> is empty "" or missing, then the <b>id</b> within the file is mandatory.
+     * </p><p>
+     * If this <i>Property</i> is not already explicitly listed within the XML layout, we lookup the 
+     * associated <i>FieldSet</i> in the XML layout file first matching by <b>id</b> 
+     * using {@code @PropertyLayout(fieldSetId=...)} if any, then falling back to matching by (friendly) 
+     * <b>name</b> using @PropertyLayout(fieldSetName=...)} if any.
+     * </p>
+     * 
+     * <h1>XML layout is absent</h1>
+     * <p>
+     * We reify (in-memory) the associated <i>FieldSet</i> using {@code @PropertyLayout(fieldSetId=...)} 
+     * (if present) as its <b>id</b> and using {@code @PropertyLayout(fieldSetId=...)} as its (friendly) 
+     * <b>name</b>. 
+     * While if no <b>id</b> is provided an <b>id</b> is inferred from the (friendly) <b>name</b>, in which 
+     * case the (friendly) <b>name</b> must not be empty.
+     * Whereas if no (friendly) <b>name</b> is provided a (friendly) <b>name</b> is inferred from the 
+     * <b>id</b>, in which case the <b>id</b> must not be empty.
+     * </p><p>
+     * With {@code @PropertyLayout(sequence=...)} the relative position within that <i>FieldSet</i> can be 
+     * specified.
+     * </p>
+     *  
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetName()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetId()
+            default "__infer";
+    
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i>. 
+     * <p>
+     * Explicitly specifying an empty "" <b>friendly-name</b> will suppress the <i>FieldSet</i>'s label
+     * from being rendered.
+     * </p>
+     * <p>
+     * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
+     * </p>
+     * 
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName()
+            default "__infer";
+    
     /**
      * Indicates where in the UI the property
      * should <i>not</i> be visible.
@@ -200,6 +269,20 @@ public @interface PropertyLayout {
      */
     Repainting repainting()
             default Repainting.NOT_SPECIFIED;
+    
+
+    /**
+     * The order of this member relative to other members in the same (layout) group, 
+     * given in <i>Dewey-decimal</i> notation.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see ActionLayout#sequence()
+     * @see CollectionLayout#sequence()
+     */
+    String sequence()
+            default "";
 
     /**
      * The typical entry length of a field, use to determine the optimum width

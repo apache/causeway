@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtimeservices.i18n.po;
 
 import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 
 abstract class PoAbstract {
 
@@ -31,8 +32,8 @@ abstract class PoAbstract {
         this.mode = mode;
     }
 
-    abstract String translate(final String context, final String msgId);
-    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num);
+    abstract String translate(final TranslationContext context, final String msgId);
+    abstract String translate(final TranslationContext context, final String msgId, final String msgIdPlural, int num);
 
     Mode getMode() {
         return mode;

@@ -26,6 +26,8 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -43,6 +45,14 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
+        
+        // guard against member not being a property
+        if(holder instanceof FacetedMethod) {
+            final FacetedMethod facetedMethod = (FacetedMethod) holder;
+            if(facetedMethod.getFeatureType() != FeatureType.PROPERTY) {
+                return null;
+            }
+        }
 
         return propertyLayoutIfAny
                 .map(PropertyLayout::promptStyle)

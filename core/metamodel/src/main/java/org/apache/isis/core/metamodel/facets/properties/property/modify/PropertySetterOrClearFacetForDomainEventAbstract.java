@@ -26,7 +26,7 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -34,20 +34,26 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySettingAccessor;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
-extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
+extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> 
+implements
+    PropertyClearingAccessor,
+    PropertySettingAccessor {
 
     private final DomainEventHelper domainEventHelper;
 
@@ -120,16 +126,20 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                 final InteractionInitiatedBy interactionInitiatedBy);
     }
 
+    @Override
     public ManagedObject clearProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
+        
+        val emptyValueAdapter = ManagedObject.empty(owningProperty.getSpecification());
+        
         return setOrClearProperty(EditingVariant.CLEAR,
-                owningProperty, targetAdapter, /*newValueAdapter*/ null, interactionInitiatedBy);
+                owningProperty, targetAdapter, emptyValueAdapter, interactionInitiatedBy);
 
     }
 
+    @Override
     public ManagedObject setProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
@@ -142,11 +152,11 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     }
 
     private ManagedObject setOrClearProperty(
-            final EditingVariant style,
-            final OneToOneAssociation owningProperty,
-            final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final @NonNull EditingVariant style,
+            final @NonNull OneToOneAssociation owningProperty,
+            final @NonNull ManagedObject targetAdapter,
+            final @NonNull ManagedObject newValueAdapter,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
         return getTransactionService()
                 .callWithinCurrentTransactionElseCreateNew(() ->
@@ -162,7 +172,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements InternalInteraction.MemberExecutor<PropertyEdit> {
+            implements InteractionInternal.MemberExecutor<PropertyEdit> {
 
         private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;
@@ -282,8 +292,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return uncheckedCast(value());
     }
 
-    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(InteractionDtoServiceInternal.class);
+    private InteractionDtoFactory getInteractionDtoServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

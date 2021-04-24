@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.Property.hidden;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -29,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @HiddenEverywhereMetaAnnotation             // <.>
 @PropertyLayout(
     describedAs =
-        "@HiddenEverywhereMetaAnnotation"
+        "@HiddenEverywhereMetaAnnotation",
+    fieldSetId = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyHiddenVm_mixinPropertyWithMetaAnnotation {
@@ -38,7 +38,6 @@ public class PropertyHiddenVm_mixinPropertyWithMetaAnnotation {
 
     private final PropertyHiddenVm propertyHiddenVm;
 
-    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
         return propertyHiddenVm.getPropertyHiddenNowhereUsingAnnotation();
     }

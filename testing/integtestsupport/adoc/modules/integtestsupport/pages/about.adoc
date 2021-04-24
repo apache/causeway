@@ -350,23 +350,23 @@ This has an alias of `wm()`.
 
 This class also provides a number of injected domain services:
 
-* xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`]
+* xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]
 +
 to query and persist objects through a generic repository
 
-* xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`]
+* xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]
 +
 for instantiating domain objects and mixins
 
-* xref:refguide:applib:index/services/user/UserService.adoc[`UserService`]
+* xref:refguide:applib:index/services/user/UserService.adoc[UserService]
 +
 to acces the current user
 
-* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[`ServiceRegistry`]
+* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 +
 to access domain services
 
-* xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[`MetaModelService`]
+* xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService]
 +
 to access the metamodel.
 
@@ -375,13 +375,13 @@ to access the metamodel.
 to simulate interactions through the UI.
 This is discussed further xref:about.adoc#wrapper-factory[below].
 
-* xref:refguide:applib:index/services/xactn/TransactionService.adoc[`TransactionService`]
+* xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]
 +
 for more control over transactions
 
 
 The class also defines (as a nested static class) the `InteractionSupport` as a domain service.
-If ``@Import``ed into the integration test's "app manifest", this ensures that any ``Command``s that are raised as the result of interactions through the wrapper factory are setup correctly.
+If ``@Import``ed into the integration test's "app manifest", this ensures that any xref:refguide:applib:index/services/command/Command.adoc[Command]s that are raised as the result of interactions through the wrapper factory are setup correctly.
 
 
 [#wrapper-factory]

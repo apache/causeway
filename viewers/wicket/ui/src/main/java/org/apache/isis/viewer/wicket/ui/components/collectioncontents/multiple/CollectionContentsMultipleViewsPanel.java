@@ -25,6 +25,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -45,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-extends PanelAbstract<EntityCollectionModel> 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;

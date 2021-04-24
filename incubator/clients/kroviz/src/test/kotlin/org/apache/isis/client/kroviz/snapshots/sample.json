@@ -2,69 +2,114 @@
   "links": [
     {
       "rel": "self",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+      "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-      "title": "String data type"
+      "title": "Malvern, UK"
     },
     {
       "rel": "describedby",
-      "href": "https://demo-wicket.isis.incode.work/restful/domain-types/demo.JavaLangStrings",
+      "href": "http://localhost:8080/restful/domain-types/demo.CustomUiVm",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
     },
     {
       "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/object-layout",
+      "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/object-layout",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-layout-bs3\""
     },
     {
       "rel": "urn:org.apache.isis.restfulobjects:rels/object-icon",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/image",
+      "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/image",
       "method": "GET",
       "type": "image/png"
     },
     {
       "rel": "urn:org.restfulobjects:rels/update",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+      "href": "http://localhost:8080/restful/objects/demo.CustomUiVm:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K",
       "method": "PUT",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
       "arguments": {}
     }
   ],
   "extensions": {
-    "oid": "demo.JavaLangStrings:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+    "oid": "demo.CustomUiVm:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K",
     "isService": false,
     "isPersistent": true
   },
-  "title": "String data type",
-  "domainType": "demo.JavaLangStrings",
-  "instanceId": "PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+  "title": "Malvern, UK",
+  "domainType": "demo.CustomUiVm",
+  "instanceId": "PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K",
   "members": {
-    "entities": {
-      "id": "entities",
-      "memberType": "collection",
+    "address": {
+      "id": "address",
+      "memberType": "property",
       "links": [
         {
-          "rel": "urn:org.restfulobjects:rels/details;collection=\"entities\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities",
+          "rel": "urn:org.restfulobjects:rels/details;property=\"address\"",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/address",
           "method": "GET",
-          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
         }
-      ]
+      ],
+      "value": "Malvern, UK",
+      "extensions": {
+        "x-isis-format": "string"
+      },
+      "disabledReason": "Disabled"
     },
-    "openViewModel": {
-      "id": "openViewModel",
-      "memberType": "action",
+    "latitude": {
+      "id": "latitude",
+      "memberType": "property",
       "links": [
         {
-          "rel": "urn:org.restfulobjects:rels/details;action=\"openViewModel\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/openViewModel",
+          "rel": "urn:org.restfulobjects:rels/details;property=\"latitude\"",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/latitude",
           "method": "GET",
-          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
         }
-      ]
+      ],
+      "value": "52.198944",
+      "extensions": {
+        "x-isis-format": "string"
+      },
+      "disabledReason": "Disabled"
+    },
+    "longitude": {
+      "id": "longitude",
+      "memberType": "property",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;property=\"longitude\"",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/longitude",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
+        }
+      ],
+      "value": "-2.2426571079130886",
+      "extensions": {
+        "x-isis-format": "string"
+      },
+      "disabledReason": "Disabled"
+    },
+    "zoom": {
+      "id": "zoom",
+      "memberType": "property",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;property=\"zoom\"",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/zoom",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
+        }
+      ],
+      "value": 14,
+      "format": "int",
+      "extensions": {
+        "x-isis-format": "int"
+      },
+      "disabledReason": "Disabled"
     },
     "clearHints": {
       "id": "clearHints",
@@ -72,7 +117,7 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"clearHints\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/clearHints",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/clearHints",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }
@@ -84,7 +129,7 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"inspectMetamodel\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/inspectMetamodel",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/inspectMetamodel",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }
@@ -96,19 +141,7 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"downloadLayoutXml\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/downloadLayoutXml",
-          "method": "GET",
-          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
-        }
-      ]
-    },
-    "rebuildMetamodel": {
-      "id": "rebuildMetamodel",
-      "memberType": "action",
-      "links": [
-        {
-          "rel": "urn:org.restfulobjects:rels/details;action=\"rebuildMetamodel\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/rebuildMetamodel",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/downloadLayoutXml",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }
@@ -120,7 +153,19 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"recentCommands\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/recentCommands",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/recentCommands",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "rebuildMetamodel": {
+      "id": "rebuildMetamodel",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"rebuildMetamodel\"",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/rebuildMetamodel",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }
@@ -132,7 +177,7 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"downloadMetamodelXml\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/downloadMetamodelXml",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/downloadMetamodelXml",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }
@@ -144,7 +189,7 @@
       "links": [
         {
           "rel": "urn:org.restfulobjects:rels/details;action=\"openRestApi\"",
-          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/openRestApi",
+          "href": "http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/openRestApi",
           "method": "GET",
           "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         }

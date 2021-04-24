@@ -19,10 +19,12 @@
 package org.apache.isis.core.interaction.session;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -30,31 +32,54 @@ import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IsisInteraction implements InternalInteraction {
+public class IsisInteraction 
+implements InteractionInternal {
 
-    public IsisInteraction(final @NonNull UUID uniqueId) {
-        this.command = new Command(uniqueId);
+    public IsisInteraction(final @NonNull UUID interactionId) {
+        this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
+        this.command = new Command(interactionId);
     }
 
     @Getter(onMethod_ = {@Override})
     private final Command command;
 
     @Override
-    public UUID getUniqueId() {
-        return command.getUniqueId();
+    public UUID getInteractionId() {
+        return command.getInteractionId();
     }
 
+    @Getter private final long startedAtSystemNanos;
+    
+    // -- INTERACTION ON CLOSE HANDLER
+
+    @Setter private Runnable onClose;
+
+    private boolean closed = false;
+
+    /** Do not use, is called by the framework internally. */
+    public void close() {
+        if(!closed
+                && onClose!=null) {
+            onClose.run();
+            onClose = null;
+        }
+        closed = true;
+    }
+    
+    // --
+    
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
 
     @Getter(onMethod_ = {@Override})
@@ -199,20 +224,40 @@ public class IsisInteraction implements InternalInteraction {
         currentExecution = newExecution;
     }
 
-    private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
+    @Getter(onMethod_ = {@Override})
+    private final LongAdder executionSequence = new LongAdder();
+    
+    @Getter(onMethod_ = {@Override})
+    private final LongAdder transactionSequence = new LongAdder();
+
+    // -- INTERACTION SCOPED ATTRIBUTES
+
+    // not thread-safe
+    private final Map<Class<?>, Object> attributes = new HashMap<>();
 
     @Override
-    public int next(final String sequenceId) {
-
-        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);
-        adder.increment();
-        return adder.intValue();
+    public <T> T putAttribute(Class<? super T> type, T value) {
+        return _Casts.uncheckedCast(attributes.put(type, value));
     }
 
-    private LongAdder newAdder(String ignore) {
-        final LongAdder adder = new LongAdder();
-        adder.decrement();
-        return adder;
+    @Override
+    public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
+        return _Casts.uncheckedCast(attributes.computeIfAbsent(type, mappingFunction));
     }
+
+    @Override
+    public <T> T getAttribute(Class<T> type) {
+        return (attributes!=null)
+                ? _Casts.uncheckedCast(attributes.get(type))
+                : null;
+    }
+
+    @Override
+    public void removeAttribute(Class<?> type) {
+        if(attributes!=null) {
+            attributes.remove(type);
+        }
+    }
+    
 
 }

@@ -18,10 +18,9 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -55,7 +54,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     /**
      * The domain object type being mixed in to (being supplemented).
      */
-    private final ObjectSpecification mixedInType;
+    private final ObjectSpecification mixeeSpec;
 
 
     /**
@@ -69,7 +68,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
@@ -77,7 +76,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+        this.mixeeSpec = mixeeSpec;
 
         //
         // ensure the contributed property cannot be modified
@@ -107,9 +106,14 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
+        val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
 
-        identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
+        identifier = Identifier.actionIdentifier(
+                LogicalType.eager(
+                        mixeeSpec.getCorrespondingClass(), 
+                        mixeeSpec.getLogicalTypeName()),
+                getId(), 
+                memberParameterClassNames);
     }
 
     @Override
@@ -157,7 +161,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     @Override
     public ObjectSpecification getOnType() {
-        return mixedInType;
+        return mixeeSpec;
     }
 
     @Override

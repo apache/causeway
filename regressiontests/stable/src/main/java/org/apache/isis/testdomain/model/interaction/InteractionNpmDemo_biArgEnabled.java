@@ -19,9 +19,9 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -40,7 +40,7 @@ public class InteractionNpmDemo_biArgEnabled {
         int b;
     }
     
-    @Model
+    @MemberSupport
     public int act(
             
             @Parameter(maxLength = 2) // setup so we can test for this facet 
@@ -55,7 +55,7 @@ public class InteractionNpmDemo_biArgEnabled {
     // -- PARAM 0
 
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
-    @Model 
+    @MemberSupport 
     public int defaultA(Parameters params) { 
         return 5;
     }
@@ -63,7 +63,7 @@ public class InteractionNpmDemo_biArgEnabled {
     // -- PARAM 1
     
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
-    @Model
+    @MemberSupport
     public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};
     }

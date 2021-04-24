@@ -1,8 +1,0 @@
-
-* xref:refguide:applib-methods:about.adoc[Methods]
-** xref:refguide:applib-methods:prefixes.adoc[Supporting Method Prefixes]
-** xref:refguide:applib-methods:reserved.adoc[Reserved Methods]
-** xref:refguide:applib-methods:lifecycle.adoc[Lifecycle Methods]
-
-
-

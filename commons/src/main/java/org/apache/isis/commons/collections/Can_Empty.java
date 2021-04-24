@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -71,6 +72,11 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public Optional<T> getFirst() {
+        return Optional.empty();
+    }
+    
+    @Override
+    public Optional<T> getLast() {
         return Optional.empty();
     }
     
@@ -196,6 +202,16 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public List<T> toList() {
         return Collections.emptyList(); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        return Collections.emptySet(); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        return Collections.emptySet(); // serializable and immutable
     }
     
     @Override

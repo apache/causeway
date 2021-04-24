@@ -12,8 +12,8 @@ include::../section-hooks/Other~pre.adoc[]
 |Default
 |Description
 |
-[[isis.as-map]]
-isis.as-map
+[[isis]]
+isis
 
 | 
 | null

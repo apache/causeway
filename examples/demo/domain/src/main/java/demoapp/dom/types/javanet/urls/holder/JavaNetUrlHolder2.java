@@ -19,7 +19,6 @@
 package demoapp.dom.types.javanet.urls.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -32,9 +31,8 @@ public interface JavaNetUrlHolder2 extends JavaNetUrlHolder {
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default java.net.URL getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,9 +42,8 @@ public interface JavaNetUrlHolder2 extends JavaNetUrlHolder {
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "2")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "2")
     default java.net.URL getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -56,9 +53,8 @@ public interface JavaNetUrlHolder2 extends JavaNetUrlHolder {
         labelPosition = LabelPosition.RIGHT,                // <.>
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "3")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "3")
     default java.net.URL getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -68,9 +64,8 @@ public interface JavaNetUrlHolder2 extends JavaNetUrlHolder {
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "4")
+        hidden = Where.ALL_TABLES,
+        fieldSetId = "label-positions", sequence = "4")
     default java.net.URL getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

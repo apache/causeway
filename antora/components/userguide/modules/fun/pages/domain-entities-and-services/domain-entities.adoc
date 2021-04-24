@@ -1,0 +1,207 @@
+[#domain-entities]
+= Domain Entities
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Domain entities are persistent domain objects, with their persistence handled an ORM (such as xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]).
+As such, they are mapped to a persistent object store, typically an RDBMS, with the ORM taking care of both lazy loading and also the persisting of modified ("dirty") objects.
+
+The vast majority of such entities will be annotated with `@DomainObject(nature=ENTITY)`.
+In addition they will also require ORM metadata.
+
+* for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], this requires the `javax.persistence.Entity` annotation
+* for xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this requires the
+`@javax.jdo.annotations.PersistenceCapable` annotation.
+
+TIP: It is also possible to specify ORM metadata using `.xml` files.
+
+In this section we discuss the mechanics of writing domain objects that comply with Apache Isis' programming model.
+
+
+== Entities (JPA)
+
+JPA entities are typically defined using the `@javax.persistence.Entity` annotation, with additional annotations to define their primary key, scalar properties and relationships to other entities.
+
+For some examples, see:
+
+* https://www.baeldung.com/jpa-entities[Baeldung article on JPA entities]
+* https://spring.io/guides/gs/accessing-data-jpa/[Spring Data tutorial]
+* https://docs.jboss.org/hibernate/annotations/3.5/reference/en/html/entity.html#entity-mapping[JBoss tutorial]
+
+See the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink object store] for further information on annotating domain entities.
+
+
+== Entities (JDO)
+
+See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store] for further information on annotating domain entities.
+
+[#persistencecapable]
+=== PersistenceCapable
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
+
+With the xref:pjdo:ROOT:about.adoc[JDO API], entities are flagged as being "persistence capable", indicating how the ORM should manage their identity:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable(                              // <.>
+        identityType=IdentityType.DATASTORE,                            // <.>
+        schema = "simple",                                              // <.>
+        table = "SimpleObject"
+)
+@javax.jdo.annotations.DatastoreIdentity(                               // <.>
+        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
+        column="id"
+)
+@javax.jdo.annotations.Version(                                         // <.>
+        strategy= VersionStrategy.DATE_TIME,
+        column="version"
+)
+@DomainObject(                                                          // <.>
+        objectType = "simple.SimpleObject"
+)
+public class SimpleObject { /* ... */ }
+----
+<.> The `@PersistenceCapable` annotation indicates that this is an entity to DataNucleus.
+The DataNucleus enhancer acts on the bytecode of compiled entities, injecting lazy loading and dirty object tracking functionality.
+Enhanced entities end up also implementing the `javax.jdo.spi.PersistenceCapable` interface.
+
+<.> Indicates how identifiers for the entity are handled.
+Using `DATASTORE` means that a DataNucleus is responsible for assigning the value (rather than the application).
+
+<.> Specifies the RDBMS database schema and table name for this entity will reside.
+The schema should correspond with the module in which the entity resides.
+The table will default to the entity name if omitted.
+
+<.> For entities that are using `DATASTORE` identity, indicates how the id will be assigned.
+A common strategy is to allow the database to assign the id, for example using an identity column or a sequence.
+
+<.> The `@Version` annotation is useful for optimistic locking; the strategy indicates what to store in the `version` column.
+
+<.> The `@DomainObject` annotation identifies the domain object to Apache Isis (not DataNucleus).
+It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
+In particular, its strongly recommended that the `objectType` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
+
+
+=== Key Properties (JDO)
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
+
+All domain entities will have some sort of mandatory key properties.
+The example below is a very simple case, where the entity is identified by a `name` property.
+This is often used in database unique indices, and in the `toString()` implementation:
+
+[source,java]
+----
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.Unique;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.ToString.Include;
+...
+@Unique(
+    name="SimpleObject_name_UNQ", members = {"name"})               // <.>
+@ToString(onlyExplicitlyIncluded = true)
+public class SimpleObject
+             implements Comparable<SimpleObject> {                  // <.>
+
+    public SimpleObject(String name) {
+        setName(name);
+    }
+
+    @Column(allowsNull="false", length=50)                          // <.>
+    @Getter @Setter                                                 // <.>
+    @ToString.Include                                               // <.>
+    private String name;
+
+    private final static Comparator<SimpleObject> comparator =
+            Comparator.comparing(SimpleObject::getName);
+
+    @Override
+    public int compareTo(final SimpleObject other) {
+        return comparator.compare(this, other);                     // <.>
+    }
+}
+----
+<.> DataNucleus will automatically add a unique index to the primary surrogate id (discussed above), but additional alternative keys can be defined using the `@Unique` annotation.
+In the example above, the "name" property is assumed to be unique.
+
+<.> Although not required, we strongly recommend that all entities are naturally `Comparable`.
+This then allows parent/child relationships to be defined using ``SortedSet``s; RDBMS after all are set-oriented.
+
+<.> Chances are that some of the properties of the entity will be mandatory, for example any properties that represent an alternate unique key to the entity.
+The `@Column` annotation specifies the length of the column in the RDBMS, and whether it is mandatory.
++
+Given there is a unique index on `name`, we want this to be mandatory.
++
+We can also represent this using a constructor that defines these mandatory properties.
+The ORM will create a no-arg constructor to allow domain entity to be rehydrated from the database at runtime (it then sets all state reflectively).
+
+<.> Use Lombok to generate the getters and setters for the `name` property itself.
+
+<.> Use Lombok to create a `toString()` implementation that includes the value of `name` property.
+
+<.> Use `java.util.Comparator#comparing()` to implement `Comparable` interface.
+
+
+=== Queries (JDO)
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
+
+When using JDO, it's also common for domain entities to have queries annotated on them.
+These are used by repository domain services to query for instances of the entity:
+
+[source,java]
+----
+...
+@javax.jdo.annotations.Queries({
+    @javax.jdo.annotations.Query(                                     // <.>
+      name = "findByName",                                            // <.>
+      value = "SELECT "                                               // <.>
+            + "FROM domainapp.modules.simple.dom.impl.SimpleObject "  // <.>
+            + "WHERE name.indexOf(:name) >= 0 ")                      // <.>
+})
+...
+public class SimpleObject { /* ... */ }
+----
+<.> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
+
+<.> Defines the name of the query.
+
+<.> The definition of the query, using JDOQL syntax.
+
+<.> The fully-qualified class name. +
+Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
+
+<5> In this particular query, is an implementation of a LIKE "name%" query.
+
+JDO/DataNucleus provides several APIs for defining queries, including entirely programmatic and type-safe APIs; but JDOQL is very similar to SQL and so easily learnt.
+
+To actually use the above definition, the framework provides the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService].
+This is a generic repository for any domain class.
+
+The corresponding repository method for the above query is:
+
+[source,java]
+----
+public List<SimpleObject> findByName(String name) {
+    return repositoryService.allMatches(            // <.>
+            Query.named(SimpleObject.class,         // <.>
+                        "findByName")               // <.>
+                   .withParameter("name", name)     // <.>
+            );
+}
+
+@javax.inject.Inject
+RepositoryService repositoryService;
+----
+<.> find all instances that match the query
+<.> Specifies the class that is annotated with `@Query`
+<.> Corresponds to the `@Query#name` attribute
+<.> Corresponds to the `:name` parameter in the query JDOQL string
+
+
+

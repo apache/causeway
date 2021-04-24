@@ -24,30 +24,23 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public abstract class ObjectSpecIdFacetAbstract extends
-FacetAbstract implements ObjectSpecIdFacet {
+public abstract class ObjectSpecIdFacetAbstract
+extends FacetAbstract 
+implements ObjectSpecIdFacet {
 
     public static Class<? extends Facet> type() {
         return ObjectSpecIdFacet.class;
     }
 
-    private final ObjectSpecId value;
+    private final String value;
 
     public ObjectSpecIdFacetAbstract(final String value, final FacetHolder holder) {
         this(value, holder, Derivation.NOT_DERIVED);
     }
 
-    public ObjectSpecIdFacetAbstract(
-            final String value,
-            final FacetHolder holder,
-            final Derivation derivation) {
-        this(ObjectSpecId.of(value), holder, derivation);
-    }
-
     protected ObjectSpecIdFacetAbstract(
-            final ObjectSpecId value,
+            final String value,
             final FacetHolder holder,
             final Derivation derivation) {
         super(ObjectSpecIdFacetAbstract.type(), holder, derivation);
@@ -55,11 +48,12 @@ FacetAbstract implements ObjectSpecIdFacet {
     }
 
     @Override
-    public ObjectSpecId value() {
+    public String value() {
         return value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);
     }

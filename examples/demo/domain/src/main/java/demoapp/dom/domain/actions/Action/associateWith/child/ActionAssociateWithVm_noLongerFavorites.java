@@ -32,13 +32,12 @@ import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 //tag::class[]
 @Action(
     associateWith = "favorites"                                 // <.>
-    , associateWithSequence = "3"                               // <.>
 )
 @ActionLayout(
     describedAs =
-        "@Action(" +
-            "associateWith = \"favorites\"" +
-            ", associateWithSequence = \"2\")"
+            "@Action(associateWith = \"favorites\") " +
+            "@ActionLayout(sequence = \"3\")"
+    , sequence = "3"                                            // <.>
 )
 @RequiredArgsConstructor
 public class ActionAssociateWithVm_noLongerFavorites {

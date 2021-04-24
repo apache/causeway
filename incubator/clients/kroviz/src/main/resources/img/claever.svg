@@ -60,40 +60,41 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(81.788246,-188.44201)">
+    <!-- red-form, but color is set at the very end  blue:3c75bc /-->
     <g
        id="g2834"
        transform="translate(4.2180348,-244.97944)"
-       style="fill:#339900">
+       style="fill:#c03d3a">
       <rect
+         style="fill-opacity:0.7;fill-rule:nonzero;stroke:none"
          transform="rotate(45)"
          y="128.81105"
          x="540.95331"
          height="228.57143"
          width="228.57143"
-         id="rect2816"
-         style="fill:#339900;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+         id="rect2816" />
       <circle
+         style="fill-opacity:0.7;fill-rule:nonzero;stroke:none"
          transform="translate(-81.952479,151.13084)"
          id="path2820"
-         style="fill:#339900;fill-opacity:1;fill-rule:nonzero;stroke:none"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
       <circle
-         style="fill:#339900;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.7;fill-rule:nonzero;stroke:none"
          id="path2822"
          transform="translate(77.738331,149.63069)"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
     </g>
-    <!-- green -->
+    <!-- green 94ba46 / 9BBB59-->
     <g
        transform="matrix(1,0,0,-1,4.2180347,1378.2333)"
        id="g2839"
-       style="fill:#9BBB59">
+       style="fill:#94ba46">
       <rect
-         style="fill:#9BBB59;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          id="rect2841"
          width="228.57143"
          height="228.57143"
@@ -101,27 +102,27 @@
          y="128.81105"
          transform="rotate(45)" />
       <circle
-         style="fill:#9BBB59;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          id="path2843"
          transform="translate(-81.952479,151.13084)"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
       <circle
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          transform="translate(77.738331,149.63069)"
          id="path2845"
-         style="fill:#9BBB59;fill-opacity:1;fill-rule:nonzero;stroke:none"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
     </g>
-    <!-- yellow -->
+    <!-- yellow / F79646 -->
     <g
        transform="rotate(90,416.77735,691.22564)"
        id="g2859"
        style="fill:#F79646">
       <rect
-         style="fill:#F79646;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          id="rect2861"
          width="228.57143"
          height="228.57143"
@@ -129,16 +130,16 @@
          y="128.81105"
          transform="rotate(45)" />
       <circle
-         style="fill:#F79646;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          id="path2863"
          transform="translate(-81.952479,151.13084)"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
       <circle
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          transform="translate(77.738331,149.63069)"
          id="path2865"
-         style="fill:#F79646;fill-opacity:1;fill-rule:nonzero;stroke:none"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
@@ -149,30 +150,31 @@
        transform="matrix(0,1,1,0,-515.2097,274.44829)"
        style="fill:#4F81BD">
       <rect
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          transform="rotate(45)"
          y="128.81105"
          x="540.95331"
          height="228.57143"
          width="228.57143"
-         id="rect2869"
-         style="fill:#4F81BD;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+         id="rect2869" />
       <circle
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          transform="translate(-81.952479,151.13084)"
          id="path2871"
-         style="fill:#4F81BD;fill-opacity:1;fill-rule:nonzero;stroke:none"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
       <circle
-         style="fill:#4F81BD;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         style="fill-opacity:0.8;fill-rule:nonzero;stroke:none"
          id="path2873"
          transform="translate(77.738331,149.63069)"
          cx="294.28571"
          cy="400.93362"
          r="117.14286" />
     </g>
+    <!-- red c03d3a / C0504D-->
     <path
-       style="fill:#C0504D;fill-opacity:1;stroke-width:2.10894227"
+       style="fill:#c03d3a;fill-opacity:0.4;stroke-width:2.10894227"
        d="m 292.44409,276.24527 c -46.08028,-46.09678 -85.57389,-86.1849 -87.76358,-89.0847 -13.6553,-18.08364 -21.56331,-43.21984 -21.56331,-68.54062 0,-50.917837 30.6962,-93.441035 79.2077,-109.7258122 35.18508,-11.8112416 76.41069,-5.2901011 104.93851,16.5993602 l 10.01748,7.686432 9.83234,-7.5052 c 46.81235,-35.732676 111.3974,-31.6665489 152.55621,9.604593 22.42968,22.490876 33.67123,49.601489 33.71804,81.315837 0.0306,20.77227 -4.06498,37.22126 -13.95305,56.0383 -6.5524,12.46921 -18.75521,25.51757 -93.86514,100.36921 -47.48351,47.32019 -87.01072,86.26581 -87.83826,86.54582 -0.82754,0.28002 -39.20666,-37.20642 -85.28694,-83.30322 z"
        id="path829"
        inkscape:connector-curvature="0"

@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 import java.io.InputStream;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Provider;
 import javax.servlet.ServletContext;
 
@@ -39,7 +38,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class AboutPanel extends PanelAbstract<AboutModel> {
+public class AboutPanel 
+extends PanelAbstract<String, AboutModel> {
 
     private static final long serialVersionUID = 1L;
 

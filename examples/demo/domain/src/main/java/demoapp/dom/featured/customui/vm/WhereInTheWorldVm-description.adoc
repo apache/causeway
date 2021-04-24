@@ -41,7 +41,7 @@ There are various subclasses available; as we want to replace the component for 
 [source,java]
 .WhereInTheWorldPanelFactory.java
 ----
-include::../wicket/WhereInTheWorldPanelFactory.java[tags=class]
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanelFactory.java[tags=class]
 ----
 <.> the framework use the chain-of-responsibility pattern to look for a component factory to render the domain object.
 This `@Order` precedence ensures that this custom implementation is consulted early on.
@@ -75,7 +75,7 @@ Note that this must _also_ be serializable.
 [source,java,indent=0]
 .WhereInTheWorldPanel.java
 ----
-include::../wicket/WhereInTheWorldPanel.java[tags=onInitialize]
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=onInitialize]
 ----
 <.> obtain the core framework's `ManagedObject` from the Wicket model...
 <.> \... and obtain the domain object in turn.
@@ -96,7 +96,7 @@ Wicket requires there to be corresponding HTML (`WhereInTheWorld.html`) file for
 [source,java,indent=0]
 .WhereInTheWorldPanel.java
 ----
-include::../wicket/WhereInTheWorldPanel.java[tags=createMapComponent]
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createMapComponent]
 ----
 <.> call the `GeoapifyClient` to download the JPEG...
 <.> \... and returns an `Image` component holding same
@@ -106,7 +106,7 @@ include::../wicket/WhereInTheWorldPanel.java[tags=createMapComponent]
 [source,java,indent=0]
 .WhereInTheWorldPanel.java
 ----
-include::../wicket/WhereInTheWorldPanel.java[tags=createPropertyComponent]
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
 ----
 <.> obtains the `ObjectSpecification` (the framework's equivalent of `java.lang.Class`) for the domain object
 <.> obtains the `OneToOneAssociation` (the framework's equivalent of a `java.lang.reflect.Method`) for the specified property

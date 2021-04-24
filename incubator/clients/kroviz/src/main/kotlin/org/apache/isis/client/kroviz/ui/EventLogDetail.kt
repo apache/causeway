@@ -23,6 +23,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.XmlHelper
 
 class EventLogDetail(val logEntry: LogEntry) : Command() {
 
@@ -31,11 +32,13 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
 
         formItems.add(FormItem("Url", ValueType.TEXT, logEntry.url))
 
-        var jsonStr = logEntry.response
-        if (jsonStr.isNotEmpty() && logEntry.subType == Constants.subTypeJson) {
-            jsonStr = Utils.format(jsonStr)
+        var responseStr = logEntry.response
+        if (logEntry.subType == Constants.subTypeJson) {
+            responseStr = Utils.format(responseStr)
+        }   else {
+            responseStr = XmlHelper.formatXml(responseStr)
         }
-        formItems.add(FormItem("Response", ValueType.TEXT_AREA, jsonStr, 10))
+        formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
 
         var aggtStr = ""
         logEntry.aggregators.forEach { it ->
@@ -47,7 +50,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 caption = "Details :" + logEntry.title,
                 items = formItems,
                 command = this,
-                defaultAction = "Debug",
+                defaultAction = "Console",
                 widthPerc = 60).open()
     }
 

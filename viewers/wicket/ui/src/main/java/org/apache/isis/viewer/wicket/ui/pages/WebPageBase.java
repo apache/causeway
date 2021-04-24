@@ -18,11 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.MetaDataHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -39,7 +43,6 @@ implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
     
-    private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
@@ -48,18 +51,37 @@ implements HasCommonContext {
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
     }
-    
+
     protected WebPageBase(final IModel<?> model) {
         super(model);
     }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        renderFavicon(response);
+    }
+
+    // -- FAVICON SUPPORT
+    
+    protected void renderFavicon(IHeaderResponse response) {
+        getConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
+        .filter(_Strings::isNotEmpty)
+        .map(getWebAppContextPath()::prependContextPathIfLocal)
+        .ifPresent(faviconUrl->{
+            response.render(MetaDataHeaderItem.forLinkTag("icon", faviconUrl));    
+        });
+    }
+    
+    // -- DEPENDENCIES
     
     @Override
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
-    public IsisConfiguration getIsisConfiguration() {
-        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
+    public IsisConfiguration getConfiguration() {
+        return getCommonContext().getConfiguration();
     }
 
     public WebAppContextPath getWebAppContextPath() {
@@ -74,13 +96,16 @@ implements HasCommonContext {
         return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
     
+    public IsisSystemEnvironment getSystemEnvironment() {
+        return getCommonContext().getSystemEnvironment();
+    }
     
     // -- HELPER
     
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFail(type);
+                : getCommonContext().lookupServiceElseFail(type);
     }
     
 }

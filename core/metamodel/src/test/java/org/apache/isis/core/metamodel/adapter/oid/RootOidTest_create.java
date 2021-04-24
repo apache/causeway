@@ -23,16 +23,15 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import lombok.val;
 
 public class RootOidTest_create {
 
-
     @Test
     public void create() throws Exception {
-        ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Oid.Factory.root(objectSpecId, "123");
-        assertThat(oid.getObjectSpecId(), is(objectSpecId));
+        val logicalType = LogicalTypeTestFactory.cus();
+        Oid oid = Oid.of(logicalType, "123");
+        assertThat(oid.getLogicalTypeName(), is(logicalType.getLogicalTypeName()));
         assertThat(oid.getIdentifier(), is("123"));
     }
 

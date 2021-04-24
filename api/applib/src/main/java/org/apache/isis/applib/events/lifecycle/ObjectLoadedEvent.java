@@ -19,27 +19,36 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
+ * Broadcast when an entity is retrieved from the database.
+ *
  * @since 1.x {@index}
  */
 public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.loaded-lifecycle-event.post-for-default</tt>
+     * {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent()}
+     * annotation element.
+     *
+     * <p>
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default</tt>
      * configuration property.
+     * </p>
      */
     public static class Default extends ObjectLoadedEvent<Object> {}
 
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Noop extends ObjectLoadedEvent<Object> {}
 
     /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event..
      */
     public static class Doop extends ObjectLoadedEvent<Object> {}
 

@@ -1,0 +1,96 @@
+== Usage notes
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Attributes `fieldSetId` and `fieldSetName` are used to associate members together. These are available for 
+xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout]
+and
+xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] 
+(but not for 
+xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] 
+as collections don't support annotation based grouping).
+
+Dependent on the type of object member the `sequence` attribute orders those members that have been grouped together. It is available with 
+xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], 
+xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] 
+and 
+xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout]
+
+=== Properties
+
+For properties, the `fieldSetId` and/or `fieldSetName` attribute is used to group properties together, and `sequence` orders the properties within that group.
+It corresponds to a `<fieldset>` if using xref:userguide:fun:ui.adoc#object-layout[layout files].
+
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Customer {
+
+    @PropertyLayout(fieldSetName = "Personal Details", sequence = "1.0")
+    private String firstName;
+
+    @PropertyLayout(fieldSetName = "Personal Details", sequence = "2.0")
+    private String lastName;
+
+    @PropertyLayout(fieldSetName = "Address", sequence = "1.0")
+    private String addressLine1;
+
+    @PropertyLayout(fieldSetName = "Address", sequence = "2.0")
+    private String addressLine2;
+
+    @PropertyLayout(fieldSetName = "Address", sequence = "3.0")
+    private String city;
+
+    @PropertyLayout(fieldSetName = "Address", sequence = "4.0")
+    private String zipCode;
+
+    // ...
+}
+----
+
+TIP: It's possible to combine `@PropertyLayout` with xref:userguide:fun:ui.adoc#object-layout[layout file].
+Use the layout file to define the positioning of the fieldsets, and use `@PropertyLayout` to organise the properties within the fieldset.
+
+=== Actions
+
+For actions, the `fieldSetId` and/or `fieldSetName` attribute indicates the name of a property to associate the action with, and `sequence` orders all the actions associated with the same property or collection (on the panel of the property's fieldset, or collection's title bar).
+
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Customer {
+
+    @ActionLayout(fieldSetName = "Personal Details")
+    public Customer updateName(String firstName, String lastName) {
+        // ...
+    }
+
+    @ActionLayout(fieldSetName = "Address")
+    public Customer changeAddress(String firstName, String lastName) {
+        // ...
+    }
+
+    // ...
+}
+----
+
+TIP: For actions xref:refguide:applib:index/annotation/Action.adoc#associateWith[@Action#associateWith()] is an alternative that indicates, that the action should be rendered close to its associated peer.
+
+TIP: For actions associated with properties, the xref:refguide:applib:index/annotation/ActionLayout.adoc#position[@ActionLayout#position()] element indicates whether the action should be rendered beneath the property's field, or instead on the property's fieldset panel's header.
+
+
+=== Collections
+
+The `fieldSetId` and `fieldSetName` attributes have no counterpart within `@CollectionLayout`.
+

@@ -31,6 +31,7 @@ import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -456,7 +457,37 @@ public final class _Strings {
         requires(delimiterPattern, "delimiterPattern");
         return delimiterPattern.splitAsStream(input);
     }
-    
+
+    /**
+     * Optionally applies {@code onNonEmptySplit} function, based on whether both split parts 
+     * <i>lhs</i> and <i>rhs</i> are non empty Strings. 
+     * @param <T>
+     * @param input
+     * @param separator
+     * @param onNonEmptySplit
+     */
+    public static <T> Optional<T> splitThenApplyRequireNonEmpty(
+            @Nullable final String input, 
+            final String separator, 
+            final BiFunction<String, String, T> onNonEmptySplit) {
+        
+        if(isEmpty(input)) {
+            return Optional.empty();
+        }
+        // we have a non-empty string
+        final int p = input.indexOf(separator);
+        if(p<1){
+            // separator not found or
+            // empty lhs in string
+            return Optional.empty();
+        }
+        final int q = p + separator.length();
+        if(q==input.length()) {
+            // empty rhs
+            return Optional.empty();
+        }
+        return Optional.ofNullable(onNonEmptySplit.apply(input.substring(0, p), input.substring(q)));
+    }
 
     public static void splitThenAccept(
             @Nullable final String input, 

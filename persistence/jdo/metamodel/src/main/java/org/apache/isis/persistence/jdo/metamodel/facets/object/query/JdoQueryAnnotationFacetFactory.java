@@ -74,24 +74,27 @@ implements MetaModelRefiner {
         val isValidateFromClause = 
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
-            programmingModel.addValidator(new VisitorForFromClause(this));
+            programmingModel.addValidator(new MetaModelVisitingValidatorForFromClause());
         }
 
         val isValidateVariablesClause = 
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
-            programmingModel.addValidator(new VisitorForVariablesClause(this));
+            programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause());
         }
     }
 
-    private static final Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*", 
+            Pattern.CASE_INSENSITIVE);
 
     static String from(final String query) {
         final Matcher matcher = fromPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;
     }
 
-    private static final Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*", 
+            Pattern.CASE_INSENSITIVE);
+    
     static String variables(final String query) {
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;

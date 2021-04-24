@@ -20,11 +20,8 @@ package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.function.Function;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -38,9 +35,12 @@ import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+
+import lombok.val;
 
 public class ApplicationFeatureIdTest {
 
@@ -54,7 +54,7 @@ public class ApplicationFeatureIdTest {
 
         @Test
         public void happyCase() throws Exception {
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
 
             assertThat(applicationFeatureId.title(), is("com.mycompany.Bar#foo"));
         }
@@ -65,9 +65,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void testNewPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
@@ -79,9 +79,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void testNewClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.CLASS));
+            assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
@@ -93,9 +93,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void using_fullyQualifiedClassName_and_MemberName() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
+            assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
@@ -104,9 +104,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void using_fullyQualifiedName() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
+            assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
@@ -114,55 +114,28 @@ public class ApplicationFeatureIdTest {
 
     }
 
-    public static class Constructor_AFT_String extends ApplicationFeatureIdTest {
-
-        @Test
-        public void whenPackage() throws Exception {
-            // when
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "com.mycompany");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
-        }
-
-        @Test
-        public void whenClass() throws Exception {
-            // when
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.CLASS, "com.mycompany.Bar");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
-        }
-
-        @Test
-        public void whenMember() throws Exception {
-            // when
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER, "com.mycompany.Bar#foo");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newMember("com.mycompany.Bar","foo")));
-        }
-    }
-
     public static class NewFeature_AFT_String extends ApplicationFeatureIdTest {
 
         @Test
         public void whenPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.PACKAGE, "com.mycompany");
+            val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "com.mycompany");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
         }
 
         @Test
         public void whenClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.CLASS, "com.mycompany.Bar");
+            val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "com.mycompany.Bar");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
         }
 
         @Test
         public void whenMember() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.MEMBER, "com.mycompany.Bar#foo");
+            val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "com.mycompany.Bar#foo");
             // then
             assertThat(applicationFeatureId, is(ApplicationFeatureId.newMember("com.mycompany.Bar","foo")));
         }
@@ -173,23 +146,23 @@ public class ApplicationFeatureIdTest {
         @Test
         public void whenPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", null, null);
+            val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", null, null);
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
         }
 
         @Test
         public void whenClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", null);
+            val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", null);
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
         }
 
         @Test
         public void whenMember() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", "foo");
+            val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", "foo");
             // then
             assertThat(applicationFeatureId, is(ApplicationFeatureId.newMember("com.mycompany.Bar","foo")));
         }
@@ -201,10 +174,11 @@ public class ApplicationFeatureIdTest {
         public void whenPackageWithNoParent() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
 
             // when
-            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
+            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentFeatureIds()
+                    .toList();
 
             // then
             assertThat(parentIds, emptyCollectionOf(ApplicationFeatureId.class));
@@ -214,29 +188,31 @@ public class ApplicationFeatureIdTest {
         public void whenPackageWithHasParent() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             // when
-            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
+            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentFeatureIds()
+                    .toList();
 
             // then
-            assertThat(parentIds, contains(ApplicationFeatureId.newPackage("com")));
+            assertThat(parentIds, contains(ApplicationFeatureId.newNamespace("com")));
         }
 
         @Test
         public void whenPackageWithHasParents() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany.bish.bosh");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.bish.bosh");
 
             // when
-            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
+            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentFeatureIds()
+                    .toList();
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newPackage("com.mycompany.bish"),
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newNamespace("com.mycompany.bish"),
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -244,15 +220,16 @@ public class ApplicationFeatureIdTest {
         public void whenClassWithParents() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // when
-            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
+            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentFeatureIds()
+                    .toList();
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -260,16 +237,17 @@ public class ApplicationFeatureIdTest {
         public void whenMember() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             // when
-            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
+            final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentFeatureIds()
+                    .toList();
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newClass("com.mycompany.Bar"),
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newType("com.mycompany.Bar"),
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -280,11 +258,11 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackageWhenParentIsNotRoot() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // when
-            final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
+            val parentPackageId = applicationFeatureId.getParentNamespaceFeatureId();
             // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
@@ -293,9 +271,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackageWhenParentIsRoot() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
             // when
-            final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
+            val parentPackageId = applicationFeatureId.getParentNamespaceFeatureId();
             // then
             assertThat(parentPackageId, is(nullValue()));
         }
@@ -303,9 +281,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenRootPackage() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("");
             // when
-            final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
+            val parentPackageId = applicationFeatureId.getParentNamespaceFeatureId();
             // then
             assertThat(parentPackageId, is(nullValue()));
         }
@@ -313,13 +291,13 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenClass() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // when
-            final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
+            val parentPackageId = applicationFeatureId.getParentNamespaceFeatureId();
 
             // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
@@ -327,30 +305,25 @@ public class ApplicationFeatureIdTest {
 
         @Test
         public void givenClassInRootPackage() throws Exception {
-            // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("Bar");
-
+            
+            // expect
+            expectedException.expect(IllegalArgumentException.class);
+            
             // when
-            final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
-
-            // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
-            assertThat(parentPackageId.getNamespace(), is(""));
-            assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
-            assertThat(parentPackageId.getMemberName(), is(nullValue()));
+            ApplicationFeatureId.newType("Bar");
         }
 
         @Test
         public void givenMember() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             // then
-            expectedException.expect(IllegalStateException.class);
+            expectedException.expect(AssertionError.class);
 
             // when
-            applicationFeatureId.getParentPackageId();
+            applicationFeatureId.getParentNamespaceFeatureId();
         }
 
     }
@@ -360,13 +333,13 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenMember() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             // when
-            final ApplicationFeatureId parentClassId = applicationFeatureId.getParentClassId();
+            val parentClassId = applicationFeatureId.getParentTypeFeatureId();
 
             // then
-            assertThat(parentClassId.getType(), is(ApplicationFeatureType.CLASS));
+            assertThat(parentClassId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(parentClassId.getNamespace(), is("com.mycompany"));
             assertThat(parentClassId.getTypeSimpleName(), is("Bar"));
             assertThat(parentClassId.getMemberName(), is(nullValue()));
@@ -375,26 +348,26 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackage() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
 
             // then
-            expectedException.expect(IllegalStateException.class);
+            expectedException.expect(AssertionError.class);
 
             // when
-            applicationFeatureId.getParentClassId();
+            applicationFeatureId.getParentTypeFeatureId();
         }
 
         @Test
         public void givenClass() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // then
-            expectedException.expect(IllegalStateException.class);
+            expectedException.expect(AssertionError.class);
 
             // when
-            applicationFeatureId.getParentClassId();
+            applicationFeatureId.getParentTypeFeatureId();
         }
     }
 
@@ -405,15 +378,15 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithSameValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newPackage("com.mycompany"));
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"));
             }
 
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany2"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
+                        ApplicationFeatureId.newNamespace("com.mycompany2"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             }
         }
@@ -423,15 +396,15 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithSameValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"));
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"));
             }
 
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo2"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo2"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             }
         }
@@ -448,8 +421,8 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar2"));
             }
         }
@@ -464,22 +437,25 @@ public class ApplicationFeatureIdTest {
         public void members() throws Exception {
             feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
 
-            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=MEMBER, "
-                    + "packageName=com.mycompany, className=Bar, memberName=b}")));
+            assertThat(feature1.toString(), 
+                    is(equalTo("ApplicationFeatureId{sort=MEMBER, "
+                    + "namespace=com.mycompany, typeSimpleName=Bar, memberName=b}")));
         }
 
         @Test
         public void classes() throws Exception {
-            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
-            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=CLASS, packageName=com.mycompany, className=B}")));
+            assertThat(feature1.toString(), 
+                    is(equalTo("ApplicationFeatureId{sort=TYPE, namespace=com.mycompany, typeSimpleName=B}")));
         }
 
         @Test
         public void packages() throws Exception {
-            feature1 = ApplicationFeatureId.newPackage("com.b");
+            feature1 = ApplicationFeatureId.newNamespace("com.b");
 
-            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=PACKAGE, packageName=com.b}")));
+            assertThat(feature1.toString(), 
+                    is(equalTo("ApplicationFeatureId{sort=NAMESPACE, namespace=com.b}")));
         }
     }
 
@@ -501,41 +477,41 @@ public class ApplicationFeatureIdTest {
             feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#a");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.Bar");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            feature2 = ApplicationFeatureId.newNamespace("com.mycompany");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
 
         @Test
         public void classes() throws Exception {
-            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.C");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.C");
             assertThat(feature1.compareTo(feature2), is(lessThan(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.B");
             assertThat(feature1.compareTo(feature2), is(equalTo(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.A");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.A");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            feature2 = ApplicationFeatureId.newNamespace("com.mycompany");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
 
         @Test
         public void packages() throws Exception {
-            feature1 = ApplicationFeatureId.newPackage("com.b");
+            feature1 = ApplicationFeatureId.newNamespace("com.b");
 
-            feature2 = ApplicationFeatureId.newPackage("com.c");
+            feature2 = ApplicationFeatureId.newNamespace("com.c");
             assertThat(feature1.compareTo(feature2), is(lessThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.b");
+            feature2 = ApplicationFeatureId.newNamespace("com.b");
             assertThat(feature1.compareTo(feature2), is(equalTo(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.a");
+            feature2 = ApplicationFeatureId.newNamespace("com.a");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
     }
@@ -545,7 +521,7 @@ public class ApplicationFeatureIdTest {
 
         public static class GET_CLASS_NAME extends FunctionsTest {
 
-            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId.Functions.GET_CLASS_NAME;
+            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId::getTypeSimpleName;
 
             @Test
             public void whenNull() throws Exception {
@@ -555,12 +531,12 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newPackage("com.mycompany")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
             }
 
             @Test
             public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newClass("com.mycompany.Bar")), is("Bar"));
+                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is("Bar"));
             }
 
             @Test
@@ -572,7 +548,8 @@ public class ApplicationFeatureIdTest {
 
         public static class GET_MEMBER_NAME extends FunctionsTest {
 
-            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId.Functions.GET_MEMBER_NAME;
+            private Function<ApplicationFeatureId, String> func = 
+                    ApplicationFeatureId::getMemberName;
 
             @Test
             public void whenNull() throws Exception {
@@ -582,12 +559,12 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newPackage("com.mycompany")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
             }
 
             @Test
             public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newClass("com.mycompany.Bar")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is(nullValue()));
             }
 
             @Test
@@ -598,94 +575,5 @@ public class ApplicationFeatureIdTest {
         }
 
     }
-
-    public static class PredicatesTest extends ApplicationFeatureIdTest {
-
-        public static class IsClassContaining extends PredicatesTest {
-
-            @SuppressWarnings("unused")
-            private ApplicationMemberType memberType;
-
-            @Mock
-            private ApplicationFeatureRepositoryDefault mockApplicationFeatureRepository;
-            @Mock
-            private ApplicationFeature mockApplicationFeature;
-
-            @Test
-            public void whenNull() throws Exception {
-                expectedException.expect(NullPointerException.class);
-
-                ApplicationFeatureId.Predicates.
-                isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                test(null);
-            }
-
-            @Test
-            public void whenNotClass() throws Exception {
-                assertThat(
-                        ApplicationFeatureId.Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(ApplicationFeatureId.newPackage("com.mycompany")),
-                        is(false));
-                assertThat(
-                        ApplicationFeatureId.Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")),
-                        is(false));
-            }
-
-            @Test
-            public void whenClassButFeatureNotFound() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    allowing(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(null));
-                }});
-
-                assertThat(
-                        ApplicationFeatureId.Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(false));
-            }
-            @Test
-            public void whenClassAndFeatureNotFoundButHasNoMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(mockApplicationFeature));
-
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberType.ACTION);
-                    will(returnValue(new TreeSet<>()));
-                }});
-
-                assertThat(
-                        ApplicationFeatureId.Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(false));
-            }
-            @Test
-            public void whenClassAndFeatureNotFoundAndHasMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(mockApplicationFeature));
-
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberType.ACTION);
-                    will(returnValue(new TreeSet<ApplicationFeatureId>() {{
-                        add(ApplicationFeatureId.newMember("com.mycompany.Bar#foo"));
-                    }}));
-                }});
-
-                assertThat(
-                        ApplicationFeatureId.Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(true));
-            }
-        }
-    }
-
 
 }

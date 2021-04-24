@@ -42,7 +42,7 @@ public final class OrphanedIncludeStatementFixer {
             final @NonNull CliConfig cliConfig,
             final @NonNull J2AdocContext j2aContext) {
 
-        if(cliConfig.getGlobal().isDryRun()) {
+        if(cliConfig.getCommands().getIndex().isDryRun()) {
             log.debug("IncludeStatementFixer: skip (dry-run)");
             return;
         }

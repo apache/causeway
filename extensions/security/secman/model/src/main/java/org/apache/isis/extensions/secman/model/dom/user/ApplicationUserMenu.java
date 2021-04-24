@@ -23,9 +23,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -84,7 +84,7 @@ public class ApplicationUserMenu {
             domainEvent = FindUsersByNameDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.10.2")
+    @ActionLayout(sequence = "100.10.2")
     public Collection<? extends ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
@@ -97,7 +97,7 @@ public class ApplicationUserMenu {
             domainEvent = NewDelegateUserDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.10.3")
+    @ActionLayout(sequence = "100.10.3")
     @Deprecated
     public ApplicationUser newDelegateUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -131,7 +131,7 @@ public class ApplicationUserMenu {
             domainEvent = NewLocalUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.10.4")
+    @ActionLayout(sequence = "100.10.4")
     @Deprecated
     public ApplicationUser newLocalUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -186,7 +186,7 @@ public class ApplicationUserMenu {
             domainEvent = AllUsersDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.10.5")
+    @ActionLayout(sequence = "100.10.5")
     public Collection<? extends ApplicationUser> allUsers() {
         return applicationUserRepository.allUsers();
     }

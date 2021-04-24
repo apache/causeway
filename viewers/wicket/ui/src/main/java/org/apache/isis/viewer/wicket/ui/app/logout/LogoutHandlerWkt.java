@@ -25,6 +25,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.security.authentication.logout.LogoutHandler;
 
 import lombok.val;
@@ -42,8 +43,9 @@ public class LogoutHandlerWkt implements LogoutHandler {
             return;
         }
         
-        if(isisInteractionTracker.isInInteractionSession()) {
-            isisInteractionTracker.currentInteractionSession()
+        if(isisInteractionTracker.isInInteraction()) {
+            isisInteractionTracker.currentInteraction()
+            .map(IsisInteraction.class::cast)
             .ifPresent(interaction->
                 interaction.setOnClose(currentWktSession::invalidateNow));
             

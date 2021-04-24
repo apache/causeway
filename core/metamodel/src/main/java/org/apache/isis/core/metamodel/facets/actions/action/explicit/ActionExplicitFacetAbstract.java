@@ -19,35 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.explicit;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.DomainEventHelper;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
-import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
 
 public abstract class ActionExplicitFacetAbstract
 extends FacetAbstract

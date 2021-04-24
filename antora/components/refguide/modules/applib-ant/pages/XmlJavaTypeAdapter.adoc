@@ -1,0 +1,27 @@
+[#javax-xml-bind-annotation-adapters-XmlJavaTypeAdapter]
+= @XmlJavaTypeAdapter (jaxb)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The JAXB `@XmlJavaTypeAdapter` annotation is used with the framework-provided
+`PersistentEntityAdapter` to instruct JAXB to serialize references to persistent entities using the canonical
+`OidDto` complex type: the object's type and its identifier.
+This is the formal XML equivalent to the `Bookmark`
+provided by the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
+
+For example:
+
+[source,java]
+----
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+public class ToDoItem ...  {
+    ...
+}
+----
+
+This annotation therefore allows view models/DTOs to have references to persistent entities; a common idiom.
+
+For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:overview.adoc#view-models[this topic]
+in the user guide.
+

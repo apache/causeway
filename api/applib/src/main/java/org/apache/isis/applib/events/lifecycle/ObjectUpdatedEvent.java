@@ -19,6 +19,11 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
+ * Broadcast when an entity has just been updated in the database, usually
+ * as the result of the ORM dirty tracking mechanisms.
+ *
+ * @see ObjectUpdatingEvent
+ *
  * @since 1.x {@index}
  */
 public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {

@@ -18,10 +18,12 @@
  */
 package org.apache.isis.core.metamodel.objectmanager;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
@@ -82,7 +84,7 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default RootOid identifyObject(ManagedObject managedObject) {
+    public default Oid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);
     }
     
@@ -95,24 +97,23 @@ public interface ObjectManager {
     }
     
     @Nullable
-    public default ObjectSpecification loadSpecification(@Nullable Object pojo) {
+    public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
         if(pojo==null) {
-            return null; 
+            return Optional.empty(); 
         }
-        return loadSpecification(pojo.getClass());
+        return specForType(pojo.getClass());
     }
     
-    @Nullable
-    default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
-        return getMetaModelContext().getSpecificationLoader().loadSpecification(domainType);
+    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> domainType) {
+        return getMetaModelContext().getSpecificationLoader().specForType(domainType);
     }
     
-    public default ManagedObject adapt(@Nullable Object pojo) {
+    public default ManagedObject adapt(final @Nullable Object pojo) {
         if(pojo==null) {
             return ManagedObject.unspecified(); 
         }
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
-        val spec = loadSpecification(pojo.getClass());
+        val spec = specForType(pojo.getClass()).orElse(null);
         if(spec==null) {
             return ManagedObject.unspecified();
         }

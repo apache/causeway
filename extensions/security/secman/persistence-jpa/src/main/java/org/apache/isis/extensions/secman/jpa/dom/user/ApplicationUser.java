@@ -46,11 +46,11 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
@@ -58,7 +58,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
@@ -77,6 +76,7 @@ import lombok.val;
 
 @Entity
 @Table(
+        schema = "isisExtensionsSecman",
         name = "ApplicationUser",
         uniqueConstraints =
             @UniqueConstraint(
@@ -148,9 +148,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.OBJECT_FORMS
-            )
-    @MemberOrder(name="Id", sequence = "1")
+            hidden=Where.OBJECT_FORMS,
+            fieldSetId="Id", 
+            sequence = "1")
     public String getName() {
         final StringBuilder buf = new StringBuilder();
         if(getFamilyName() != null) {
@@ -179,9 +179,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.PARENTED_TABLES
-            )
-    @MemberOrder(name="Id", sequence = "1")
+            hidden=Where.PARENTED_TABLES,
+            fieldSetId="Id", 
+            sequence = "1")
     @Getter @Setter
     private String username;
 
@@ -196,9 +196,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.ALL_TABLES
-            )
-    @MemberOrder(name="Name",sequence = "2.1")
+            hidden=Where.ALL_TABLES,
+            fieldSetId="Name",
+            sequence = "2.1")
     @Getter @Setter
     private String familyName;
 
@@ -213,9 +213,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.ALL_TABLES
-            )
-    @MemberOrder(name="Name", sequence = "2.2")
+            hidden=Where.ALL_TABLES, 
+            fieldSetId="Name", 
+            sequence = "2.2")
     @Getter @Setter
     private String givenName;
 
@@ -231,9 +231,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.ALL_TABLES
-            )
-    @MemberOrder(name="Name",sequence = "2.3")
+            hidden=Where.ALL_TABLES,
+            fieldSetId="Name",
+            sequence = "2.3")
     @Getter @Setter
     private String knownAs;
 
@@ -247,7 +247,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = EmailAddressDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Contact Details", sequence = "3.1")
+    @PropertyLayout(fieldSetId="Contact Details", sequence = "3.1")
     @Getter @Setter
     private String emailAddress;
 
@@ -262,7 +262,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = PhoneNumberDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Contact Details", sequence = "3.2")
+    @PropertyLayout(fieldSetId="Contact Details", sequence = "3.2")
     @Getter @Setter
     private String phoneNumber;
 
@@ -277,9 +277,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            hidden=Where.PARENTED_TABLES
-            )
-    @MemberOrder(name="Contact Details", sequence = "3.3")
+            hidden=Where.PARENTED_TABLES,
+            fieldSetId="Contact Details", 
+            sequence = "3.3")
     @Getter @Setter
     private String faxNumber;
 
@@ -294,7 +294,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = AtPathDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="atPath", sequence = "3.4")
+    @PropertyLayout(fieldSetId="atPath", sequence = "3.4")
     @Getter @Setter
     private String atPath;
 
@@ -309,7 +309,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = AccountTypeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Status", sequence = "3")
+    @PropertyLayout(fieldSetId="Status", sequence = "3")
     @Getter @Setter
     private AccountType accountType;
 
@@ -325,7 +325,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = StatusDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Status", sequence = "4")
+    @PropertyLayout(fieldSetId="Status", sequence = "4")
     @Getter @Setter
     private ApplicationUserStatus status;
 
@@ -351,7 +351,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = HasPasswordDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Status", sequence = "4")
+    @PropertyLayout(fieldSetId="Status", sequence = "4")
     @Override
     public boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
@@ -376,9 +376,8 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             domainEvent = RolesDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20")
+            defaultView="table",
+            sequence = "20")
     @Getter @Setter
     private Set<ApplicationRole> roles = new TreeSet<>();
 

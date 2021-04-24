@@ -24,12 +24,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -39,21 +37,6 @@ public class MethodUtil {
 
     public static void invoke(final Collection<Method> methods, final Object object) {
         methods.forEach(method->MethodExtensions.invoke(method, object));
-    }
-
-    public static void removeMethods(
-            Set<Method> methods,
-            Predicate<Method> filter,
-            Consumer<Method> onMatch) {
-
-        methods.removeIf(method -> { 
-            val doRemove = filter.test(method);
-            if(doRemove) {
-                onMatch.accept(method);
-            }
-            return doRemove;
-        });
-        
     }
 
     public static boolean isNotStatic(final Method method) {

@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class JavaTimeOffsetDateTimeHolder_mixinProperty {
 
     private final JavaTimeOffsetDateTimeHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public java.time.OffsetDateTime prop() {
         return holder.getReadOnlyProperty();
     }

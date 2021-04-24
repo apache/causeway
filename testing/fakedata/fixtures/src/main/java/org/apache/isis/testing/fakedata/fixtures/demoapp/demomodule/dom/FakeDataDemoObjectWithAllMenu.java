@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -43,14 +42,12 @@ public class FakeDataDemoObjectWithAllMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
     public List<FakeDataDemoObjectWithAll> listAllDemoObjectsWithAll() {
         return repositoryService.allInstances(FakeDataDemoObjectWithAll.class);
     }
 
-
-    @MemberOrder(sequence = "2")
+    @ActionLayout(sequence = "2")
     public FakeDataDemoObjectWithAll createDemoObjectWithAll(
             final String name,
             final boolean someBoolean,

@@ -3,14 +3,17 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+WARNING: TODO: v2 - this documentation has not yet been updated.
+In particular, the `Clock` singleton has been removed, the `ClockService` has been refactored.
+
 It's often useful to be able to change the effective time that a test runs.
-The framework itself uses the xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] to obtain the current time, and applications should also use this domain service for a consistent view of the current time.
+The framework itself uses the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to obtain the current time, and applications should also use this domain service for a consistent view of the current time.
 
 This page describes how to change the current time, and how to set up tests using fixture scripts with a mocked time.
 
 == FixtureClock
 
-The default xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
+The default xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
 It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
 
 * If running in xref:refguide:config:about.adoc#deployment-types[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
@@ -19,18 +22,14 @@ The instance registers itself as the singleton and cannot be replaced.
 
 * If running in xref:refguide:config:about.adoc#deployment-types[prototype] mode, though, then the framework (using `FixturesLifecycleService`) will instead instantiate `FixtureClock`.
 This is a read-write clock that will behave as the system clock, unless it is explicitly set using eg, `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` etc.
-+
-WARNING: TODO: v2 - looking now to remove Clock singleton, so refactor FixtureClock and TickingFixtureClock with alternative implementations of ClockService.
 
 Moreover, the `FixtureClock` singleton can be replaced with another implementation.
 And, it is sometimes useful to replace it using `TickingFixtureClock`, a subclass that is very similar to `FixtureClock` (in that the time can be changed) but which will continue to tick once set.
 
-WARNING: TODO: v2 - this is currently broken; there is nothing that actually instantiates and installs the TickingFixtureClock.
-Will be superceded as a requirement if refactor to provide alternative ClockService implementations instead.
 
 == TickingClockFixture
 
-The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] to a known value.
+The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to a known value.
 
 Thereafter the time returned continues to tick forward (as would the real clock) until reset once more.
 

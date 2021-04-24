@@ -29,10 +29,9 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        associateWith = "readOnlyProperty"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
 @RequiredArgsConstructor
 public class PrimitiveLongHolder_updateReadOnlyProperty {
 

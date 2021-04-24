@@ -24,11 +24,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -40,17 +41,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides the ability to download the framework's internal
+ * metamodel for any domain entity or view model, in XML format.
+ *
  * @since 1.x {@index}
  */
 @Action(
         domainEvent = Object_downloadMetamodelXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
-        )
+)
 @ActionLayout(
         cssClassFa = "fa-download",
-        position = ActionLayout.Position.PANEL_DROPDOWN
-        )
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "700.2"
+)
 @RequiredArgsConstructor
 public class Object_downloadMetamodelXml {
 
@@ -59,13 +67,10 @@ public class Object_downloadMetamodelXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
-
-            // PARAM 0
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
         val pkg = holder.getClass().getPackage().getName();
@@ -90,13 +95,15 @@ public class Object_downloadMetamodelXml {
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    // -- PARAM 0
 
+    /**
+     * Defaults to the simple name of the domain object's class.
+     */
     public String default0Act() {
         return holder.getClass().getSimpleName();
     }
 
-    // -- DEPENDENCIES
+
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;

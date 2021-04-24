@@ -1,0 +1,48 @@
+= @DomainService
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Indicates that the class should be automatically recognized as a domain service.
+
+Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
+
+== API
+
+[source,java]
+.DomainService.java
+----
+@interface DomainService {
+  NatureOfService nature() default NatureOfService.VIEW;     // <.>
+  String objectType() default "";     // <.>
+}
+----
+
+<.> xref:#nature[nature]
++
+--
+The nature of this service, either in the UI or REST only
+--
+<.> xref:#objectType[objectType]
++
+--
+Provides a unique abbreviation for the object type's, eg "customer.CustomerService" for CustomerService.
+--
+
+== Members
+
+[#nature]
+=== nature
+
+The nature of this service, either in the UI or REST only
+
+[#objectType]
+=== objectType
+
+Provides a unique abbreviation for the object type's, eg "customer.CustomerService" for CustomerService.
+
+This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
+
+include::hooks/DomainService_010-examples-and-usage.adoc[]
+
+include::hooks/DomainService_021-objectType.adoc[]
+
+include::hooks/DomainService_022-nature.adoc[]

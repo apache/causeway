@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 

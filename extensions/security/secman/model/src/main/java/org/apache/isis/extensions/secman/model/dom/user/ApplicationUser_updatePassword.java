@@ -21,10 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -38,17 +39,17 @@ import lombok.val;
 
 @Action(
         domainEvent = UpdatePasswordDomainEvent.class, 
-        associateWith = "hasPassword",
-        associateWithSequence = "10")
+        associateWith = "hasPassword")
+@ActionLayout(sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @ParameterLayout(named="Existing password")
             final Password existingPassword,
@@ -57,42 +58,42 @@ public class ApplicationUser_updatePassword {
             @ParameterLayout(named="Re-enter password")
             final Password newPasswordRepeat) {
         
-        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
-        return holder;
+        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public boolean hideAct() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
+        return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
 
-        if(!holder.isForSelfOrRunAsAdministrator()) {
+        if(!target.isForSelfOrRunAsAdministrator()) {
             return "Can only update password for your own user account.";
         }
-        if (!holder.isHasPassword()) {
+        if (!target.isHasPassword()) {
             return "Password must be reset by administrator.";
         }
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(
             final Password existingPassword,
             final Password newPassword,
             final Password newPasswordRepeat) {
 
-        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+        if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
 
         val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
         
-        val encryptedPassword = holder.getEncryptedPassword();
+        val encryptedPassword = target.getEncryptedPassword();
         
-        if(holder.getEncryptedPassword() != null) {
+        if(target.getEncryptedPassword() != null) {
             if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
                 return "Existing password is incorrect";
             }

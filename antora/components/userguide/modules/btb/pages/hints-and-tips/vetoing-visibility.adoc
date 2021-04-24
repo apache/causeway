@@ -1,0 +1,33 @@
+[[vetoing-visibility]]
+= Vetoing Visibility
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The framework provides a number of actions (domain service menu items or mixins) that you may wish to suppress from the user interface.
+This can be done by implementing a "vetoing subscriber" design pattern.
+
+For example, the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] has a related interface, xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], for objects that holds a reference to another domain object implicitly as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark].
+
+The xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object] mixin surfaces the related domain object as an "object" property of the `BookmarkHolder`.
+
+If you want to suppress this property, a vetoing subscriber can listen to the associated domain event of the mixin:
+
+[source, java]
+.HideBookmarkHolderObjectProperty.java
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class HideBookmarkHolderObjectProperty {
+
+    @EventListener(BookmarkHolder_object.PropertyDomainEvent.class)
+    public void on(BookmarkHolder_object.PropertyDomainEvent ev) {
+        ev.hide();
+    }
+}
+----
+
+These domain events will often have a superclass, in which case the vetoing subscriber can be as broad-brush or fine-grained as required.

@@ -20,6 +20,7 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Stream;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -28,7 +29,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import lombok.NonNull;
 
 public final class AnnotationDeclarations {
-    
+
     // ANNOTATION MEMBER
 
     public static <T> Stream<AnnotationMemberDeclaration> streamAnnotationMemberDeclarations(
@@ -37,12 +38,13 @@ public final class AnnotationDeclarations {
                 .filter(member->member instanceof AnnotationMemberDeclaration)
                 .map(AnnotationMemberDeclaration.class::cast);
     }
-    
+
     // -- FIELDS
 
     public static <T> Stream<FieldDeclaration> streamFieldDeclarations(
             final @NonNull AnnotationDeclaration typeDeclaration) {
-        return typeDeclaration.getFields().stream();
+        return typeDeclaration.getFields()
+                .stream();
     }
 
     // -- METHODS

@@ -31,12 +31,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.MethodReferences.Call0;
-import org.apache.isis.applib.services.MethodReferences.Call1;
-import org.apache.isis.applib.services.MethodReferences.Call2;
-import org.apache.isis.applib.services.MethodReferences.Call3;
-import org.apache.isis.applib.services.MethodReferences.Call4;
-import org.apache.isis.applib.services.MethodReferences.Call5;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call0;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call1;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call2;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call3;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call4;
+import org.apache.isis.applib.services.queryresultscache.MethodReferences.Call5;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.commons.internal.base._Casts;

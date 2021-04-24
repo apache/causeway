@@ -22,9 +22,9 @@ import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -46,7 +46,7 @@ public class BulkUpdateMenuForDemoToDoItem {
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    @MemberOrder(sequence="90.1")
+    @ActionLayout(sequence="90.1")
     public BulkUpdateManagerForDemoToDoItem bulkUpdateManager() {
         BulkUpdateManagerForDemoToDoItem manager = new BulkUpdateManagerForDemoToDoItem();
         manager.setFileName("toDoItems.xlsx");

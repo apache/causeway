@@ -19,12 +19,15 @@
 package org.apache.isis.testdomain.applayer;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -32,7 +35,6 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -44,19 +46,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
+import org.apache.isis.core.security.util.XrayUtil;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -81,8 +88,8 @@ public class ApplicationLayerTestFactory {
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
-    private final InteractionFactory isisInteractionFactory;
-    private final Provider<EntityChangeTrackerDefault> entityChangeTrackerProvider;
+    private final InteractionFactory interactionFactory;
+    private final InteractionTracker interactionTracker;
     
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
@@ -113,22 +120,42 @@ public class ApplicationLayerTestFactory {
     public List<DynamicTest> generateTests(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
-        return _Lists.of(
-//                dynamicTest("No initial Transaction with Test Execution", 
-//                        this::no_initial_tx_context),
-                programmaticTest("Programmatic Execution", 
-                        given, verifier, this::programmaticExecution),
+
+        val dynamicTests = Can.<DynamicTest>of(
+                
+                interactionTest("Programmatic Execution", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC, 
+                        this::programmaticExecution),
                 interactionTest("Interaction Api Execution", 
-                        given, verifier, this::interactionApiExecution),
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::interactionApiExecution),
                 interactionTest("Wrapper Sync Execution w/o Rules", 
-                        given, verifier, this::wrapperSyncExecution),
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperSyncExecutionNoRules),
                 interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, this::wrapperSyncExecutionWithFailure),
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperSyncExecutionWithFailure),
                 interactionTest("Wrapper Async Execution w/o Rules", 
-                        given, verifier, this::wrapperAsyncExecution),
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperAsyncExecutionNoRules),
                 interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, this::wrapperAsyncExecutionWithFailure)
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperAsyncExecutionWithFailure)
                 );
+
+        return XrayUi.isXrayEnabled()
+                ? dynamicTests
+                        .add(dynamicTest("wait for xray viewer", XrayUi::waitForShutdown))
+                        .toList()
+                : dynamicTests
+                        .toList();
+        
     }
     
     // -- INTERACTION TEST FACTORY
@@ -142,48 +169,40 @@ public class ApplicationLayerTestFactory {
             final String displayName,
             final Runnable given,
             final Consumer<VerificationStage> verifier,
+            final VerificationStage onSuccess,
             final InteractionTestRunner interactionTestRunner) {
+        
         return dynamicTest(displayName, ()->{
+
+            xrayAddTest(displayName);
             
-            val isSuccesfulRun = isisInteractionFactory.callAnonymous(()->
-                    interactionTestRunner.run(given, verifier));
+            assertFalse(interactionFactory.isInInteraction());
+            assert_no_initial_tx_context();
             
-            isisInteractionFactory.closeSessionStack();
+            final boolean isSuccesfulRun = interactionFactory.callAnonymous(()->{
+                val currentInteraction = interactionTracker.currentInteraction();
+                xrayEnterInteraction(currentInteraction);
+                val result = interactionTestRunner.run(given, verifier);
+                xrayExitInteraction();
+                return result;
+            });
+            
+            interactionFactory.closeSessionStack();
             
             if(isSuccesfulRun) {
-                verifier.accept(VerificationStage.POST_INTERACTION);
+                verifier.accept(onSuccess);
             }
                         
-        });
-    }
-
-    private DynamicTest programmaticTest(
-            final String displayName,
-            final Runnable given,
-            final Consumer<VerificationStage> verifier,
-            final InteractionTestRunner interactionTestRunner) {
-        return dynamicTest(displayName, ()->{
-            
-            val isSuccessfulRun = isisInteractionFactory.callAnonymous(()->
-                        interactionTestRunner.run(given, verifier));
-                    
-            isisInteractionFactory.closeSessionStack();
-            
-            if(isSuccessfulRun) {
-                verifier.accept(VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC);
-            }
-
         });
     }
     
 
     // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED 
 
-//    boolean no_initial_tx_context() {
-//        val txState = transactionService.currentTransactionState();
-//        assertEquals(TransactionState.NONE, txState);
-//        return true;
-//    }
+    void assert_no_initial_tx_context() {
+        val txState = transactionService.currentTransactionState();
+        assertEquals(TransactionState.NONE, txState);
+    }
 
     // -- TESTS - WRAPPER SYNC
 
@@ -192,24 +211,22 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
         
         // given
-        val book = setupForJdo();
-        given.run();
-
+        setupBookForJdo();
+        
         preCommitListener.setVerifier(verifier);
         
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+        withBookDoTransactional(book->{
+        
+            given.run();
 
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
             repository.persist(book);
             
-            // trigger publishing of entity changes (flush queue)
-            entityChangeTrackerProvider.get().onPreCommit(null);
-            
         });
         
         preCommitListener.setVerifier(null);
-
+       
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
@@ -226,19 +243,25 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
 
         // given
-        val book = setupForJdo();
-        given.run();
-
-        preCommitListener.setVerifier(verifier);
+        setupBookForJdo();
         
         // when
-        val managedObject = objectManager.adapt(book);
-        val propertyInteraction = PropertyInteraction.start(managedObject, "name", Where.OBJECT_FORMS);
-        val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-        val propertyModel = managedProperty.startNegotiation();
-        val propertySpec = managedProperty.getSpecification();
-        propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-        propertyModel.submit();
+        withBookDoTransactional(book->{
+            
+            given.run();
+
+            preCommitListener.setVerifier(verifier);
+            
+            // when
+            val bookAdapter = objectManager.adapt(book);
+            val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+            val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+            val propertyModel = managedProperty.startNegotiation();
+            val propertySpec = managedProperty.getSpecification();
+            propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+            propertyModel.submit();    
+            
+        });
         
         preCommitListener.setVerifier(null);
 
@@ -250,21 +273,27 @@ public class ApplicationLayerTestFactory {
 
     // -- TESTS - WRAPPER SYNC
 
-    private boolean wrapperSyncExecution(
+    private boolean wrapperSyncExecutionNoRules(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
 
         // given
-        val book = setupForJdo();
-        given.run();
+        setupBookForJdo();
         
-        preCommitListener.setVerifier(verifier);
+        // when
+        withBookDoTransactional(book->{
 
-        // when - running synchronous
-        val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-        wrapper.wrap(book, syncControl).setName("Book #2");
-        
-        preCommitListener.setVerifier(null);
+            given.run();
+            
+            preCommitListener.setVerifier(verifier);
+
+            // when - running synchronous
+            val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+            wrapper.wrap(book, syncControl).setName("Book #2");
+            
+            preCommitListener.setVerifier(null);
+            
+        });
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT);
@@ -277,19 +306,26 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
 
         // given
-        val book = setupForJdo();
-        given.run();
-
-        preCommitListener.setVerifier(verifier);
+        setupBookForJdo();
         
-        // when - running synchronous
-        val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
+        // when
+        withBookDoTransactional(book->{
+            
+            given.run();
 
-        assertThrows(DisabledException.class, ()->{
-            wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+            preCommitListener.setVerifier(verifier);
+            
+            // when - running synchronous
+            val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
+
+            assertThrows(DisabledException.class, ()->{
+                wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+            });
+            
+            preCommitListener.setVerifier(null);
+            
         });
         
-        preCommitListener.setVerifier(null);
 
         // then
         verifier.accept(VerificationStage.FAILURE_CASE);
@@ -299,20 +335,28 @@ public class ApplicationLayerTestFactory {
 
     // -- TESTS - WRAPPER ASYNC
 
-    private boolean wrapperAsyncExecution(
+    private boolean wrapperAsyncExecutionNoRules(
             final Runnable given,
             final Consumer<VerificationStage> verifier) throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        val book = setupForJdo();
-        given.run();
-        
-        preCommitListener.setVerifier(verifier);
-
-        // when - running asynchronous
+        setupBookForJdo();
         val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
-        wrapper.asyncWrap(book, asyncControl).setName("Book #2");
+        
+        // when
+        
+        withBookDoTransactional(book->{
 
+            given.run();
+            
+            preCommitListener.setVerifier(verifier);
+
+            // when - running asynchronous
+            wrapper.asyncWrap(book, asyncControl)
+            .setName("Book #2");
+            
+        });
+        
         asyncControl.getFuture().get(10, TimeUnit.SECONDS);
         
         preCommitListener.setVerifier(null);
@@ -328,22 +372,28 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
         
         // given
-        val book = setupForJdo();
-        given.run();
+        setupBookForJdo();
         
-        preCommitListener.setVerifier(verifier);
+        // when
+        withBookDoTransactional(book->{
 
-        // when - running synchronous
-        val asyncControl = returningVoid().withCheckRules(); // enforce rules 
+            given.run();
+            
+            preCommitListener.setVerifier(verifier);
 
-        assertThrows(DisabledException.class, ()->{
-            // should fail with DisabledException (synchronous) within the calling Thread
-            wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
+            // when - running synchronous
+            val asyncControl = returningVoid().withCheckRules(); // enforce rules 
 
-            fail("unexpected code reach");
+            assertThrows(DisabledException.class, ()->{
+                // should fail with DisabledException (synchronous) within the calling Thread
+                wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
+
+                fail("unexpected code reach");
+            });
+            
+            preCommitListener.setVerifier(null);
+            
         });
-        
-        preCommitListener.setVerifier(null);
 
         // then
         verifier.accept(VerificationStage.FAILURE_CASE);
@@ -352,8 +402,8 @@ public class ApplicationLayerTestFactory {
     }
     
     // -- TEST SETUP
-
-    private JdoBook setupForJdo() {
+    
+    private void setupBookForJdo() {
         
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
             val pm = pmf.getPersistenceManager();
@@ -383,26 +433,48 @@ public class ApplicationLayerTestFactory {
             
             pm.flush();
             
-            // trigger publishing of entity changes (flush queue)
-            entityChangeTrackerProvider.get().onPreCommit(null);
-            
         });
+    }
+    
+    private void withBookDoTransactional(CheckedConsumer<JdoBook> transactionalBookConsumer) {
         
-        return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->{
-            return repository.allInstances(JdoBook.class).listIterator().next();
+        xrayEnterTansaction(Propagation.REQUIRES_NEW);
+        
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+            val book = repository.allInstances(JdoBook.class).listIterator().next();
+            transactionalBookConsumer.accept(book);
+
         })
-        .presentElseFail();
+        .optionalElseFail();
+        
+        xrayExitTansaction();
+    }
+    
+    // -- XRAY
+    
+    private void xrayAddTest(String name) {
+        
+        val threadId = XrayUtil.currentThreadAsMemento();
+        
+        XrayUi.updateModel(model->{
+            model.addContainerNode(
+                    model.getThreadNode(threadId), 
+                    String.format("Test: %s", name));
+                
+        });  
         
     }
     
-//    private JdoBook setupForJdo() {
-//        // cleanup
-//        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-//        
-//        // given Inventory with 1 Book
-//        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-//        
-//        return repository.allInstances(JdoBook.class).listIterator().next();
-//    }
+    private void xrayEnterTansaction(Propagation propagation) {
+    }
+    
+    private void xrayExitTansaction() {
+    }
+    
+    private void xrayEnterInteraction(Optional<Interaction> currentInteraction) {
+    }
+    
+    private void xrayExitInteraction() {
+    }
 
 }

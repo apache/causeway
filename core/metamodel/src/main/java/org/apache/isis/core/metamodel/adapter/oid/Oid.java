@@ -20,90 +20,108 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.schema.common.v2.OidDto;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
- * An immutable identifier for a root object (subtype {@link RootOid}).
+ * An immutable identifier for a root object.
  *
- * <p>
  * @apiNote value objects (strings, ints, {@link Value}s etc) do not have a 
  * semantically meaningful {@link Oid}, but as an implementation detail 
  * might have a placeholder {@link Oid}. 
  */
 public interface Oid extends Serializable {
 
+    // -- FACTORIES
+
+    public static Oid of(final LogicalType logicalType, final String identifier) {
+        return _SimpleOid.of(
+                logicalType.getLogicalTypeName(), 
+                identifier);
+    }
+    
+    public static Oid forBookmark(final Bookmark bookmark) {
+        return _SimpleOid.of(
+                bookmark.getLogicalTypeName(), 
+                bookmark.getIdentifier());
+    }
+    
+    public static Oid forDto(final OidDto oidDto) {
+        return _SimpleOid.of(
+                oidDto.getType(), 
+                oidDto.getId());
+    }
+    
+    public static Oid forLogicalTypeNameAndIdentifier(
+            final String logicalTypeName,
+            final String identifier) {
+        return _SimpleOid.of(
+                logicalTypeName, 
+                identifier);
+    }
+    
+    // -- PARTS THAT MAKE UP THE OID
+    
+    /**
+     * The logical-type-name of the domain object this instance is representing.
+     * When representing a value returns {@code null}.
+     */
+    String getLogicalTypeName();
+
+    
+    String getIdentifier();
+    
+    // -- STRINGIFY
+    
     /**
      * A string representation of this {@link Oid}.
      */
-    String enString();
+    default String stringify() {
+        return _OidMarshaller.marshal(this);
+    }
 
-    default boolean isValue() {
-        return false; // default, only overridden by Oid_Value
+    // -- PARSING 
+    
+    public static Oid parseUrlEncoded(final String urlEncodedOidStr) {
+        final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
+        return parse(oidStr);
+    }
+
+    public static Oid parse(final String oidStr) {
+        return _OidMarshaller.unmarshal(oidStr);
+    }
+
+    // -- OBJECT LOADING
+    
+    default public Optional<ManagedObject> loadObject(final @NonNull MetaModelContext mmc) {
+        
+        val objectId = this.getIdentifier();
+        val specLoader = mmc.getSpecificationLoader(); 
+        val objManager = mmc.getObjectManager();
+        
+        return specLoader
+                .specForLogicalTypeName(this.getLogicalTypeName())
+                .map(spec->objManager.loadObject(
+                        ObjectLoader.Request.of(spec, objectId)));
+        
     }
     
-    /**
-     * {@link ObjectSpecId} of the domain object this instance is representing, or when parented,
-     * the ObjectSpecId of the parent domain object. When representing a value returns {@code null}.   
-     */
-    ObjectSpecId getObjectSpecId();
-
-    // -- MARSHALLING
-
-    public static interface Marshaller {
-
-        String marshal(RootOid rootOid);
-
-        String joinAsOid(String domainType, String instanceId);
-
+    // -- CONVERSION
+    
+    public default Bookmark asBookmark() {
+        return Bookmark.of(getLogicalTypeName(), getIdentifier());
     }
-
-    public static Marshaller marshaller() {
-        return Oid_Marshaller.INSTANCE;
-    }
-
-    // -- UN-MARSHALLING
-
-    public static interface Unmarshaller {
-
-        <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType);
-
-        String splitInstanceId(String oidStr);
-
-    }
-
-    public static Unmarshaller unmarshaller() {
-        return Oid_Marshaller.INSTANCE;
-    }
-
-    // -- FACTORIES
-
-    /** for convenience*/
-    public static final class Factory {
-
-        public static RootOid value() {
-            return Oid_Value.INSTANCE;
-        }
-
-        public static RootOid ofBookmark(final Bookmark bookmark) {
-            return Oid_Root.of(
-                    ObjectSpecId.of(bookmark.getObjectType()), 
-                    bookmark.getIdentifier());
-        }
-        
-        public static RootOid ofDto(final OidDto oid) {
-            return Oid_Root.of(
-                    ObjectSpecId.of(oid.getType()), 
-                    oid.getId());
-        }
-
-        public static RootOid root(final ObjectSpecId objectSpecId, final String identifier) {
-            return Oid_Root.of(objectSpecId, identifier);
-        }
-        
-    }
+    
 
 }

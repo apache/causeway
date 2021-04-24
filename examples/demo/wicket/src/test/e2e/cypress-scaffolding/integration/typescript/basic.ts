@@ -1,4 +1,4 @@
-describe('learning typescript', () => {
+describe('learning TypeScript', () => {
 
     it('should perform basic google search', () => {
         cy.visit('https://google.com');

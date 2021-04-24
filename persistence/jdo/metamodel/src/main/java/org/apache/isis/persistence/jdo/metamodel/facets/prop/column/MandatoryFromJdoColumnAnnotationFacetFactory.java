@@ -34,12 +34,9 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -122,87 +119,71 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+            
+            final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
+            if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+                return;
+            }
+
+            final Stream<ObjectAssociation> associations = objectSpec
+                    .streamAssociations(MixedIn.EXCLUDED)
+                    .filter(ObjectAssociation.Predicates.PROPERTIES);
+
+            associations
+            // skip checks if annotated with JDO @NotPersistent
+            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+            .forEach(association->validateMandatoryFacet(association));
+            
+        });
     }
+    
+    private static void validateMandatoryFacet(ObjectAssociation association) {
+        MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
 
-    private Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.Visitor() {
+        MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
+        if(underlying == null) {
+            return;
+        }
 
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                validate(objectSpec, validator);
-                return true;
+        if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
+
+            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+                return;
             }
 
-            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
-
-                final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
-                if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
-                    return;
-                }
-
-                final Stream<ObjectAssociation> associations = objectSpec
-                        .streamAssociations(MixedIn.EXCLUDED)
-                        .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-                associations
-                // skip checks if annotated with JDO @NotPersistent
-                .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-                .forEach(association->validateMandatoryFacet(association, validator));
+            if(underlying.isInvertedSemantics()) {
+                // ie @Optional
+                ValidationFailure.raiseFormatted(
+                        association,
+                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
+                        association.getIdentifier().getFullIdentityString());
+            } else {
+                ValidationFailure.raiseFormatted(
+                        association,
+                        "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
+                        association.getIdentifier().getFullIdentityString());
             }
+        }
 
-            private void validateMandatoryFacet(ObjectAssociation association, MetaModelValidator validator) {
-                MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
+        if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
 
-                MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
-                if(underlying == null) {
-                    return;
-                }
-
-                if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
-
-                    if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                        return;
-                    }
-
-                    if(underlying.isInvertedSemantics()) {
-                        // ie @Optional
-                        validator.onFailure(
-                                association,
-                                association.getIdentifier(),
-                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
-                    } else {
-                        validator.onFailure(
-                                association,
-                                association.getIdentifier(),
-                                "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
-                    }
-                }
-
-                if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
-
-                    if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                        return;
-                    }
-                    if(underlying.isInvertedSemantics()) {
-                        // ie @Optional
-                        validator.onFailure(
-                                association,
-                                association.getIdentifier(),
-                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
-                    } else {
-                        validator.onFailure(
-                                association,
-                                association.getIdentifier(),
-                                "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
-                    }
-                }
+            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+                return;
             }
-        };
+            if(underlying.isInvertedSemantics()) {
+                // ie @Optional
+                ValidationFailure.raiseFormatted(
+                        association,
+                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
+                        association.getIdentifier().getFullIdentityString());
+            } else {
+                ValidationFailure.raiseFormatted(
+                        association,
+                        "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
+                        association.getIdentifier().getFullIdentityString());
+            }
+        }
     }
 
 }

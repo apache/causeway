@@ -51,7 +51,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * collection of entity}s rendered using as a table of summary values with a
  * chart alongside.
  */
-public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
+public class CollectionContentsAsSummary 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
+implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";
 

@@ -40,6 +40,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -48,7 +49,6 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
@@ -198,7 +198,7 @@ implements
     
     @Override
     public Optional<TransactionId> currentTransactionId() {
-        return interactionTracker.getConversationId()
+        return interactionTracker.getInteractionId()
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
                     val persistenceContext = "";
@@ -232,7 +232,7 @@ implements
     
     /** INTERACTION BEGIN BOUNDARY */
     @Override
-    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         txCounter.get().reset();
     }
     
@@ -244,7 +244,7 @@ implements
     
     /** INTERACTION END BOUNDARY */
     @Override
-    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+    public void afterLeavingTransactionalBoundary(Interaction interaction) {
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards? 
     }
     

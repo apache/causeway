@@ -33,6 +33,7 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm;
+import demoapp.dom.services.core.messageservice.MessageServiceDemoVm;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdo;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoEntities;
 import demoapp.dom.services.core.xmlSnapshotService.XmlSnapshotParentVm;
@@ -53,7 +54,11 @@ public class ServicesMenu {
         return factoryService.viewModel(new EventBusServiceDemoVm());
     }
 
-
+    @Action
+    @ActionLayout(cssClassFa="fa-sticky-note")
+    public MessageServiceDemoVm messageService(){
+        return factoryService.viewModel(new MessageServiceDemoVm());
+    }
 
     @Action
     @ActionLayout(cssClassFa="fa-bomb")
@@ -61,15 +66,11 @@ public class ServicesMenu {
         return factoryService.viewModel(new ErrorReportingServiceDemoVm());
     }
 
-
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-gift", describedAs = "Formal object interactions + async")
     public WrapperFactoryJdo wrapperFactory(){
         return wrapperFactoryJdoEntities.first();
     }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot object graphs as XML")

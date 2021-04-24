@@ -26,9 +26,11 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
 /**
- * An immutable, serializable value type, that holds details about a user's authentication. 
- * 
- * @since 2.0
+ * An immutable, serializable value type, that holds details about a user's authentication.
+ *
+ * @apiNote This is a framework internal class and so does not constitute a formal API.
+ *
+ * @since 2.0 {@index}
  */
 public interface Authentication extends Serializable {
 
@@ -51,19 +53,19 @@ public interface Authentication extends Serializable {
 
     /**
      * The (programmatically) simulated (or actual) user, belonging to this session.
-     * 
-     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
-     * own simulated (or actual) user 
+     *
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
+     * own simulated (or actual) user
      */
     default UserMemento getUser() {
         return getExecutionContext().getUser();
     }
-    
+
     /**
      * The {@link ExecutionContext} (programmatically) simulated (or actual), belonging to this session.
-     * 
-     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
-     * own simulated (or actual) clock 
+     *
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
+     * own simulated (or actual) clock
      */
     ExecutionContext getExecutionContext();
 
@@ -87,7 +89,7 @@ public interface Authentication extends Serializable {
     }
 
     // -- WITHERS
-    
+
     /**
      * Returns a copy with given {@code executionContext}.
      * @param executionContext

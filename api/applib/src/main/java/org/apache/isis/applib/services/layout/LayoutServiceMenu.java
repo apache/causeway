@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -73,9 +72,8 @@ public class LayoutServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Object Layouts (ZIP)"
-            )
-    @MemberOrder(sequence="500.400.1")
+            named = "Download Object Layouts (ZIP)",
+            sequence="500.400.1")
     // ...
     public Blob downloadLayouts(final Style style) {
 
@@ -100,9 +98,8 @@ public class LayoutServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Menu Bars Layout (XML)"
-            )
-    @MemberOrder(sequence="500.400.2")
+            named = "Download Menu Bars Layout (XML)",
+            sequence="500.400.2")
     // ...
     public Clob downloadMenuBarsLayout(
             @ParameterLayout(named = "File name") final String fileName,

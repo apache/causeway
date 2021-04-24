@@ -12,6 +12,15 @@ include::../section-hooks/isis.viewer.restfulobjects~pre.adoc[]
 |Default
 |Description
 |
+[[isis.viewer.restfulobjects.authentication.strategy-class-name]]
+isis.viewer.restfulobjects. +
+authentication.strategy-class-name
+
+| 
+| Defaults to ``AuthenticationStrategyBasicAuth``.
+
+
+|
 [[isis.viewer.restfulobjects.base-uri]]
 isis.viewer.restfulobjects. +
 base-uri

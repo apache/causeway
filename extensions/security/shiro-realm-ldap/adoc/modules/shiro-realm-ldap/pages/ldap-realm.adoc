@@ -1,0 +1,145 @@
+= Ldap Realm
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Apache Isis ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
+
+image::configuration/configuring-shiro/ldap/configure-shiro-to-use-isis-ldap-realm.png[width="600px"]
+
+The LDAP database stores the user/passwords and user groups, while the `shiro.ini` file is used to map the LDAP groups to roles, and to map the roles to permissions.
+
+== Shiro Configuration
+
+To use LDAP involves telling Shiro how to instantiate the realm.  This bootstrapping info lives in the `shiro.ini`:
+
+[source,ini]
+----
+contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
+contextFactory.url = ldap://localhost:10389
+contextFactory.systemUsername = uid=admin,ou=system        # <.>
+contextFactory.systemPassword = secret
+contextFactory.authenticationMechanism = CRAM-MD5          # <.>
+contextFactory.systemAuthenticationMechanism = simple
+
+ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm   # <.>
+ldapRealm.contextFactory = $contextFactory
+
+ldapRealm.searchBase = ou=groups,o=mojo                    # <.>
+ldapRealm.groupObjectClass = groupOfUniqueNames            # <.>
+ldapRealm.uniqueMemberAttribute = uniqueMember             # <.>
+ldapRealm.uniqueMemberAttributeValueTemplate = uid={0}
+
+# optional mapping from physical groups to logical application roles
+ldapRealm.rolesByGroup = \                                 # <.>
+    LDN_USERS: user_role,\
+    NYK_USERS: user_role,\
+    HKG_USERS: user_role,\
+    GLOBAL_ADMIN: admin_role,\
+    DEMOS: self-install_role
+
+ldapRealm.permissionsByRole=\                              # <.>
+   user_role = *:ToDoItemsJdo:*:*,\
+               *:ToDoItem:*:*; \
+   self-install_role = *:ToDoItemsFixturesService:install:* ; \
+   admin_role = *
+
+securityManager.realms = $ldapRealm
+----
+<.> user accounts are searched using a dedicated service account
+<.> SASL (CRAM-MD5) authentication is used for this authentication
+<.> Apache Isis' implementation of the LDAP realm.
+<.> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
+<.> each group has an LDAP objectClass of `groupOfUniqueNames`
+<.> each group has a vector attribute of `uniqueMember`
+<.> groups looked up from LDAP can optionally be mapped to logical roles; otherwise groups are used as role names directly
+<.> roles are mapped in turn to permissions
+
+The value of `uniqueMember` is in the form `uid=xxx`, with `xxx` being the uid of the user
+* users searched under `ou=system`
+* users have, at minimum, a `uid` attribute and a password
+* the users credentials are used to verify their user/password
+
+The above configuration has been tested against http://directory.apache.org/apacheds/[ApacheDS], v1.5.7. This can be administered using http://directory.apache.org/studio/[Apache Directory Studio], v1.5.3.
+
+
+[TIP]
+.Shiro Realm Mappings
+====
+When configuring role based permission mapping, there can only be one of these entries per realm:
+
+[source,ini]
+----
+realm.groupToRolesMappings = ...
+----
+
+and
+
+[source,ini]
+----
+realm.roleToPermissionsMappings = ...
+----
+
+This forces you to put everything on one line for each of the above.  This is, unfortunately, a Shiro "feature".  And if you repeat the entries above then it's "last one wins".)
+
+To make the configuration maintainable, use "\" to separate the mappings onto separate lines in the file.  Use this technique for both group to roles mapping and role to permission mapping. If you use the '&#39; after the "," that separates the key:value pairs it is more readable.
+====
+
+
+
+
+
+
+== Externalizing role perms
+
+As an alternative to injecting the `permissionsByRole` property, the role/permission mapping can alternatively be specified by injecting a resource path:
+
+[source,ini]
+----
+ldapRealm.resourcePath=classpath:webapp/myroles.ini
+----
+
+where `myroles.ini` is in `src/main/resources/webapp`, and takes the form:
+
+[source,ini]
+----
+[roles]
+user_role = *:ToDoItemsJdo:*:*,\
+            *:ToDoItem:*:*
+self-install_role = *:ToDoItemsFixturesService:install:*
+admin_role = *
+----
+
+This separation of the role/mapping can be useful if Shiro is configured to support multiple realms (eg an LdapRealm based one and also an TextRealm)
+
+
+
+
+== Active DS LDAP tutorial
+
+The screenshots below show how to setup LDAP accounts in ApacheDS using the Apache Directory Studio.
+
+The setup here was initially based on http://krams915.blogspot.co.uk/2011/01/ldap-apache-directory-studio-basic.html[this tutorial], however we have moved the user accounts so that they are defined in a separate LDAP node.
+
+To start, create a partition in order to hold the mojo node (holding the groups):
+
+image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png[]
+
+Create the `ou=groups,o=mojo` hierarchy:
+
+image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[]
+
+Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Isis connecting to LDAP using these credentials:
+
+image::configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[]
+
+In order for SASL to work, it seems to be necessary to put users under `o=system`. (This is why the setup is slightly different than the tutorial mentioned above):
+
+image::configuration/configuring-shiro/ldap/activeds-ldap-users.png[]
+
+Configure the users into the groups:
+
+image::configuration/configuring-shiro/ldap/activeds-ldap-groups.png[]
+
+

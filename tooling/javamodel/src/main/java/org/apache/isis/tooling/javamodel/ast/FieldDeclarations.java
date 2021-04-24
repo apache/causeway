@@ -20,6 +20,8 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -38,62 +40,60 @@ import lombok.val;
 
 //TODO effective public might require more context
 public final class FieldDeclarations {
-    
+
     private static final PrinterConfiguration printingConf = new DefaultPrinterConfiguration()
             .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
-    
+
     /**
      * Returns given {@link FieldDeclaration} as normal text, without formatting.
      */
     public static String asNormalized(final @NonNull FieldDeclaration fd) {
-        
+
         //suppress initializer printing (that is assignments)
         val clone = fd.clone();
         clone.getVariables().stream()
                 .forEach(vd->vd.setInitializer((Expression)null));
-        
+
         return clone.toString(printingConf).trim();
     }
-    
+
     public static String asNormalizedName(final @NonNull FieldDeclaration fd) {
         return fd.getVariables().stream()
                 .map(VariableDeclarator::getNameAsString)
                 .collect(Collectors.joining(", "))
                 .trim();
     }
-    
+
     public static Can<TypeParameter> getTypeParameters(final @NonNull FieldDeclaration fd) {
         return Can.ofCollection(fd.findAll(TypeParameter.class));
     }
-    
+
     // -- CONTEXT
-    
+
     public static boolean isEffectivePublic(
-            final @NonNull FieldDeclaration fd, 
+            final @NonNull FieldDeclaration fd,
             final @NonNull ClassOrInterfaceDeclaration context) {
-        
+
         if(!ClassOrInterfaceDeclarations.isEffectivePublic(context)) {
             return false;
         }
         if(context.isInterface()) {
             return true;
         }
-        return !fd.isPrivate() 
-                && !fd.isProtected()
-                ;
+        return fd.isPublic();
     }
-    
+
     public static boolean isEffectivePublic(
-            final @NonNull FieldDeclaration fd, 
+            final @NonNull FieldDeclaration fd,
             final @NonNull EnumDeclaration context) {
-        
+
         if(!EnumDeclarations.isEffectivePublic(context)) {
             return false;
         }
-       
-        return !fd.isPrivate() 
+
+        return !fd.isPrivate()
                 && !fd.isProtected()
                 ;
     }
-    
+
 }

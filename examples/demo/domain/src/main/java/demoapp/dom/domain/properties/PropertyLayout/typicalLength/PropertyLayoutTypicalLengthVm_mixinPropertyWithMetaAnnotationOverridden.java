@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.typicalLength;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -30,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     typicalLength = 3                                       // <.>
     , describedAs =
-        "@TypicalLengthMetaAnnotation @PropertyLayout(...)"
+        "@TypicalLengthMetaAnnotation @PropertyLayout(...)",
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotationOverridden {
@@ -39,7 +39,6 @@ public class PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotationOverri
 
     private final PropertyLayoutTypicalLengthVm propertyLayoutTypicalLengthVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
         return propertyLayoutTypicalLengthVm.getPropertyUsingAnnotation();
     }

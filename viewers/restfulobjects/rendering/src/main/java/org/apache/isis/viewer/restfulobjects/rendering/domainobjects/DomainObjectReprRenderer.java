@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -171,15 +170,15 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         if (!(mode.isArgs())) {
 
-            val rootOidIfAny = objectAdapter.getRootOid();
+            val oidIfAny = objectAdapter.getRootOid();
             
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
-                rootOidIfAny.ifPresent(rootOid->{
-                    val oidStr = rootOid.enString();
+                oidIfAny.ifPresent(oid->{
+                    val oidStr = oid.stringify();
                     getExtensions().mapPut("oid", oidStr);
                 });
             }
@@ -192,12 +191,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
-                rootOidIfAny.ifPresent(rootOid->{
-                    Optional.ofNullable(rootOid.getObjectSpecId())
-                    .map(ObjectSpecId::asString)
-                    .ifPresent(objectSpecIdLiteral->
-                        representation.mapPut("domainType", objectSpecIdLiteral));
-                    representation.mapPut("instanceId", rootOid.getIdentifier());
+                oidIfAny.ifPresent(oid->{
+                    Optional.ofNullable(oid.getLogicalTypeName())
+                    .ifPresent(domainType->
+                        representation.mapPut("domainType", domainType));
+                    representation.mapPut("instanceId", oid.getIdentifier());
                 });
             }
         }
@@ -413,7 +411,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().getSpecId().asString();
+        final String domainType = objectAdapter.getSpecification().getLogicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

@@ -25,15 +25,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,13 +49,13 @@ public class ActionLayoutPositionVm implements HasAsciiDocDescription {
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty1;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "layout", sequence = "1")
+    @PropertyLayout(fieldSetId = "layout", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty2;

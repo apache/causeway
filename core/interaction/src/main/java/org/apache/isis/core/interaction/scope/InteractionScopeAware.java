@@ -18,23 +18,23 @@
  */
 package org.apache.isis.core.interaction.scope;
 
-import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.applib.services.iactn.Interaction;
 
 public interface InteractionScopeAware {
 
-    default void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+    default void beforeEnteringTransactionalBoundary(Interaction interaction) {
         
     }
     
-    default void afterEnteringTransactionalBoundary(InteractionSession interactionSession, boolean isSynchronizationActive) {
+    default void afterEnteringTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
         
     }
     
-    default void beforeLeavingTransactionalBoundary(InteractionSession interactionSession, boolean isSynchronizationActive) {
+    default void beforeLeavingTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
         
     }
     
-    default void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+    default void afterLeavingTransactionalBoundary(Interaction interaction) {
         
     }
     

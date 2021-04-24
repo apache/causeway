@@ -24,8 +24,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
 
@@ -116,7 +119,7 @@ implements
         val specificationLoader = model.getSpecificationLoader();
 
         val elementSpec = commonSuperClassFinder.getCommonSuperclass()
-                .map(specificationLoader::loadSpecification)
+                .flatMap(specificationLoader::specForType)
                 .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
         final int pageSize = (elementSpec != null) 
@@ -298,7 +301,7 @@ implements
     @Getter private final Variant variant;
     
     private final Class<?> typeOf;
-    private transient ObjectSpecification typeOfSpec;
+    private transient Optional<ObjectSpecification> typeOfSpec;
 
     /**
      * Populated only if {@link Variant#STANDALONE}.
@@ -418,12 +421,12 @@ implements
     protected List<ManagedObject> load() {
         return variant.load(this);
     }
-
-    public ObjectSpecification getTypeOfSpecification() {
+    
+    public @Nullable ObjectSpecification getTypeOfSpecification() {
         if (typeOfSpec == null) {
-            typeOfSpec = getSpecificationLoader().loadSpecification(typeOf);
+            typeOfSpec = getSpecificationLoader().specForType(typeOf);
         }
-        return typeOfSpec;
+        return typeOfSpec.orElse(null);
     }
 
     @Override

@@ -45,15 +45,15 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -67,15 +67,16 @@ import lombok.experimental.UtilityClass;
 
 @Entity
 @Table(
-        name = "ApplicationPermission", 
+        schema = "isisExtensionsSecman",
+        name = "ApplicationPermission",
         uniqueConstraints=
             @UniqueConstraint(
-                    name = "ApplicationPermission_role_feature_rule_UNQ", 
-                    columnNames={"roleId", "featureType", "featureFqn", "rule"})
+                    name = "ApplicationPermission_role_feature_rule_UNQ",
+                    columnNames={"roleId", "featureSort", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE, 
+            name = NamedQueryNames.PERMISSION_BY_ROLE,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role"),
@@ -88,26 +89,26 @@ import lombok.experimental.UtilityClass;
                   + "WHERE u.username = :username"
                   + "    AND p.role MEMBER OF u.roles"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_FEATURE, 
+            name = NamedQueryNames.PERMISSION_BY_FEATURE,
             query = "SELECT p "
                     + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
-                    + "WHERE p.featureType = :featureType "
+                    + "WHERE p.featureSort = :featureSort "
                     + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN, 
+            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "
                   + "   AND p.rule = :rule "
-                  + "   AND p.featureType = :featureType "
+                  + "   AND p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE, 
+            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "
                   + "   AND p.rule = :rule "
-                  + "   AND p.featureType = :featureType "),
+                  + "   AND p.featureSort = :featureSort "),
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
@@ -116,19 +117,19 @@ import lombok.experimental.UtilityClass;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-public class ApplicationPermission 
-implements 
-    org.apache.isis.extensions.secman.api.permission.ApplicationPermission, 
+public class ApplicationPermission
+implements
+    org.apache.isis.extensions.secman.api.permission.ApplicationPermission,
     Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
-    
-    @Inject private transient ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    
+
+    @Inject private transient ApplicationFeatureRepository featureRepository;
+
     @Id
     @GeneratedValue
     private Long id;
-    
+
     // -- role (property)
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
@@ -140,9 +141,9 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(hidden = Where.REFERENCES_PARENT)
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     private ApplicationRole role;
-    
+
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.ApplicationRole applicationRole) {
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
@@ -158,7 +159,7 @@ implements
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
 
@@ -173,44 +174,45 @@ implements
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
 
     // -- featureId (derived property)
 
     private Optional<ApplicationFeature> getFeature() {
-        return createFeatureId()
-                .map(featureId -> applicationFeatureRepository.findFeature(featureId));
+        return asFeatureId()
+                .map(featureId -> featureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberType of associated feature)
+    // region > type (derived, memberSort of associated feature)
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureType() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature sort} and member sort.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
-                ? getFeatureType() 
-                        : getMemberType().orElse(null);
+    @Override
+    public String getSort() {
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
+                ? getFeatureSort()
+                : getMemberSort().orElse(null);
         return e != null ? e.name(): null;
     }
 
     @Programmatic
-    private Optional<ApplicationMemberType> getMemberType() {
+    private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
-                .map(ApplicationFeature::getMemberType);
+                .flatMap(ApplicationFeature::getMemberSort);
     }
 
 
-    // -- featureType
+    // -- featureSort
 
     /**
      * The {@link ApplicationFeatureId#getType() feature type} of the
@@ -226,12 +228,12 @@ implements
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     @Setter
-    private ApplicationFeatureType featureType;
+    private ApplicationFeatureSort featureSort;
 
     @Override
     @Programmatic
-    public ApplicationFeatureType getFeatureType() {
-        return featureType;
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
     }
 
 
@@ -245,11 +247,11 @@ implements
      * of the feature.
      *
      * <p>
-     *     The combination of the {@link #getFeatureType() feature type} and the fully qualified name is used to build
+     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
      *     the corresponding {@link #getFeature() feature} (view model).
      * </p>
      *
-     * @see #getFeatureType()
+     * @see #getFeatureSort()
      */
     @Column(nullable=false)
     @Property(
@@ -262,10 +264,10 @@ implements
 
     // -- CONTRACT
 
-    private static final ObjectContract<ApplicationPermission> contract	= 
+    private static final ObjectContract<ApplicationPermission> contract	=
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
-            .thenUse("featureType", ApplicationPermission::getFeatureType)
+            .thenUse("featureSort", ApplicationPermission::getFeatureSort)
             .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
             .thenUse("mode", ApplicationPermission::getMode);
 
@@ -304,15 +306,15 @@ implements
     @UtilityClass
     public static final class Functions {
 
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
                 (ApplicationPermission input) ->
                     new ApplicationPermissionValue(
-                            input.createFeatureId().orElseThrow(_Exceptions::noSuchElement), 
-                            input.getRule(), 
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                            input.getRule(),
                             input.getMode());
 
     }
 
-    
+
 
 }

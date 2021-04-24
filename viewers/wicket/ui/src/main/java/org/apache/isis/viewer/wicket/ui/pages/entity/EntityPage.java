@@ -112,9 +112,8 @@ public class EntityPage extends PageAbstract {
     private static EntityModel newEntityModel(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
-        val entityModel = EntityModel.ofAdapter(commonContext, adapter);
-        return entityModel;
+                
+        return EntityModel.ofAdapter(commonContext, adapter);
     }
 
     private EntityPage(
@@ -191,7 +190,7 @@ public class EntityPage extends PageAbstract {
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         CssClassAppender.appendCssClassTo(entityPageContainer,
-                CssClassAppender.asCssStyle("isis-" + objectSpec.getSpecId().asString().replace(".","-")));
+                CssClassAppender.asCssStyle("isis-" + objectSpec.getLogicalTypeName().replace(".","-")));
 
         CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
         if(cssClassFacet != null) {
@@ -208,10 +207,12 @@ public class EntityPage extends PageAbstract {
         // bookmarks and breadcrumbs
         bookmarkPageIfShown(model);
         addBreadcrumbIfShown(model);
-
-        addBookmarkedPages(entityPageContainer);
-
-
+        try {
+            addBookmarkedPages(entityPageContainer);   
+        } catch (Exception e) {
+           System.err.println(e);
+           throw e;
+        }
     }
 
     protected void addWhereAmIIfShown(

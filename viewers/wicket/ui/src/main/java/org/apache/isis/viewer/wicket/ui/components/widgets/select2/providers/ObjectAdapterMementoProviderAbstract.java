@@ -31,7 +31,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -87,14 +87,15 @@ extends ChoiceProvider<ObjectMemento> {
         if (choiceMemento == null) {
             return NULL_PLACEHOLDER;
         }
-        val objectSpecId = choiceMemento.getObjectSpecId();
+        val logicalType = choiceMemento.getLogicalType();
         val spec = getCommonContext().getSpecificationLoader()
-                .lookupBySpecIdElseLoad(objectSpecId);
+                .specForLogicalType(logicalType)
+                .orElse(null);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
         if(spec != null && spec.isEncodeable()) {
-            return objectSpecId.asString() + ":" + choiceMemento.asString();
+            return logicalType.getLogicalTypeName() + ":" + choiceMemento.asString();
         } else {
             return choiceMemento.asString();
         }
@@ -177,8 +178,8 @@ extends ChoiceProvider<ObjectMemento> {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;
         }
-        val rootOid = RootOid.deString(id);
-        return getCommonContext().mementoFor(rootOid);
+        val oid = Oid.parse(id);
+        return getCommonContext().mementoFor(oid);
     }
 
 

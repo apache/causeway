@@ -33,18 +33,17 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -151,16 +150,6 @@ implements ImperativeFacet {
                 getIdentified());
     }
 
-    private static String trim(String message, final int maxLen) {
-        if(!_Strings.isNullOrEmpty(message)) {
-            message = message.substring(0, Math.min(message.length(), maxLen));
-            if(message.length() == maxLen) {
-                message += " ...";
-            }
-        }
-        return message;
-    }
-
     private Object invokeMethodElseFromCache(
             final ManagedObject targetAdapter,
             final Can<ManagedObject> arguments)
@@ -215,13 +204,13 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
 
-    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return serviceRegistry.lookupServiceElseFail(InteractionDtoServiceInternal.class);
+    private InteractionDtoFactory getInteractionDtoServiceInternal() {
+        return serviceRegistry.lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements InternalInteraction.MemberExecutor<ActionInvocation> {
+            implements InteractionInternal.MemberExecutor<ActionInvocation> {
 
         private final Can<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;

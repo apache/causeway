@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -74,12 +75,12 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
     private final Class<? extends TitleUiEvent<?>> titleUiEventClass;
     private final TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
     private final MetamodelEventService metamodelEventService;
 
     public TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
             final Class<? extends TitleUiEvent<?>> titleUiEventClass,
-                    final String translationContext,
+                    final TranslationContext translationContext,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
         super(holder);
@@ -130,10 +131,10 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         return null;
     }
 
-    private static String translationContextFor(final FacetHolder facetHolder) {
-        if(facetHolder instanceof ObjectSpecification) {
-            val facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
-            return facetHolderAsSpec.getCorrespondingClass().getCanonicalName();    
+    private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
+        if(facetHolder instanceof ObjectSpecification) {        	
+            val facetHolderAsSpec = (ObjectSpecification) facetHolder;
+            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getIdentifier());
         } 
         return null;
     }

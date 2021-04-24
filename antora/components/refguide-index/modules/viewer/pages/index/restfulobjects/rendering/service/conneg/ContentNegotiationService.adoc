@@ -1,0 +1,85 @@
+= ContentNegotiationService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Generates a representation according to HTTP `Accept` header of the request.
+
+This idea is discussed in section 34.1 of theRestful Objects specv1.0.
+
+The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain JavaScript library, say) expect, or at least works best with, a certain style of representation.
+
+== API
+
+[source,java]
+.ContentNegotiationService.java
+----
+interface ContentNegotiationService {
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+}
+----
+
+<.> xref:#buildResponse__IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
++
+--
+Returns a representation of a single object.
+--
+<.> xref:#buildResponse__IResourceContext_ManagedProperty[buildResponse(IResourceContext, ManagedProperty)]
++
+--
+Returns a representation of a single property of an object.
+--
+<.> xref:#buildResponse__IResourceContext_ManagedCollection[buildResponse(IResourceContext, ManagedCollection)]
++
+--
+Returns a representation of a single collection of an object.
+--
+<.> xref:#buildResponse__IResourceContext_ManagedAction[buildResponse(IResourceContext, ManagedAction)]
++
+--
+Returns a representation of a single action (prompt) of an object.
+--
+<.> xref:#buildResponse__IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
++
+--
+Returns a representation of a single action invocation of an object.
+--
+
+== Members
+
+[#buildResponse__IResourceContext_ManagedObject]
+=== buildResponse(IResourceContext, ManagedObject)
+
+Returns a representation of a single object.
+
+By default this representation is as per section 14.4 of the RO spec, v1.0.
+
+[#buildResponse__IResourceContext_ManagedProperty]
+=== buildResponse(IResourceContext, ManagedProperty)
+
+Returns a representation of a single property of an object.
+
+By default this representation is as per section 16.4 of the RO spec, v1.0.
+
+[#buildResponse__IResourceContext_ManagedCollection]
+=== buildResponse(IResourceContext, ManagedCollection)
+
+Returns a representation of a single collection of an object.
+
+By default this representation is as per section 17.5 of the RO spec, v1.0.
+
+[#buildResponse__IResourceContext_ManagedAction]
+=== buildResponse(IResourceContext, ManagedAction)
+
+Returns a representation of a single action (prompt) of an object.
+
+By default this representation is as per section 18.2 of the RO spec, v1.0.
+
+[#buildResponse__IResourceContext_ObjectAndActionInvocation]
+=== buildResponse(IResourceContext, ObjectAndActionInvocation)
+
+Returns a representation of a single action invocation of an object.
+
+By default this representation is as per section 19.5 of the RO spec, v1.0.

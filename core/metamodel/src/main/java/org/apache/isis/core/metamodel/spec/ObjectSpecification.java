@@ -31,8 +31,8 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -62,12 +61,10 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
@@ -90,7 +87,8 @@ extends
     ObjectActionContainer,
     ObjectAssociationContainer, 
     Hierarchical, 
-    DefaultProvider {
+    DefaultProvider,
+    HasLogicalType {
 
     final class Comparators{
         private Comparators(){}
@@ -103,7 +101,7 @@ extends
                 (final ObjectSpecification s1, final ObjectSpecification s2) -> 
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-
+    
     /**
      * @param memberId
      * @return optionally the ObjectMember associated with given {@code memberId}, 
@@ -143,19 +141,6 @@ extends
      * @return Java class this specification is associated with
      */
     Class<?> getCorrespondingClass();
-
-    /**
-     * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
-     *
-     * <p>
-     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
-     * If none has been specified then will default to the fully qualified class name (with
-     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime bytecode enhancement.
-     *
-     * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecIdElseLoad(ObjectSpecId)}}.
-     */
-    ObjectSpecId getSpecId();
 
     /**
      * Returns an (immutable) "full" identifier for this specification.

@@ -39,7 +39,8 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -48,7 +49,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -72,12 +72,11 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.Rec
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -88,13 +87,8 @@ import lombok.val;
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
 
-    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid =
-            new MetaModelValidatorForValidationFailures();
-
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
-
-
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -103,8 +97,6 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        autoCompleteMethodInvalid.setMetaModelContext(metaModelContext);
-        mixinTypeValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -135,8 +127,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         // this rule originally implemented only in AuditableFacetFromConfigurationFactory
         // but think should apply in general
         //
-        if(HasUniqueId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(cls)) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -218,11 +210,16 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 }
             }
         }
-        autoCompleteMethodInvalid.onFailure(
-                facetHolder,
-                Identifier.classIdentifier(cls),
-                "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
-                annotationName, cls.getName(), methodName, repositoryClass.getName());
+        ValidationFailure.raise(
+                facetHolder.getSpecificationLoader(),
+                Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                String.format(
+                        "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
+                        annotationName, 
+                        cls.getName(), 
+                        methodName, 
+                        repositoryClass.getName())
+                );
         return null;
     }
 
@@ -295,7 +292,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
             val mixinFacet = MixinFacetForDomainObjectAnnotation
                     .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
-            
+
             super.addFacet(mixinFacet);
         }
 
@@ -477,44 +474,40 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-
         if(getConfiguration().getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
-            addValidatorToEnsureUniqueObjectIds(programmingModel);
+            addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
         }
-
-        programmingModel.addValidator(autoCompleteMethodInvalid);
-        programmingModel.addValidator(mixinTypeValidator);
     }
 
-    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel pm) {
+    private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {
 
-        final _Multimaps.ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById =
+        final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
                 _Multimaps.newConcurrentListMultimap();
 
-        final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds =
-                new MetaModelValidatorVisiting.SummarizingVisitor(){
+        final MetaModelVisitingValidatorAbstract ensureUniqueObjectIds =
+                new MetaModelVisitingValidatorAbstract(){
 
                     @Override
-                    public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
-                        val specId = objSpec.getSpecId();
-                        collidingSpecsById.putElement(specId, objSpec);
-                        return true;
+                    public void validate(ObjectSpecification objSpec) {
+                        if(objSpec.isManagedBean()) {
+                            return;
+                        }
+                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
                     }
 
                     @Override
-                    public void summarize(MetaModelValidator validator) {
-                        for (val specId : collidingSpecsById.keySet()) {
-                            val collidingSpecs = collidingSpecsById.get(specId);
+                    public void summarize() {
+                        for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
+                            val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
                             val isCollision = collidingSpecs.size()>1;
                             if(isCollision) {
                                 val csv = asCsv(collidingSpecs);
 
                                 collidingSpecs.forEach(spec->{
-                                    validator.onFailure(
+                                    ValidationFailure.raiseFormatted(
                                             spec,
-                                            spec.getIdentifier(),
-                                            "Object type '%s' mapped to multiple classes: %s",
-                                            specId.asString(),
+                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
+                                            logicalTypeName,
                                             csv);
                                 });
 
@@ -522,7 +515,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                             }
                         }
                         // so can be revalidated again if necessary.
-                        collidingSpecsById.clear();
+                        collidingSpecsByLogicalTypeName.clear();
                     }
 
                     private String asCsv(final List<ObjectSpecification> specList) {

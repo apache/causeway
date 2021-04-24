@@ -38,11 +38,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract
@@ -72,16 +73,19 @@ implements MetaModelRefiner {
         programmingModel.addValidator(newValidatorVisitor());
     }
 
-    private Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.SummarizingVisitor() {
-
+    private MetaModelValidator newValidatorVisitor() {
+        return new MetaModelVisitingValidatorAbstract() {
+            
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                
+            public void validate(@NonNull ObjectSpecification spec) {
+                if(spec.isManagedBean()) {
+                    return;
+                }
+                             
                 // as an optimization only checking declared members (skipping inherited ones)                 
-                objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
+                spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
                     
@@ -95,34 +99,35 @@ implements MetaModelRefiner {
                     // TODO might collide with type level annotations as well 
                     
                 });
-
-                return true; // keep searching
             }
 
             @Override
-            public void summarize(MetaModelValidator validator) {
+            public void summarize() {
                 if(actionsHavingHomePageFacet.size()>1) {
                     
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
                             .map(ObjectAction::getIdentifier)
-                            .map(Identifier::toClassAndNameIdentityString)
+                            .map(Identifier::getFullIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
                     
                     for (val objectAction : actionsHavingHomePageFacet.values()) {
-                        val actionIdentifier = objectAction.getIdentifier(); 
-                        val actionId = actionIdentifier.toClassAndNameIdentityString();
+                        val actionId = objectAction.getIdentifier().getFullIdentityString(); 
                         val colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
-                        validator.onFailure(
-                                objectAction,
-                                actionIdentifier,
-                                "%s: other actions also specified as home page: %s ",
-                                actionId, colission);
+                        ValidationFailure.raise(
+                                objectAction, 
+                                String.format(
+                                        "%s: other actions also specified as home page: %s ",
+                                        actionId, 
+                                        colission));
+                        
                     }
                 }
             }
+
         };
+
     }
 }

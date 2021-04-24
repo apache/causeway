@@ -23,9 +23,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -68,7 +68,7 @@ public class  ApplicationRoleMenu {
             domainEvent = FindRolesDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.20.1")
+    @ActionLayout(sequence = "100.20.1")
     public Collection<? extends ApplicationRole> findRoles(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
             @ParameterLayout(named = "Search", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
@@ -84,7 +84,7 @@ public class  ApplicationRoleMenu {
             domainEvent = NewRoleDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
-    @MemberOrder(sequence = "100.20.2")
+    @ActionLayout(sequence = "100.20.2")
     public ApplicationRole newRole(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
             @ParameterLayout(named="Name", typicalLength=ApplicationRole.TYPICAL_LENGTH_NAME)
@@ -103,7 +103,7 @@ public class  ApplicationRoleMenu {
             domainEvent = AllRolesDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.20.3")
+    @ActionLayout(sequence = "100.20.3")
     public Collection<? extends ApplicationRole> allRoles() {
         return applicationRoleRepository.allRoles();
     }

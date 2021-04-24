@@ -9,11 +9,20 @@ While this is appropriate for the object view, it can be cumbersome within table
 
 If an object's title is specified with from `@Title` annotation then the Wicket viewer will (for parented collections) automatically "contextualize" a title by excluding the part of the title corresponding to a reference to the owning (parent) object.
 
-In other words, suppose we have:
+For example, suppose we have:
 
-image::how-tos/ui-hints/object-titles-and-icons/cust-order-product.png[width="579px"]
+[plantuml]
+----
+hide empty members
+class Customer {}
+class Order {}
+class Product {}
 
-so that `Customer` has a collection of `Order`s:
+Customer <-d-> "0..*" Order
+Product <-d[norank]-> "0..*" Order
+----
+
+so that `Customer` has a collection of ``Order``s:
 
 [source,java]
 ----
@@ -23,7 +32,7 @@ public class Customer {
 }
 ----
 
-and `Product` also has a collection of `Order`s (please forgive the suspect domain modelling in this example (!)):
+and `Product` also has a collection of ``Order``s:
 
 [source,java]
 ----
@@ -67,12 +76,11 @@ public class Order {
     ...
 }
 ----
-
 ====
 
 The above annotations mean that titles usually "just work", altering according to the context in which they are viewed.
 
 [TIP]
 ====
-It is also possible to configure the Wicket viewer to xref:vw:ROOT:configuration-properties.adoc#presentation.[abbreviate titles or suppress them] completely.
+It is also possible to configure the Wicket viewer to xref:vw:ROOT:setup-and-configuration.adoc#presentation[abbreviate titles or suppress them] completely.
 ====

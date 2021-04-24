@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.actions.Action.semantics;
 
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,21 +31,18 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
-
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -81,56 +80,56 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @MemberOrder(name = "not-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyNoAnnotation;
 
     @Property()
-    @MemberOrder(name = "annotated-safe", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafe;
 
     @Property()
-    @MemberOrder(name = "annotated-safe", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafeAndRequestCacheable;
 
 
     @Property()
-    @MemberOrder(name = "annotated-idempotent", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotent;
 
     @Property()
-    @MemberOrder(name = "annotated-idempotent", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotentAreYouSure;
 
     @Property()
-    @MemberOrder(name = "annotated-non-idempotent", sequence = "5")
+    @PropertyLayout(fieldSetId = "annotated-non-idempotent", sequence = "5")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotent;
 
     @Property()
-    @MemberOrder(name = "annotated-non-idempotent", sequence = "6")
+    @PropertyLayout(fieldSetId = "annotated-non-idempotent", sequence = "6")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotentAreYouSure;
 
     @Property()
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotations;
 
     @Property()
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotationsOverridden;
@@ -138,18 +137,18 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-no-annotation[]
     @Action(
         associateWith = "propertyNoAnnotation"
-        , associateWithSequence = "1"
         // no semantics attribute              // <.>
     )
     @ActionLayout(
         named = "Increment by Amount",
         describedAs = "@Action()"
+        , sequence = "1"
     )
     public ActionSemanticsVm incrementByAmountNoAnnotation(final int amount) {
         setPropertyNoAnnotation(getPropertyNoAnnotation() + amount);
         return this;
     }
-    public int default0IncrementNoAnnotation() {
+    public int default0IncrementByAmountNoAnnotation() {
         return 1;
     }
 //end::action-no-annotation[]
@@ -158,12 +157,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.SAFE            // <.>
         , associateWith = "propertyForSafe"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Report",
         describedAs =
             "@Action(semantics = SemanticsOf.SAFE)"
+        , sequence = "1"
     )
     public ActionSemanticsVm reportPropertyForSafe() {
         messageService.informUser(String.format(
@@ -177,11 +176,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.SAFE
         , associateWith = "propertyForSafeAndRequestCacheable"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Report"
         , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
+        , sequence = "1"
     )
     public ActionSemanticsVm reportPropertyForSafeAndRequestCacheable() {
         int val = 0;
@@ -213,11 +212,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT              // <.>
         , associateWith = "propertyForIdempotent"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+        , sequence = "1"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotent(final int value) {
         setPropertyForIdempotent(value);
@@ -232,11 +231,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE              // <.>
         , associateWith = "propertyForIdempotent"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Set to Value",
         describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
+        , sequence = "1"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotentAreYouSure(final int value) {
         setPropertyForIdempotentAreYouSure(value);
@@ -251,12 +250,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT      // <.>
         , associateWith = "propertyForNonIdempotent"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Increment by Amount"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT)"
+        , sequence = "1"
     )
     public ActionSemanticsVm incrementByAmountPropertyForNonIdempotent(final int amount) {
         setPropertyForNonIdempotent(getPropertyForNonIdempotent() + amount);
@@ -271,12 +270,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
         , associateWith = "propertyForNonIdempotentAreYouSure"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Increment"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+        , sequence = "1"
     )
     public ActionSemanticsVm incrementPropertyForNonIdempotentAreYouSure() {
         setPropertyForNonIdempotentAreYouSure(
@@ -287,12 +286,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
         , associateWith = "propertyForNonIdempotentAreYouSure"
-        , associateWithSequence = "2"
     )
     @ActionLayout(
         named = "Increment by Amount"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+        , sequence = "2"
     )
     public ActionSemanticsVm incrementByAmountPropertyForNonIdempotentAreYouSure(final int amount) {
         setPropertyForNonIdempotentAreYouSure(getPropertyForNonIdempotentAreYouSure() + amount);
@@ -308,18 +307,18 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyForMetaAnnotations"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs =
             "@ActionSemanticsIdempotentMetaAnnotation"
+        , sequence = "1"
     )
     public ActionSemanticsVm setToValueMetaAnnotated(final int value) {
         setPropertyForMetaAnnotations(value);
         return this;
     }
-    public int default0UpdateMetaAnnotated() {
+    public int default0SetToValueMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -329,19 +328,19 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT      // <.>
         , associateWith = "propertyForMetaAnnotationsOverridden"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs =
             "@ActionSemanticsSafeMetaAnnotation " +
             "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+        , sequence = "1"
     )
     public ActionSemanticsVm setToValueMetaAnnotatedOverridden(final int val) {
         setPropertyForMetaAnnotationsOverridden(val);
         return this;
     }
-    public int default0UpdateMetaAnnotatedOverridden() {
+    public int default0SetToValueMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

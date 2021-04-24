@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.interaction;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.UUID;
 
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
@@ -36,13 +36,13 @@ public class InteractionDefaultTest_next {
     public void test() {
         val interaction = new IsisInteraction(UUID.randomUUID());
 
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
+        assertThat(interaction.getThenIncrementExecutionSequence(), is(0));
+        assertThat(interaction.getThenIncrementExecutionSequence(), is(1));
+        assertThat(interaction.getThenIncrementTransactionSequence(), is(0));
+        assertThat(interaction.getThenIncrementTransactionSequence(), is(1));
+        assertThat(interaction.getThenIncrementExecutionSequence(), is(2));
+        assertThat(interaction.getThenIncrementTransactionSequence(), is(2));
+        assertThat(interaction.getThenIncrementTransactionSequence(), is(3));
     }
 
 }

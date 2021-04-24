@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixed
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
@@ -71,7 +71,10 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
         pm.addFactory(step2, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
         pm.addFactory(step2, JdoNotPersistentAnnotationFacetFactory.class, Marker.JDO);
-        pm.addFactory(step2, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
+        
+        // breaks idea of logical-type-names having namespaces
+        //pm.addFactory(step2, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
+        
         pm.addFactory(step2, JdoVersionAnnotationFacetFactory.class, Marker.JDO);
 
         pm.addFactory(step2, JdoQueryAnnotationFacetFactory.class, Marker.JDO);
@@ -95,11 +98,11 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     private void addValidatorToEnsureIdentityType(ProgrammingModel pm) {
 
-        pm.addValidator((objSpec, validation) -> {
+        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
 
             final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(jpcf == null) {
-                return true;
+                return;
             }
             final IdentityType identityType = jpcf.getIdentityType();
             if(identityType == IdentityType.APPLICATION) {
@@ -115,30 +118,26 @@ public class JdoProgrammingModel implements MetaModelRefiner {
             } else {
                 // in fact, at the time of writing there are no others, so this is theoretical in case there is
                 // a future change to the JDO spec
-                validation.onFailure(
+                ValidationFailure.raiseFormatted(
                         objSpec,
-                        objSpec.getIdentifier(),
                         "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
                         objSpec.getFullIdentifier(),
                         identityType);
             }
 
-            return true;
         }, Marker.JDO);
 
     }
 
     private void addValidatorToCheckForUnsupportedAnnotations(ProgrammingModel pm) {
 
-        pm.addValidator((objSpec, validation) -> {
+        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
-                validation.onFailure(
+                ValidationFailure.raiseFormatted(
                         objSpec,
-                        objSpec.getIdentifier(),
                         "%s: JDO/DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                         objSpec.getFullIdentifier());
             }
-            return true;
         }, Marker.JDO);
 
     }

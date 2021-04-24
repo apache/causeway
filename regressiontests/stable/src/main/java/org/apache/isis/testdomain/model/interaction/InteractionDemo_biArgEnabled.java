@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,17 +30,17 @@ public class InteractionDemo_biArgEnabled {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
-    @Model
+    @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
     
-    @Model 
+    @MemberSupport 
     public int defaultA(Parameters.BiInt p) {
         return 5;
     }
     
-    @Model
+    @MemberSupport
     public int[] choicesB(Parameters.BiInt p) {
         return new int[] {1, 2, 3, 4};
     }

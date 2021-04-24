@@ -31,15 +31,14 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -58,7 +57,7 @@ public class PropertyProjectingVm implements HasAsciiDocDescription {
     }
 
 //tag::property[]
-    @MemberOrder(name = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     public PropertyProjectingChildVm getFirstChild() {
         return getChildren().get(0);
     }

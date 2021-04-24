@@ -47,4 +47,29 @@ object XmlHelper {
         return p.parseFromString(xmlStr, "application/xml")
     }
 
+    // Adopted from @link https://stackoverflow.com/questions/376373/pretty-printing-xml-with-javascript
+    fun formatXml(xml: String): String {
+        var formatted = ""
+        val reg = "/(>)(<)(/*)/g"
+        var pad = 0
+        xml.split(reg).forEach { node ->
+            var indent = 0
+            when {
+                "/.+</w[^>]*>$/".toRegex().containsMatchIn(node) -> indent = 0
+                "/^</w/".toRegex().containsMatchIn(node) -> {
+                    if (pad != 0) pad -= 1
+                }
+                "/^<w[^>]*[^/]>.*$/".toRegex().containsMatchIn(node) -> indent = 1
+                else -> indent = 0
+            }
+
+            var padding = ""
+            (1..pad).forEach { padding += "  " }
+
+            formatted += padding + node + "\r\n"
+            pad += indent
+        }
+        return formatted.substring(1, formatted.length - 3);
+    }
+
 }

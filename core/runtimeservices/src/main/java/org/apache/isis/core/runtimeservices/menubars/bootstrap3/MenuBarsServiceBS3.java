@@ -55,7 +55,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
@@ -283,7 +283,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 }
 
                 ObjectAction objectAction = serviceAndAction.getObjectAction();
-                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getSpecId().asString();
+                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getServiceActions().add(action);
@@ -374,8 +374,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 // skip if annotated to not be included in repository menu using legacy mechanism
                 .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
                 .map(objectAction->{
-                    final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
-                    String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
+                    val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                    String serviceName = layoutGroupFacet != null ? layoutGroupFacet.getGroupId(): null;
                     if(_Strings.isNullOrEmpty(serviceName)){
                         serviceName = serviceSpec.getFacet(NamedFacet.class).value();
                     }

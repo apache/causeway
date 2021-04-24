@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -39,7 +40,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
  * actions) of an entity, as per the provided {@link EntityModel}.
  */
-public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
+public class EntityHeaderPanel 
+extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
 

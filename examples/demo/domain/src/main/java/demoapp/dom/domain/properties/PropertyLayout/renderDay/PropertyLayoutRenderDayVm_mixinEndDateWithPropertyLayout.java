@@ -20,7 +20,6 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 
 import java.time.LocalDate;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
@@ -32,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     renderDay = RenderDay.AS_DAY_BEFORE         // <.>
     , describedAs =
-        "@PropertyLayout(renderDay = AS_DAY_BEFORE)"
+        "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
+    fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {
@@ -41,7 +41,6 @@ public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {
 
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public LocalDate prop() {
         return propertyLayoutRenderDayVm.getEndDate();
     }

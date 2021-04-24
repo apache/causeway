@@ -1,0 +1,82 @@
+[#lifecycle-events]
+= Lifecycle Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Lifecycle events are broadcast through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] when a domain entity is loaded, created, updated to/from the database.
+
+They allow subscribers to trigger other operations as a result of these persistence operations.
+One use case is to maintain an alternate data store.
+
+It is also possible for the domain object itself to be invoked on a callback.
+
+.Lifecycle Event Classes
+[cols="6m,6m,6a,4m", options="header"]
+|===
+
+|API
+|Event class defined by xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]
+|Published when
+|Object callback
+
+
+|xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent]
+|n/a
+|n/a - superclass of the other lifecycle events.
+|n/a
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
+|entity is first instantiated using  xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] +
+
+Also raised for view models.
+|xref:refguide:applib-methods:lifecycle.adoc#created[created()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
+|entity is retrieved from the database.
+|xref:refguide:applib-methods:lifecycle.adoc#loaded[loaded()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
+|entity is about to be saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+`#persist(...)` method.
+|xref:refguide:applib-methods:lifecycle.adoc#persisting[persisting()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
+|entity is first saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+`#persist(...)` method.
+|xref:refguide:applib-methods:lifecycle.adoc#persisted[persisted()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
+|entity has just been updated in the database.
+|xref:refguide:applib-methods:lifecycle.adoc#updating[updating()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
+|entity is about to be updated in the database.
+|xref:refguide:applib-methods:lifecycle.adoc#updated[updated()]
+
+
+|xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
+|entity is about to be deleted from the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+`#remove(...)` method.
+|xref:refguide:applib-methods:lifecycle.adoc#removing[removing()]
+
+
+
+|===
+
+
+

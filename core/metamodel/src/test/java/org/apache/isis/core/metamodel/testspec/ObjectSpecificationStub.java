@@ -24,9 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -41,7 +43,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -49,25 +50,25 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
+import lombok.Synchronized;
 import lombok.val;
 
-public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
+public class ObjectSpecificationStub 
+extends FacetHolderImpl
+implements ObjectSpecification {
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
-    private final String name;
     private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
-     * lazily derived, see {@link #getSpecId()} 
+     * lazily derived, see {@link #getLogicalType()} 
      */
-    private ObjectSpecId specId;
+    private LogicalType logicalType;
 
     private ObjectSpecification elementSpecification;
-
-    public ObjectSpecificationStub(final Class<?> type) {
-        this(type.getName());
-    }
+    private final Class<?> correspondingClass;
+    private final String name;
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
@@ -84,16 +85,13 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Class<?> getCorrespondingClass() {
-        try {
-            return Class.forName(name);
-        } catch (final ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return correspondingClass;
     }
 
-    public ObjectSpecificationStub(final String name) {
-        this.name = name;
+    public ObjectSpecificationStub(final Class<?> correspondingClass) {
+        this.correspondingClass = correspondingClass;
         title = "";
+        name = correspondingClass.getCanonicalName();
     }
 
     @Override
@@ -131,12 +129,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return name;
     }
 
+    @Synchronized
     @Override
-    public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            specId = getFacet(ObjectSpecIdFacet.class).value();
+    public LogicalType getLogicalType() {
+        if(logicalType == null) {
+            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value();
+            logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
         }
-        return specId;
+        return logicalType;
     }
 
     @Override
@@ -262,7 +262,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Identifier getIdentifier() {
-        return Identifier.classIdentifier(name);
+        return Identifier.classIdentifier(LogicalType.fqcn(correspondingClass));
     }
 
     @Override
@@ -359,7 +359,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
     
     @Override
-    public Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
+    public Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed,
+            final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
         return streamDeclaredActions(contributed);
     }

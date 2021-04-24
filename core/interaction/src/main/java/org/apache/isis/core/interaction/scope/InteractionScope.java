@@ -66,7 +66,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
         
-        if(!isisInteractionTracker.isInInteractionSession()) {
+        if(!isisInteractionTracker.isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -110,7 +110,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return isisInteractionTracker.getConversationId()
+        return isisInteractionTracker.getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }

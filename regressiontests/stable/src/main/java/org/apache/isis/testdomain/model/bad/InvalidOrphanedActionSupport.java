@@ -18,17 +18,25 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class InvalidOrphanedActionSupport {
 
     // should fail
-    @Model
+    @MemberSupport
     public boolean hideOrphaned() {
         return false;
     }
+    
+    // [ISIS-2561] should be detected as an orphaned supporting method as well
+    // with the reasoning, that if reserved prefixes are used with action names,
+    // the @Action annotation becomes mandatory
+    public String hideMe() {
+        return null;
+    }
+
     
 }

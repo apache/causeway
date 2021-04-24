@@ -42,7 +42,7 @@ import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus.oid._JdoObjectIdDecoder.JdoObjectIdDecodingRequest;
 
@@ -82,7 +82,7 @@ public final class JdoObjectIdSerializer {
             jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString());
     }
     
-    public static Object toJdoObjectId(ObjectSpecification spec, RootOid oid) {
+    public static Object toJdoObjectId(ObjectSpecification spec, Oid oid) {
         
         val request = JdoObjectIdDecodingRequest.parse(spec, oid.getIdentifier());
         

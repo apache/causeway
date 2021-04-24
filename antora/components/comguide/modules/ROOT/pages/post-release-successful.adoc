@@ -303,6 +303,7 @@ If there are patches to the documentation, we move the branches.
 We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
 All of this is changed afterwards.
 
+[#create-doc-branch]
 === Create doc branch
 
 First, we update all versions in `antora.yml`:
@@ -345,14 +346,7 @@ git revert HEAD
 
 Lastly, we update `index.html` and then `site.yml`
 
-* Update the home page of the website, `antora/supplemental-ui/index.html`
-+
-
-** update any mention of `master` -> `{page-isisrel}`
-+
-This should be the two sets of starter app instructions for helloworld and simpleapp.
-
-** update any mention of `latest` -> `{page-isisrel}`
+* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-isisrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
 +
@@ -391,86 +385,9 @@ Finally, revert the last commit (backing out changes to `site.yml`):
 git revert HEAD
 ----
 
-[#publish-website]
-== Publish website
 
-We now copy the results of the Antora website generation over to the `isis-site` repo:
+include::partial$publish-and-index-website.adoc[]
 
-* in the `isis-site` repo, check out the `asf-site` branch:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../isis-site
-
-git checkout asf-site
-git pull --ff-only
-----
-
-* still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
-+
-[source,bash,subs="attributes+"]
-----
-pushd content
-for a in $(ls -1 | grep -v schema | grep -v versions)
-do
-    rm -rf $a
-done
-popd
-----
-
-* Copy the generated Antora site to `isis-site` repo's `contents` directory:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../isis
-
-cp -Rf antora/target/site/* ../isis-site/content/.
-----
-
-* Back in the `isis-site` repo, commit the changes and preview:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../isis-site
-
-git add .
-git commit -m "$ISISJIRA : production changes to website"
-
-sh preview.sh
-----
-
-* If everything looks ok, then push the changes to make live, and switch back to the `isis` repo:
-+
-[source,bash,subs="attributes+"]
-----
-git push origin asf-site
-----
-
-[#update-the-algolia-search-index]
-== Update the Algolia search index
-
-Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `isis-site`:
-
-[source,ini]
-.algolia.env
-----
-APPLICATION_ID=...
-API_KEY=...
-----
-
-CAUTION: This file should not be checked into the repo, because the API_KEY allows the index to be modified or deleted.
-
-We use the Algolia-provided link:https://hub.docker.com/r/algolia/docsearch-scraper[docker image] for the crawler to perform the search (as per the link:as per https://docsearch.algolia.com/docs/run-your-own/#run-the-crawl-from-the-docker-image[docs]):
-
-[source,bash]
-----
-cd content
-docker run -it --env-file=../algolia.env -e "CONFIG=$(cat ../algolia-config.json | jq -r tostring)" algolia/docsearch-scraper
-----
-
-This posts the index up to the link:https://algolia.com[Algolia] site.
-
-NOTE: Additional config options for the crawler can be found link:https://www.algolia.com/doc/api-reference/crawler/[here].
 
 
 == Merge in release branch
@@ -491,6 +408,28 @@ git branch -d release-{page-isisrel}-RC1              # branch no longer needed
 == Bump \{page-isisrel} in `site.yml`
 
 In `site.yml` file, bump the version of `\{page-isisrel}` and also `\{page-isisprev}`, and commit.
+
+== Update starter projects
+
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:
+
+* `jdo` and `jpa`
++
+These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
+These are the branches referenced from the home page and getting started pages of the website.
+
+* `jdo-SNAPSHOT` and `jpa-SNAPSHOT`
++
+These reference the most current snapshot nightly build.
+
+The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`.
+
+Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
+
+IMPORTANT: The `jdo` and `jpa` branches should always work against the most recent release, whereas the `jdo-SNAPSHOT` and `jpa-SNAPSHOT` can reference more recently nightly builds if necessary.
+
 
 == Update the ASF Reporter website
 
@@ -536,64 +475,9 @@ Enjoy!
 link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
 
-== Update dependencies
 
-With the release complete, now is a good time to bump versions of dependencies (so that there is a full release cycle to identify any possible issues).
+== Update BASELINE for nightly builds
 
-You will probably want to create a new JIRA ticket for these updates (or if minor then use the "catch-all" JIRA ticket raised earlier for the next release).
+Nightly builds (non-ASF) are generated using CI definitions in the link:https://github.com/apache-isis-committers/isis-nightly[github.com/apache-isis-committers/isis-nightly] repo, published to the link:https://nexus.incode.work/repository/nightly-builds/[nightly-builds] repo of link:https://nexus.incode.work/[nexus.incode.work]:
 
-=== Merge in any changes from `org.apache:apache`
-
-Check (via link:http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache%22%20a%3A%22apache%22[search.maven.org]) whether there is a newer version of the Apache parent `org.apache:apache`.
-
-If there are, merge in these changes to the `isis-parent` POM.
-
-=== Update plugin versions
-
-The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Apache Isis.
-Since this goes off to the internet, it may take a minute or two to run:
-
-[source,bash]
-----
-mvn versions:display-plugin-updates > /tmp/foo
-grep "\->" /tmp/foo | /bin/sort -u
-----
-
-Review the generated output and make updates as you see fit.
-(However, if updating, please check by searching for known issues with newer versions).
-
-=== Update dependency versions
-
-The `maven-versions-plugin` should be used to determine if there are newer versions of any of Isis' dependencies.
-Since this goes off to the internet, it may take a minute or two to run:
-
-[source,bash]
-----
-mvn versions:display-dependency-updates > /tmp/foo
-grep "\->" /tmp/foo | /bin/sort -u
-----
-
-Update any of the dependencies that are out-of-date.
-That said, do note that some dependencies may show up with a new dependency, when in fact the dependency is for an old, badly named version.
-Also, there may be new dependencies that you do not wish to move to, eg release candidates or milestones.
-
-For example, here is a report showing both of these cases:
-
-[source,bash]
-----
-[INFO]   asm:asm ..................................... 3.3.1 -> 20041228.180559
-[INFO]   commons-httpclient:commons-httpclient .......... 3.1 -> 3.1-jbossorg-1
-[INFO]   commons-logging:commons-logging ......... 1.1.1 -> 99.0-does-not-exist
-[INFO]   dom4j:dom4j ................................. 1.6.1 -> 20040902.021138
-[INFO]   org.datanucleus:datanucleus-api-jdo ................ 3.1.2 -> 3.2.0-m1
-[INFO]   org.datanucleus:datanucleus-core ................... 3.1.2 -> 3.2.0-m1
-[INFO]   org.datanucleus:datanucleus-jodatime ............... 3.1.1 -> 3.2.0-m1
-[INFO]   org.datanucleus:datanucleus-rdbms .................. 3.1.2 -> 3.2.0-m1
-[INFO]   org.easymock:easymock ................................... 2.5.2 -> 3.1
-[INFO]   org.jboss.resteasy:resteasy-jaxrs ............. 2.3.1.GA -> 3.0-beta-1
-----
-
-For these artifacts you will need to search http://search.maven.org[Maven central repo] directly yourself to confirm there are no newer dependencies not shown in this list.
-
-
-
+* bump the `BASELINE` variable in link:https://github.com/apache-isis-committers/isis-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-isis-ci-nightly.yml#L15[apache-isis-ci-nightly.yml] (workflow file).

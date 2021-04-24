@@ -16,7 +16,8 @@
 #  under the License.
 
 name: refguide
+title: "Reference Guide"
 version: latest
-
-
-
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

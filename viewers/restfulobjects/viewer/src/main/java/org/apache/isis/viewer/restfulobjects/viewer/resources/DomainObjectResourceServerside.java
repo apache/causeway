@@ -60,7 +60,6 @@ import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.Acc
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -114,7 +113,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
+                .orElse(null);        
+        
         if (domainTypeSpec == null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
@@ -343,9 +344,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final String domainType,
             final String instanceId) {
         
-        val specId = ObjectSpecId.of(domainType);
-        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(specId);
-        val gridFacet = objectSpec.getFacet(GridFacet.class);
+        val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
+        .map(spec->spec.getFacet(GridFacet.class))
+        .orElse(null);
 
         if(gridFacet == null) {
             return Optional.empty();

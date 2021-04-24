@@ -23,13 +23,15 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Abstraction of show/hide, ie two buttons only one of which is visible.
  */
-public class ToggleButtonsPanel extends PanelAbstract<EntityModel> {
+public class ToggleButtonsPanel 
+extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
 

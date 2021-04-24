@@ -39,6 +39,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -76,16 +78,13 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Mock SpecificationLoader mockSpecificationLoader;
 
     protected ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
+    
     @Before
     public void setUp() throws Exception {
 
-        final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
-
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
                 /*configuration*/ null, 
-                mockSpecificationLoader, 
-                applicationFeatureFactory);
+                mockSpecificationLoader);
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
     }
@@ -93,6 +92,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
     public static class Load extends ApplicationFeatureRepositoryDefaultTest {
 
         public static class Bar {}
+        
+        private static ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
+            return new ApplicationFeatureDefault(featId);
+        }
 
         @Ignore // considering deleting this test, it's too long and too fragile.  integ tests ought to suffice.
         @Test
@@ -177,60 +180,60 @@ public class ApplicationFeatureRepositoryDefaultTest {
             context.checking(new Expectations() {{
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newClass(Bar.class.getName()))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newType(Bar.class.getName()))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someProperty"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someProperty"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someCollection"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someCollection"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someAction"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someAction"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom.feature"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org.isisaddons.module.security.dom.feature"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org.isisaddons.module.security.dom"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org.isisaddons.module.security"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org.isisaddons.module"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org.isisaddons"))));
 
                 oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
-                will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org"))));
+                will(returnValue(newApplicationFeature(ApplicationFeatureId.newNamespace("org"))));
             }});
 
             // when
             applicationFeatureRepository.createApplicationFeaturesFor(mockSpec);
 
             // then
-            final ApplicationFeature orgPkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newPackage("org"));
+            final ApplicationFeature orgPkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org"));
             assertThat(orgPkg, is(notNullValue()));
-            final ApplicationFeature orgIsisaddonsPkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newPackage("org.isisaddons"));
+            final ApplicationFeature orgIsisaddonsPkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org.isisaddons"));
             assertThat(orgPkg, is(notNullValue()));
-            final ApplicationFeature featurePkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom.feature"));
+            final ApplicationFeature featurePkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org.isisaddons.module.security.dom.feature"));
             assertThat(orgPkg, is(notNullValue()));
             assertThat(orgPkg.getContents(), contains(orgIsisaddonsPkg.getFeatureId()));
-            assertThat(featurePkg.getContents(), contains(ApplicationFeatureId.newClass(Bar.class.getName())));
+            assertThat(featurePkg.getContents(), contains(ApplicationFeatureId.newType(Bar.class.getName())));
 
             // then
-            final ApplicationFeature barClass = applicationFeatureRepository.findClass(ApplicationFeatureId.newClass(Bar.class.getName()));
+            final ApplicationFeature barClass = applicationFeatureRepository.findLogicalType(ApplicationFeatureId.newType(Bar.class.getName()));
             assertThat(barClass, is(Matchers.notNullValue()));
 
             // then the mockActThatIsHidden is not listed.
@@ -255,6 +258,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
     public static class AddClassParent extends ApplicationFeatureRepositoryDefaultTest {
 
+        private static ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
+            return new ApplicationFeatureDefault(featId);
+        }
+        
         @Override
         @Before
         public void setUp() throws Exception {
@@ -270,39 +277,15 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
         }
 
-        @Test @Ignore // ApplicationFeature is a value not an entity, hence no longer created with the Factory Service
-        public void parentNotYetEncountered() throws Exception {
-
-            // given
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
-
-            // expecting
-            final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
-
-            context.checking(new Expectations() {{
-                allowing(mockFactoryService).create(ApplicationFeature.class);
-                will(returnValue(newlyCreatedParent));
-            }});
-
-            // when
-            final ApplicationFeatureId classParentId = applicationFeatureRepository.addClassParent(classFeatureId);
-
-            // then
-            Assert.assertThat(classParentId, is(equalTo(classFeatureId.getParentPackageId())));
-            final ApplicationFeature classPackage = applicationFeatureRepository.findPackage(classParentId);
-            assertThat(classPackage, is(newlyCreatedParent));
-        }
-
         @Test
         public void parentAlreadyEncountered() throws Exception {
 
             // given
-            final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage("com.mycompany");
-            final ApplicationFeature pkg = new ApplicationFeature();
-            pkg.setFeatureId(packageId);
-            applicationFeatureRepository.packageFeatures.put(packageId, pkg);
+            final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace("com.mycompany");
+            final ApplicationFeature pkg = newApplicationFeature(packageId);
+            applicationFeatureRepository.namespaceFeatures.put(packageId, pkg);
 
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
 
 

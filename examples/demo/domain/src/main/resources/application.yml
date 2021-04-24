@@ -69,12 +69,13 @@ isis:
     wicket:
       application:
         menubars-layout-xml: demoapp/dom/menubars.layout.xml
-        favicon-url: images/favicon.png
+        favicon-url: images/gift.svg
         brand-logo-header: images/gift_48.png
         brand-logo-signin: images/gift_256.png
         name: Apache Isis Demo App
         # https://stackoverflow.com/a/38983935/56880
-        version: @project.version@
+        # in addition using special config with the project's maven-resources-plugin 
+        version: ${project.version}
         css: css/application.css
         js: scripts/application.js
         about: This application demonstrates many aspects of the Apache Isis programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
@@ -127,6 +128,9 @@ resteasy:
 
 server:
   max-http-header-size: 16KB
+  servlet:
+    session:
+      timeout: 20m
 
 spring:
   banner:

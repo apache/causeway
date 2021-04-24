@@ -24,10 +24,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
  * A serializable value object representing a set of (anonymized)
@@ -88,7 +88,7 @@ public class ApplicationPermissionValueSet implements Serializable {
      */
     private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature =
             _Multimaps.newSortedSetMultimap(
-                    Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
+                    Collections.reverseOrder(),
                     null // natural element order
                     );
 
@@ -142,8 +142,8 @@ public class ApplicationPermissionValueSet implements Serializable {
     public Evaluation evaluate(
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
-        final List<ApplicationFeatureId> pathIds = featureId.getPathIds();
-        for (final ApplicationFeatureId pathId : pathIds) {
+        
+        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             final Collection<ApplicationPermissionValue> permissionValues = permissionsByFeature.get(pathId);
             final Evaluation evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
             if(evaluation != null) {

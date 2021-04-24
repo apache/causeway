@@ -12,12 +12,12 @@ You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and l
 
 Thanks for considering to help out, your contributions are appreciated!
 
-== Recommended Workflow (github)
+== Recommended Workflow (GitHub)
 
-Apache Isis' source code is hosted in at github (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`).
+Apache Isis' source code is hosted in at GitHub (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`).
 
-As you might imagine, only committers are permitted to push changes to the github repo.
-As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] github repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
+As you might imagine, only committers are permitted to push changes to the GitHub repo.
+As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
 
 The diagram below illustrates the process:
 
@@ -29,11 +29,11 @@ That is:
 . as a one-time activity, you fork the https://github.com/apache/isis.git[github.com/apache/isis] repo into your own fork on github.com
 . as a one-time activity, you clone your fork to your local computer
 . you set the https://github.com/apache/isis.git[github.com/apache/isis] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
-* note the asymmetry here: the `upstream` repo (the Apache github repo) is *not* the same as the `origin` repo (your fork).
-. you work on your changes locally; when done, you push them to your github fork
+* note the asymmetry here: the `upstream` repo (the Apache GitHub repo) is *not* the same as the `origin` repo (your fork).
+. you work on your changes locally; when done, you push them to your GitHub fork
 . to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below).
 In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
-. Use github to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
+. Use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
 . An Apache Isis committer will review your change, and apply it if suitable.
 
 == Setting up your fork/clone
@@ -49,12 +49,12 @@ image::contributing/github-forking.png[width="600px"]
 An account isn't needed if you just clone straight from the http://github.com/apache/isis[github.com/apache/isis].
 
 Whether you've forked or not, you then need to clone the repo onto your computer.
-Github makes this very easy to do:
+GitHub makes this very easy to do:
 
-* for Windows users, we suggest you use github's 'Clone in Windows' feature
+* for Windows users, we suggest you use GitHub's 'Clone in Windows' feature
 * for Mac/Linux users, create a clone from the command line:
 
-Again, the info is easily found in the github page:
+Again, the info is easily found in the GitHub page:
 
 
 
@@ -99,7 +99,7 @@ why this is a problem, and how the patch fixes the problem when applied.
 
 == Creating the patch file
 
-If you are working without a github fork of Apache Isis, then you can create the patches from your own local git repository.
+If you are working without a GitHub fork of Apache Isis, then you can create the patches from your own local git repository.
 
 As per http://stackoverflow.com/questions/6658313/generate-a-git-patch-for-a-specific-commit[this stackoverflow question], create the patch using `git format-patch`:
 
@@ -121,7 +121,7 @@ In this example, suppose that you've decided to work on JIRA ticket #123, an enh
 The first thing to do is to make sure your local clone is up-to-date.
 We do this by retrieving new commits from upstream repo and then merging them as a fast-forward into your local branch.
 
-Irrespective of whether you are using a github fork, the upstream for your local `master` branch will be tracking the appropriate remote's `master` branch.
+Irrespective of whether you are using a GitHub fork, the upstream for your local `master` branch will be tracking the appropriate remote's `master` branch.
 So n either case, the same commands work:
 
 Alternatively, you can combine the `git fetch` and `git merge` and just use `git pull`:
@@ -196,16 +196,16 @@ Once the rebase has completed, re-run your tests to confirm that everything is s
 
 If you have your own fork, you can now simply push the changes you've made locally to your fork:
 
-This will create a corresponding branch in the remote github repo.
+This will create a corresponding branch in the remote GitHub repo.
 If you use `gitk --all`, you'll also see a `remotes/origin/ISIS-123-blobs` branch.
 
-Then, use github to raise a https://help.github.com/articles/using-pull-requests/[pull request].
+Then, use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request].
 Pull requests sent to the Apache GitHub repositories will forward a pull request e-mail to the xref:docs:support:mailing-list.adoc[dev mailing list].
 You'll probably want to sign up to the dev mailing list first before issuing your first pull request (though that isn't mandatory).
 
 The process to raise the pull request, broadly speaking:
 
-* Open a web browser to your github fork of isis
+* Open a web browser to your GitHub fork of isis
 * Select your topic branch (pushed in the previous step) so that the pull request references the topic branch.
 * Click the `Pull Request` button.
 * Check that the Apache Isis mailing list email came through.
@@ -216,9 +216,9 @@ To double check that your pull request is accepted, update your `master` branch 
 
 You can then use `gitk --all` (or `git log` if you prefer the command line) to check your contribution has been added.
 
-You can now delete your topic branch and remove the branch in your github:
+You can now delete your topic branch and remove the branch in your GitHub:
 
-Finally, you might want to push the latest changes in master back up to your github fork.
+Finally, you might want to push the latest changes in master back up to your GitHub fork.
 If so, use:
 
 === If your pull request is rejected

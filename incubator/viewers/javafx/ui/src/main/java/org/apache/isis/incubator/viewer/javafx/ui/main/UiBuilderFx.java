@@ -26,9 +26,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class UiBuilderFx implements InteractionScopeAware {
-    
+
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
 
@@ -67,35 +67,35 @@ public class UiBuilderFx implements InteractionScopeAware {
     }
 
     @Override
-    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has started
         //scene.getRoot().cursorProperty().set(Cursor.WAIT);
-        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getUniqueId());
+        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
     }
-    
+
     @Override
-    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+    public void afterLeavingTransactionalBoundary(Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has ended
         //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
-        _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getUniqueId());
+        _Probe.errOut("Interaction IS_ENDING interactionId=%s", interaction.getInteractionId());
     }
-    
+
     // -- HELPER
-        
+
     private void setupTitle(Stage stage) {
         val title = Optional.ofNullable(viewerConfig.getApplicationTitle())
                 .orElse("Unknonw Title");
         stage.setTitle(title);
     }
-    
+
     private void setupIcon(Stage stage) {
         val icon = viewerConfig.getApplicationIcon();
         if(icon==null) {
-            return; 
+            return;
         }
         stage.getIcons().add(icon);
     }
-    
-    
+
+
 
 }

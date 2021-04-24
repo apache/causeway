@@ -1,0 +1,167 @@
+= Setup and Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This section describes how to include the JDO module and set its configuration properties.
+
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-jdo.adoc[leveloffset=+1]
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleJpaEclipselink.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+== DataSource
+
+The JPA object store uses Spring to provide a `javax.sql.DataSource`.
+Normally this is done by setting the `spring.datasource` configuration properties, as described in the
+link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-connect-to-production-database-configuration[Spring Boot] documentation.
+
+For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app defines these:
+
+* for H2 (in-memory):
++
+[source,properties]
+.app.properties
+----
+spring.datasource.platform=h2
+spring.datasource.url=jdbc:h2:mem:simple
+spring.datasource.driver-class-name=org.h2.Driver
+----
+
+* for SQL Server:
++
+[source,properties]
+.app.properties
+----
+spring.datasource.platform=sqlserver
+spring.datasource.url=jdbc:sqlserver://localhost;databaseName=simpleapp
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.username=simpleapp
+spring.datasource.password=simpleapp
+----
+
+It is also possible to programmatically define a `DataSource`; see the link:https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-data-access[Spring docs] for details.
+
+
+== Create Schema
+
+It's good practice to use link:https://crate.io/docs/sql-99/en/latest/chapters/17.html#create-schema-statement[SQL schemas] as a way to organise database tables into groups.
+We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] also follows the same pattern.
+
+For example:
+
+[source,java]
+----
+@javax.persistence.Entity
+@javax.persistence.Table(
+    schema="SIMPLE",                                // <.>
+    ...
+)
+@DomainObject(objectType = "simple.SimpleObject")   // <.>
+...
+public class SimpleObject ... {
+
+}
+----
+<.> specifies the database schema.
+The table name will be based on the entity
+<.> corresponding two-part object type.
+
+When prototyping we rely on the ORM to automatically create the entire database tables, which includes the owning schemas.
+As EclipseLink does not do this automatically, the framework will do this if requested.
+The xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.auto-create-schemas[isis.persistence.schema.auto-create-schemas] controls if this is done or not.
+
+Different database vendors have different syntaxes to do this, and so this can be configured using the xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.create-schema-sql-template[isis.persistence.schema.create-schema-sql-template].
+The default value is to use SQL-99 syntax ("CREATE SCHEMA IF NOT EXISTS %S"), passed through to `String.format()`.
+
+
+
+
+== Auto-create (or validate) tables
+
+When running against the h2 in-memory database (eg for prototype mode or integration tests), you'll probably want DataNucleus to automatically create the tables.
+
+This can be configured using the:
+
+* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.auto-create-all[datanucleus.schema.autoCreateAll] configuration property.
+
+Conversely, if running in production then you will probably use xref:userguide:flyway:about.adoc[Flyway] to manage database migrations.
+In this case you'll just want to validate that the database table structure of the target database is in line with what DataNucleus expectss.
+
+You can do this using the:
+
+* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validateAll] configuration property.
+
+This will fail-fast if there is a mismatch.
+
+
+== Other Configuration Properties
+
+Additional configuration properties for DataNucleus itself can be specified directly under the `datanucleus.` configuration key.
+
+We recommend that some of these should be configured:
+
+* disable xref:configuring/disabling-persistence-by-reachability.adoc[persistence by reachability]
+
+
+
+See the xref:refguide:config:sections/datanucleus.adoc[datanucleus] section of the xref:refguide:config:about.adoc[Configuration Guide] for further details.
+
+
+Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.
+A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].
+
+[IMPORTANT]
+====
+DataNucleus properties must be specified using `camelCase`, not `kebab-case`.
+
+For example, use `datanucleus.schema.autoCreateAll` not `datanucleus.schema.auto-create-all`
+====
+
+
+[[persistence-xml]]
+== persistence.xml
+
+DataNucleus will for itself also read the `META-INF/persistence.xml`.
+In theory this can hold mappings and even connection strings.
+However, with Apache Isis we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
+
+Here's the one provided by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+
+    <persistence-unit name="simple">
+    </persistence-unit>
+</persistence>
+----
+
+Normally all one needs to do is to change the `persistence-unit` name.
+
+[TIP]
+====
+If you use Eclipse IDE on Windows then
+xref:setupguide:eclipse:about.adoc#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml[note the importance] of the `persistence.xml` file to make DataNucleus enhancer work correctly.
+====
+
+
+See link:http://www.datanucleus.org/products/datanucleus/jdo/persistence.html#persistenceunit[DataNucleus' documentation] on `persistence.xml` to learn more.
+

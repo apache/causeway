@@ -53,8 +53,8 @@ import lombok.val;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis 
-extends AuthenticatedWebSession 
+public class AuthenticatedWebSessionForIsis
+extends AuthenticatedWebSession
 implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonContext {
 
     private static final long serialVersionUID = 1L;
@@ -65,8 +65,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    @Getter protected transient IsisAppCommonContext commonContext; 
-    
+    @Getter protected transient IsisAppCommonContext commonContext;
+
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;
 
@@ -88,7 +88,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
+        val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(USER_ROLE);
         this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
         if (this.authentication != null) {
@@ -119,9 +119,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
         getAuthenticationManager().closeSession(getAuthentication());
         //getIsisInteractionFactory().closeSessionStack();
-        
+
         super.invalidateNow();
-        
+
     }
 
     @Override
@@ -141,10 +141,10 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     }
 
     public synchronized Authentication getAuthentication() {
-        
+
         commonContext.getInteractionTracker().currentAuthentication()
         .ifPresent(currentAuthentication->{
-            
+
             if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
                 if (this.authentication != null) {
                     if (Objects.equals(currentAuthentication.getUserName(), this.authentication.getUserName())) {
@@ -172,7 +172,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                     this.authentication = currentAuthentication;
                 }
             }
-            
+
         });
 
         return this.authentication;
@@ -180,8 +180,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     /**
      * This is a no-op if the {@link #getAuthentication() authentication session}'s
-     * {@link Authentication#getType() type} is 
-     * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external} 
+     * {@link Authentication#getType() type} is
+     * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     public void invalidate() {
@@ -247,12 +247,12 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
-            
+
             val now = virtualClock().javaUtilDate();
-            
+
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingServices.forEach(sessionLoggingService -> 
+            sessionLoggingServices.forEach(sessionLoggingService ->
                 sessionLoggingService.log(type, username, now, causedBy, Integer.toString(sessionHashCode))
             );
         };
@@ -267,7 +267,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     protected Can<SessionLoggingService> getSessionLoggingServices() {
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
-    
+
     protected InteractionFactory getIsisInteractionFactory() {
         return commonContext.lookupServiceElseFail(InteractionFactory.class);
     }

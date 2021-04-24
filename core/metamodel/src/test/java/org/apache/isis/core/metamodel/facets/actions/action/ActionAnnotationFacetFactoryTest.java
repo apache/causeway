@@ -27,7 +27,7 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -54,7 +54,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).loadSpecification(cls);
             will(returnValue(mockTypeSpec));
-            
+
             allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
         }});
@@ -78,7 +78,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");
-        
+
     }
 
     @Override
@@ -92,18 +92,18 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
     }
 
-    class SomeHasUniqueId implements HasUniqueId {
+    class SomeHasInteractionId implements HasInteractionId {
         public void someAction() {
         }
 
         @Override
-        public UUID getUniqueId() {
+        public UUID getInteractionId() {
             return null;
         }
 
 
     }
-    
+
     void allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy value) {
         val config = metaModelContext.getConfiguration();
         config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);

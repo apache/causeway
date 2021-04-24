@@ -27,20 +27,27 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
+
+import lombok.val;
 
 public class ApplicationFeatureTest {
 
     public static class GetContents_and_AddToContents extends ApplicationFeatureTest {
 
+        private static ApplicationFeatureDefault newApplicationFeature(ApplicationFeatureId featId) {
+            return new ApplicationFeatureDefault(featId);
+        }
+        
         @Rule
         public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void givenPackage_whenAddPackageAndClass() throws Exception {
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
-            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newPackage("com.mycompany.flob");
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            val packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.flob");
+            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             applicationFeature.addToContents(packageFeatureId);
             applicationFeature.addToContents(classFeatureId);
@@ -54,8 +61,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
-            final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             applicationFeature.addToContents(memberFeatureId);
         }
@@ -65,8 +72,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             applicationFeature.addToContents(classFeatureId);
         }
@@ -76,8 +83,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
+            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             applicationFeature.addToContents(classFeatureId);
         }
@@ -86,6 +93,10 @@ public class ApplicationFeatureTest {
 
     public static class GetMembers_and_AddToMembers extends ApplicationFeatureTest {
 
+        private static ApplicationFeatureDefault newApplicationFeature(ApplicationFeatureId featId) {
+            return new ApplicationFeatureDefault(featId);
+        }
+        
         @Rule
         public ExpectedException expectedException = ExpectedException.none();
 
@@ -94,21 +105,21 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
-            final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
-            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
         public void givenClass_whenAddMember() throws Exception {
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
-            final ApplicationFeatureId memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            val memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
 
-            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberType.PROPERTY);
-            applicationFeature.addToMembers(memberFeatureId2, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId2, ApplicationMemberSort.PROPERTY);
 
             assertThat(applicationFeature.getProperties().size(), is(2));
             assertThat(applicationFeature.getProperties(), containsInAnyOrder(memberFeatureId, memberFeatureId2));
@@ -119,10 +130,10 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            val packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
-            applicationFeature.addToMembers(packageFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(packageFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
@@ -130,10 +141,10 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bop");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bop");
 
-            applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
@@ -141,20 +152,24 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
+            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
-            applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY);
         }
     }
 
 
-    public static class FunctionsTest extends ApplicationFeatureTest {
+    public static class MethodsTest extends ApplicationFeatureTest {
 
+        private static ApplicationFeatureDefault newApplicationFeature(ApplicationFeatureId featId) {
+            return new ApplicationFeatureDefault(featId);
+        }
+        
         @Test
-        public void GET_FQN() throws Exception {
-            final ApplicationFeature input = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
-            assertThat(ApplicationFeature.Functions.GET_FQN.apply(input), is("com.mycompany.Foo#bar"));
+        public void getFullyQualifiedName() throws Exception {
+            val input = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
+            assertThat(input.getFullyQualifiedName(), is("com.mycompany.Foo#bar"));
         }
     }
 

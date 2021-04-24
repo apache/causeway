@@ -30,7 +30,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -81,7 +80,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
 
-        return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
+        return ofMemento(commonContext, commonContext.mementoFor(oidFrom(pageParameters)));
     }
     
     public static EntityModel ofAdapter(
@@ -149,8 +148,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 
-    private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return Oid.unmarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
+    private static Oid oidFrom(final PageParameters pageParameters) {
+        return Oid.parse(oidStr(pageParameters));
     }
 
 

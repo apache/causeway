@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -37,11 +37,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemoveRoleDomainEvent.class, 
-        associateWith = "roles",
-        associateWithSequence = "2")
-@ActionLayout(
-        named="Remove"
-        )
+        associateWith = "roles")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_removeRoles {
     
@@ -49,25 +46,24 @@ public class ApplicationUser_removeRoles {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     
-    @Model
+    @MemberSupport
     public ApplicationUser act(Collection<ApplicationRole> roles) {
         
         _NullSafe.stream(roles)
         .filter(this::canRemove)
-        .forEach(role->applicationRoleRepository.removeRoleFromUser(role, holder));
+        .forEach(role->applicationRoleRepository.removeRoleFromUser(role, target));
         
-        return holder;
+        return target;
     }
 
-    @Model
     // same logic in ApplicationRole_removeUsers
     public boolean canRemove(
             final ApplicationRole applicationRole) {
         
-        if(applicationUserRepository.isAdminUser(holder) 
+        if(applicationUserRepository.isAdminUser(target) 
                 && applicationRoleRepository.isAdminRole(applicationRole)) {
             messageService.warnUser("Cannot remove admin user from the admin role.");
             return false;

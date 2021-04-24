@@ -19,13 +19,16 @@
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsisExtFixturesFixtureResultsRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtFixturesFixtureResultsRoleAndPermissions 
+extends AbstractRoleAndPermissionsFixtureScript {
 
     public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";
 
@@ -35,9 +38,10 @@ public class IsisExtFixturesFixtureResultsRoleAndPermissions extends AbstractRol
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        newClassPermissions(
+        newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                FixtureResult.class);
+                Can.ofSingleton(
+                        ApplicationFeatureId.newType(FixtureResult.OBJECT_TYPE)));
     }
 }

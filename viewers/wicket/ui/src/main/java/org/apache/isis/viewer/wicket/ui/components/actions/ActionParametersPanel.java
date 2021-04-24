@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -39,7 +40,8 @@ import lombok.Setter;
  * <p>
  * Corresponding component to edit properties is {@link PropertyEditPanel}.
  */
-public class ActionParametersPanel extends PanelAbstract<ActionModel> {
+public class ActionParametersPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 

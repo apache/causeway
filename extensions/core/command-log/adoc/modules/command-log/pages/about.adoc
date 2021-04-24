@@ -3,18 +3,18 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+
 WARNING: TODO: v2 - this code has not yet been brought into the framework.
 
-The _command-log_ module provides an implementation that persists ``Command``s using the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
-It further provides a number of supporting services:
+The _command-log_ module provides an implementation that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
 
-* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
-
-* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
-
-All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:about.adoc#vetoing-visibility[vetoing subscriber].
+//It further provides a number of supporting services:
+//
+//* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted xref:refguide:applib:index/services/command/Command.adoc[Command]s
+//
+//* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling xref:refguide:applib:index/services/command/Command.adoc[Command]s.
+//
+//If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:hints-and-tips.adoc#vetoing-visibility[vetoing subscriber].
 
 
 

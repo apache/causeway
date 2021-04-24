@@ -2,15 +2,14 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-Apache Isis' Restful Objects viewer provides a number of additional resource endpoints that provide representations of the object layout (as per xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`]) and of the menu layout (as per xref:refguide:applib:index/services/menu/MenuBarsService.adoc[`MenuBarsService`]).
+Apache Isis' Restful Objects viewer provides a number of additional resource endpoints (not defined in the xref:ro-spec.adoc[RO spec]) that provide representations of the object layout (as per xref:refguide:applib:index/services/grid/GridService.adoc[GridService]) and of the menu layout (as per xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService]).
 
 This chapter provides details of these resources, the link ``Rel``s to access them, and the resultant representations.
 
 == MenuBars
 
-The xref:refguide:applib:index/services/menu/MenuBarsService.adoc[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
+The xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
 
 For example, the xref:docs:starters:helloworld.adoc[Hello World starter app] has the following layout:
 
@@ -49,7 +48,7 @@ For example, the xref:docs:starters:helloworld.adoc[Hello World starter app] has
 Note that exactly one `<mb3:menu>` must have the `unreferencedActions` flag set.
 Any service actions that are not explicitly listed will be added to this menu.
 
-The representation returned by home page resource (section 5.2 of the RO spec v1.0) has been extended to provide a link to this resource:
+The representation returned by home page resource (link:https://www.restfulobjects.org/spec/1.0/section-b/chapter-05.html#5.2-representation[section 5.2 of the RO spec v1.0]) has been extended to provide a link to this resource:
 
 [source,javascript]
 ----
@@ -106,7 +105,7 @@ This can also be obtained in JSON format in the usual way (by specifying an HTTP
 
 == Domain Object Icon
 
-The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to the icon image (`.png`) to use:
+The representation returned by the domain object resource (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-14.html#14.4-representation[section 14.4] of the RO spec v1.0) has been extended to provide a link to the icon image (`.png`) to use:
 
 [source,javascript]
 ----
@@ -124,16 +123,17 @@ The representation returned by the domain object resource (section 14.4 of the R
 }
 ----
 
-Note that because of dynamic icons (the xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] supporting method) the image returned can vary on an instance-by-instance basis.
+Note that because of dynamic icons (the
+xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()] supporting method) the image returned can vary on an instance-by-instance basis.
 
 == Domain Object Layout
 
-The xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`] provides an XML document which defines the layout of any of domain object.
+The xref:refguide:applib:index/services/grid/GridService.adoc[GridService] provides an XML document which defines the layout of any of domain object.
 Typically this is the contents of the `Xxx.layout.xml` file (where `Xxx` is the domain type).
 
 For example, in the xref:docs:starters:helloworld.adoc[Hello World starter app] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
 
-The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to this resource:
+The representation returned by the domain object resource (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-14.html#14.4-representation[section 14.4] of the RO spec v1.0) has been extended to provide a link to this resource:
 
 [source,javascript]
 ----
@@ -224,7 +224,7 @@ This can also be obtained as JSON (using `Accept: application/json` HTTP header)
 
 == Domain Type Layout
 
-The representation of the domain types resource (section 22.2 of RO spec v1.0) has also been extended to return the (type) layout:
+The representation of the domain types resource (link:https://www.restfulobjects.org/spec/1.0/section-d/chapter-22.html#22.2-representation[section 22.2] of RO spec v1.0) has also been extended to return the (type) layout:
 
 [source,javascript]
 ----
@@ -242,7 +242,7 @@ The representation of the domain types resource (section 22.2 of RO spec v1.0) h
 }
 ----
 
-The representation returned by this resource is essentially exactly the same as the layout returned by xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`] (it is not dynamically extended with links).
+The representation returned by this resource is essentially exactly the same as the layout returned by xref:refguide:applib:index/services/grid/GridService.adoc[GridService] (it is not dynamically extended with links).
 
 == Static vs Dynamic Resources
 

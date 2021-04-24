@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -73,7 +74,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -153,7 +153,7 @@ implements ObjectSpecification {
     
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
     
-    /** not API, used for validation, when {@code @Action} is NOT mandatory */
+    /** not API, used for validation */
     @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
@@ -185,7 +185,7 @@ implements ObjectSpecification {
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
-    protected ObjectSpecId specId;
+    private _Lazy<LogicalType> logicalTypeLazy = _Lazy.threadSafe(this::lookupLogicalType);
 
     private ObjectSpecification superclassSpec;
 
@@ -212,7 +212,10 @@ implements ObjectSpecification {
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
-        this.identifier = Identifier.classIdentifier(introspectedClass);
+        this.identifier = Identifier.classIdentifier(
+                LogicalType.lazy(
+                        introspectedClass,
+                        ()->logicalTypeLazy.get().getLogicalTypeName()));
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -225,15 +228,16 @@ implements ObjectSpecification {
     }
 
     @Override
-    public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
-            if(objectSpecIdFacet == null) {
-                throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
-            }
-            specId = objectSpecIdFacet.value();
+    public LogicalType getLogicalType() {
+        return logicalTypeLazy.get();
+    }
+        
+    private LogicalType lookupLogicalType() {
+        val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
+        if(objectSpecIdFacet == null) {
+            throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
         }
-        return specId;
+        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value());
     }
 
     /**
@@ -287,7 +291,7 @@ implements ObjectSpecification {
             if(isLessThan(upTo)) {
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
-                this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
                 revalidate = true;
             }
             // set to avoid infinite loops
@@ -300,13 +304,13 @@ implements ObjectSpecification {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
-                this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
+                this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
                 revalidate = true;
             }
             break;
         case MEMBERS_BEING_INTROSPECTED:
             // nothing to do
-        case TYPE_AND_MEMBERS_INTROSPECTED:
+        case FULLY_INTROSPECTED:
             // nothing to do
             break;
 
@@ -467,16 +471,11 @@ implements ObjectSpecification {
     @Override
     public boolean isOfType(final ObjectSpecification other) {
         
-        // do the comparison using value types because of a possible aliasing/race condition
-        // in matchesParameterOf when building up contributed associations
-        if (other.getSpecId().equals(this.getSpecId())) {
-            return true;
-        }
-        
         val thisClass = this.getCorrespondingClass();
         val otherClass = other.getCorrespondingClass();
         
-        return otherClass.isAssignableFrom(thisClass);
+        return thisClass == otherClass 
+                || otherClass.isAssignableFrom(thisClass);
         
 //XXX legacy of ...        
 //        
@@ -679,7 +678,7 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if(contributed.isIncluded()) {
             createMixedInAssociations(); // only if not already
@@ -697,7 +696,7 @@ implements ObjectSpecification {
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
@@ -717,7 +716,7 @@ implements ObjectSpecification {
      */
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
         return streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
@@ -729,7 +728,7 @@ implements ObjectSpecification {
     public Stream<ObjectAction> streamDeclaredActions(
             final ImmutableEnumSet<ActionType> types, 
             final MixedIn contributed) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if(contributed.isIncluded()) { // conditional not strictly required, could instead always go this code path 
             createMixedInActions(); // only if not already
@@ -762,7 +761,7 @@ implements ObjectSpecification {
             final Consumer<ObjectAssociation> onNewMixedInAssociation) {
 
         val specification = getSpecificationLoader().loadSpecification(mixinType,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         if (specification == this) {
             return;
         }
@@ -814,7 +813,7 @@ implements ObjectSpecification {
             final Consumer<ObjectAction> onNewMixedInAction) {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                IntrospectionState.FULLY_INTROSPECTED);
         if (mixinSpec == this) {
             return;
         }

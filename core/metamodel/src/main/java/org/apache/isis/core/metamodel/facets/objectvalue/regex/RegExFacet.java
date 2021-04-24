@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Whether the (string) property or a parameter must correspond to a specific
  * regular expression.
  */
-public interface RegExFacet extends MultipleValueFacet, ValidatingInteractionAdvisor {
+public interface RegExFacet extends Facet, ValidatingInteractionAdvisor {
 
     public String regexp();
 

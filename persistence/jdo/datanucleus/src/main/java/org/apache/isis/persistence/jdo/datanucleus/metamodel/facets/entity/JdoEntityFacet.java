@@ -126,13 +126,13 @@ implements EntityFacet {
 
         _Assert.assertTrue(entitySpec.isEntity());
 
-        val rootOid = Oid.Factory.root(entitySpec.getSpecId(), identifier);
+        val oid = Oid.of(entitySpec.getLogicalType(), identifier);
 
-        log.debug("fetchEntity; rootOid={}", rootOid);
+        log.debug("fetchEntity; oid={}", oid);
 
         Object entityPojo;
         try {
-            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, rootOid);
+            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, oid);
             val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();
             val fetchPlan = persistenceManager.getFetchPlan();
@@ -144,7 +144,7 @@ implements EntityFacet {
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
-                    throw new ObjectNotFoundException(""+rootOid, e);
+                    throw new ObjectNotFoundException(""+oid, e);
                 }
             }
 
@@ -152,13 +152,13 @@ implements EntityFacet {
         }
 
         if (entityPojo == null) {
-            throw new ObjectNotFoundException(""+rootOid);
+            throw new ObjectNotFoundException(""+oid);
         }
 
-        val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
+        val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
-        return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);
+        return ManagedObject.identified(actualEntitySpec, entityPojo, oid);
     }
 
     @Override

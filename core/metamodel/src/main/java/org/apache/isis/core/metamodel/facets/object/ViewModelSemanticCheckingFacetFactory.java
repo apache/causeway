@@ -18,38 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.object;
 
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-
-public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract
-implements MetaModelRefiner {
-
+public class ViewModelSemanticCheckingFacetFactory 
+extends FacetFactoryAbstract {
 
     public ViewModelSemanticCheckingFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
-    private final MetaModelValidatorForValidationFailures validator = 
-            new MetaModelValidatorForValidationFailures();
-
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        validator.setMetaModelContext(metaModelContext);
     }
     
     @Override
@@ -73,62 +65,64 @@ implements MetaModelRefiner {
         final boolean annotatedWithDomainObject = domainObject != null;
 
         if(implementsViewModel && implementsRecreatableDomainObject) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %s should not implement "
-                    + "both %s and %s interfaces (implement one or the other)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName());
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %s should not implement "
+                        + "both %s and %s interfaces (implement one or the other)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName())
+                    );
 
         }
         if(implementsViewModel && annotatedWithDomainObject) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not implement "
-                    + "%2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    DomainObject.class.getSimpleName(),
-                    "TODO ViewModel removed",
-                    RecreatableDomainObject.class.getSimpleName()
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not implement "
+                        + "%2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        DomainObject.class.getSimpleName(),
+                        "TODO ViewModel removed",
+                        RecreatableDomainObject.class.getSimpleName())
                     );
         }
         if(implementsViewModel && annotatedWithDomainObjectLayout) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not implement "
-                    + "%2$s and be annotated with @%3$s (annotate with @%4$s instead of %3$s, or implement %5$s instead of %2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    DomainObjectLayout.class.getSimpleName(),
-                    RecreatableDomainObject.class.getSimpleName());
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not implement "
+                        + "%2$s and be annotated with @%3$s (annotate with @%4$s instead of %3$s, or implement %5$s instead of %2$s)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        DomainObjectLayout.class.getSimpleName(),
+                        RecreatableDomainObject.class.getSimpleName())
+                    );
         }
 
         if(annotatedWithDomainObject
                 && (domainObject.nature() == Nature.NOT_SPECIFIED 
                     || domainObject.nature().isEntity()) 
                 && implementsRecreatableDomainObject) {
-            validator.onFailure(
-                    facetHolder,
-                    Identifier.classIdentifier(cls),
-                    "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
-                    + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s)",
-                    cls.getName(),
-                    DomainObject.class.getSimpleName(),
-                    domainObject.nature(),
-                    org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
-                    Nature.VIEW_MODEL);
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
+                        + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s)",
+                        cls.getName(),
+                        DomainObject.class.getSimpleName(),
+                        domainObject.nature(),
+                        org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
+                        Nature.VIEW_MODEL)
+                    );
         }
 
-    }
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(validator);
     }
 
 

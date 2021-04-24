@@ -36,6 +36,8 @@ import lombok.val;
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the
  * {@link Authentication} onto the {@link HttpSession}.
+ *
+ * @since 2.0 {@index}
  */
 public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstract {
 
@@ -46,17 +48,17 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
 
     @Override
     public Authentication lookupValid(
-            final HttpServletRequest httpServletRequest, 
+            final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
-        // Basic auth should never create sessions! 
+        // Basic auth should never create sessions!
         // However, telling this Shiro here, is a fragile approach.
         //TODO[2156] do this somewhere else (more coupled with shiro)
         httpServletRequest.setAttribute(
-                "org.apache.shiro.subject.support.DefaultSubjectContext.SESSION_CREATION_ENABLED", 
+                "org.apache.shiro.subject.support.DefaultSubjectContext.SESSION_CREATION_ENABLED",
                 Boolean.FALSE);
 
-        
+
         val digest = getBasicAuthDigest(httpServletRequest);
         if (digest == null) {
             return null;
@@ -79,15 +81,15 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
 
     @Override
     public void bind(
-            HttpServletRequest httpServletRequest, 
+            HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             Authentication auth) {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
     // -- HELPER
-    
+
     // value should be in the form:
     // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
     private String getBasicAuthDigest(final HttpServletRequest httpServletRequest) {

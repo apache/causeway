@@ -34,18 +34,16 @@ import lombok.NonNull;
  */
 public class AuthenticationLayer {
 
-	@Getter private final InteractionSession interactionSession;
+	@Getter private final IsisInteraction interaction;
 	@Getter private final Authentication authentication;
 
 	public AuthenticationLayer(
-			final @NonNull InteractionSession interactionSession,
+			final @NonNull IsisInteraction interaction,
 			final @NonNull Authentication authentication) {
 
-		//super(interactionSession.getMetaModelContext());
-
-		// current thread's InteractionSession which this layer belongs to,
-		// meaning the InteractionSession that holds the stack containing this layer
-		this.interactionSession = interactionSession;
+		// current thread's Interaction which this layer belongs to,
+		// meaning the Interaction that holds the stack containing this layer
+		this.interaction = interaction;
 
 		// binds given authentication to this layer
 		this.authentication = authentication;

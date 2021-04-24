@@ -26,15 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -57,9 +55,8 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(maxLength = 10)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(maxLength = 10)",
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -69,9 +66,8 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     @MaxLength10MetaAnnotation                            // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@MaxLength10MetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@MaxLength10MetaAnnotation",
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -85,9 +81,8 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@MaxLength10MetaAnnotation " +
-            "@PropertyLayout(maxLength = 3)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@PropertyLayout(maxLength = 3)",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

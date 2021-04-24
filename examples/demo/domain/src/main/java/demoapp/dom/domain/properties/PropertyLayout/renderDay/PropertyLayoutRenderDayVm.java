@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -37,11 +36,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -69,9 +67,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         renderDay = RenderDay.NOT_SPECIFIED         // <.>
         , describedAs =
-            "@PropertyLayout(renderDay = NOT_SPECIFIED)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@PropertyLayout(renderDay = NOT_SPECIFIED)",
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -83,9 +80,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         renderDay = RenderDay.AS_DAY_BEFORE         // <.>
         , describedAs =
-            "@PropertyLayout(renderDay = AS_DAY_BEFORE)"
-    )
-    @MemberOrder(name = "annotation", sequence = "2")
+            "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
+        fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -97,9 +93,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         renderDay = RenderDay.AS_DAY             // <.>
         , describedAs =
-            "Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)"
-    )
-    @MemberOrder(name = "annotation", sequence = "3")
+            "Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)",
+        fieldSetId = "annotation", sequence = "3")
     public LocalDate getEndDateRaw() {
         return getEndDate();
     }
@@ -110,9 +105,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(                                // <.>
         describedAs =
             "<cpt:property id=\"endDateLayoutFile\" " +
-            "renderedAsDayBefore=\"true\"/>"
-    )
-    @MemberOrder(name = "layout-file", sequence = "1")
+            "renderedAsDayBefore=\"true\"/>",
+        fieldSetId = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -124,9 +118,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =
-            "@RenderDayMetaAnnotationEndDateExclusive"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+            "@RenderDayMetaAnnotationEndDateExclusive",
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -139,9 +132,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         renderDay = RenderDay.AS_DAY_BEFORE
         , describedAs =
-            "@RenderDayMetaAnnotationEndDateExclusive"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@RenderDayMetaAnnotationEndDateExclusive",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter

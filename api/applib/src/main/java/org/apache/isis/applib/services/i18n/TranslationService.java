@@ -45,7 +45,7 @@ public interface TranslationService {
      * @param text
      */
     String translate(
-            final String context,
+            final TranslationContext context,
             final String text);
 
     /**
@@ -62,7 +62,7 @@ public interface TranslationService {
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
      */
     String translate(
-            final String context,
+            final TranslationContext context,
             final String singularText,
             final String pluralText,
             int num);

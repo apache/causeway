@@ -18,38 +18,41 @@
  */
 package org.apache.isis.extensions.commandlog.impl.mixins;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 /**
+ * This mixin contributes a <tt>recentCommands</tt> action to any domain object
+ * (unless also {@link HasInteractionId} - commands don't themselves have commands).
+ * 
  * @since 2.0 {@index}
  */
-
-/**
- * This mixin contributes a <tt>recentCommands</tt> action to any domain object
- * (unless also {@link HasUniqueId} - commands don't themselves have commands).
- */
 @Action(
-    semantics = SemanticsOf.SAFE,
-    domainEvent = Object_recentCommands.ActionDomainEvent.class,
-    restrictTo = RestrictTo.PROTOTYPING
+        domainEvent = Object_recentCommands.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
-    cssClassFa = "fa-bolt",
-    position = ActionLayout.Position.PANEL_DROPDOWN
+        cssClassFa = "fa-bolt",
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "900.1"
 )
 public class Object_recentCommands {
 
@@ -61,17 +64,17 @@ public class Object_recentCommands {
         this.domainObject = domainObject;
     }
 
-    @MemberOrder(name = "datanucleusIdLong", sequence = "900.1")
     public List<CommandJdo> act() {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
-        return commandServiceRepository.findRecentByTarget(bookmark);
+        return bookmarkService.bookmarkFor(domainObject)
+        .map(commandServiceRepository::findRecentByTarget)
+        .orElse(Collections.emptyList());
     }
     /**
-     * Hide if the contributee is itself {@link HasUniqueId}
+     * Hide if the contributee is itself {@link HasInteractionId}
      * (commands don't have commands).
      */
     public boolean hideAct() {
-        return (domainObject instanceof HasUniqueId);
+        return (domainObject instanceof HasInteractionId);
     }
 
     @Inject CommandJdoRepository commandServiceRepository;

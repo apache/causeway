@@ -32,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
@@ -42,7 +43,6 @@ import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingCo
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -50,8 +50,9 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingCommandPublishing.class,
-                ApplicationLayerTestFactory.class
-        }, 
+                ApplicationLayerTestFactory.class,
+                XrayEnable.class
+        },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
@@ -60,7 +61,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
+class JdoCommandPublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -73,40 +74,40 @@ class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
     private void given() {
         CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
-    
+
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
-        
+
         case FAILURE_CASE:
             assertHasCommandEntries(Can.empty());
             break;
         case POST_INTERACTION:
-        
-            
+
+
 //            Interaction interaction = null;
 //            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
 //            Object target = null;
 //            Object argValue = "Book #2";
 //            String targetMemberName = "name???";
 //            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-            
+
             val propertyDto = new PropertyDto();
             propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
-            
+
             val command = new Command(UUID.randomUUID());
             val commandDto = new CommandDto();
-            commandDto.setTransactionId(command.getUniqueId().toString());
+            commandDto.setInteractionId(command.getInteractionId().toString());
             commandDto.setMember(propertyDto);
 
             command.updater().setCommandDto(commandDto);
-            
+
             assertHasCommandEntries(Can.of(command));
             break;
         default:
             // ignore ... no checks
         }
     }
-    
+
     // -- HELPER
 
     private void assertHasCommandEntries(Can<Command> expectedCommands) {
@@ -114,19 +115,19 @@ class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
         CollectionAssertions.assertComponentWiseEquals(
                 expectedCommands, actualCommands, this::commandDifference);
     }
-    
+
     private String commandDifference(Command a, Command b) {
         if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s", 
+            return String.format("differing member identifier %s != %s",
                     a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
         }
         if(!Objects.equals(a.getResult(), b.getResult())) {
-            return String.format("differing results %s != %s", 
+            return String.format("differing results %s != %s",
                     a.getResult(), b.getResult());
         }
         return null; // no difference
     }
-    
+
 
 
 }

@@ -18,19 +18,26 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class GridFacetDefault
@@ -41,7 +48,6 @@ implements GridFacet {
         return GridFacet.class;
     }
 
-
     public static GridFacet create(
             final FacetHolder facetHolder,
             final GridService gridService) {
@@ -50,8 +56,11 @@ implements GridFacet {
 
     private final GridService gridService;
 
-    private Grid grid;
-
+    private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
+        getFacetHolder().getFacet(LayoutFacet.class));
+    
+    private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
+    
     private GridFacetDefault(
             final FacetHolder facetHolder,
             final GridService gridService) {
@@ -60,36 +69,61 @@ implements GridFacet {
     }
 
     @Override
-    public Grid getGrid(final ManagedObject objectAdapterIfAny) {
-        if (this.grid == null || gridService.supportsReloading()) {
-            val domainClass = getSpecification().getCorrespondingClass();
-            final String layout = layout(objectAdapterIfAny);
-            this.grid = load(domainClass, layout);
-        }
-        return this.grid;
+    public Grid getGrid(final @Nullable ManagedObject objectAdapter) {
+        
+        guardAgainstObjectOfDifferentType(objectAdapter);
+        
+        // gridByLayoutName is used as cache, unless gridService.supportsReloading() returns true
+        return gridByLayoutName.compute(layoutNameFor(objectAdapter), 
+                (layoutName, cachedLayout)->
+                    (cachedLayout==null
+                            || gridService.supportsReloading())
+                    ? this.load(layoutName)
+                    : cachedLayout
+        );
+        
     }
     
     // -- HELPER
     
-    @Nullable
-    private String layout(@Nullable final ManagedObject objectAdapterIfAny) {
-        if(objectAdapterIfAny == null) {
-            return null;
+    private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
+        
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+            return; // cannot introspect
         }
-        val facetHolder = getFacetHolder();
-        val layoutFacet = facetHolder.getFacet(LayoutFacet.class);
-        if(layoutFacet == null) {
-            return null;
+        
+        if(!getSpecification().equals(objectAdapter.getSpecification())) {
+            throw _Exceptions.unrecoverableFormatted(
+                    "getGrid(adapter) was called passing an adapter (specId: %s), "
+                    + "for which this GridFacet (specId: %s) is not responsible; "
+                    + "indicates that some framework internals are wired up in a wrong way",
+                    objectAdapter.getSpecification().getLogicalTypeName(),
+                    getSpecification().getLogicalTypeName());
         }
-        return layoutFacet.layout(objectAdapterIfAny);
     }
 
-    private Grid load(final Class<?> domainClass, final String layout) {
-        val grid = Optional.ofNullable(gridService.load(domainClass, layout)) //loads from object's XML if available
-                .orElseGet(()->gridService.defaultGridFor(domainClass)); //loads from default-XML if available
+    private String layoutNameFor(final @Nullable ManagedObject objectAdapter) {
+        if(!hasLayoutFacet()
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+            return "";
+        }
+        return _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
+    }
+    
+    private boolean hasLayoutFacet() {
+        return layoutFacetLazy.get()!=null;
+    }
+
+    private Grid load(final @NonNull String layoutName) {
         
-        gridService.normalize(grid);
-        return grid;
+        val domainClass = getSpecification().getCorrespondingClass();
+
+        val grid = Optional.ofNullable(
+                // loads from object's XML if available
+                gridService.load(domainClass, _Strings.emptyToNull(layoutName))) 
+                // loads from default-XML if available
+                .orElseGet(()->gridService.defaultGridFor(domainClass)); 
+        return gridService.normalize(grid);
     }
 
     private ObjectSpecification getSpecification() {

@@ -19,8 +19,20 @@
 package org.apache.isis.applib.services.bookmark;
 
 /**
+ * Can be optionally implemented by any object that is holds (either directly
+ * or implicitly) a {@link Bookmark} to a domain object.
+ *
+ * <p>
+ *     The framework provides mixins that surface the bookmarked domain
+ *     object as either a property or an action of the holder.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface BookmarkHolder {
+
+    /**
+     * A reference to an arbitrary domain object, as a {@link Bookmark}.
+     */
     Bookmark bookmark();
 }

@@ -24,23 +24,28 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-public class MetaModelValidatorForConflictingOptionality extends MetaModelValidatorAbstract {
+@UtilityClass
+public class MetaModelValidatorForConflictingOptionality {
 
-    public Facet flagIfConflict(final MandatoryFacet facet, final String message) {
+    public static void flagIfConflict(final MandatoryFacet facet, final String message) {
         if(conflictingOptionality(facet)) {
             addFailure(facet, message);
         }
-        return facet;
     }
+    
+    // -- HELPER
 
-    private Facet addFailure(final Facet facet, final String message) {
+    private static void addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
-            val identifier = holder.getIdentifier();
-            super.onFailure(holder, identifier, "%s : %s", message, identifier.toFullIdentityString());
+            ValidationFailure.raiseFormatted(
+                    holder, 
+                    "%s : %s", 
+                    message, 
+                    holder.getIdentifier().getFullIdentityString());
         }
-        return facet;
     }
 
     private static boolean conflictingOptionality(final MandatoryFacet facet) {

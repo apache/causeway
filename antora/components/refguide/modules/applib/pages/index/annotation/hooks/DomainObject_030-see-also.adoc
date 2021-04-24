@@ -1,9 +1,0 @@
-=== See also
-
-* xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] SPI
-+
-(only applies to entity objects)
-
-* xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`] SPI
-+
-(only applies to entity objects)

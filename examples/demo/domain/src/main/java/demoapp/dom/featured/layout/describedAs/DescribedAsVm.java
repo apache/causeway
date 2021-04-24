@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -42,7 +43,6 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -105,7 +105,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @Model
+    @MemberSupport
     public String validateBiArgAction(String firstArg, String secondArg) {
         return "always fail for demonstration";
     }
@@ -134,7 +134,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @Model
+    @MemberSupport
     public String validateBiArgActionWithConfirm(String firstArg, String secondArg) {
         return "always fail for demonstration";
     }
@@ -150,7 +150,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @Model
+    @MemberSupport
     public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
@@ -165,7 +165,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @Model
+    @MemberSupport
     public String disableDisabledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }

@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,15 +32,18 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -56,8 +60,9 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     private final UserService userService;
     private final ClockService clockService;
     private final TransactionService transactionService;
+    private final InteractionTracker iaTracker;
     
-    private Can<EntityPropertyChangeSubscriber> enabledSubscribers;
+    private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
     
     @PostConstruct
     public void init() {
@@ -69,8 +74,30 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     public void publishChangedProperties(
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
         
-        if(!canPublish()) { 
-            return; 
+        val payload = getPayload(hasEnlistedEntityPropertyChanges);
+        val handle = _Xray.enterEntityPropertyChangePublishing(
+                iaTracker, 
+                payload,
+                enabledSubscribers,
+                ()->getCannotPublishReason(payload)
+                );
+        
+        payload.forEach(propertyChange->{
+            for (val subscriber : enabledSubscribers) {
+                subscriber.onChanging(propertyChange);
+            }
+        });
+        
+        _Xray.exitPublishing(handle);
+    }
+
+    // -- HELPER
+    
+    private Can<EntityPropertyChange> getPayload(
+            HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
+        
+        if(enabledSubscribers.isEmpty()) { 
+            return Can.empty(); 
         }
         
         val currentTime = clockService.getClock().javaSqlTimestamp();
@@ -78,22 +105,19 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         val currentTransactionId = transactionService.currentTransactionId()
                 .orElse(TransactionId.empty());
         
-        hasEnlistedEntityPropertyChanges.streamPropertyChanges(
+        return hasEnlistedEntityPropertyChanges.getPropertyChanges(
                 currentTime, 
                 currentUser,
-                currentTransactionId)
-        .forEach(propertyChange->{
-            for (val subscriber : enabledSubscribers) {
-                subscriber.onChanging(propertyChange);
-            }
-        });
+                currentTransactionId);
     }
-
-    // -- HELPER
     
-    private boolean canPublish() {
-        return enabledSubscribers.isNotEmpty();
+    // x-ray support
+    private @Nullable String getCannotPublishReason(final @NonNull Can<EntityPropertyChange> payload) {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : payload.isEmpty()
+                        ? "no changes had been enlisted"
+                        : null;
     }
-
 
 }

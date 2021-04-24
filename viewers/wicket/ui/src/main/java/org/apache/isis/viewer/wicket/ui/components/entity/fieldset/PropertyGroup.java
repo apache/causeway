@@ -55,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
+public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_MEMBER_GROUP = "memberGroup";

@@ -40,8 +40,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -74,7 +72,6 @@ import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitCon
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
@@ -100,18 +97,6 @@ public class IsisConfiguration {
         this.environment = environment;
     }
 
-    @Inject @Named("isis-settings")
-    @Getter(AccessLevel.PRIVATE) private Map<String, String> isisSettings;
-    /**
-     * All of the isis configuration properties, gathered together as an immutable map.
-     */
-    public Map<String, String> getAsMap() {
-        return isisSettings!=null
-                ? Collections.unmodifiableMap(isisSettings)
-                : Collections.emptyMap();
-    }
-
-
     private final Security security = new Security();
     @Data
     public static class Security {
@@ -129,6 +114,24 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
 
         }
+
+        private final Spring spring = new Spring();
+        @Data
+        public static class Spring {
+            /**
+             * The framework on initialization by default disables any {@code CsrfFilter}(s) it finds
+             * with <i>Spring Security</i> registered filters.
+             * <p>
+             * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
+             * configured. Yet EXPERIMENTAL.
+             *
+             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see "https://www.baeldung.com/spring-security-registered-filters"
+             */
+            private boolean allowCsrfFilters = false;
+
+        }
+
     }
 
     private final Applib applib = new Applib();
@@ -798,8 +801,8 @@ public class IsisConfiguration {
                             "previous.*:fa-step-backward",
                             "refresh.*:fa-refresh",
                             "remove.*:fa-minus-square",
-                            "renew.*:fa-repeat",
-                            "reset.*:fa-repeat",
+                            "renew.*:fa-redo",
+                            "reset.*:fa-redo",
                             "resume.*:fa-play",
                             "run.*:fa-bolt",
                             "save.*:fa-floppy-o",
@@ -1196,6 +1199,32 @@ public class IsisConfiguration {
     @Data
     public static class Core {
 
+        private final Config config = new Config();
+        @Data
+        public static class Config {
+
+            public static enum ConfigurationPropertyVisibilityPolicy {
+                NEVER_SHOW,
+                SHOW_ONLY_IN_PROTOTYPE,
+                ALWAYS_SHOW
+            }
+
+            /**
+             * Configuration values might contain sensitive data, hence per default,
+             * configuration properties are only visible with the configuration-page
+             * when <i>prototyping</i>.
+             *
+             * <p>
+             * Alternatively this policy can be set to either <b>always</b> show or <b>never</b> show.
+             * </p>
+             *
+             * @see ConfigurationPropertyVisibilityPolicy
+             */
+            private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy
+                = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
+
+        }
+
         private final MetaModel metaModel = new MetaModel();
         @Data
         public static class MetaModel {
@@ -1234,7 +1263,7 @@ public class IsisConfiguration {
                  *     For now this is <i>experimental</i>. Leave this disabled (the default).
                  * </p>
                  */
-                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is experimental
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
@@ -1695,6 +1724,16 @@ public class IsisConfiguration {
         @Data
         public static class Restfulobjects {
 
+            @Getter
+            private final Authentication authentication = new Authentication();
+            @Data
+            public static class Authentication {
+                /**
+                 * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
+                 */
+                private Optional<String> strategyClassName = Optional.empty();
+            }
+
             /**
              * Whether to enable the <code>x-ro-follow-links</code> support, to minimize round trips.
              *
@@ -2143,11 +2182,6 @@ public class IsisConfiguration {
                 private Optional<String> css = Optional.empty();
 
                 /**
-                 * Specifies the content type of the favIcon, if any.
-                 */
-                private Optional<String> faviconContentType = Optional.empty();
-
-                /**
                  * Specifies the URL to use of the favIcon.
                  *
                  * <p>
@@ -2160,7 +2194,7 @@ public class IsisConfiguration {
                 /**
                  */
                 /**
-                 * URL of file to read any custom Javascript, relative to <code>static</code> package on the class path.
+                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
                  *
                  * <p>
                  *     A typical value is <code>js/application.js</code>.  This will result in this file being read
@@ -2976,4 +3010,40 @@ public class IsisConfiguration {
             return superType.isAssignableFrom(candidateClass);
         }
     }
+
+    @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
+    @Retention(RUNTIME)
+    @Constraint(validatedBy = OneOfValidator.class)
+    @Documented
+    public @interface OneOf {
+
+        String[] value();
+
+        String message()
+                default "{org.apache.isis.core.config.IsisConfiguration.OneOf.message}";
+
+        Class<?>[] groups() default { };
+
+        Class<? extends Payload>[] payload() default { };
+    }
+
+
+    public static class OneOfValidator implements ConstraintValidator<OneOf, String> {
+
+        private List<String> allowed;
+
+        @Override
+        public void initialize(final OneOf assignableFrom) {
+            val value = assignableFrom.value();
+            allowed = value != null? Collections.unmodifiableList(Arrays.asList(value)): Collections.emptyList();
+        }
+
+        @Override
+        public boolean isValid(
+                final String candidateValue,
+                final ConstraintValidatorContext constraintContext) {
+            return allowed.contains(candidateValue);
+        }
+    }
+
 }

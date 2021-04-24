@@ -26,6 +26,7 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -98,7 +99,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         // PRODUCTION
 
         facetHolder = new IdentifiedHolderImpl(
-                Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
@@ -136,8 +137,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
-            will(returnValue(objectSpecification));
+            allowing(mockSpecificationLoader).specForType(with(any(Class.class)));
+            will(returnValue(Optional.of(objectSpecification)));
         }});
     }
 

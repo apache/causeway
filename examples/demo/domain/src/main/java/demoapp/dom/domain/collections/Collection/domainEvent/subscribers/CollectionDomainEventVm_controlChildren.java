@@ -20,12 +20,11 @@ package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
@@ -35,7 +34,7 @@ public class CollectionDomainEventVm_controlChildren {
 
     private final CollectionDomainEventVm collectionDomainEventVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
+    @PropertyLayout(fieldSetId = "contributed", sequence = "1")
     public CollectionDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;
     }

@@ -1,0 +1,294 @@
+=== Lifecycle Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Whenever the framework interacts with a domain entity, lifecycle events are fired.
+These are:
+
+* instantiated
++
+through xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
+An event is also fired for view models
+
+* persisting
++
+an entity is about to be persisted (``INSERT``ed) into the database
+
+* persisted
++
+an entity has just been persisted to the database
+
+* loaded
++
+an already persistent entity has just been loaded from the database
+
+* updating
++
+an already persistent entity is about to be saved (``UPDATE``d) to the database
+
+* updated
++
+an already persistent entity has just been saved (``UPDATE``d) to the database
+
+* removing
++
+an already persistent entity is about to be removed (``DELETE``d) from the database
+
+The framework has a built-in event class (for each lifecycle hint) that is raised by default; for example a `ObjectUpdatingEvent.Default` is raised when an object is about to be updated.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] and can use the event to obtain a reference to the object just created.
+
+This basic model can be influenced in a couple of ways:
+
+* first, it is also possible to suppress any events from being emitted using a configuration property (a different config property exists each lifecycle hook).
+
+* second, an element on xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation (for each lifecycle hook) allows a different event subtype to be emitted instead
++
+This allows subscribers to more targeted as to the events that they subscribe to.
+
+The framework also provides convenience "Doop" and a "Noop" event classes, that provoke these behaviours:
+
+* if the appropriate xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject]' element is set to the "Doop" subclass, then this will event will be fired
++
+this is a convenient way of ensuring an event is fired even if the hook has been disabled globally, but without the hassle of defining a custom event type
+
+* if set to the "Noop" subclass, then an event will _not_ be fired.
+
+
+The table below summarises all the lifecycle hooks:
+
+[cols="2a,6a,3a,4a"]
+.Lifecycle events
+|===
+| Lifecycle event
+| Config property
+| xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] override
+| Framework event types
+
+|created
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
+m|ObjectCreatedEvent.Default +
+ObjectCreatedEvent.Doop +
+ObjectCreatedEvent.Noop
+
+|loaded
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
+m|ObjectLoadedEvent.Default +
+ObjectLoadedEvent.Doop +
+ObjectLoadedEvent.Noop
+
+|persisting
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
+m|ObjectPersistingEvent.Default +
+ObjectPersistingEvent.Doop +
+ObjectPersistingEvent.Noop
+
+|persisted
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
+m|ObjectPersistedEvent.Default +
+ObjectPersistedEvent.Doop +
+ObjectPersistedEvent.Noop
+
+|updating
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
+m|ObjectUpdatingEvent.Default +
+ObjectUpdatingEvent.Doop +
+ObjectUpdatingEvent.Noop
+
+|updated
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
+m|ObjectUpdatedEvent.Default +
+ObjectUpdatedEvent.Doop +
+ObjectUpdatedEvent.Noop
+
+|removing
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
+m|ObjectRemovingEvent.Default +
+ObjectRemovingEvent.Doop +
+ObjectRemovingEvent.Noop
+
+|===
+
+
+
+==== Subscribers
+
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
+    @EventListener(ObjectCreatedEvent.class)
+    public void on(ObjectCreatedEvent ev) {
+        if(ev.getSource() instanceof ToDoItem) {
+            ...
+        }
+    }
+}
+----
+
+or can be fine-grained (by subscribing to specific event subtypes):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
+    @EventListener(ToDoItem.ObjectCreatedEvent.class)
+    public void on(ToDoItem.ObjectCreatedEvent ev) {
+        ...
+    }
+}
+----
+
+==== Examples
+
+===== created example
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    createdLifecycleEvent=ToDoItem.CreatedEvent.class
+)
+public class ToDoItem {
+    public static class CreatedEvent
+        extends org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent<ToDoItem> { }
+    ...
+}
+----
+
+[NOTE]
+====
+It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceInjector``'s
+xref:refguide:applib:index/services/inject/ServiceInjector.adoc[injectServicesInto(...)] to manually inject any required domain services.
+====
+
+
+===== persisting example
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    persistingLifecycleEvent=ToDoItem.PersistingEvent.class
+)
+public class ToDoItem {
+
+    public static class PersistingEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent<ToDoItem> { }
+
+    // ...
+}
+----
+
+
+===== persisted example
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    persistedLifecycleEvent=ToDoItem.PersistedEvent.class
+)
+public class ToDoItem {
+
+    public static class PersistedEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent<ToDoItem> { }
+
+    // ...
+}
+----
+
+
+===== loaded example
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    loadedLifecycleEvent=ToDoItem.LoadedEvent.class
+)
+public class ToDoItem {
+    public static class LoadedEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent<ToDoItem> { }
+    ...
+}
+----
+
+
+===== updating example
+
+For example:
+
+
+[source,java]
+----
+@DomainObjectLayout(
+    updatingLifecycleEvent=ToDoItem.UpdatingEvent.class
+)
+public class ToDoItem {
+
+    public static class UpdatingEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent<ToDoItem> { }
+
+    // ...
+}
+----
+
+
+
+===== updated example
+
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    updatedLifecycleEvent=ToDoItem.UpdatedEvent.class
+)
+public class ToDoItem {
+
+    public static class UpdatedEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent<ToDoItem> { }
+
+    // ...
+}
+----
+
+
+===== removing example
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    removingLifecycleEvent=ToDoItem.RemovingEvent.class
+)
+public class ToDoItem {
+
+    public static class RemovingEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent<ToDoItem> { }
+
+    // ...
+}
+----

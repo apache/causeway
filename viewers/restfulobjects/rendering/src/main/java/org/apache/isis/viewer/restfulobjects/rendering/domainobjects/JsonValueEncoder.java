@@ -18,10 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -38,18 +36,18 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -73,18 +71,16 @@ public class JsonValueEncoder {
         
         //XXX no lombok val here
         Function<Object, ManagedObject> pojoToAdapter = pojo ->
-            ManagedObject.of(specificationLoader::loadSpecification, pojo);
+            ManagedObject.lazy(specificationLoader, pojo);
         
         new JsonValueEncoder_Converters().asList(pojoToAdapter)
             .forEach(this::registerConverter);
     }
     
-    private Map<ObjectSpecId, JsonValueConverter> converterBySpecId = _Maps.newLinkedHashMap();
+    private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
 
     private void registerConverter(JsonValueConverter jvc) {
-        for (val specId : jvc.getSpecIds()) {
-            converterBySpecId.put(specId, jvc);
-        }
+        jvc.getClasses().forEach(cls->converterByClass.put(cls, jvc));
     }
 
     public ManagedObject asAdapter(
@@ -107,8 +103,8 @@ public class JsonValueEncoder {
             throw new IllegalArgumentException(reason);
         }
 
-        final ObjectSpecId specId = objectSpec.getSpecId();
-        final JsonValueConverter jvc = converterBySpecId.get(specId);
+        val cls = objectSpec.getCorrespondingClass();
+        final JsonValueConverter jvc = converterByClass.get(cls);
         if(jvc == null) {
             // best effort
             if (argValueRepr.isString()) {
@@ -144,8 +140,8 @@ public class JsonValueEncoder {
             String format,
             boolean suppressExtensions) {
 
-        val specId = objectSpecification.getSpecId();
-        val jsonValueConverter = converterBySpecId.get(specId);
+        val cls = objectSpecification.getCorrespondingClass();
+        val jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {
             return jsonValueConverter.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
         } else {
@@ -154,7 +150,7 @@ public class JsonValueEncoder {
                 throw _Exceptions.illegalArgument(
                         "objectSpec '%s' expected to have EncodableFacet "
                         + "or a registered JsonValueConverter", 
-                        specId);
+                        objectSpecification.getLogicalTypeName());
             }
             Object value = objectAdapter != null
                     ? encodableFacet.toEncodedString(objectAdapter)
@@ -171,8 +167,9 @@ public class JsonValueEncoder {
         requires(adapter, "adapter");
         
         val objectSpec = adapter.getSpecification();
+        val cls = objectSpec.getCorrespondingClass();
         
-        val jsonValueConverter = converterBySpecId.get(objectSpec.getSpecId());
+        val jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {
             return jsonValueConverter.asObject(adapter, format);
         }
@@ -213,18 +210,13 @@ public class JsonValueEncoder {
 
         protected final String format;
         protected final String xIsisFormat;
-        private final Class<?>[] classes;
+        
+        @Getter private final Can<Class<?>> classes;
 
         public JsonValueConverter(String format, String xIsisFormat, Class<?>... classes) {
             this.format = format;
             this.xIsisFormat = xIsisFormat;
-            this.classes = classes;
-        }
-
-        public List<ObjectSpecId> getSpecIds() {
-            return _NullSafe.stream(classes)
-                    .map((Class<?> cls) ->ObjectSpecId.of(cls.getName()))
-                    .collect(Collectors.toList());
+            this.classes = Can.ofArray(classes);
         }
 
         /**

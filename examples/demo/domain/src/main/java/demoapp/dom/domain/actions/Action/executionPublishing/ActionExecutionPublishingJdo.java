@@ -27,17 +27,16 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -64,17 +63,17 @@ public class ActionExecutionPublishingJdo
 
 //tag::property[]
     @Property()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 
     @Property()
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 
     @Property()
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::property[]
@@ -84,11 +83,11 @@ public class ActionExecutionPublishingJdo
         executionPublishing = Publishing.ENABLED       // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@Action(publishing = ENABLED)"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingAnnotation(final String value) {
         setProperty(value);
@@ -105,11 +104,11 @@ public class ActionExecutionPublishingJdo
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@ActionPublishingEnabledMetaAnnotation"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
         setPropertyMetaAnnotated(value);
@@ -126,13 +125,13 @@ public class ActionExecutionPublishingJdo
         executionPublishing = Publishing.ENABLED       // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotatedOverridden"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs =
             "@ActionPublishingDisabledMetaAnnotation " +
             "@Action(publishing = ENABLED)"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
         setPropertyMetaAnnotatedOverridden(value);

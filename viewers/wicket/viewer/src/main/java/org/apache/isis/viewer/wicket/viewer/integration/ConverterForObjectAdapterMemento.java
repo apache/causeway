@@ -25,7 +25,6 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
@@ -54,13 +53,13 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
         if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
-        val rootOid = RootOid.deStringEncoded(value);
-        return commonContext.mementoFor(rootOid);
+        val oid = Oid.parseUrlEncoded(value);
+        return commonContext.mementoFor(oid);
     }
 
     /**
      * Converts {@link ObjectMemento} to string representation of
-     * {@link RootOid}.
+     * {@link Oid}.
      */
     @Override
     public String convertToString(final ObjectMemento memento, final Locale locale) {

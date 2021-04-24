@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -77,19 +78,32 @@ implements
     @Override
     public Stream<ObjectAction> streamActions(
             final ImmutableEnumSet<ActionType> types, 
-            final MixedIn contributed) {
+            final MixedIn contributed,
+            final Consumer<ObjectAction> onActionOverloaded) {
         
-        if(isTypeHierarchyRoot()) {
-            return streamDeclaredActions(contributed); // stop going deeper
-        }
+        val actionStream = isTypeHierarchyRoot()
+                ? streamDeclaredActions(types, contributed) // stop going deeper
+                : Stream.concat(
+                        streamDeclaredActions(types, contributed), 
+                        superclass().streamActions(types, contributed));
         
-        val ids = _Sets.<String>newHashSet();
+        val actionSignatures = _Sets.<String>newHashSet();
+        val actionIds = _Sets.<String>newHashSet();
         
-        return Stream.concat(
-            streamDeclaredActions(contributed), 
-            superclass().streamActions(contributed)
-        )
-        .filter(action->ids.add(action.getId())); // ensure we don't emit duplicates
+        return actionStream
+        
+        // as of contributing super-classes same actions might appear more than once (overriding) 
+        .filter(action->actionSignatures.add(
+                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString()))
+        
+        // ensure we don't emit duplicates
+        .filter(action->{
+            val isUnique = actionIds.add(action.getId());
+            if(!isUnique) {
+                onActionOverloaded.accept(action);
+            }
+            return isUnique;
+        }); 
     }
     
     // -- ASSOCIATIONS

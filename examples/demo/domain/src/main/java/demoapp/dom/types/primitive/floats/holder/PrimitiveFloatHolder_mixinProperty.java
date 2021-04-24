@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.primitive.floats.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class PrimitiveFloatHolder_mixinProperty {
 
     private final PrimitiveFloatHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public float prop() {
         return holder.getReadOnlyProperty();
     }

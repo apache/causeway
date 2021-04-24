@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,9 +33,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -45,7 +42,8 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
+public class BreadcrumbPanel 
+extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -82,8 +80,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    final RootOid result = RootOid.deString(oidStr);
-                    return Oid.marshaller().marshal(result);
+                    final Oid resultOid = Oid.parse(oidStr);
+                    return resultOid.stringify();
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;
@@ -125,7 +123,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            currentMessageBroker().ifPresent(messageBroker->{
+                            getCommonContext().getMessageBroker()
+                            .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");
                                 String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                                 target.appendJavaScript(feedbackMsg);    
@@ -136,11 +135,6 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
-                    private Optional<MessageBroker> currentMessageBroker() {
-                        return getCommonContext().getInteractionTracker()
-                                .currentMessageBroker();
-                    }
-                    
                     private IsisAppCommonContext getCommonContext() {
                         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
                     }

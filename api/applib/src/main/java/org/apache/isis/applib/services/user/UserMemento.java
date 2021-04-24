@@ -19,19 +19,28 @@
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
@@ -77,7 +86,16 @@ public final class UserMemento implements Serializable {
     public static UserMemento ofNameAndRoleNames(
             final @NonNull String name,
             final String... roleNames) {
-        return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
+        return ofNameAndRoleNames(name, Stream.of(roleNames));
+    }
+
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name,
+            final @NonNull List<String> roleNames) {
+        return ofNameAndRoleNames(name, roleNames.stream());
     }
 
     /**
@@ -109,18 +127,79 @@ public final class UserMemento implements Serializable {
     /**
      * The user's login name.
      */
-    @MemberOrder(sequence = "1.1")
+    @Property
+    @PropertyLayout(sequence = "1.1")
     @Getter
     private final String name;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.2")
+    @Getter
+    private String realName;
+
+    @Programmatic
+    public UserMemento withRealName(final String realName) {
+        val userMemento = copy();
+        userMemento.realName = realName;
+        return userMemento;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.3")
+    @Getter
+    @Nullable
+    private URL avatarUrl;
+
+    @Programmatic
+    public UserMemento withAvatarUrl(final URL avatarUrl) {
+        val userMemento = copy();
+        userMemento.avatarUrl = avatarUrl;
+        return userMemento;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.4")
+    @Getter
+    private boolean impersonating;
+
+    public UserMemento withImpersonating() {
+        final UserMemento copy = copy();
+        copy.impersonating = true;
+        return copy;
+    }
+
+    private UserMemento copy() {
+        return copy(this.roles);
+    }
+
+    private UserMemento copy(final List<RoleMemento> roles) {
+        val userMemento = new UserMemento(this.name, roles.stream());
+        userMemento.realName = this.realName;
+        userMemento.avatarUrl = this.avatarUrl;
+        userMemento.impersonating = this.impersonating;
+        return userMemento;
+    }
+
 
     /**
      * The roles associated with this user.
      */
-    @MemberOrder(sequence = "1.1")
+    @Collection
+    @CollectionLayout(sequence = "1.4")
     private final List<RoleMemento> roles;
     public List<RoleMemento> getRoles() {
         return roles;
     }
+
+    @Programmatic
+    public UserMemento withRole(String role) {
+        final List<RoleMemento> roles = new ArrayList<>(this.roles);
+        roles.add(new RoleMemento(role));
+        val userMemento = copy(roles);
+        return userMemento;
+    }
+
+
 
     /**
      * Determine if the specified name is this user.
@@ -133,11 +212,13 @@ public final class UserMemento implements Serializable {
         return name.equals(userName);
     }
 
+    @Programmatic
     public Stream<String> streamRoleNames() {
         return roles.stream()
                 .map(RoleMemento::getName);
     }
 
+    @Programmatic
     public boolean hasRoleName(final @Nullable String roleName) {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
@@ -146,11 +227,10 @@ public final class UserMemento implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        for (final RoleMemento role : roles) {
-            buf.append(role.getName()).append(" ");
-        }
-        return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
+        val rolesStringified = roles.stream()
+        .map(RoleMemento::getName)
+        .collect(Collectors.joining(", "));
+        return "User [name=" + getName() + ", roles=" + rolesStringified + "]";
     }
 
     @Override

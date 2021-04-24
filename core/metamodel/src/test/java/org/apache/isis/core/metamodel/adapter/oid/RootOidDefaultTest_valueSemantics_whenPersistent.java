@@ -22,24 +22,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public class RootOidDefaultTest_valueSemantics_whenPersistent extends ValueTypeContractTestAbstract<RootOid> {
+public class RootOidDefaultTest_valueSemantics_whenPersistent 
+extends ValueTypeContractTestAbstract<Oid> {
 
     @Override
-    protected List<RootOid> getObjectsWithSameValue() {
+    protected List<Oid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"));
+                Oid.of(LogicalTypeTestFactory.cus(), "123"),
+                Oid.of(LogicalTypeTestFactory.cus(), "123"),
+                Oid.of(LogicalTypeTestFactory.cus(), "123"));
     }
 
     @Override
-    protected List<RootOid> getObjectsWithDifferentValue() {
+    protected List<Oid> getObjectsWithDifferentValue() {
         return Arrays.asList(
                 //Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.root(ObjectSpecId.of("CUS"), "124"),
-                Oid.Factory.root(ObjectSpecId.of("CUX"), "123"));
+                Oid.of(LogicalTypeTestFactory.cus(), "124"),
+                Oid.of(LogicalTypeTestFactory.cux(), "123"));
     }
 
 }

@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.update.modify;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * The mechanism by which the value of the property can be set.
@@ -38,18 +35,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * @see PropertyClearFacet
  * @see PropertyInitializationFacet
  */
-public interface PropertySetterFacet extends Facet {
+public interface PropertySetterFacet extends PropertySettingAccessor, Facet {
 
-    /**
-     * Sets the value of this property.
-     *
-     * <p>
-     *     If this is a view model, then the target will be cloned and effectively replaced.
-     * </p>
-     */
-    ManagedObject setProperty(
-            final OneToOneAssociation owningAssociation,
-            final ManagedObject inObject,
-            final ManagedObject value,
-            final InteractionInitiatedBy interactionInitiatedBy);
 }

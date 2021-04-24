@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.value;
 
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -31,7 +32,8 @@ import lombok.val;
  * Panel for rendering any value types that do not have their own custom
  * {@link ScalarPanelAbstract panel} to render them.
  */
-public class StandaloneValuePanel extends PanelAbstract<ValueModel> {
+public class StandaloneValuePanel
+extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_STANDALONE_VALUE = "standaloneValue";

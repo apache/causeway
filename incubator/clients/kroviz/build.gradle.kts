@@ -117,8 +117,8 @@ kotlin {
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.3")
         implementation("pl.treksoft:kvision-testutils:$kvisionVersion:tests")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.2")
     }
     sourceSets["main"].resources.srcDir(webDir)
 }

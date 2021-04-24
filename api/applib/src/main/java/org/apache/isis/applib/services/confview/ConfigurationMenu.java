@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.services.confview;
 
-import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,10 +27,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.applib.services.factory.FactoryService;
 
 /**
  * Simply provides a UI in order to access the configuration properties
@@ -48,11 +44,11 @@ public class ConfigurationMenu {
     public static abstract class ActionDomainEvent
             extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
 
-    private final ConfigurationViewService configurationService;
+    private final FactoryService factoryService;
 
     @Inject
-    public ConfigurationMenu(ConfigurationViewService configurationService) {
-        this.configurationService = configurationService;
+    public ConfigurationMenu(FactoryService factoryService) {
+        this.factoryService = factoryService;
     }
 
     public static class ConfigurationDomainEvent
@@ -63,11 +59,11 @@ public class ConfigurationMenu {
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
-            cssClassFa = "fa-wrench"
-    )
-    @MemberOrder(sequence = "500.900.1")
-    public Set<ConfigurationProperty> configuration(){
-        return configurationService.allProperties();
+            cssClassFa = "fa-wrench",
+            sequence = "500.900.1")
+    public ConfigurationViewmodel configuration(){
+        return factoryService.viewModel(new ConfigurationViewmodel());
     }
+
 
 }

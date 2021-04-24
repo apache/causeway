@@ -20,11 +20,11 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
@@ -34,10 +34,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Contributes a property exposing the internal identifier of the domain
+ * object, typically as specified by {@link DomainObject#objectType()}.
+ *
+ * <p>
+ *     The object identifier is also accessible from the
+ *     {@link org.apache.isis.applib.services.bookmark.Bookmark} of the
+ *     object.
+ * </p>
+ *
+ * @see DomainObject
+ * @see org.apache.isis.applib.mixins.metamodel.Object_objectType
+ * @see org.apache.isis.applib.services.bookmark.Bookmark
+ * @see org.apache.isis.applib.services.bookmark.BookmarkService
+ *
  * @since 1.x {@index}
  */
 @Property
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(
+        hidden = Where.ALL_TABLES,
+        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        sequence = "700.2"
+)
 @RequiredArgsConstructor
 public class Object_objectIdentifier {
 
@@ -49,9 +67,8 @@ public class Object_objectIdentifier {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
+        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         val sort = mmService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
         if(!sort.isEntity()) {
             return shortend(bookmark.getIdentifier());

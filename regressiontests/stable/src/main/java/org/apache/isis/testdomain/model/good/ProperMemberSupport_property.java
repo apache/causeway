@@ -20,10 +20,10 @@ package org.apache.isis.testdomain.model.good;
 
 import java.util.Set;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,27 +42,27 @@ public class ProperMemberSupport_property {
     
     // -- PROPERLY DECLARED SUPPORTING METHODS 
     
-    @Model
+    @MemberSupport
     public Set<String> autoCompleteProp(@MinLength(3) String search) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Set<String> choicesProp() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public String defaultProp() {
         return "";
     }
 
-    @Model
+    @MemberSupport
     public String disableProp() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hideProp() {
         return false;
     }

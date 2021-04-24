@@ -19,6 +19,7 @@
 package demoapp.dom.domain._interactions;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -53,10 +54,12 @@ public class InteractionDtoVm implements ViewModel {
         // nb: not thread-safe
         // formats defined in https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
         val format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
+        val exec = getInteractionDto().getExecution();
+        val instant = exec.getMetrics().getTimings().getStartedAt().toGregorianCalendar().toInstant();
+        
         val buf = new TitleBuffer();
-        buf.append(format.format(getInteractionDto().getExecution().getMetrics().getTimings().getStartedAt().toString()));
-        buf.append(" ").append(getInteractionDto().getExecution().getLogicalMemberIdentifier());
+        buf.append(format.format(Date.from(instant)));
+        buf.append(" ").append(exec.getLogicalMemberIdentifier());
         return buf.toString();
     }
 

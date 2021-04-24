@@ -398,7 +398,7 @@ class Generation {
         operation
         .response(200,
                 newResponse(Caching.TRANSACTIONAL)
-                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(newRefProperty(isisModelDefinition)));
 
         final ModelImpl isisModel = new ModelImpl();
@@ -503,7 +503,7 @@ class Generation {
         invokeOperation
         .response(
                 200, new Response()
-                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(actionReturnTypeFor(serviceAction))
                 );
     }
@@ -532,7 +532,7 @@ class Generation {
         collectionOperation
         .response(
                 200, new Response()
-                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(modelFor(collection))
                 );
     }
@@ -761,7 +761,7 @@ class Generation {
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {
-        return objectSpec.getFacet(ObjectSpecIdFacet.class).value().asString();
+        return objectSpec.getFacet(ObjectSpecIdFacet.class).value();
     }
 
     static StringProperty stringProperty() {
@@ -846,8 +846,8 @@ class Generation {
 
         if(supportsV1) {
             operation = operation
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1" + DQ)
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1;suppress=all" + DQ);
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2" + DQ)
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2;suppress=all" + DQ);
         }
 
         return operation;

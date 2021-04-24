@@ -39,14 +39,14 @@ public class ApplicationTenancy_users {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     // -- users (collection)
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
     public java.util.Collection<? extends ApplicationUser> coll() {
-        return applicationUserRepository.findByAtPath(holder.getPath());
+        return applicationUserRepository.findByAtPath(target.getPath());
     }
 
 }

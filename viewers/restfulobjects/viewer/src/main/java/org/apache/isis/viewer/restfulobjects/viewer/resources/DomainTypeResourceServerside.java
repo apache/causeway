@@ -36,7 +36,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -113,9 +112,9 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val objectSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
 
-        final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        val renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -135,8 +134,9 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
-        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
-        val gridFacet = objectSpec.getFacet(GridFacet.class);
+        val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
+                .map(spec->spec.getFacet(GridFacet.class))
+                .orElse(null);
         
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
@@ -160,7 +160,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.PROPERTY_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -188,7 +188,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -216,7 +216,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -239,7 +239,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -274,9 +274,13 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
-        val domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
-        val supertypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(supertype));
-
+        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        val supertypeSpec = getSpecificationLoader().specForLogicalTypeName(supertype).orElse(null);
+        if (domainTypeSpec == null
+                || supertypeSpec == null) {
+            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
+        
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 
         final String url = "domain-types/" + domainType + "/type-actions/isSubtypeOf/invoke";
@@ -306,8 +310,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 
-        val domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
-        val subtypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(subtype));
+        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        val subtypeSpec = getSpecificationLoader().specForLogicalTypeName(subtype).orElse(null);
+        if (domainTypeSpec == null
+                || subtypeSpec == null) {
+            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 

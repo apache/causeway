@@ -30,14 +30,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.adapter.oid.LogicalTypeTestFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 public class SpecificationCacheDefaultTest {
+    
+    private LogicalType cus = LogicalTypeTestFactory.cus();
+    private LogicalType ord = LogicalTypeTestFactory.ord();
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
@@ -48,7 +52,7 @@ public class SpecificationCacheDefaultTest {
     private ObjectSpecification orderSpec;
 
     private SpecificationCache<ObjectSpecification> specificationCache = new SpecificationCacheDefault<>();
-    private SpecIdToClassResolver specIdToClassResolver = new SpecIdToClassResolverDefault();
+    private LogicalTypeResolver specIdToClassResolver = new LogicalTypeResolverDefault();
 
     @Before
     public void setUp() throws Exception {
@@ -57,14 +61,14 @@ public class SpecificationCacheDefaultTest {
             allowing(customerSpec).getCorrespondingClass();
             will(returnValue(Customer.class));
 
-            allowing(customerSpec).getSpecId();
-            will(returnValue(ObjectSpecId.of("CUS")));
+            allowing(customerSpec).getLogicalType();
+            will(returnValue(cus));
             
             allowing(orderSpec).getCorrespondingClass();
             will(returnValue(Order.class));
             
-            allowing(orderSpec).getSpecId();
-            will(returnValue(ObjectSpecId.of("ORD")));
+            allowing(orderSpec).getLogicalType();
+            will(returnValue(ord));
             
         }});
     }
@@ -106,7 +110,7 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        val type = specIdToClassResolver.lookup(ObjectSpecId.of("CUS"));
+        val type = specIdToClassResolver.lookup(cus.getLogicalTypeName());
         assertFalse(type.isPresent());
     }
 

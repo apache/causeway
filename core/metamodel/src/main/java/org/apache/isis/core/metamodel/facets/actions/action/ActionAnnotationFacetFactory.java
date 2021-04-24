@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -42,16 +42,18 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
+public class ActionAnnotationFacetFactory
+extends FacetFactoryAbstract {
 
     public ActionAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -59,9 +61,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
-        val actionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Action.class);
-        
+
+        val actionIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Action.class, 
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+
         processExplicit(processMethodContext, actionIfAny);
         processInvocation(processMethodContext, actionIfAny);
         processHidden(processMethodContext, actionIfAny);
@@ -76,7 +82,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processTypeOf(processMethodContext, actionIfAny);
         processAssociateWith(processMethodContext, actionIfAny);
-        
+
         processFileAccept(processMethodContext, actionIfAny);
     }
 
@@ -107,7 +113,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
-            
+
 
             // search for @Action(domainEvent=...), else use the default event type
             val actionDomainEventFacet =
@@ -154,7 +160,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
             final ObjectSpecification typeSpec,
             final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
-        
+
         if (actionDomainEventType == ActionDomainEvent.Default.class) {
             val typeFromDomainObject =
                     typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
@@ -179,7 +185,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // search for @Action(restrictTo=...)
         val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, facetedMethod,
                 ()->super.getSystemEnvironment().getDeploymentType());
-        
+
         super.addFacet(facet);
     }
 
@@ -193,7 +199,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processCommandPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
@@ -201,8 +207,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -215,17 +221,17 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processExecutionPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
-        
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -267,21 +273,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
-
         actionIfAny.ifPresent(action->{
             val associateWith = action.associateWith();
-            if(!_Strings.isNullOrEmpty(associateWith)) {
-                val associateWithSequence = action.associateWithSequence();
-                super.addFacet(
-                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, facetedMethod));
-                super.addFacet(
-                        new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
+            if(_Strings.isNotEmpty(associateWith)) {
+                super.addFacet(new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
+                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
             }
         });
-        
-
     }
-    
+
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val holder = processMethodContext.getFacetHolder();
@@ -289,7 +289,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(fileAccept=...)
         val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
         super.addFacet(facet);
-
     }
 
 

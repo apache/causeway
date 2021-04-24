@@ -69,7 +69,7 @@ The `InteractionDto` DTO corresponding to the `interactionDto` root element can 
 == `memberExecutionDto`
 
 The `memberExecutionDto` complex type is an abstract type representing either the invocation an action or the editing of a property.
-It corresponds to the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`] of the "cmd" schema; some elements are copied directly:
+It corresponds to the xref:refguide:schema:cmd/memberDto.adoc[memberDto] of the "cmd" schema; some elements are copied directly:
 
 [source,xml]
 ----
@@ -103,10 +103,10 @@ It corresponds to the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`] of th
 <1> the `memberExecutionDto` is an abstract type
 <2> uniquely identifies this execution within the transaction.
 Can be combined with `transactionId` to create a unique identifier (across all other interaction executions and also changed objects events) of this particular interaction execution.
-<3> the target object, corresponding to one of the elements of the `targets` element of the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`]
-<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`]
-<5> the _logical_ member identifier; corresponds to `logicalMemberIdentifier` of the `member` element of the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`]
-<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:refguide:schema:cmd/memberDto.adoc[`memberDto`]
+<3> the target object, corresponding to one of the elements of the `targets` element of the xref:refguide:schema:cmd/memberDto.adoc[memberDto]
+<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:refguide:schema:cmd/memberDto.adoc[memberDto]
+<5> the _logical_ member identifier; corresponds to `logicalMemberIdentifier` of the `member` element of the xref:refguide:schema:cmd/memberDto.adoc[memberDto]
+<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:refguide:schema:cmd/memberDto.adoc[memberDto]
 <7> the current "human-friendly" title of the target object
 <8> the set of metrics captured for this execution, of type `metricsDto` defined xref:refguide:schema:ixn/ancillary.adoc[below].
 <9> if the action invocation/property edit threw an exception, then this is captured here.
@@ -149,12 +149,12 @@ The `actionInvocationDto` and `propertyEditDto` are the concrete subtypes:
 ----
 <1> the `actionInvocationDto` inherits from `memberExecutionDto`.
 It corresponds to the similar
-xref:refguide:schema:cmd/memberDto.adoc[`actionDto`] complex type of the "cmd" schema
+xref:refguide:schema:cmd/memberDto.adoc[actionDto] complex type of the "cmd" schema
 <2> the `parameters` element captures the parameter and argument values; for the top-level execution it is a direct copy of the corresponding `parameters` element of the `actionDto` complex type of the "cmd" schema.
 <3> the `returned` element captures the returned value (if not void).
 It is not valid for both this element and the inherited `threw` element to both be populated.
 <4> the `propertyEditDto` inherits from `memberExecutionDto`.
-It corresponds to the similar xref:refguide:schema:cmd/memberDto.adoc[`propertyDto`] complex type of the "cmd" schema
+It corresponds to the similar xref:refguide:schema:cmd/memberDto.adoc[propertyDto] complex type of the "cmd" schema
 <5> the `newValue` element captures the new value; for the top-level execution it is a direct
 copy of the corresponding `newValue` element of the `propertyDto` complex type of the "cmd" schema.
 

@@ -25,12 +25,14 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -38,21 +40,25 @@ public class TransactionEventEmitter
 implements TransactionSynchronization, InteractionScopeAware {
 
     private final EventBusService eventBusService;
+    private final InteractionTracker interactionTracker;
     
     @Override
     public void beforeCompletion() {
+        _Xray.txBeforeCompletion(interactionTracker, "tx: beforeCompletion");
         eventBusService.post(TransactionBeforeCompletionEvent.instance());
     }
 
     @Override
     public void afterCompletion(int status) {
-        eventBusService.post(TransactionAfterCompletionEvent.forStatus(status));
+        val event = TransactionAfterCompletionEvent.forStatus(status);
+        eventBusService.post(event);
+        _Xray.txAfterCompletion(interactionTracker, String.format("tx: afterCompletion (%s)", event.name()));
     }
     
     @Override
     public void afterEnteringTransactionalBoundary(
-            InteractionSession interactionSession, 
-            boolean isSynchronizationActive) {
+            final Interaction interaction, 
+            final boolean isSynchronizationActive) {
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);
         }

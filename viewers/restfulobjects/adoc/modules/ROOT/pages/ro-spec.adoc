@@ -2,16 +2,15 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The Restful Objects v1.0 specification defines a comprehensive hypermedia API, consisting of HTTP resources and corresponding JSON representations, for accessing and manipulating a domain object model.
 
-The Restful Objects spec can be downloaded from link:http://restfulobjects.org[here] as either a PDF or Word doc.
+The Restful Objects spec is available online at link:https://restfulobjects.org[https://restfulobjects.org].
 
 == Goals of the Spec
 
 The goal of Restful Objects is to allow domain models to be accessed through HTTP resources, returning a set of JSON representations.
-These representations can then be consumed by any client (e.g. Javascript, Java, .NET, Ruby, Python).
+These representations can then be consumed by any client (e.g. JavaScript, Java, .NET, Ruby, Python).
 
 Both the resources and representations are generalized so that they can be applied to any domain model, and by default all representations have media types designed to allow a completely generic client to be written, capable of working, unmodified, with any domain model that has a Restful Objects interface.
 
@@ -41,17 +40,12 @@ image::restfulobjects/ro-spec-resources-and-representations.png[width="800px"]
 The resource URLs are always well-defined, but Apache Isis' implementation allows for different representations to be returned, using content negotiation.
 This is discussed further below.
 
-[NOTE]
-====
-In fact, there's nothing in Apache Isis to prevent you from defining your own REST controllers to provide custom resource URLs.
-One use case might be to support user registration/authentication, a topic out-of-scope of the RO spec itself.
-====
 
 == Apache Isis' implementation
 
 The Restful Objects viewer is Apache Isis' implementation of the Restful Objects spec.
 It implements all the mandatory features of the specification.
-It also implements some of the optional capabilities (as defined in section 3 of the RO spec, and as represented in the version resource, section 8.1):
+It also implements some of the optional capabilities (as defined in link:https://www.restfulobjects.org/spec/1.0/section-a/chapter-03.html[section 3] of the RO spec, and as represented in the version resource, section 8.1):
 
 [cols="1a,1a,1a",options="header"]
 |===
@@ -86,16 +80,16 @@ It also implements some of the optional capabilities (as defined in section 3 of
 
 == Extensions
 
-The Restful Objects viewer also implements some of the "future ideas" that are out of scope for the RO spec v1.0, but described in section 34, "ideas for future extensions".
+The Restful Objects viewer also implements some of the "future ideas" that are out of scope for the RO spec v1.0, but described in link:http://www.restfulobjects.org/spec/1.0/section-e/chapter-34.html[chapter 34], "ideas for future extensions".
 
-=== Content Negotiation (34.1)
+=== Content Negotiation
 
-Apache Isis provides two levels of support for content negotiation.
+Apache Isis provides two levels of support for content negotiation (section link:http://www.restfulobjects.org/spec/1.0/section-e/chapter-34.html#34.1-content-negotiation[34.1])
 
 ==== `x-ro-domain-type`
 
 The first level is very similar to the "Domain Model Agnostic" approach sketched out in the RO spec.
-The client can send an `x-ro-domain-type` parameter for either domain object representations (section 14 of the spec) or action invocation results (section 19 of the spec).
+The client can send an `x-ro-domain-type` parameter for either domain object representations (link:http://www.restfulobjects.org/spec/1.0/section-c/chapter-14.html[section 14] of the spec) or action invocation results (link:http://www.restfulobjects.org/spec/1.0/section-c/chapter-19.html[section 19]).
 This can be combined with either `application/json` or
 `application/xml`.
 
@@ -106,8 +100,8 @@ For example, the client could use an `Accept` header such as:
 Accept: application/xml;x-ro-domain-type="com.mycompany.viewmodels.v2.CustomerViewModel"
 ----
 
-The server will use the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to attempt to transform the domain object into the requested `x-ro-domain-type`.
-The whole process is discussed in more detail in the xref:vro:ROOT:architecture.adoc[architecture] chapter.
+The server will use the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] to attempt to transform the domain object into the requested `x-ro-domain-type`.
+The whole process is discussed in more detail in the xref:vro:ROOT:content-negotiation.adoc[architecture] chapter.
 
 ==== Apache Isis profile
 
@@ -121,22 +115,20 @@ link:https://github.com/mgcrea/angular-strap[Angular Strap].
 This support is discussed further in the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
 chapter.
 
-=== Minimizing Round-trips (34.4)
+=== Minimizing Round-trips
 
-The Restful Objects viewer supports the `x-ro-follow-links` query parameter in a way very similar to that suggested in the RO spec, the main point being to avoid the "N+1" problem of too many (slow) network calls.
+The Restful Objects viewer supports the `x-ro-follow-links` query parameter in a way very similar to that suggested in the RO spec (section link:https://www.restfulobjects.org/spec/1.0/section-e/chapter-34.html#34.4-minimizing-round-trips-(x-ro-follow-links)[34.4]), the main point being to avoid the "N+1" problem of too many (slow) network calls.
 For example, using this feature one can load a grid of data in a single call.
 (That said, the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
 supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
-This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the link:http://github.com/apache/isis-app-kitchensink[Isis addons' kitchensink] app as the example, This app contains three entities, `Grandparent`, `Parent` and `ChildJdo` that define a hierarchy of 1:m relationships.
+For example, with an app containing three entities, `Grandparent`, `Parent` and `ChildJdo` that define a hierarchy of 1:m relationships, we could define the following queries:
 
-The queries that are shown in the screencast include:
-
-* show parent and its children (titles) +
+* show parent and its children (titles)
 +
 pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=members[children\].value]
 
-* show parent and its children (full details) +
+* show parent and its children (full details)
 +
 pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=members[children\].value.href]
 
@@ -154,11 +146,6 @@ By default the representations generated by Restful Objects ignore any Apache Is
 In particular, if a collection is annotated then `Render(EAGERLY)` then the contents of the collection are _not_ eagerly embedded in the object representation.
 
 However, this behaviour can be overridden globally using the
-xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.honor-ui-hints[`isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.honor-ui-hints`] configuration property:
-
-[source,ini]
-----
-isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.honor-ui-hints=true
-----
+xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.honor-ui-hints[isis.viewer.restfulobjects.honor-ui-hints] configuration property:
 
 This means that standard Apache Isis annotations can be used as a simple way to obtain follow-links (driven from the server model, though, rather than the requesting client).

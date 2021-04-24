@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,28 +30,28 @@ public class InteractionDemo_multiEnum {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
-    @Model
+    @MemberSupport
     public int act(DemoEnum a, DemoEnum b, DemoEnum c) {
         return a.ordinal() * (b.ordinal() + c.ordinal());
     }
     
     // -- PARAM A
     
-    @Model 
+    @MemberSupport 
     public DemoEnum defaultA(Parameters.TriEnum p) {
         return DemoEnum.values()[1];
     }
     
     // -- PARAM B
     
-    @Model 
+    @MemberSupport 
     public DemoEnum defaultB(Parameters.TriEnum p) {
         return DemoEnum.values()[2];
     }
     
     // -- PARAM C
     
-    @Model 
+    @MemberSupport 
     public DemoEnum defaultC(Parameters.TriEnum p) {
         return DemoEnum.values()[3];
     }

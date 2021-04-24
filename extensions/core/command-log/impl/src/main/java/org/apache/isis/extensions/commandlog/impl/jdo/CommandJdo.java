@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.DomainChangeRecord;
+import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
@@ -84,10 +84,10 @@ import lombok.val;
         table = "Command")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name="findByUniqueIdStr",
+            name="findByInteractionIdStr",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE uniqueIdStr == :uniqueIdStr "),
+                    + "WHERE interactionIdStr == :interactionIdStr "),
     @javax.jdo.annotations.Query(
             name="findByParent",
             value="SELECT "
@@ -110,14 +110,14 @@ import lombok.val;
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
                     + "WHERE target == :target "
-                    + "ORDER BY this.timestamp DESC, uniqueIdStr DESC "
+                    + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,30"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBetween",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
                     + "WHERE target == :target "
-                    + "&& timestamp >= :from " 
+                    + "&& timestamp >= :from "
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
@@ -144,7 +144,7 @@ import lombok.val;
             name="findByTimestampBetween",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp >= :from " 
+                    + "WHERE timestamp >= :from "
                     + "&&    timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
@@ -272,8 +272,8 @@ public class CommandJdo
      * @param command
      */
     public CommandJdo(final Command command) {
-        
-        setUniqueIdStr(command.getUniqueId().toString());
+
+        setInteractionIdStr(command.getInteractionId().toString());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
 
@@ -303,12 +303,12 @@ public class CommandJdo
             final ReplayState replayState,
             final int targetIndex) {
 
-        setUniqueIdStr(commandDto.getTransactionId());
+        setInteractionIdStr(commandDto.getInteractionId());
         setUsername(commandDto.getUser());
         setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp()));
 
         setCommandDto(commandDto);
-        setTarget(Bookmark.from(commandDto.getTargets().getOid().get(targetIndex)));
+        setTarget(Bookmark.fromOidDto(commandDto.getTargets().getOid().get(targetIndex)));
         setLogicalMemberIdentifier(commandDto.getMember().getLogicalMemberIdentifier());
 
         // the hierarchy of commands calling other commands is only available on the primary system, and is
@@ -360,7 +360,7 @@ public class CommandJdo
     }
 
 
-    public static class UniqueIdDomainEvent extends PropertyDomainEvent<String> { }
+    public static class InteractionIdDomainEvent extends PropertyDomainEvent<String> { }
     /**
      * Implementation note: persisted as a string rather than a UUID as fails
      * to persist if using h2 (perhaps would need to be mapped differently).
@@ -368,13 +368,13 @@ public class CommandJdo
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false", name = "uniqueId", length = 36)
-    @Property(domainEvent = UniqueIdDomainEvent.class)
-    @PropertyLayout(named = "UniqueId")
+    @javax.jdo.annotations.Column(allowsNull="false", name = "interactionId", length = 36)
+    @Property(domainEvent = InteractionIdDomainEvent.class)
+    @PropertyLayout(named = "Interaction Id")
     @Getter @Setter
-    private String uniqueIdStr;
+    private String interactionIdStr;
     @Programmatic
-    public UUID getUniqueId() {return UUID.fromString(getUniqueIdStr());}
+    public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
 
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> { }
@@ -492,7 +492,7 @@ public class CommandJdo
     public static class DurationDomainEvent extends PropertyDomainEvent<BigDecimal> { }
     /**
      * The number of seconds (to 3 decimal places) that this interaction lasted.
-     * 
+     *
      * <p>
      * Populated only if it has {@link #getCompletedAt() completed}.
      */
@@ -594,7 +594,7 @@ public class CommandJdo
     @Override
     public String toString() {
         return ObjectContracts
-                .toString("uniqueId", CommandJdo::getUniqueId)
+                .toString("interactionId", CommandJdo::getInteractionId)
                 .thenToString("username", CommandJdo::getUsername)
                 .thenToString("timestamp", CommandJdo::getTimestamp)
                 .thenToString("target", CommandJdo::getTarget)
@@ -631,7 +631,7 @@ public class CommandJdo
                 CommandJdo.this.setResult(resultBookmark.getValue().orElse(null));
                 CommandJdo.this.setException(resultBookmark.getFailure().orElse(null));
             }
-            
+
         };
     }
 
@@ -653,7 +653,7 @@ public class CommandJdo
 
         private List<String> ordered(List<String> propertyIds) {
             return Arrays.asList(
-                "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "uniqueIdStr"
+                "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "interactionIdStr"
             );
         }
     }

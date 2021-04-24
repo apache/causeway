@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -114,8 +114,7 @@ public final class ManagedObjects {
     
     public static Optional<String> getDomainType(ManagedObject managedObject) {
         return spec(managedObject)
-                .map(ObjectSpecification::getSpecId)
-                .map(ObjectSpecId::asString);
+                .map(ObjectSpecification::getLogicalTypeName);
     }
     
     // -- IDENTIFICATION
@@ -124,18 +123,18 @@ public final class ManagedObjects {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty(); 
     }
     
-    public static Optional<RootOid> identify(@Nullable ManagedObject managedObject) {
+    public static Optional<Oid> identify(@Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? managedObject.getRootOid() : Optional.empty(); 
     }
     
-    public static RootOid identifyElseFail(@Nullable ManagedObject managedObject) {
+    public static Oid identifyElseFail(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
     
     public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
-                .map(RootOid::asBookmark);
+                .map(Oid::asBookmark);
     }
     
     public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
@@ -150,7 +149,7 @@ public final class ManagedObjects {
      */
     public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
         return identify(managedObject)
-                .map(RootOid::enString);
+                .map(Oid::stringify);
     }
     
     public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
@@ -169,7 +168,7 @@ public final class ManagedObjects {
             @Nullable ManagedObject managedObject, 
             @NonNull final String separator) {
         return identify(managedObject)
-                .map(rootOid->rootOid.getObjectSpecId() + separator + rootOid.getIdentifier());
+                .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
@@ -318,8 +317,7 @@ public final class ManagedObjects {
         val commonSuperClass = commonSuperClassFinder.getCommonSuperclass().orElse(null);
         if(commonSuperClass!=null && commonSuperClass!=firstElement.getSpecification().getCorrespondingClass()) {
             val specificationLoader = firstElementSpec.getMetaModelContext().getSpecificationLoader();
-            val commonSpec = specificationLoader.loadSpecification(commonSuperClass);
-            return Optional.of(commonSpec);
+            return specificationLoader.specForType(commonSuperClass);
         }
         
         return Optional.of(firstElementSpec);
@@ -411,13 +409,13 @@ public final class ManagedObjects {
         
         @NonNull
         public static EntityState getEntityState(@Nullable ManagedObject adapter) {
-            if(adapter==null) {
+            if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 return EntityState.NOT_PERSISTABLE;
             }
             val spec = adapter.getSpecification();
             val pojo = adapter.getPojo();
             
-            if(spec==null || pojo==null || !spec.isEntity()) {
+            if(!spec.isEntity()) {
                 return EntityState.NOT_PERSISTABLE;
             }
 
@@ -469,7 +467,7 @@ public final class ManagedObjects {
                         EntityState.PERSISTABLE_ATTACHED, 
                         entityState,
                         ()-> String.format("entity %s is required to be attached (not detached)", 
-                                managedObject.getSpecification().getSpecId()));
+                                managedObject.getSpecification().getLogicalTypeName()));
             }
             return managedObject;
         }
@@ -487,20 +485,20 @@ public final class ManagedObjects {
                 return managedObject;
             }
             
-            // identification (on JDO) fails, when detached object, where rootOid was not previously memoized
+            // identification (on JDO) fails, when detached object, where oid was not previously memoized
             if(EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)
                     && !managedObject.isRootOidMemoized()) {
                 val msg = String.format("entity %s is required to have a memoized ID, "
                         + "otherwise cannot re-attach", 
-                        managedObject.getSpecification().getSpecId());
+                        managedObject.getSpecification().getLogicalTypeName());
                 log.error(msg); // in case exception gets swallowed
                 throw _Exceptions.illegalState(msg);
             }
             
             val objectIdentifier = identify(managedObject)
-                    .map(RootOid::getIdentifier);
+                    .map(Oid::getIdentifier);
                     
             if(!objectIdentifier.isPresent()) {
                 return managedObject;

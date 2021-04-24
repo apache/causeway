@@ -22,10 +22,14 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.springframework.stereotype.Component;
 
@@ -44,8 +48,14 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
+@PWA(name = "Example Project", shortName = "Example Project")
+//@Theme(themeClass = Material.class, variant = Material.DARK)
+@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 @Log4j2
-public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
+public class VaadinAuthenticationHandler 
+implements
+    AppShellConfigurator,
+    VaadinServiceInitListener {
 
     private static final long serialVersionUID = 1L;
     

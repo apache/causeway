@@ -35,7 +35,7 @@ public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstra
         
         return actionLayoutIfAny
                 .map(ActionLayout::redirectPolicy)
-                .map(redirect ->  new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
+                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
                 .orElse(null);
     }
 

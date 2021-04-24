@@ -20,10 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Objects;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -34,37 +35,37 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = ResetPasswordDomainEvent.class, 
-        associateWith = "hasPassword",
-        associateWithSequence = "20")
+        associateWith = "hasPassword")
+@ActionLayout(sequence = "20")
 @RequiredArgsConstructor
 public class ApplicationUser_resetPassword {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @ParameterLayout(named="New password")
             final Password newPassword,
             @ParameterLayout(named="Repeat password")
             final Password newPasswordRepeat) {
         
-        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
-        return holder;
+        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public boolean hideAct() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
+        return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(
             final Password newPassword,
             final Password newPasswordRepeat) {
         
-        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+        if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
         

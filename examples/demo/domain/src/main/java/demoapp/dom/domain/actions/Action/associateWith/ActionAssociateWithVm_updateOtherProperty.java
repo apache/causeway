@@ -26,14 +26,13 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-    associateWith = "otherProperty"                                 // <.>
-    , associateWithSequence = "1"                                   // <.>
+    associateWith = "otherProperty"                             // <.>
 )
 @ActionLayout(
     describedAs =
-        "@Action(" +
-            "associateWith = \"otherProperty\"" +
-            ", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"favorites\") " +
+            "@ActionLayout(sequence = \"1\")"
+    , sequence = "2"                                            // <.>
 )
 @RequiredArgsConstructor
 public class ActionAssociateWithVm_updateOtherProperty {

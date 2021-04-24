@@ -28,8 +28,8 @@ import com.vaadin.flow.spring.SpringServlet;
 
 import org.springframework.context.ApplicationContext;
 
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
 import lombok.NonNull;
@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * An extension of {@link SpringServlet} to support {@link InteractionSession} life-cycle management.
+ * An extension of {@link SpringServlet} to support {@link Interaction} life-cycle management.
  * @since Mar 14, 2020
  *
  */
@@ -79,7 +79,7 @@ extends SpringServlet {
         
         log.debug("request was successfully serviced (authentication={})", authentication);
         
-        if(isisInteractionFactory.isInInteractionSession()) {
+        if(isisInteractionFactory.isInInteraction()) {
             isisInteractionFactory.closeSessionStack();
             log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }

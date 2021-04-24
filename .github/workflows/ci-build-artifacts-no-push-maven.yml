@@ -31,23 +31,25 @@ jobs:
     - uses: actions/checkout@v2.3.4
     
     - name: Set up JDK 11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
+        distribution: 'zulu'
         java-version: 11
     
     - name: Print Maven Version
       run: mvn --version
       
     - name: Activate Cache for Maven Downloads
-      uses: actions/cache@v2.1.4
+      uses: actions/cache@v2.1.5
       env:
-        cache-name: cache-maven-modules
+        # change the cache-name if we want to rebuild the cache
+        # currently there is no concept of cache clearing 
+        cache-name: maven-2021-03
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
+          ${{ runner.os }}-${{ env.cache-name }}-
           ${{ runner.os }}-
     
     - name: Setup Script Environment
@@ -68,8 +70,14 @@ jobs:
         # -Dmodule-all ... build all modules 
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
+        # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
         # -T 1C ... 1 build thread per core
-        MVN_ADDITIONAL_OPTS: -Dmodule-all -Dmaven.source.skip=true -Denforcer.failFast=true -T 1C
+        MVN_ADDITIONAL_OPTS: >-
+          -Dmodule-all
+          -Dmaven.source.skip=true
+          -Denforcer.failFast=true
+          -Djacoco.skip=true 
+          -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 

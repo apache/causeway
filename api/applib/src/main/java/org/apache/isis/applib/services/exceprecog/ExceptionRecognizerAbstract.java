@@ -26,13 +26,13 @@ import java.util.function.Predicate;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.TranslatableException;
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -115,10 +115,11 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 log.info("Recognized exception, stacktrace : ", throwable);
             }
             if(ex instanceof TranslatableException) {
-                final TranslatableException translatableException = (TranslatableException) ex;
-                final TranslatableString translatableMessage = translatableException.getTranslatableMessage();
-                final String translationContext = translatableException.getTranslationContext();
-                if(translatableMessage != null && translationContext != null) {
+                val translatableException = (TranslatableException) ex;
+                val translatableMessage = translatableException.getTranslatableMessage();
+                val translationContext = translatableException.getTranslationContext();
+                if(translatableMessage != null 
+                        && translationContext != null) {
                     return translatableMessage.translate(translationService, translationContext);
                 }
             }

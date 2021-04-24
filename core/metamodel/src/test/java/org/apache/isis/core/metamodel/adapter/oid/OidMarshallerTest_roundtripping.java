@@ -24,25 +24,25 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import lombok.val;
 
 public class OidMarshallerTest_roundtripping {
 
     @Test
-    public void rootOid() {
-        RootOid oid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
+    public void oid() {
+        val oid = Oid.of(LogicalTypeTestFactory.cus(), "123");
 
-        final String enString = oid.enString();
-        final RootOid deString = RootOid.deString(enString);
+        final String enString = oid.stringify();
+        final Oid deString = Oid.parse(enString);
         assertThat(deString, is(oid));
     }
     
     @Test
-    public void rootOid_withLegacyVersionIgnored() {
-        RootOid oid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
+    public void oid_withLegacyVersionIgnored() {
+        val oid = Oid.of(LogicalTypeTestFactory.cus(), "123");
 
-        final String enString = oid.enString();
-        final RootOid deString = RootOid.deString(enString + "^" + 90807L);
+        final String enString = oid.stringify();
+        final Oid deString = Oid.parse(enString + "^" + 90807L);
         assertThat(deString, is(oid));
     }
     

@@ -37,7 +37,7 @@ public class CommonContextUtils {
     public static IsisAppCommonContext computeIfAbsent(IsisAppCommonContext commonContext) {
         return commonContext!=null
                 ? commonContext
-                        : getCommonContext();
+                : getCommonContext();
     }
     
 }

@@ -25,29 +25,24 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.val;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-    describedAs = "Updates all publishing enabled entities and all publishing disabled entities"
-)
+    describedAs = "Updates all publishing enabled entities and all publishing disabled entities",
+    sequence = "2.0")
+@RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_updateAll {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-    public DomainObjectEntityChangePublishingVm_updateAll(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
-    }
-
-    @MemberOrder(sequence = "2.0")
+    
     public DomainObjectEntityChangePublishingVm act(
             boolean publishingEnabled
             , boolean publishingDisabled
@@ -83,9 +78,9 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
         return true;
     }
 
+    final static AtomicInteger counter = new AtomicInteger(0);
     private static void renumber(List<DomainObjectEntityChangePublishingJdo> all) {
-        val ai = new AtomicInteger(0);
-        all.forEach(x -> x.setPropertyUpdatedByAction("Object #" + ai.incrementAndGet()));
+        all.forEach(x -> x.setPropertyUpdatedByAction("Object #" + counter.incrementAndGet()));
     }
 
     @Inject

@@ -1,0 +1,284 @@
+[#actions]
+= Actions
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+An action is a public method that is presented as a prompt form, and invoked upon a target object (or on a xref:overview.adoc#mixins[mixin] contributing to the target object).
+
+They allow the user to perform complex interactions with the domain object, and so raise the level of abstraction compared to requiring the user than simple CRUD-style operations.
+
+For example, imagine a lease management system, where a lease is extended by creating a sibling lease term that starts on the same date that the original lease term ended.
+There are three operations here: set the end date of the original lease term, create the new lease term with relevant details copied over from the original lease term, and set the start date of the lease term correctly.
+
+Instead, all of these operations can be combined into a single action, "renew".
+Through such means the xref:concepts-patterns.adoc#ubiquitous-language[ubiquitous language] grows.
+
+TIP: This is the reason why Apache Isis' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
+
+You can find further discussion on when and why you should write actions xref:overview.adoc#actions[earlier].
+
+
+== Defining actions
+
+If the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property is not set (the default), then any "left-over" `public` methods will be considered to be actions.
+These are methods that do not represent properties or collections, and that are not recognised as xref:business-rules.adoc[supporting methods] (such as `hideXxx()` or `disableXxx()`).
+
+Conversely, if that xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property _is_ set, then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.
+The `@Action` annotation is also used to specify additional domain semantics, for example regarding idempotency.
+
+For example:
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)       // <.>
+public ShoppingBasket addToBasket(
+        Product product,
+        int quantity
+        ) {
+    ...
+    return this;
+}
+----
+
+<.> `@Action` annotation indicates that this public method is an action..
+
+If the code is compiled (`javac`) using the `-parameters` flag, then the name of the parameter in the metamodel uses the name of the parameter variable.
+
+Otherwise, the type of the parameter is used.
+For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
+In such a case the xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] annotation can be used to provide the UI hint.
+
+
+
+[#reference-parameter-types]
+== (Reference) Parameter types
+
+Parameter types can be value types or reference types.
+In the case of primitive types, the end-user can just enter the value directly through the parameter field.
+In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
+This is done using either a supporting xref:refguide:applib-methods:prefixes.adoc#choices[choices] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete] method.
+The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
+
+For example, the `addToBasket(...)` action shown above might well have an autocomplete supporting method :
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)
+public ShoppingBasket addToBasket(
+        Product product,
+        @ParameterLayout(named="Quantity")
+        int quantity
+        ) {
+    ...
+    return this;
+}
+public List<Product> autoComplete0AddToBasket(              // <.>
+    @MinLength(3)                                           // <.>
+    String searchTerm) {
+    return productRepository.find(searchTerm);              // <.>
+}
+@javax.inject.Inject
+ProductRepository productRepository;
+----
+
+<.> Supporting `autoComplete` method. +
+The "0" in the name means that this corresponds to parameter 0 of the "addToBasket" action (ie `Product`).
+It is also required to return a Collection of that type.
+
+<.> The xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation defines how many characters the end-user must enter before performing a search.
+
+<.> The implementation delegates to an injected repository service.  This is typical.
+
+Note that it is also valid to define "choices" and "autoComplete" for value types (such as `quantity`, above); it just isn't as common to do so.
+
+=== Removing boilerplate with autoCompleteRepository
+
+To save having to define an `autoCompleteNXxx(...)` method everywhere that a reference to a particular type (such as `Product`) appears as an action parameter, it is also possible to use the `@DomainObject` annotation on `Product` itself:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository=ProductRepository.class          // <.>
+    autoCompleteAction="find"                               // <.>
+)
+public class Product ... {
+    ...
+}
+----
+<.> Whenever an action parameter requiring a `Product` is defined, provide an autoComplete drop-down automatically
+<.> Use the "find" method of `ProductRepository` (rather than the default name of "autoComplete").
++
+NOTE: The referenced method can be xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] - it doesn't actually need to be an action in the metamodel.
+
+=== Removing boilerplate with choices
+
+If the number of available instances of the reference type is a small number (in other words, all of which could comfortably be shown in a drop-down) then instead the `choicesNXxx()` supporting method can be used.
+This too can be avoided by annotating the referenced class.
+
+For example, suppose we have an action to specify the `PaymentMethodType`, where there are only 10 or so such (Visa, Mastercard, Amex, Paypal etc).
+We could define this as:
+
+[source,java]
+----
+@Action
+public Order payUsing(PaymentMethodType type) {
+    ...
+}
+----
+
+where `PaymentMethodType` would be annotated using:
+
+[source,java]
+----
+@DomainObject(
+    bounded=true                            // <.>
+)
+public class PaymentMethodType ... {
+    ...
+}
+----
+<.> only a small (ie "bounded") number of instances available, meaning that the framework should render all in a drop-down.
+
+
+== Collection Parameter types
+
+Action parameters can also be collections of values (for example `List<String>`), or can be collections of references (such as `List<Customer>`).
+
+For example:
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)
+public ShoppingBasket addToBasket(
+        List<Product> products,
+        int quantity
+        ) {
+    // ...
+    return this;
+}
+public List<Product> autoComplete0AddToBasket(              // <.>
+                        @MinLength(3) String searchTerm) {
+    return ...
+}
+----
+
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] on the referenced type (described xref:userguide:fun:object-members.adoc#reference-parameter-types[above]).
+
+
+== Optional Parameters
+
+Either the xref:refguide:applib-ant:Nullable.adoc[@Nullable] annotation or the xref:refguide:applib:index/annotation/Parameter.adoc#optionality[@Parameter#optionality]  annotation/attribute can be used to indicate that a parameter can be left blank.
+
+For example:
+
+[source,java]
+----
+import javax.jdo.annotations.Column;
+import lombok.Getter;
+import lombok.Setter;
+import org.joda.time.LocalDate;
+
+@Action(semantics=SemanticsOf.IDEMPOTENT)
+public Order invoice(
+                PaymentMethodType paymentMethodType,
+                @Nullable                                      // <.>
+                @ParameterLayout(named="Ship no later than")
+                LocalDate shipBy) {
+    ...
+    setShipBy(shipBy)
+    return this;
+}
+
+@Column(allowsNull="true")                                     // <.>
+@Property
+@Getter @Setter
+private LocalDate shipBy;
+----
+<.> Specifies the parameter is optional.
+<.> Specifies the corresponding property is optional.
++
+Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using JDO/DataNucleus' `@Column#allowsNull()`.)
+
+See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+
+== ``String`` Parameters (Length)
+
+The xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[@Parameter#maxLength] annotation/attribute is used to specify the maximum number of characters allowed for a string parameter.
+
+For example:
+
+[source,java]
+----
+import javax.jdo.annotations.Column;
+import lombok.Getter;
+import lombok.Setter;
+
+public Customer updateName(
+                @Parameter(maxLength=50)                // <.>
+                @ParameterLayout(named="First name")
+                String firstName,
+                @Parameter(maxLength=50)
+                @ParameterLayout(named="Last name")
+                String lastName) {
+    setFirstName(firstName);
+    setLastName(lastName);
+    return this;
+}
+
+@Column(length=50)                                      // <.>
+@Getter @Setter
+private String firstName;
+
+@Column(length=50)
+@Getter @Setter
+private String lastName;
+----
+<.> Specifies the parameter length using xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[@Parameter#maxLength] annotation
+<.> Specifies the length of a corresponding property.
++
+Note that this uses an ORM-specific annotation (in this case, xref:refguide:applib-ant:Column.adoc#length-for-strings[@Column#length()] annotation
+
+[IMPORTANT]
+====
+Incidentally, note in the above example that the new value is assigned to the properties using the setter methods; the action does not simply set the instance field directly.
+
+This is important, because it allows the ORM to keep track that this instance variable is "dirty" and so needs writing to the database table before the transaction completes.
+====
+
+See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+
+== ``BigDecimal``s (Precision)
+
+The xref:refguide:applib-ant:Digits.adoc[@javax.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
+
+For example:
+
+[source,java]
+----
+import javax.jdo.annotations.Column;
+import lombok.Getter;
+import lombok.Setter;
+
+public Order updateDiscount(
+                @javax.validation.constraints.Digits(fraction=2)    // <.>
+                @ParameterLayout(named="Discount rate")
+                String discountRate) {
+    setDiscountRate(discountRate);
+    return this;
+}
+
+@Column(scale=2)                                                    // <.>
+@Getter @Setter
+private BigDecimal discountRate;
+----
+<.> Specifies the parameter precision using xref:refguide:applib-ant:Digits.adoc[@Digits#fraction].
+<.> Specifies the corresponding property precision.
++
+Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[@Column#scale]
+
+See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+
+
+

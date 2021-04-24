@@ -31,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
@@ -39,7 +40,6 @@ import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEn
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -47,18 +47,20 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
-                ApplicationLayerTestFactory.class
+                ApplicationLayerTestFactory.class,
+                XrayEnable.class
         }, 
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
+                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoEntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
+class JdoEntityPropertyChangePublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -78,9 +77,8 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link-alt"
-            )
-    @MemberOrder(sequence="500.600.1")
+            cssClassFa = "fa-external-link-alt",
+            sequence="500.600.1")
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.thtml");
     }
@@ -97,9 +95,8 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link-alt"
-            )
-    @MemberOrder(sequence="500.600.2")
+            cssClassFa = "fa-external-link-alt",
+            sequence="500.600.2")
     public LocalResourcePath openRestApi() {
         return new LocalResourcePath(basePath);
     }
@@ -116,9 +113,8 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-download"
-            )
-    @MemberOrder(sequence="500.600.3")
+            cssClassFa = "fa-download",
+            sequence="500.600.3")
     public Clob downloadSwaggerSchemaDefinition(
             @ParameterLayout(named = "Filename")
             final String fileNamePrefix,
@@ -143,7 +139,8 @@ public class SwaggerServiceMenu {
     // -- HELPER
 
     private String disableReasonWhenRequiresROViewer() {
-        final Optional<?> moduleIfAny = serviceRegistry.lookupBeanById("isisRoViewer.WebModuleJaxrsRestEasy4");
+        final Optional<?> moduleIfAny = serviceRegistry
+                .lookupBeanById("isis.viewer.ro.WebModuleJaxrsRestEasy4");
         return moduleIfAny.isPresent()
                 ? null
                 : "RestfulObjects viewer is not configured";

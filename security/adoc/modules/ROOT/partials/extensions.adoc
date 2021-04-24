@@ -1,0 +1,5 @@
+include::security:secman:partial$module-nav.adoc[]
+include::security:audit-trail:partial$module-nav.adoc[]
+include::security:session-log:partial$module-nav.adoc[]
+include::security:shiro-realm-ldap:partial$module-nav.adoc[]
+include::security:spring-oauth2:partial$module-nav.adoc[]

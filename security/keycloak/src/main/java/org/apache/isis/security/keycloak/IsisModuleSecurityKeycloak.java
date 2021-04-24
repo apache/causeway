@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.keycloak.authentication.AuthenticatorKeycloak;
-import org.apache.isis.security.keycloak.authorization.AuthorizorKeycloak;
 import org.apache.isis.security.keycloak.webmodule.WebModuleKeycloak;
 import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
@@ -40,7 +39,6 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
         // @Service's
         AuthenticatorKeycloak.class,
-        AuthorizorKeycloak.class,
         WebModuleKeycloak.class,
 
 })

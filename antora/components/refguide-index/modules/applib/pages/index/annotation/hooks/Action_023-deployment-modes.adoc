@@ -1,0 +1,37 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+=== Deployment modes
+
+By default actions are available irrespective of the xref:refguide:config:about.adoc#deployment-types[deployment mode].
+The xref:refguide:applib:index/annotation/Action.adoc#restrictTo[restrictTo()] element specifies whether the action should instead be restricted to only available in prototyping mode.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Action
+    public Order placeNewOrder() {
+        // ...
+    }
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Order> listRecentOrders() {
+        // ...
+    }
+
+    @Action(restrictTo=RestrictTo.PROTOTYPING)      // <.>
+    public List<Order> listAllOrders() {
+        // ...
+    }
+    ...
+}
+----
+
+<.> Only visible in prototype mode.
+
+In this case the listing of all orders (in the `listAllOrders()` action) probably doesn't make sense for production; there could be thousands or millions.
+However, it would be useful to disaply how for a test or demo system where there are only a handful of orders.
+

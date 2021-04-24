@@ -21,15 +21,14 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
+public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation 
+extends ObjectSpecIdFacetAbstract {
 
-public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation extends
-ObjectSpecIdFacetAbstract {
-
-    public ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(final String value,
+    public ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
+            final String value,
             final FacetHolder holder) {
         super(value, holder);
     }
 
 }
 
-// Copyright (c) Naked Objects Group Ltd.

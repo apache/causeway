@@ -48,7 +48,7 @@ public interface MemberExecutorService {
     @Deprecated // just a refactoring step
     @FunctionalInterface
     interface ActionExecutorFactory {
-        InternalInteraction.MemberExecutor<ActionInvocation> createExecutor(
+        InteractionInternal.MemberExecutor<ActionInvocation> createExecutor(
                 Can<ManagedObject> argumentAdapters,
                 ManagedObject targetAdapter,
                 ObjectAction owningAction,
@@ -59,7 +59,7 @@ public interface MemberExecutorService {
     @Deprecated // just a refactoring step
     @FunctionalInterface
     interface PropertyExecutorFactory {
-        InternalInteraction.MemberExecutor<PropertyEdit> createExecutor(
+        InteractionInternal.MemberExecutor<PropertyEdit> createExecutor(
                 ManagedObject newValueAdapter,
                 OneToOneAssociation owningProperty,
                 ManagedObject targetManagedObject,
@@ -69,17 +69,17 @@ public interface MemberExecutorService {
     }
 
     /**
-     * Optionally, the currently active {@link InternalInteraction} for the calling thread.
+     * Optionally, the currently active {@link InteractionInternal} for the calling thread.
      */
-    Optional<InternalInteraction> getInteraction();
+    Optional<InteractionInternal> getInteraction();
 
     // -- SHORTCUTS
 
-    default InternalInteraction getInteractionIfAny() {
+    default InteractionInternal getInteractionIfAny() {
         return getInteraction().orElse(null);
     }
 
-    default InternalInteraction getInteractionElseFail() {
+    default InteractionInternal getInteractionElseFail() {
         return getInteraction().orElseThrow(()->_Exceptions
                 .unrecoverable("needs an InteractionSession on current thread"));
     }

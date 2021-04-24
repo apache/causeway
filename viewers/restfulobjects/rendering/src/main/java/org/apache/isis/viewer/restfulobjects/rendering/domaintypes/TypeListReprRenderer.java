@@ -53,7 +53,7 @@ extends ReprRendererAbstract<TypeListReprRenderer, Can<ObjectSpecification>> {
 
         final JsonRepresentation specList = JsonRepresentation.newArray();
         for (final ObjectSpecification objectSpec : specifications) {
-            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getSpecId().asString());
+            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getLogicalTypeName());
             specList.arrayAdd(linkBuilder.build());
         }
 

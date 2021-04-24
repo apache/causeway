@@ -4,11 +4,11 @@
 
 // TODO: v2: NICE-TO-HAVE: these screenshots should be updated, but first need to port the todoapp over first (which also means the various modules from incode-platform)
 
-On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Wicket viewer].
+On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 The screenshots below are taken from a "Todo" application.
 
 NOTE: these screenshots are based on an app running against v1.13  and v1.10 of the framework.
-There have since been a number of UI improvements since these releases.
+There have been a number of UI improvements since these releases.
 
 == Basics
 
@@ -16,8 +16,9 @@ Let's start with the basics...
 
 === Sign-in
 
-Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
+Apache Isis integrates with a variety of authentication mechanisms, including link:http://shiro.apache.org[Apache Shiro], link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
+
+The xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
 
 
@@ -196,7 +197,7 @@ image::what-is-apache-isis/isis-in-pictures/190-switch-theme.png[width="800px"]
 == REST API
 
 In addition to Apache Isis' Wicket viewer, it also provides a rich REST API with a full set of hypermedia controls, generated automatically from the domain objects (entities and view models).
-The framework provides two default representations, one an implementation of the http://restfulobjects.org[Restful Objects] spec, the other a simplified representation suitable for custom Javascript apps.
+The framework provides two default representations, one an implementation of the http://restfulobjects.org[Restful Objects] spec, the other a simplified representation suitable for custom JavaScript apps.
 Other representations can be plugged in.
 
 The screenshot below shows accessing the Restful Objects representation API accessed through a Chrome plugin:

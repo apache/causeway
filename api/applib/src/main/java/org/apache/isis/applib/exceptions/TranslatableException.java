@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.exceptions;
 
+import org.apache.isis.applib.services.i18n.HasTranslationContext;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  * </p>
  * @since 1.x {@index}
  */
-public interface TranslatableException {
+public interface TranslatableException extends HasTranslationContext {
 
     /**
      * In the spirit of {@link Exception#getLocalizedMessage()}, but using {@link org.apache.isis.applib.services.i18n.TranslatableString} instead.
@@ -44,11 +45,5 @@ public interface TranslatableException {
      * </p>
      */
     TranslatableString getTranslatableMessage();
-
-    /**
-     * The context to use when translating the {@link #getTranslatableMessage() translatable message},
-     * as ultimately passed through to {@link org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)}.
-     */
-    String getTranslationContext();
 
 }

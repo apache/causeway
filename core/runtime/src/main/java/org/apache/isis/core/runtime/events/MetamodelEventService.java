@@ -27,6 +27,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 
@@ -44,10 +45,12 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
 public class MetamodelEventService {
     
     @Inject private EventBusService eventBusService;
-
-   // -- APP
+    @Inject private ConfigurationViewService configurationService;
 
     public void fireBeforeMetamodelLoading() {
+        
+        _Xray.addConfiguration(configurationService);
+        
         eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
     }
 

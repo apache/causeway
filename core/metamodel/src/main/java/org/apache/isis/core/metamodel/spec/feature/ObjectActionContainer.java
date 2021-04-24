@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -85,7 +86,16 @@ public interface ObjectActionContainer {
 
     // -- ACTION STREAM (W/ INHERITANCE)
     
-    Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
+    Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed,
+            Consumer<ObjectAction> onActionOverloaded);
+    
+    default Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed) {
+        return streamActions(types, contributed, __->{});
+    }
     
     default Stream<ObjectAction> streamActions(ActionType type, MixedIn contributed) {
         return streamActions(ImmutableEnumSet.of(type), contributed);

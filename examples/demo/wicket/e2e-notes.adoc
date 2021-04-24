@@ -37,7 +37,7 @@ npm run cypress:open
 
 * moved the scaffolding to `cypress-scaffolding` for reference
 +
-NOTE: it uses javascript rather than typescript.
+NOTE: it uses JavaScript rather than TypeScript.
 
 == Tab support (plugin)
 

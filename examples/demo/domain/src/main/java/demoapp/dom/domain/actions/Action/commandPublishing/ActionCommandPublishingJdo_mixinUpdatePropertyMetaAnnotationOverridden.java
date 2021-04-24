@@ -28,16 +28,16 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @ActionCommandPublishingDisabledMetaAnnotation        // <.>
 @Action(
-    commandPublishing = Publishing.ENABLED          // <.>
+    commandPublishing = Publishing.ENABLED            // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyMetaAnnotatedOverridden"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs =
         "@ActionCommandDisabledMetaAnnotation " +
         "@Action(command = ENABLED)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden {

@@ -20,17 +20,27 @@
 package org.apache.isis.core.interaction.session;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.val;
+
+/**
+ * Holder of queued up messages, to be accessed/drained cross interaction boundary.
+ *
+ * @implNote Serializable and thread-safe
+ *
+ * @since 1.x
+ */
 public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // -- constructor, fields
+    // serializable lock
+    private final Object $lock = new Object[0];
 
     private final List<String> messages = _Lists.newArrayList();
     private final List<String> warnings = _Lists.newArrayList();
@@ -39,67 +49,69 @@ public class MessageBroker implements Serializable {
     public MessageBroker() {
     }
 
-
-    // -- reset
+    // -- RESET
 
     public void reset() {
-        warnings.clear();
-        messages.clear();
-        applicationError = null;
+        synchronized ($lock) {
+            warnings.clear();
+            messages.clear();
+            applicationError = null;
+        }
     }
 
+    // -- MESSAGES & WARNINGS
 
-
-    // -- messages
-
-    public List<String> getMessages() {
+    public Can<String> drainMessages() {
         return copyAndClear(messages);
     }
 
     public void addMessage(final String message) {
-        messages.add(message);
+        addIfNotAlreadyPresent(this.messages, message);
     }
 
-
-
-    // -- warnings
-
-    public List<String> getWarnings() {
+    public Can<String> drainWarnings() {
         return copyAndClear(warnings);
     }
 
-    public void addWarning(final String message) {
-        if(warnings.contains(message)) {
-            // just ignore it...
-            return;
-        }
-        warnings.add(message);
+    public void addWarning(final String warning) {
+        addIfNotAlreadyPresent(this.warnings, warning);
     }
 
+    private void addIfNotAlreadyPresent(List<String> strings, String string) {
+        synchronized ($lock) {
+            if (strings.contains(string)) {
+                // just ignore it...
+                return;
+            }
+            strings.add(string);
+        }
+    }
 
+    // -- APPLICATION ERROR
 
-    // -- applicationError
-    public String getApplicationError() {
-        final String error = applicationError;
-        setApplicationError(null);
-        return error;
+    public Optional<String> drainApplicationError() {
+        synchronized ($lock) {
+            final String error = applicationError;
+            setApplicationError(null);
+            return Optional.ofNullable(error);
+        }
     }
 
     public void setApplicationError(String applicationError) {
-        this.applicationError = applicationError;
+        synchronized ($lock) {
+            this.applicationError = applicationError;
+        }
     }
 
 
+    // -- HELPERS
 
-    // -- helpers
-
-    private List<String> copyAndClear(final List<String> messages) {
-        final List<String> copy = Collections.unmodifiableList(new ArrayList<>(messages));
-        messages.clear();
-        return copy;
+    private Can<String> copyAndClear(final List<String> messages) {
+        synchronized ($lock) {
+            val copy = Can.ofCollection(messages);
+            messages.clear();
+            return copy;
+        }
     }
-
-
-
 
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import java.util.List;
@@ -61,8 +60,8 @@ import lombok.val;
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */
-abstract class ScalarPanelAbstractLegacy<T extends ScalarModel> 
-extends PanelAbstract<T> 
+abstract class ScalarPanelAbstractLegacy 
+extends PanelAbstract<ManagedObject, ScalarModel> 
 implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;

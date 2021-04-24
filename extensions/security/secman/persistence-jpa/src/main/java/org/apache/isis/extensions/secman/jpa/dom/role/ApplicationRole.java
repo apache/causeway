@@ -42,17 +42,13 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
@@ -64,6 +60,7 @@ import lombok.Setter;
 
 @Entity
 @Table(
+        schema = "isisExtensionsSecman",
         name = "ApplicationRole",
         uniqueConstraints =
             @UniqueConstraint(
@@ -98,7 +95,6 @@ implements
     org.apache.isis.extensions.secman.api.role.ApplicationRole,
     Comparable<ApplicationRole> {
 
-    @Inject private transient ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
 
     @Id
@@ -115,8 +111,7 @@ implements
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME)
-    @MemberOrder(sequence = "1")
+    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME, sequence = "1")
     @Getter @Setter
     private String name;
 
@@ -132,9 +127,8 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION
-            )
-    @MemberOrder(sequence = "2")
+            typicalLength=TYPICAL_LENGTH_DESCRIPTION, 
+            sequence = "2")
     @Getter @Setter
     private String description;
 
@@ -146,31 +140,10 @@ implements
             )
     @CollectionLayout(
             defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class
-            )
-    @MemberOrder(sequence = "10")
+            sortedBy = ApplicationPermission.DefaultComparator.class, 
+            sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
-    }
-
-
-
-
-    /**
-     * Package names that have classes in them.
-     */
-    public java.util.Collection<String> choices2AddClass() {
-        return applicationFeatureRepository.packageNamesContainingClasses(null);
-    }
-
-    /**
-     * Class names for selected package.
-     */
-    public java.util.Collection<String> choices3AddClass(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, null);
     }
 
     // -- users (collection)
@@ -182,9 +155,8 @@ implements
             domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20")
+            defaultView="table", 
+            sequence = "20")
     @Getter @Setter
     private Set<ApplicationUser> users = new TreeSet<>();
 

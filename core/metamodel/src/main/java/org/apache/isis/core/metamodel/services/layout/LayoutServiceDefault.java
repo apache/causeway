@@ -70,9 +70,11 @@ public class LayoutServiceDefault implements LayoutService {
     protected Grid toGrid(final Class<?> domainClass, final Style style) {
 
         if (style == Style.CURRENT) {
-            final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
-            final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-            return facet != null? facet.getGrid(null): null;
+            
+            return specificationLoader.specForType(domainClass)
+                    .flatMap(spec->spec.lookupFacet(GridFacet.class))
+                    .map(gridFacet->gridFacet.getGrid(null))
+                    .orElse(null);
         }
 
         // don't use the grid from the facet, because it will be modified subsequently.

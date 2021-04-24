@@ -30,14 +30,19 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
 
 public class ActionLayoutFacetFactory 
 extends FacetFactoryAbstract {
-
+    
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -46,34 +51,36 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
 
         val facetHolder = processMethodContext.getFacetHolder();
-
-        val actionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class);
+        val actionLayoutIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        ActionLayout.class,
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
         
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
         super.addFacet(bookmarkableFacet);
 
-
         // cssClass
         CssClassFacet cssClassFacet = CssClassFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(cssClassFacet);
-
 
         // cssClassFa
         CssClassFaFacet cssClassFaFacet = CssClassFaFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(cssClassFaFacet);
 
-
         // describedAs
         DescribedAsFacet describedAsFacet = DescribedAsFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
 
-
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-
+        
+        // layoutGroup
+        LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
+        super.addFacet(layoutGroupFacet);
 
         // named
         NamedFacet namedFacet = NamedFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
@@ -85,7 +92,6 @@ extends FacetFactoryAbstract {
 
         super.addFacet(promptStyleFacet);
 
-
         // position
         ActionPositionFacet actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
@@ -94,34 +100,18 @@ extends FacetFactoryAbstract {
         }
         super.addFacet(actionPositionFacet);
 
-
         // redirectPolicy
         RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         if(redirectFacet == null) {
             redirectFacet = new RedirectFacetFallback(facetHolder);
         }
         super.addFacet(redirectFacet);
+        
+        // sequence (layout)
+        LayoutOrderFacet layoutOrderFacet = LayoutOrderFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder); 
+        super.addFacet(layoutOrderFacet);
 
-
-//        // contributing
-//        if (isContributingServiceOrMixinObject(processMethodContext)) {
-//            NotContributedFacet notContributedFacet = NotContributedFacetForActionLayoutAnnotation
-//                    .create(actionLayoutIfAny, facetHolder);
-//            super.addFacet(notContributedFacet);
-//        }
     }
 
-//    private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
-//        final Class<?> cls =  processMethodContext.getCls();
-//        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
-//
-//        return DomainServiceFacet.isContributing(spec) || isMixinObject(spec);
-//    }
-
-//    private static boolean isMixinObject(final ObjectSpecification spec) {
-//        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
-//        final boolean b = mixinFacet != null && !mixinFacet.isFallback();
-//        return b;
-//    }
 
 }

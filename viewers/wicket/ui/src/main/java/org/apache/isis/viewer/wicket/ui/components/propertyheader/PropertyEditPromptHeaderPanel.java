@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -29,7 +30,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarPropertyModel> {
+public class PropertyEditPromptHeaderPanel
+extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_PROPERTY_NAME = "propertyName";

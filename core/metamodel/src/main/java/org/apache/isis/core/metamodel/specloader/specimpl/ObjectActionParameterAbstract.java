@@ -175,8 +175,8 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public boolean hasAutoComplete() {
-        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
-        return facet != null;
+        val actionParameterAutoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
+        return actionParameterAutoCompleteFacet != null;
     }
 
     @Override

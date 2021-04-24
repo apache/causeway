@@ -45,12 +45,14 @@ import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeO
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
-
+public class CollectionAnnotationFacetFactory
+extends FacetFactoryAbstract {
+    
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
@@ -58,7 +60,11 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val collectionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Collection.class);
+        val collectionIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Collection.class, 
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
 
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
 
@@ -96,8 +102,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-
-
         // following only runs for regular collections, not for mixins.
         // those are tackled in the post-processing, when more of the metamodel is available to us
 
@@ -105,19 +109,17 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
-
         // search for @Collection(domainEvent=...)
         val collectionDomainEventFacet = collectionIfAny
-                .map(Collection::domainEvent)
-                .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-                .map(domainEvent ->
+        .map(Collection::domainEvent)
+        .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
+        .map(domainEvent ->
                 (CollectionDomainEventFacetAbstract)
                 new CollectionDomainEventFacetForCollectionAnnotation(
                         defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
-                .orElse(
-                        new CollectionDomainEventFacetDefault(
-                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder)
-                        );
+        .orElse(
+                new CollectionDomainEventFacetDefault(
+                        defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             super.addFacet(collectionDomainEventFacet);
         }
@@ -218,6 +220,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         return null;
     }
+
 
 
 }

@@ -79,7 +79,7 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
     private PrincipalCollection createPrincipalCollection() {
         return ShiroUtils.isSingleRealm()
                 ? PrincipalCollectionForApplicationUserOnSingleRealm.of(principal, realmName)
-                        : new SimplePrincipalCollection(principal, realmName);
+                : new SimplePrincipalCollection(principal, realmName);
     }
 
 

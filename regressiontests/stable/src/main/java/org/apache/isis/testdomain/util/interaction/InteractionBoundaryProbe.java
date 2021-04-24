@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -43,14 +43,14 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
     
     /** INTERACTION BEGIN BOUNDARY */
     @Override
-    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         log.debug("iaStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
     
     /** INTERACTION END BOUNDARY */
     @Override
-    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+    public void afterLeavingTransactionalBoundary(Interaction interaction) {
         log.debug("iaEnded");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaEnded");
     }

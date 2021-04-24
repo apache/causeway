@@ -101,6 +101,9 @@ public class RestEndpointService {
         // register additional filter if any
         additionalFilters.forEach(clientConfig.getClientConversationFilters()::add);
 
+        //debug
+        //clientConfig.setUseRequestDebugLogging(true);
+        
         val client = RestfulClient.ofConfig(clientConfig);
 
         return client;

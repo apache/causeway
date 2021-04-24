@@ -1,0 +1,39 @@
+= UI Hint Methods
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The table below lists the UI hint methods that are recognized as part of default programming model.
+
+.UI Hint Methods
+[cols="1m,4a", options="header"]
+|===
+
+|Method
+|Description
+
+|xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()]
+|Provides a CSS class for this object instance.
+In conjunction with `static/css/application-css`, can therefore provide custom styling of an object instance wherever it is rendered.
+
+|xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()]
+|Provides the name of the image to render, usually alongside the title, to represent the object.
+If not provided, then the class name is used to locate an image.
+
+|xref:refguide:applib-methods:ui-hints.adoc#layout[layout()]
+|Provides an alternative layout to use, if available.
+If null or no such layout, then uses to the default layout.
+
+|xref:refguide:applib-methods:ui-hints.adoc#title[title()]
+|Provides a title for the object. +
+
+|===
+
+
+
+
+include::ui-hints/cssClass.adoc[leveloffset=+1]
+include::ui-hints/iconName.adoc[leveloffset=+1]
+include::ui-hints/layout.adoc[leveloffset=+1]
+include::ui-hints/title.adoc[leveloffset=+1]

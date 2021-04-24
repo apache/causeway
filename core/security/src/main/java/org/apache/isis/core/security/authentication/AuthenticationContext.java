@@ -48,4 +48,7 @@ public interface AuthenticationContext {
                             _Probe.currentThreadId()));
     }
     
+    /** authentication-layer-stack size */
+    int getAuthenticationLayerCount();
+    
 }

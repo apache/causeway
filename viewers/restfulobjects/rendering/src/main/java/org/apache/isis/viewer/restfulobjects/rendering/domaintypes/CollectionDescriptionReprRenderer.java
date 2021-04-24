@@ -30,7 +30,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<CollectionDescriptionReprRenderer, OneToManyAssociation> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
-        final String domainType = objectSpecification.getSpecId().asString();
+        final String domainType = objectSpecification.getLogicalTypeName();
         final String collectionId = collection.getId();
         final String url = "domain-types/" + domainType + "/collections/" + collectionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);

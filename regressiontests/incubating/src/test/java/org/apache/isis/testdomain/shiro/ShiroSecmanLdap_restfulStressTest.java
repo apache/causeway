@@ -54,9 +54,9 @@ import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjec
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdoAndShiro.class
-        }, 
+        },
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
@@ -91,50 +91,54 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 //    @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
-    
+
     @BeforeAll
     static void setup() {
         WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
     }
-    
+
     @BeforeEach
     void beforeEach() {
-        
+
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
-        
+
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
-    
+
     @AfterEach
     void afterEach() {
         tearDownShiro();
     }
 
-    @Test 
+    @Test
     void stressTheRestEndpoint() {
 
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         assertTimeout(ofMillis(5000), ()->{
-            
+
             for(int i=0; i<100; ++i) {
                 val digest = restService.getHttpSessionInfo(restfulClient);
                 if(!digest.isSuccess()) {
                     fail(digest.getFailureCause());
                 }
-                
+
                 val httpSessionInfo = digest.getEntities();
 
                 assertNotNull(httpSessionInfo);
-                assertEquals("no http-session", httpSessionInfo.getSingletonOrFail());
-                
+
+                // impersonation in UserServiceDefault means that we _do_ now get
+                // an httpSession as a side-effect
+                //assertEquals("no http-session", httpSessionInfo);
+                assertEquals("http-session attribute names: {}", httpSessionInfo);
+
             }
-            
+
         });
-        
-        
+
+
     }
 
 }

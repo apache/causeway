@@ -4,90 +4,11 @@
 
 
 
-Isis' Wicket viewer has an About page that, by default, will provide a dump of the JARs that make up the webapp.
-This page will also show the manifest attributes of the WAR archive itself, if there are any.
-One of these attributes may also be used as the application version number.
-
-
-== Screenshot
-
-Here's what the About page looks like with this configuration added:
+Isis' Wicket viewer has an About page that, accessed by clicking on the application version in the footer.
 
 image::about-page/about-page.png[width="800px"]
 
-[NOTE]
-====
-Note that this screenshot shows an earlier version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
-
-Note that the `Build-Time` attribute has been used as the version number.
-The Wicket viewer is hard-coded to search for specific attributes and use as the application version.
-In order, it searches for:
-
-* `Implementation-Version`
-* `Build-Time`
-
-If none of these are found, then no version is displayed.
-
-
-== Configuration
-
-=== Adding attributes to the WAR's manifest
-
-Add the following to the webapp's `pom.xml` (under `<build>/<plugins>`):
-
-[source,xml]
-----
-<plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>build-helper-maven-plugin</artifactId>
-    <version>1.5</version>
-      <executions>
-        <execution>
-          <phase>validate</phase>
-          <goals>
-            <goal>maven-version</goal>
-          </goals>
-        </execution>
-      </executions>
-</plugin>
-
-<plugin>
-    <artifactId>maven-war-plugin</artifactId>
-    <configuration>
-        <archive>
-            <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-            <manifestEntries>
-                <Build-Time>${maven.build.timestamp}</Build-Time>
-                <Build-Number>${buildNumber}</Build-Number>
-                <Build-Host>${agent.name}</Build-Host>
-                <Build-User>${user.name}</Build-User>
-                <Build-Maven>Maven ${maven.version}</Build-Maven>
-                <Build-Java>${java.version}</Build-Java>
-                <Build-OS>${os.name}</Build-OS>
-                <Build-Label>${project.version}</Build-Label>
-            </manifestEntries>
-        </archive>
-    </configuration>
-    <executions>
-        <execution>
-            <phase>package</phase>
-            <goals>
-                <goal>war</goal>
-            </goals>
-            <configuration>
-                <classifier>${env}</classifier>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-----
-
-If you then build the webapp from the Maven command line (`mvn clean package`), then the WAR should contain a `META-INF/MANIFEST.MF` with those various attribute entries.
-This will be picked up automatically and used in the about page.
-
+The about page provides a dump of the JARs that make up the webapp, along with the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.name[configured application name] and xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.about[configured about text].
 
 
 

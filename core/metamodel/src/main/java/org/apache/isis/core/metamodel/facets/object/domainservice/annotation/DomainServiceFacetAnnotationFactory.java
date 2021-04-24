@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
-
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -29,21 +28,15 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
 public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract 
 implements MetaModelRefiner {
-
-    private MetaModelValidatorForValidationFailures mixinOnlyValidator =
-            new MetaModelValidatorForValidationFailures();
 
     public DomainServiceFacetAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -52,7 +45,6 @@ implements MetaModelRefiner {
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        mixinOnlyValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -72,48 +64,30 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        val isServiceActionsOnly = true;
-        if (isServiceActionsOnly) {
-            
-            programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
-                @Override
-                public boolean visit(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
-                    validate(thisSpec, validator);
-                    return true;
-                }
+            if(!spec.containsFacet(DomainServiceFacet.class)) {
+                return;
+            }
 
-                private void validate(
-                        final ObjectSpecification thisSpec,
-                        final MetaModelValidator validator) {
+            final String associationNames = spec
+                    .streamAssociations(MixedIn.EXCLUDED)
+                    .map(ObjectAssociation::getName)
+                    // it's okay to have an "association" called "Id" (corresponding to getId() method)
+                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
+                    .collect(Collectors.joining(", "));
 
-                    if(!thisSpec.containsFacet(DomainServiceFacet.class)) {
-                        return;
-                    }
+            if(associationNames.isEmpty()) {
+                return;
+            }
 
-                    final String associationNames = thisSpec
-                            .streamAssociations(MixedIn.EXCLUDED)
-                            .map(ObjectAssociation::getName)
-                            // it's okay to have an "association" called "Id" (corresponding to getId() method)
-                            .filter(associationName->!"Id".equalsIgnoreCase(associationName))
-                            .collect(Collectors.joining(", "));
-
-                    if(associationNames.isEmpty()) {
-                        return;
-                    }
-
-                    validator.onFailure(
-                            thisSpec,
-                            thisSpec.getIdentifier(),
-                            "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
-                            thisSpec.getFullIdentifier(),
-                            "'isis.core.meta-model.validator.serviceActionsOnly'",
-                            associationNames);
-                }
-            });
-        }
-
-        programmingModel.addValidator(mixinOnlyValidator);
+            ValidationFailure.raiseFormatted(
+                    spec,
+                    "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
+                    spec.getFullIdentifier(),
+                    "'isis.core.meta-model.validator.serviceActionsOnly'",
+                    associationNames);
+        });
 
     }
     

@@ -21,15 +21,14 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
@@ -97,14 +96,14 @@ public interface ApplicationPermission {
         .append(" ").append(getMode().toString()) // Viewing|Changing
         .append(" of ");
 
-        createFeatureId()
+        asFeatureId()
         .ifPresent(featureId->{
 
-            switch (featureId.getType()) {
-            case PACKAGE:
+            switch (featureId.getSort()) {
+            case NAMESPACE:
                 buf.append(getFeatureFqn());              // com.mycompany
                 break;
-            case CLASS:
+            case TYPE:
                 // abbreviate if required because otherwise title overflows on action prompt.
                 if(getFeatureFqn().length() < 30) {
                     buf.append(getFeatureFqn());          // com.mycompany.Bar
@@ -124,15 +123,15 @@ public interface ApplicationPermission {
         return buf.toString();
     }
 
-    ApplicationFeatureType getFeatureType();
+    ApplicationFeatureSort getFeatureSort();
 
     // -- ROLE
 
     @Property
     @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT
-            )
-    @MemberOrder(name="Role", sequence = "1")
+            hidden=Where.REFERENCES_PARENT,
+            fieldSetId="Role", 
+            sequence = "1")
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -141,7 +140,7 @@ public interface ApplicationPermission {
     // -- RULE
 
     @Property
-    @MemberOrder(name="Permissions", sequence = "2")
+    @PropertyLayout(fieldSetId="Permissions", sequence = "2")
     default ApplicationPermissionRule getRule() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -150,24 +149,24 @@ public interface ApplicationPermission {
     // -- MODE
 
     @Property
-    @MemberOrder(name="Permissions", sequence = "3")
+    @PropertyLayout(fieldSetId="Permissions", sequence = "3")
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setMode(ApplicationPermissionMode changing);
 
-    // -- TYPE
+    // -- SORT
 
     @Property
-    @MemberOrder(name="Feature", sequence = "5")
-    default String getType() {
+    @PropertyLayout(fieldSetId="Feature", sequence = "5")
+    default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
 
     // -- FQN
 
     @Property
-    @MemberOrder(name="Feature", sequence = "5.1")
+    @PropertyLayout(fieldSetId="Feature", sequence = "5.1")
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -176,9 +175,9 @@ public interface ApplicationPermission {
     // -- HELPER
 
     @Programmatic
-    default Optional<ApplicationFeatureId> createFeatureId() {
-        return Optional.of(getFeatureType())
-                .map(featureType -> ApplicationFeatureId.newFeature(featureType, getFeatureFqn()));
+    default Optional<ApplicationFeatureId> asFeatureId() {
+        return Optional.ofNullable(getFeatureSort())
+                .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
 
 

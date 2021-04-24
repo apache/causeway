@@ -63,7 +63,7 @@ public interface ProperMemberInheritanceInterface {
     
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
-    default void sampleActionOverride(String x) {
+    default void sampleActionOverrideWithParam(String x) {
     }
     
     @Property

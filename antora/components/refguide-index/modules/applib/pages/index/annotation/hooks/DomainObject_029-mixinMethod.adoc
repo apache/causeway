@@ -1,0 +1,48 @@
+=== Mixin method
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+The xref:refguide:applib:index/annotation/DomainObject.adoc#mixinMethod[mixinMethod()] element specifies the name of the method to be treated as a "reserved" method name, meaning that the mixin's name should instead be inferred from the mixin's type.
+
+For example:
+
+[source,java]
+----
+@DomainObject
+public class Customer {
+
+    @DomainObject(
+        nature=Nature.MIXIN,                                // <.>
+        mixinMethod="execute"                               // <.>
+    )
+    public class placeOrder {                               // <.>
+
+        public Customer execute(Product p, int quantity) {  // <.>
+            // ...
+        }
+        public String disableExecute() {
+            // ...
+        }
+        public String validate0Execute() {
+            // ...
+        }
+    }
+)
+----
+<.> This is a mixin. +
+Alternatively, could have used xref:refguide:applib:index/annotation/Action.adoc[@Action].
+<.> This mixin is using a non-standard method.
+<.> a trick - this is not a `static` class, so the java compiler will create the 1-arg constructor automatically
+<.> Same name as the specified mixinMethod.
+Alternatively, when using xref:refguide:applib:index/annotation/Action.adoc[@Action] then method's name defaults to `act`.
+
+This allows all mixins to follow a similar convention, with the name of the mixin inferred entirely from its type ("placeOrder").
+
+When invoked programmatically, the code reads:
+
+[source,java]
+----
+someCustomer.new placeOrder().execute(someProduct, 3);
+----
+

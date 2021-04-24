@@ -21,6 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.confirm;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.config.messages.MessageRegistry;
 
@@ -47,9 +48,11 @@ public class ConfirmUiModel implements Serializable {
     
     public static ConfirmUiModel ofAreYouSure(TranslationService translationService, Placement placement) {
         
-        val areYouSure = translate(translationService, MessageRegistry.MSG_ARE_YOU_SURE); 
-        val confirm = translate(translationService, MessageRegistry.MSG_CONFIRM);
-        val cancel = translate(translationService, MessageRegistry.MSG_CANCEL);
+    	val context = TranslationContext.forClassName(MessageRegistry.class);
+    	
+        val areYouSure = translate(translationService, context, MessageRegistry.MSG_ARE_YOU_SURE); 
+        val confirm = translate(translationService, context, MessageRegistry.MSG_CONFIRM);
+        val cancel = translate(translationService, context, MessageRegistry.MSG_CANCEL);
         
         val message = Optional.<String>empty(); // not used yet
         
@@ -58,9 +61,9 @@ public class ConfirmUiModel implements Serializable {
     
     // -- HELPER
     
-    private static String translate(TranslationService translationService, String msg) {
-        if(translationService!=null) {
-            return translationService.translate(MessageRegistry.class.getName(), msg);
+    private static String translate(TranslationService translationService, TranslationContext context, String msg) {
+        if(translationService!=null) {        	
+            return translationService.translate(context, msg);
         }
         return msg;
     }

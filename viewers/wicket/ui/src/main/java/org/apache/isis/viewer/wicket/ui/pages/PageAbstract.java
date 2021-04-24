@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.util.Arrays;
@@ -48,9 +47,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -77,7 +73,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -96,7 +91,9 @@ import de.agilecoders.wicket.core.settings.ITheme;
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 @Log4j2
-public abstract class PageAbstract extends WebPageBase implements ActionPromptProvider {
+public abstract class PageAbstract 
+extends WebPageBase 
+implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
     
@@ -113,7 +110,6 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
     private static final String ID_PAGE_TITLE = "pageTitle";
-    private static final String ID_FAVICON = "favicon";
     public static final String ID_MENU_LINK = "menuLink";
     public static final String UIHINT_FOCUS = "focus";
 
@@ -148,11 +144,9 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
 
             setTitle(title);
 
-            add(new Favicon(ID_FAVICON));
-
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
-            String applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
+            String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
@@ -240,7 +234,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null
                 ? title
-                        : getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+                : getConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -266,19 +260,21 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(getCommonContext());
         jGrowlBehaviour.renderFeedbackMessages(response);
 
-        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
-                .ifPresent(applicationCss -> {
-                    response.render(CssReferenceHeaderItem.forUrl(applicationCss));
-                });
-        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
-                .ifPresent(applicationJs -> {
-                    response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-                } );
-
-        getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
+        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        .ifPresent(applicationCss -> {
+            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
+        });
+        
+        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        .ifPresent(applicationJs -> {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+        } );
+        
+        getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
-        if(isModernBrowser()) {
+        
+        if(getSystemEnvironment().isPrototyping()) {
             addBootLint(response);
         }
 
@@ -306,24 +302,14 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         return null;
     }
 
+    /**
+     * BootLint checks for malformed bootstrap CSS. It is probably only needed in PROTOTYPE mode.
+     */
     private void addBootLint(final IHeaderResponse response) {
         // rather than using the default BootlintHeaderItem.INSTANCE;
         // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
-        response.render(new BootlintHeaderItem("bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
-    }
-
-    private boolean isModernBrowser() {
-        return !isIePre9();
-    }
-
-    @SuppressWarnings("deprecation")
-    private boolean isIePre9() {
-        final WebClientInfo clientInfo = WebSession.get().getClientInfo();
-        final ClientProperties properties = clientInfo.getProperties();
-        if (properties.isBrowserInternetExplorer())
-            if (properties.getBrowserVersionMajor() < 9)
-                return true;
-        return false;
+        response.render(new BootlintHeaderItem(
+                "bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
     }
 
     /**

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -30,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
@@ -61,15 +58,14 @@ extends RecreatableObjectFacetAbstract {
         }
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpecification(viewModelPojo);
-        val viewModelAdapter = ManagedObject.of(spec, viewModelPojo); 
+        val viewModelAdapter = objectManager.adapt(viewModelPojo);
+        val spec = viewModelAdapter.getSpecification();
 
         super.getServiceInjector().injectServicesInto(viewModelPojo);
         
-        val propertiesStream = spec.streamProperties(MixedIn.EXCLUDED)
-                .filter(property->mementoKeys.contains(property.getId()));
-
-        propertiesStream.forEach(property->{
+        spec.streamProperties(MixedIn.EXCLUDED)
+        .filter(property->mementoKeys.contains(property.getId()))
+        .forEach(property->{
 
             val propertyId = property.getId();
             val propertyType = property.getSpecification().getCorrespondingClass();
@@ -88,7 +84,6 @@ extends RecreatableObjectFacetAbstract {
         final _Mementos.Memento memento = newMemento();
 
         val objectManager = super.getObjectManager();
-        val spec = objectManager.loadSpecification(viewModelPojo);
         
         /*
          * ManagedObject that holds the ObjectSpecification used for 
@@ -97,19 +92,19 @@ extends RecreatableObjectFacetAbstract {
          * Does _not_ perform dependency injection on the domain object. Also bypasses 
          * caching (if any), that is each call to this method creates a new instance.
          */
-        val ownerAdapter = ManagedObject.of(spec, viewModelPojo);
+        val viewModelAdapter = objectManager.adapt(viewModelPojo);
+        val spec = viewModelAdapter.getSpecification();
 
-        final Stream<OneToOneAssociation> properties = spec.streamProperties(MixedIn.EXCLUDED);
-
-        properties
+        spec.streamProperties(MixedIn.EXCLUDED)
         // ignore read-only
         .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
         // ignore those explicitly annotated as @NotPersisted
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
             final ManagedObject propertyValue = 
-                    property.get(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
-            if(propertyValue != null && propertyValue.getPojo()!=null) {
+                    property.get(viewModelAdapter, InteractionInitiatedBy.FRAMEWORK);
+            if(propertyValue != null 
+                    && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());
             }
         });

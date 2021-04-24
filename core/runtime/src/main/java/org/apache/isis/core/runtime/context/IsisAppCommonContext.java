@@ -29,7 +29,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -78,7 +78,7 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public Optional<MessageBroker> getMessageBroker() {
-        return getInteractionTracker().currentMessageBroker();
+        return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
     }
     
     // -- SHORTCUTS
@@ -108,8 +108,8 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMementoService().mementoForParameter(adapter);
     }
     
-    public ObjectMemento mementoFor(RootOid rootOid) {
-        return getMementoService().mementoForRootOid(rootOid);
+    public ObjectMemento mementoFor(Oid oid) {
+        return getMementoService().mementoForRootOid(oid);
     }
     
     public ManagedObject reconstructObject(ObjectMemento memento) {

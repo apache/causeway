@@ -4,17 +4,13 @@
 
 
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of `org.apache.wicket.markup.html.WebPage`):
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] defines a relatively small number of pages (subclasses of `org.apache.wicket.markup.html.WebPage`).
+There are two main groups:
 
-* about page
-* entity page
-* error page
-* home page
-* standalone collection page
-* value page
-* void return page
+* subclasses of `PageAbstract`, and
+* subclasses of `AccountManagementPageAbstract`
 
-All of these (except about page) are annotated with the Wicket annotation:
+The subclasses of `PageAbstract` are annotated with the Wicket annotation:
 
 [source,java]
 ----
@@ -24,12 +20,7 @@ All of these (except about page) are annotated with the Wicket annotation:
 which means that they can only be accessed by a user with an authenticated session that has this special, reserved role.
 If not, Wicket will automatically redirect the user to the sign-in page.
 
-[TIP]
-====
-The sign-in page to render is pluggable; see xref:vw:ROOT:extending.adoc#custom-pages[extensions chapter] for details.
-====
-
-In the sign-in page the viewer calls to the Isis Authenticator API, and obtains back a user/role.
+In the sign-in page the viewer calls to the xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] API, and obtains back a user/role.
 It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
 
 And that's really all there is to it.

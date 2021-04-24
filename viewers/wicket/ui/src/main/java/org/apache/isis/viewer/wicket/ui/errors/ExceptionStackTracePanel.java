@@ -92,7 +92,7 @@ public class ExceptionStackTracePanel extends Panel {
                 final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
 
                 // to avoid potential XSS attacks, no longer escape model strings
-                // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
+                // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue JavaScript)
                 // label.setEscapeModelStrings(false);
                 add(label);
 

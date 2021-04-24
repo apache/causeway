@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl"?>
 <rdf:RDF xml:lang="en"
-         xmlns="http://usefulinc.com/ns/doap#" 
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+         xmlns="http://usefulinc.com/ns/doap#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:asfext="http://projects.apache.org/ns/asfext#"
          xmlns:foaf="http://xmlns.com/foaf/0.1/">
 <!--
@@ -12,9 +12,9 @@
     The ASF licenses this file to You under the Apache License, Version 2.0
     (the "License"); you may not use this file except in compliance with
     the License.  You may obtain a copy of the License at
-   
+
          http://www.apache.org/licenses/LICENSE-2.0
-   
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,8 +35,16 @@
     <programming-language>Java</programming-language>
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 
-    
-    <!-- 2020-10-17 releases -->
+
+    <release>
+      <Version>
+        <name>isis</name>
+        <created>2021-03-28</created>
+        <revision>2.0.0-M5</revision>
+      </Version>
+    </release>
+
+
     <release>
       <Version>
         <name>isis</name>
@@ -46,7 +54,6 @@
     </release>
 
 
-    <!-- 2020-03-27 releases -->
     <release>
       <Version>
         <name>isis</name>
@@ -522,8 +529,8 @@
         <revision>1.6.0</revision>
       </Version>
     </release>
-    
-    
+
+
     <!-- 2014-06-08 releases -->
     <release>
       <Version>
@@ -574,8 +581,8 @@
         <revision>1.5.0</revision>
       </Version>
     </release>
-    
-    
+
+
     <!-- 2014-03-14 releases -->
     <release>
       <Version>
@@ -606,7 +613,7 @@
       </Version>
     </release>
 
-    
+
     <!-- 2014-03-11 releases -->
     <release>
       <Version>
@@ -664,7 +671,7 @@
         <revision>1.4.0</revision>
       </Version>
     </release>
-    
+
 
     <!-- 2013-11-07 releases -->
     <release>
@@ -739,8 +746,8 @@
         <revision>1.3.0</revision>
       </Version>
     </release>
-    
-    
+
+
     <!-- 2013-05-31 releases -->
     <release>
       <Version>
@@ -791,8 +798,8 @@
         <revision>1.0.3</revision>
       </Version>
     </release>
-    
-    
+
+
     <!-- 2013-01-31 releases -->
     <release>
       <Version>
@@ -823,7 +830,7 @@
       </Version>
     </release>
 
-    
+
     <!-- 2013-01-10 releases -->
     <release>
       <Version>
@@ -840,7 +847,7 @@
       </Version>
     </release>
 
-    
+
     <!-- 2012-12-24 releases -->
     <release>
       <Version>
@@ -884,8 +891,8 @@
         <revision>1.0.0</revision>
       </Version>
     </release>
-    
-    
+
+
     <repository>
       <GITRepository>
         <location rdf:resource="https://github.com/apache/isis.git"/>

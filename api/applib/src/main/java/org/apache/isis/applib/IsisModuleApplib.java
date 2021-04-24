@@ -25,8 +25,8 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.mixins.layout.Object_openRestApi;
-import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
+import org.apache.isis.applib.mixins.rest.Object_openRestApi;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.schema.IsisModuleSchema;
 
 /**
@@ -77,6 +78,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         // @DomainService(s)
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
+        ImpersonateMenu.class,
         MetaModelServiceMenu.class,
 
         // @Service(s)

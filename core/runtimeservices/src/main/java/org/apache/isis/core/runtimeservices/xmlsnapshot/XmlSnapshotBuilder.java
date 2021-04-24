@@ -70,7 +70,7 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ManagedObject adapter = ManagedObject.of(specificationLoader::loadSpecification, domainObject);
+        final ManagedObject adapter = ManagedObject.lazy(specificationLoader, domainObject);
         final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {

@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class OneToOneAssociationDefault 
-extends ObjectAssociationAbstract 
+public class OneToOneAssociationDefault
+extends ObjectAssociationAbstract
 implements OneToOneAssociation {
 
     public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
@@ -73,7 +73,7 @@ implements OneToOneAssociation {
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyVisibilityContext(
@@ -83,7 +83,7 @@ implements OneToOneAssociation {
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyUsabilityContext(
@@ -125,9 +125,9 @@ implements OneToOneAssociation {
     // -- init
     @Override
     public void initAssociation(
-            final ManagedObject ownerAdapter, 
+            final ManagedObject ownerAdapter,
             final ManagedObject referencedAdapter) {
-        
+
         final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
         if (initializerFacet != null) {
             initializerFacet.initProperty(ownerAdapter, referencedAdapter);
@@ -189,7 +189,7 @@ implements OneToOneAssociation {
         if (propertySetterFacet == null) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        
+
         EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
         return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
@@ -198,13 +198,13 @@ implements OneToOneAssociation {
     private ManagedObject clearValue(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val propertyClearFacet = getFacet(PropertyClearFacet.class);
-        
+
         if (propertyClearFacet == null) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        
+
         return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
@@ -274,11 +274,11 @@ implements OneToOneAssociation {
             final ManagedObject ownerAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet
                 .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
-        
+
         val adapters = _NullSafe.stream(pojoOptions)
                 .map(getObjectManager()::adapt)
                 .collect(Can.toCan());
@@ -300,9 +300,9 @@ implements OneToOneAssociation {
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
 
-        setupCommand(targetAdapter, uniqueId -> 
+        setupCommand(targetAdapter, interactionId ->
             getCommandDtoFactory()
-                .asCommandDto(uniqueId, Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
+                .asCommandDto(interactionId, Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
     }
 
 

@@ -71,7 +71,6 @@ public class ServiceName implements Capability, Comparable<ServiceName> {
 		return title();
 	}
 
-	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Getter	@Setter
 	public String name;

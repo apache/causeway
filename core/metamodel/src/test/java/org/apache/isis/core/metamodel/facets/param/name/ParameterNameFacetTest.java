@@ -64,7 +64,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         super.setUpFacetedMethodAndParameter();
 
         // verify that
-        assertEquals(122, programmingModel.streamFactories().count());
+        assertEquals(119, programmingModel.streamFactories().count());
     }
 
     @Override

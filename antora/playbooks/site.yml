@@ -42,17 +42,14 @@ content:
     - url: .
       start_path: antora/components/refguide # refguide
       branches: HEAD
+    - url: .
+      start_path: antora/components/refguide-index # refguide
+      branches: HEAD
+    - url: .
+      start_path: antora/components/userguide # userguide
+      branches: HEAD
 
 # api
-    - url: .
-      start_path: api/adoc/refguide # refguide
-      branches: HEAD
-    - url: .
-      start_path: api/adoc/userguide # userguide
-      branches: HEAD
-    - url: .
-      start_path: api/applib/src/main/adoc # refguide
-      branches: HEAD
     - url: .
       start_path: api/schema/src/main/adoc # refguide
       branches: HEAD
@@ -71,6 +68,9 @@ content:
       start_path: core/config/src/main/adoc # refguide
       branches: HEAD
     - url: .
+      start_path: core/interaction/src/main/adoc # core
+      branches: HEAD
+    - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
       branches: HEAD
     - url: .
@@ -83,10 +83,13 @@ content:
       start_path: core/runtimeservices/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/webapp/src/main/adoc # core
+      start_path: core/security/src/main/adoc # security
       branches: HEAD
     - url: .
-      start_path: core/security/src/main/adoc # security
+      start_path: core/transaction/src/main/adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/webapp/src/main/adoc # core
       branches: HEAD
 
 # examples
@@ -112,9 +115,6 @@ content:
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/model-annotation/adoc # extensions
-      branches: HEAD
-    - url: .
       start_path: extensions/core/quartz/adoc # userguide
       branches: HEAD
 
@@ -129,6 +129,9 @@ content:
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/spring-oauth2/src/main/adoc # security
       branches: HEAD
 
     - url: .
@@ -160,32 +163,6 @@ content:
     - url: .
       start_path: incubator/viewers/vaadin/adoc # incubator
       branches: HEAD
-    - url: .
-      start_path: incubator/mappings/microprofile/src/main/adoc # incubator
-      branches: HEAD
-
-# legacy
-    - url: .
-      start_path: legacy/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/applib/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/commons/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/metamodel/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/mappings/restclient/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/subdomains/servletapi/src/main/adoc # legacy
-      branches: HEAD
 
 # mappings
     - url: .
@@ -214,11 +191,11 @@ content:
 
 # persistence
     - url: .
+      start_path: persistence/jpa/adoc # pjpa
+      branches: HEAD
+    - url: .
       start_path: persistence/jdo/adoc # pjdo
       branches: HEAD
-#    - url: .
-#      start_path: persistence/jpa/adoc # pjpa
-#      branches: HEAD
 
 # security
     - url: .
@@ -232,6 +209,9 @@ content:
       branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: security/spring/src/main/adoc # security
       branches: HEAD
 
 # starters
@@ -330,6 +310,7 @@ content:
       start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
+
 ui:
   bundle:
 #    url: ../isis-antora/build/ui-bundle.zip
@@ -353,8 +334,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-isisprev: "2.0.0-M4"
-    page-isisrel: "2.0.0-M5"
+    page-isisprev: "2.0.0-M5"
+    page-isisrel: "2.0.0-M6"
 
 output:
   dir: antora/target/site

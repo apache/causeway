@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.searchable;
 
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Indicates that this property should be used as part of a generic searching
@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * introduced for the adapterrcp.sourceforge.net viewer as an extension point
  * plug-in for the Search menu ( <tt>org.eclipse.search.searchPages</tt>).
  */
-public interface SearchableFacet extends MultipleValueFacet {
+public interface SearchableFacet extends Facet {
 
     /**
      * The (class of the) repository to delegate to.

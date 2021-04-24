@@ -12,7 +12,11 @@ export ANTORA_TARGET_SITE=antora/target/site
 #
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
-while getopts 'ECDAKSecdaksxyhf:' opt
+BRANCH=$(git branch --show-current)
+DATE=$(date +%Y%m%d-%H%M)
+export REVISION="${BRANCH}.${DATE}"
+
+while getopts 'ECDAKSLecdaksxylhf:' opt
 do
   case $opt in
     E) export SKIP_EXAMPLES=false
@@ -20,6 +24,8 @@ do
     C) export SKIP_CONFIGS=false
        forcing=true ;;
     D) export SKIP_PROJDOC_GENERATION=false
+       forcing=true ;;
+    L) export SKIP_FIX_ADOC_LINE_ENDINGS=false
        forcing=true ;;
     A) export SKIP_ANTORA_GENERATION=false
        export SKIP_CLEAR_CACHE=false
@@ -33,6 +39,7 @@ do
     e) export SKIP_EXAMPLES=true ;;
     c) export SKIP_CONFIGS=true ;;
     d) export SKIP_PROJDOC_GENERATION=true ;;
+    l) export SKIP_FIX_ADOC_LINE_ENDINGS=true ;;
     a) export SKIP_ANTORA_GENERATION=true
        export SKIP_CLEAR_CACHE=true
        export SKIP_CLEAR_PREVIOUS=true
@@ -51,6 +58,7 @@ do
        echo "  -k skip stale example check"
        echo "  -c skip config doc generation"
        echo "  -d skip projdoc generation"
+       echo "  -l skip fix adoc line endings"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
        echo ""
@@ -59,6 +67,7 @@ do
        echo "  -K force stale example check"
        echo "  -C force config doc generation"
        echo "  -D force projdoc generation"
+       echo "  -L force fix adoc line endings"
        echo "  -A force Antora generation"
        echo "  -S force serving generated site"
        echo ""
@@ -81,6 +90,9 @@ if [ "$forcing" = "true" ]; then
     if [ -z "$SKIP_PROJDOC_GENERATION" ]; then
       export SKIP_PROJDOC_GENERATION=true
     fi
+    if [ -z "$SKIP_FIX_ADOC_LINE_ENDINGS" ]; then
+      export SKIP_FIX_ADOC_LINE_ENDINGS=true
+    fi
     if [ -z "$SKIP_ANTORA_GENERATION" ]; then
       export SKIP_ANTORA_GENERATION=true
       export SKIP_CLEAR_CACHE=true
@@ -98,6 +110,7 @@ echo ""
 echo "SKIP_EXAMPLES              : $SKIP_EXAMPLES"
 echo "SKIP_STALE_EXAMPLE_CHECK   : $SKIP_STALE_EXAMPLE_CHECK"
 echo "SKIP_PROJDOC_GENERATION    : $SKIP_PROJDOC_GENERATION"
+echo "SKIP_FIX_ADOC_LINE_ENDINGS : $SKIP_FIX_ADOC_LINE_ENDINGS"
 echo "SKIP_CONFIGS               : $SKIP_CONFIGS"
 echo "SKIP_ANTORA_GENERATION     : $SKIP_ANTORA_GENERATION"
 echo "SKIP_SERVE                 : $SKIP_SERVE"
@@ -127,7 +140,6 @@ export ANTORA_CMD=antora
 SECONDS=0
 echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
 sh build-site.sh $PLAYBOOK_FILE || exit 1
-
 
 if [[ "$SKIP_SERVE" == "true" ]]; then
   echo "skipping serving"

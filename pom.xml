@@ -30,9 +30,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
-	    <sonar.projectKey>MNummila_isis</sonar.projectKey>
-        <sonar.organization>mnummila</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>MNummila_isis2</sonar.projectKey>
+  		<sonar.organization>mnummila</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
 	<scm>
@@ -90,7 +90,6 @@
 				<module>antora</module>
 				<module>examples/demo</module>
 				<module>incubator</module>
-				<module>legacy</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -204,18 +203,6 @@
 			<modules>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/viewers/vaadin</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-legacy</id>
-			<activation>
-				<property>
-					<name>module-legacy</name>
-				</property>
-			</activation>
-			<modules>
-				<module>legacy</module>
 			</modules>
 		</profile>
 

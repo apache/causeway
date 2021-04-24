@@ -29,9 +29,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
@@ -65,45 +63,30 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
-    }
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
-    Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.Visitor() {
-
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                validate(objectSpec, validator);
-                return true;
+            if(!declaresVersionAnnotation(spec)) {
+                return;
             }
 
-            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                if(!declaresVersionAnnotation(objectSpec)) {
+            ObjectSpecification superclassSpec = spec.superclass();
+            while(superclassSpec != null) {
+                if(declaresVersionAnnotation(superclassSpec)) {
+                    ValidationFailure.raiseFormatted(
+                            spec,
+                            "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
+                            spec.getFullIdentifier(),
+                            superclassSpec.getFullIdentifier() );
                     return;
                 }
-
-                ObjectSpecification superclassSpec = objectSpec.superclass();
-                while(superclassSpec != null) {
-                    if(declaresVersionAnnotation(superclassSpec)) {
-                        validator.onFailure(
-                                objectSpec,
-                                objectSpec.getIdentifier(),
-                                "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
-                                objectSpec.getFullIdentifier(),
-                                superclassSpec.getFullIdentifier() );
-                        return;
-                    }
-                    superclassSpec = superclassSpec.superclass();
-                }
+                superclassSpec = superclassSpec.superclass();
             }
-
-            private boolean declaresVersionAnnotation(ObjectSpecification objectSpec) {
-                return Annotations.getDeclaredAnnotation(objectSpec.getCorrespondingClass(), Version.class)!=null;
-            }
-        };
+        });
     }
 
-
+    private static boolean declaresVersionAnnotation(ObjectSpecification spec) {
+        return Annotations.getDeclaredAnnotation(spec.getCorrespondingClass(), Version.class)!=null;
+    }
 
 
 }

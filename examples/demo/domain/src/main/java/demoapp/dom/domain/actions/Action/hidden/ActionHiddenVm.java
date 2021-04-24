@@ -27,17 +27,16 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -62,13 +61,13 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @MemberOrder(name = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()
-    @MemberOrder(name = "properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "properties", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String otherText;
@@ -77,12 +76,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "text"
-            , associateWithSequence = "1"
             // no hidden attribute              // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action()"
+        , sequence = "1"
     )
     public ActionHiddenVm updateTextNoAnnotation(final String text) {
         setText(text);
@@ -97,12 +96,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "text"
-            , associateWithSequence = "2"
             , hidden = Where.NOWHERE            // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.NOWHERE)"
+        , sequence = "2"
     )
     public ActionHiddenVm updateTextAndHiddenNowhere(final String text) {
         setText(text);
@@ -117,12 +116,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "text"
-            , associateWithSequence = "3"
             , hidden = Where.OBJECT_FORMS       // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.OBJECT_FORMS)"
+        , sequence = "3"
     )
     public ActionHiddenVm updateTextButHiddenOnForms(final String text) {
         setText(text);
@@ -137,12 +136,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "text"
-            , associateWithSequence = "4"
             , hidden = Where.EVERYWHERE         // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.EVERYWHERE)"
+        , sequence = "4"
     )
     public ActionHiddenVm updateTextButHiddenEverywhere(final String text) {
         setText(text);

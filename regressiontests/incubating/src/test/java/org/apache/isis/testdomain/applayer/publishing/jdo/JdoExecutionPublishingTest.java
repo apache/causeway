@@ -29,11 +29,14 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
-import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
@@ -41,9 +44,9 @@ import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.Verificat
 import org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -51,7 +54,8 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingExecutionPublishing.class,
-                ApplicationLayerTestFactory.class
+                ApplicationLayerTestFactory.class,
+                XrayEnable.class
         },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
@@ -61,7 +65,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
+class JdoExecutionPublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -82,10 +86,9 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
             assertHasExecutionEntries(Can.empty());
             break;
         case POST_COMMIT:
-
-
             Interaction interaction = null;
-            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
+            Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
+                    LogicalType.fqcn(JdoBook.class), "name");
             Object target = null;
             Object argValue = "Book #2";
             String targetMemberName = "name???";

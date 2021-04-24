@@ -1,5 +1,5 @@
 
 
-** xref:command-replay:about.adoc[Command Replay]
+** xref:userguide:command-replay:about.adoc[Command Replay]
 
 

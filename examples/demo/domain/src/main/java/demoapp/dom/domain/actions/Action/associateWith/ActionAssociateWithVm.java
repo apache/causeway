@@ -33,18 +33,17 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -72,13 +71,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 
 //tag::class-properties[]
     @Property()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()
-    @MemberOrder(name = "annotation", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String otherProperty;
@@ -108,11 +107,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "text"                // <.>
-        , associateWithSequence = "1"           // <.>
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"text\", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"text\") " +
+            "@ActionLayout(sequence = \"1\")"
+        , sequence = "1"           // <.>
     )
     public ActionAssociateWithVm updateText(final String text) {
         setText(text);
@@ -127,11 +127,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "children"        // <.>
-        , associateWithSequence = "1"       // <.>
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"1\")"
+        , sequence = "1"                    // <.>
     )
     public ActionAssociateWithVm addChild(final String value) {
         val childVm = new ActionAssociateWithChildVm(value);
@@ -145,11 +146,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "children"        // <.>
-        , associateWithSequence = "2"       // <.>
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\", associateWithSequence = \"2\")"
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"2\")"
+        , sequence = "2"                   // <.>
     )
     public ActionAssociateWithVm removeChild(final ActionAssociateWithChildVm child) {
         getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));
@@ -162,12 +164,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "children"        // <.>
-            , associateWithSequence = "3"       // <.>
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\"" +
-                    ", associateWithSequence = \"3\")"
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"3\")"
+        , sequence = "3"                        // <.>
     )
     public ActionAssociateWithVm removeChildren(final List<ActionAssociateWithChildVm> children) {
         for (ActionAssociateWithChildVm child : children) {

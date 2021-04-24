@@ -5,12 +5,12 @@
 
 ** Overview
 
-*** xref:refguide:_overview:about.adoc[System Overview]
+*** xref:core:_overview:about.adoc[System Overview]
 
 ** Viewers
 
-*** xref:vw:ROOT:about.adoc[Wicket UI]
-*** xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
+*** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
+*** xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 
 ** Security
 
@@ -18,7 +18,8 @@
 
 ** Persistence
 
-*** xref:pjdo:ROOT:about.adoc[DataNucleus (JDO)]
+*** xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
+*** xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
 ** Extensions
 

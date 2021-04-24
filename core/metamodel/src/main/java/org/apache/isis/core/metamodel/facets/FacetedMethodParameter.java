@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+
+import lombok.val;
 
 public class FacetedMethodParameter 
 extends TypedHolderDefault 
@@ -38,8 +41,12 @@ implements IdentifiedHolder {
         
         super(featureType, type);
         
+        val logicalType = LogicalType.lazy(
+                declaringType,
+                ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
+        
         // best we can do...
-        this.identifier = FeatureType.ACTION.identifierFor(declaringType, method);
+        this.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
     }
 
     @Override

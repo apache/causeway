@@ -33,12 +33,12 @@ import lombok.val;
 public class ComplexNumberJdoValueSemantics
         implements ValueSemanticsProvider<ComplexNumberJdo>{
 
+// end::class[]
 // tag::getParser[]
     @Override
     public Parser<ComplexNumberJdo> getParser() {
 // end::getParser[]
         // ...
-// end::class[]
 // tag::getParser[]
         return new Parser<ComplexNumberJdo>() {
             @Override
@@ -63,7 +63,6 @@ public class ComplexNumberJdoValueSemantics
             }
         };
     }
-// tag::class[]
 // end::getParser[]
 
 // tag::getEncoderDecoder[]
@@ -71,7 +70,6 @@ public class ComplexNumberJdoValueSemantics
     public EncoderDecoder<ComplexNumberJdo> getEncoderDecoder() {
 // end::getEncoderDecoder[]
         // ...
-// end::class[]
 // tag::getEncoderDecoder[]
         return new EncoderDecoder<ComplexNumberJdo>() {
             @Override
@@ -100,7 +98,6 @@ public class ComplexNumberJdoValueSemantics
                 return ComplexNumberJdo.of(re, im);
             }
         };
-// tag::class[]
     }
 // end::getEncoderDecoder[]
 
@@ -109,11 +106,10 @@ public class ComplexNumberJdoValueSemantics
     public DefaultsProvider<ComplexNumberJdo> getDefaultsProvider() {
 // end::getDefaultsProvider[]
         // ...
-// end::class[]
 // tag::getDefaultsProvider[]
         return ()-> ComplexNumberJdo.of(0, 0);
-// tag::class[]
     }
 // end::getDefaultsProvider[]
+// tag::class[]
 }
 // end::class[]

@@ -25,35 +25,35 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.applib.id.LogicalType;
 
 public class OidVersionTest  {
 
-    private ObjectSpecId cusObjectSpecId = ObjectSpecId.of("CUS");
-    private ObjectSpecId ordObjectSpecId = ObjectSpecId.of("ORD");
+    private LogicalType cus = LogicalTypeTestFactory.cus();
+    private LogicalType ord = LogicalTypeTestFactory.ord();
 
-    private RootOid oid1, oid2;
+    private Oid oid1, oid2;
 
     @Test
     public void whenEquivalent() throws Exception {
-        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.root(cusObjectSpecId, "123");
+        oid1 = Oid.of(cus, "123");
+        oid2 = Oid.of(cus, "123");
 
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenNotEquivalentById() throws Exception {
-        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.root(cusObjectSpecId, "124");
+        oid1 = Oid.of(cus, "123");
+        oid2 = Oid.of(cus, "124");
 
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
     @Test
     public void whenNotEquivalentByObjectSpecId() throws Exception {
-        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.root(ordObjectSpecId, "123");
+        oid1 = Oid.of(cus, "123");
+        oid2 = Oid.of(ord, "123");
 
         assertThat(oid1, is(not(equalTo(oid2))));
     }

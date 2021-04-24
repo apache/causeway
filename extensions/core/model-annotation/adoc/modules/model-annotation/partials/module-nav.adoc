@@ -1,5 +1,0 @@
-
-
-** xref:model-annotation:about.adoc[Model Annotation]
-
-

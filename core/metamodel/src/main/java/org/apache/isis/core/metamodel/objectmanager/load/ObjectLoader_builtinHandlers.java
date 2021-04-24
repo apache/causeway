@@ -90,7 +90,7 @@ final class ObjectLoader_builtinHandlers {
         public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
             
             val spec = objectLoadRequest.getObjectSpecification();
-            val beanName = spec.getSpecId().asString();
+            val beanName = spec.getLogicalTypeName();
             
             val servicePojo = metaModelContext.getServiceRegistry()
                 .lookupRegisteredBeanById(beanName)

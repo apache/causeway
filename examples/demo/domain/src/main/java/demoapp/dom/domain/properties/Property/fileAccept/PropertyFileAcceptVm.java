@@ -26,17 +26,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -59,9 +57,8 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(fileAccept = \".pdf\")"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(fileAccept = \".pdf\")",
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingAnnotation;
@@ -73,9 +70,8 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(fileAccept = \".txt\")"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(fileAccept = \".txt\")",
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Clob txtPropertyUsingAnnotation;
@@ -85,9 +81,8 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @Property()
     @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@FileAcceptPdfMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@FileAcceptPdfMetaAnnotation",
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingMetaAnnotation;
@@ -100,9 +95,8 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob docxPropertyUsingMetaAnnotationButOverridden;

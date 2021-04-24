@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,6 +31,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -38,12 +41,10 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -65,25 +66,24 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GridService gridService;
 
+    @Nullable
     @Override
-    public Class<?> fromObjectType(final String objectType) {
-        if(objectType == null) {
-            return null;
-        }
-        final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
-        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
-        return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
+    public Class<?> fromObjectType(final @Nullable String objectType) {
+        return specificationLoader.specForLogicalTypeName(objectType)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .orElse(null);
     }
 
     @Override
-    public String toObjectType(final Class<?> domainType) {
+    public String toObjectType(final @Nullable Class<?> domainType) {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(domainType);
-        final ObjectSpecIdFacet objectSpecIdFacet = objectSpecification.getFacet(ObjectSpecIdFacet.class);
-        final ObjectSpecId objectSpecId = objectSpecIdFacet.value();
-        return objectSpecId.asString();
+        
+        return specificationLoader.specForType(domainType)
+        .flatMap(spec->spec.lookupFacet(ObjectSpecIdFacet.class))
+        .map(ObjectSpecIdFacet::value)
+        .orElse(null);
     }
 
     @Override
@@ -157,7 +157,10 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainType);
+        final ObjectSpecification objectSpec = specificationLoader.specForType(domainType).orElse(null);
+        if(objectSpec == null) {
+            return BeanSort.UNKNOWN;
+        }
         if(objectSpec.isManagedBean()) {
             return BeanSort.MANAGED_BEAN_CONTRIBUTING;
         }
@@ -214,14 +217,14 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public CommandDtoProcessor commandDtoProcessorFor(final String memberIdentifier) {
         final ApplicationFeatureId featureId = ApplicationFeatureId
-                .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
+                .newFeature(ApplicationFeatureSort.MEMBER, memberIdentifier);
 
-        final ObjectSpecId objectSpecId = featureId.getObjectSpecId();
-        if(objectSpecId == null) {
+        final String logicalTypeName = featureId.getLogicalTypeName();
+        if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification spec = specificationLoader.specForLogicalTypeName(logicalTypeName).orElse(null);
         if(spec == null) {
             return null;
         }

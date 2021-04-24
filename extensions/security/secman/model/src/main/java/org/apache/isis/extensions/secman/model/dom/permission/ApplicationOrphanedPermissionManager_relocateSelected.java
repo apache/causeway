@@ -19,15 +19,19 @@
 package org.apache.isis.extensions.secman.model.dom.permission;
 
 import java.util.Collection;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.RelocateNamespaceDomainEvent;
 
@@ -37,13 +41,14 @@ import lombok.val;
 @Action(
         associateWith = "orphanedPermissions",
         domainEvent = RelocateNamespaceDomainEvent.class, 
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(describedAs = "for the selected permissions renames the namespace")
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     
-    private final ApplicationOrphanedPermissionManager holder;
+    private final ApplicationOrphanedPermissionManager target;
     
     public ApplicationOrphanedPermissionManager act(
             final Collection<ApplicationPermission> permissions,
@@ -52,11 +57,13 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
             final String targetNamespace) {
         
         permissions.forEach(perm->relocate(perm, targetNamespace));
-        return holder;
+        return target;
     }
 
     public Collection<String> choices1Act() {
-        return applicationFeatureRepository.packageNames();
+        return featureRepository.allNamespaces().stream()
+                    .map(ApplicationFeature::getFullyQualifiedName)
+                    .collect(Collectors.toCollection(TreeSet::new));
     }
     
     private void relocate(
@@ -64,7 +71,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
             final String targetNamespace) {
         
         val appFeatureId = ApplicationFeatureId.newFeature(
-                permission.getFeatureType(), 
+                permission.getFeatureSort(), 
                 permission.getFeatureFqn());
         
         val relocatedFqn = appFeatureId

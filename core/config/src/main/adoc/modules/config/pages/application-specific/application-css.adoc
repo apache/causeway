@@ -1,21 +1,21 @@
 [#application-css]
-= `application.css`
+= application.css
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 All of the layout annotations provide the ability to specify adhoc CSS classes, associated with the corresponding element:
 
-* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`]
-* xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`]
-* xref:refguide:applib:index/annotation/PropertyLayout.adoc#cssClass[`@PropertyLayout#cssClass()`]
-* xref:refguide:applib:index/annotation/CollectionLayout.adoc#cssClass[`@CollectionLayout#cssClass()`]
+* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()]
+* xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[@ActionLayout#cssClass()]
+* xref:refguide:applib:index/annotation/PropertyLayout.adoc#cssClass[@PropertyLayout#cssClass()]
+* xref:refguide:applib:index/annotation/CollectionLayout.adoc#cssClass[@CollectionLayout#cssClass()]
 
-CSS can also be specified using the xref:userguide:fun:ui.adoc#object-layout[`Xxx.layout.xml`] layout files.
+CSS can also be specified using the xref:userguide:fun:ui.adoc#object-layout[Xxx.layout.xml] layout files.
 The viewer can then use this information within the rendered page.
-For example, the xref:vw:ROOT:about.adoc[Wicket Viewer] adds the CSS as a style in a containing `<div>` for each element.
+For example, the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] adds the CSS as a style in a containing `<div>` for each element.
 
 The serving of the CSS (containing the style definitions) is also viewer-specific.
-In the case of the xref:vw:ROOT:about.adoc[Wicket Viewer] it uses Spring Boot to serve the CSS file, under `static` package on the classpath.
+In the case of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] it uses Spring Boot to serve the CSS file, under `static` package on the classpath.
 
 The name of the file under `static` is configurable, in either `application.yml` or `application.properties`.
 For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses `application.yml`:

@@ -178,7 +178,7 @@ class MetaModelContext_usingIoc implements MetaModelContext {
                         "Cannot get service instance of type '%s'", 
                         managedBeanAdapter.getBeanClass()));
         
-        return ManagedObject.of(getSpecificationLoader()::loadSpecification, servicePojo);
+        return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
         
     }
 

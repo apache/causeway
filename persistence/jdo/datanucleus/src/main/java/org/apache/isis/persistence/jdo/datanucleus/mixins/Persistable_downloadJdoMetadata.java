@@ -29,11 +29,11 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
@@ -41,17 +41,25 @@ import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Provides the ability to download the JDO
+ * <a href="http://www.datanucleus.org/products/datanucleus/jdo/metadata_xml.html">class metadata</a>
+ * as XML.
+ *
  * @since 2.0 {@index}
  */
 @Action(
         domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
-        )
+)
 @ActionLayout(
         cssClassFa = "fa-download",
-        position = ActionLayout.Position.PANEL_DROPDOWN
-        )
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "710.1"
+)
 @RequiredArgsConstructor
 public class Persistable_downloadJdoMetadata {
 
@@ -61,7 +69,6 @@ public class Persistable_downloadJdoMetadata {
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")
             final String fileName) throws JAXBException, IOException {

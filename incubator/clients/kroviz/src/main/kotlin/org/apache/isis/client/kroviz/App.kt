@@ -31,7 +31,7 @@ class App : Application() {
 
     init {
         require("css/kroviz.css")
-        require("lodash")
+//        require("lodash")
     }
 
     override fun start() {

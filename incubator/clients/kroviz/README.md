@@ -4,7 +4,7 @@ Notice: Licensed to the Apache Software Foundation (ASF) under one or more contr
 
 
 
-![kroviz Logo](./images/kroviz-logo.svg )
+![kroviz Logo](./adoc/modules/kroviz/images/kroviz-logo.svg )
 # kroviz 
 (to be pronounced: [krous]) is a viewer for [Restful Objects](http://www.restfulobjects.org) written in [Kotlin/JS](https://github.com/JetBrains/kotlin/tree/master/js), using [KVision](https://rjaros.github.io/kvision) for the UI part. 
 
@@ -21,7 +21,7 @@ etc. See [setup instructions](./docs/DevelopmentGuide.md#setup-the-back-end).
 
 A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application should work as well, but is not tested yet.
 
-![Preview](./docs/arc-overview.png)
+![Preview](./adoc/modules/kroviz/partials/design/arc-overview.png)
 
 ## User Interface
 
@@ -29,27 +29,27 @@ The GUI will be similar to the well known Wicket-UI of Apache Isis, but will mak
 The table widget allows filtering/sorting on the client and scrolling behavior will be more like in traditional desktop applications.  
 
 In the left upper corner you will find a burger icon with an drop down menu. Click and select -> Connect, edit/confirm the settings and press OK.
-![Preview](./images/Connect1.png)
+![Preview](./adoc/modules/kroviz/images/Connect1.png)
 
 The default url is localhost:8080/
-![Preview](./images/Connect2.png)
+![Preview](./adoc/modules/kroviz/images/Connect2.png)
 
 The menu gets populated and you may select Prototyping -> runFixtureScript:
-![Preview](./images/RunFixtureScript1.png)
-![Preview](./images/RunFixtureScript2.png)
-![Preview](./images/RunFixtureScript3.png)
+![Preview](./adoc/modules/kroviz/images/RunFixtureScript1.png)
+![Preview](./adoc/modules/kroviz/images/RunFixtureScript2.png)
+![Preview](./adoc/modules/kroviz/images/RunFixtureScript3.png)
 In order to filter the list, enter a string:
-![Preview](./images/RunFixtureScript4.png)
+![Preview](./adoc/modules/kroviz/images/RunFixtureScript4.png)
 
 Other lists work the same way, eg. SimpleObjects -> listAll:
-![Preview](./images/ListAll1.png)
+![Preview](./adoc/modules/kroviz/images/ListAll1.png)
 Clicking on the icon with three dots on the right will open a context menu:
-![Preview](./images/ListAll2.png)
+![Preview](./adoc/modules/kroviz/images/ListAll2.png)
 
 'Burger' -> Log Entries  creates another tab showing logged XmlHttpRequests, sorted by number of 'cache hits'.
-![Preview](./images/LogEntries1.png)
+![Preview](./adoc/modules/kroviz/images/LogEntries1.png)
 Not only XHR's are logged, but 'screen events' as well (filtered for type VIEW)
-![Preview2](./images/LogEntries2.png)
+![Preview2](./adoc/modules/kroviz/images/LogEntries2.png)
 
 
 # Contributing

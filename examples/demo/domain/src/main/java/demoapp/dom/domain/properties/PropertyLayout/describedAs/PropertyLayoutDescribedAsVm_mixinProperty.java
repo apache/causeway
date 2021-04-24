@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.describedAs;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -28,7 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Property()
 @PropertyLayout(
     describedAs =                                   // <.>
-        "@PropertyLayout(describedAs = \"...\")"
+        "@PropertyLayout(describedAs = \"...\")",
+    fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutDescribedAsVm_mixinProperty {
@@ -37,7 +37,6 @@ public class PropertyLayoutDescribedAsVm_mixinProperty {
 
     private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyLayoutDescribedAsVm.getPropertyUsingAnnotation();
     }

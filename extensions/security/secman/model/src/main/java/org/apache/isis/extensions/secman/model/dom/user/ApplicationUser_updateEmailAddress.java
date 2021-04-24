@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -30,30 +30,30 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateEmailAddressDomainEvent.class, 
-        associateWith = "emailAddress",
-        associateWithSequence = "1")
+        associateWith = "emailAddress")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateEmailAddress {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
             @ParameterLayout(named="Email")
             final String emailAddress) {
-        holder.setEmailAddress(emailAddress);
-        return holder;
+        target.setEmailAddress(emailAddress);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
-        return holder.getEmailAddress();
+        return target.getEmailAddress();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
 }

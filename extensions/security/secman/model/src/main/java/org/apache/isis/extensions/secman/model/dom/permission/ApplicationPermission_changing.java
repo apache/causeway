@@ -29,16 +29,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationPermission_changing {
 
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
 
-    //@MemberOrder(name = "Mode", sequence = "2")
+    //@PropertyLayout(group = "Mode", sequence = "2")
     public ApplicationPermission act() {
-        holder.setMode(ApplicationPermissionMode.CHANGING);
-        return holder;
+        target.setMode(ApplicationPermissionMode.CHANGING);
+        return target;
     }
     
     public String disableAct() {
-        return holder.getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
+        return target.getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
     }
     
 

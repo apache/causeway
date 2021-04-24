@@ -1,16 +1,40 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.applib.services.layout;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
- * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's
+ * Mode of operation when downloading a layout file (while prototyping).
+ *
+ * <p>
+ * It affects the way the file's
  * content is assembled. Once a layout file is in place, its layout data takes precedence over any
  * conflicting layout data from annotations.
+ * </p>
+ * 
+ * TODO update for v2 - @MemberGroupLayout and @MemberOrder have been removed
  *
  * @since 1.x {@index}
  */
 public enum Style {
+    
     /**
      * The current layout for the domain class.
      * <p>
@@ -21,6 +45,7 @@ public enum Style {
      * also {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
      */
     CURRENT,
+    
     /**
      * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
      * properties/collections/actions also included included in the grid.
@@ -33,6 +58,7 @@ public enum Style {
      * </ul>
      */
     COMPLETE,
+    
     /**
      * Default, whereby missing properties/collections/actions are added to regions,
      * and unused/empty regions are removed/trimmed.
@@ -46,6 +72,7 @@ public enum Style {
      * </ul>
      */
     NORMALIZED,
+    
     /**
      * As per {@link #NORMALIZED}, but with no properties/collections/actions.
      * <p>

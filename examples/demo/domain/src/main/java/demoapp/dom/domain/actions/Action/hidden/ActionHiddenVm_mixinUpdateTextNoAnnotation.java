@@ -29,12 +29,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "otherText"
-    , associateWithSequence = "1"
     // no hidden attribute              // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action()"
+    , sequence = "1"
 )
 @RequiredArgsConstructor
 public class ActionHiddenVm_mixinUpdateTextNoAnnotation {

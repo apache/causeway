@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.Property.optionality;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -28,8 +29,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "mandatoryPropertyUsingAnnotation", associateWithSequence = "1"
+    associateWith = "mandatoryPropertyUsingAnnotation"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyOptionalityVm_updateMandatoryWithParameterLayout {
 

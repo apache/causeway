@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Blob;
@@ -30,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Property()
 @PropertyLayout(
     describedAs =
-        "@RepaintingNoRepaintMetaAnnotation"
+        "@RepaintingNoRepaintMetaAnnotation",
+    fieldSetId = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotation {
@@ -40,7 +40,6 @@ public class PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotation {
     private final PropertyLayoutRepaintingVm propertyLayoutRepaintingVm;
 
 //    @PdfJsViewer
-    @MemberOrder(name = "meta-annotated", sequence = "2")
     public Blob prop() {
         return propertyLayoutRepaintingVm.getPropertyUsingAnnotation();
     }

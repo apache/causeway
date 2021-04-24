@@ -23,8 +23,8 @@ import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.Authenticator;
+import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
  * @since 2.0

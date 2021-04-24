@@ -45,7 +45,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="transactionId" type="xs:string">
+                <xs:element name="interactionId" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>Unique identifier of the interaction id within which this change occurred.
                         </xs:documentation>
@@ -53,7 +53,7 @@
                 </xs:element>
                 <xs:element name="sequence" type="xs:int">
                     <xs:annotation>
-                        <xs:documentation>Unique sequence number of the set of change within the interaction.  There could be many such events within a single interaction, one for each completed transaction.
+                        <xs:documentation>Unique sequence number of the transaction committed within the interaction.  Although there is usually just one transaction per interaction, in advanced use cases there could be many.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>

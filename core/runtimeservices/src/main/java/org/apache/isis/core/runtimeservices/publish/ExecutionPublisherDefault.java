@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,6 +39,7 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 
 import lombok.RequiredArgsConstructor;
@@ -55,8 +57,9 @@ public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 
     private final List<ExecutionSubscriber> subscribers;
+    private final InteractionTracker iaTracker;
 
-    private Can<ExecutionSubscriber> enabledSubscribers;
+    private Can<ExecutionSubscriber> enabledSubscribers = Can.empty();
 
     @PostConstruct
     public void init() {
@@ -84,24 +87,42 @@ implements ExecutionPublisher {
         }
     }
 
-    // -- HELPERS
+    // -- HELPER
 
     private void notifySubscribers(final Execution<?,?> execution) {
-        if(isSuppressed()) {
-            return;
+        
+        val handle = _Xray.enterExecutionPublishing(
+                iaTracker, 
+                execution, 
+                enabledSubscribers,
+                this::getCannotPublishReason);
+        
+        if(canPublish()) {
+            for (val subscriber : enabledSubscribers) {
+                subscriber.onExecution(execution);
+            }    
         }
-        for (val subscriber : enabledSubscribers) {
-            subscriber.onExecution(execution);
-        }
+        
+        _Xray.exitPublishing(handle);
+        
     }
 
     private final LongAdder suppressionRequestCounter = new LongAdder();
 
-    private boolean isSuppressed() {
-        return enabledSubscribers == null
-                || enabledSubscribers.isEmpty()
-                || suppressionRequestCounter.intValue() > 0;
+    private boolean canPublish() {
+        return enabledSubscribers.isNotEmpty()
+                && suppressionRequestCounter.longValue() < 1L;    
     }
 
+    // x-ray support
+    private @Nullable String getCannotPublishReason() {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : suppressionRequestCounter.longValue() > 0L
+                        ? String.format(
+                                "suppressed for block of executable code\nsuppression request depth %d",
+                                suppressionRequestCounter.longValue())
+                        : null;
+    }
 
 }

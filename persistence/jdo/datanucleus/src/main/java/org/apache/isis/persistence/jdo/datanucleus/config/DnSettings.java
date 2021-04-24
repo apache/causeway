@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.config;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,14 +41,19 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.persistence.jdo.DnSettings")
 @Primary
 @Qualifier("Dn5")
-@ConfigurationProperties(prefix = "")
+@ConfigurationProperties(
+        prefix = "", 
+        ignoreUnknownFields = true)
 @Log4j2
 public class DnSettings {
 
+    /** mapped by {@code datanucleus.*} */
     @Getter @Setter 
-    private Map<String, String> datanucleus; //mapped by "datanucleus"
+    private Map<String, String> datanucleus = Collections.emptyMap(); 
+    
+    /** mapped by {@code javax.*} filtered later for {@code javax.jdo.*} */
     @Getter @Setter 
-    private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
+    private Map<String, String> javax = Collections.emptyMap();
     
     private final Object lock = new Object();
     private Map<String, Object> properties;
@@ -97,32 +103,9 @@ public class DnSettings {
                 log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
-        } else {
-            // use JDBC connection properties; put if not present
-
-//XXX let Spring handle datasources instead            
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
-//
-//            if(log.isInfoEnabled()) {
-//                log.info("using JDBC connection '{}'", 
-//                        props.get("javax.jdo.option.ConnectionURL"));
-//            }
-        }
+        } 
         
     }
-
-//    private static void putIfNotPresent(
-//            final Map<String, Object> props,
-//            final String key,
-//            final String value) {
-//        
-//        if(!props.containsKey(key)) {
-//            props.put(key, value);
-//        }
-//    }
     
     
 }

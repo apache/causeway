@@ -2,21 +2,21 @@
 
 WARNING: TODO command was renamed to commandPublishing
 
-The `command` element is used to allow or suppress the reification of an property edit into a `Command`.
+The `command` element is used to allow or suppress the reification of an property edit into a xref:refguide:applib:index/services/command/Command.adoc[Command].
 
 
-When allowed (the default), then the `Command` is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[`CommandServiceListener`] SPI, _after_ the interaction has completed.
+When allowed (the default), then the xref:refguide:applib:index/services/command/Command.adoc[Command] is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandServiceListener.html#section-top[CommandServiceListener] SPI, _after_ the interaction has completed.
 One use case is to replicate and replay commands to a secondary system, for example for regression testing.
 For more on this, see the "Command Replay" section below.
 
-Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[`WrapperFactory`].
+Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[WrapperFactory].
 
 [NOTE]
 ====
-The list of persisted ``Command``s can be viewed in a collection at the left bottom of the page.
-``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+The list of persisted xref:refguide:applib:index/services/command/Command.adoc[Command]s can be viewed in a collection at the left bottom of the page.
+xref:refguide:applib:index/services/command/Command.adoc[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
-If running in prototype mode, the list of persisted ``Command``s can also be truncated from the activity menu.
+If running in prototype mode, the list of persisted xref:refguide:applib:index/services/command/Command.adoc[Command]s can also be truncated from the activity menu.
 ====
 
 == Annotated
@@ -77,7 +77,7 @@ include::PropertyCommandPublishingJdo.java[tags=meta-annotation-overridden]
 
 The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension, so every command is persisted.
 These can be viewed in the collection at the bottom of the left page.
-``Command``s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+xref:refguide:applib:index/services/command/Command.adoc[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
 
 == Configuration
@@ -101,13 +101,13 @@ In other words actions are reified to commands except for those that don't chang
 
 == Command Replay
 
-The link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow ``Command``s to be persisted.
-It also provides a RESTful endpoint to allow ``Command``s to be queried.
+The link:https://isis.apache.org/extensions/2.0.0-M3/command-log/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
+It also provides a RESTful endpoint to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be queried.
 This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/command-replay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
 
-The associated `commandDtoProcessor()` element allows the `Command` XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+The associated `commandDtoProcessor()` element allows the xref:refguide:applib:index/services/command/Command.adoc[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
 One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
-As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[`CommandDtoProcessorService`] SPI.
+As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
 
 The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
 This is most easily done by specifying a system property:

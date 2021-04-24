@@ -29,10 +29,13 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1",
-        associateWithSequence = "2"
+        associateWith = "readOnlyProperty1"
 )
-@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
+@ActionLayout(
+        promptStyle = PromptStyle.DIALOG_MODAL, 
+        named = "Modal", 
+        describedAs = "promptStyle = MODAL",
+        sequence = "2")
 @RequiredArgsConstructor
 public class ActionLayoutPromptStyleVm_annotatedModal {
 

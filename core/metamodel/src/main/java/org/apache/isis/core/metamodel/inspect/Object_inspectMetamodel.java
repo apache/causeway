@@ -24,12 +24,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -42,10 +42,16 @@ import lombok.val;
 @Action(
         domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING)
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
+)
 @ActionLayout(
         cssClassFa = "fa-sitemap",
-        position = ActionLayout.Position.PANEL_DROPDOWN)
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "700.2.1"
+)
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
@@ -57,7 +63,6 @@ public class Object_inspectMetamodel {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2.1")
     public Object act() {
 
         val pkg = holder.getClass().getPackage().getName();

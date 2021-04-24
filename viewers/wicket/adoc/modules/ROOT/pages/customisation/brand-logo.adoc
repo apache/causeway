@@ -10,7 +10,7 @@ This can be changed to display a png logo instead.
 
 == Screenshots
 
-The screenshot below shows the example https://github.com/apache/isis-app-todoapp/[TodoApp] with a 'brand logo' image in its header:
+The screenshot below shows an app with a 'brand logo' image in its header:
 
 image::brand-logo/brand-logo.png[width="750px"]
 
@@ -20,21 +20,24 @@ image::brand-logo/brand-logo-signin.png[width="750px"]
 
 
 
-To configure, simply specify the appropriate configuration properties:
+To configure, set the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-signin[isis.viewer.wicket.application.brand-logo-signin] and xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-header[isis.viewer.wicket.application.brand-logo-header] config properties:
 
 [source,properties]
 ----
-isis.wicket.viewer.application.brandLogoSignin=/images/todoapp-logo-signin.png
-isis.wicket.viewer.application.brandLogoHeader=/images/todoapp-logo-header.png
+isis.wicket.viewer.application.brand-logo-signin=images/todoapp-logo-signin.png
+isis.wicket.viewer.application.brand-logo-header=images/todoapp-logo-header.png
 ----
 
-These are resolved relative to `src/main/webapp`, or an absolute URL can be specified.
+These files are resolved relative to the `static` package in `src/main/resources`.
+Alternatively an absolute URL can be specified.
+
+In terms of sizing:
 
 * for the signin image, a size of 400x100 works well.
 * for the header image, a size of 160x40 works well.
 
 
-You may also wish to tweak the xref:refguide:config:application-specific/application-css.adoc[`application.css`].
+You may also wish to tweak the xref:refguide:config:application-specific/application-css.adoc[application.css].
 For example, a logo with height 40px works well with the following:
 
 [source,css]

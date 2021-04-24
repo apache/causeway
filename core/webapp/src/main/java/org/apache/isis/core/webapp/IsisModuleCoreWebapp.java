@@ -18,13 +18,18 @@
  */
 package org.apache.isis.core.webapp;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.context.WebApplicationContext;
 
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
+import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources;
-import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
 import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
 
 @Configuration
@@ -45,4 +50,12 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
 })
 public class IsisModuleCoreWebapp {
 
+    @Bean
+    @Scope(
+            value = WebApplicationContext.SCOPE_SESSION, 
+            proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public MessageBroker sessionScopedMessageBroker() {
+        return new MessageBroker();
+    }
+    
 }

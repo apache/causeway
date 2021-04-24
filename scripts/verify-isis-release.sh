@@ -93,38 +93,19 @@ _build(){
 	popd
 }
 
-_download_simpleapp(){
-    APP=simpleapp
-    BRANCH=release-$VERSION-$RC
-
-    rm -rf test-$APP
-    mkdir test-$APP
-    pushd test-$APP
+_download_app(){
+    APP=$1
+    BRANCH=$2
 
     REPO=isis-app-$APP
+    DIR=$REPO-$BRANCH
+
+    rm -rf $DIR
     curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-    mv $REPO-$BRANCH $REPO
 
-    pushd $REPO
+    pushd $DIR
     _execmustpass mvn clean install
-    popd; popd
-}
-
-_download_helloworld(){
-    APP=helloworld
-    BRANCH=release-$VERSION-$RC
-
-    rm -rf test-$APP
-    mkdir test-$APP
-    pushd test-$APP
-
-    REPO=isis-app-$APP
-    curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-    mv $REPO-$BRANCH $REPO
-
-    pushd $REPO
-    _execmustpass mvn clean install
-    popd; popd
+    popd
 }
 
 
@@ -166,20 +147,32 @@ _download
 _verify
 _unpack
 _build
-_download_simpleapp
-_download_helloworld
+_download_app helloworld jdo
+_download_app helloworld jpa
+_download_app simpleapp jdo
+_download_app simpleapp jpa
 
 # print instructions for final testing
 clear
 cat <<EOF
 
-# Test out helloworld using:
-pushd test-helloworld/isis-app-helloworld
+# Test out helloworld (jdo) using:
+pushd isis-app-helloworld-jdo
 mvn spring-boot:run
 popd
 
-# Test out simpleapp using:
-pushd test-simpleapp/isis-app-simpleapp
+# Test out helloworld (jpa) using:
+pushd isis-app-helloworld-jpa
+mvn spring-boot:run
+popd
+
+# Test out simpleapp (jdo) using:
+pushd isis-app-simpleapp-jdo
+mvn -pl webapp spring-boot:run
+popd
+
+# Test out simpleapp (jpa) using:
+pushd isis-app-simpleapp-jpa
 mvn -pl webapp spring-boot:run
 popd
 

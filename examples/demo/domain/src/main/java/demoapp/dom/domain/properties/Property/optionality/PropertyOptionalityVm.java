@@ -26,16 +26,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -60,9 +58,8 @@ public class PropertyOptionalityVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(optionality = OPTIONAL)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(optionality = OPTIONAL)",
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -74,9 +71,8 @@ public class PropertyOptionalityVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(optionality = MANDATORY)"
-    )
-    @MemberOrder(name = "annotation", sequence = "2")
+            "@Property(optionality = MANDATORY)",
+        fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String mandatoryPropertyUsingAnnotation;
@@ -86,9 +82,8 @@ public class PropertyOptionalityVm implements HasAsciiDocDescription {
     @OptionalityOptionalMetaAnnotation                  // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@OptionalityOptionalMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@OptionalityOptionalMetaAnnotation",
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -102,9 +97,8 @@ public class PropertyOptionalityVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@OptionalityOptionalMetaAnnotation " +
-            "@PropertyLayout(optionality = MANDATORY)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@PropertyLayout(optionality = MANDATORY)",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

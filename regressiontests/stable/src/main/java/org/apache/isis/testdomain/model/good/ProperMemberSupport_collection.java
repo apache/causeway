@@ -21,9 +21,9 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,17 +42,17 @@ public class ProperMemberSupport_collection {
     
     // -- PROPERLY DECLARED SUPPORTING METHODS 
     
-    @Model
+    @MemberSupport
     public boolean hideColl() {
         return false;
     }
     
-    @Model
+    @MemberSupport
     public String disableColl() {
         return null;
     }
     
-    @Model //TODO not documented with the support-matrix, what to do here?
+    @MemberSupport //TODO not documented with the support-matrix, what to do here?
     public String validateColl() {
         return null;
     }

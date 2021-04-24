@@ -32,17 +32,15 @@ import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -133,9 +131,9 @@ public class DomainModelValidator {
                 .filter(failure->filter.test(failure.getOrigin()));
     }
 
-    public Stream<ValidationFailure> streamFailuresMatchingOriginatingClass(Class<?> cls) {
-        requires(cls, "cls");
-        return streamFailures(origin->origin.getClassName().equals(cls.getName()));
+    public Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(
+            final @NonNull Identifier identifier) {
+        return streamFailures(id->id.equals(identifier));
     }
 
 
@@ -144,8 +142,10 @@ public class DomainModelValidator {
     /**
      * primarily used for testing
      */
-    public boolean anyMatchesContaining(Class<?> cls, String messageSnippet) {
-        return streamFailuresMatchingOriginatingClass(cls)
+    public boolean anyMatchesContaining(
+            final @NonNull Identifier identifier, 
+            final @NonNull String messageSnippet) {
+        return streamFailuresMatchingOriginatingIdentifier(identifier)
                 .anyMatch(failure->
                     failure.getMessage().contains(messageSnippet));
     }

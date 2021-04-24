@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.Property.mustSatisfy;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -28,8 +29,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "customerAgePropertyUsingMetaAnnotation", associateWithSequence = "1"
+    associateWith = "customerAgePropertyUsingMetaAnnotation"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
 

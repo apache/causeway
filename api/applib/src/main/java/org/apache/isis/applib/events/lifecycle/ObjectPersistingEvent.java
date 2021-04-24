@@ -19,6 +19,14 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
+ * Broadcast when an entity is about to be saved (inserted) into the database
+ * either explicitly using the
+ * {@link org.apache.isis.applib.services.repository.RepositoryService}, or
+ * implicitly, for example due to persistence-by-reachability or similar
+ * persistence mechanisms.
+ *
+ * @see ObjectPersistedEvent
+ *
  * @since 1.x {@index}
  */
 public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S> {

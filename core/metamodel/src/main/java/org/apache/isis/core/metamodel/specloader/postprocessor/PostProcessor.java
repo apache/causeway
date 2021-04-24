@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.postprocessor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,22 +28,18 @@ import lombok.val;
 public class PostProcessor {
 
     private final ProgrammingModel programmingModel;
-    private List<ObjectSpecificationPostProcessor> postProcessors; // populated at #init
+    private Can<ObjectSpecificationPostProcessor> postProcessors = Can.empty(); // populated at #init
 
     public PostProcessor(ProgrammingModel programmingModel) {
         this.programmingModel = programmingModel;
     }
 
     public void init() {
-        postProcessors = programmingModel.streamPostProcessors().collect(Collectors.toList());
+        postProcessors = programmingModel.streamPostProcessors().collect(Can.toCan());
     }
     
     public void shutdown() {
-        // in case initialization never happened.
-        if(postProcessors == null) {
-            return;
-        }
-        postProcessors.clear();
+        postProcessors = null;
     }
     
     public void postProcess(ObjectSpecification objectSpecification) {

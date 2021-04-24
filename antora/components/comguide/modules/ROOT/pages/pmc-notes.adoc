@@ -156,7 +156,8 @@ modify_committee.pl isis --add joebloggs                                        
 <1> update as required
 
 * second, update `committee-info.txt` +
-+ This is held in SVN, under https://svn.apache.org/repos/private[https://svn.apache.org/repos/private]; the file resides at `committers/board/committee-info.txt`
++
+This is held in SVN, under https://svn.apache.org/repos/private[https://svn.apache.org/repos/private]; the file resides at `committers/board/committee-info.txt`
 
 The new committer does not officially become a member of the PMC until the ASF records have been updated.
 

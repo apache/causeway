@@ -23,6 +23,8 @@ import java.util.UUID;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.iactn.Execution;
@@ -31,8 +33,6 @@ import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -78,18 +78,18 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @ToString
 @Log4j2
-public class Command implements HasUniqueId, HasUsername, HasCommandDto {
+public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
     /**
      * Unique identifier for the command.
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTransactionId()}
+     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
      * </p>
      */
     @Getter
         (onMethod_ = {@Override})
-    private final UUID uniqueId;
+    private final UUID interactionId;
 
     /**
      * The user that created the command.
@@ -125,10 +125,10 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getTransactionId()},
+     *     expected to have {@link CommandDto#getInteractionId()},
      *     {@link CommandDto#getUser()}, {@link CommandDto#getTimestamp()},
      *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
-     *     to be populated.  The {@link #getUniqueId()}, {@link #getUsername()},
+     *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
      *     from the provided {@link CommandDto}.
      * </p>
@@ -141,9 +141,10 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
      * the target object (entity or service) on which this action/edit was performed.
      */
+    @ToString.Include(name = "target")
     public Bookmark getTarget() {
         return commandDto != null
-                ? Bookmark.from(commandDto.getTargets().getOid().get(0))
+                ? Bookmark.fromOidDto(commandDto.getTargets().getOid().get(0))
                 : null;
     }
 
@@ -151,6 +152,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * Derived from {@link #getCommandDto()}, holds a string
      * representation of the invoked action, or the edited property.
      */
+    @ToString.Include(name = "memberId")
     public String getLogicalMemberIdentifier() {
         return commandDto != null
                     ? commandDto.getMember().getLogicalMemberIdentifier()
@@ -251,7 +253,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      */
     @Getter
     private boolean publishingEnabled;
-
+    
+    @ToString.Exclude
     private final Updater UPDATER = new Updater();
 
     public class Updater implements CommandOutcomeHandler {
@@ -266,14 +269,14 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
         public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
 
-            // even though redundant, but must ensure commandUniqueId == dtoUniqueId
-            val commandUniqueId = Command.this.getUniqueId().toString();
-            val dtoUniqueId = commandDto.getTransactionId();
+            // should be redundant, but we ensure commandInteractionId == dtoInteractionId
+            val commandInteractionId = Command.this.getInteractionId().toString();
+            val dtoInteractionId = commandDto.getInteractionId();
 
-            if(!commandUniqueId.equals(dtoUniqueId)) {
-                log.warn("setting CommandDto on a Command has side-effects when "
-                        + "both their UniqueIds don't match");
-                commandDto.setTransactionId(commandUniqueId);
+            if(!commandInteractionId.equals(dtoInteractionId)) {
+                log.warn("setting CommandDto on a Command has side-effects if "
+                        + "their InteractionIds don't match; forcing CommandDto's Id to be same as Command's");
+                commandDto.setInteractionId(commandInteractionId);
             }
 
         }

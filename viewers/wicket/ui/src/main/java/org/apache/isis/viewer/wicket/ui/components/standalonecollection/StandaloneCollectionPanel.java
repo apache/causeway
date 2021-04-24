@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -40,7 +41,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
+public class StandaloneCollectionPanel 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionCountProvider, CollectionSelectorProvider {
 
     private static final long serialVersionUID = 1L;
@@ -67,9 +69,9 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + action.getOnType().getSpecId().asString().replace('.', '-') + "-" + action.getId()));
+                CssClassAppender.asCssStyle("isis-" + action.getOnType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getSpecId().asString().replace('.','-')));
+                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getLogicalTypeName().replace('.','-')));
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());

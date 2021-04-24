@@ -26,22 +26,46 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**
- * Extension to applib's {@link ReasonBuffer}.
+ * Helper class to construct reason strings, with support for evaluating the
+ * condition.
+ *
+ * <p>
+ * An alternative is to use the (very simple) {@link Reasons} class or the
+ * (a bit more sophisticated) {@link ReasonBuffer}.
+ * </p>
+ *
+ * @see ReasonBuffer
+ * @see Reasons
  *
  * @since 2.0 {@index}
  */
 public class ReasonBuffer2 {
 
-    public static ReasonBuffer2Builder builder() {
-        return new ReasonBuffer2Builder();
+    public static Builder builder() {
+        return new Builder();
     }
 
-
-    public static interface Condition {
-        public boolean evaluate();
+    public static ReasonBuffer2 forAll() {
+        return ReasonBuffer2.builder().build();
     }
 
-    public static interface LazyReason {
+    public static ReasonBuffer2 forSingle() {
+        return ReasonBuffer2.builder().mode(Mode.SINGLE).build();
+    }
+
+    public static ReasonBuffer2 forAll(final String prefix) {
+        return ReasonBuffer2.builder().prefix(prefix).build();
+    }
+
+    public static ReasonBuffer2 forSingle(final String prefix) {
+        return ReasonBuffer2.builder().prefix(prefix).mode(Mode.SINGLE).build();
+    }
+
+    public interface Condition {
+        boolean evaluate();
+    }
+
+    public interface LazyReason {
         public String evaluate();
     }
 
@@ -84,21 +108,6 @@ public class ReasonBuffer2 {
 
     private final List<LazyReason> lazyReasons = _Lists.newArrayList();
 
-    public static ReasonBuffer2 forAll() {
-        return ReasonBuffer2.builder().build();
-    }
-
-    public static ReasonBuffer2 forSingle() {
-        return ReasonBuffer2.builder().mode(Mode.SINGLE).build();
-    }
-
-    public static ReasonBuffer2 forAll(final String prefix) {
-        return ReasonBuffer2.builder().prefix(prefix).build();
-    }
-
-    public static ReasonBuffer2 forSingle(final String prefix) {
-        return ReasonBuffer2.builder().prefix(prefix).mode(Mode.SINGLE).build();
-    }
 
     private ReasonBuffer2(final Mode mode, final String prefix) {
         this.prefix = prefix;
@@ -200,19 +209,19 @@ public class ReasonBuffer2 {
         return this;
     }
 
-    public static class ReasonBuffer2Builder {
+    public static class Builder {
         private Mode mode;
         private String prefix;
 
-        ReasonBuffer2Builder() {
+        Builder() {
         }
 
-        public ReasonBuffer2Builder mode(Mode mode) {
+        public Builder mode(Mode mode) {
             this.mode = mode;
             return this;
         }
 
-        public ReasonBuffer2Builder prefix(String prefix) {
+        public Builder prefix(String prefix) {
             this.prefix = prefix;
             return this;
         }
@@ -223,7 +232,7 @@ public class ReasonBuffer2 {
 
         @Override
         public String toString() {
-            return "ReasonBuffer2.ReasonBuffer2Builder(mode=" + this.mode + ", prefix=" + this.prefix + ")";
+            return "ReasonBuffer2.Builder(mode=" + this.mode + ", prefix=" + this.prefix + ")";
         }
     }
 }

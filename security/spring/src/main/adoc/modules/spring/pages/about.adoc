@@ -1,0 +1,181 @@
+= Spring Security
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This guide describes the configuration of the Spring implementation of Apache Isis' xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] SPI.
+
+It does _not_ however provide any implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI.
+You will therefore need to configure an alternative implementation, eg the xref:bypass:about.adoc[Bypass] implementation (to disable authorisation checks completely), or use the xref:secman:about.adoc[SecMan] implementation.
+
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+
+== Dependency
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.security</groupId>
+        <artifactId>isis-security-spring</artifactId>
+    </dependency>
+</dependencies>
+----
+
+[[_update-appmanifest]]
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleSecuritySpring` module and remove any other `IsisModuleSecurityXxx` modules.
+
+Also, as this module provides no implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, instead you will need some an alternative implementation, such as the xref:bypass:about.adoc[Bypass] implementation.
+(Note: this will in effect disable authorisation checks).
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecuritySpring.class,     // <.>
+        AuthorizorBypass.class,             // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> make sure that no other `IsisModuleSecurityXxx` module is imported.
+<.> or some other implementation of `Authorizor`.
+
+
+== Design
+
+The module brings in a transitive dependency to `org.springframework.boot:spring-boot-starter-security`:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+----
+
+This enables security by default, and should then be adjusted as required to enable access.
+See the Spring documentation for details on how to do this, for example:
+
+* link:https://spring.io/guides/gs/securing-web/[Spring security introductory guide]
+* link:https://www.baeldung.com/spring-boot-security-autoconfiguration[Baeldung article] on `spring-boot-starter-security`
+* link:https://www.tutorialspoint.com/spring_boot/spring_boot_securing_web_applications.htm[Tutorialspoint] tutorial on `spring-boot-starter-security`
+
+The module itself configures a filter that is installed at the end of Spring Security's filter chain.
+It uses the link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/context/SecurityContextHolder.html[SecurityContextHolder] to obtain the current authentication:
+
+[source,java]
+.SpringSecurityFilter.java
+----
+val springAuthentication = SecurityContextHolder.getContext().getAuthentication();
+if(springAuthentication==null
+        || !springAuthentication.isAuthenticated()) {
+    httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    return; // not authenticated
+}
+----
+
+For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to the list of roles.
+
+
+
+[#walk-through-in-memory]
+== Walk-through : In-memory
+
+Using Spring Security we can configure your app with various authentication providers.
+In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use an in-memory authenticator.
+
+
+=== Code Changes
+
+First, we need an implementation of `WebSecurityConfigurerAdapter` to setup the inmemory authenticator:
+
+[source,java]
+----
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter
+{
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("sven")
+                .password(passwordEncoder().encode("pass"))
+                .roles("USER");   // <.>
+                ;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+----
+<.> at least one role must be assigned to each user.
+
+Next, we configure the necessary components (including `SecurityConfig`, above).
+As discussed <<_update-appmanifest,above>>, we need to reference Apache Isis' Spring security module and also an implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, eg the xref:bypass:about.adoc[Bypass] implementation:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecuritySpring.class,
+        AuthorizorBypass.class,
+        SecurityConfig.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+Lastly (and optionally), the swagger/REST API is not configured for spring security, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+
+[source,html]
+.static/index.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="refresh" content="0;url=/wicket/" />
+</head>
+<body>
+<div id="wrapper">
+    <!-- we just redirect immediately, because swagger/restful API not configured to use spring security -->
+</div>
+</body>
+</html>
+----
+
+=== Run the application
+
+You should now be able to run the application.
+You will see that the usual login page is replaced by one provided by Spring:
+
+image::spring-security-login.png[width=300px]
+
+
+
+[#authenticatorconverter-spi]
+== AuthenticatorConverter SPI
+
+The module provides a number of implementations of xref:refguide:security:index/spring/authconverters/AuthenticationConverter.adoc[AuthenticationConverter] that (attempt to) convert a Spring `Authentication` object into an Apache Isis `UserMemento`.
+
+Several implementations are provided by default for most of the common representations of a user principal, including support for link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetails.html[UserDetails] (as returned in the <<walk-through-in-memory,in-memory walk through above>>) and link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/user/OAuth2User.html[OAuth2User] (as returned in the <<walk-through-oauth2,oauth2 walk-through>>).
+This SPI does though provide additional flexibility for other security technologies that may be supported by link:https://spring.io/projects/spring-security[Spring].

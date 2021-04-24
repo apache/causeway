@@ -16,7 +16,7 @@
 #  under the License.
 
 name: vro
-title: "Restful Objects Viewer"
+title: "REST API (Restful Objects Viewer)"
 version: latest
 start_page: ROOT:about.adoc
 nav:

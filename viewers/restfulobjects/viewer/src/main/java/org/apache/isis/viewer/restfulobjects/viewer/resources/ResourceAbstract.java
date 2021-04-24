@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +36,6 @@ import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -104,7 +102,7 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
         
-        if (!isisInteractionTracker.isInInteractionSession()) {
+        if (!isisInteractionTracker.isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
@@ -127,12 +125,15 @@ public abstract class ResourceAbstract {
 
     protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        val rootOid = RootOid.deString(oidStrUnencoded);
-        
-        return Optional.ofNullable(rootOid.loadObject(getSpecificationLoader()))
-                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
+
+        val oid = Oid.forLogicalTypeNameAndIdentifier(domainType, instanceIdUnencoded);
+        return oid
+                .loadObject(metaModelContext)
+                .orElseThrow(()->RestfulObjectsApplicationException
+                        .createWithMessage(HttpStatusCode.NOT_FOUND, 
+                                "Could not determine adapter for OID: '%s:%s'", 
+                                domainType, 
+                                instanceIdUnencoded));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {

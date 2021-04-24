@@ -59,10 +59,10 @@ public class CommandRetrievalService {
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
-        private final UUID uniqueId;
-        public NotFoundException(final UUID uniqueId) {
+        private final UUID interactionId;
+        public NotFoundException(final UUID interactionId) {
             super("Command not found");
-            this.uniqueId = uniqueId;
+            this.interactionId = interactionId;
         }
     }
 
@@ -70,22 +70,22 @@ public class CommandRetrievalService {
      * These actions should be called with HTTP Accept Header set to:
      * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
      *
-     * @param uniqueId - to search from.  This transactionId will <i>not</i> be included in the response.
+     * @param interactionId - to search from.  This interactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsOnPrimaryFromDomainEvent.class, semantics = SemanticsOf.SAFE)
     public List<CommandJdo> findCommandsOnPrimaryFrom(
             @Nullable
-            @ParameterLayout(named="Unique Id")
-            final UUID uniqueId,
+            @ParameterLayout(named="Interaction Id")
+            final UUID interactionId,
             @Nullable
             @ParameterLayout(named="Batch size")
             final Integer batchSize)
             throws NotFoundException {
-        final List<CommandJdo> commands = commandServiceRepository.findSince(uniqueId, batchSize);
+        final List<CommandJdo> commands = commandServiceRepository.findSince(interactionId, batchSize);
         if(commands == null) {
-            throw new NotFoundException(uniqueId);
+            throw new NotFoundException(interactionId);
         }
         return commands;
     }

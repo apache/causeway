@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.node.BigIntegerNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
@@ -37,19 +38,19 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.val;
@@ -128,8 +129,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BooleanNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(((Object)value).getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(((Object)value).getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -175,8 +176,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(IntNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(((Object)value).getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(((Object)value).getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -217,8 +218,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(LongNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(((Object)value).getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(((Object)value).getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -264,8 +265,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DoubleNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(((Object)value).getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(((Object)value).getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -297,8 +298,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(value.getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(value.getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -330,8 +331,8 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DecimalNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(value.getClass());
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(value.getClass());
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -363,8 +364,8 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).loadSpecification(String.class);
-                will(returnValue(mockObjectSpec));
+                oneOf(specLoader).specForType(String.class);
+                will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
 
@@ -390,8 +391,8 @@ public class JsonValueEncoderTest_asAdapter {
                 allowing(mockObjectSpec).getCorrespondingClass();
                 will(returnValue(result));
 
-                allowing(mockObjectSpec).getSpecId();
-                will(returnValue(ObjectSpecId.of(result.getName())));
+                allowing(mockObjectSpec).getLogicalType();
+                will(returnValue(LogicalType.fqcn(result)));
 
             }
         });

@@ -1,43 +1,12 @@
 {
   "properties": [
     {
-      "name": "resteasy.jaxrs.app.registration",
-      "type": "java.lang.String",
-      "description": "How the implementation of the JAX-RS application is discovered."
-    },
-    {
-      "name": "resteasy.jaxrs.defaultPath",
-      "type": "java.lang.String",
-      "description": "The path at which the RO viewer should be mounted."
-    },
-    {
-      "name": "isis.value-types.primitives.integer.format",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "isis.value-types.java-lang.byte.format",
-      "type": "java.lang.String"
+      "name": "datanucleus.identifier.case",
+      "type": "org.apache.isis.core.config.DatanucleusConfiguration.Identifier.Case",
+      "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
     }
   ],
   "hints": [
-    {
-      "name": "javax.jdo.PersistenceManagerFactoryClass",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "javax.jdo.PersistenceManagerFactory"
-        }
-      }]
-    },
-    {
-      "name": "datanucleus.objectProvider.className",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.datanucleus.state.StateManagerImpl"
-        }
-      }]
-    },
     {
       "name": "isis.testing.fixtures.initial-script",
       "providers": [{
@@ -55,6 +24,119 @@
           "target": "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport"
         }
       }]
+    },
+    {
+      "name": "isis.viewer.wicket.app",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.cache.database-event-listener",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.platform.database.events.DatabaseEventListener"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.descriptor.customizer",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.descriptors.ClassDescriptor"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.session.customizer",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.config.SessionCustomizer"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.exception-handler",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.exceptions.ExceptionHandler"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.ddl-generation",
+      "values": [
+        {
+          "value": "create-tables"
+        },
+        {
+          "value": "create-or-extend-tables"
+        },
+        {
+          "value": "drop-and-create-tables"
+        },
+        {
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.ddl-generation.output-mode",
+      "values": [
+        {
+          "value": "both"
+        },
+        {
+          "value": "database"
+        },
+        {
+          "value": "sql-script"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.jdbc.batch-writing",
+      "values": [
+        {
+          "value": "jdbc"
+        },
+        {
+          "value": "buffered"
+        },
+        {
+          "value": "oracle-jdbc"
+        },
+        {
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.jpql.validation",
+      "values": [
+        {
+          "value": "EclipseLink"
+        },
+        {
+          "value": "JPA 1.0"
+        },
+        {
+          "value": "JPA 2.0"
+        },
+        {
+          "value": "JPA 2.1"
+        },
+        {
+          "value": "None"
+        }
+      ]
     }
   ]
 }

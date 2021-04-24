@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.util.pchain;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Represents a unidirectionally linked ordered set of POJOs (chain), where the chain
@@ -39,8 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ParentChain {
 
-    public static ParentChain of(Function<Class<?>, ObjectSpecification> specificationLookup){
-        return new ParentChainDefault(specificationLookup);
+    public static ParentChain of(SpecificationLoader specLoader){
+        return new ParentChainDefault(specLoader);
     }
 
     /**

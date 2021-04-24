@@ -27,7 +27,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -133,7 +133,7 @@ public class TableViewVaa extends VerticalLayout {
         
         // rather prepare all table cells into a multi-map eagerly, 
         // than having to spawn new transactions/interactions for each table cell when rendered lazily 
-        val table = _Multimaps.<RootOid, String, String>newMapMultimap();
+        val table = _Multimaps.<Oid, String, String>newMapMultimap();
 
         objects.stream()
         .forEach(object->{

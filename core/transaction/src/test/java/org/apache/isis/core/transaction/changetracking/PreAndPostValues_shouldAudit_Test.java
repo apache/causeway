@@ -18,48 +18,51 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import lombok.val;
+
 
 public class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
-        papv.setPost("Foo");
+        val preAndPostValue = _PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
+                .withPost("Foo");
 
-        assertTrue(papv.shouldAudit());
+        assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void just_deleted() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
-        papv.setPost(IsisTransactionPlaceholder.DELETED);
+        val preAndPostValue = _PreAndPostValue.pre("Foo")
+                .withPost(IsisTransactionPlaceholder.DELETED);
 
-        assertTrue(papv.shouldAudit());
+        assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void changed() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
-        papv.setPost("Bar");
+        val preAndPostValue = _PreAndPostValue.pre("Foo")
+                .withPost("Bar");
 
-        assertTrue(papv.shouldAudit());
+        assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void unchanged() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
-        papv.setPost("Foo");
+        val preAndPostValue = _PreAndPostValue.pre("Foo")
+                .withPost("Foo");
 
-        assertFalse(papv.shouldAudit());
+        assertFalse(preAndPostValue.shouldPublish());
     }
     @Test
     public void created_and_then_deleted() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
-        papv.setPost(IsisTransactionPlaceholder.DELETED);
+        val preAndPostValue = _PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
+                .withPost(IsisTransactionPlaceholder.DELETED);
 
-        assertFalse(papv.shouldAudit());
+        assertFalse(preAndPostValue.shouldPublish());
     }
 }

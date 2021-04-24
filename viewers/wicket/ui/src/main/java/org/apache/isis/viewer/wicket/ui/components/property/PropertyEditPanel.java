@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -36,7 +37,8 @@ import lombok.val;
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
  */
-public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
+public class PropertyEditPanel 
+extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
 

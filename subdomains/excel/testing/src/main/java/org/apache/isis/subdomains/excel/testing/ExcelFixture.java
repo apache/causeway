@@ -28,13 +28,14 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -43,7 +44,6 @@ import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -87,7 +87,8 @@ public class ExcelFixture extends FixtureScript {
         for (Class<?> cls : classes) {
 
             val beanSort = Optional.ofNullable(specLoader)
-            .map(sl->sl.loadSpecification(cls))
+            .flatMap(sl->sl.specForType(cls))
+            .filter(_NullSafe::isPresent)
             .map(ObjectSpecification::getBeanSort)
             .orElse(BeanSort.UNKNOWN);
 
@@ -106,14 +107,14 @@ public class ExcelFixture extends FixtureScript {
      * used with different excel spreadsheets).
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.1")
+    @PropertyLayout(sequence = "1.1")
     private String excelResourceName;
 
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.2")
+    @PropertyLayout(sequence = "1.2")
     private URL excelResource;
 
     /**

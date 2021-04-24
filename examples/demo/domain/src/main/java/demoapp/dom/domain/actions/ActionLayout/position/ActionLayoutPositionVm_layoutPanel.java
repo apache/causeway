@@ -28,10 +28,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty2",
-        associateWithSequence = "2"
+        associateWith = "readOnlyProperty2"
 )
-@ActionLayout(named = "Positioned on panel", describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL/></cpt:property>")
+@ActionLayout(
+        named = "Positioned on panel", 
+        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL/></cpt:property>",
+        sequence = "2")
 @RequiredArgsConstructor
 public class ActionLayoutPositionVm_layoutPanel {
 

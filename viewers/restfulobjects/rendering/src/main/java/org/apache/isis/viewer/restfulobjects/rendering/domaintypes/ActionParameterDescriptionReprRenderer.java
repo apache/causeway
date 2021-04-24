@@ -32,7 +32,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
-        final String domainType = objectSpecification.getSpecId().asString();
+        final String domainType = objectSpecification.getLogicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();

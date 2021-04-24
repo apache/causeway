@@ -1,5 +1,4 @@
-hide empty pathsToInclude
-'hide methods
+hide empty members
 
 skinparam class {
     BackgroundColor<<desc>> Cyan

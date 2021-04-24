@@ -4,29 +4,43 @@
 
 The quickest way to get started building an application "for real" is to use the `simpleapp` starter app.
 
-As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a very simple one-class domain model, namely the `SimpleObject` entity and a supporting `SimpleObjects` domain service.
+There are two variations of the application (and so two branches in the git repo).
+One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
 
-However, the app also provides more structure to assist you as your application grows, with multiple Maven modules, and examples of unit tests, integration tests and BDD (cucumber) specs.
+The application is also deployed online for you to try out, link:https://simpleapp.jdo.isis.incode.work[here (jdo)] and link:https://simpleapp.jpa.isis.incode.work[here (jpa)].
 
-You also can try out this application online, running link:https://simpleapp.isis.incode.work[here].
+As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Isis app consisting of a single entity (`SimpleObject`) with supporting domain services.
+
+However, unlike HelloWorld, this app also provides more structure to assist you as your application grows, with business logic placed in a separate Maven module (`simpleapp-...-module-simple`) to the module that bootstraps the webapp (`simpleapp-...-webapp`).
+Replace "..." with either "jdo" or "jpa", as appropriate.
+
+The idea is that as your application grows in scope that you put each new area of functionality in its own module (copy-n-paste the `simpleapp-...-module-simple` module).
+These modules can depend on each other, but Maven will to ensure that dependencies between these areas of functionality are unidirectional.
+In this way your application will be a "modular monolith"; said another way it will prevent your application from degenerating into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud[big ball of mud].
+See also the discussion <<structure-of-the-app,below>>.
+
+The application also includes examples of unit tests, integration tests and BDD (cucumber) specs.
+You'll find these in their own Maven modules (`simpleapp-...-module-simple-tests` and `simpleapp-...-webapp-tests`).
+Normally we recommend that tests should be in the same Maven module as the code that they exercise.
+The simpleapp doesn't do it this way just to give you the option to exclude them while initially prototyping/exploring a domain.
+You can use them as a reference once your ideas have solidifid and you need to start writing proper "production" code.
+
 
 
 == Prerequisites
 
 Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* an LTS version of Java: either Java 8 JDK or Java 11 JDK
+* Java 11 JDK (or later)
++
+Apache Isis itself is compatible with Java 8, but the simpleapp itself is configured for Java 11.
+
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:about.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.
-If you're a NetBeans user you should have no problems as it too has strong support for Maven.
+If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
+The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
 
-When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.
-This is implemented as a Maven plugin, so in the case of IntelliJ, it's easy enough to run the enhancer as required.
-It should be just as straightforward for NetBeans too.
-
-For Eclipse the maven integration story is a little less refined.
-All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which works well enough.
+If using JPA as the ORM, the equivalent process to enhancement is performed at run-time, so there are no special setup considerations.
 
 
 
@@ -36,7 +50,14 @@ Create a new directory, and `cd` into that directory.
 
 To build the app from the latest stable release, then run the following command:
 
-include::simpleapp-script.adoc[]
+include::simpleapp-script-jdo.adoc[]
+
+to use JDO for the ORM, or:
+
+include::simpleapp-script-jpa.adoc[]
+
+to use JPA as the ORM.
+
 
 This should only take a few seconds to download, compile and run.
 Then browse to link:http://localhost:8080[], and read on.
@@ -44,7 +65,7 @@ Then browse to link:http://localhost:8080[], and read on.
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or use Swagger to access the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]:
 
 image::simpleapp/using/010-root-page.png[width="600px"]
 
@@ -52,7 +73,7 @@ Choose the generic Wicket UI, and navigate to the login page:
 
 image::simpleapp/using/020-login-to-wicket-viewer.png[width="600px"]
 
-The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
+The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `shiro.ini` config file.
 You can login with:
 
 * username: _sven_
@@ -76,19 +97,23 @@ This is a view model annotated with xref:refguide:applib:index/annotation/HomePa
 @HomePage
 public class HomePageViewModel {
 
-    public TranslatableString title() {
-        return TranslatableString.tr("{num} objects", "num", getObjects().size());
+    public String title() {                             // <.>
+        return return getObjects().size() + " objects";
     }
 
-    public List<SimpleObject> getObjects() {
+    public List<SimpleObject> getObjects() {            // <.>
         return simpleObjects.listAll();
     }
 
-    @Inject SimpleObjects simpleObjects;
+    @Inject SimpleObjects simpleObjects;                // <.>
 }
 ----
 
+<.> identifies or describes the object
+<.> collection of objects shown on the page
+<.> automatically injected by the framework
 
+[#fixtures]
 ==== Fixtures
 
 When prototyping against an in-memory database, it's useful to have a mechanism to create some initial state.
@@ -109,16 +134,20 @@ public class DomainAppDemo extends FixtureScript {
 
     @Override
     protected void execute(final ExecutionContext ec) {
-        ec.executeChild(this, new TeardownFixtureAbstract2() {
-            @Override
-            protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(SimpleObject.class);
-            }
-        });
-        ec.executeChild(this, new SimpleObject_persona.PersistAll());
+        ec.executeChildren(this,
+            moduleWithFixturesService.getTeardownFixture());        // <.>
+        ec.executeChild(this,
+            new SimpleObject_persona.PersistAll());                 // <.>
     }
+
+    @Inject ModuleWithFixturesService moduleWithFixturesService;
+
 }
 ----
+
+<.> uses injected service to tear down all objects.
+(Each module provides a teardown script; these are run in the correct sequence).
+<.> Creates new objects
 
 When executed, all objects created by the fixture are listed:
 
@@ -153,22 +182,21 @@ Hitting OK returns the created object:
 
 image::simpleapp/using/060-created-object.png[width="600px"]
 
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the `SimpleObjects` menu domain service):
 
 [source,java]
 ----
-public static class CreateActionDomainEvent extends ActionDomainEvent {}
-@Action(semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CreateActionDomainEvent.class)                     // <.>
-@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)                  // <.>
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)                     // <.>
+@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)             // <.>
 public SimpleObject create(
-        @Name final String name) {                                       // <.>
+        @Name final String name) {                                  // <.>
     return repositoryService.persist(SimpleObject.ofName(name));
 }
 ----
-<.> Published on an in-memory event bus; this allows subscribers to veto or to react to the action invocation.
-<.> Policies such as modal or sidebar can be specified per action, or globally in `application.yml` file.
+<.> Specifying semantics is recommended, as it changes the HTTP method that is used if the action is invoked through the xref:vro::about.adoc[REST API].
+<.> Prompt styles such as modal or sidebar can be specified per action, or globally in `application.yml` file.
 <.> The `@Name` annotation is actually a meta-annotation, meaning that a number of additional semantics (length, layout, validation etc.) are inferred.
+
 
 ==== Invoke an action
 
@@ -178,16 +206,11 @@ The `name` property is read-only, and can only be modified using the `updateName
 
 image::simpleapp/using/070-update-name.png[width="600px"]
 
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the `SimpleObject` entity):
 
 [source,java]
 ----
-public static class UpdateNameActionDomainEvent
-                      extends SimpleObject.ActionDomainEvent {}
-@Action(semantics = IDEMPOTENT,
-        publishing = Publishing.ENABLED,                    // <.>
-        associateWith = "name",
-        domainEvent = UpdateNameActionDomainEvent.class)
+@Action(semantics = IDEMPOTENT)
 public SimpleObject updateName(
         @Name final String name) {
     setName(name);
@@ -197,15 +220,6 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
-+
-The framework provides a default implementation that just logs the interaction:
-+
-image::simpleapp/using/075-publish-logging-1.png[width="600px"]
-+
-It also logs the fact that the object itself was modified:
-+
-image::simpleapp/using/076-publish-logging-2.png[width="600px"]
 
 
 
@@ -227,24 +241,24 @@ The viewer displays a message confirming that the object has been deleted:
 
 image::simpleapp/using/100-object-deleted.png[width="600px"]
 
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the`SimpleObject` entity):
 
 [source,java]
 ----
-public static class DeleteActionDomainEvent
-                       extends SimpleObject.ActionDomainEvent {}
-@Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE,
-        domainEvent = DeleteActionDomainEvent.class)
+@Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE)                        // <.>
 public void delete() {
-    final String title = titleService.titleOf(this);                 // <.>
+    final String title = titleService.titleOf(this);                    // <.>
     messageService.informUser(String.format("'%s' deleted", title));
     repositoryService.removeAndFlush(this);
 }
 ----
-<.> Note that this method uses three services provided by the framework; these are injected into the domain object automatically.
+<.> Requires the user to confirm the action
+<.> The action's implementation uses three services provided by the framework; these are injected into the domain object automatically.
 
 
 === Swagger (Restful Objects)
+
+CAUTION: if invoking an action using Swagger returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 Using menu:Prototyping[Open Swagger UI] menu item (or just going back to the home page at link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
@@ -258,8 +272,6 @@ image::simpleapp/using/210-simpleapp-resources.png[width="600px"]
 For example, an object can be created using the resource that represents the `SimpleObjects#create` action:
 
 image::simpleapp/using/220-create-object-thru-rest-api.png[width="600px"]
-
-CAUTION: if invoking the action returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 The response indicates that the object was successfully created:
 
@@ -279,25 +291,35 @@ The REST API implemented by Apache Isis is specified in the link:http://www.rest
 
 
 
+[#structure-of-the-app]
 == Structure of the App
 
 The simpleapp starter app is a multi-module project, structured so that you easily extend it as your application grows.
 
 === Application Modules
 
-The application consists of three modules, with a top-level module acting as an aggregator, the `module-simple` module that contains the business logic, and `webapp` module that acts as a bootstrapper.
+The application consists of five modules:
 
 [plantuml]
-.simpleapp module dependencies
+.simpleapp dependencies
 ----
-[webapp] <<maven module>>
-[module-simple]  <<maven module>>
+[webapp-...-tests] <<maven module>> #LightBlue
+[webapp-...] <<maven module>>
+[module-...-simple-tests]  <<maven module>> #LightBlue
+[module-...-simple]  <<maven module>>
 
-[webapp] .-> [module-simple]
+[webapp-...-tests] .l-> [webapp-...]
+[module-...-simple-tests] .l-> [module-...-simple]
+[webapp-...] .u-> [module-...-simple]
 ----
 
-Each Maven module contains exactly one link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] class, residing at the package root for that Maven module.
-So, the `module-simple` maven
+where "..." is either "jdo" or "jpa", depending on the branch.
+
+The main business logic resides in `module-...-simple`, with the `webapp` module acting as an aggregator.
+Each of these modules have unit and/or integration tests.
+To allow them to be easily excluded (while prototyping/exploration), they have been placed into their own respective modules.
+
+The (non-test) Maven modules each contain exactly one link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] class, residing at the package root for that Maven module.
 The location of this class is used for classpath scanning.
 
 In a larger application there would likely be many more modules containing these domain object modules.
@@ -312,9 +334,9 @@ For example, you might have a `module-customer` holding a `Customer` entity and 
 [module-customer]  <<maven module>>
 [module-product]  <<maven module>>
 
-[webapp] .-> [module-order]
-[module-order] .-> [module-customer]
-[module-order] .-> [module-product]
+[webapp] .u-> [module-order]
+[module-order] .u-> [module-customer]
+[module-order] .u-> [module-product]
 ----
 
 We can use Maven dependency management to ensure that there are no cyclic dependencies (order "knows about" product but product does not know about orders) and ensure that the codebase remains decoupled.
@@ -329,21 +351,18 @@ For integration tests, this uses the link:https://docs.spring.io/spring-boot/doc
 These two different annotations reference a (class annotated with) link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration], which in turn can link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] other annotations.
 
 By convention, the top-level `@Configuration` in an Apache Isis application is called the "app manifest".
-This references not only the application-level modules (described xref:about.adoc#application-modules[above]), but also the framework's modules.
-There will be several of these app manifests, typically one for the webapp itself, and one for integration testing each module.
 
 The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
 
 .Module Dependencies
 image::simpleapp/simpleapp-modules-dependencies.png[width="800px"]
 
-
-
+(For a JPA branch, the `JdoDataNucleus5` dependency is replaced by `JpaEclipseLink`).
 
 Let's now review the contents of each of the modules in the simpleapp starter app.
 
 
-=== module-simple's src/main/java
+=== module-...-simple's src/main/java
 
 Under `src/main/java` we have:
 
@@ -358,6 +377,7 @@ src/main/java/
             SimpleObject.java
             SimpleObject.layout.xml
             SimpleObject.png
+            SimpleObjectRepository.java <!--.-->
             SimpleObjects.java
         fixture/                        <!--.-->
           SimpleObject_persona.java
@@ -372,14 +392,15 @@ src/main/java/
 <.> For simplicity, all the Java source files reside in a `domainapp` top-level package.
 Change as required.
 
-<.> Defines the 'simple' module.
-Apache Isis can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
+<.> Top level package for the 'simple' module.
 
-<.> The `dom` package holds the "domain object model" for this module.
-Modules may have other packages, common ones include ``types`` and ``fixture``s (as below), also ``api``s, ``contribution``s, ``spi``s
+<.> The `dom` subpackage holds the "domain object model" for this module.
+Modules may have other subpackages, common ones include ``types`` and ``fixture``s (as below), also ``api``s, ``contribution``s, ``spi``s
 
-<.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding repository (`SimpleObjects`).
+<.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding domin services (`SimpleObjects` and `SimpleObjectRepository`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
+
+<.> For the `jpa` branch only, uses Spring Data JPA to automatically provide the query implementation.
 
 <.> The `fixture` package contains classes to set up the database to an initial state (as described xref:#fixtures[earlier].
 One of the classes is a `FixtureScript` (defines _how_ to set up the data) the other is a persona enum (defines _what_ data to set up).
@@ -389,7 +410,7 @@ One of the classes is a `FixtureScript` (defines _how_ to set up the data) the o
 <.> `SimpleModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
 This is discussed in more detail below.
 
-<.> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
+<.> For the `jdo` branch only, the `persistence.xml` file is required boilerplate.
 
 
 ==== SimpleModule
@@ -404,10 +425,12 @@ In the case of `SimpleModule`, it consists of:
 package domainapp.modules.simple;
 ... imports omitted ...
 @Configuration
-@Import({})                                                                 // <1>
-@ComponentScan                                                              // <2>
+@Import({})                                            // <.>
+@ComponentScan                                         // <.>
+@EnableJpaRepositories                                 // <.>
+@EntityScan(basePackageClasses = {SimpleModule.class}) // <.>
 public class SimpleModule
-                implements ModuleWithFixtures {                             // <3>
+                implements ModuleWithFixtures {        // <.>
 
     @Override
     public FixtureScript getTeardownFixture() {
@@ -419,16 +442,7 @@ public class SimpleModule
         };
     }
 
-    public static class PropertyDomainEvent<S,T>                            // <4>
-    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
-
-    public static class CollectionDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
-
-    public static class ActionDomainEvent<S> extends
-    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
-
-    @ConfigurationProperties("app.simple-module")                           // <5>
+    @ConfigurationProperties("app.simple-module")      // <.>
     @Data
     @Validated
     public static class Configuration {
@@ -450,23 +464,25 @@ public class SimpleModule
 
 }
 ----
+
 <.> This module has no dependencies.
 If there were, these would be expressed in terms of module classes (each being a Spring `@Configuration`)
+
 <.> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
+
+<.> for `jpa` branch only, enables Spring Data JPA repositories
+
+<.> for `jpa` branch only, to automatically discover JPA entities
+
 <.> Optionally, modules can implement the testing's `ModuleWithFixtures` interface.
 Through this, they can provide a fixture script which can be used to teardown all entities that are "owned" by the module.
 Since the module dependency graph is known, this allows all data to be removed, useful for prototyping and sometimes for integration tests.
-<.> The actions for the domain objects and domain services all emit domain events, ultimately inheriting from xref:refguide:applib-cm:classes/domainevent/ActionDomainEvent.adoc[ActionDomainEvent].
-By convention, this inheritance hierarchy includes classes defined at the module level.
-This then allows subscribes to subscribe to all actions emitted by anything within the module. +
-Events can also be emitted for xref:refguide:applib-cm:classes/domainevent/PropertyDomainEvent.adoc[properties] and xref:refguide:applib-cm:classes/domainevent/CollectionDomainEvent.adoc[collections].
+
 <.> Spring Boot link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-typesafe-configuration-properties[type-safe configuration], as per link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/ConfigurationProperties.html[@ConfigurationProperties] annotation.
 This Spring Boot feature is used by the framework, but can equally easily be used by application code.
 The `@Name.Specification` class uses this configuration property.
 
-The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
-
-This will pick up the `SimpleObjects` repository because it is annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
+The scanning mechanism is also leveraged by Apache Isis to pick up three types of classes:
 
 * all domain services
 +
@@ -477,12 +493,12 @@ Depending on their nature, domain services are used to build up the menu, or are
 +
 In the simpleapp starter app, the only domain service  is `SimpleObjects`.
 This appears in the menu, and also acts as a repository for the `SimpleObject` entity.
+The `jpa` branch also has the `SimpleObjectRepository` Spring Data service.
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
-Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
-They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the ORM-specific annotation.
+For `jdo` branch, this is `@javax.jdo.annotations.PersistenceCapable`; for the `jpa` branch this is `@javax.persistence.Entity`).
 +
 In the simpleapp starter app, the only entity is `SimpleObject`.
 
@@ -493,7 +509,7 @@ These are classes that extend from the testing applib's `FixtureScript` class, a
 As already discussed, the `fixture` package provides classes to create sample objects, while the `SimpleModule` provides a fixture script to tear down all data from the module.
 
 
-=== module-simple's src/test/java
+=== module-...-simple-test's src/test/java
 
 Under `src/test/java` we have:
 
@@ -504,27 +520,33 @@ src/test/java/
     modules/
       simple/
         dom/
-          so/                                   <!--1-->
+          so/                                       <.>
             SimpleObject_Test.java
             SimpleObjects_Test.java
         integtests/
-          tests/                                <!--2-->
+          tests/                                    <.>
             SimpleObject_IntegTest.java
             SimpleObjects_IntegTest.java
-          SimpleModuleIntegTestAbstract.java    <!--3-->
+          SimpleModuleIntegTestAbstract.java        <.>
+          SimpleModuleIntegTestConfiguration.java   <.>
+src/test/resources/
+  application-test.yml                              <.>
 ----
-<1> These are very simple unit tests of `SimpleObject` and `SimpleObjects` with the package structure the same as in `src/main/java`.
+<.> These are very simple unit tests of `SimpleObject` and `SimpleObjects` with the package structure the same as in `src/main/java`.
 They are written in JUnit 5, and use JMockito as the mocking library.
-<2> Integration tests for the module.
+<.> Integration tests for the module.
 These use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
-<3> The `SimpleModuleIntegTestAbstract` superclass bootstraps the module's integration tests.
+<.> The `SimpleModuleIntegTestAbstract` superclass bootstraps the module's integration tests.
 This is discussed in more detail below.
+<.> Spring to bootstrap the integration test.
+<.> Configuration for the "test" profile
 
 NOTE: these integration tests are annotated with the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html[@Transactional], which means that Spring will automatically roll back the changes to the database; there's no need to delete data afterwards.
 
 IMPORTANT: the naming convention -- with `Test` and `IntegTest` suffixes -- is important, because the Maven surefire plugin is configured to run multiple times, one `<execution>` for each suffix.
 
 
+[#simplemoduleintegtestabstract]
 ==== SimpleModuleIntegTestAbstract
 
 The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests in the module, annotated with link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest]:
@@ -533,45 +555,61 @@ The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests i
 .SimpleModuleIntegTestAbstract.java
 ----
 @SpringBootTest(
-        classes = SimpleModuleIntegTestAbstract.AppManifest.class   // <1>
+        classes = SimpleModuleIntegTestAbstract.TestApp.class   // <.>
 )
-@TestPropertySource({                                               // <2>
-        IsisPresets.H2InMemory_withUniqueSchema,                    // <3>
-        IsisPresets.DataNucleusAutoCreate,                          // <4>
-        IsisPresets.UseLog4j2Test,                                  // <5>
-})
+@ActiveProfiles("test") // <.>
 public abstract class SimpleModuleIntegTestAbstract
-        extends IsisIntegrationTestAbstractWithFixtures {           // <6>
+        extends IsisIntegrationTestAbstractWithFixtures {       // <.>
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,                        // <7>
-        IsisModuleSecurityBypass.class,
-        IsisModuleJdoDataNucleus5.class,
-        IsisModuleTestingFixturesApplib.class,                      // <8>
+        IsisModuleCoreRuntimeServices.class,                    // <.>
+        IsisModuleSecurityBypass.class,                         // <.>
+        IsisModuleJdoDataNucleus5.class,                        // <.>
+        IsisModuleTestingFixturesApplib.class,                  // <.>
 
-        SimpleModule.class
+        SimpleModule.class                                      // <.>
     })
-    public static class AppManifest {
+    @PropertySources({
+            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),     // <.>
+            @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate), // <.>
+            @PropertySource(IsisPresets.UseLog4j2Test),                   // <.>
+    })
+    public static class TestApp {
     }
 }
 ----
-<1> The `AppManifest` (defined as a nested static class below) lists the modules needed to bootstrap the integration test.
-<2> Spring allows additional properties to be defined through the link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/TestPropertySource.html[@TestPropertySource] annotation
-<3> Runs the tests in memory using H2.
-A unique schema allows tests to potentially be run in parallel
-<4> Ensures that JDO/DataNucleus is configured to create the database schema first.
-This may be required because the application might otherwise be configured to use the xref:userguide:flyway:about.adoc[Flyway integration].
-<5> Sets up logging to use the configuration defined in the `log4j2-test.xml` file
-<6> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
-In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
-<7> Specifies the modules that make up Apache Isis framework itself.
+
+<.> The `TestApp` (defined as a nested static class below) lists the modules needed to bootstrap the integration test.
+
+<.> Actives the "test" profile, which reads in additional configuratoin in `application-test.yml"
+
+<.> Specifies the modules that make up Apache Isis framework itself.
 These include core, security set to the bypass implementation (effecively is ignored) and JDO/DataNucleus for persistence.
 Note that there no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
-<8> Brings in support for running fixtures.
 
-TIP: You can learn more about testing in the xref:testing:ROOT:about.adoc[Testing Guide].
+<.> Disables security checks.
 
+<.> Configures JDO as the ORM.
++
+If using JPA, this would be `IsisModuleJpaEclipseLink.class` instead.
+
+<.> Brings in support for running fixtures.
++
+You can learn more about testing in the xref:testing:ROOT:about.adoc[Testing Guide].
+
+<.> The module containing the actual business logic to be tested.
+
+<.> Runs the tests in memory using H2.
+A unique schema allows tests to potentially be run in parallel
+
+<.> Ensures that JDO/DataNucleus is configured to create the database schema first.
+This may be required because the application might otherwise be configured to use the xref:userguide:flyway:about.adoc[Flyway integration].
+
+<.> Sets up logging to use the configuration defined in the `log4j2-test.xml` file
+
+<.> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
+In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 
 
@@ -586,37 +624,59 @@ src/main/java/
     webapp/
       application/
         fixture/
-          scenarios/                                            <!--1-->
-            DomainAppDemo.java                                  <!--2-->
-            DomainAppFixtureScriptsSpecificationProvider.java   <!--3-->
+          scenarios/                                            <.>
+            DomainAppDemo.java                                  <.>
+            DomainAppFixtureScriptsSpecificationProvider.java   <.>
         services/
           health/
-            HealthCheckServiceImpl.java                         <!--4-->
+            HealthCheckServiceImpl.java                         <.>
           homepage/
-            HomePageViewModel.java                              <!--5-->
+            HomePageViewModel.java                              <.>
             HomePageViewModel.layout.xml
             HomePageViewModel.png
-         ApplicationModule.java                                 <!--6-->
-      AppManifest.java                                          <!--7-->
-      SimpleApp.java                                            <!--8-->
+         ApplicationModule.java                                 <.>
+      custom/
+        restapi/
+          CustomController.class                                <.>
+        CustomModule.class
+      quartz/
+        job/
+          SampleJob.class                                       <.>
+        QuartzModule.class
+      AppManifest.java                                          <.>
+      SimpleApp.java                                            <.>
 ----
-<1> Defines scenarios (fixtures) for setting up the system into a known state.
+
+<.> Defines scenarios (fixtures) for setting up the system into a known state.
 Used for prototyping and also integration testing.
-<2> The `DomainAppDemo` is the fixture that was run xref:#fixtures[earlier on].
-<3> The `DomainAppFixtureScriptsSpecificationProvider` is used to configure the run fixture script menu item shown on the "Prototyping" menu.
+
+<.> The `DomainAppDemo` is the fixture that was run xref:#fixtures[earlier on].
+
+<.> The `DomainAppFixtureScriptsSpecificationProvider` is used to configure the run fixture script menu item shown on the "Prototyping" menu.
 +
 NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import]ed, typically in the top-level `AppManifest`.
 
-<4> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealtCheckService].
+<.> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
-<5> Annotated with xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
-<6> Defines the services in the webapp module, along with dependencies onto the other modules in the application. +
+
+<.> Annotated with xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
+
+<.> Defines the services in the webapp module, along with dependencies onto the other modules in the application.
++
 Discussed in more detail below.
-<7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`). +
+
+<.> Demonstrates how to implement a custom REST controller, accessing the domain object model managed by Apache Isis.
+
+<.> Demonstrates how to run quartz as a background service, accessing the domain object model managed by Apache Isis.
+
+<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`, and `CustomModule`).
++
 This is discussed in more detail below
-<8> `SimpleApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
-It's pretty much boilerplate - the important piece is that it references `AppManifest`. +
-It's discussed in more detail below
+
+<.> `SimpleApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
+It's pretty much boilerplate - the important piece is that it references `AppManifest`.
++
+Discussed in more detail below
 
 
 
@@ -631,18 +691,18 @@ It's very simple though:
 package domainapp.webapp.application;
 ... imports omitted ...
 @Configuration
-@Import(SimpleModule.class)             // <!--1-->
-@ComponentScan                          // <!--2-->
+@Import(SimpleModule.class)             // <.>
+@ComponentScan                          // <.>
 public class ApplicationModule {
 }
 ----
-<1> This module depends on the `SimpleModule` module.
-<2> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
+<.> This module depends on the `SimpleModule` module.
+<.> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
 
 ==== AppManifest
 
-The "app manifest" (the name has been retained from Apache Isis v1.x) is the top-level Spring `@Configuration`.
+The "app manifest" is the top-level Spring `@Configuration`.
 It looks like this:
 
 [source,java]
@@ -650,40 +710,56 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <1>
-        IsisModuleSecurityShiro.class,                          // <2>
-        IsisModuleJdoDataNucleus5.class,                        // <3>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
-        IsisModuleViewerWicketViewer.class,                     // <5>
+        IsisModuleCoreRuntimeServices.class,                    // <.>
+        IsisModuleSecurityShiro.class,                          // <.>
+        IsisModuleJpaEclipseLink.class,                         // <.>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
+        IsisModuleViewerWicketViewer.class,                     // <.>
 
-        IsisModuleTestingH2ConsoleUi.class,                     // <6>
-        IsisModuleTestingFixturesApplib.class,                  // <7>
+        IsisModuleTestingH2ConsoleUi.class,                     // <.>
+        IsisModuleTestingFixturesApplib.class,                  // <.>
 
-        IsisModuleExtFlywayImpl.class,                          // <8>
+        IsisModuleExtFlywayImpl.class,                          // <.>
 
-        ApplicationModule.class,                                // <9>
+        ApplicationModule.class,                                // <.>
+        CustomModule.class,                                     // <9>
+        QuartzModule.class,                                     // <9>
 
-        DomainAppDemo.class                                     // <10>
+        DomainAppDemo.class                                     // <.>
 })
-@PropertySource(IsisPresets.NoTranslations)                     // <11>
-@PropertySource(IsisPresets.DebugDiscovery),
+@PropertySources({
+        @PropertySource(IsisPresets.DebugDiscovery),            // <.>
+})
 public class AppManifest {
 }
 ----
-<1> Mandatory - specifies the core of the Apache Isis framework
-<2> Enables the Shiro security mechanism.
+
+<.> Mandatory - specifies the core of the Apache Isis framework
+
+<.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
-<3> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
-<4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
-<5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
-<6> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
-<7> Brings in support to run xref:testing:fixtures:about.adoc[fixtures] within the application, eg for prototyping.
-<8> Enables the xref:userguide:flyway:about.adoc[Flyway] integration.
-<9> References the application's module(s), in this case just the one, `ApplicationModule`. +
-This is discussed below.
-<10> Makes the fixture scenario classes available for discovery.
-<11> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
+
+<.> Enables JPA/Eclipselink for persistence.
++
+If using JDO as the ORM, replace with `IsisModuleJdoDataNucleus5`.
+
+<.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
+
+<.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
+
+<.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
+
+<.> Brings in support to run xref:testing:fixtures:about.adoc[fixtures] within the application, eg for prototyping.
+
+<.> Enables the xref:userguide:flyway:about.adoc[Flyway] integration.
+
+<.> References the application's module(s), in this case `ApplicationModule` , `CustomModule` and `QuartzModule`.
++
+`ApplicationModule` is discussed below.
+
+<.> Makes the fixture scenario classes available for discovery.
+
+<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
 These two both use the `IsisPresets` convenience class, to disable i18n support and for additional debugging log statements.
 
 
@@ -696,20 +772,20 @@ It is mostly boilerplate:
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          // <1>
+    AppManifest.class,                                          // <.>
 })
 public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <2>
+        IsisPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
 }
 ----
-<1> references the `AppManifest` mentioned earlier
-<2> specifies prototyping mode.
+<.> references the `AppManifest` mentioned earlier
+<.> specifies prototyping mode.
 This enables actions marked for prototyping to become available, useful during the early stages of development.
 +
 TIP: As an alternative to making this call, you can also just run with a system property `-DPROTOTYPING=true`
@@ -723,32 +799,43 @@ Under `src/main/resources` we have:
 ----
 src/main/resources
   config/
-    application.properties              <!--1-->
-    application-SQLSERVER.properties    <!--2-->
+    application.properties              <.>
+    application-SQLSERVER.properties    <.>
+    application-POSTGRES.properties     <.>
   db/
     migration/
       SQLSERVER/
-        Vyyyy.mm.dd.hh.ss__xxx.sql      <!--3-->
-  static/                               <!--4-->
-  templates/                            <!--5-->
-  application.yml                       <!--6-->
-  banner.txt                            <!--7-->
-  log4j2-spring.xml                     <!--8-->
-  menubars.layout.xml                   <!--9-->
-  shiro.ini                             <!--10-->
+        Vyyyy.mm.dd.hh.ss__xxx.sql      <.>
+  static/                               <.>
+  templates/                            <.>
+  application.yml                       <.>
+  banner.txt                            <.>
+  log4j2-spring.xml                     <.>
+  menubars.layout.xml                   <.>
+  shiro.ini                             <.>
 ----
-<1> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
+
+<.> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
 Typically this just holds JDBC connection strings, etc.
-<2> Enabled if run using the `SQLSERVER` profile (eg using `-Dspring.profiles.active=SQLSERVER`). Configures to use a SQL Server database, and enables Flyway to set up the database schema
-<3> Flyway migration scripts. +
+
+<.> Enabled if run using the `SQLSERVER` profile (eg using `-Dspring.profiles.active=SQLSERVER`). Configures to use a SQL Server database, and enables Flyway to set up the database schema
+
+<.> Flyway migration scripts. +
 This leverages a feature in Spring Boot's Flyway integration which allows different variants of scripts for different vendors to be stored, in a `+db.migration.{vendor}+` package.
-<4> The `static` package (a link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-spring-mvc-static-content[Spring convention]) provides access for static resources that are accessible from the webapp
-<5> The `templates` package holds a fallback error page, which is the link:https://www.baeldung.com/spring-thymeleaf-template-directory#change-default[default location] for pages rendered using Spring Boot's integration with Thymeleaf.
-<6> By convention, we use `application.yml` to hold configuration properties that do _not_ change between environments.
-<7> The `banner.txt` is shown when bootstrapping.
-<8> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
-<9> The `menubars.layout.xml` arranges the actions of the domain services into menus.
-<10> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
+
+<.> The `static` package (a link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-spring-mvc-static-content[Spring convention]) provides access for static resources that are accessible from the webapp
+
+<.> The `templates` package holds a fallback error page, which is the link:https://www.baeldung.com/spring-thymeleaf-template-directory#change-default[default location] for pages rendered using Spring Boot's integration with Thymeleaf.
+
+<.> By convention, we use `application.yml` to hold configuration properties that do _not_ change between environments.
+
+<.> The `banner.txt` is shown when bootstrapping.
+
+<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
+
+<.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
+
+<.> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
 +
 [TIP]
 ====
@@ -764,7 +851,7 @@ In a production application this is usually replaced with a page that does an HT
 The pages generated by the Wicket viewer have plenty of CSS classes to target.
 You can also implement the `cssClass()` method in each domain object to provide additional CSS classes to target.
 
-* Similarly, in `scripts/application.js` you have the option to add arbitrary Javascript.
+* Similarly, in `scripts/application.js` you have the option to add arbitrary JavaScript.
 JQuery is available by default.
 
 === No src/main/webapp
@@ -772,7 +859,7 @@ JQuery is available by default.
 Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Isis automatically.
 
 
-=== webapp's src/test/java
+=== webapp-test's src/test/java
 
 Under `src/test/java` we have different sets of tests.
 We'll inspect each in turn.
@@ -791,15 +878,15 @@ src/test/java
     webapp/
       bdd/
         glue/
-          SimpleObjectsStepDef.java                     <!--1-->
+          SimpleObjectsStepDef.java                     <.>
         specs/
-          SimpleObjectSpec_listAllAndCreate.feature     <!--2-->
-        RunIntegBddSpecs.java                           <!--3-->
+          SimpleObjectSpec_listAllAndCreate.feature     <.>
+        RunIntegBddSpecs.java                           <.>
 ----
-<1> defines the step definitions (or "glue") which describes how to interact with the application. +
-This class inherits from `ApplicationIntegTestAbstract`, the base class for integration tests, described in the xref:about.adoc#integration-tests[next section].
-<2> the feature file, discussed below.
-<3> boilerplate used to run the BDD Cucumber tests using JUni5 4.x.
+<.> defines the step definitions (or "glue") which describes how to interact with the application. +
+This class inherits from `WebAppIntegTestAbstract`, the base class for integration tests, described in the <<integration-tests,next section>>.
+<.> the feature file, discussed below.
+<.> boilerplate used to run the BDD Cucumber tests using JUni5 4.x.
 
 There is just one feature file: `SimpleObjectSpec_listAllAndCreate.feature`, which is pretty simple:
 
@@ -816,6 +903,7 @@ Feature: List and Create New Simple Objects
 The set up of the 3 initial objects is part of the step definitions.
 
 
+[#integration-tests]
 ==== Integration Tests
 
 The integration tests are in `domainapp.application.integtests`:
@@ -834,19 +922,25 @@ src/
                   ...
                 current/
                   ...
-                LockDownMetaModel_IntegTest.java    <!--1-->
-              ValidateDomainModel_IntegTest.java    <!--2-->
+                LockDownMetaModel_IntegTest.java    <.>
+              ValidateDomainModel_IntegTest.java    <.>
             smoke/
-              Smoke_IntegTest.java                  <!--3-->
-            ApplicationIntegTestAbstract.java       <!--4-->
+              Smoke_IntegTest.java                  <.>
+            ApplicationIntegTestAbstract.java       <.>
 ----
-<1> Uses approval tests to verify that the metamodel is unchanged between releases of Apache Isis. +
+
+<.> Uses approval tests to verify that the metamodel is unchanged between releases of Apache Isis.
++
 Discussed in more detail below.
-<2> Bootstraps the app and runs the metamodel validators to check that there are not metamodel errors. +
+
+<.> Bootstraps the app and runs the metamodel validators to check that there are not metamodel errors.
++
 This can also be done simply when running the application, but performing the checks through integration tests enables "fail-fast" checking, as part of CI, for example.
-<3> Performs a number of high-level smoke tests, to check that the core functionality works correctly.
-<4> Base class used to bootstrap all integration tests for this module.
-It is very similar to the base class used to bootstrap the integration tests for the simple module xref:about.adoc#SimpleModuleIntegTestAbstract[], but referencing `ApplicationModule` rather than `SimpleModule`.
+
+<.> Performs a number of high-level smoke tests, to check that the core functionality works correctly.
+
+<.> Base class used to bootstrap all integration tests for this module.
+It is very similar to the base class used to bootstrap the integration tests for the simple module xref:simpleapp.adoc#simplemoduleintegtestabstract[], but referencing `ApplicationModule` rather than `SimpleModule`.
 
 The purpose of the metamodel lockdown tests is to capture regressions in Apache Isis itself whenever it is updated.
 
@@ -924,7 +1018,8 @@ Here's what the setup looks like in IntelliJ IDEA:
 
 image::simpleapp/simpleapp-webapp.png[width="600px"]
 
-which uses an IntelliJ feature to run a different run configuration to run DataNucleus enhancer beforehand:
+If using JDO as the ORM, then the DataNucleus enhancer must be run beforehand.
+With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
 
 image::simpleapp/simpleapp-webapp-before-launch.png[width="600px"]
 
@@ -935,7 +1030,135 @@ image::simpleapp/simpleapp-webapp-before-launch.png[width="600px"]
 Once you are familiar with the app, try modifying it.
 There is plenty more guidance on this site; start with the xref:userguide:fun:about.adoc[User Guide Fundamentals] and then look at the other guides linked to from the top-level menu or from the main xref:docs:ROOT:about.adoc[table of contents].
 
-// If you use IntelliJ IDEA or Eclipse, do also install the xref:setupguide:intellij:about.adoc#live-templates[live templates (for IntelliJ)] / xref:setupguide:eclipse:about.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
-
 If you run into issues, please don't hesitate to ask for help on the users mailing list or the Slack channel, as per the xref:docs:support:about.adoc[support page].
 
+
+== Using an external database and FlywayDB
+
+The application is configured by default uses H2 as an inmemory database, with <<fixtures,fixtures>> used to populate the database with representative data.
+
+To deploy to production though of course will require a persistent database, and the schema of the tables will be explicitly managed.
+Although both JDO and JPA can automatically create the database schema, many development teams choose to manage the schema externally to the ORM.
+
+A popular tool to do this is link:https://flywaydb.org/[Flyway], and Spring Boot provides automatic support for it using link:https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-data-migration[these configuration properties].
+
+The simpleapp demonstrates how this can be done using SQL Server.
+Adapt the following for your own preferred database.
+
+=== Prereqs
+
+If you happen to use SQL Server, then just use a dev instance.
+Otherwise, you can easily run up an instance using Docker:
+
+[source,bash]
+----
+docker run \
+    --name sqlserver \
+    -e 'ACCEPT_EULA=Y' \
+    -e 'SA_PASSWORD=pa$$w0rd' \
+    -p 1433:1433 \
+    -d mcr.microsoft.com/mssql/server:2019-latest
+----
+
+You can then connect:
+
+* if on Linux/Mac, start a command line client using:
++
+[source,bash]
+----
+docker exec -it sqlserver \
+    /opt/mssql-tools/bin/sqlcmd \
+    -S localhost -U sa -P pa$$w0rd
+----
+
+* if on Windows, you might instead prefer to use Microsoft's free GUI client, link:https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15[SQL Server Management Studio].
+
+You then need to create a database and login:
+
+[source,sql]
+----
+CREATE DATABASE [simpleapp]
+go
+CREATE LOGIN [simpleapp]
+    WITH PASSWORD=N'simpleapp',
+        DEFAULT_DATABASE=[simpleapp],
+        CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+go
+USE [simpleapp]
+GO
+ALTER AUTHORIZATION ON DATABASE::[simpleapp] TO [simpleapp]
+GO
+----
+
+If using the command line, type 'exit' to quit out.
+
+To confirm the connect, try logging in as simpleapp/simpleapp, and verify using:
+
+
+[source,sql]
+----
+select db_name(), user_name()
+go
+----
+
+This should return `simpleapp` and `dbo` respectively, meaning that the `simpleapp` login is all-powerful in the `simpleapp` database.
+
+
+=== Enabling Flyway
+
+With the backend database running, we can now run the simpleapp application with Flyway enabled.
+This is done simply by activating the "SQLSERVER" profile (see also the link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-profiles[Spring docs]):
+
+* either by setting a system property:
++
+[source,bash]
+----
+-Dspring.profiles.active=SQLSERVER
+----
+
+* or by setting an environment variable:
++
+[source,bash]
+----
+export SPRING_PROFILES_ACTIVE=SQLSERVER
+----
+
+This will cause Spring to read in the `config/application-SQLSERVER.properties` file:
+
+[source,properties]
+.config/application-SQLSERVER.properties
+----
+spring.flyway.enabled=true
+spring.flyway.default-schema=SIMPLE
+spring.flyway.schemas=SIMPLE
+
+spring.datasource.platform=sqlserver
+spring.datasource.url=jdbc:sqlserver://localhost;databaseName=simpleapp
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.username=simpleapp
+spring.datasource.password=simpleapp
+
+#isis.persistence.schema.create-schema-sql-template=   (use flyway instead)
+isis.persistence.schema.auto-create-schemas=
+
+# DataNucleus, and must use camelCase rather than kebab-case
+datanucleus.schema.autoCreateAll=false
+----
+
+Flyway in turn reads the migration scripts under `db.migration` package (in `src/main/resources` of the `webapp` module).
+
+Run up the application and Flyway will run in the scripts.
+It will also create its own table, `SIMPLE.flyway_schema_history`:
+
+image::simpleapp/flyway/tables-created.png[width=300px]
+
+
+=== Cleaning up
+
+If you were using Docker to try this out, remember to clean up afterwards:
+
+[source,bash]
+----
+docker kill sqlserver
+docker rm sqlserver
+----

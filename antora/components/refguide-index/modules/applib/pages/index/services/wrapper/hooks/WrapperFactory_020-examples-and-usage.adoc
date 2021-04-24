@@ -1,0 +1,108 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Typical Usage: Enforcing Constraints
+
+The caller will typically obtain the target object (eg from some repository) and then use the injected `WrapperFactory` to wrap it before interacting with it.
+
+For example:
+
+[source,java]
+----
+public class CustomerAgent {
+    @Action
+    public void refundOrder(final Order order) {
+        final Order wrappedOrder = wrapperFactory.wrap(order);
+        try {
+            wrappedOrder.refund();
+        } catch(InteractionException ex) {          // <1>
+            messageService.raiseError(ex.getMessage());  // <2>
+            return;
+        }
+    }
+    ...
+    @Inject
+    WrapperFactory wrapperFactory;
+    @Inject
+    MessageService messageService;
+}
+----
+<1> if any constraints on the `Order`'s `refund()` action would be violated, then ...
+<2> ... these will be trapped and raised to the user as a warning.
+
+
+== Usage Notes
+
+=== Domain Objects
+
+For domain objects (not mixins), the wrapper can be interacted with as follows:
+
+* a `get...()` method for properties or collections
+* a `set...()` method for properties
+* an `addTo...()` or `removeFrom...()` method for collections
+* any action
+
+Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
+For example, if a property is annotated with xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[@ActionLayout#hidden] then a `HiddenException` will be thrown.
+Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc[validateXxx()] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+
+In addition, the following methods may also be called:
+
+* the xref:refguide:applib-methods:ui-hints.adoc#title[title()] and `toString()` methods
+* any xref:refguide:applib-methods:prefixes.adoc#default[default...()], xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] methods
+
+An exception will be thrown if any other methods are thrown.
+
+If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped - a xref:refguide:applib:index/annotation/Action.adoc#command[command] will be created and pre- and post-execute xref:refguide:applib:index/annotation/Action.adoc#domainEvent[domain event]s) will be fired.
+
+=== Mixins
+
+For mixins, the behaviour of the wrapper is similar but simpler.
+Mixin wrappers only apply to actions, and so the wrapper will enforce the hidden/disable/validate rules before executing.
+In addition, any xref:refguide:applib-methods:prefixes.adoc#default[default...()], xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] methods can be called.
+
+
+== Other Use Cases
+
+=== Creating interactions
+
+One use case for the `WrapperFactory` is to invoke actions that have xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[Action#executionPublishing] enabled.
+This will result in a serializable representation of the action invocation to be published; this could then be used to route a message to another system.
+
+The target action is often a no-op; indeed it can even be hidden if the `WrapperFactory` is invoked with rules skipped.
+
+
+=== Integration tests
+
+The `WrapperFactory` is frequently used within xref:testing:integtestsupport:about.adoc[integration tests].
+A longer discussion of the use of the `WrapperFactory` within integration tests can be found xref:testing:integtestsupport:about.adoc#wrapper-factory[here].
+
+
+=== Trust boundaries
+
+If there is a (lack of) trust boundary between the caller and callee -- eg if they reside in different modules -- then the `WrapperFactory` is one mechanism to ensure that any business constraints defined by the callee are honoured.
+
+For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.
+
+Said another way: interactions are performed "as if" they are through the viewer.
+
+
+=== Listener API
+
+One possible use case for the listener API would be to autogenerate documentation, for example a sequence diagram from tests.
+
+Such a feature would probably also use xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext], which builds up an execution call graph of interactions between (wrapped) objects.
+
+
+
+
+
+
+== See also
+
+* xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] and xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl]
+** xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler]
+** xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]
+* xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener]
+** xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter]

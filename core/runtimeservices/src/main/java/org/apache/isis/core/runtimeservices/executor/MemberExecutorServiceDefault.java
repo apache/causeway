@@ -47,7 +47,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -83,20 +83,20 @@ import lombok.extern.log4j.Log4j2;
 public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
-    private final @Getter InteractionTracker isisInteractionTracker;
+    private final @Getter InteractionTracker interactionTracker;
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter Provider<MetricsService> metricsService;
-    private final @Getter InteractionDtoServiceInternal interactionDtoServiceInternal;
+    private final @Getter InteractionDtoFactory interactionDtoFactory;
     private final @Getter Provider<ExecutionPublisher> executionPublisher;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
 
     @Override
-    public Optional<InternalInteraction> getInteraction() {
-        return isisInteractionTracker.currentInteraction()
-                .map(InternalInteraction.class::cast);
+    public Optional<InteractionInternal> getInteraction() {
+        return interactionTracker.currentInteraction()
+                .map(InteractionInternal.class::cast);
     }
 
     @Override
@@ -115,11 +115,13 @@ implements MemberExecutorService {
 
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
+        
+        CommandPublishingFacet.ifPublishingEnabledForCommand(
+                command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
+        
+        val xrayHandle = _Xray.enterActionInvocation(interactionTracker, interaction, owningAction, head, argumentAdapters);
 
-        command.updater().setPublishingEnabled(
-                CommandPublishingFacet.isPublishingEnabled(facetHolder));
-
-        val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
+        val actionId = owningAction.getIdentifier();
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
@@ -138,7 +140,7 @@ implements MemberExecutorService {
                 new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos, targetMemberName,
                         targetClass);
-        final InternalInteraction.MemberExecutor<ActionInvocation> memberExecution =
+        final InteractionInternal.MemberExecutor<ActionInvocation> memberExecution =
                 actionExecutorFactory.createExecutor(
                         argumentAdapters, targetAdapter, owningAction,
                         targetAdapter, mixedInAdapter);
@@ -164,7 +166,7 @@ implements MemberExecutorService {
         val returnedAdapter = objectManager.adapt(returnedPojo);
 
         // sync DTO with result
-        interactionDtoServiceInternal
+        interactionDtoFactory
         .updateResult(priorExecution.getDto(), owningAction, returnedPojo);
 
         // update Command (if required)
@@ -175,8 +177,9 @@ implements MemberExecutorService {
             executionPublisher.get().publishActionInvocation(priorExecution);
         }
 
-        return filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
-
+        val result = filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
+        _Xray.exitInvocation(xrayHandle);
+        return result;
     }
     @Override
     public ManagedObject setOrClearProperty(
@@ -195,10 +198,12 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        command.updater().setPublishingEnabled(
-                CommandPublishingFacet.isPublishingEnabled(facetHolder));
+        CommandPublishingFacet.ifPublishingEnabledForCommand(
+                command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
+        val xrayHandle = _Xray.enterPropertyEdit(interactionTracker, interaction, owningProperty, head, newValueAdapter);
+        
+        val propertyId = owningProperty.getIdentifier();
 
         val targetManagedObject = head.getTarget();
         val target = UnwrapUtil.single(targetManagedObject);
@@ -233,7 +238,9 @@ implements MemberExecutorService {
             executionPublisher.get().publishPropertyEdit(priorExecution);
         }
 
-        return getObjectManager().adapt(targetPojo);
+        val result = getObjectManager().adapt(targetPojo);
+        _Xray.exitInvocation(xrayHandle);
+        return result;
 
     }
 
@@ -259,8 +266,8 @@ implements MemberExecutorService {
             getTransactionService().flushTransaction();
         }
         if(entityState.isAttached()) {
-            resultAdapter.getRootOid().ifPresent(rootOid->{
-                val bookmark = rootOid.asBookmark();
+            resultAdapter.getRootOid().ifPresent(oid->{
+                val bookmark = oid.asBookmark();
                 command.updater().setResult(Result.success(bookmark));
             });
         } else {

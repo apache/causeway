@@ -31,12 +31,9 @@ import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigit
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
@@ -103,74 +100,64 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
+
+            // only consider persistent entities
+            final JdoPersistenceCapableFacet pcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
+            if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+                return;
+            }
+
+            spec.streamProperties(MixedIn.EXCLUDED)
+            // skip checks if annotated with JDO @NotPersistent
+            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+            .forEach(association->{
+                validateBigDecimalValueFacet(association);
+            });
+            
+        });
+    }
+    
+    private static void validateBigDecimalValueFacet(ObjectAssociation association) {
+        BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
+        if(facet == null) {
+            return;
+        }
+
+        BigDecimalValueFacet underlying = (BigDecimalValueFacet) facet.getUnderlyingFacet();
+        if(underlying == null) {
+            return;
+        }
+
+        if(facet instanceof BigDecimalFacetDerivedFromJdoColumn) {
+
+            if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
+
+                if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
+                    ValidationFailure.raise(
+                            association,
+                            String.format("%s: @javax.jdo.annotations.Column(length=...) "
+                                    + "different from @javax.validation.constraint.Digits(...); "
+                                    + "should equal the sum of its integer and fraction attributes",
+                                    association.getIdentifier().toString())
+                            );
+                }
+
+                if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
+                    ValidationFailure.raise(
+                            association,
+                            String.format("%s: @javax.jdo.annotations.Column(scale=...) "
+                                    + "different from @javax.validation.constraint.Digits(fraction=...)",
+                                    association.getIdentifier().toString())
+                            );
+                }
+            }
+        }
     }
 
-    private Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.Visitor() {
-
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                validate(objectSpec, validator);
-                return true;
-            }
-
-            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
-
-                // only consider persistent entities
-                final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
-                if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
-                    return;
-                }
-
-                objectSpec.streamProperties(MixedIn.EXCLUDED)
-                // skip checks if annotated with JDO @NotPersistent
-                .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
-                .forEach(association->{
-                    validateBigDecimalValueFacet(association, validator);
-                });
-
-            }
-
-            private void validateBigDecimalValueFacet(ObjectAssociation association, MetaModelValidator validator) {
-                BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
-                if(facet == null) {
-                    return;
-                }
-
-                BigDecimalValueFacet underlying = (BigDecimalValueFacet) facet.getUnderlyingFacet();
-                if(underlying == null) {
-                    return;
-                }
-
-                if(facet instanceof BigDecimalFacetDerivedFromJdoColumn) {
-
-                    if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
-
-                        if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
-                            validator.onFailure(
-                                    association,
-                                    association.getIdentifier(),
-                                    "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
-                                    association.getIdentifier().toClassAndNameIdentityString());
-                        }
-
-                        if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
-                            validator.onFailure(
-                                    association,
-                                    association.getIdentifier(),
-                                    "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
-                                    association.getIdentifier().toClassAndNameIdentityString());
-                        }
-                    }
-                }
-            }
-
-            private boolean notNullButNotEqual(Integer x, Integer y) {
-                return x != null && y != null && !x.equals(y);
-            }
-        };
+    private static boolean notNullButNotEqual(Integer x, Integer y) {
+        return x != null && y != null && !x.equals(y);
     }
-
+    
 
 }

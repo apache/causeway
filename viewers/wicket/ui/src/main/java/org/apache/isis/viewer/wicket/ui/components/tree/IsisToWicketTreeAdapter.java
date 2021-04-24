@@ -46,7 +46,7 @@ import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -253,7 +253,7 @@ class IsisToWicketTreeAdapter {
             this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
             this.pojoToAdapter = pojo ->
-                ManagedObject.of(commonContext.getSpecificationLoader()::loadSpecification, pojo);
+                ManagedObject.lazy(commonContext.getSpecificationLoader(), pojo);
         }
 
         private TreeAdapter wrappedTreeAdapter() {
@@ -393,7 +393,7 @@ class IsisToWicketTreeAdapter {
     private static class LoadableDetachableTreeModel extends LoadableDetachableModel<TreeModel> {
         private static final long serialVersionUID = 1L;
 
-        private final RootOid id;
+        private final Oid id;
         private final TreePath treePath;
         private final int hashCode;
 
@@ -414,12 +414,10 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-            val rootOid = id;
-            val objAdapter = rootOid.loadObject(commonContext.getSpecificationLoader()); 
-            if(objAdapter==null) {
-                throw new NoSuchElementException(
-                        String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id));
-            }
+            val oid = id;
+            val objAdapter = oid.loadObject(commonContext.getMetaModelContext())
+                    .orElseThrow(()->new NoSuchElementException(
+                            String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id)));
 
             final Object pojo = objAdapter.getPojo();
             if(pojo==null) {

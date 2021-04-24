@@ -119,13 +119,13 @@ public class ProjectDocModel {
                     }
                 })
                 .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
-                .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
+                .namespacePartsSkipCount(cliConfig.getCommands().getIndex().getNamespacePartsSkipCount())
                 .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
                 .build();
 
         // partition modules into sections
         val sections = new ArrayList<Section>();
-        cliConfig.getGlobal().getSections().forEach((section, groupIdArtifactIdPattern)->{
+        cliConfig.getCommands().getOverview().getSections().forEach((section, groupIdArtifactIdPattern)->{
             createSections(modules, section, groupIdArtifactIdPattern, sections::add);
         });
 

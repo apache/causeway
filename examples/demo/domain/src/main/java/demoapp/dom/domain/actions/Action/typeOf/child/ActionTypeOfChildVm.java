@@ -25,16 +25,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -59,29 +57,25 @@ public class ActionTypeOfChildVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String value;
 
     @Property()
-    @PropertyLayout()
-    @MemberOrder(name = "annotation", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueUpper;
 
     @Property()
-    @PropertyLayout()
-    @MemberOrder(name = "annotation", sequence = "3")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueLower;
 
     @Property()
-    @PropertyLayout()
-    @MemberOrder(name = "annotation", sequence = "4")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "4")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueReversed;

@@ -19,43 +19,20 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 public abstract class MetaModelValidatorAbstract 
-implements MetaModelValidator, MetaModelContextAware {
+implements 
+    MetaModelValidator, 
+    MetaModelContextAware {
 
-    protected final ValidationFailures failures = new ValidationFailures();
-    
     @Getter @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    
-    /**
-     * Collect any {@link ValidationFailure} to given validationFailures. 
-     *  
-     * @param validationFailures
-     */
-    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
-        validationFailures.addAll(failures);
-    }
-
-    @Override
-    public void onFailure(
-            @NonNull FacetHolder facetHolder, 
-            @NonNull Identifier deficiencyOrigin,
-            @NonNull String deficiencyMessageFormat, 
-            Object... args) {
-        
-        MetaModelValidator.super.onFailure(facetHolder, deficiencyOrigin, deficiencyMessageFormat, args);
-        failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
-    }
     
     protected IsisConfiguration getConfiguration() {
         return metaModelContext.getConfiguration();

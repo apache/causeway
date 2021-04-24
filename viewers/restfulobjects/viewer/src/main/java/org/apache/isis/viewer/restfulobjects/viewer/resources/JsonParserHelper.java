@@ -151,7 +151,8 @@ public class JsonParserHelper {
         }
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
-        return Oid.marshaller().joinAsOid(domainType, instanceId);
+        
+        return Oid.forLogicalTypeNameAndIdentifier(domainType, instanceId).stringify();
     }
 
     private static String resourceFor(final ObjectSpecification objectSpec) {

@@ -1,0 +1,52 @@
+= ImpersonateMenu
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the UI to allow a current user to be impersonated.
+
+All of the actions provided here are restricted to PROTOTYPE mode only; this feature is _not_ intended for production use as it would imply a large security hole !
+
+== API
+
+[source,java]
+.ImpersonateMenu.java
+----
+class ImpersonateMenu {
+  void impersonate(final String userName)     // <.>
+  boolean hideImpersonate()
+  String disableImpersonate()
+  void impersonateWithRoles(final String userName, final List<String> roleNames)     // <.>
+  boolean hideImpersonateWithRoles()
+  String disableImpersonateWithRoles()
+  List<String> choices0ImpersonateWithRoles()
+  List<String> choices1ImpersonateWithRoles()
+  List<String> default1ImpersonateWithRoles(String userName)
+  void stopImpersonating()
+  boolean hideStopImpersonating()
+  String disableStopImpersonating()
+}
+----
+
+<.> xref:#impersonate__String[impersonate(String)]
++
+--
+Simple implementation that is surfaced if there is no advisor.
+--
+<.> xref:#impersonateWithRoles__String_List[impersonateWithRoles(String, List)]
++
+--
+Impersonate a selected user, either using their current roles or with a specific set of roles.
+--
+
+== Members
+
+[#impersonate__String]
+=== impersonate(String)
+
+Simple implementation that is surfaced if there is no advisor.
+
+[#impersonateWithRoles__String_List]
+=== impersonateWithRoles(String, List)
+
+Impersonate a selected user, either using their current roles or with a specific set of roles.
+
+This more sophisticated implementation is only available if there is an xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor] implementation to provide the choices.

@@ -145,8 +145,8 @@ public final class Util {
         return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
                     !classExcluder.exclude(objectAction)
-                        && !visibility.isPublic()
-                        || isVisibleForPublic(objectAction) )
+                    && !visibility.isPublic()
+                    || isVisibleForPublic(objectAction) )
                 .collect(Collectors.toList());
     }
 

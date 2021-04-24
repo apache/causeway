@@ -1,0 +1,166 @@
+[[r2.0.0-M5]]
+= 2.0.0-M5
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The main new feature in this release is to add support for JPA persistence as an alternative to JDO.
+This included support for Spring Data.
+
+In order to keep the two persistence implementations as consistent as possible, the JDO integration was substantially reworked.
+Data source URLs are now configured using Spring configuration properties (for either JPA or JDO).
+
+The xref:security:secman:about.adoc[SecMan] integration was extended to also provide a JPA implementation, and was also reworked to use logical type names rather than physical package names.
+The notion of xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] was also formally added into the applib.
+
+One notable breaking change: the XSDs for schemas were changed, with `transactionId` being renamed to `interactionId`.
+
+Documentation tooling was also developed to automate large parts of the xref:refguide::about.adoc[Reference Guide], as well as to provide a xref:core:_overview:about.adoc[System Overview].
+
+
+
+
+== JPA & JDO
+
+* link:https://issues.apache.org/jira/browse/ISIS-2033[ISIS-2033] - Spring Data Integration
+* link:https://issues.apache.org/jira/browse/ISIS-2581[ISIS-2581] - Clean up configuration properties for DN and RestEasy
+* link:https://issues.apache.org/jira/browse/ISIS-2537[ISIS-2537] - JPA: support object type naming from @Table(schema=...) annotation
+* link:https://issues.apache.org/jira/browse/ISIS-2504[ISIS-2504] - JDO Integration: configure datasources the Spring way
+* link:https://issues.apache.org/jira/browse/ISIS-2512[ISIS-2512] - Migrate example JDO datasource configurations to Spring way
+* link:https://issues.apache.org/jira/browse/ISIS-2486[ISIS-2486] - Rationalize JDO and JPA modules so that they are more symmetrical
+* link:https://issues.apache.org/jira/browse/ISIS-2481[ISIS-2481] - Consolidate BeanSort ENTITY_JDO, ENTITY_JPA -> ENTITY
+* link:https://issues.apache.org/jira/browse/ISIS-2570[ISIS-2570] - Disable JdoDiscriminatorAnnotationFacetFactory
+* link:https://issues.apache.org/jira/browse/ISIS-2579[ISIS-2579] - Wicket/JPA: entity deletion does not redirect to homepage
+* link:https://issues.apache.org/jira/browse/ISIS-2294[ISIS-2294] - Create JPA variant of JDO Book/Product/Inventory (regressiontests)
+* link:https://issues.apache.org/jira/browse/ISIS-2539[ISIS-2539] - JDO Integration: table/schema auto-creation might fail when not done eagerly
+* link:https://issues.apache.org/jira/browse/ISIS-2532[ISIS-2532] - Wicket/JPA: entity object memento cannot reattach on AJAX requests
+* link:https://issues.apache.org/jira/browse/ISIS-2515[ISIS-2515] - Translate original Spring ORM JDO ref doc for forked 'persistence.jdo.spring' Module.
+* link:https://issues.apache.org/jira/browse/ISIS-2453[ISIS-2453] - Remove TypeManagerImpl Monkey Patch once DN-core 5.2.5 is available
+
+
+== Documentation Tooling
+
+* link:https://issues.apache.org/jira/browse/ISIS-2516[ISIS-2516] - Tooling Global Document Index: add support for namespaces
+* link:https://issues.apache.org/jira/browse/ISIS-2526[ISIS-2526] - Tooling: suppress header, use filename in caption
+* link:https://issues.apache.org/jira/browse/ISIS-2525[ISIS-2525] - Tooling: make callouts link to sections; remove blank lines in listing.
+* link:https://issues.apache.org/jira/browse/ISIS-2522[ISIS-2522] - Tooling: for system-overview diagrams use SVG rather than PNG
+* link:https://issues.apache.org/jira/browse/ISIS-2520[ISIS-2520] - Tooling: index gen. should not suppress generic type params
+* link:https://issues.apache.org/jira/browse/ISIS-2519[ISIS-2519] - Tooling: system-overview should use collapsible content
+* link:https://issues.apache.org/jira/browse/ISIS-2508[ISIS-2508] - Tooling CLI: add documentation (README.adoc)
+* link:https://issues.apache.org/jira/browse/ISIS-2473[ISIS-2473] - Automate Refguide Example Generation from Java-Doc
+
+
+== SecMan
+
+* link:https://issues.apache.org/jira/browse/ISIS-2480[ISIS-2480] - SecMan to support JPA
+* link:https://issues.apache.org/jira/browse/ISIS-2565[ISIS-2565] - SecMan: fix outdated semantics PACKAGE, CLASS and TYPE
+* link:https://issues.apache.org/jira/browse/ISIS-2560[ISIS-2560] - SecMan: ApplicationRole ... make adding Permissions more convenient
+* link:https://issues.apache.org/jira/browse/ISIS-2559[ISIS-2559] - SecMan: ApplicationUser_delete has no are_u_sure semantics
+* link:https://issues.apache.org/jira/browse/ISIS-2544[ISIS-2544] - SecMan: ApplicationRole#Permissions ... hide role column (references parent)
+* link:https://issues.apache.org/jira/browse/ISIS-2541[ISIS-2541] - SecMan: existing admin user is not attached to the new secman-admin role
+* link:https://issues.apache.org/jira/browse/ISIS-2509[ISIS-2509] - SecMan: add multi select action to relocate orphaned CLASSes to new namespace
+* link:https://issues.apache.org/jira/browse/ISIS-2500[ISIS-2500] - SecMan: Regular User is missing Permision for LogoutMenu#logout
+* link:https://issues.apache.org/jira/browse/ISIS-2431[ISIS-2431] - SecMan support for ObjectType (canonical object names)
+* link:https://issues.apache.org/jira/browse/ISIS-2543[ISIS-2543] - SecMan/JPA: user-role (many-to-many) management is not working
+* link:https://issues.apache.org/jira/browse/ISIS-2542[ISIS-2542] - SecMan/JPA: cannot add user to role (autocomplete search issue)
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-2575[ISIS-2575] - PanelAbstract found to be suspectious generic by the IDE because of erasure clash.
+* link:https://issues.apache.org/jira/browse/ISIS-2571[ISIS-2571] - Enforce logical-type-names to have non empty namespaces.
+* link:https://issues.apache.org/jira/browse/ISIS-2566[ISIS-2566] - Rename CommandDto#transactionId to #interactionId, similarly for ixn and chg schemas. Also for Command and CommandJdo
+* link:https://issues.apache.org/jira/browse/ISIS-2564[ISIS-2564] - Rationalize mixee interfaces; fix derivation of sequence for EntityChanges
+* link:https://issues.apache.org/jira/browse/ISIS-2558[ISIS-2558] - Configuration Page: make config item visibility a configuration option
+* link:https://issues.apache.org/jira/browse/ISIS-2554[ISIS-2554] - Make TypeIdentifier Serializable
+* link:https://issues.apache.org/jira/browse/ISIS-2553[ISIS-2553] - Rationalize value types representing the metamodel, promote to applib if possible.
+* link:https://issues.apache.org/jira/browse/ISIS-2538[ISIS-2538] - Action results of type LocalResourcePath should be able to replace the current page.
+* link:https://issues.apache.org/jira/browse/ISIS-2530[ISIS-2530] - Wicket: switch session timeout policy to not recreate expired pages
+* link:https://issues.apache.org/jira/browse/ISIS-2511[ISIS-2511] - Rationalize all @Named("...") @DomainXxx(objectType="...") namespaces.
+* link:https://issues.apache.org/jira/browse/ISIS-2502[ISIS-2502] - Convert existing Exception Recognizers from JDO to Spring Data
+* link:https://issues.apache.org/jira/browse/ISIS-2501[ISIS-2501] - WebModuleShiro to also cover DispatcherType.ASYNC
+* link:https://issues.apache.org/jira/browse/ISIS-2498[ISIS-2498] - Remove requirement for Mixins to actually store their mixee.
+* link:https://issues.apache.org/jira/browse/ISIS-2496[ISIS-2496] - Suppress misleading "helpful" exception message if exception caused for reasons other than a mismatch of parameter count or type.
+* link:https://issues.apache.org/jira/browse/ISIS-2495[ISIS-2495] - Promote SimpleTicket from core.runtimeservices to applib; move EmailTicket into the demo app only.
+* link:https://issues.apache.org/jira/browse/ISIS-2476[ISIS-2476] - Remove EntityLinksSelectorPanel, as is dead code, and allow other implementations of ComponentType.ENTITY to be picked up.
+* link:https://issues.apache.org/jira/browse/ISIS-2470[ISIS-2470] - Unify Maven dependency declarations for jdk-supplemental (JDK11+)
+* link:https://issues.apache.org/jira/browse/ISIS-2469[ISIS-2469] - Remove Annotations ViewModel, ViewModelLayout and Mixin
+* link:https://issues.apache.org/jira/browse/ISIS-2468[ISIS-2468] - Remove @Collection(mementoSerialization=...)
+* link:https://issues.apache.org/jira/browse/ISIS-2466[ISIS-2466] - Avoid duplicate metamodel validations when objectType is reused
+* link:https://issues.apache.org/jira/browse/ISIS-2464[ISIS-2464] - Application Layer Overhaul for v2
+* link:https://issues.apache.org/jira/browse/ISIS-2455[ISIS-2455] - Build 'essential' Artefacts From Root with Maven
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-2586[ISIS-2586] - ServiceInjector cannot handle null argument
+* link:https://issues.apache.org/jira/browse/ISIS-2582[ISIS-2582] - Wicket: NPE when ComponentHintKey#hintStore not restored on deserialization
+* link:https://issues.apache.org/jira/browse/ISIS-2577[ISIS-2577] - Potential NPE when clearing a scalar property.
+* link:https://issues.apache.org/jira/browse/ISIS-2576[ISIS-2576] - favicon missing from signin page
+* link:https://issues.apache.org/jira/browse/ISIS-2572[ISIS-2572] - RO/Swagger: Generated schema offers outdated urn:org.apache.isis/v2
+* link:https://issues.apache.org/jira/browse/ISIS-2567[ISIS-2567] - Regression: commands are not published
+* link:https://issues.apache.org/jira/browse/ISIS-2563[ISIS-2563] - Autocomplete MinLength not always handled correctly
+* link:https://issues.apache.org/jira/browse/ISIS-2547[ISIS-2547] - layout() method does not reload grid in production mode
+* link:https://issues.apache.org/jira/browse/ISIS-2540[ISIS-2540] - Regression: bulk select from mixin actions is broken
+* link:https://issues.apache.org/jira/browse/ISIS-2535[ISIS-2535] - Regression: @PersistenceCapable(schema= ) does not get picked up as ObjectType
+* link:https://issues.apache.org/jira/browse/ISIS-2510[ISIS-2510] - Regression: interfaces when registered with the metamodel never expose their members
+* link:https://issues.apache.org/jira/browse/ISIS-2507[ISIS-2507] - JaxbServiceDefault: potential infinite loop when processing DomainObjectList
+* link:https://issues.apache.org/jira/browse/ISIS-2497[ISIS-2497] - Regression: Mixin's holder instance cannot be found if stored in non-public field.
+* link:https://issues.apache.org/jira/browse/ISIS-2492[ISIS-2492] - Metamodel contributing members are not inheritable from abstract super class.
+* link:https://issues.apache.org/jira/browse/ISIS-2491[ISIS-2491] - WebModuleH2Console is never enabled when using JPA
+* link:https://issues.apache.org/jira/browse/ISIS-2489[ISIS-2489] - TranslationsResolverWicket uses outdated config, also might fail to read translation sources
+* link:https://issues.apache.org/jira/browse/ISIS-2479[ISIS-2479] - Resurrect support for TransactionId
+* link:https://issues.apache.org/jira/browse/ISIS-2478[ISIS-2478] - CommonDtoUtils#newParamDto fails to handle non-scalar values.
+* link:https://issues.apache.org/jira/browse/ISIS-2475[ISIS-2475] - RESTEASY003210: Could not find resource for full path: https://demo-wicket.isis.incode.work/restful/domain-types/org.apache.wicket.markup.MarkupStream/properties/
+* link:https://issues.apache.org/jira/browse/ISIS-2474[ISIS-2474] - Fix Named annotation in WebModuleShiro 
+* link:https://issues.apache.org/jira/browse/ISIS-2462[ISIS-2462] - Reinstate version in footer, and link to about page.
+* link:https://issues.apache.org/jira/browse/ISIS-2461[ISIS-2461] - Potential NPE when menu-contributing ViewModel not explicitly listed in menubar.layout.xml
+* link:https://issues.apache.org/jira/browse/ISIS-2460[ISIS-2460] - Kroviz - Demo Menu Missing
+* link:https://issues.apache.org/jira/browse/ISIS-2459[ISIS-2459] - Async Execution might throw 'no current IsisPersistenceSessionJdoBase available'
+* link:https://issues.apache.org/jira/browse/ISIS-2458[ISIS-2458] - Deploying demo-wicket app to k8s causes a logging issue, won't start
+* link:https://issues.apache.org/jira/browse/ISIS-2456[ISIS-2456] - Regression: Object of type Nature.BEAN may have no Spec from SpecLoader
+* link:https://issues.apache.org/jira/browse/ISIS-2454[ISIS-2454] - CORS Filter not in FilterChain?
+* link:https://issues.apache.org/jira/browse/ISIS-2452[ISIS-2452] - NPE within WicketViewerSettingsDefault when deserialized (IsisConfig is null)
+* link:https://issues.apache.org/jira/browse/ISIS-2449[ISIS-2449] - RO-Viewer: NPE when action invocation result is null
+* link:https://issues.apache.org/jira/browse/ISIS-2441[ISIS-2441] - Auditing/Publishing: dispatch calls happen before enlist calls
+* link:https://issues.apache.org/jira/browse/ISIS-2412[ISIS-2412] - java.awt.Image does not render (simply blank) not persist (ditto)
+* link:https://issues.apache.org/jira/browse/ISIS-2411[ISIS-2411] - Remove Isis Image (use AWT's BufferedImage instead)
+* link:https://issues.apache.org/jira/browse/ISIS-2410[ISIS-2410] - ZonedDateTime does not render/parse correctly.
+* link:https://issues.apache.org/jira/browse/ISIS-2409[ISIS-2409] - Offset Time does not render in the demo app.
+* link:https://issues.apache.org/jira/browse/ISIS-2382[ISIS-2382] - Concurrent Spec Loading is broken (possible race condition)
+* link:https://issues.apache.org/jira/browse/ISIS-2363[ISIS-2363] - Recently removed ServiceRegistry.injectServicesInto() is still recommended in docs
+* link:https://issues.apache.org/jira/browse/ISIS-2269[ISIS-2269] - Exception when calling collection on integration test ('more than one ImperativeFacet for method getReferencedObjects , with inconsistent intents')
+* link:https://issues.apache.org/jira/browse/ISIS-1980[ISIS-1980] - Unexpected error when accessing collection through wrapper.
+
+
+== Docs & Demos
+
+* link:https://issues.apache.org/jira/browse/ISIS-2443[ISIS-2443] - Flesh out demo app with further examples
+* link:https://issues.apache.org/jira/browse/ISIS-2444[ISIS-2444] - Ongoing improvements to the Apache Isis website
+* link:https://issues.apache.org/jira/browse/ISIS-2518[ISIS-2518] - Java-Doc: link tag contents that reference types should have corresponding import statements
+
+
+== Dependencies Updates
+
+* link:https://issues.apache.org/jira/browse/ISIS-2467[ISIS-2467] - Bump Wicket to latest Version (8.11.0)
+* link:https://issues.apache.org/jira/browse/ISIS-2451[ISIS-2451] - Remove Dependencies on Google Guava
+* link:https://issues.apache.org/jira/browse/ISIS-2448[ISIS-2448] - ChicagoFLF.ttf in kroviz hinders bumping maven-resources-plugin to 3.2.0
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-2457[ISIS-2457] - Switch nightly builds to upload to nexus.incode.work (instead of repo.incode.work)
+* link:https://issues.apache.org/jira/browse/ISIS-2536[ISIS-2536] - attach sources in nightly build
+* link:https://issues.apache.org/jira/browse/ISIS-2450[ISIS-2450] - Isis 2.0.0 M5 Release activities
+
+
+== Won't Fix / Not a Problem
+
+* link:https://issues.apache.org/jira/browse/ISIS-1001[ISIS-1001] - [WON'T FIX] For hard-coded methods such as title(), iconName(), and cssClass(), hidden(), disabled(), validate(), provide an alternative mechanism to specify such methods.
+* link:https://issues.apache.org/jira/browse/ISIS-471[ISIS-471] - [WON'T FIX] Pinnable (for session) bookmarks
+
+* link:https://issues.apache.org/jira/browse/ISIS-2472[ISIS-2472] - [WON'T FIX] Move Tooling to isis-lab project (github).
+
+* link:https://issues.apache.org/jira/browse/ISIS-2503[ISIS-2503] - [NOT AN ISSUE] RO Viewer does not emit object members of type 'property'
+* link:https://issues.apache.org/jira/browse/ISIS-2487[ISIS-2487] - [NOT AN ISSUE] DomainService(nature=View) recreate from memento has empty result
+
+* link:https://issues.apache.org/jira/browse/ISIS-1709[ISIS-1709] - [INVALID] Inconsistent handling of commands vs auditing for objects implementing HasTransactionId

@@ -25,8 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
@@ -39,7 +38,8 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
     domainEvent = HasUsername_recentCommandsByUser.CollectionDomainEvent.class
 )
 @CollectionLayout(
-    defaultView = "table"
+    defaultView = "table",
+    sequence = "3"
 )
 public class HasUsername_recentCommandsByUser {
 
@@ -51,7 +51,6 @@ public class HasUsername_recentCommandsByUser {
         this.hasUsername = hasUsername;
     }
 
-    @MemberOrder(name="user", sequence = "3")
     public List<CommandJdo> coll() {
         final String username = hasUsername.getUsername();
         return username != null

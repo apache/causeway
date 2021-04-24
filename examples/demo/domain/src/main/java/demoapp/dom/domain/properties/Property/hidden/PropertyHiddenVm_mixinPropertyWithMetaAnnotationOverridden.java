@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.Property.hidden;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -33,7 +32,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     describedAs =
         "@HiddenEverywhereMetaAnnotation " +
-        "@Property(hidden = NOWHERE)"
+        "@Property(hidden = NOWHERE)",
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyHiddenVm_mixinPropertyWithMetaAnnotationOverridden {
@@ -42,7 +42,6 @@ public class PropertyHiddenVm_mixinPropertyWithMetaAnnotationOverridden {
 
     private final PropertyHiddenVm propertyHiddenVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
         return propertyHiddenVm.getPropertyHiddenNowhereUsingAnnotation();
     }

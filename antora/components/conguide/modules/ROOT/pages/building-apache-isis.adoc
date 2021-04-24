@@ -9,7 +9,7 @@
 From the root project root run:
 
 [source,bash]
-----
+----gacyy
 mvn clean install
 ----
 
@@ -254,9 +254,6 @@ where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 
 | module-incubator-vaadin
 | The Vaadin Viewer
-
-| module-legacy
-| Legacy Packages (to ease migration)
 
 | module-regressiontests
 | Regression Tests (for the CI pipelines)

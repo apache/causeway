@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -31,14 +31,14 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateNameDomainEvent.class, 
-        associateWith = "knownAs",
-        associateWithSequence = "1")
+        associateWith = "knownAs")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateName {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_FAMILY_NAME, optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Family Name")
@@ -50,33 +50,33 @@ public class ApplicationUser_updateName {
             @ParameterLayout(named="Known As")
             final String knownAs
             ) {
-        holder.setFamilyName(familyName);
-        holder.setGivenName(givenName);
-        holder.setKnownAs(knownAs);
-        return holder;
+        target.setFamilyName(familyName);
+        target.setGivenName(givenName);
+        target.setKnownAs(knownAs);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
-        return holder.getFamilyName();
+        return target.getFamilyName();
     }
 
-    @Model
+    @MemberSupport
     public String default1Act() {
-        return holder.getGivenName();
+        return target.getGivenName();
     }
 
-    @Model
+    @MemberSupport
     public String default2Act() {
-        return holder.getKnownAs();
+        return target.getKnownAs();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(final String familyName, final String givenName, final String knownAs) {
         if(familyName != null && givenName == null) {
             return "Must provide given name if family name has been provided.";

@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ObjectSpecIdFacetOnStandaloneList extends ObjectSpecIdFacetAbstract {
 
-    public ObjectSpecIdFacetOnStandaloneList(final ObjectSpecId value, final FacetHolder holder) {
+    public ObjectSpecIdFacetOnStandaloneList(final String value, final FacetHolder holder) {
         super(value, holder, Derivation.NOT_DERIVED);
     }
 }

@@ -25,13 +25,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -84,7 +84,7 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 1
 
-    @Model
+    @MemberSupport
     public int default1Act(Parameters params) {
         _Probe.sysOut("p0: %d %d %d %d", params.a, params.b, params.c, params.d);
         return 1;
@@ -92,7 +92,7 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 2
 
-    @Model
+    @MemberSupport
     public Integer default2Act(Parameters params) {
         _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
         return null;
@@ -100,12 +100,12 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 3
 
-    @Model
+    @MemberSupport
     public Collection<Integer> choices3Act(Parameters params) {
         return _Lists.of(1,2,3,4);
     }
 
-    @Model
+    @MemberSupport
     public String validate3Act(Parameters params) {
         return params.c() < 2 ? "please specify c>=2" : null;
     }
@@ -118,7 +118,7 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 4
 
-    @Model
+    @MemberSupport
     public int default4Act(Parameters params) {
         _Probe.sysOut("p3: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.c() + 1;
@@ -136,7 +136,7 @@ public class DependentArgsActionDemo_bulkAction {
 //    }
 
 
-    @Model
+    @MemberSupport
     public String validateAct(
             Set<DemoItem> demoItems,
             int a,

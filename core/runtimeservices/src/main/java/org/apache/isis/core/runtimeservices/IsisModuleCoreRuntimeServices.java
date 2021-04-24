@@ -30,7 +30,7 @@ import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.clock.ClockServiceDefault;
-import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
+import org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
@@ -40,7 +40,7 @@ import org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
-import org.apache.isis.core.runtimeservices.interaction.InteractionDtoServiceInternalDefault;
+import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
@@ -59,8 +59,9 @@ import org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
+import org.apache.isis.core.runtimeservices.user.ImpersonatedUserHolderDefault;
+import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
-import org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
@@ -77,7 +78,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         EntityChangesPublisherDefault.class,
         EntityPropertyChangePublisherDefault.class,
         ClockServiceDefault.class,
-        CommandDtoServiceInternalDefault.class,
+        CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,
         ConfigurationViewServiceDefault.class,
@@ -88,7 +89,9 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
-        InteractionDtoServiceInternalDefault.class,
+        ImpersonatedUserHolderDefault.class,
+        ImpersonateMenuAdvisorDefault.class,
+        InteractionDtoFactoryDefault.class,
         InteractionFactoryDefault.class,
         JaxbServiceDefault.class,
         TranslationServicePo.class,
@@ -101,12 +104,11 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         SudoServiceDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
-        UserProfileServiceDefault.class,
         UserServiceDefault.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
-        
+
         // @Controller
         RoutingServiceDefault.class,
 
@@ -115,7 +117,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @DomainService's
         TranslationServicePoMenu.class,
-        
+
         // Exception Recognizers
         ExceptionRecognizerForDataAccessException.class,
 
@@ -126,5 +128,5 @@ public class IsisModuleCoreRuntimeServices {
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
     }
-    
+
 }

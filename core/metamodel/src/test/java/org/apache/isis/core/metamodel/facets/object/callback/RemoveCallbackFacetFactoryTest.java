@@ -25,8 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
 
@@ -62,25 +60,6 @@ public class RemoveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
         final RemovingCallbackFacetViaMethod removingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
         assertEquals(method, removingCallbackFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
-    }
-
-    public void testRemovedLifecycleMethodPickedUpOn() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void removed() {
-            };
-        }
-        final Method method = findMethod(Customer.class, "removed");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(RemovedCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof RemovedCallbackFacetViaMethod);
-        final RemovedCallbackFacetViaMethod removedCallbackFacetViaMethod = (RemovedCallbackFacetViaMethod) facet;
-        assertEquals(method, removedCallbackFacetViaMethod.getMethods().get(0));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

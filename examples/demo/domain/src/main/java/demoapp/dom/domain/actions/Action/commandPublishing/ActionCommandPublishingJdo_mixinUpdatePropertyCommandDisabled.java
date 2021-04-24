@@ -30,11 +30,11 @@ import lombok.RequiredArgsConstructor;
     commandPublishing = Publishing.DISABLED       // <.>
     , semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyCommandDisabled"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs = "@Action(command = DISABLED)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionCommandPublishingJdo_mixinUpdatePropertyCommandDisabled {

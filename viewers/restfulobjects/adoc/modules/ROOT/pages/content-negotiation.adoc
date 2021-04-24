@@ -1,0 +1,105 @@
+= Content Negotiation
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The xref:vro:ROOT:about.adoc[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning that it defines a well-defined set of endpoint URLs as resources, and generates a well-defined set of (JSON) representations when these resources are accessed.
+
+By default, the Restful Objects viewer will automatically handle requests and return representations according to the RO spec.
+However, its internal architecture provides the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] SPI to allow alternative representations to be returned based on the standard HTTP `Accept` header.
+In response, the server uses the `Content-Type` header which the client can use to know how to process the returned representation.
+
+The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain JavaScript library, say) expect, or at least works best with, a certain style of representation.
+
+Another use case is to support "third party" REST clients over which you have no control.
+In this scenario you _must not_ naively expose entities through the RO viewer, because over time those entities will inevitably evolve and change their structure.
+If the entities were exposed directly then those REST clients will break.
+
+Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.
+There are three ways in which you can do this:
+
+* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:userguide:fun:overview.adoc#view-models[view model].
+This is then surfaced by the RO viewer.
++
+If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
+
+* a second option is to solve the problem at the persistence layer, by defining a (SQL) view in the database.
+Again this is surfaced by the RO viewer.
++
+If the underlying tables change (as the result of a change in their corresponding domain entities) then the SQL view must be refactored so that it still presents the same structure.
+
+* our third option is to solve the problem at the presentation layer, using the `ContentNegotiationService` described in this section.
++
+The `ContentNegotiationService` is responsible for inspecting the HTTP `Accept` header, and use this to select the correct representation to render.
++
+The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.
+One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header.
++
+A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".
+If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer (courtesy of the underlying link:http://resteasy.jboss.org/[RestEasy] framework) can serialize these directly.
++
+What all that means is that, if the underlying entities change, we are required to update the mappings in the `ContentMappingService` to map to the same DTOs.
+
+This diagram illustrates the three options available:
+
+image::restfulobjects/facade-choices.png[width="700px"]
+
+
+Here we focus on implementing a facade at the viewer (presentation) layer:
+
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService]
++
+As noted above, there can be multiple implementations of the
+xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], each one handling a particular HTTP `Accept` header.
+If the implementation does not recognize the value of the header, if can simply return `null`.
++
+The framework provides a number of implementations; an implementation that handles the
+xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
+
+* xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService]
++
+The xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] is used by the implementation of
+xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] that recognizes the `x-ro-domain-type`, its role being to transform a domain object (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.
+There can be many such implementations, each handling a different target domain type.
+
+This diagram shows how these services collaborate:
+
+[plantuml]
+----
+hide empty members
+left to right direction
+'skinparam linetype ortho
+
+class RepresentationService {}
+
+interface ContentNegotiationService {
+}
+class ContentNegotiationServiceSimplified {
+    // application/json;profile="urn:org.apache.isis/v2"
+}
+class ContentNegotiationServiceXRoDomainType {
+    // application/xml;x-ro-domain-type="xxx"
+}
+class ContentNegotiationServiceForRestfulObjectsV1_0 {
+    // application/json
+}
+interface ContentMappingService {}
+
+ContentNegotiationServiceXRoDomainType -l-> ContentMappingService : "delegates to\n(if recognizes\nx-ro-domain-type)"
+ContentNegotiationService ^-d- ContentNegotiationServiceForRestfulObjectsV1_0
+ContentNegotiationService ^-d- ContentNegotiationServiceXRoDomainType
+ContentNegotiationService ^-d- ContentNegotiationServiceSimplified
+
+RepresentationService -l-> "1..*" ContentNegotiationService : delegates to\nbased on\nACCEPT header
+----
+
+
+Taken together these domain services offer a lot of flexibility in terms of the representations that can be generated from the RestfulObjects viewer.
+
+
+For further details, see:
+
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceXRoDomainType.adoc[ContentNegotiationServiceXRoDomainType]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1] and  xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV2.adoc[ContentNegotiationServiceOrgApacheIsisV2]

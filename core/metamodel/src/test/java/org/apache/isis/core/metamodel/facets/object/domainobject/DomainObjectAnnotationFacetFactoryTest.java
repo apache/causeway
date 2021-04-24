@@ -34,7 +34,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
@@ -58,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.val;
 
@@ -82,22 +81,22 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
 
-    class SomeHasUniqueId implements HasUniqueId {
+    class SomeHasInteractionId implements HasInteractionId {
 
         @Override
-        public UUID getUniqueId() {
+        public UUID getInteractionId() {
             return null;
         }
 
     }
-    
+
     void allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
         }
     }
-    
+
     void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
         if(value!=null) {
             final IsisConfiguration config = super.metaModelContext.getConfiguration();
@@ -124,11 +123,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Test
-        public void ignore_HasUniqueId() {
+        public void ignore_HasInteractionId() {
 
             allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-            facetFactory.processEntityChangePublishing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
+            facetFactory.processEntityChangePublishing(new ProcessClassContext(HasInteractionId.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
             Assert.assertNull(facet);
@@ -158,7 +157,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                Assert.assertNull(facet); 
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -293,7 +292,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public void whenDomainObjectAndAutoCompleteRepository() {
 
             facetFactory.process(new ProcessClassContext(
-                    CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); 
+                    CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -504,7 +503,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                         CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet); 
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -560,7 +559,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             final ObjectSpecIdFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
                     (ObjectSpecIdFacetForDomainObjectAnnotation) facet;
 
-            assertThat(facetForDomainObjectAnnotation.value(), is(ObjectSpecId.of("CUS")));
+            assertThat(facetForDomainObjectAnnotation.value(), is("CUS"));
 
             expectNoMethodsRemoved();
         }

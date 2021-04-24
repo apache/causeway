@@ -60,13 +60,12 @@ public class JpaEntityInjectionPointResolver {
     @PostUpdate
     @PostRemove
     private void afterAnyUpdate(Object entityPojo) {
-        log.debug("afterAnyUpdate: {}" + entityPojo);
-        //serviceInjector.injectServicesInto(entityPojo);
+        log.debug("afterAnyUpdate: {}", entityPojo);
     }
 
     @PostLoad
     private void afterLoad(Object entityPojo) {
-        log.debug("afterLoad: {}" + entityPojo);
+        log.debug("afterLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
     }
 

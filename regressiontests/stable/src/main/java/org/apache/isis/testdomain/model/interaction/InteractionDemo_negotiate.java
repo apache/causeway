@@ -21,9 +21,9 @@ package org.apache.isis.testdomain.model.interaction;
 import java.util.stream.IntStream;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class InteractionDemo_negotiate {
     // for the purpose of testing we constrain parameters a, b, c by their ranges rangeA, rangeB, rangeC
     // and let the picked set {a, b, c} only be valid if a+b+c==0
     
-    @Model
+    @MemberSupport
     public int act(
             NumberRange rangeA,
             int a,
@@ -77,7 +77,7 @@ public class InteractionDemo_negotiate {
     }
 
     // constraint considering all parameters
-    @Model 
+    @MemberSupport 
     public String validate(Params p) {
         final int sum = p.a + p.b + p.c;
         if(sum == 0) {
@@ -88,25 +88,25 @@ public class InteractionDemo_negotiate {
     
     // -- defaults 
 
-    @Model public NumberRange defaultRangeA(Params p) { return NumberRange.POSITITVE; }
-    @Model public NumberRange defaultRangeB(Params p) { return NumberRange.NEGATIVE; }
-    @Model public NumberRange defaultRangeC(Params p) { return NumberRange.ODD; }
+    @MemberSupport public NumberRange defaultRangeA(Params p) { return NumberRange.POSITITVE; }
+    @MemberSupport public NumberRange defaultRangeB(Params p) { return NumberRange.NEGATIVE; }
+    @MemberSupport public NumberRange defaultRangeC(Params p) { return NumberRange.ODD; }
     
-    @Model public int defaultA(Params p) { return firstOf(p.rangeA()); }
-    @Model public int defaultB(Params p) { return firstOf(p.rangeB()); }
-    @Model public int defaultC(Params p) { return firstOf(p.rangeC()); }
+    @MemberSupport public int defaultA(Params p) { return firstOf(p.rangeA()); }
+    @MemberSupport public int defaultB(Params p) { return firstOf(p.rangeB()); }
+    @MemberSupport public int defaultC(Params p) { return firstOf(p.rangeC()); }
 
     // -- choices
     
-    @Model public int[] choicesA(Params p) { return p.rangeA().numbers(); }
-    @Model public int[] choicesB(Params p) { return p.rangeB().numbers(); }
-    @Model public int[] autoCompleteC(Params p, String search) { return searchWithin(p.rangeC(), search); }
+    @MemberSupport public int[] choicesA(Params p) { return p.rangeA().numbers(); }
+    @MemberSupport public int[] choicesB(Params p) { return p.rangeB().numbers(); }
+    @MemberSupport public int[] autoCompleteC(Params p, String search) { return searchWithin(p.rangeC(), search); }
     
     // -- parameter specific validation
     
-    @Model public String validateA(Params p) { return verifyContains(p.a(), p.rangeA(), p); }
-    @Model public String validateB(Params p) { return verifyContains(p.b(), p.rangeB(), p); }
-    @Model public String validateC(Params p) { return verifyContains(p.c(), p.rangeC(), p); }
+    @MemberSupport public String validateA(Params p) { return verifyContains(p.a(), p.rangeA(), p); }
+    @MemberSupport public String validateB(Params p) { return verifyContains(p.b(), p.rangeB(), p); }
+    @MemberSupport public String validateC(Params p) { return verifyContains(p.c(), p.rangeC(), p); }
     
     // -- HELPER
     

@@ -47,7 +47,7 @@ under the License.
         </bs3:col>
         <bs3:col span="6">
             <cpt:fieldSet name="Feature" id="feature">
-                <cpt:property id="type"/>
+                <cpt:property id="sort"/>
                 <cpt:property id="featureFqn"/>
             </cpt:fieldSet>
         </bs3:col>

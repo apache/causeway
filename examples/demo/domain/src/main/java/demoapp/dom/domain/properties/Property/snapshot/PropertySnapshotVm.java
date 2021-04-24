@@ -26,17 +26,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Snapshot;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -64,7 +62,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
 
 //tag::no-annotation[]
     @Property()
-    @MemberOrder(name = "no-annotations", sequence = "1")
+    @PropertyLayout(fieldSetId = "no-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
@@ -75,9 +73,8 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
         snapshot = Snapshot.NOT_SPECIFIED
     )
     @PropertyLayout(
-        describedAs = "@Property(snapshot = NOT_SPECIFIED)"
-    )
-    @MemberOrder(name = "annotations", sequence = "1")
+        describedAs = "@Property(snapshot = NOT_SPECIFIED)",
+        fieldSetId = "annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String notSpecifiedProperty;
@@ -88,9 +85,8 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
         snapshot = Snapshot.EXCLUDED
     )
     @PropertyLayout(
-        describedAs = "@Property(snapshot = EXCLUDED)"
-    )
-    @MemberOrder(name = "annotations", sequence = "2")
+        describedAs = "@Property(snapshot = EXCLUDED)",
+        fieldSetId = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String excludedProperty;
@@ -101,9 +97,8 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
         snapshot = Snapshot.INCLUDED
     )
     @PropertyLayout(
-        describedAs = "@Property(snapshot = INCLUDED)"
-    )
-    @MemberOrder(name = "annotations", sequence = "2")
+        describedAs = "@Property(snapshot = INCLUDED)",
+        fieldSetId = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String includedProperty;
@@ -113,9 +108,8 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     @SnapshotExcludedMetaAnnotation
     @Property()
     @PropertyLayout(
-        describedAs = "@SnapshotExcludedMetaAnnotation "
-    )
-    @MemberOrder(name = "meta-annotations", sequence = "1")
+        describedAs = "@SnapshotExcludedMetaAnnotation ",
+        fieldSetId = "meta-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedProperty;
@@ -129,9 +123,8 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@SnapshotIncludedMetaAnnotation "
-            + "@Property(snapshot = EXCLUDED)"
-    )
-    @MemberOrder(name = "meta-annotations-overridden", sequence = "1")
+            + "@Property(snapshot = EXCLUDED)",
+        fieldSetId = "meta-annotations-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedPropertyOverridden;

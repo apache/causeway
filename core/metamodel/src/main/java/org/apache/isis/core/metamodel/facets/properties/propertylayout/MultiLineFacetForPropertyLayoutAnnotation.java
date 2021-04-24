@@ -35,12 +35,12 @@ public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbs
         return propertyLayoutIfAny
                 .map(PropertyLayout::multiLine)
                 .filter(multiLine -> multiLine > 1)
-                .map(multiLine -> new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder))
+                .map(multiLine -> new MultiLineFacetForPropertyLayoutAnnotation(multiLine, holder))
                 .orElse(null);
     }
 
-    private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
-        super(numberOfLines, preventWrapping, holder);
+    private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, FacetHolder holder) {
+        super(numberOfLines, holder);
     }
 
 }

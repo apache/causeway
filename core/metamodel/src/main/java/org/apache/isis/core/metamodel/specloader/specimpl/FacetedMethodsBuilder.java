@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -71,12 +72,19 @@ public class FacetedMethodsBuilder {
 
         private FacetedMethodsMethodRemover(final Class<?> introspectedClass, Method[] methods) {
             this.methodsRemaining = Stream.of(methods)
+                    .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
         
         @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
-            MethodUtil.removeMethods(methodsRemaining, filter, onRemoval);
+        public void removeMethods(Predicate<Method> removeIf, Consumer<Method> onRemoval) {
+            methodsRemaining.removeIf(method -> { 
+                val doRemove = removeIf.test(method);
+                if(doRemove) {
+                    onRemoval.accept(method);
+                }
+                return doRemove;
+            });
         }
 
         @Override
@@ -87,12 +95,8 @@ public class FacetedMethodsBuilder {
             methodsRemaining.remove(method);    
         }
 
-        void removeIf(Predicate<Method> matcher) {
-            methodsRemaining.removeIf(matcher);
-        }
-
-        void acceptRemaining(Consumer<Set<Method>> consumer) {
-            consumer.accept(methodsRemaining);
+        Stream<Method> streamRemaining() {
+            return methodsRemaining.stream();
         }
         
     }
@@ -214,10 +218,11 @@ public class FacetedMethodsBuilder {
         
         val associationCandidateMethods = new HashSet<Method>();
         
-        methodRemover.acceptRemaining(methodsRemaining->{
-            getFacetProcessor()
-            .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods::add);
-        });
+        
+        getFacetProcessor().findAssociationCandidateAccessors(
+                    methodRemover.streamRemaining(), 
+                    associationCandidateMethods::add);
+        
         
         // Ensure all return types are known
         
@@ -352,7 +357,7 @@ public class FacetedMethodsBuilder {
             log.debug("  looking for action methods");
         }
 
-        methodRemover.removeIf(method->{
+        methodRemover.removeMethods(method->{
             val actionPeer = findActionFacetedMethod(method);
             if (actionPeer != null) {
                 onActionFacetedMethod.accept(actionPeer);
@@ -416,6 +421,10 @@ public class FacetedMethodsBuilder {
             return false;
         }
         
+        val hasActionAnnotation = _Annotations
+                .findNearestAnnotation(actionMethod, Action.class)
+                .isPresent();
+        
         // just an optimization, not strictly required:
         // return false if both are true
         // 1. actionMethod has no @Action annotation
@@ -425,9 +434,7 @@ public class FacetedMethodsBuilder {
             // even though when @Action is mandatory for action methods, 
             // mixins now can contribute methods, 
             // that do not need to be annotated (see ISIS-1998)
-            val hasActionAnnotation = _Annotations
-                    .findNearestAnnotation(actionMethod, Action.class)
-                    .isPresent();
+            
             if(!hasActionAnnotation) {
                 // omitting the @Action annotation at given method is only allowed, when the 
                 // type is a mixin, and the mixin's main method identifies as the given actionMethod 
@@ -475,22 +482,21 @@ public class FacetedMethodsBuilder {
             return true;
         } 
         
-        if(isExplicitActionAnnotationConfigured()) {
-            
-            if(_Annotations.isPresent(actionMethod, Action.class)) {
-                log.debug("  identified action {}", actionMethod);
-                return true;
-            }
-            // we have no @Action, so dismiss
-            return false;
-            
-        } 
+        if(hasActionAnnotation) {
+            log.debug("  identified action {}", actionMethod);
+            return true;
+        }
         
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
             
             inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
+            return false;
+        }
+        
+        if(isExplicitActionAnnotationConfigured()) {
+            // we have no @Action, so dismiss
             return false;
         }
 
@@ -532,10 +538,7 @@ public class FacetedMethodsBuilder {
             Consumer<Method> onMatch) {
         
         val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
-        
-        methodRemover.acceptRemaining(methodsRemaining->{
-            MethodUtil.removeMethods(methodsRemaining, filter, onMatch);
-        });
+        methodRemover.removeMethods(filter, onMatch);
         
     }
     
@@ -550,7 +553,7 @@ public class FacetedMethodsBuilder {
         if(mixinFacet==null || mixinFacet.isFallback()) {
             return false;
         }
-        if(inspectedTypeSpec.isLessThan(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED)) {
+        if(inspectedTypeSpec.isLessThan(IntrospectionState.FULLY_INTROSPECTED)) {
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
         }

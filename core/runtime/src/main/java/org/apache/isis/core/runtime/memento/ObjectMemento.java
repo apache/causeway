@@ -24,19 +24,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.apache.isis.applib.id.HasLogicalType;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
 
 /**
  * @since 2.0
  */
-public interface ObjectMemento extends Serializable {
+public interface ObjectMemento extends HasLogicalType, Serializable {
 
     String asString();
-
+    
     /**
      * Returns a bookmark only if 
      * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
@@ -52,20 +52,18 @@ public interface ObjectMemento extends Serializable {
      * Returns {@code null} otherwise. 
      */
     Bookmark asHintingBookmarkIfSupported();
-
-    ObjectSpecId getObjectSpecId();
-
+    
     // -- FACTORIES
 
     static ObjectMemento wrapMementoList(
             Collection<ObjectMemento> container, 
-            ObjectSpecId specId) {
+            LogicalType logicalType) {
 
         // ArrayList is serializable
         if(container instanceof ArrayList) {
-            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, specId);
+            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, logicalType);
         }
-        return ObjectMementoCollection.of(_Lists.newArrayList(container), specId);
+        return ObjectMementoCollection.of(_Lists.newArrayList(container), logicalType);
     }
 
     // ArrayList is serializable

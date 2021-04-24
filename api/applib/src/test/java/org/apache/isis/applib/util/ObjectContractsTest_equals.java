@@ -16,11 +16,17 @@
  */
 package org.apache.isis.applib.util;
 
+import java.util.Comparator;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @SuppressWarnings("deprecation")
 public class ObjectContractsTest_equals {
@@ -88,5 +94,45 @@ public class ObjectContractsTest_equals {
         assertFalse(ObjectContracts.equals(p, null, "number"));
     }
 
+    @RequiredArgsConstructor(staticName = "of")
+    public static class ComplexNumber implements Comparable<ComplexNumber> {
+
+        @Getter private final int real;
+        @Getter private final int imaginary;
+
+        private ObjectContracts.ObjectContract<ComplexNumber> contract
+                = ObjectContracts.contract(ComplexNumber.class)
+                    .thenUse("real", ComplexNumber::getReal)
+                    .thenUse("imaginary", ComplexNumber::getImaginary);
+
+
+        @Override
+        public boolean equals(Object o) {
+            return contract.equals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return contract.hashCode(this);
+        }
+
+        @Override
+        public int compareTo(final ComplexNumber other) {
+            return contract.compare(this, other);
+        }
+
+        @Override
+        public String toString() {
+            return contract.toString(this);
+        }
+    }
+
+    @Test
+    public void more_complex_scenario() {
+        final ComplexNumber cn1 = ComplexNumber.of(3, 4);
+        final ComplexNumber cn2 = ComplexNumber.of(3, 4);
+
+        assertEquals(cn1, cn2);
+    }
 
 }

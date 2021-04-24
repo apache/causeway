@@ -1,4 +1,4 @@
-= Core Runtime configurations
+= Core Runtime
 :page-role: -toc -narrow
 
 

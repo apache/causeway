@@ -57,11 +57,11 @@ class CliConfigTest {
         assertNotNull(config.getCommands().getOverview());
         assertNotNull(config.getCommands().getIndex());
         assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getCommands().getOverview().getDescription());
-        assertNotNull(config.getGlobal().getSections());
-        assertTrue(config.getGlobal().getSections().size()>5);
+        assertNotNull(config.getCommands().getOverview().getSections());
+        assertTrue(config.getCommands().getOverview().getSections().size()>5);
 
         assertTrue(config.getCommands().getIndex().isFixOrphanedAdocIncludeStatements());
-        assertEquals(3, config.getGlobal().getNamespacePartsSkipCount());
+        assertEquals(3, config.getCommands().getIndex().getNamespacePartsSkipCount());
     }
 
 }

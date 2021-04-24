@@ -27,6 +27,12 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
+
+# core
+    - url: .
+      start_path: core/config/src/main/adoc # refguide
+      branches: HEAD
+
 # examples
     - url: .
       start_path: examples/demo/domain/src/main/adoc # docs
@@ -39,16 +45,17 @@ content:
 
 # persistence
     - url: .
+      start_path: persistence/jpa/adoc # pjpa
+      branches: HEAD
+    - url: .
       start_path: persistence/jdo/adoc # pjdo
       branches: HEAD
-#    - url: .
-#      start_path: persistence/jpa/adoc # pjpa
-#      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
       branches: HEAD
+
 
 ui:
   bundle:
@@ -68,8 +75,14 @@ asciidoc:
     experimental: ""
     idprefix: ""
     idseparator: "-"
-#    plantuml-server-url: "http://www.plantuml.com/plantuml"
-    page-isisrel: "2.0.0-M4"
+    # kroki
+    # for more options see https://github.com/Mogztter/asciidoctor-kroki
+    kroki-default-format: svg # (default)
+    kroki-default-options: interactive # only available for SVG
+    kroki-fetch-diagram: true
+    kroki-server-url: https://kroki.io # (default)
+    page-isisprev: "2.0.0-M5"
+    page-isisrel: "2.0.0-M6"
 
 output:
   dir: antora/target/site

@@ -35,13 +35,13 @@ public enum IntrospectionState implements Comparable<IntrospectionState> {
     TYPE_INTROSPECTED,
 
     /**
-     * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_AND_MEMBERS_INTROSPECTED}
+     * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
      */
     MEMBERS_BEING_INTROSPECTED,
 
     /**
      * Fully introspected... class and also its members.
      */
-    TYPE_AND_MEMBERS_INTROSPECTED
+    FULLY_INTROSPECTED
 
 }

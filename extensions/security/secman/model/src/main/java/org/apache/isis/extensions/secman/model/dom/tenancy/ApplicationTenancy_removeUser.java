@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.tenancy;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
@@ -33,29 +33,30 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
-associateWithSequence = "2")
-@ActionLayout(named="Remove")
+@Action(
+        domainEvent = RemoveUserDomainEvent.class, 
+        associateWith = "users")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
     
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
     
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.clearTenancyOnUser(applicationUser);
-        return holder;
+        return target;
     }
     
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationUser> choices0Act() {
-        return applicationUserRepository.findByTenancy(holder);
+        return applicationUserRepository.findByTenancy(target);
     }
     
-    @Model
+    @MemberSupport
     public String disableAct() {
         return choices0Act().isEmpty()? "No users to remove": null;
     }

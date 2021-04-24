@@ -40,7 +40,7 @@ public class BookmarkHolder_object {
     extends IsisModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
 
     public Object prop() {
-        return bookmarkService.lookup(bookmarkHolder);
+        return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 
     // -- DEPENDENCIES

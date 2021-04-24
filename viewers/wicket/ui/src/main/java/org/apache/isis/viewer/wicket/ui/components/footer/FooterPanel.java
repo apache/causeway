@@ -46,7 +46,8 @@ import lombok.val;
 /**
  * A panel for the default page footer
  */
-public class FooterPanel extends PanelAbstract<Model<String>> {
+public class FooterPanel 
+extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;
 

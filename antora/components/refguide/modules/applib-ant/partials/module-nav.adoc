@@ -1,0 +1,43 @@
+
+
+
+* xref:refguide:applib-ant:about.adoc[Annotations]
+
+** xref:refguide:applib:index/annotation/Action.adoc[@Action]
+** xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout]
+** xref:refguide:applib:index/annotation/Collection.adoc[@Collection]
+** xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout]
+** xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]
+** xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
+** xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService]
+** xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout]
+** xref:refguide:applib:index/annotation/Facets.adoc[@Facets]
+** xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]
+** xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
+** xref:refguide:applib:index/annotation/MemberSupport.adoc[@MemberSupport]
+** xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength]
+** xref:refguide:applib:index/annotation/Module.adoc[@Module]
+** xref:refguide:applib:index/annotation/Parameter.adoc[@Parameter]
+** xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout]
+** xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic]
+** xref:refguide:applib:index/annotation/Property.adoc[@Property]
+** xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout]
+** xref:refguide:applib:index/annotation/Title.adoc[@Title]
+** xref:refguide:applib:index/annotation/Value.adoc[@Value]
+
+** javax.validation
+*** xref:refguide:applib-ant:Digits.adoc[@Digits]
+*** xref:refguide:applib-ant:Nullable.adoc[@Nullable]
+*** xref:refguide:applib-ant:Pattern.adoc[@Pattern]
+
+** JAXB
+*** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter]
+*** xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]
+
+** JDO
+*** xref:refguide:applib-ant:Column.adoc[@Column]
+*** xref:refguide:applib-ant:Discriminator.adoc[@Discriminator]
+*** xref:refguide:applib-ant:NotPersistent.adoc[@NotPersistent]
+*** xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable]
+*** xref:refguide:applib-ant:PrimaryKey.adoc[@PrimaryKey]
+

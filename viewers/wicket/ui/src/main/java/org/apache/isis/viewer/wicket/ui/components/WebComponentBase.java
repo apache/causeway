@@ -68,7 +68,7 @@ implements HasCommonContext {
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFail(type);
+                : getCommonContext().lookupServiceElseFail(type);
     }
     
 }

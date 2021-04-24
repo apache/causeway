@@ -27,17 +27,16 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -65,31 +64,31 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @MemberOrder(name = "not-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyNoAnnotation;
 
     @Property()
-    @MemberOrder(name = "annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForPrototyping;
 
     @Property()
-    @MemberOrder(name = "annotated", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotated", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForNoRestrictions;
 
     @Property()
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForMetaAnnotations;
 
     @Property()
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForMetaAnnotationsOverridden;
@@ -98,12 +97,12 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "propertyNoAnnotation"
-            , associateWithSequence = "1"
             // no restrictTo attribute              // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action()"
+        , sequence = "1"
     )
     public ActionRestrictToVm updateNoAnnotation(final String text) {
         setPropertyNoAnnotation(text);
@@ -118,12 +117,12 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "propertyForPrototyping"
-            , associateWithSequence = "1"
             , restrictTo = RestrictTo.PROTOTYPING // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+        , sequence = "1"
     )
     public ActionRestrictToVm updateRestrictToPrototyping(final String text) {
         setPropertyForPrototyping(text);
@@ -138,12 +137,12 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "propertyForNoRestrictions"
-            , associateWithSequence = "1"
             , restrictTo = RestrictTo.NO_RESTRICTIONS      // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(restrictTo = RestrictTo.NO_RESTRICTIONS)"
+        , sequence = "1"
     )
     public ActionRestrictToVm updateRestrictToNoRestrictions(final String text) {
         setPropertyForNoRestrictions(text);
@@ -159,11 +158,11 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "propertyForMetaAnnotations"
-            , associateWithSequence = "1"
     )
     @ActionLayout(
         describedAs =
             "@ActionRestrictToPrototypingMetaAnnotation"
+        , sequence = "1"
     )
     public ActionRestrictToVm updateMetaAnnotated(final String text) {
         setPropertyForMetaAnnotations(text);
@@ -179,13 +178,13 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "propertyForMetaAnnotationsOverridden"
-            , associateWithSequence = "1"
             , restrictTo = RestrictTo.PROTOTYPING   // <.>
     )
     @ActionLayout(
         describedAs =
             "@ActionRestrictToNoRestrictionsMetaAnnotation " +
             "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+        , sequence = "1"
     )
     public ActionRestrictToVm updateMetaAnnotatedOverridden(final String text) {
         setPropertyForMetaAnnotationsOverridden(text);

@@ -26,10 +26,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -81,7 +81,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         @NonNull  private final ActionLinkUiComponentFactoryWkt uiComponentFactory;
         @Nullable private final String named;
         @NonNull  private final EntityModel actionHolder;
-        @NonNull  private final ObjectSpecId actionHolderSpecId;
+        @NonNull  private final LogicalType actionHolderLogicalType;
         @NonNull  private final String objectActionId;
         
         private SerializationProxy(LinkAndLabel target) {
@@ -89,18 +89,18 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
             // make sure we do this without side-effects
-            this.actionHolderSpecId = actionHolder.getTypeOfSpecificationId()
+            this.actionHolderLogicalType = actionHolder.getLogicalElementType()
                     .orElseThrow(_Exceptions::unexpectedCodeReach); 
             this.objectActionId = target.getObjectAction().getId();
         }
 
         private Object readResolve() {
             val commonContext = CommonContextUtils.getCommonContext();
-            val actionHolderSpec = commonContext.getSpecificationLoader().loadSpecification(actionHolderSpecId);
-            val objectMember = actionHolderSpec
-                    .getMember(objectActionId)
-                    .orElseThrow(()->
-                        _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
+            val objectMember = commonContext.getSpecificationLoader()
+            .specForLogicalType(actionHolderLogicalType)
+            .flatMap(actionHolderSpec->actionHolderSpec.getMember(objectActionId))
+            .orElseThrow(()->
+                _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
             return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
         }
     }

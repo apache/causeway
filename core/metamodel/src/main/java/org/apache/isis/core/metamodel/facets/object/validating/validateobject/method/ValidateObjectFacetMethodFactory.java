@@ -21,14 +21,15 @@ package org.apache.isis.core.metamodel.facets.object.validating.validateobject.m
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -52,7 +53,8 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         if (method != null) {
             val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+            val translationContext = TranslationContext.forTranslationContextHolder(
+                    ((IdentifiedHolder)facetHolder).getIdentifier());
             FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }

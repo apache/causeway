@@ -21,11 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.role;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddUserDomainEvent;
@@ -37,28 +37,27 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = AddUserDomainEvent.class, 
-        associateWith = "users",
-        associateWithSequence = "1")
-@ActionLayout(named="Add")
+        associateWith = "users")
+@ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_addUser {
     
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
-    @Model
+    @MemberSupport
     public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
-        return holder;
+        applicationRoleRepository.addRoleToUser(target, applicationUser);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationUserRepository.findByRole(holder));
+        list.removeAll(applicationUserRepository.findByRole(target));
         return list;
     }
 }

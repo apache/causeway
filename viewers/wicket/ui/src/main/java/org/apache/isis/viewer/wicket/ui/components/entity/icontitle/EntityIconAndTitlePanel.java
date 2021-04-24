@@ -49,7 +49,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
+public class EntityIconAndTitlePanel 
+extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
 

@@ -40,6 +40,25 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Represents a binary large object.
+ *
+ * <p>
+ * Conceptually you can consider it as a set of bytes (a picture, a video etc),
+ * though in fact it wraps three pieces of information:
+ * </p>
+ * <ul>
+ *     <li>
+ *         the set of bytes
+ *     </li>
+ *     <li>
+ *         a name
+ *     </li>
+ *     <li>
+ *         a mime type
+ *     </li>
+ * </ul>
+ *
+ * @see Clob
  * @since 1.x {@index}
  */
 @Value(semanticsProviderName =
@@ -50,11 +69,14 @@ public final class Blob implements NamedWithMimeType {
 
     /**
      * Computed for state:
+     *
+     * <p>
      * <pre>
-     *     private final MimeType mimeType;
-     *     private final byte[] bytes;
-     *     private final String name;
+     * private final MimeType mimeType;
+     * private final byte[] bytes;
+     * private final String name;
      * </pre>
+     * </p>
      */
     private static final long serialVersionUID = 5659679806709601263L;
 

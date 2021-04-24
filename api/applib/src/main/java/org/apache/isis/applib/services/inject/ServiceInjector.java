@@ -18,12 +18,7 @@
  */
 package org.apache.isis.applib.services.inject;
 
-import java.util.NoSuchElementException;
-import java.util.function.Consumer;
-
-import org.springframework.beans.factory.InjectionPoint;
-
-import lombok.val;
+import javax.annotation.Nullable;
 
 /**
  * Resolves injection points using the
@@ -36,39 +31,13 @@ import lombok.val;
 public interface ServiceInjector {
 
     /**
-     * Injects domain services into the object, and calls the provided
-     * {@link Consumer} for any non-resolvable injection points.
-     *
-     * @param domainObject
-     * @param onNotResolvable
-     * @param <T>
-     * @return
-     */
-    <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
-
-    /**
-     * Injecs domain services into the object, and throws a
-     * {@link NoSuchElementException} for any injection points that cannot be resolved.
+     * Injects domain services into the object.
      *
      * @param domainObject
      * @param <T>
-     * @return
+     * @return domainObject with injection points resolved
      */
-    default <T> T injectServicesInto(final T domainObject) {
+    <T> @Nullable T injectServicesInto(final @Nullable T domainObject);
 
-        return injectServicesInto(domainObject, injectionPoint->{
-
-            val injectionPointName = injectionPoint.toString();
-            val requiredType = injectionPoint.getDeclaredType();
-            val msg = String
-                    .format("Could not resolve injection point [%s] in target '%s' of required type '%s'",
-                            injectionPointName,
-                            domainObject.getClass().getName(),
-                            requiredType);
-            throw new NoSuchElementException(msg);
-        });
-
-        // ...
-    }
 
 }

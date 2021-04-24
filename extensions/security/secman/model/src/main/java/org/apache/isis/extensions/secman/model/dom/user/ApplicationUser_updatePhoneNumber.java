@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -31,29 +31,29 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdatePhoneNumberDomainEvent.class, 
-        associateWith = "phoneNumber",
-        associateWithSequence = "1")
+        associateWith = "phoneNumber")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePhoneNumber {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @ParameterLayout(named="Phone")
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
             final String phoneNumber) {
-        holder.setPhoneNumber(phoneNumber);
-        return holder;
+        target.setPhoneNumber(phoneNumber);
+        return target;
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
     
-    @Model
+    @MemberSupport
     public String default0Act() {
-        return holder.getPhoneNumber();
+        return target.getPhoneNumber();
     }
 }

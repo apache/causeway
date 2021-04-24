@@ -26,17 +26,15 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -67,9 +65,8 @@ public class PropertyExecutionPublishingJdo
     )
     @PropertyLayout(
         describedAs =
-            "@Property(publishing = ENABLED)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(publishing = ENABLED)",
+        fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
     private String propertyUsingAnnotation;
 //end::annotation[]
@@ -78,9 +75,8 @@ public class PropertyExecutionPublishingJdo
     @PropertyExecutionPublishingEnabledMetaAnnotation                // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@PropertyPublishingEnabledMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@PropertyPublishingEnabledMetaAnnotation",
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -94,9 +90,8 @@ public class PropertyExecutionPublishingJdo
     @PropertyLayout(
         describedAs =
             "@PropertyPublishingDisabledMetaAnnotation " +
-            "@Property(publishing = ENABLED)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@Property(publishing = ENABLED)",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

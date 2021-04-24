@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -42,7 +41,7 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isis.ext.fixtures.FixtureResult"
+        objectType = FixtureResult.OBJECT_TYPE
         )
 @DomainObjectLayout(paged=500)
 @XmlRootElement(name = "fixtureResult")
@@ -56,6 +55,8 @@ import lombok.Setter;
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
+    
+    public static final String OBJECT_TYPE = "isis.ext.fixtures.FixtureResult"; // secman seeding
 
     @PropertyLayout(named="Fixture script")
     @Property(optionality = Optionality.OPTIONAL)
@@ -75,15 +76,14 @@ public class FixtureResult {
     @PropertyLayout(named="Result")
     @Title(sequence="2")
     public Object getObject() {
-        return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null));
+        return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null)).orElse(null);
     }
 
     public void setObject(Object object) {
-        this.objectBookmark = bookmarkService.bookmarkFor(object).toString();
+        this.objectBookmark = bookmarkService.bookmarkForElseFail(object).toString();
     }
 
-    @PropertyLayout(named="Result class")
-    @MemberOrder(sequence="3")
+    @PropertyLayout(named="Result class", sequence="3")
     public String getClassName() {
         return getObjectBookmark() != null? getObject().getClass().getName(): null;
     }

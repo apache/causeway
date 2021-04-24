@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -29,8 +30,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "propertyUsingMetaAnnotationButOverridden"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
 

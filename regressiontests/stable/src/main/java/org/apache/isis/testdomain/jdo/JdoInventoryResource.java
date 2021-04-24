@@ -75,7 +75,7 @@ public class JdoInventoryResource {
         
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
             books.add(repository.persist(book));
         }
         return books;

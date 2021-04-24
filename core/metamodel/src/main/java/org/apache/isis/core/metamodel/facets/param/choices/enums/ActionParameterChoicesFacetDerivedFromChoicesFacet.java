@@ -44,7 +44,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
         
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
-        final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
+        final ObjectSpecification noSpec = specForTypeElseFail(paramPeer.getType());
         final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();

@@ -1,0 +1,53 @@
+= TransactionServiceSpring
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.TransactionServiceSpring.java
+----
+class TransactionServiceSpring {
+  TransactionServiceSpring(final List<PlatformTransactionManager> platformTransactionManagers, final List<PersistenceExceptionTranslator> persistenceExceptionTranslators, final InteractionTracker interactionTracker)
+  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)
+  void nextTransaction()
+  void flushTransaction()
+  Optional<TransactionId> currentTransactionId()
+  TransactionState currentTransactionState()
+  void beforeEnteringTransactionalBoundary(Interaction interaction)     // <.>
+  void onTransactionEnded(TransactionAfterCompletionEvent event)     // <.>
+  void afterLeavingTransactionalBoundary(Interaction interaction)     // <.>
+}
+----
+
+<.> xref:#beforeEnteringTransactionalBoundary__Interaction[beforeEnteringTransactionalBoundary(Interaction)]
++
+--
+INTERACTION BEGIN BOUNDARY
+--
+<.> xref:#onTransactionEnded__TransactionAfterCompletionEvent[onTransactionEnded(TransactionAfterCompletionEvent)]
++
+--
+TRANSACTION END BOUNDARY
+--
+<.> xref:#afterLeavingTransactionalBoundary__Interaction[afterLeavingTransactionalBoundary(Interaction)]
++
+--
+INTERACTION END BOUNDARY
+--
+
+== Members
+
+[#beforeEnteringTransactionalBoundary__Interaction]
+=== beforeEnteringTransactionalBoundary(Interaction)
+
+INTERACTION BEGIN BOUNDARY
+
+[#onTransactionEnded__TransactionAfterCompletionEvent]
+=== onTransactionEnded(TransactionAfterCompletionEvent)
+
+TRANSACTION END BOUNDARY
+
+[#afterLeavingTransactionalBoundary__Interaction]
+=== afterLeavingTransactionalBoundary(Interaction)
+
+INTERACTION END BOUNDARY

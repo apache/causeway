@@ -20,22 +20,21 @@ package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Property()
+@PropertyLayout(fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class PropertyDomainEventVm_controlText {
 
     private final PropertyDomainEventVm propertyDomainEventVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public PropertyDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;
     }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.multiline;
 
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Whether the (string) property or parameter should be rendered over multiple
@@ -29,23 +29,11 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>@MultiLine</tt> annotation.
  */
-public interface MultiLineFacet extends MultipleValueFacet {
+public interface MultiLineFacet extends Facet {
 
     /**
      * How many lines to use.
      */
     int numberOfLines();
-
-    /**
-     * Whether carriage returns should be used to split over multiple lines or
-     * not.
-     *
-     * <p>
-     * If set to <tt>true</tt>, then user must use carriage returns to split. If
-     * set to <tt>false</tt>, then the viewer should automatically wrap when
-     * spills over the length of one line.
-     */
-    @Deprecated
-    boolean preventWrapping();
 
 }

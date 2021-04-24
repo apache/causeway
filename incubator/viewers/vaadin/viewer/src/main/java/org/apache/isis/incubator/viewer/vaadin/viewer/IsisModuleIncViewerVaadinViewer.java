@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import com.vaadin.flow.server.Constants;
+import com.vaadin.flow.server.InitParameters;
 import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
 import com.vaadin.flow.spring.SpringServlet;
@@ -95,7 +95,7 @@ public class IsisModuleIncViewerVaadinViewer {
         val isRootMapping = RootMappedCondition.isRootMapping(urlMapping);
         if (isRootMapping) {
             urlMapping = "/vaadinServlet/*";
-            initParameters.put(Constants.SERVLET_PARAMETER_PUSH_URL,
+            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(

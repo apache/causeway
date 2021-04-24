@@ -1,0 +1,100 @@
+[[autoComplete]]
+= `autoComplete...()`
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+The `autoComplete...()` supporting method is called for action parameters and for properties to find objects from a drop-down list box.  The use case is when the number of candidate objects is expected to be large, so the user is required to enter some characters to narrow the search down.
+
+[TIP]
+====
+If the number of candidate objects is comparatively small, then use xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] supporting method instead.
+====
+
+The signature of the supporting method depends on whether it is for a parameter or a property.
+
+
+== Parameters
+
+For an action parameter in (0-based) position _N_, and of type `T`, the signature is:
+
+[source,java]
+----
+public List<T> autoCompleteNXxx(String search) { /* ... */ }
+----
+
+It is also valid to return `T[]`, a `Set<T>` or a `Collection<T>`.
+
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class ShoppingCartItem {
+
+    @Property(editing=Editing.DISABLED)
+    @Getter @Setter
+    private Product product;
+
+    @Property(editing=Editing.DISABLED)
+    @Getter @Setter
+    private int quantity;
+
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public ShoppingCartItem updateProduct(
+                                final Product product,
+                                final int quantity) {
+        // ...
+    }
+    public Collection<Product> autoComplete0UpdateProduct(  // <.>
+                                    @MinLength(3)           // <.>
+                                    final String search ) {
+        // ...
+    }
+
+    // ...
+}
+----
+
+<.> `product` is the 0th argument of the action.
+
+<.> the xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+
+
+== Properties
+
+For a property of type `T`, the signature is:
+
+[source,java]
+----
+public List<T> autoCompleteXxx(String search) { /* ... */ }
+----
+
+(As for action parameters) it is also valid to return `T[]`, a `Set<T>` or a `Collection<T>`.
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class ShoppingCartItem {
+    @Getter @Setter
+    private Product product;
+
+    public Collection<Product> autoCompleteProduct(
+                                @MinLength(3)           // <.>
+                                final String search ) {
+        ...
+    }
+    ...
+}
+----
+<1> the xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+
+

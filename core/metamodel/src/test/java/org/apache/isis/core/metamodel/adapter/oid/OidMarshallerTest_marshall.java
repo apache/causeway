@@ -18,32 +18,22 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
 public class OidMarshallerTest_marshall {
 
-    private Oid_Marshaller oidMarshaller;
-
-    @Before
-    public void setUp() throws Exception {
-        oidMarshaller = Oid_Marshaller.INSTANCE;
-    }
-
     @Test
-    public void rootOid() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.root(ObjectSpecId.of("CUS"),  "123"));
+    public void oid() {
+        final String marshal = _OidMarshaller.marshal(Oid.of(LogicalTypeTestFactory.cus(),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 
 //deprecated    
 //    @Test
-//    public void rootOid_transient() {
+//    public void oid_transient() {
 //        final String marshal = oidMarshaller.marshal(Oid.Factory.transientOf(ObjectSpecId.of("CUS"),  "123"));
 //        assertThat(marshal, equalTo("!CUS:123"));
 //    }

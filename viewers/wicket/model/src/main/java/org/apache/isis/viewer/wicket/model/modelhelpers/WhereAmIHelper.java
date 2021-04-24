@@ -56,7 +56,7 @@ public class WhereAmIHelper {
         val adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
-        ParentChain.of(commonContext.getSpecificationLoader()::loadSpecification)
+        ParentChain.of(commonContext.getSpecificationLoader())
         .streamParentChainOf(startNode, maxChainLength)
         .forEach(reversedChainOfParents::addFirst);
     }

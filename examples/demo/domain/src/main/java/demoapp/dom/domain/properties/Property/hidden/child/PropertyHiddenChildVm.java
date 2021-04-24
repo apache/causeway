@@ -26,18 +26,16 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -75,9 +73,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.NOWHERE)"
-    )
-    @MemberOrder(name = "variants", sequence = "1")
+            "@Property(hidden = Where.NOWHERE)",
+        fieldSetId = "variants", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhere;
@@ -89,9 +86,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.EVERYWHERE)"
-    )
-    @MemberOrder(name = "variants", sequence = "2")
+            "@Property(hidden = Where.EVERYWHERE)",
+        fieldSetId = "variants", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenEverywhere;
@@ -103,9 +99,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.ANYWHERE)"
-    )
-    @MemberOrder(name = "variants", sequence = "2.1")
+            "@Property(hidden = Where.ANYWHERE)",
+        fieldSetId = "variants", sequence = "2.1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAnywhere;
@@ -117,9 +112,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.ALL_TABLES)"
-    )
-    @MemberOrder(name = "variants", sequence = "3")
+            "@Property(hidden = Where.ALL_TABLES)",
+        fieldSetId = "variants", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAllTables;
@@ -131,9 +125,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.OBJECT_FORMS)"
-    )
-    @MemberOrder(name = "variants", sequence = "4")
+            "@Property(hidden = Where.OBJECT_FORMS)",
+        fieldSetId = "variants", sequence = "4")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenObjectForms;
@@ -145,9 +138,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.STANDALONE_TABLES)"
-    )
-    @MemberOrder(name = "variants", sequence = "5")
+            "@Property(hidden = Where.STANDALONE_TABLES)",
+        fieldSetId = "variants", sequence = "5")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenStandaloneTables;
@@ -159,9 +151,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)"
-    )
-    @MemberOrder(name = "variants", sequence = "6")
+            "@Property(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)",
+        fieldSetId = "variants", sequence = "6")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAllExceptStandaloneTables;
@@ -174,9 +165,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.PARENTED_TABLES)"
-    )
-    @MemberOrder(name = "variants", sequence = "7")
+            "@Property(hidden = Where.PARENTED_TABLES)",
+        fieldSetId = "variants", sequence = "7")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenParentedTables;
@@ -188,9 +178,8 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(hidden = Where.REFERENCES_PARENT)"
-    )
-    @MemberOrder(name = "variants", sequence = "8")
+            "@Property(hidden = Where.REFERENCES_PARENT)",
+        fieldSetId = "variants", sequence = "8")
     @XmlTransient   // to avoid cycles
     @Getter @Setter
     private PropertyHiddenVm propertyHiddenReferencesParent;

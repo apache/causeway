@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,7 +47,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
     private final PropertyOrCollectionAccessorFacet getterFacetIfAny;
     private final TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
 
     /**
      * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
@@ -62,7 +63,8 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+        this.translationContext = TranslationContext.forTranslationContextHolder(
+                ((IdentifiedHolder)holder).getIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

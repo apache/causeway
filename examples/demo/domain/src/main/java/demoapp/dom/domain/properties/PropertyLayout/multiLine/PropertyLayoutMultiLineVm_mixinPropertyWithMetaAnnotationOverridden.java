@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.multiLine;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -31,7 +30,8 @@ import lombok.RequiredArgsConstructor;
     multiLine = 3                                       // <.>
     , describedAs =
         "@MultiLine10MetaAnnotation " +
-        "@PropertyLayout(multiLine = 3)"
+        "@PropertyLayout(multiLine = 3)",
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden {
@@ -40,7 +40,6 @@ public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden
 
     private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
         return propertyLayoutMultiLineVm.getPropertyUsingAnnotation();
     }

@@ -1,0 +1,8 @@
+
+* xref:refguide:applib-methods:about.adoc[Methods]
+** xref:refguide:applib-methods:prefixes.adoc[Supporting Methods]
+** xref:refguide:applib-methods:ui-hints.adoc[UI Hint Methods]
+** xref:refguide:applib-methods:lifecycle.adoc[Lifecycle Methods]
+
+
+

@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -74,6 +75,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -116,7 +118,7 @@ import lombok.val;
 @Qualifier("Default")
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
-    
+
     @Inject InteractionTracker interactionTracker;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
@@ -130,13 +132,13 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
         dispatchersByEventClass = new HashMap<>();
     private ProxyContextHandler proxyContextHandler;
-    
+
     @PostConstruct
     public void init() {
 
         val proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
-        
+
         putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
         putDispatcher(PropertyVisibilityEvent.class, InteractionListener::propertyVisible);
         putDispatcher(PropertyUsabilityEvent.class, InteractionListener::propertyUsable);
@@ -156,7 +158,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     // -- WRAPPING
-    
+
     @Override
     public <T> T wrap(
             final @NonNull T domainObject) {
@@ -167,21 +169,21 @@ public class WrapperFactoryDefault implements WrapperFactory {
     public <T> T wrap(
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
-        
-        // skip in support of JUnit tests, that don't inject a SpecificationLoader 
+
+        // skip in support of JUnit tests, that don't inject a SpecificationLoader
         if(specificationLoader!=null) {
-            val spec = specificationLoader.loadSpecification(domainObject.getClass());
+            val spec = specificationLoader.specForTypeElseFail(domainObject.getClass());
             if(spec.isMixin()) {
                 throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                         + "use WrapperFactory.wrapMixin(...) instead");
             }
         }
-        
+
         if (isWrapper(domainObject)) {
             val wrapperObject = (WrappingObject) domainObject;
             val executionMode = wrapperObject.__isis_executionModes();
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
-                return domainObject;    
+                return domainObject;
             }
             val underlyingDomainObject = wrapperObject.__isis_wrapped();
             return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
@@ -199,29 +201,29 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T> T wrapMixin(
-            final @NonNull Class<T> mixinClass, 
+            final @NonNull Class<T> mixinClass,
             final @NonNull Object mixee) {
         return wrapMixin(mixinClass, mixee, control());
     }
 
     @Override
     public <T> T wrapMixin(
-            final @NonNull Class<T> mixinClass, 
-            final @NonNull Object mixee, 
+            final @NonNull Class<T> mixinClass,
+            final @NonNull Object mixee,
             final @NonNull SyncControl syncControl) {
-        
+
         T mixin = factoryService.mixin(mixinClass, mixee);
-        
+
         if (isWrapper(mixee)) {
             val wrapperObject = (WrappingObject) mixee;
             val executionMode = wrapperObject.__isis_executionModes();
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
-                return mixin;    
+                return mixin;
             }
             val underlyingMixee = wrapperObject.__isis_wrapped();
             return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
         }
-        
+
         return createMixinProxy(mixee, mixin, syncControl);
     }
 
@@ -229,7 +231,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
         return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
     }
-    
+
     protected <T> T createMixinProxy(Object mixee, T mixin, SyncControl syncControl) {
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
@@ -264,7 +266,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
-        
+
         val proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
 
@@ -281,7 +283,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                             domainObject,
                             null, // mixeeAdapter ignored
                             targetAdapter,
-                            control().withNoExecute(), 
+                            control().withNoExecute(),
                             null);
                     doih.invoke(null, method, args);
                 }
@@ -304,15 +306,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T, R> T asyncWrapMixin(
-            final @NonNull Class<T> mixinClass, 
-            final @NonNull Object mixee, 
+            final @NonNull Class<T> mixinClass,
+            final @NonNull Object mixee,
             final @NonNull AsyncControl<R> asyncControl) {
 
         T mixin = factoryService.mixin(mixinClass, mixee);
-        
+
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
-        
+
         val proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixee.getClass()});
 
@@ -329,8 +331,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     val doih = new DomainObjectInvocationHandler<>(
                             mixin,
                             mixeeAdapter,
-                            mixinAdapter, 
-                            control().withNoExecute(), 
+                            mixinAdapter,
+                            control().withNoExecute(),
                             null);
                     doih.invoke(null, method, args);
                 }
@@ -357,7 +359,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionLayer = currentInteractionLayer();
         val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
         val command = interactionContextProvider.get().currentInteractionElseFail().getCommand();
-        val commandUniqueId = command.getUniqueId();
+        val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -370,12 +372,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
             case ACTION:
                 val action = memberAndTarget.getAction();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandUniqueId, targetList, action, argAdapters);
+                        .asCommandDto(commandInteractionId, targetList, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandUniqueId, targetList, property, argAdapters.getElseFail(0));
+                        .asCommandDto(commandInteractionId, targetList, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
@@ -384,15 +386,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val oidDto = commandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
-        asyncControl.setBookmark(Bookmark.from(oidDto));
+        asyncControl.setBookmark(Bookmark.fromOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(
                 new ExecCommand<R>(
-                        asyncAuth, 
-                        commandDto, 
-                        asyncControl.getReturnType(), 
-                        command, 
+                        asyncAuth,
+                        Propagation.REQUIRES_NEW,
+                        commandDto,
+                        asyncControl.getReturnType(),
+                        command,
                         serviceInjector)
         );
 
@@ -402,14 +405,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private MemberAndTarget memberAndTargetForRegular(
-            final Method method, 
+            final Method method,
             final ManagedObject targetAdapter) {
-        
+
         val objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }
-        
+
         if (objectMember instanceof OneToOneAssociation) {
             return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method);
         }
@@ -423,8 +426,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private <T> MemberAndTarget memberAndTargetForMixin(
-            final Method method, 
-            final T mixedIn, 
+            final Method method,
+            final T mixedIn,
             final ManagedObject mixinAdapter) {
 
         val mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
@@ -434,29 +437,28 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // find corresponding action of the mixedIn (this is the 'real' target).
         val mixedInClass = mixedIn.getClass();
-        val mixedInSpec = specificationLoader.loadSpecification(mixedInClass);
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamActions(MixedIn.INCLUDED)
+        final ObjectActionMixedIn targetAction = specificationLoader
+        .specForType(mixedInClass)
+        .flatMap(mixedInSpec->mixedInSpec.streamActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))
-                .findFirst();
+                .findFirst()
+        )
+        .orElseThrow(()->new UnsupportedOperationException(String.format(
+                "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
+                mixinMember.getId(), mixedInClass.getName())));
 
-        if(!targetActionIfAny.isPresent()) {
-            throw new UnsupportedOperationException(String.format(
-                    "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
-                    mixinMember.getId(), mixedInClass.getName()));
-        }
-
-        return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
+        return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixedIn), method);
     }
 
     private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
-    
+
         val executionContext = auth.getExecutionContext();
-        
+
         val newExecutionContext = ExecutionContext.builder()
         .clock(Optional.ofNullable(asyncControl.getClock())
                 .orElseGet(executionContext::getClock))
@@ -467,9 +469,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
         .user(Optional.ofNullable(asyncControl.getUser())
                 .orElseGet(executionContext::getUser))
         .build();
-        
+
         return auth.withExecutionContext(newExecutionContext);
-        
+
     }
 
     @Data
@@ -540,27 +542,27 @@ public class WrapperFactoryDefault implements WrapperFactory {
         }
         dispatcher.dispatch(interactionEvent);
     }
-    
+
     // -- HELPER - CHECK WRAPPING SUPPORTED
-    
+
     private ManagedObject adaptAndGuardAgainstWrappingNotSupported(
             final @NonNull Object domainObject) {
-        
+
         val adapter = currentObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
-            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s", 
+            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
         }
-        
+
         return adapter;
     }
-    
+
     // -- HELPER - SETUP
-    
+
     private <T extends InteractionEvent> void putDispatcher(
             Class<T> type, BiConsumer<InteractionListener, T> onDispatch) {
-    
+
         val dispatcher = new InteractionEventDispatcherTypeSafe<T>() {
             @Override
             public void dispatchTypeSafe(T interactionEvent) {
@@ -569,7 +571,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 }
             }
         };
-        
+
         dispatchersByEventClass.put(type, dispatcher);
     }
 
@@ -585,13 +587,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private static class ExecCommand<R> implements Callable<R> {
 
         private final Authentication authentication;
+        private final Propagation propagation;
         private final CommandDto commandDto;
         private final Class<R> returnType;
         private final Command parentCommand;
         private final ServiceInjector serviceInjector;
 
-        @Inject InteractionFactory isisInteractionFactory;
-        //@Inject TransactionService transactionService;
+        @Inject InteractionFactory interactionFactory;
+        @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionContext> interactionContextProvider;
         @Inject BookmarkService bookmarkService;
@@ -601,23 +604,32 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Override
         public R call() {
             serviceInjector.injectServicesInto(this);
-
-            return isisInteractionFactory.callAuthenticated(authentication, () -> {
-                val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
-                childCommand.updater().setParent(parentCommand);
-                //return transactionService.callWithinCurrentTransactionElseCreateNew(() -> {
-                        val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
-                        if (bookmark == null) {
-                            return null;
-                        }
-                        R entity = bookmarkService.lookup(bookmark, returnType);
-                        if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
-                            entity = repositoryService.detach(entity);
-                        }
-                        return entity;
-//                    })
-//                        .nullableOrElseFail();
-            });
+            return interactionFactory.callAuthenticated(authentication, this::updateDomainObjectHonoringTransactionalPropagation);
         }
+        
+        private R updateDomainObjectHonoringTransactionalPropagation() {
+            return transactionService.callTransactional(propagation, this::updateDomainObject)
+                    .optionalElseFail()
+                    .orElse(null);            
+        }
+        
+        private R updateDomainObject() {
+            
+            val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+            childCommand.updater().setParent(parentCommand);
+            
+            val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
+            if (bookmark == null) {
+                return null;
+            }
+            R domainObject = bookmarkService.lookup(bookmark, returnType).orElse(null);
+            if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
+                domainObject = repositoryService.detach(domainObject);
+            }
+            return domainObject;
+                        
+        }
+        
+        
     }
 }

@@ -1,0 +1,282 @@
+[[object-layout]]
+= Object Layout
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+As with menubars, although the layout of objects can be specified using just annotations, in real-world applications you will almost certainly use a companion layout file, `Xxx.layout.xml` (where `Xxx` is the entity or view model to be rendered).
+
+File-based layouts offer a number of benefits:
+
+* Probably most significantly, the layout can be updated without requiring a recompile of the code and redeploy of the app; fine-tuning the layout with your end users is easy to do
+
+* Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+
+* UI hints can be provided for xref:userguide:fun:mixins.adoc[mixin] contributions that are synthesised at runtime.
+
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService] (exposed on the prototyping menu) or using a xref:refguide:applib-classes:mixins.adoc#java-lang-object[mixin action] contributed to every domain object.
+
+There are some downsides, though:
+
+* file-based layouts are not typesafe: a typo will result in the metadata not being picked up for the element.
+
+* they suffer from syntactic fragility: an invalid XML document could result in no metadata for the entire class.
+
+* there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
+
+The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-classes:layout/object-layout.adoc[Grid] layout class defined within Apache Isis' applib.
+These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
+
+== Grids vs Components
+
+The layout file distinguishes between two types of element:
+
+* those that define a grid structure, of: rows, columns, tab groups and tabs.
++
+The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]).
+
+* those that define common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
+
+More information about these classes can be found in xref:refguide:applib-classes:layout/object-layout.adoc[the reference guide].
+More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
+
+== By Example
+
+Probably the easiest way to understand dynamic XML layouts is by example, in this case of a "todo item":
+
+image::layout-dynamic-xml/ToDoItem.png[width="940px"]
+
+=== Namespaces
+
+Every `.layout.xml` file must properly declare the XSD namespaces and schemas.
+There are two: one for the grid classes, and one for the common component classes:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<bs3:grid
+  xsi:schemaLocation="http://isis.apache.org/applib/layout/component
+                      http://isis.apache.org/applib/layout/component/component.xsd
+                      http://isis.apache.org/applib/layout/grid/bootstrap3
+                      http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+  xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+  xmlns:c="http://isis.apache.org/applib/layout/component"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</bs3:grid>
+----
+
+Most IDEs will automatically download the XSD schemas from the specified schema locations, thereby providing "intellisense" help as you edit the file.
+
+=== Rows, full-width cols, and tabs
+
+The example layout consists of three rows: a row for the object/icon, a row containing a properties, and a row containing collections.
+In all three cases the row contains a single column spanning the full width of the page.
+For the property and collection rows, the column contains a tab group.
+
+This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:row>
+    <bs3:col span="12" unreferencedActions="true">
+        <c:domainObject bookmarking="AS_ROOT"/>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup>
+            <bs3:tab name="Properties">...</bs3:tab>
+            <bs3:tab name="Other">...</bs3:tab>
+            <bs3:tab name="Metadata">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup unreferencedCollections="true">
+            <bs3:tab name="Similar to">...</bs3:tab>
+            <bs3:tab name="Dependencies">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
+----
+
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
+This topic is discussed in more detail xref:#unreferenced-members[below].
+
+=== Fieldsets
+
+The first tab containing properties is divided into two columns, each of which holds a single fieldset of multiple properties.
+Those properties in turn can have associated actions.
+
+This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:tab name="Properties">
+    <bs3:row>
+        <bs3:col span="6">
+            <c:fieldSet name="General" id="general" unreferencedProperties="true">
+                <c:action id="duplicate" position="PANEL_DROPDOWN"/>
+                <c:action id="delete"/>
+                <c:property id="description"/>
+                <c:property id="category"/>
+                <c:property id="subcategory">
+                    <c:action id="updateCategory"/>
+                    <c:action id="analyseCategory" position="RIGHT"/>
+                </c:property>
+                <c:property id="complete">
+                    <c:action id="completed" cssClassFa="fa-thumbs-up"/>
+                    <c:action id="notYetCompleted" cssClassFa="fa-thumbs-down"/>
+                </c:property>
+            </c:fieldSet>
+        </bs3:col>
+        <bs3:col span="6">
+            ...
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+----
+
+The tab defines two columns, each span of 6 (meaning half the width of the page).
+
+In the first column there is a single fieldset.
+Notice how actions - such as `duplicate` and `delete` - can be associated with this fieldset directly, meaning that they should be rendered on the fieldset's top panel.
+
+Thereafter the fieldset lists the properties in order.
+Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
+
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:#unreferenced-members[below].
+
+
+[NOTE]
+====
+The ``<fieldset>``'s "name" attribute is optional.
+If omitted, then the title panel is suppressed, freeing more real estate.
+
+Do be aware though that if there are any actions that have been placed on the fieldset's panel, then these _will *not* be displayed_.
+====
+
+=== Collections
+
+In the final row the collections are placed in tabs, simply one collection per tab.
+This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:tab name="Similar to">
+    <bs3:row>
+        <bs3:col span="12">
+            <c:collection defaultView="table" id="similarTo"/>
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+<bs3:tab name="Dependencies">
+    <bs3:row>
+        <bs3:col span="12">
+            <c:collection defaultView="table" id="dependencies">
+                <c:action id="add"/>
+                <c:action id="remove"/>
+            </c:collection>
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+----
+
+As with properties, actions can be associated with collections; this indicates that they should be rendered in the collection's header.
+
+[#unreferenced-members]
+== Unreferenced Members
+
+As noted in the preceding discussion, several of the grid's regions have either an ``unreferencedActions``, ``unreferencedCollections`` or ``unreferencedProperties`` attribute.
+
+The rules are:
+
+* `unreferencedActions` attribute can be specified either on a column or on a fieldset.
++
+It would normally be typical to use the column holding the `<domainObject/>` icon/title, that is as shown in the example.
+The unreferenced actions then appear as top-level actions for the domain object.
+
+* `unreferencedCollections` attribute can be specified either on a column or on a tabgroup.
++
+If specified on a column, then that column will contain each of the unreferenced collections, stacked one on top of the other.
+If specified on a tab group, then a separate tab will be created for each collection, with that tab containing only that single collection.
+
+* `unreferencedProperties` attribute can be specified only on a fieldset.
+
+The purpose of these attributes is to indicate where in the layout any unreferenced members should be rendered.
+Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object members inferred from the Java source code.
+This might be because the developer forgot to update the layout, or it might be because of a new mixin (property, collection or action) contributed to many objects.
+
+The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.
+If the grid fails this validation, then a warning message will be displayed, and the invalid XML logged.
+The layout XML will then be ignored.
+
+== Combining with Annotations
+
+Rather than specify every UI semantic in the layout file, you can optionally combine with a number of annotations.
+The idea is that the layout.xml is used primarily for the coarse-grained grid layout, with annotations used for the stuff that changes less often, such as associating actions with properties or collections, or the order of properties or actions within a fieldset.
+
+The annotations most relevant here is xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder]:
+
+* for properties:
+
+** `@PropertyLayout#fieldSetId()` and `@PropertyLayout#fieldSetName()` can be used to associate a property with a fieldset.
++
+With this approach all of the fieldsets in the `layout.xml` file are left empty.
+The properties "slot into" the relevant field set to associate  = "...", sequence = "...")`.
+
+** `@PropertyLayout#sequence()` specifies the order of properties within their fieldset
+
+* for actions:
+
+** `@Action#associateWith()` is used to associate an action with a property.
+
+** `@ActionLayout#sequence()` specifies the order of actions (if there are multiple actions for a property)
+
+There are a number of other "layout" annotations, specifically xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout], xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] and xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout].
+All of the semantics in these layout annotations can also be specified in the `.layout.xml` files; which is used is a matter of taste.
+
+In addition, xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] provides layout hints for action parameters.
+There is no way to specify these semantics in the `.layout.xml` file (action parameters are not enumerated in the file).
+
+=== Layout file styles
+
+NOTE: TODO v2 - Style has been changed (WIP)
+
+If you want to make your usage of layout files consistent, then the framework can help because it allows the layout XML files to be downloaded using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService].
+This is exposed on the prototyping menu to allow you to download a ZIP file of layout XML files for all domain entities and view models.
+
+When downloading the layout files, there are four "styles" available:
+
+* current
+* complete
+* normalized
+* minimal
+
+Ignoring the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained from annotations in the metamodel.
+
+As a developer, you can therefore select the layout file which maps to your preferred usage:
+
+* if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
+You can then remove all `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
+
+* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.
+You can then remove the `@MemberOrder` and `@Action#associateWith` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
+
+* if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
+The grid regions will be empty in this version, and the framework will use the `@MemberOrder` and `@Action#associateWith` annotations to bind object members to those regions.
+
+If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-classes:mixins.adoc#[mixin action] (contributed to every domain object).
+

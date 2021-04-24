@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.objectmanager.identify;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
@@ -32,11 +32,11 @@ import lombok.val;
  */
 public interface ObjectIdentifier {
 
-    RootOid identifyObject(ManagedObject managedObject);
+    Oid identifyObject(ManagedObject managedObject);
 
     // -- HANDLER
     
-    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, RootOid> {}
+    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Oid> {}
 
     // -- FACTORY
     

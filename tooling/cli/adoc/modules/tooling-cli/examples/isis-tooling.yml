@@ -21,78 +21,74 @@ global:
   namespacePartsSkipCount: 3
 
   sections:
-#    App: org.apache.isis.app.*
-#    Mavendeps: org.apache.isis.mavendeps.*
-#    Testing: org.apache.isis.testing.*
-#    Examples: org.apache.isis.examples.*
-#
-#    Root: org.apache.isis
-#    Commons: org.apache.isis.commons.*
+    App: org.apache.isis.app.*
+    Mavendeps: org.apache.isis.mavendeps.*
+    Testing: org.apache.isis.testing.*
+    Examples: org.apache.isis.examples.*
+
+    Root: org.apache.isis
+    Commons: org.apache.isis.commons.*
 
     Core: org.apache.isis.core.*
 
-#    Persistence: org.apache.isis.persistence
-#    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
-#    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
-#
-#    Security: org.apache.isis.security
-#    Bypass: "org.apache.isis.security:isis-security-bypass.*"
-#    Keycloak: "org.apache.isis.security:isis-security-keycloak.*"
-#    Shiro: "org.apache.isis.security:isis-security-shiro.*"
-#
-#    Viewer: org.apache.isis.viewer
-#    "Restful Objects": "org.apache.isis.viewer:isis-viewer-restfulobjects.*"
-#    Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
-#
-#    Valuetypes: org.apache.isis.valuetypes.*
-#    "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
-#    "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
-#    "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
-#
-#    Mappings: org.apache.isis.mappings
-#    #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
-#    "JAX-RS Client Library": "org.apache.isis.mappings:isis-mappings-jaxrsclient.*"
-#    #Minio: "org.apache.isis.mappings:isis-mappings-minio.*"
-#    "REST Client": "org.apache.isis.mappings:isis-mappings-restclient.*"
-#    #"Slack Library": "org.apache.isis.mappings:isis-mappings-slack.*"
-#
-#    Extensions: org.apache.isis.extensions
-#    "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
-#    "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
-#    #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
-#    "Core: Model Annotation": "org.apache.isis.extensions:isis-extensions-modelannotation.*"
-#    "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
-#    #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"
-#    "Security: Secman": "org.apache.isis.security:isis-extensions-secman.*"
-#    #"Security: Session Log": "org.apache.isis.security:isis-extensions-session-log.*"
-#    "Security: Shiro LDAP Realm": "org.apache.isis.security:isis-extensions-shiro-realm-ldap.*"
-#    "RO Viewer: CORS": "org.apache.isis.security:isis-extensions-cors.*"
-#    "Wicket Viewer: Excel Download": "org.apache.isis.security:isis-extensions-exceldownload.*"
-#    "Wicket Viewer: Full Calendar": "org.apache.isis.security:isis-extensions-fullcalendar.*"
-#    #"Wicket Viewer: Gmap3": "org.apache.isis.security:isis-extensions-gmap3.*"
-#    "Wicket Viewer: Pdf.js": "org.apache.isis.security:isis-extensions-fullcalendar.*"
-#
-#    Subdomains: org.apache.isis.subdomains
-#    "Base": "org.apache.isis.subdomains:isis-subdomains-base.*"
-#    #"docx": "org.apache.isis.subdomains:isis-subdomains-docx.*"
-#    "Excel": "org.apache.isis.subdomains:isis-subdomains-excel.*"
-#    #"Freemarker": "org.apache.isis.subdomains:isis-subdomains-freemarker.*"
-#    #"OGNL": "org.apache.isis.subdomains:isis-subdomains-ognl.*"
-#    #"PDF Box": "org.apache.isis.subdomains:isis-subdomains-pdfbox.*"
-#    "Spring": "org.apache.isis.subdomains:isis-subdomains-spring.*"
-#    "XDocReport": "org.apache.isis.subdomains:isis-subdomains-xdocreport.*"
-#    #"Zip": "org.apache.isis.subdomains:isis-subdomains-zip.*"
-#
-#    "Tooling": org.apache.isis.tooling.*
-#    "Regression Tests": org.apache.isis.regressiontests.*
-#
-#    Incubator: org.apache.isis.incubator
-#    "Kroviz Client": "org.apache.isis.incubator.clients:isis-client-kroviz.*"
-#    "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
-#    "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
-#
-#    Legacy: org.apache.isis.legacy.*
+    Persistence: org.apache.isis.persistence
+    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
+    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
 
+    Security: org.apache.isis.security
+    Bypass: "org.apache.isis.security:isis-security-bypass.*"
+    Keycloak: "org.apache.isis.security:isis-security-keycloak.*"
+    Shiro: "org.apache.isis.security:isis-security-shiro.*"
+
+    Viewer: org.apache.isis.viewer
+    "Restful Objects": "org.apache.isis.viewer:isis-viewer-restfulobjects.*"
+    Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
+
+    Valuetypes: org.apache.isis.valuetypes.*
+    "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
+    "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
+    "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
+
+    Mappings: org.apache.isis.mappings
+    #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
+    "JAX-RS Client Library": "org.apache.isis.mappings:isis-mappings-jaxrsclient.*"
+    #Minio: "org.apache.isis.mappings:isis-mappings-minio.*"
+    "REST Client": "org.apache.isis.mappings:isis-mappings-restclient.*"
+    #"Slack Library": "org.apache.isis.mappings:isis-mappings-slack.*"
+
+    Extensions: org.apache.isis.extensions
+    "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
+    "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
+    #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
+    "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
+    #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"
+    "Security: Secman": "org.apache.isis.security:isis-extensions-secman.*"
+    #"Security: Session Log": "org.apache.isis.security:isis-extensions-session-log.*"
+    "Security: Shiro LDAP Realm": "org.apache.isis.security:isis-extensions-shiro-realm-ldap.*"
+    "RO Viewer: CORS": "org.apache.isis.security:isis-extensions-cors.*"
+    "Wicket Viewer: Excel Download": "org.apache.isis.security:isis-extensions-exceldownload.*"
+    "Wicket Viewer: Full Calendar": "org.apache.isis.security:isis-extensions-fullcalendar.*"
+    #"Wicket Viewer: Gmap3": "org.apache.isis.security:isis-extensions-gmap3.*"
+    "Wicket Viewer: Pdf.js": "org.apache.isis.security:isis-extensions-fullcalendar.*"
+
+    Subdomains: org.apache.isis.subdomains
+    "Base": "org.apache.isis.subdomains:isis-subdomains-base.*"
+    #"docx": "org.apache.isis.subdomains:isis-subdomains-docx.*"
+    "Excel": "org.apache.isis.subdomains:isis-subdomains-excel.*"
+    #"Freemarker": "org.apache.isis.subdomains:isis-subdomains-freemarker.*"
+    #"OGNL": "org.apache.isis.subdomains:isis-subdomains-ognl.*"
+    #"PDF Box": "org.apache.isis.subdomains:isis-subdomains-pdfbox.*"
+    "Spring": "org.apache.isis.subdomains:isis-subdomains-spring.*"
+    "XDocReport": "org.apache.isis.subdomains:isis-subdomains-xdocreport.*"
+    #"Zip": "org.apache.isis.subdomains:isis-subdomains-zip.*"
+
+    "Tooling": org.apache.isis.tooling.*
+    "Regression Tests": org.apache.isis.regressiontests.*
+
+    Incubator: org.apache.isis.incubator
+    "Kroviz Client": "org.apache.isis.incubator.clients:isis-client-kroviz.*"
+    "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
+    "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
 
 commands:
   overview:
@@ -100,6 +96,6 @@ commands:
 
   index:
     fixOrphanedAdocIncludeStatements: false
-    skipTitleHeader: true
+    skipTitleHeader: false
     formatter: JAVA_SOURCES_WITH_SECTIONS
 

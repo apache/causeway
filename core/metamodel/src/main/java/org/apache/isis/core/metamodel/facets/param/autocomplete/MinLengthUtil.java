@@ -23,29 +23,28 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.MinLength;
 
-public final class MinLengthUtil {
+import lombok.val;
 
-    private MinLengthUtil(){}
+public final class MinLengthUtil {
 
     /**
      * Finds the value of the minimum length, from the {@link MinLength} annotation
-     * on the first parameter of the supplied method.
+     * on the last parameter of the supplied method.
      */
     public static int determineMinLength(final Method method) {
-        if(method == null) {
+        if(method == null
+                || method.getParameterCount()==0) {
             return MIN_LENGTH_DEFAULT;
         }
 
-        final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-        if(parameterAnnotations.length == 1) {
-            final Annotation[] searchArgAnnotations = parameterAnnotations[0];
-            for(Annotation annotation: searchArgAnnotations) {
-                if(annotation instanceof MinLength) {
-                    MinLength minLength = (MinLength) annotation;
-                    return minLength.value();
-                }
+        val lastParam = method.getParameters()[method.getParameterCount()-1]; 
+            
+        for(Annotation annotation: lastParam.getAnnotations()) {
+            if(annotation instanceof MinLength) {
+                return ((MinLength) annotation).value();
             }
         }
+        
         return MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 

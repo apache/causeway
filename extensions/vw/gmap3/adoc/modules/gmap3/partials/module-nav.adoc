@@ -1,3 +1,3 @@
 
-** xref:gmap3:about.adoc[GMap3]
+** xref:vw:gmap3:about.adoc[GMap3]
 
