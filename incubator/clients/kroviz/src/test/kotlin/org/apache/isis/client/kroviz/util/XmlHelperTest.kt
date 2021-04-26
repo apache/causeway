@@ -30,10 +30,10 @@ class XmlHelperTest {
         //given
         val xmlStr = TAB_LAYOUT_XML.str
         //when
-        val jsonStr = XmlHelper.xml2json(xmlStr)
+        val jsonStr = XmlHelper.xml2json(xmlStr).trim()
         // then
-        assertEquals("{", jsonStr.first())
-        assertEquals("}", jsonStr.last())
+        assertEquals('{', jsonStr.first())
+        assertEquals('}', jsonStr.last())
     }
 
 
