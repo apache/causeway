@@ -389,7 +389,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
     private void addValidators() {
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
-        addValidator(new TitlesAndTranslationsValidator());
+        addValidator(new TitlesAndTranslationsValidator());  // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
         addValidator(new ActionOverloadingValidator());
     }
