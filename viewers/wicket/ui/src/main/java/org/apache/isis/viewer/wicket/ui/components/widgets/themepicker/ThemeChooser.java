@@ -47,8 +47,6 @@ import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-// import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
-// import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin

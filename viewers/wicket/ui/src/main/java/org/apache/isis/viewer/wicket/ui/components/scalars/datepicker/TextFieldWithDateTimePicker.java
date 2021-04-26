@@ -91,11 +91,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         config.minDate(datePickerMinDate);
         config.maxDate(datePickerMaxDate);
-        
-        boolean enabled = this.isEnabled();
-        
-        // config.keepOpen(true);
-        config.readonly(! enabled);
+        config.readonly(!this.isEnabled());
         
         this.config = config;
     }
