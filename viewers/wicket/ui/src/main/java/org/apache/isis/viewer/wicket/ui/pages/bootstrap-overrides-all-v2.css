@@ -1195,6 +1195,11 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 	font-size: 1.5em;
 }
 
-@media all and (min-width: 992px) {
+/* footer padding fix */
+footer > .navbar {
+    padding: 0.5rem 1rem;
+}
+
+@media all and (min-width: 750px) {
 	.navbar .nav-item .dropdown-menu{ margin-top:0; margin-bottom:0; }
 }
