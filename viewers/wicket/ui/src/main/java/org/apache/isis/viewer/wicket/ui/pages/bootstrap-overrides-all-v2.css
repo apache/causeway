@@ -556,6 +556,13 @@ div.additionalLinkList {
 
 }
 
+/* dropdown-menu: distinguished rendering for disabled menu-items
+   (assuming grey foreground text color is reasonable to apply to light as well as dark themes) */
+.dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
+    color: #b4bcc2;
+    cursor: not-allowed;
+}
+
 /* removes the caret (arrow down) from the additional links selector dropdowns */
 .additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
 	content: none;
