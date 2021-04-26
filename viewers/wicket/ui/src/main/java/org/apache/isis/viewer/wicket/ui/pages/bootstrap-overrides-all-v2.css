@@ -558,9 +558,20 @@ div.additionalLinkList {
 
 /* dropdown-menu: distinguished rendering for disabled menu-items
    (assuming grey foreground text color is reasonable to apply to light as well as dark themes) */
-.dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
+.dropdown-menu > .disabled > a, 
+.dropdown-menu > .disabled > a:hover, 
+.dropdown-menu > .disabled > a:focus {
     color: #b4bcc2;
     cursor: not-allowed;
+}
+
+/* menu-bar: distinguished rendering for selected menu items
+   (assuming white-ish background overlay color is reasonable to apply to light as well as dark themes) */
+.navbar-nav .active > .nav-link, 
+.navbar-nav .nav-link.active, 
+.navbar-nav .nav-link.show, 
+.navbar-nav .show > .nav-link {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
