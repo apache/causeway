@@ -16,23 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core.aggregator
+package org.apache.isis.client.kroviz.util
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.kv.MapPanel
-import org.apache.isis.client.kroviz.utils.DomUtil
-import org.apache.isis.client.kroviz.utils.UUID
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.TAB_LAYOUT_XML
+import org.apache.isis.client.kroviz.utils.XmlHelper
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class SvgDispatcher(val callBack: Any) : BaseAggregator() {
+class XmlHelperTest {
 
-    override fun update(logEntry: LogEntry, subType: String) {
-        val response = logEntry.response
-        when (callBack) {
-            is UUID -> DomUtil.appendTo(callBack, response)
-            is MapPanel -> callBack.renderSvg(response)
-            else -> {
-            }
-        }
+    @Test
+    fun testXml2Json() {
+        //given
+        val xmlStr = TAB_LAYOUT_XML.str
+        //when
+        val jsonStr = XmlHelper.xml2json(xmlStr)
+        // then
+        assertEquals("{", jsonStr.first())
+        assertEquals("}", jsonStr.last())
     }
+
 
 }

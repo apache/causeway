@@ -35,7 +35,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         var responseStr = logEntry.response
         if (logEntry.subType == Constants.subTypeJson) {
             responseStr = Utils.format(responseStr)
-        }   else {
+        } else {
             responseStr = XmlHelper.formatXml(responseStr)
         }
         formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
@@ -56,11 +56,16 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
 
 
     override fun execute() {
-        if (logEntry.subType != Constants.subTypeXml) {
-            val responseStr = logEntry.response
-            val pumlCode = PumlBuilder().asJsonDiagram(responseStr)
-            DiagramDialog("Json Diagram", pumlCode).open()
+        val str = logEntry.response
+        val json = when {
+            str.startsWith("<") -> {
+                XmlHelper.xml2json(str)
+            }
+            str.startsWith("{") -> str
+            else -> "{}"
         }
+        val pumlCode = PumlBuilder().asJsonDiagram(json)
+        DiagramDialog("Response Diagram", pumlCode).open()
     }
 
     fun executeConsole() {

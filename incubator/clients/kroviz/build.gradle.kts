@@ -88,6 +88,7 @@ kotlin {
         implementation("io.kvision:kvision-pace:$kvisionVersion")
         implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
+        implementation(npm("xmltojson", "1.3.5", false))
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))

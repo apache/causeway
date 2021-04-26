@@ -16,23 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core.aggregator
+package org.apache.isis.client.kroviz.utils
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.kv.MapPanel
-import org.apache.isis.client.kroviz.utils.DomUtil
-import org.apache.isis.client.kroviz.utils.UUID
+import org.w3c.dom.Document
 
-class SvgDispatcher(val callBack: Any) : BaseAggregator() {
-
-    override fun update(logEntry: LogEntry, subType: String) {
-        val response = logEntry.response
-        when (callBack) {
-            is UUID -> DomUtil.appendTo(callBack, response)
-            is MapPanel -> callBack.renderSvg(response)
-            else -> {
-            }
-        }
-    }
-
+@JsModule("xmltojson")
+@JsNonModule
+external object XmlToJson {
+    fun parseString(xml: String): String
 }

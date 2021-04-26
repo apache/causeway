@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
@@ -25,8 +26,8 @@ import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.*
 
 class DiagramDialog(
-    var label: String,
-    private var pumlCode: String
+        var label: String,
+        private var pumlCode: String
 ) : Command() {
 
     private var callBack: Any = UUID()
@@ -35,8 +36,6 @@ class DiagramDialog(
 
     fun open() {
         dialog.open()
-        console.log("[DiagramDialog.open]")
-        console.log(pumlCode)
         UmlUtils.generateJsonDiagram(pumlCode, callBack)
     }
 
@@ -45,40 +44,47 @@ class DiagramDialog(
         formItems.add(fi)
 
         dialog = RoDialog(
-            widthPerc = 80,
-            caption = "Diagram",
-            items = formItems,
-            command = this,
-            defaultAction = "Pin"
+                widthPerc = 80,
+                caption = "Diagram",
+                items = formItems,
+                command = this,
+                defaultAction = "Pin"
         )
     }
 
     override fun execute() {
-        val newFormItems = mutableListOf<FormItem>()
-        val newCallBack = UUID()
-        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = newCallBack)
-        newFormItems.add(newFi)
-        val panel = FormPanelFactory(newFormItems)
-        UiManager.add("Diagram", panel)
-        // Timing critical: Panel has to be added first, then extract from old location.
-        val uuid = callBack as UUID
-        val oldElement = DomUtil.getById(uuid.value)!!
-        val oldStr = oldElement.innerHTML
-        val newImage = ScalableVectorGraphic(oldStr)
+        val newImage = getDiagram()
+        val newCallBack = buildNewPanel()
         DomUtil.replaceWith(newCallBack, newImage)
+    }
+
+    private fun getDiagram(): ScalableVectorGraphic {
+        val logEntry = EventStore.findBy(callBack as UUID)
+        val svgStr = logEntry.getResponse()
+        console.log("[DiagramDialog.execute]")
+        console.log(svgStr)
+        return ScalableVectorGraphic(svgStr)
+    }
+
+    private fun buildNewPanel() : UUID {
+        val newUuid = UUID()
+        val formItems = mutableListOf<FormItem>()
+        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = newUuid)
+        formItems.add(newFi)
+        val panel = FormPanelFactory(formItems)
+        console.log(panel)
+        UiManager.add("Diagram", panel)
+        return newUuid
     }
 
     @Deprecated("use leaflet/svg")
     fun scale(direction: Direction) {
-        val uuid = callBack as UUID
-        val oldElement = DomUtil.getById(uuid.value)!!
-        val oldStr = oldElement.innerHTML
-        val newImage = ScalableVectorGraphic(oldStr)
+        val svg = getDiagram()
         when (direction) {
-            Direction.UP -> newImage.scaleUp()
-            Direction.DOWN -> newImage.scaleDown()
+            Direction.UP -> svg.scaleUp()
+            Direction.DOWN -> svg.scaleDown()
         }
-        DomUtil.replaceWith(uuid, newImage)
+        DomUtil.replaceWith(callBack as UUID, svg)
     }
 
 }

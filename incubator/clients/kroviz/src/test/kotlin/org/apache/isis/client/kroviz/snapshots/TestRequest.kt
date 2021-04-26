@@ -2,7 +2,6 @@ package org.apache.isis.client.kroviz.snapshots
 
 import kotlinx.browser.window
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.asDeferred
 import kotlinx.coroutines.await
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.to.Link

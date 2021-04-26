@@ -36,7 +36,6 @@ import io.kvision.form.time.dateTime
 import io.kvision.html.Div
 import io.kvision.html.Iframe
 import io.kvision.html.Image
-import io.kvision.html.image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto

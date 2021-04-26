@@ -24,6 +24,8 @@ import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * Keeps a log of remote invocations and the responses.
@@ -124,6 +126,11 @@ object EventStore {
 
     fun findBy(aggregator: BaseAggregator): LogEntry? {
         return log.firstOrNull { it.getAggregator() == aggregator }
+    }
+
+    fun findBy(uuid: UUID): LogEntry {
+        return log.first { it.getAggregator() is SvgDispatcher
+                && (it.getAggregator() as SvgDispatcher).callBack == uuid }
     }
 
     fun findMenuBars(): LogEntry? {

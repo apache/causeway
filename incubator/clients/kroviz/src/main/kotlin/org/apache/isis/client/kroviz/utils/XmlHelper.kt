@@ -69,7 +69,16 @@ object XmlHelper {
             formatted += padding + node + "\r\n"
             pad += indent
         }
-        return formatted.substring(1, formatted.length - 3);
+        return formatted.substring(0, formatted.length - 2);
+    }
+
+    fun xml2json(xml: String): String {
+        console.log("[XmlHelper.xml2json]")
+        val json = XmlToJson.parseString(xml)
+        console.log(json)
+        val jsonStr = JSON.stringify(json)
+        console.log(jsonStr)
+        return jsonStr
     }
 
 }

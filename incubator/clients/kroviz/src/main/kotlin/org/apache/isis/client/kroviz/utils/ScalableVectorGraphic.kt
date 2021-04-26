@@ -20,14 +20,19 @@ package org.apache.isis.client.kroviz.utils
 
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.w3c.dom.Document
+import org.w3c.dom.Image
 import org.w3c.dom.parsing.DOMParser
 import org.w3c.dom.svg.SVGSVGElement
+import org.w3c.dom.url.URL
+import org.w3c.files.Blob
+import org.w3c.files.BlobPropertyBag
 
 enum class Direction(val id: String) {
     UP("UP"),
     DOWN("DOWN")
 }
 
+// see: https://vecta.io/blog/best-way-to-embed-svg
 class ScalableVectorGraphic(val data: String) {
 
     var document: Document = DOMParser().parseFromString(data, Constants.svgMimeType)
@@ -84,5 +89,15 @@ class ScalableVectorGraphic(val data: String) {
     }
 
     class ViewBox(val x: Int, val y: Int, var width: Int, var height: Int)
+
+    fun asImage(): Image {
+        val byteArray = data.encodeToByteArray().asDynamic()
+        val options = BlobPropertyBag("image/svg+xml;charset=utf-8")
+        val svgBlob = Blob(byteArray, options)
+        val objectURL = URL.createObjectURL(svgBlob)
+        val image = Image()
+        image.src = objectURL
+        return image
+    }
 
 }
