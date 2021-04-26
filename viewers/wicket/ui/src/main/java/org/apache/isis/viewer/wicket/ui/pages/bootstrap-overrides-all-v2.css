@@ -25,7 +25,7 @@
 }
 
 #body {
-    padding-top: 61px;
+    padding-top: 0px;
 }
 
 body {
@@ -1204,6 +1204,11 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 /* footer padding fix */
 footer > .navbar {
     padding: 0.5rem 1rem;
+}
+
+/* header to body offset fix, so we don't need a #body{ padding-top: 61px; } */
+header > .fixed-top {
+	position: static;	
 }
 
 /*
