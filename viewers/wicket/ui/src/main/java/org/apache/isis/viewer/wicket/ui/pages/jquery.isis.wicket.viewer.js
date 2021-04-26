@@ -197,6 +197,7 @@ $(function() {
 
     /*
     Adapted from https://bootstrap-menu.com/detail-basic-hover.html
+    Ignoring mouseleave events if hovering over a popover that belongs to a menuitem.
     The magic number in the window width predicate corresponds to the nav-bar collaps behavior 
     as used in Footer/HeaderPanel.html templates; see Bootstrap 4 ref. ...
         navbar-expand = never collapses vertically (remains horizontal)
@@ -206,22 +207,43 @@ $(function() {
         navbar-expand-xl = collapses below xl widths <1200px
 	*/
 	document.querySelectorAll('.navbar .nav-item, div.additionalLinkList').forEach(function(everyitem){	
+		
 		everyitem.addEventListener('mouseover', function(e){
 			if(window.innerWidth<576){
 				return; // when collapsed is a no-op
 			}
-			this.querySelectorAll('a[data-toggle]', 'button[data-toggle]').forEach(function(el_link){
+			this.querySelectorAll('a[data-toggle], button[data-toggle]').forEach(function(el_link){
 				let nextEl = el_link.nextElementSibling;
 				el_link.classList.add('show');
 				nextEl.classList.add('show');
 			})
 		});
 
+		everyitem.addEventListener('mouseleave', function(e){
+			if(window.innerWidth<576){
+				return; // when collapsed is a no-op
+			}
+			// do not hide the dropdown if hovering over a popover (tooltip) attached to the dropdown item
+			// The MouseEvent.relatedTarget read-only property is the secondary target for the mouse event, 
+			// if there is one: That is, the EventTarget the pointing device entered to.
+			let relatedTarget = $(e.relatedTarget);
+			if(relatedTarget.hasClass('popover')
+					|| relatedTarget.hasClass('popover-body') // not strictly required, just an optimization
+					|| relatedTarget.parents('.popover').length>0) {
+				e.preventDefault();
+				return;
+			}
+			this.querySelectorAll('a[data-toggle], button[data-toggle]').forEach(function(el_link){
+				let nextEl = el_link.nextElementSibling;
+				el_link.classList.remove('show');
+				nextEl.classList.remove('show');
+			})
+		});
 	});	
 	
 
 });
-remove 
+
 /**
  * enables 'maxlength' to work as an attribute on 'textarea'
  * 
