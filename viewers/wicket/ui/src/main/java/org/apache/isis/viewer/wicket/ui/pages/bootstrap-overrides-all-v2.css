@@ -583,6 +583,12 @@ div.additionalLinkList {
     box-shadow: none;
 }
 
+/* make sure there is no gap between the menu toggle and its menu, otherwise menu hides on focus transition*/
+ul.dropdown-menu {
+	padding-top: 0;
+	margin-top: 0;
+}
+
 /* removes the caret (arrow down) from the additional links selector dropdowns */
 .additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
 	content: none;
@@ -1200,6 +1206,7 @@ footer > .navbar {
     padding: 0.5rem 1rem;
 }
 
+/*
 @media all and (min-width: 750px) {
 	.navbar .nav-item .dropdown-menu{ margin-top:0; margin-bottom:0; }
-}
+}*/
