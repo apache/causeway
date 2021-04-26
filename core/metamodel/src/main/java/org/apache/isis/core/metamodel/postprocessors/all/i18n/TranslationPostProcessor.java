@@ -16,60 +16,70 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.all.i18n;
+package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class TranslationFacetFactory
-extends FacetFactoryAbstract {
+public class TranslationPostProcessor
+extends ObjectSpecificationPostProcessorAbstract {
 
-    public TranslationFacetFactory() {
-        super(FeatureType.EVERYTHING);
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification) {
+        addFacetsFor(objectSpecification);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        val facetHolder = processClassContext.getFacetHolder();
-        if(facetHolder instanceof IdentifiedHolder) {
-            val identifiedHolder = (IdentifiedHolder) facetHolder;
-            val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
-            translateName(identifiedHolder, translationContext);
-            translateDescription(identifiedHolder, translationContext);
-        }
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+        addFacetsFor(act);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        val identifiedHolder = processMethodContext.getFacetHolder();
-
-        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
-        translateName(identifiedHolder, translationContext);
-        translateDescription(identifiedHolder, translationContext);
+    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+        addFacetsFor(param);
     }
 
     @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-        val identifiedHolder = processParameterContext.getFacetHolder();
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+        addFacetsFor(prop);
+    }
 
-        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
-        translateName(identifiedHolder, translationContext);
-        translateDescription(identifiedHolder, translationContext);
+    @Override
+    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+        addFacetsFor(coll);
+
     }
 
     // -- HELPER
 
-    void translateName(final IdentifiedHolder facetHolder, final TranslationContext translationContext) {
-        final NamedFacet facet = facetHolder.getFacet(NamedFacet.class);
+    private void addFacetsFor(final IdentifiedHolder identifiedHolder) {
+        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
+        translateName(identifiedHolder, translationContext);
+        translateDescription(identifiedHolder, translationContext);
+    }
+
+    void translateName(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
+        final NamedFacet facet = identifiedHolder.getFacet(NamedFacet.class);
         if(facet == null) {
             // not expected...
             return;
@@ -80,17 +90,15 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val translationService = getTranslationService();
-        val namedFacetTranslated 
-            = new NamedFacetTranslated(translationContext, originalText, translationService, facetHolder);
+        val namedFacetTranslated
+            = new NamedFacetTranslated(translationContext, originalText, translationService, identifiedHolder);
         namedFacetTranslated.setUnderlyingFacet(facet);
-        super.addFacet(namedFacetTranslated);
+        FacetUtil.addFacet(namedFacetTranslated);
     }
 
-    void translateDescription(final FacetHolder facetHolder, final TranslationContext translationContext) {
+    void translateDescription(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
 
-        val identifiedHolder = (IdentifiedHolder) facetHolder;
-        val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
+        val describedAsFacet = identifiedHolder.getFacet(DescribedAsFacet.class);
         if(describedAsFacet == null) {
             return;
         }
@@ -99,16 +107,15 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val translationService = getTranslationService();
-        super.addFacet(new DescribedAsFacetTranslated(
+        FacetUtil.addFacet(new DescribedAsFacetTranslated(
                 translationContext, originalText, translationService, identifiedHolder));
-
     }
 
-    private boolean isNullOrEmptyWhenTrimmed(final String originalText) {
+    static boolean isNullOrEmptyWhenTrimmed(final String originalText) {
         return originalText == null || _Strings.isNullOrEmpty(originalText.trim());
     }
 
-
+    @Inject
+    TranslationService translationService;
 
 }

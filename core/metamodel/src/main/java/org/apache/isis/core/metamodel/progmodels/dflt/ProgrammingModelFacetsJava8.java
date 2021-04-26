@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
@@ -161,6 +161,18 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
     public ProgrammingModelFacetsJava8(ServiceInjector serviceInjector) {
         super(serviceInjector);
 
+        // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
+        addFacetFactories();
+
+        // only during the post processors will the mixin members been resolved
+        // and are available on the ObjectSpecification.
+        addPostProcessors();
+
+        addValidators();
+    }
+
+    private void addFacetFactories() {
+
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
@@ -285,7 +297,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.F1_LAYOUT, ActionLayoutFacetFactory.class);
         addFactory(FacetProcessingOrder.F1_LAYOUT, CollectionLayoutFacetFactory.class);
 
-
         // built-in value types for Java language
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BooleanPrimitiveValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BooleanWrapperValueFacetUsingSemanticsProviderFactory.class);
@@ -351,12 +362,10 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, FacetsFacetAnnotationFactory.class);
 
-        // must be after all named facets and description facets have been installed
-        addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class); // TODO: reimplement as a PostProcessor
-
-
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
+    }
 
+    private void addPostProcessors() {
         addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
 
         // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
@@ -371,14 +380,18 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
+        // must be after all named facets and description facets have been installed
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, TranslationPostProcessor.class);
 
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
+    }
+
+    private void addValidators() {
         addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
         addValidator(new ActionOverloadingValidator());
-
     }
 
 }
