@@ -574,6 +574,15 @@ div.additionalLinkList {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/* buttons: distinguished rendering for disabled action buttons
+   (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    opacity: 0.65;
+    box-shadow: none;
+}
+
 /* removes the caret (arrow down) from the additional links selector dropdowns */
 .additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
 	content: none;
