@@ -184,9 +184,11 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
                     link.add(label);
                     item.add(link);
-                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
-                        item.add(new CssClassAppender("disabled"));
-                    }
+//XXX seems broken when there is only one bookmark entry; 
+// an alternative idea would be to render the item differently eg. bold, but don't disable it                     
+//                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
+//                        item.add(new CssClassAppender("disabled"));
+//                    }
                     item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
                 } catch(ObjectNotFoundException ex) {
                     // ignore
