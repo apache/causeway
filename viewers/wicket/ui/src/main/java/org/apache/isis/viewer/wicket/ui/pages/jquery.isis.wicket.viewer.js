@@ -214,8 +214,9 @@ $(function() {
 			// The MouseEvent.relatedTarget read-only property is the secondary target for the mouse event, 
 			// if there is one: That is, the EventTarget the pointing device entered to.
 			let relatedTarget = $(e.relatedTarget);
-			if(relatedTarget.hasClass('popover-body')
-					||relatedTarget.hasClass('popover')){
+			if(relatedTarget.hasClass('popover')
+					|| relatedTarget.hasClass('popover-body') // not strictly required, just an optimization
+					|| relatedTarget.parents('.popover').length>0) {
 				e.preventDefault();
 				return;
 			}
