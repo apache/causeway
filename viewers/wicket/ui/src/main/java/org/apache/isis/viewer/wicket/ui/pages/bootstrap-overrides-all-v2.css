@@ -1185,14 +1185,6 @@ ul.tertiary li.dropdown img.avatar {
     padding-right: 5px;
 }
 
-/* disabled, as it was changing the baseline of the tertiary menu */
-/*
-ul.tertiary li.dropdown a.dropdown-toggle {
-    padding-bottom: 13px;
-    margin-bottom: 0px;
-}
-*/
-
 ul.tertiary li.dropdown ul.dropdown-menu {
     min-width: 0px;
 }
@@ -1201,13 +1193,8 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 	font-size: 1.5em;
 }
 
-/* header/footer padding fix */
+/* header/footer vertical padding fix */
 nav.sticky-top,
 footer > .navbar {
     padding: 0.5rem 1rem;
 }
-
-/*
-@media all and (min-width: 750px) {
-	.navbar .nav-item .dropdown-menu{ margin-top:0; margin-bottom:0; }
-}*/

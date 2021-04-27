@@ -209,7 +209,7 @@ $(function() {
 	document.querySelectorAll('.navbar .nav-item, div.additionalLinkList').forEach(function(everyitem){	
 		
 		everyitem.addEventListener('mouseover', function(e){
-			if(window.innerWidth<576){
+			if(window.innerWidth<768){
 				return; // when collapsed is a no-op
 			}
 			this.querySelectorAll('a[data-toggle], button[data-toggle]').forEach(function(el_link){
@@ -220,7 +220,7 @@ $(function() {
 		});
 
 		everyitem.addEventListener('mouseleave', function(e){
-			if(window.innerWidth<576){
+			if(window.innerWidth<768){
 				return; // when collapsed is a no-op
 			}
 			// do not hide the dropdown if hovering over a popover (tooltip) attached to the dropdown item
