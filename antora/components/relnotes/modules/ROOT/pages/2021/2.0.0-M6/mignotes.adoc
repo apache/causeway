@@ -41,7 +41,7 @@ Module `IsisModuleExtModelAnnotation` was removed and is no longer required.
 
 Service `BookmarkService` has been improved, such that its methods return `Optional<?>` instead of nullable objects. 
 
-
+The _Wicket Viewer_ was migrated from using _Bootstrap 3_ to _Bootstrap 4_, which might have more or less severe implications on (your) customized _CSS_ and _JavaScript_ and _Wicket_ components. 
 
 == Extensions
 
