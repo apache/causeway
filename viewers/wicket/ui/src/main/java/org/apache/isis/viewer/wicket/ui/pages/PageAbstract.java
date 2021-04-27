@@ -82,7 +82,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 // import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
@@ -145,6 +144,7 @@ implements ActionPromptProvider {
 
             setTitle(title);
             
+            // must be a direct child of <body> for the 'sticky-top' CSS class to work
             MarkupContainer header = createPageHeader("header");
             add(header);
 
@@ -160,9 +160,6 @@ implements ActionPromptProvider {
                     ? newDebugBar("debugBar")
                     : new EmptyPanel("debugBar").setVisible(false);
             add(debugBar);
-
-//            MarkupContainer header = createPageHeader("header");
-//            themeDiv.add(header);
 
             MarkupContainer footer = createPageFooter("footer");
             themeDiv.add(footer);
