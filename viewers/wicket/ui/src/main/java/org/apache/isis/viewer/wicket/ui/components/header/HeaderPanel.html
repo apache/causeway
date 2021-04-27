@@ -20,41 +20,41 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-        	<header>
-            <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-primary" role="navigation">
+		<!-- <header> -->
+			<nav class="navbar navbar-expand-sm sticky-top navbar-dark bg-primary" role="navigation">
 
-            <div class="container-fluid">
-                <a class="navbar-brand mr-1 ml-n2 mb-n2" wicket:id="applicationName">
-                    <span wicket:id="brandText"></span>
-                    <img alt="Brand" wicket:id="brandLogo"/>
-                </a>
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse.app-actions" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse app-actions mr-auto">
-                    <ul class="navbar-nav" style="flex-wrap:wrap" wicket:id="primaryMenuBar"></ul>
-                </div>
-                <div class="navbar collapse navbar-collapse app-actions p-0 flex-grow-0">
-                    <ul class="navbar-nav" wicket:id="secondaryMenuBar"></ul>
-                    <ul class="navbar-nav tertiary">
-                        <li class="nav-item dropdown">                        	
-                            <a href="#" class="nav-link dropdown-toggle" id="tertiaryDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span wicket:id="userIcon">
-                                    <i class="fa fa-fw fa-user"></i>
-                                </span>
-                                <img class="avatar" alt="Avatar" wicket:id="userAvatar" />
-                                <span class="userName" wicket:id="userName"></span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul wicket:id="tertiaryMenuBar" class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tertiaryDropdownMenuLink">
-                            </ul>                            
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <div class="container-fluid">
+        <a class="navbar-brand mr-1 ml-n2 mb-n2" wicket:id="applicationName">
+            <span wicket:id="brandText"></span>
+            <img alt="Brand" wicket:id="brandLogo"/>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse.app-actions" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse app-actions mr-auto">
+            <ul class="navbar-nav" style="flex-wrap:wrap" wicket:id="primaryMenuBar"></ul>
+        </div>
+        <div class="navbar collapse navbar-collapse app-actions p-0 flex-grow-0">
+            <ul class="navbar-nav" wicket:id="secondaryMenuBar"></ul>
+            <ul class="navbar-nav tertiary">
+                <li class="nav-item dropdown">                        	
+                    <a href="#" class="nav-link dropdown-toggle" id="tertiaryDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span wicket:id="userIcon">
+                            <i class="fa fa-fw fa-user"></i>
+                        </span>
+                        <img class="avatar" alt="Avatar" wicket:id="userAvatar" />
+                        <span class="userName" wicket:id="userName"></span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul wicket:id="tertiaryMenuBar" class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tertiaryDropdownMenuLink">
+                    </ul>                            
+                </li>
+            </ul>
+        </div>
+    </div>
 
-            </nav>
-            </header>
+           	</nav>
+		<!-- </header> -->
         </wicket:panel>
     </body>
 </html>

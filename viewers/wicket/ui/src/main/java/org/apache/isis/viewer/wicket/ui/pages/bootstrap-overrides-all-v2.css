@@ -1201,14 +1201,10 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 	font-size: 1.5em;
 }
 
-/* footer padding fix */
+/* header/footer padding fix */
+nav.sticky-top,
 footer > .navbar {
     padding: 0.5rem 1rem;
-}
-
-/* header to body offset fix, so we don't need a #body{ padding-top: 61px; } */
-header > .fixed-top {
-	position: static;	
 }
 
 /*

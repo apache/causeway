@@ -144,6 +144,9 @@ implements ActionPromptProvider {
             getSession().bind();
 
             setTitle(title);
+            
+            MarkupContainer header = createPageHeader("header");
+            add(header);
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -155,11 +158,11 @@ implements ActionPromptProvider {
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
             Component debugBar = devUtilitiesEnabled
                     ? newDebugBar("debugBar")
-                            : new EmptyPanel("debugBar").setVisible(false);
+                    : new EmptyPanel("debugBar").setVisible(false);
             add(debugBar);
 
-            MarkupContainer header = createPageHeader("header");
-            themeDiv.add(header);
+//            MarkupContainer header = createPageHeader("header");
+//            themeDiv.add(header);
 
             MarkupContainer footer = createPageFooter("footer");
             themeDiv.add(footer);
