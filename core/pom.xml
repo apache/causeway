@@ -86,7 +86,7 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 
-		<approvaltests.version>11.0.0</approvaltests.version>
+		<approvaltests.version>11.1.0</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 

@@ -42,7 +42,7 @@
 		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
 		<spring-boot.version>2.4.5</spring-boot.version>
-		<approvaltests.version>11.0.0</approvaltests.version>
+		<approvaltests.version>11.1.0</approvaltests.version>
 
 		<resteasy.version>4.4.1.Final</resteasy.version>
 
