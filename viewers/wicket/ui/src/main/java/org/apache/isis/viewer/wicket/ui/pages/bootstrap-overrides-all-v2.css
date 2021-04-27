@@ -1198,3 +1198,9 @@ nav.sticky-top,
 footer > .navbar {
     padding: 0.5rem 1rem;
 }
+
+/* enable line wrapping on nav-bar's content, so we don't overflow */
+div.navbar-wrap,
+ul.navbar-wrap {
+	flex-wrap:wrap;
+}
