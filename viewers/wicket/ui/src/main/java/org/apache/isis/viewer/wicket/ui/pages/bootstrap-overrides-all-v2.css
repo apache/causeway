@@ -588,6 +588,10 @@ ul.dropdown-menu {
 	padding-top: 0;
 	margin-top: 0;
 }
+.dropup ul.dropdown-menu {
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
 .additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
