@@ -561,7 +561,8 @@ div.additionalLinkList {
 .dropdown-menu > .disabled > a, 
 .dropdown-menu > .disabled > a:hover, 
 .dropdown-menu > .disabled > a:focus {
-    color: #b4bcc2;
+    /*color: rgba(123, 138, 139, 0.5);*/
+    opacity: 0.5; 
     cursor: not-allowed;
 }
 
