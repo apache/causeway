@@ -41,8 +41,8 @@
 	position: fixed;
 	top: 0;left: 1px;
 	z-index: 1997;
-	font-size: 36px;
-	transform: scale(0.5, 1) translateX(-50%);
+	font-size: 48px;
+	transform: scale(0.33,1) translateX(-100%);
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv {
