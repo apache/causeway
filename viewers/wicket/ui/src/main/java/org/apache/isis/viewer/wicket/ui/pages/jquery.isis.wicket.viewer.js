@@ -207,12 +207,20 @@ $(function() {
         navbar-expand-xl = collapses below xl widths <1200px
 	*/
 	document.querySelectorAll('.navbar .nav-item, div.additionalLinkList').forEach(function(everyitem){	
+		/* 
+		   disabled for additional-action-links, 
+           as it currently does not work consistently eg. with AJAX requests
+
+		   let autoShowSelector = 'a[data-toggle], button[data-toggle]';
+		*/ 
+		let autoShowSelector = 'a[data-toggle]';
 		
 		everyitem.addEventListener('mouseover', function(e){
 			if(window.innerWidth<768){
 				return; // when collapsed is a no-op
 			}
-			this.querySelectorAll('a[data-toggle], button[data-toggle]').forEach(function(el_link){
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
 				let nextEl = el_link.nextElementSibling;
 				el_link.classList.add('show');
 				nextEl.classList.add('show');
@@ -233,7 +241,8 @@ $(function() {
 				e.preventDefault();
 				return;
 			}
-			this.querySelectorAll('a[data-toggle], button[data-toggle]').forEach(function(el_link){
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
 				let nextEl = el_link.nextElementSibling;
 				el_link.classList.remove('show');
 				nextEl.classList.remove('show');
