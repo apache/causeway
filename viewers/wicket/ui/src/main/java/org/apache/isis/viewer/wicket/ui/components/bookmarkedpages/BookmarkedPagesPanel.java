@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -86,8 +85,6 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
-        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('.navbar.navbar-fixed-top').height()-5);"));
     }
 
     private void buildGui() {
@@ -184,9 +181,11 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
                     link.add(label);
                     item.add(link);
-                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
-                        item.add(new CssClassAppender("disabled"));
-                    }
+//XXX seems broken when there is only one bookmark entry; 
+// an alternative idea would be to render the item differently eg. bold, but don't disable it                     
+//                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
+//                        item.add(new CssClassAppender("disabled"));
+//                    }
                     item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
                 } catch(ObjectNotFoundException ex) {
                     // ignore

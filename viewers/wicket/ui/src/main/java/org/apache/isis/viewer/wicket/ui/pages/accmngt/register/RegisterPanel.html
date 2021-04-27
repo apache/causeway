@@ -27,24 +27,24 @@
                 </div>
 
                 <div class="form-group" wicket:id="usernameFormGroup">
-                    <label wicket:for="username" class="control-label"><wicket:message key="usernameLabel"/></label>
+                    <label wicket:for="username" class="col-form-label"><wicket:message key="usernameLabel"/></label>
                     <input type="text" class="form-control" wicket:id="username" wicket:message="placeholder:usernamePlaceholder"/>
                 </div>
 
                 <div class="form-group" wicket:id="passwordFormGroup">
-                    <label wicket:for="password" class="control-label"><wicket:message key="passwordLabel"/></label>
+                    <label wicket:for="password" class="col-form-label"><wicket:message key="passwordLabel"/></label>
                     <input type="password" class="form-control" wicket:id="password" wicket:message="placeholder:passwordPlaceholder"/>
                 </div>
 
                 <div class="form-group" wicket:id="confirmPasswordFormGroup">
-                    <label wicket:for="confirmPassword" class="control-label"><wicket:message key="confirmPasswordLabel"/></label>
+                    <label wicket:for="confirmPassword" class="col-form-label"><wicket:message key="confirmPasswordLabel"/></label>
                     <input type="password" class="form-control" wicket:id="confirmPassword" wicket:message="placeholder:confirmPasswordPlaceholder"/>
                 </div>
 
                 <wicket:container wicket:id="extraFieldsContainer"/>
 
                 <button type="submit" class="btn btn-primary btn-sm"><wicket:message key="registerButtonLabel"/></button>
-                <button type="reset" class="btn btn-default btn-sm"><wicket:message key="resetButtonLabel"/></button>
+                <button type="reset" class="btn btn-secondary btn-sm"><wicket:message key="resetButtonLabel"/></button>
             </form>
         </wicket:panel>
     </body>

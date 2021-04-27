@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix.CssDisplay;
+
 /**
  * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
  *
@@ -42,16 +44,6 @@ public class BS3ClearFixVisible extends BS3ClearFix {
 
     private static final long serialVersionUID = 1L;
 
-    public enum CssDisplay {
-        BLOCK,
-        INLINE,
-        INLINE_BLOCK;
-
-        public String toCssClassFragment() {
-            return name().toLowerCase().replace('_', '-');
-        }
-    }
-
     private CssDisplay cssDisplay;
 
 
@@ -68,8 +60,8 @@ public class BS3ClearFixVisible extends BS3ClearFix {
     @Override
     public String toCssClass() {
         return "clearfix "
-                + "visible-" + getSize().toCssClassFragment() + "-" + getCssDisplay().toCssClassFragment() +
-                (getCssClass() != null? " " + getCssClass(): "");
+        		+ getDisplayFragment(getCssDisplay(), getSize())                
+                + (getCssClass() != null? " " + getCssClass(): "");
     }
 
 }

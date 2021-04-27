@@ -96,11 +96,19 @@ public class SizeSpan implements Serializable {
         if(buf.length() > 0) {
             buf.append(" ");
         }
-        buf.append("col-")
-        .append(size.toCssClassFragment())
-        .append("-")
-        .append(offset != null && offset ? "offset-": "")
-        .append(span);
+        if(Boolean.TRUE.equals(offset)) {
+            buf.append("offset-").append(span);
+        } else {
+        	buf.append("col-");
+        	switch(size) {
+        	case XS:
+        		buf.append("" + span);
+        		break;
+        	default:
+        		buf.append(size.toCssClassFragment()).append("-").append("" + span);
+        		break;
+        	}
+        }
         return buf;
     }
 }

@@ -17,6 +17,16 @@
  *  under the License.
  */
 
+header nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+header .navbar-header .navbar-brand {
+	padding-bottom: 0px;
+}
+footer nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+
 .bootstrap-datetimepicker-widget {
     background-color: #ffffff;
     color: #000000;
@@ -41,6 +51,22 @@ a.scalarValueInlinePromptLink:focus textarea,
 }
 
 /* ISIS-2092 fixing Darkly Theme: buttons and fieldset-headers have same background-color */
-.panel-default > .panel-heading {
+.card > .card-header {
     background-color: #515050;
 }
+
+/* makes disabled fields even darker */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #c0c0c0;
+    opacity: 1;
+}
+
+.btn[disabled="disabled"] {
+	color: rgba(255,255,255,0.5)!important;
+}
+
+/* setting the select2 dropdown background to secondary theme color */
+.select2-container.select2-container--default.select2-container--open .select2-dropdown {
+	background-color: #444!important
+}
+

@@ -142,7 +142,11 @@
 		<jmock.version>2.12.0</jmock.version>
 		<joda-time.version>2.10.10</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
-		<jquery-ui.version>1.12.1</jquery-ui.version>
+
+		<!-- See org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication -->
+		<jquery.version>3.5.1</jquery.version> <!-- org.webjars:jquery -->
+
+		<jquery-ui.version>1.12.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<junit-platform.version>1.7.1</junit-platform.version>
@@ -182,11 +186,13 @@
 		<vaadin.version>19.0.6</vaadin.version>
 
 		<wicket.version>8.12.0</wicket.version>
-		<wicket-bootstrap.version>2.0.14</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
+		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.20</wicket-webjars.version>
+
+		<bootstrap.version>4.6.0</bootstrap.version> <!-- org.webjars:boostrap -->
+		<popper-js.version>1.16.0</popper-js.version> <!-- org.webjars:popper-js -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
@@ -562,10 +568,17 @@
 						<jswarn>false</jswarn>
 						<suffix>.min</suffix>
 						<excludes>
-							<exclude>**/moment.js</exclude>
-							<exclude>**/moment.min.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.min.js</exclude>
+							<!-- -->
+							<exclude>**/jquery.isis.wicket.viewer.js</exclude>
+							<!-- select 2 -->
+							<exclude>**/i18n/*.js</exclude>
+							<exclude>**/select2*.js</exclude>
+							<!-- datetime picker -->
+							<exclude>**/moment-with-locales.js</exclude>
+							<exclude>**/moment-with-locales.min.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.min.js</exclude>
+							<!-- boostrap growl -->
 							<exclude>**/bootstrap-growl.js</exclude>
 							<exclude>**/bootstrap-growl.min.js</exclude>
 						</excludes>
@@ -973,6 +986,21 @@
 				<type>pom</type>
 			</dependency>
 
+	        <dependency>
+	            <groupId>org.webjars</groupId>
+	            <artifactId>bootstrap</artifactId>
+	            <version>${bootstrap.version}</version>
+	        </dependency>
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>jquery</artifactId>
+				<version>${jquery.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>popper.js</artifactId>		    
+				<version>${popper-js.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
@@ -1451,20 +1479,7 @@
 				<artifactId>jquery-ui</artifactId>
 				<version>${jquery-ui.version}</version>
 			</dependency>
-
-			<!-- TODO: when used, move exclusions down -->
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
-				<version>${wicket-bootstrap-datetimepicker.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.webjars</groupId>
-						<artifactId>momentjs</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
+ 			
 			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>select2</artifactId>

@@ -59,6 +59,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
@@ -66,8 +67,8 @@ import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -105,6 +106,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBe
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
@@ -249,12 +251,13 @@ implements
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
-
+            
+            setupJQuery();
+            
             this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
             configureSecurity(configuration);
@@ -372,7 +375,8 @@ implements
     private void configureWicketSelect2() {
         ApplicationSettings select2Settings = ApplicationSettings.get();
         select2Settings.setCssReference(new Select2BootstrapCssReference());
-        select2Settings.setJavaScriptReference(new Select2JsReference());
+        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
+        select2Settings.setIncludeJavascriptFull(true);
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
@@ -617,6 +621,23 @@ implements
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
+    }
+    
+    protected void setupJQuery() {
+        switch(configuration.getViewer().getWicket().getJQueryVersion()) {
+        case 2: 
+            getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
+            break;
+        default: 
+            // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+        	/*
+        	 * downgrading to jquery 3.5.1 because of this issue:
+        	 * 
+        	 * https://github.com/select2/select2/issues/5993
+        	 */
+        	getJavaScriptLibrarySettings().setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
+            break;
+        }
     }
 
 }

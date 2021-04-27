@@ -82,7 +82,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
+// import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -143,6 +143,10 @@ implements ActionPromptProvider {
             getSession().bind();
 
             setTitle(title);
+            
+            // must be a direct child of <body> for the 'sticky-top' CSS class to work
+            MarkupContainer header = createPageHeader("header");
+            add(header);
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -154,22 +158,19 @@ implements ActionPromptProvider {
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
             Component debugBar = devUtilitiesEnabled
                     ? newDebugBar("debugBar")
-                            : new EmptyPanel("debugBar").setVisible(false);
-                    add(debugBar);
+                    : new EmptyPanel("debugBar").setVisible(false);
+            add(debugBar);
 
-                    MarkupContainer header = createPageHeader("header");
-                    themeDiv.add(header);
+            MarkupContainer footer = createPageFooter("footer");
+            themeDiv.add(footer);
 
-                    MarkupContainer footer = createPageFooter("footer");
-                    themeDiv.add(footer);
+            addActionPromptModalWindow(themeDiv);
+            addActionPromptSidebar(themeDiv);
 
-                    addActionPromptModalWindow(themeDiv);
-                    addActionPromptSidebar(themeDiv);
+            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
-                    this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
-
-                    // ensure that all collected JavaScript contributions are loaded at the page footer
-                    add(new HeaderResponseContainer("footerJS", "footerJS"));
+            // ensure that all collected JavaScript contributions are loaded at the page footer
+            add(new HeaderResponseContainer("footerJS", "footerJS"));
 
         } catch(final RuntimeException ex) {
 
@@ -307,9 +308,13 @@ implements ActionPromptProvider {
      */
     private void addBootLint(final IHeaderResponse response) {
         // rather than using the default BootlintHeaderItem.INSTANCE;
-        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
+        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)    	
+    	
+    	// Bootlint not available for BS4 (as for now)
+    	/*
         response.render(new BootlintHeaderItem(
                 "bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
+                */
     }
 
     /**

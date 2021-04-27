@@ -108,7 +108,7 @@ public class Decorators {
                     .withBtnOkLabel(confirmUiModel.getOkLabel())
                     .withBtnCancelLabel(confirmUiModel.getCancelLabel())
                     .withBtnOkClass("btn btn-danger")
-                    .withBtnCancelClass("btn btn-default")
+                    .withBtnCancelClass("btn btn-secondary")
                     .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
             
             uiComponent.add(new ConfirmationBehavior(confirmationConfig));

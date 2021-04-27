@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -38,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
+// import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -82,10 +80,6 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
-
-        response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
-        response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
-
         SSESupport.renderHead(response);
 
     }

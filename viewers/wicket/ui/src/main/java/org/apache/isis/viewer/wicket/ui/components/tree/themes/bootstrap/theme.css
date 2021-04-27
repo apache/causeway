@@ -46,9 +46,11 @@
   text-decoration: none;
 }
 
+/* https://fontawesome.com/icons/chevron-down?style=solid */
 .tree-theme-bootstrap .tree-junction-expanded:before {
-  font-family: "Glyphicons Halflings", sans-serif;
-  content: "\e114";
+  font-family: "Font Awesome 5 Free", sans-serif;
+  font-weight: 900;
+  content: "\f078";
 }
 
 .tree-theme-bootstrap .tree-junction-expanded:hover {
@@ -62,9 +64,11 @@
   text-decoration: none;
 }
 
+/* https://fontawesome.com/icons/chevron-right?style=solid */
 .tree-theme-bootstrap .tree-junction-collapsed:before {
-  font-family: "Glyphicons Halflings", sans-serif;
-  content: "\e080";
+  font-family: "Font Awesome 5 Free", sans-serif;
+  font-weight: 900;
+  content: "\f054";
 }
 
 .tree-theme-bootstrap .tree-junction-collapsed:hover {

@@ -195,6 +195,62 @@ $(function() {
     });
 */
 
+    /*
+    Adapted from https://bootstrap-menu.com/detail-basic-hover.html
+    Ignoring mouseleave events if hovering over a popover that belongs to a menuitem.
+    The magic number in the window width predicate corresponds to the nav-bar collaps behavior 
+    as used in Footer/HeaderPanel.html templates; see Bootstrap 4 ref. ...
+        navbar-expand = never collapses vertically (remains horizontal)
+        navbar-expand-sm = collapses below sm widths <576px
+        navbar-expand-md = collapses below md widths <768px
+        navbar-expand-lg = collapses below lg widths <992px
+        navbar-expand-xl = collapses below xl widths <1200px
+	*/
+	document.querySelectorAll('.navbar .nav-item, div.additionalLinkList').forEach(function(everyitem){	
+		/* 
+		   disabled for additional-action-links, 
+           as it currently does not work consistently eg. with AJAX requests
+
+		   let autoShowSelector = 'a[data-toggle], button[data-toggle]';
+		*/ 
+		let autoShowSelector = 'a[data-toggle]';
+		
+		everyitem.addEventListener('mouseover', function(e){
+			if(window.innerWidth<768){
+				return; // when collapsed is a no-op
+			}
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
+				let nextEl = el_link.nextElementSibling;
+				el_link.classList.add('show');
+				nextEl.classList.add('show');
+			})
+		});
+
+		everyitem.addEventListener('mouseleave', function(e){
+			if(window.innerWidth<768){
+				return; // when collapsed is a no-op
+			}
+			// do not hide the dropdown if hovering over a popover (tooltip) attached to the dropdown item
+			// The MouseEvent.relatedTarget read-only property is the secondary target for the mouse event, 
+			// if there is one: That is, the EventTarget the pointing device entered to.
+			let relatedTarget = $(e.relatedTarget);
+			if(relatedTarget.hasClass('popover')
+					|| relatedTarget.hasClass('popover-body') // not strictly required, just an optimization
+					|| relatedTarget.parents('.popover').length>0) {
+				e.preventDefault();
+				return;
+			}
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
+				let nextEl = el_link.nextElementSibling;
+				el_link.classList.remove('show');
+				nextEl.classList.remove('show');
+			})
+		});
+	});	
+	
+
 });
 
 /**
@@ -210,3 +266,5 @@ $(function() {
         }  
     })  
 });
+
+
