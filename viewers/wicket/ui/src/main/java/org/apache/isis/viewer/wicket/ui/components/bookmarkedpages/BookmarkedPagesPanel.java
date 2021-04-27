@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -86,8 +85,6 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
-        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('nav.navbar.fixed-top')[0].offsetHeight - 5);"));
     }
 
     private void buildGui() {
