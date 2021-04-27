@@ -37,20 +37,12 @@
 }
 
 .bookmarkedPagesPanel .bookmarkRibbon {
-    width:10px;
-    margin-top: -120px;
-    height:120px;
-    position:fixed;
-    left:0;
-    top:120px;
-    display:block;
-    cursor:pointer;
-    z-index: 1997;
-    margin-left: 1px;
-    font-weight:bold;
-    border-right:6px solid transparent;
-    border-left:6px solid transparent;
-    border-bottom:6px solid white;
+	cursor:pointer;
+	position: fixed;
+	top: 0;left: 1px;
+	z-index: 1997;
+	font-size: 36px;
+	transform: scale(0.5, 1) translateX(-50%);
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv {
