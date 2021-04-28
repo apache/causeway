@@ -193,7 +193,7 @@
 		
 		<!-- org.webjars:boostrap, NOTE: dictates popper-js.version and jquery.version -->
 		<bootstrap.version>4.6.0-1</bootstrap.version> 
-		<popper-js.version>1.16.0</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
+		<popper-js.version>1.16.1-lts</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>

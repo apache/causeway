@@ -578,8 +578,7 @@ div.additionalLinkList {
 /* buttons: distinguished rendering for disabled action buttons
    (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
-    cursor: not-allowed;
-    filter: alpha(opacity=65);
+    cursor: not-allowed!important;
     opacity: 0.65;
     box-shadow: none;
 }
@@ -621,10 +620,6 @@ ul.dropdown-menu {
 .collectionPanel .card.card-body {
     background-color: transparent;
     margin-bottom: 0px;
-}
-
-.btn[disabled="disabled"] {
-	cursor: unset!important;
 }
 
 .nav > li > a {
