@@ -191,7 +191,7 @@
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.20</wicket-webjars.version>
 
-		<bootstrap.version>4.6.0</bootstrap.version> <!-- org.webjars:boostrap -->
+		<bootstrap.version>4.6.0-1</bootstrap.version> <!-- org.webjars:boostrap -->
 		<popper-js.version>1.16.0</popper-js.version> <!-- org.webjars:popper-js -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
