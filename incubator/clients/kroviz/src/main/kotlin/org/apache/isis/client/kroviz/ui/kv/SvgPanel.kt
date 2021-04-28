@@ -24,7 +24,7 @@ import io.kvision.maps.*
 import io.kvision.panel.HPanel
 import io.kvision.utils.pc
 
-class MapPanel : HPanel() {
+class SvgPanel : HPanel() {
 
     val map: Maps = maps(0, 0, 11, baseLayerProvider = BaseLayerProvider.EMPTY, crs = CRS.Simple) {
         width = 100.pc

@@ -193,8 +193,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return panel
     }
 
-    private fun createSvgMap(fi: FormItem): MapPanel {
-        val panel = MapPanel()
+    private fun createSvgMap(fi: FormItem): SvgPanel {
+        val panel = SvgPanel()
         panel.height = 100.perc
         panel.width = 100.perc
         fi.callBack = panel
