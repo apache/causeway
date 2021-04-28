@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogModel;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
 import org.apache.isis.extensions.commandreplay.primary.mixins.Object_openOnSecondary;
 import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
@@ -35,7 +35,7 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
 @Configuration
 @Import({
         // @Configuration's
-        IsisModuleExtCommandLogModel.class,
+        IsisModuleExtCommandLogApplib.class,
 
         // @Service's
         CommandRetrievalService.class,

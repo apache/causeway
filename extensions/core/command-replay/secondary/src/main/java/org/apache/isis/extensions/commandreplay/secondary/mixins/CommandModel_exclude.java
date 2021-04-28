@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogModel;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 public class CommandModel_exclude {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogModel.ActionDomainEvent<CommandModel_exclude> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandModel_exclude> { }
 
     final CommandModel commandModel;
 

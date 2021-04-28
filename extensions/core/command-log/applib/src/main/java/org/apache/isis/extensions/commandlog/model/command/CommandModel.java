@@ -24,18 +24,18 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogModel;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
 public interface CommandModel extends HasCommandDto {
     
-    public static class TitleUiEvent extends IsisModuleExtCommandLogModel.TitleUiEvent<CommandModel> { }
-    public static class IconUiEvent extends IsisModuleExtCommandLogModel.IconUiEvent<CommandModel> { }
-    public static class CssClassUiEvent extends IsisModuleExtCommandLogModel.CssClassUiEvent<CommandModel> { }
-    public static class LayoutUiEvent extends IsisModuleExtCommandLogModel.LayoutUiEvent<CommandModel> { }
+    public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandModel> { }
+    public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandModel> { }
+    public static class CssClassUiEvent extends IsisModuleExtCommandLogApplib.CssClassUiEvent<CommandModel> { }
+    public static class LayoutUiEvent extends IsisModuleExtCommandLogApplib.LayoutUiEvent<CommandModel> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtCommandLogModel.PropertyDomainEvent<CommandModel, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogModel.CollectionDomainEvent<CommandModel, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogModel.ActionDomainEvent<CommandModel> { }
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<CommandModel, T> { }
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandModel, T> { }
+    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandModel> { }
 
     
     Bookmark getResult();

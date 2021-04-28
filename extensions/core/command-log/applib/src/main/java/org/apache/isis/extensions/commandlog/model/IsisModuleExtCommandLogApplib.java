@@ -20,7 +20,7 @@ package org.apache.isis.extensions.commandlog.model;
 
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
-public interface IsisModuleExtCommandLogModel 
+public interface IsisModuleExtCommandLogApplib 
 extends ModuleWithFixtures {
 
     public abstract static class TitleUiEvent<S>
