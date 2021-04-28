@@ -18,11 +18,15 @@
  */
 package org.apache.isis.tooling.model4adoc.ast;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.Catalog;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.RevisionInfo;
 import org.asciidoctor.ast.Title;
 
 import lombok.Getter;
@@ -64,6 +68,16 @@ public class SimpleDocument extends SimpleStructuralNode implements Document {
 
     @Override
     public Catalog getCatalog() {
+        return null;
+    }
+
+    @Override
+    public List<Author> getAuthors() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public RevisionInfo getRevisionInfo() {
         return null;
     }
 
