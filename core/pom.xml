@@ -144,7 +144,7 @@
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
 		<!-- See org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication -->
-		<jquery.version>3.5.1</jquery.version> <!-- org.webjars:jquery -->
+		<jquery.version>3.5.1</jquery.version> <!-- org.webjars:jquery, dictated by bootstrap.version -->
 
 		<jquery-ui.version>1.12.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
@@ -190,9 +190,10 @@
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.20</wicket-webjars.version>
-
-		<bootstrap.version>4.6.0-1</bootstrap.version> <!-- org.webjars:boostrap -->
-		<popper-js.version>1.16.0</popper-js.version> <!-- org.webjars:popper-js -->
+		
+		<!-- org.webjars:boostrap, NOTE: dictates popper-js.version and jquery.version -->
+		<bootstrap.version>4.6.0-1</bootstrap.version> 
+		<popper-js.version>1.16.0</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
