@@ -67,7 +67,7 @@
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-command-log-model</artifactId>
+            <artifactId>isis-extensions-command-log-applib</artifactId>
         </dependency>
 
         <dependency>

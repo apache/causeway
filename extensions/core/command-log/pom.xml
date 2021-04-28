@@ -40,7 +40,7 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>model</module>
+		<module>applib</module>
 		<module>jdo</module>
 		<module>jpa</module>
 	</modules>

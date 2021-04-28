@@ -19,12 +19,12 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-command-log-model</artifactId>
-    <name>Apache Isis Ext - Command Log Model</name>
+    <artifactId>isis-extensions-command-log-applib</artifactId>
+    <name>Apache Isis Ext - Command Log API</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.commandlog.model</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/commandlog/model</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.commandlog.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/commandlog/applib</git-plugin.propertiesDir>
     </properties>
 
     <build>
