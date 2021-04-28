@@ -35,8 +35,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -61,7 +61,7 @@ import lombok.val;
 //@Log4j2
 public class CommandReplayOnSecondaryService {
 
-    @Inject final CommandJdoRepository commandJdoRepository;
+    @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
     @Inject final JaxbService jaxbService;
 
     public static abstract class ActionDomainEvent
@@ -70,11 +70,9 @@ public class CommandReplayOnSecondaryService {
     public static class FindMostRecentReplayedDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindMostRecentReplayedDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")
-    public CommandJdo findMostRecentReplayed() {
-        return commandJdoRepository.findMostRecentReplayed().orElse(null);
+    public CommandModel findMostRecentReplayed() {
+        return commandModelRepository.findMostRecentReplayed().orElse(null);
     }
-
-
 
     public static class UploadCommandsDomainEvent extends ActionDomainEvent { }
     @Action(
@@ -96,7 +94,7 @@ public class CommandReplayOnSecondaryService {
         }
 
         for (final CommandDto commandDto : commandDtoList) {
-            commandJdoRepository.saveForReplay(commandDto);
+            commandModelRepository.saveForReplay(commandDto);
         }
     }
 

@@ -26,9 +26,8 @@ import javax.inject.Named;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 
 import lombok.extern.log4j.Log4j2;
@@ -45,15 +44,15 @@ public class CommandReplayAnalysisService {
     /**
      * if hit an issue with the command having been replayed, then mark this
      * as in error.
-     * This will effectively block the running of any further commands until the adminstrator fixes the issue.
+     * This will effectively block the running of any further commands until the administrator fixes the issue.
      */
-    public void analyse(final CommandJdo commandJdo) {
-        final String analysis = analyseReplay(commandJdo);
+    public void analyse(final CommandModel commandModel) {
+        final String analysis = analyseReplay(commandModel);
 
-        commandJdo.saveAnalysis(analysis);
+        commandModel.saveAnalysis(analysis);
     }
 
-    private String analyseReplay(final CommandJdo commandJdo) {
+    private String analyseReplay(final CommandModel commandJdo) {
 
         for (final CommandReplayAnalyser analyser : analysers) {
             try {

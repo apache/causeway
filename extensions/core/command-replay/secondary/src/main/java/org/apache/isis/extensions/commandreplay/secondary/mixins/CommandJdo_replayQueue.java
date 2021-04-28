@@ -24,8 +24,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
@@ -45,19 +45,18 @@ import lombok.RequiredArgsConstructor;
 public class CommandJdo_replayQueue {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandJdo_replayQueue, CommandJdo> { }
+            extends IsisModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandJdo_replayQueue, CommandModel> { }
 
-    final CommandJdo commandJdo;
+    final CommandModel commandModel;
 
-    
-    public List<CommandJdo> coll() {
-        return commandJdoRepository.findReplayedOnSecondary();
+    public List<? extends CommandModel> coll() {
+        return commandModelRepository.findReplayedOnSecondary();
     }
     public boolean hideColl() {
         return !secondaryConfig.isConfigured();
     }
 
     @Inject SecondaryConfig secondaryConfig;
-    @Inject CommandJdoRepository commandJdoRepository;
+    @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
 
 }

@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
@@ -54,12 +54,12 @@ public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
     }
 
     @Override
-    public String analyzeReplay(final CommandJdo commandJdo) {
+    public String analyzeReplay(final CommandModel commandModel) {
         if(!enabled) {
             return null;
         }
 
-        val dto = commandJdo.getCommandDto();
+        val dto = commandModel.getCommandDto();
         if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
             return null;
         }
@@ -68,7 +68,7 @@ public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
         // ... either the same result when replayed
         val primaryResultStr = CommandDtoUtils.getUserData(dto, UserDataKeys.RESULT);
 
-        val secondaryResult = commandJdo.getResult();
+        val secondaryResult = commandModel.getResult();
         val secondaryResultStr =
                 secondaryResult != null ? secondaryResult.toString() : null;
         return Objects.equals(primaryResultStr, secondaryResultStr)
