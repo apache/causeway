@@ -18,14 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.Command
-import org.apache.isis.client.kroviz.ui.DiagramDialog
-import org.apache.isis.client.kroviz.ui.Displayable
-import org.apache.isis.client.kroviz.ui.FormItem
-import org.apache.isis.client.kroviz.utils.Direction
-import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.Point
 import io.kvision.core.CssSize
 import io.kvision.core.JustifyContent
 import io.kvision.core.UNIT
@@ -36,6 +28,14 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.HPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.perc
+import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.Command
+import org.apache.isis.client.kroviz.ui.DiagramDialog
+import org.apache.isis.client.kroviz.ui.Displayable
+import org.apache.isis.client.kroviz.ui.FormItem
+import org.apache.isis.client.kroviz.utils.Direction
+import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.Point
 
 class RoDialog(
         caption: String,
@@ -134,6 +134,17 @@ class RoDialog(
     private fun hasScalableContent(): Boolean {
         val scalable = items.firstOrNull { it.type == ValueType.IMAGE }
         return scalable != null
+    }
+
+    override fun toggleMaximize() {
+        execute()
+    }
+
+    /**
+     * Minimize or restore the window size.
+     */
+    override fun toggleMinimize() {
+        //TODO put Dialog to lower right message box
     }
 
 }

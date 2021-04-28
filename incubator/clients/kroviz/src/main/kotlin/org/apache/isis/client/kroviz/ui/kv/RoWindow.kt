@@ -61,8 +61,8 @@ open class RoWindow(
         isResizable: Boolean = true,
         isDraggable: Boolean = true,
         closeButton: Boolean = false,
-        maximizeButton: Boolean = false,
-        minimizeButton: Boolean = false,
+        maximizeButton: Boolean = true,
+        minimizeButton: Boolean = true,
         icon: String? = null,
         classes: Set<String> = setOf(),
         init: (RoWindow.() -> Unit)? = null

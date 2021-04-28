@@ -53,6 +53,11 @@ class DiagramDialog(
     }
 
     override fun execute() {
+        pin()
+ //       dialog.close()
+    }
+
+    private fun pin() {
         val newImage = getDiagram()
         val newCallBack = buildNewPanel()
         DomUtil.replaceWith(newCallBack, newImage)
@@ -61,7 +66,7 @@ class DiagramDialog(
     private fun getDiagram(): ScalableVectorGraphic {
         val logEntry = EventStore.findBy(callBack as UUID)
         val svgStr = logEntry.getResponse()
-        console.log("[DiagramDialog.execute]")
+        console.log("[DiagramDialog.getDiagram]")
         console.log(svgStr)
         return ScalableVectorGraphic(svgStr)
     }
