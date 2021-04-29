@@ -113,15 +113,17 @@ public class TenantedAuthorizationPostProcessor
                 .injectServicesInto(new QueryResultsCacheProviderHolder())
                 .getQueryResultsCacheProvider();
 
-        return new TenantedAuthorizationFacetDefault(
-                        evaluators, applicationUserRepository,
-                        queryResultsCacheProvider, userService,
-                        holder);
+        return serviceRegistry.lookupService(ApplicationUserRepository.class)
+                .map(userRepository ->
+                        new TenantedAuthorizationFacetDefault(
+                                evaluators, userRepository,
+                                queryResultsCacheProvider, userService,
+                                holder))
+                .orElse(null);
     }
 
     @Inject ServiceRegistry serviceRegistry;
     @Inject ServiceInjector serviceInjector;
     @Inject UserService userService;
-    @Inject ApplicationUserRepository applicationUserRepository;
 
 }
