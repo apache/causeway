@@ -18,18 +18,24 @@
  */
 package org.apache.isis.extensions.secman.model;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModels;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationNamespace;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationType;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeAction;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeCollection;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeMember;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeProperty;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationOrphanedPermissionManager_relocateSelected;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermissionMenu;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_allow;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_changing;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
+import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_feature;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_updateRole;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_veto;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_viewing;
@@ -50,6 +56,7 @@ import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_re
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_updateName;
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_updateParent;
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_users;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_delete;
@@ -70,6 +77,7 @@ import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updatePh
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateUsername;
 import org.apache.isis.extensions.secman.model.dom.user.HasUsername_open;
 import org.apache.isis.extensions.secman.model.dom.user.MeService;
+import org.apache.isis.extensions.secman.model.dom.user.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory;
 
 /**
@@ -94,15 +102,19 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         // @Component
         TenantedAuthorizationFacetFactory.Register.class,
         
+        // -- ViewModels
+        
+        ApplicationNamespace.class,
+        ApplicationType.class,
+        ApplicationTypeAction.class,
+        ApplicationTypeCollection.class,
+        ApplicationTypeMember.class,
+        ApplicationTypeProperty.class,
+        ApplicationUserManager.class,
+        UserPermissionViewModel.class,
+        
         // -- Mixins
-/*TODO[2619] when launching the demo there should be 
- *  - introspecting 43 value types
- *  - introspecting 464 mixins
- *  - introspecting 52 managed beans contributing (aka domain services)
- *  - introspecting 59 entities (JDO+JPA)
- *  - introspecting 166 view models
- *  so it seems this list is missing one mixin ...     
- *        
+      
         //ApplicationOrphanedPermissionManager
         ApplicationOrphanedPermissionManager_relocateSelected.class,
 
@@ -110,6 +122,7 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationPermission_allow.class,
         ApplicationPermission_changing.class,
         ApplicationPermission_delete.class,
+        ApplicationPermission_feature.class,
         ApplicationPermission_updateRole.class,
         ApplicationPermission_veto.class,
         ApplicationPermission_viewing.class,
@@ -124,7 +137,6 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationRole_updateName.class,
 
         //ApplicationTenancy
-        ApplicationTenancy_users.class,
         ApplicationTenancy_addChild.class,
         ApplicationTenancy_addUser.class,
         ApplicationTenancy_delete.class,
@@ -132,15 +144,15 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationTenancy_removeUser.class,
         ApplicationTenancy_updateName.class,
         ApplicationTenancy_updateParent.class,
+        ApplicationTenancy_users.class,
 
         //ApplicationUser
-        ApplicationUser_permissions.class,
         ApplicationUser_addRole.class,
         ApplicationUser_delete.class,
         ApplicationUser_duplicate.class,
         ApplicationUser_filterPermissions.class,
         ApplicationUser_lock.class,
-        HasUsername_open.class,
+        ApplicationUser_permissions.class,
         ApplicationUser_removeRoles.class,
         ApplicationUser_resetPassword.class,
         ApplicationUser_unlock.class,
@@ -152,18 +164,13 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationUser_updatePassword.class,
         ApplicationUser_updatePhoneNumber.class,
         ApplicationUser_updateUsername.class,
+        HasUsername_open.class,
 
         //ApplicationUserManager (abstract, concrete classes are in JDO/JPA)
         //ApplicationUserManager_allUsers.class,
         //ApplicationUserManager_newDelegateUser.class,
         //ApplicationUserManager_newLocalUser.class,
-*/
     })        
-//TODO[2619] remove once we have the complete list of @Components
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanModel.class
-        })
 public class IsisModuleExtSecmanModel {
 
 }
