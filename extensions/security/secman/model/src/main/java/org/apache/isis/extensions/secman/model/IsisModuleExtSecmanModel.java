@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -30,7 +31,6 @@ import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancyMen
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.model.dom.user.MeService;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory;
-import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSecman;
 
 /**
  * @since 2.0 {@index}
@@ -55,6 +55,12 @@ import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSec
         TenantedAuthorizationFacetFactory.Register.class,
 
 })
+//TODO[2630] remove once we have the concrete list of Mixins we need to explicitly import
+//idea is to extend the meta-model CSV download to also include mixins so we can copy paste the list 
+@ComponentScan(
+        basePackageClasses= {
+                IsisModuleExtSecmanModel.class
+        })
 public class IsisModuleExtSecmanModel {
 
 }
