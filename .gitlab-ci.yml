@@ -1,6 +1,5 @@
 variables:
   BASELINE: "1.17.0"
-  MAVEN_EXTRA_OPTS: "-pl core"
   MAVEN_DEPLOY_OPTS: ""
 
 include:

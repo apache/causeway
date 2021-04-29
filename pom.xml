@@ -42,7 +42,6 @@
         <module>core</module>
     </modules>
 
-
     <distributionManagement>
         <repository>
             <id>gitlab-maven</id>
