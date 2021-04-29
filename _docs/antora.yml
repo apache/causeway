@@ -1,0 +1,6 @@
+name: overview
+title: Overview
+version: latest
+start_page: ROOT:about.adoc
+nav:
+  - modules/ROOT/nav.adoc

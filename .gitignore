@@ -47,3 +47,5 @@ rebel.xml
 **/.DS_Store
 
 .flattened-pom.xml
+
+public/

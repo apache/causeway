@@ -1,0 +1,30 @@
+site:
+  title: IXN Relay
+  start_page: overview:ROOT:about.adoc
+
+content:
+
+  sources:
+    - url: .
+      branches: HEAD
+      start_path: _docs
+
+ui:
+  bundle:
+    url: _pipeline-resources/build/pages/antora/ui-bundle.zip
+    snapshot: true
+  supplemental_files: _docs/supplemental-ui
+
+asciidoc:
+  extensions:
+    - asciidoctor-kroki
+  attributes:
+    experimental: ""
+    idprefix: ""
+    idseparator: "-"
+    page-ci-project-root-namespace: "ecpnv.devops"
+    page-ci-project-path: "libs/apache/isis"
+
+output:
+  clean: true
+  dir: public

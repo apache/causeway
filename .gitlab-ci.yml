@@ -7,4 +7,4 @@ include:
     file:
       - '/build/lib/lifecycle-and-policies.yml'
       - '/build/lib/mvn-deploy-java-8.yml'
-#      - '/build/pages/antora/generate.yml'
+      - '/build/pages/antora/generate.yml'

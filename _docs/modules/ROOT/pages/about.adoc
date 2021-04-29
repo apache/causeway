@@ -1,0 +1,4 @@
+= Apache Isis
+:toc:
+
+Local build of Apache Isis as used by ECP applications.
