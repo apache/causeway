@@ -1,5 +1,5 @@
 variables:
-  BASELINE: "17.0"
+  BASELINE: "1.17.0"
 
 include:
   - project: 'ecpnv.devops/infrastructure/pipeline-resources'
