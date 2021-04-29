@@ -78,7 +78,8 @@ import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateUs
 import org.apache.isis.extensions.secman.model.dom.user.HasUsername_open;
 import org.apache.isis.extensions.secman.model.dom.user.MeService;
 import org.apache.isis.extensions.secman.model.dom.user.UserPermissionViewModel;
-import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory;
+import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
+import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSecman;
 
 /**
  * @since 2.0 {@index}
@@ -95,15 +96,15 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationRoleMenu.class,
         ApplicationTenancyMenu.class,
         ApplicationUserMenu.class,
-        
+
         //ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
         MeService.class,
 
         // @Component
-        TenantedAuthorizationFacetFactory.Register.class,
-        
+        TenantedAuthorizationPostProcessor.Register.class,
+
         // -- ViewModels
-        
+
         ApplicationNamespace.class,
         ApplicationType.class,
         ApplicationTypeAction.class,
@@ -112,9 +113,9 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         ApplicationTypeProperty.class,
         ApplicationUserManager.class,
         UserPermissionViewModel.class,
-        
+
         // -- Mixins
-      
+
         //ApplicationOrphanedPermissionManager
         ApplicationOrphanedPermissionManager_relocateSelected.class,
 
@@ -170,7 +171,7 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacet
         //ApplicationUserManager_allUsers.class,
         //ApplicationUserManager_newDelegateUser.class,
         //ApplicationUserManager_newLocalUser.class,
-    })        
+    })
 public class IsisModuleExtSecmanModel {
 
 }
