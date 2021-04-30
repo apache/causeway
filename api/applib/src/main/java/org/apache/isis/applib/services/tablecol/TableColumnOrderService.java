@@ -21,8 +21,13 @@ package org.apache.isis.applib.services.tablecol;
 import java.util.List;
 
 /**
- * Provides the ability to reorder (or suppress) columns in both parented- and
+ * Provides the ability to reorder columns in both parented- and
  * standalone tables.
+ *
+ * <p>
+ *     If a property is excluded from the returned list, then no column will
+ *     be rendered, so the API can also be used to suppress columns completely.
+ * </p>
  *
  * <p>
  *     There can be multiple implementations of this service registered,
@@ -35,6 +40,21 @@ import java.util.List;
  * <p>
  *      If all provided implementations return <code>null</code>, then the
  *      framework will fallback to a default implementation.
+ * </p>
+ *
+ * <p>
+ *     The similar {@link TableColumnVisibilityService} SPI is the preferred way to
+ *     suppress columns.  As noted above, this {@link TableColumnOrderService}
+ *     can also be used to suppress columns.  The reason that the
+ *     {@link TableColumnVisibilityService} is needed in addition to this SPI is
+ *     because of the way that non-null values are handled; as soon as one
+ *     implementation has an opinion on the order of columns, no other
+ *     services are consulted.  Trying to combine both responsibilities
+ *     (reordering and filtering only in a single
+ *     {@link TableColumnOrderService} would result in the user needing to take
+ *     a lot of care in the relative priority of different implementations.
+ *     Separating out the filter responsibility in the
+ *     {@link TableColumnVisibilityService} SPIs eliminates these difficulties).
  * </p>
  *
  * @since 1.x {@index}

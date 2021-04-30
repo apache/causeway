@@ -17,44 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.i18n;
+package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 
-public class DescribedAsFacetTranslated extends FacetAbstract implements DescribedAsFacet {
+public class PluralFacetTranslated extends FacetAbstract implements PluralFacet {
 
-    private final TranslationContext context;
-    private final String originalText;
     private final TranslationService translationService;
+    private TranslationContext context;
+    private String originalText;
 
-    public DescribedAsFacetTranslated(
-            final TranslationContext context, final String originalText,
-            final TranslationService translationService,
-            final IdentifiedHolder holder) {
-        super(DescribedAsFacet.class, holder, Derivation.NOT_DERIVED);
-        this.context = context;
-        this.originalText = originalText;
-        this.translationService = translationService;
-
-        if(translationService.getMode().isWrite()) {
-            // force PoWriter to be called to capture this text that needs translating
-            translateText();
-        }
+    public PluralFacetTranslated(final NamedFacetTranslated facet, final FacetHolder facetHolder) {
+        super(PluralFacet.class, facetHolder, Derivation.DERIVED);
+        this.translationService = facet.translationService;
+        this.context = facet.context;
+        this.originalText = facet.originalText;
     }
 
     @Override
     public String value() {
-        return translateText();
-    }
-
-    private String translateText() {
-        return translationService.translate(context, originalText);
+        final String singularName = translationService.translate(context, originalText);
+        // TODO: sure this could be improved somehow using the other overload of translationService#translate(...)
+        return StringExtensions.asPluralName(singularName);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

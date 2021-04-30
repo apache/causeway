@@ -31,7 +31,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -67,7 +67,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public abstract class LinkAndLabelFactoryAbstract 
+public abstract class LinkAndLabelFactoryAbstract
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,15 +82,15 @@ implements Serializable {
             final EntityModel targetEntityModel,
             final ScalarModel scalarModelForAssociationIfAny,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
-        
+
         this.linkId = linkId;
         this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
         this.toggledMementosProviderIfAny = toggledMementosProviderIfAny;
     }
-    
+
     public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
-    
+
     protected ActionLink newLinkComponent(
             final ObjectAction objectAction,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
@@ -99,27 +99,27 @@ implements Serializable {
         val commonContext = actionModel.getCommonContext();
 
         final ActionLink link = new ActionLink(commonContext, linkId, actionModel) {
-            
+
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void doOnClick(final AjaxRequestTarget target) {
 
                 if(toggledMementosProviderIfAny != null) {
-                    
+
                     val commonContext = super.getCommonContext();
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
                     val selectedPojosFromAssocCollection = selectedMementos
                             .map(commonContext::reconstructObject)
                             .map(ManagedObject::getPojo);
-                    
+
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
                             .applyWithSelected(
                                     selectedPojosFromAssocCollection,
                                     this::performOnClick,
                                     target);
-                    
+
                     if(actionPrompt != null) {
                         actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
                             private static final long serialVersionUID = 1L;
@@ -205,7 +205,7 @@ implements Serializable {
 
                             val commonContext = getCommonContext();
                             final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getOwner());
-                            final EntityModel entityModelForMixin = 
+                            final EntityModel entityModelForMixin =
                                     EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
 
                             final GridFacet facet = mixinSpec.getFacet(GridFacet.class);
@@ -247,9 +247,9 @@ implements Serializable {
                             val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
                             val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
                             RequestCycle.get().setResponsePage(signInPage);
-                        }    
+                        }
                     });
-                    
+
                     // else nothing to do
 
                     //
@@ -327,6 +327,6 @@ implements Serializable {
         return targetEntityModel.getCommonContext();
     }
 
-    
+
 
 }

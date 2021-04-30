@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
-import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -69,9 +69,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDef
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2 
-public class ObjectSpecificationDefault 
-extends ObjectSpecificationAbstract 
+@Log4j2
+public class ObjectSpecificationDefault
+extends ObjectSpecificationAbstract
 implements FacetHolder {
 
     private static String determineShortName(final Class<?> introspectedClass) {
@@ -89,7 +89,7 @@ implements FacetHolder {
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    
+
     /**
      * available only for managed-beans
      */
@@ -103,7 +103,7 @@ implements FacetHolder {
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
-        
+
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
@@ -113,7 +113,7 @@ implements FacetHolder {
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         facetProcessor.processObjectSpecId(correspondingClass, this);
-        
+
     }
 
     @Override
@@ -160,7 +160,7 @@ implements FacetHolder {
         updateAsSubclassTo(interfaceSpecList);
         updateInterfaces(interfaceSpecList);
     }
-    
+
     @Override
     protected void introspectMembers() {
 
@@ -266,7 +266,7 @@ implements FacetHolder {
     public String getManagedBeanName() {
         return nameIfIsManagedBean;
     }
-    
+
     // -- getObjectAction
 
     @Override
@@ -275,9 +275,9 @@ implements FacetHolder {
 
         final Stream<ObjectAction> actions =
                 streamDeclaredActions(
-                        type==null 
-                            ? ActionType.ANY 
-                            : ImmutableEnumSet.of(type), 
+                        type==null
+                            ? ActionType.ANY
+                            : ImmutableEnumSet.of(type),
                         MixedIn.INCLUDED);
         return firstAction(actions, id);
     }
@@ -363,7 +363,7 @@ implements FacetHolder {
 
     // -- ELEMENT SPECIFICATION
 
-    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification);
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {

@@ -20,28 +20,51 @@ package org.apache.isis.applib.services.tablecol;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Convenience implementation of {@link TableColumnOrderService} that ignores
+ * requests for the order of any types other than that
+ * {@link #getCollectionType() type specified in the constructor}.
+ *
  * @since 1.x {@index}
  */
 @RequiredArgsConstructor
 public abstract class TableColumnOrderForCollectionTypeAbstract<T>
         implements TableColumnOrderService {
 
+    @Getter
     private final Class<T> collectionType;
 
+    /**
+     * Ignores any request for collections not of the
+     * {@link #getCollectionType() type specified in the constructor},
+     * otherwise delegates to {@link #orderParented(Object, String, List)}.
+     *
+     * @see #orderParented(Object, String, List)
+     */
+    @Override
     public final List<String> orderParented(
             final Object parent,
             final String collectionId,
             final Class<?> collectionType,
             final List<String> propertyIds) {
         if (! this.collectionType.isAssignableFrom(collectionType)) {
-            return propertyIds;
+            return null;
         }
         return orderParented(parent, collectionId, propertyIds);
     }
 
+    /**
+     * Default implementation just returns the provided <code>propertyIds</code>
+     * unchanged, but subclasses can override as necessary.
+     *
+     * @param propertyIds - to reorder
+     * @return - the reordered propertyIds (or <code>null</code> if no opinion)
+     */
     protected List<String> orderParented(
             final Object parent,
             final String collectionId,
@@ -49,15 +72,29 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
         return propertyIds;
     }
 
+    /**
+     * Ignores any request for collections not of the
+     * {@link #getCollectionType() type specified in the constructor},
+     * otherwise delegates to {@link #orderStandalone(List)}.
+     *
+     * @see #orderStandalone(List)
+     */
     public final List<String> orderStandalone(
             final Class<?> collectionType,
             final List<String> propertyIds) {
         if (! this.collectionType.isAssignableFrom(collectionType)) {
-            return propertyIds;
+            return null;
         }
         return orderStandalone(propertyIds);
     }
 
+    /**
+     * Default implementation just returns the provided <code>propertyIds</code>
+     * unchanged, but subclasses can override as necessary.
+     *
+     * @param propertyIds - to reorder
+     * @return - the reordered propertyIds (or <code>null</code> if no opinion)
+     */
     protected List<String> orderStandalone(
             final List<String> propertyIds) {
         return propertyIds;

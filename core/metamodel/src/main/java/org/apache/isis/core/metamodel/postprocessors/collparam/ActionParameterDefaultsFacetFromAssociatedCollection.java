@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.postprocessors.param;
+package org.apache.isis.core.metamodel.postprocessors.collparam;
 
 import java.util.function.Function;
 
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 
 import lombok.NonNull;
 
-public class ActionParameterDefaultsFacetFromAssociatedCollection 
+public class ActionParameterDefaultsFacetFromAssociatedCollection
 extends ActionParameterDefaultsFacetAbstract {
 
     private static ThreadLocal<Can<Object>> _selectedPojos = ThreadLocal.withInitial(Can::empty);
@@ -40,15 +40,15 @@ extends ActionParameterDefaultsFacetAbstract {
 
     @Override
     public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
-        
+
         return _selectedPojos.get();
     }
-    
+
     public static <T, R> R applyWithSelected(
-            final Can<Object> selectedPojos, 
+            final Can<Object> selectedPojos,
             final Function<T, R> function,
             final T argument) {
-        
+
         try {
             _selectedPojos.set(selectedPojos);
             return function.apply(argument);

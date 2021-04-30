@@ -17,16 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.authorization.standard;
+package org.apache.isis.core.metamodel.postprocessors;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-/**
- * Optionally hide or disable an object, property, collection or action
- * depending on the authorization.
- */
-public interface AuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+public interface ObjectSpecificationPostProcessor {
+
+    void postProcess(ObjectSpecification objectSpecification);
 
 }

@@ -55,6 +55,12 @@ For example, the viewer remembers which tabs are selected, and for collections w
 |xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService]
 |Allows the columns of a parented or standalone table to be reordered, based upon the parent object, collection id and type of object in the collection.
 
+|xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService]
+|Filters the columns of a parented or standalone tables.
+
+xref:security:secman:about.adoc[SecMan] provides an implementation of this service that filters out columns based on security permissions.
+
+
 
 |xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
 |Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocalProvider].

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.i18n;
+package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 import java.util.Map;
 
@@ -25,24 +25,24 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 
-public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
+public class DescribedAsFacetTranslated extends FacetAbstract implements DescribedAsFacet {
 
-    final TranslationService translationService;
-    TranslationContext context;
-    String originalText;
+    private final TranslationContext context;
+    private final String originalText;
+    private final TranslationService translationService;
 
-    public NamedFacetTranslated(
+    public DescribedAsFacetTranslated(
             final TranslationContext context, final String originalText,
             final TranslationService translationService,
-            final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder, Derivation.NOT_DERIVED);
+            final IdentifiedHolder holder) {
+        super(DescribedAsFacet.class, holder, Derivation.NOT_DERIVED);
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
 
-        if(translationService!=null && translationService.getMode().isWrite()) {
+        if(translationService.getMode().isWrite()) {
             // force PoWriter to be called to capture this text that needs translating
             translateText();
         }
@@ -54,15 +54,7 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     }
 
     private String translateText() {
-        return translationService!=null
-                ? translationService.translate(context, originalText)
-                        : originalText;
-    }
-
-    @Override
-    public boolean escaped() {
-        final NamedFacet underlyingFacet = (NamedFacet) getUnderlyingFacet();
-        return underlyingFacet != null && underlyingFacet.escaped();
+        return translationService.translate(context, originalText);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

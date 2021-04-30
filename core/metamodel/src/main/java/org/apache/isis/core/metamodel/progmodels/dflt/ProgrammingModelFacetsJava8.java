@@ -18,7 +18,7 @@
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
@@ -142,7 +142,16 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
-import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
@@ -152,6 +161,18 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
     public ProgrammingModelFacetsJava8(ServiceInjector serviceInjector) {
         super(serviceInjector);
+
+        // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
+        addFacetFactories();
+
+        // only during the post processors will the mixin members been resolved
+        // and are available on the ObjectSpecification.
+        addPostProcessors();
+
+        addValidators();
+    }
+
+    private void addFacetFactories() {
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
@@ -236,7 +257,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisabledObjectFacetViaMethodFactory.class);
 
         val postConstructMethodsCache = new MethodByClassMap();
-        
+
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
 
@@ -256,7 +277,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
 
-        
+
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
         // must come before DomainObjectLayoutFacetFactory
@@ -276,7 +297,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.F1_LAYOUT, ParameterLayoutFacetFactory.class);
         addFactory(FacetProcessingOrder.F1_LAYOUT, ActionLayoutFacetFactory.class);
         addFactory(FacetProcessingOrder.F1_LAYOUT, CollectionLayoutFacetFactory.class);
-
 
         // built-in value types for Java language
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BooleanPrimitiveValueFacetUsingSemanticsProviderFactory.class);
@@ -327,8 +347,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ZonedDateTimeValueFacetUsingSemanticsProviderFactory.class);
 
-        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, AuthorizationFacetFactory.class);
-
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
@@ -345,20 +363,36 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, FacetsFacetAnnotationFactory.class);
 
-        // must be after all named facets and description facets have been installed
-        addFactory(FacetProcessingOrder.Z1_FINALLY, TranslationFacetFactory.class);
-
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
-
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
-        
-        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
-        addValidator(new OrphanedSupportingMethodValidator());
-        addValidator(new TitlesAndTranslationsValidator());
-        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
-        addValidator(new ActionOverloadingValidator());
-
     }
 
+    private void addPostProcessors() {
+        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
+
+        // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
+
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromImmutablePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromViewModelPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
+
+        // must be after all named facets and description facets have been installed
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, TranslationPostProcessor.class);
+
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
+    }
+
+    private void addValidators() {
+        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
+        addValidator(new OrphanedSupportingMethodValidator());
+        addValidator(new TitlesAndTranslationsValidator());  // should this instead be a post processor, alongside TranslationPostProcessor ?
+        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
+        addValidator(new ActionOverloadingValidator());
+    }
 
 }
