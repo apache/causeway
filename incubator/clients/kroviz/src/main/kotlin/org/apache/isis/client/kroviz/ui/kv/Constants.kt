@@ -22,6 +22,7 @@ object Constants {
 
     const val stdMimeType = "text/plain"
     const val svgMimeType = "image/svg+xml"
+    const val xmlMimeType = "application/xml"
     const val calcHeight = "calc(100vh - 88px)"
     const val actionSeparator = "\n"
     const val subTypeJson = "json"

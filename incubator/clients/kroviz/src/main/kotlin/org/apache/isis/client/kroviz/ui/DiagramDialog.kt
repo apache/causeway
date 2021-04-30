@@ -18,11 +18,10 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
-import org.apache.isis.client.kroviz.ui.kv.RoDialog
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.kv.*
 import org.apache.isis.client.kroviz.utils.*
 
 class DiagramDialog(
@@ -58,9 +57,14 @@ class DiagramDialog(
     }
 
     private fun pin() {
-        val newImage = getDiagram()
-        val newCallBack = buildNewPanel()
-        DomUtil.replaceWith(newCallBack, newImage)
+//        val newImage = getDiagram()
+//        val newCallBack = buildNewPanel()
+//        DomUtil.replaceWith(newCallBack, newImage)
+        val logEntry = EventStore.findBy(callBack as UUID)
+        val svgStr = logEntry.getResponse()
+        val panel = SvgPanel()
+        panel.renderSvg(svgStr)
+        UiManager.add("Diagram", panel)
     }
 
     private fun getDiagram(): ScalableVectorGraphic {

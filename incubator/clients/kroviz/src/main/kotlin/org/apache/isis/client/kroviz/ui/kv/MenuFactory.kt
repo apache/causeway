@@ -132,7 +132,7 @@ object MenuFactory {
         return null
     }
 
-    private fun buildActionLink(
+     fun buildActionLink(
             label: String,
             menuTitle: String): KvisionHtmlLink {
         val actionTitle = Utils.deCamel(label)

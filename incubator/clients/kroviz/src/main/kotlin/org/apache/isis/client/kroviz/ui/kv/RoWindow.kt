@@ -18,21 +18,24 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-/* (!) copied from io.kvision.window.Window in order to make Dialogs transparent on move */
+/* (!) copied from io.kvision.window.Window in order to make
+* Dialogs transparent on move
+* add a dd menu to the icon
+* */
 
 import com.github.snabbdom.VNode
-import org.w3c.dom.events.Event
-import org.w3c.dom.events.MouseEvent
 import io.kvision.core.*
-import io.kvision.html.Icon
-import io.kvision.html.TAG
-import io.kvision.html.Tag
+import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.separator
+import io.kvision.html.*
 import io.kvision.modal.CloseIcon
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import io.kvision.window.MaximizeIcon
 import io.kvision.window.MinimizeIcon
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.MouseEvent
 
 internal const val DEFAULT_Z_INDEX = 900
 internal const val WINDOW_HEADER_HEIGHT = 40
@@ -78,6 +81,7 @@ open class RoWindow(
             captionTag.content = value
             checkHeaderVisibility()
         }
+
     /**
      * Window content width.
      */
@@ -86,6 +90,7 @@ open class RoWindow(
         set(value) {
             width = value
         }
+
     /**
      * Window content height.
      */
@@ -94,6 +99,7 @@ open class RoWindow(
         set(value) {
             content.height = value
         }
+
     /**
      * Window content height.
      */
@@ -102,14 +108,17 @@ open class RoWindow(
         set(value) {
             content.overflow = value
         }
+
     /**
      * Determines if the window is resizable.
      */
     var isResizable by refreshOnUpdate(isResizable) { checkIsResizable() }
+
     /**
      * Determines if the window is draggable.
      */
     var isDraggable by refreshOnUpdate(isDraggable) { checkIsDraggable(); checkHeaderVisibility() }
+
     /**
      * Determines if Close button is visible.
      */
@@ -119,6 +128,7 @@ open class RoWindow(
             closeIcon.visible = value
             checkHeaderVisibility()
         }
+
     /**
      * Determines if Maximize button is visible.
      */
@@ -128,6 +138,7 @@ open class RoWindow(
             maximizeIcon.visible = value
             checkHeaderVisibility()
         }
+
     /**
      * Determines if Maximize button is visible.
      */
@@ -137,6 +148,7 @@ open class RoWindow(
             minimizeIcon.visible = value
             checkHeaderVisibility()
         }
+
     /**
      * Window icon.
      */
@@ -160,12 +172,24 @@ open class RoWindow(
     private val closeIcon = CloseIcon()
     private val maximizeIcon = MaximizeIcon()
     private val minimizeIcon = MinimizeIcon()
-    private val captionTag = Tag(TAG.H5, caption, classes = setOf("modal-title"))
-    private val iconsContainer = SimplePanel(setOf("kv-window-icons-container"))
-    private val windowIcon = Icon(icon ?: "").apply {
-        addCssClass("window-icon")
-        visible = (icon != null && icon != "")
+    private val captionTag = Tag(TAG.H5, caption, classes = setOf("modal-title")).apply {
+        alignSelf = AlignItems.START
     }
+    private val iconsContainer = SimplePanel(setOf("kv-window-icons-container"))
+
+    /*    private val windowIcon = Icon(icon ?: "").apply {
+            addCssClass("window-icon")
+            visible = (icon != null && icon != "")
+        } */
+    private val windowIcon = DropDown(
+            text = "",
+            icon = icon,
+            style = ButtonStyle.LIGHT).apply {
+        marginLeft = CssSize(-16, UNIT.px)
+        marginTop = CssSize(-1, UNIT.px)
+        background = Background(color = Color.name(Col.WHITE))
+    }
+
 
     private var isResizeEvent = false
 
@@ -179,8 +203,17 @@ open class RoWindow(
         width = contentWidth
         @Suppress("LeakingThis")
         zIndex = ++zIndexCounter
+        amendMenu(windowIcon)
+        header.add(windowIcon)
+        windowIcon.setEventListener<Icon> {
+            click = { _ ->
+                console.log("[RoWindow.windowIcon.click]")
+            }
+            mousedown = { e ->
+                e.stopPropagation()
+            }
+        }
         header.add(captionTag)
-        captionTag.add(windowIcon)
         header.add(iconsContainer)
         minimizeIcon.visible = minimizeButton
         minimizeIcon.setEventListener<MinimizeIcon> {
@@ -410,9 +443,26 @@ open class RoWindow(
     open fun toggleMinimize() {
     }
 
+    //TODO pass in menu in constructor?
+    fun amendMenu(
+            dd: DropDown) {
+        dd.separator()
+
+//        val saveLink = tObject.links.first()
+        val saveAction = MenuFactory.buildActionLink(
+                label = "save",
+                menuTitle = "save")
+        saveAction.onClick {
+//            RoXmlHttpRequest().invoke(saveLink)
+        }
+        dd.add(saveAction)
+    }
+
+
     companion object {
         internal var counter = 0
         internal var zIndexCounter = DEFAULT_Z_INDEX
     }
+
 }
 
