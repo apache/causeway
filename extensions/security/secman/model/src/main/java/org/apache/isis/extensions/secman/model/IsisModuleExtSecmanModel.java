@@ -80,6 +80,7 @@ import org.apache.isis.extensions.secman.model.dom.user.MeService;
 import org.apache.isis.extensions.secman.model.dom.user.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
 import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSecman;
+import org.apache.isis.extensions.secman.model.spiimpl.TableColumnHidingService;
 
 /**
  * @since 2.0 {@index}
@@ -102,6 +103,7 @@ import org.apache.isis.extensions.secman.model.menu.ImpersonateMenuAdvisorForSec
 
         // @Component
         TenantedAuthorizationPostProcessor.Register.class,
+        TableColumnHidingService.class,
 
         // -- ViewModels
 
