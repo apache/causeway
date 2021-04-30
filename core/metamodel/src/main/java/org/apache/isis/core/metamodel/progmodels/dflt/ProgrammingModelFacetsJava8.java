@@ -142,6 +142,7 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
+import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
@@ -374,8 +375,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromImmutablePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromViewModelPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
