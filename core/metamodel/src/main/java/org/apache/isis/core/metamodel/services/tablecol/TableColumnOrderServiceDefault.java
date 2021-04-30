@@ -31,7 +31,9 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 
 /**
- * Used as a fallback.
+ * Used as a identity fallback.
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.metamodel.TableColumnOrderServiceDefault")
@@ -40,6 +42,15 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 @Qualifier("Default")
 public class TableColumnOrderServiceDefault implements TableColumnOrderService {
 
+    /**
+     * Just returns the <code>propertyIds</code> unchanged.
+     *
+     * @param parent
+     * @param collectionId
+     * @param collectionType
+     * @param propertyIds
+     * @return
+     */
     @Override
     public List<String> orderParented(
             final Object parent,
@@ -49,6 +60,15 @@ public class TableColumnOrderServiceDefault implements TableColumnOrderService {
         return propertyIds;
     }
 
+    /**
+     * Just returns the <code>propertyIds</code> unchanged.
+     *
+     * @param parent
+     * @param collectionId
+     * @param collectionType
+     * @param propertyIds
+     * @return
+     */
     @Override
     public List<String> orderStandalone(
             final Class<?> collectionType,
