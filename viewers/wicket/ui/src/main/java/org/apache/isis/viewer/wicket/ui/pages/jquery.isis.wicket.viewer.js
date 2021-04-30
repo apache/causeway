@@ -185,6 +185,16 @@ $(function() {
         }
     });
 
+	/* force hide popover on button click */
+	
+	let hidePopover = function (e) {
+	    $(e.target).closest('[rel="popover"]').each(function () {
+	   		$(this).popover('hide');
+	    });
+	}
+	
+	$(document, '.isis-component-with-tooltip').on('click', hidePopover);
+
 /*
     $('.editing .editable').parent().hover(function () {
         var inputEl = $(this).find("> .editable")
