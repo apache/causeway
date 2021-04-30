@@ -61,12 +61,24 @@ public interface SpecificationLoader {
     
     /**
      * Returns the collected results of the various {@link MetaModelValidator}s configured with
-     * the {@link ProgrammingModel}.
+     * the {@link ProgrammingModel}. As a side-effect, triggers meta-model validation, if that has 
+     * not happened already. Viewers should call the side-effect free 
+     * {@link #getValidationResult() variant} instead. 
      * 
      * @apiNote Some of the {@link MetaModelValidator}s run during {@link #createMetaModel()}, 
      * others are only triggered when calling this method. 
+     * @see #getValidationResult()
      */
-    ValidationFailures getValidationResult();
+    ValidationFailures getOrAssessValidationResult();
+
+    /**
+     * Optionally returns the collected results of the various {@link MetaModelValidator}s configured with
+     * the {@link ProgrammingModel}, based on whether the <i>Application<i> is yet fully initialized. 
+     * 
+     * @apiNote This is the side-effect free variant of {@link #getOrAssessValidationResult()}
+     * @see #getOrAssessValidationResult() 
+     */
+    Optional<ValidationFailures> getValidationResult();
     
     void addValidationFailure(ValidationFailure validationFailure);
 

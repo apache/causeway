@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -62,6 +63,13 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
             }
             memoized = true;
             return value = supplier.get();    
+        }
+    }
+    
+    @Override
+    public Optional<T> getMemoized() {
+        synchronized (this) {
+            return Optional.ofNullable(value);
         }
     }
     

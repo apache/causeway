@@ -20,6 +20,7 @@
 package org.apache.isis.commons.internal.base;
 
 import java.lang.ref.WeakReference;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -67,6 +68,11 @@ final class _Lazy_ThreadSafeAndWeak<T> implements _Lazy<T> {
             weakValueReference = new WeakReference<T>(newValue);
             return newValue;    
         }
+    }
+    
+    @Override
+    public Optional<T> getMemoized() {
+        throw _Exceptions.unsupportedOperation("undecidable for weak references");
     }
     
     @Override

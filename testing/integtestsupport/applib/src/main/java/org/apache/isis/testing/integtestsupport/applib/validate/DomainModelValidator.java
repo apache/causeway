@@ -74,7 +74,7 @@ public class DomainModelValidator {
             }
         }
 
-        this.validationFailures = specificationLoader.getValidationResult();
+        this.validationFailures = specificationLoader.getOrAssessValidationResult();
     }
 
 

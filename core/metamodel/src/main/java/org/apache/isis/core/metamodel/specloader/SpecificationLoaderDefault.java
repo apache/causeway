@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -302,7 +303,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
         
         log.info(" - running remaining validators");
-        _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
+        _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
         log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
@@ -313,7 +314,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public ValidationFailures getValidationResult() {
+    public Optional<ValidationFailures> getValidationResult() {
+        return validationResult.getMemoized();
+    }
+    
+    @Override
+    public ValidationFailures getOrAssessValidationResult() {
         return validationResult.get();
     }
 
@@ -404,12 +410,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             validationResult.clear(); // invalidate
             // potentially triggers a call to the method we are currently in, 
             // which adds more entries to the validationQueue
-            getValidationResult(); 
+            getOrAssessValidationResult(); 
         }
         
         // only after things have settled we offer feedback to the user (interface) 
         
-        final ValidationFailures validationFailures = getValidationResult();
+        final ValidationFailures validationFailures = getOrAssessValidationResult();
         if(validationFailures.hasFailures()) {
             throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
         }

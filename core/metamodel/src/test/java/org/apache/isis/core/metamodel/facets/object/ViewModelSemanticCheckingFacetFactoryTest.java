@@ -154,7 +154,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
         
-        return metaModelContext.getSpecificationLoader().getValidationResult();
+        return metaModelContext.getSpecificationLoader().getOrAssessValidationResult();
     }
 
 

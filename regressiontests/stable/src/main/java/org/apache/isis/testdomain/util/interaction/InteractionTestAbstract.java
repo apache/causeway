@@ -108,7 +108,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
 
     protected void assertMetamodelValid() {
         val specLoader = objectManager.getMetaModelContext().getSpecificationLoader(); 
-        assertEquals(Collections.<String>emptyList(), specLoader.getValidationResult().getMessages());    
+        assertEquals(Collections.<String>emptyList(), specLoader.getOrAssessValidationResult().getMessages());    
     }
     
     protected void assertComponentWiseEquals(Object a, Object b) {

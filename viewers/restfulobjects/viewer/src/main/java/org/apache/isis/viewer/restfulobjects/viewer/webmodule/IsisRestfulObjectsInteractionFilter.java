@@ -46,6 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
@@ -412,10 +413,12 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
 
     private static void ensureMetamodelIsValid(SpecificationLoader specificationLoader) {
-        val validationResult = specificationLoader.getValidationResult();
+        // using side-effect free access to MM validation result
+        val validationResult = specificationLoader.getValidationResult()
+        .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
         if(validationResult.hasFailures()) {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
-        }
+        }   
     }
 
 

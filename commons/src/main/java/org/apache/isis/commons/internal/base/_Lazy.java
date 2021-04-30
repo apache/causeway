@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -57,6 +58,11 @@ public interface _Lazy<T> extends Supplier<T> {
      */
     @Override
     public T get();
+    
+    /**
+     * Optionally returns the value, based on whether this lazy got initialized and holds a memoized value.
+     */
+    public Optional<T> getMemoized();
     
     /**
      * Sets the memoized value, if not already memoized. 

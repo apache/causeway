@@ -172,7 +172,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             
         } else if(handler instanceof RenderPageRequestHandler) {
 
-            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
+            // using side-effect free access to MM validation result
+            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
 
             if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
@@ -272,8 +274,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         log.debug("onException {}", ex.getClass().getSimpleName());
 
-        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
-        if(validationResult.hasFailures()) {
+        // using side-effect free access to MM validation result
+        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+                .orElse(null);
+        if(validationResult!=null
+                && validationResult.hasFailures()) {
             val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
@@ -385,8 +390,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return null; 
         } 
         
-        val validationResult = commmonContext.getSpecificationLoader().getValidationResult();
-        if(validationResult.hasFailures()) {
+        // using side-effect free access to MM validation result
+        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+                .orElse(null);
+        if(validationResult!=null
+                && validationResult.hasFailures()) {
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
         }
         

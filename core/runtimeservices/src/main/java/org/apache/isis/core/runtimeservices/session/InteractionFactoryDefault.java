@@ -134,7 +134,7 @@ implements
         taskList.await();
 
         { // log any validation failures, experimental code however, not sure how to best propagate failures
-            val validationResult = specificationLoader.getValidationResult();
+            val validationResult = specificationLoader.getOrAssessValidationResult();
             if(validationResult.getNumberOfFailures()==0) {
                 log.info("Validation PASSED");
             } else {
