@@ -40,19 +40,19 @@ import lombok.val;
 
 @Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")
-public class ApplicationTenancyRepository 
+public class ApplicationTenancyRepository
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository<ApplicationTenancy> {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
-    
+
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-    
+
     @Override
     public ApplicationTenancy newApplicationTenancy() {
         return factory.detachedEntity(new ApplicationTenancy());
     }
-    
+
     // -- findByNameOrPathMatching
 
     @Override
@@ -133,13 +133,19 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
             tenancy = newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
-            tenancy.setParent((ApplicationTenancy) parent);
+            final ApplicationTenancy parentJdo = (ApplicationTenancy) parent;
+            tenancy.setParent(parentJdo);
+            if(parentJdo != null) {
+                // although explicit maintenance of the children is normally not needed,
+                // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
+                parentJdo.getChildren().add(tenancy);
+            }
             repository.persist(tenancy);
         }
         return tenancy;
     }
 
-    // -- 
+    // --
 
     @Override
     public Collection<ApplicationTenancy> allTenancies() {
@@ -157,17 +163,17 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
                 .map(ApplicationTenancy.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-    
+
     @Override
     public void setTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy, 
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
             @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
         user.setAtPath(tenancy.getPath());
     }
-    
+
     @Override
     public void clearTenancyOnUser(
             @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
@@ -182,16 +188,23 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericParent) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val parent = _Casts.<ApplicationTenancy>uncheckedCast(genericParent);
-        // no need to add to children set, since will be done by JDO/DN.
+        // although explicit maintenance of the children is normally not needed,
+        // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
         tenancy.setParent(parent);
+        parent.getChildren().add(tenancy);
     }
 
     @Override
     public void clearParentOnTenancy(
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        // no need to remove from children set, since will be done by JDO/DN.
-        tenancy.setParent(null);
+        // although explicit maintenance of the children is normally not needed,
+        // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
+        final ApplicationTenancy parent = tenancy.getParent();
+        if(parent != null) {
+            parent.getChildren().add(tenancy);
+            tenancy.setParent(null);
+        }
     }
 
     @Override
