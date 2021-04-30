@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.facets;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -113,12 +114,13 @@ public class TenantedAuthorizationPostProcessor
                 .injectServicesInto(new QueryResultsCacheProviderHolder())
                 .getQueryResultsCacheProvider();
 
-        return serviceRegistry.lookupService(ApplicationUserRepository.class)
+        final Optional<TenantedAuthorizationFacetDefault> facetIfAny = serviceRegistry.lookupService(ApplicationUserRepository.class)
                 .map(userRepository ->
                         new TenantedAuthorizationFacetDefault(
                                 evaluators, userRepository,
                                 queryResultsCacheProvider, userService,
-                                holder))
+                                holder));
+        return facetIfAny
                 .orElse(null);
     }
 
