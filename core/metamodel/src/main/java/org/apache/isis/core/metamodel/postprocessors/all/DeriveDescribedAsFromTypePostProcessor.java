@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.postprocessors.all;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
@@ -32,11 +30,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 /**
  * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory} and
@@ -94,18 +89,6 @@ extends ObjectSpecificationPostProcessorAbstract {
         .lookupNonFallbackFacet(DescribedAsFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(
                                     specFacet, facetedMethodFor(objectAssociation))));
-    }
-
-    private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
-        return objectActionImpl.getFacetedMethod();
-    }
-
-    private static TypedHolder peerFor(final ObjectActionParameter param) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        final ObjectActionParameterAbstract objectActionImpl = (ObjectActionParameterAbstract) param;
-        return objectActionImpl.getPeer();
     }
 
 }

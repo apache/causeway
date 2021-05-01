@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.postprocessors.properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
@@ -31,10 +30,8 @@ import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProc
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.val;
 
@@ -93,11 +90,6 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
 
     }
-
-    private static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        final ObjectMemberAbstract objectActionImpl = (ObjectMemberAbstract) objectMember;
-        return objectActionImpl.getFacetedMethod();
-    }
+    
 
 }
