@@ -18,12 +18,12 @@
  */
 package org.apache.isis.extensions.secman.model.facets;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -42,9 +42,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
-import lombok.Getter;
 import lombok.val;
 
 public class TenantedAuthorizationPostProcessor
@@ -89,12 +89,6 @@ public class TenantedAuthorizationPostProcessor
         FacetUtil.addFacet(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
-
-    public static class QueryResultsCacheProviderHolder {
-        @Inject @Getter private Provider<QueryResultsCache> queryResultsCacheProvider;
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     private TenantedAuthorizationFacetDefault createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
@@ -105,27 +99,18 @@ public class TenantedAuthorizationPostProcessor
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
-        if(evaluators.isEmpty()) {
-            return null;
-        }
-
-        val queryResultsCacheProvider =
-                serviceInjector
-                .injectServicesInto(new QueryResultsCacheProviderHolder())
-                .getQueryResultsCacheProvider();
-
-        final Optional<TenantedAuthorizationFacetDefault> facetIfAny = serviceRegistry.lookupService(ApplicationUserRepository.class)
-                .map(userRepository ->
-                        new TenantedAuthorizationFacetDefault(
-                                evaluators, userRepository,
-                                queryResultsCacheProvider, userService,
-                                holder));
-        return facetIfAny
-                .orElse(null);
+        return evaluators.isEmpty()
+                ? null
+                : new TenantedAuthorizationFacetDefault(
+                        evaluators, userRepository,
+                        queryResultsCacheProvider, userService,
+                        holder);
     }
 
     @Inject ServiceRegistry serviceRegistry;
     @Inject ServiceInjector serviceInjector;
     @Inject UserService userService;
+    @Inject @Lazy ApplicationUserRepository<? extends ApplicationUser> userRepository;
+    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

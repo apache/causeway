@@ -78,15 +78,13 @@ public final class _Annotations {
         return synthesize(annotatedElement, annotationType);
     }
     
-    //final static _Probe probe1 = _Probe.unlimited().label("synthesizeInherited");
-    //final static _Probe probe2 = _Probe.unlimited().label("synthesizeInherited");
     private static final _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
     public static void clearCache() {
         syntCache.clear();
     }
     
     /**
-     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * Optionally creates a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Does support attribute inheritance.
      * 
@@ -99,24 +97,12 @@ public final class _Annotations {
             AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
         
-        //probe1.println("lookup");
-        
-        //return _AnnotationsLegacy.nearest(annotatedElement, annotationType);
-        
         return calc_synthesizeInherited(annotatedElement, annotationType);
-               
-        
-//        return syntCache.computeIfAbsent(
-//                annotatedElement, 
-//                annotationType, 
-//                _Annotations::calc_synthesizeInherited);
     }
     
     private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
             AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
-        
-        //probe2.println("cache-miss");
         
         val collected = _Annotations
                 .collect(annotatedElement);

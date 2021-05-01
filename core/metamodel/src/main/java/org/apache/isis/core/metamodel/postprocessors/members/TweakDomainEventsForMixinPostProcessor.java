@@ -105,9 +105,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                         _Annotations.synthesizeInherited(method, Property.class)
                         .orElse(null);
 
-//                _Assert.assertEquals("expected same", propertyAnnot,
-//                        Annotations.getAnnotation(method, Property.class));
-
                 if(propertyAnnot != null) {
                     final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
                             PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
@@ -149,9 +146,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                 final Collection collectionAnnot =
                         _Annotations.synthesizeInherited(method, Collection.class)
                                 .orElse(null);
-
-//                _Assert.assertEquals("expected same", collectionAnnot,
-//                        Annotations.getAnnotation(method, Collection.class));
 
                 if(collectionAnnot != null) {
                     final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =

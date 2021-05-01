@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -39,6 +38,8 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
 
+        //TODO none of these 3 streams are actually consumed!
+        
         // all the actions of this type
         val actionTypes = metaModelContext.getSystemEnvironment().isPrototyping()
                 ? ActionType.USER_AND_PROTOTYPE

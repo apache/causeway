@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
