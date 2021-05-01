@@ -22,15 +22,15 @@ Head over to https://www.docker.com/community-edition[Docker] to install the com
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-wicket:latest
+docker pull apacheisis/demo-wicket-jdo:latest
 ----
 
 * Running the Docker Image
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-wicket:latest
-docker run -d -p8080:8080 apacheisis/demo-wicket:latest
+docker pull apacheisis/demo-wicket-jdo:latest
+docker run -d -p8080:8080 apacheisis/demo-wicket-jdo:latest
 ----
 +
 The Demo app can then be accessed at http://localhost:8080/wicket/[].
@@ -51,13 +51,13 @@ The way in which the app is run by Docker be customised in a couple of ways:
 * Prototyping mode
 +
 ----
-docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-wicket:latest
+docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-wicket-jdo:latest
 ----
 
 * Attached console
 +
 ----
-docker run -it -p8080:8080 apacheisis/demo-wicket:latest
+docker run -it -p8080:8080 apacheisis/demo-wicket-jdo:latest
 ----
 +
 Use CTRL-C to stop and detach
@@ -67,7 +67,7 @@ TIP: on Windows, you might need to prefix with `winpty`.
 * Specify a different context Path
 +
 ----
-docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-wicket:latest
+docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-wicket-jdo:latest
 ----
 +
 then access at http://localhost:8080/myPath/wicket/[].
