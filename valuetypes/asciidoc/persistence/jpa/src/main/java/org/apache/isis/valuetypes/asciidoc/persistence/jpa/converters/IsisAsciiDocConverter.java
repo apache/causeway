@@ -16,33 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.converters;
+package org.apache.isis.valuetypes.asciidoc.persistence.jpa.converters;
 
+import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import org.datanucleus.store.types.converters.TypeConverter;
-
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 /**
  * @since 2.0 {@index}
  */
 @Converter
-public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
-
-    private static final long serialVersionUID = 1L;
+public class IsisAsciiDocConverter implements AttributeConverter<AsciiDoc, String>{
 
     @Override
-    public String toDatastoreType(final Markdown memberValue) {
+    public String convertToDatabaseColumn(final AsciiDoc memberValue) {
         return memberValue != null
                 ? memberValue.asHtml()
                 : null;
     }
 
     @Override
-    public Markdown toMemberType(final String datastoreValue) {
+    public AsciiDoc convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
-                ? Markdown.valueOfHtml(datastoreValue)
+                ? AsciiDoc.valueOfHtml(datastoreValue)
                 : null;
     }
 

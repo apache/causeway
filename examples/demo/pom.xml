@@ -175,11 +175,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>

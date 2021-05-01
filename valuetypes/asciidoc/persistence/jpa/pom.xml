@@ -20,19 +20,16 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
-	<name>Apache Isis Val - Asciidoctor (persistence jdo DN5)</name>
+	<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+	<name>Apache Isis Val - Asciidoctor (persistence jpa)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/persistence/jdo/dn5</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.persistence.jpa</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/persistence/jpa</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-core</artifactId>
-		</dependency>
+		
 	</dependencies>
 
 </project>

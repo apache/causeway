@@ -16,34 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.converters;
+package org.apache.isis.valuetypes.markdown.persistence.jpa;
 
-import javax.persistence.Converter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.datanucleus.store.types.converters.TypeConverter;
-
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 
 /**
  * @since 2.0 {@index}
  */
-@Converter
-public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
-
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public String toDatastoreType(final Markdown memberValue) {
-        return memberValue != null
-                ? memberValue.asHtml()
-                : null;
-    }
-
-    @Override
-    public Markdown toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? Markdown.valueOfHtml(datastoreValue)
-                : null;
-    }
-
+@Configuration
+@Import({
+    IsisModuleValMarkdownApplib.class
+})
+public class IsisModuleValMarkdownPersistenceJpa {
 }

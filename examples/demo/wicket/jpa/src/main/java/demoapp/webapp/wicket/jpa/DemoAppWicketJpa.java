@@ -25,9 +25,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
+import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
+import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
@@ -40,7 +40,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifest.class,
+    DemoAppManifest.class, // TODO we gonna need 2 variants JDO/JPA
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
@@ -55,9 +55,9 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
     // Custom Demo UI (Wicket Viewer)
     WhereInTheWorldPanelFactory.class,
 
-    // Persistence (JDO/DN5)
-    IsisModuleValAsciidocPersistenceJdoDn5.class,
-    IsisModuleValMarkdownPersistenceJdoDn5.class,
+    // Persistence/Converters (JPA)
+    IsisModuleValAsciidocPersistenceJpa.class,
+    IsisModuleValMarkdownPersistenceJpa.class,
     
     //XrayEnable.class // for debugging only
 })
