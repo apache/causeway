@@ -120,7 +120,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/demo-wicket</image>
+								<image>docker.io/apacheisis/demo-wicket-jdo</image>
 								<tags>
 									<tag>${env.REVISION}</tag>
 								</tags>
