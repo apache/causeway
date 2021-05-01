@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.ui.custom;
+package demoapp.webapp.wicket.common.ui.custom;
 
 import javax.inject.Inject;
 
@@ -37,6 +37,8 @@ import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.EARLY)                                             // <.>
 public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
+
+    private static final long serialVersionUID = 1L;
 
     public WhereInTheWorldPanelFactory() {
         super(

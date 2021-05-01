@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket;
+package demoapp.webapp.wicket.jdo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +33,7 @@ import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifest;
-import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
+import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 
 /**
  * Bootstrap the application.
@@ -62,7 +62,7 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     //XrayEnable.class // for debugging only
 })
 //@Log4j2
-public class DemoAppWicket extends SpringBootServletInitializer {
+public class DemoAppWicketJdo extends SpringBootServletInitializer {
 
     /**
      *
@@ -75,7 +75,7 @@ public class DemoAppWicket extends SpringBootServletInitializer {
         
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
-        SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
+        SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
     }
 

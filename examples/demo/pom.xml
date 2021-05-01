@@ -225,7 +225,9 @@
 		<module>domain</module>
 		<module>javafx</module>
 		<module>web</module>
-		<module>wicket</module>
+		<module>wicket/common</module>
+		<module>wicket/jdo</module>
+		<module>wicket/jpa</module>
 		<module>vaadin</module>
 	</modules>
 

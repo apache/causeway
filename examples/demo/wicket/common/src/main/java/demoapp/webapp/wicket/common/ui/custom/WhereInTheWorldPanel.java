@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package demoapp.webapp.wicket.ui.custom;
+package demoapp.webapp.wicket.common.ui.custom;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
