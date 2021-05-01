@@ -22,10 +22,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MetaModelContext_configTest {
 

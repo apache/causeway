@@ -29,10 +29,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.spec.Specification;
@@ -47,6 +43,10 @@ import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFac
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unused")
 public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {

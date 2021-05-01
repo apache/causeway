@@ -18,7 +18,6 @@
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -29,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
@@ -142,16 +140,18 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
-import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 

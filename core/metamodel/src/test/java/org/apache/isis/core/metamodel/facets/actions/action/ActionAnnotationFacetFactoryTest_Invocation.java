@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -36,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 
 import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 

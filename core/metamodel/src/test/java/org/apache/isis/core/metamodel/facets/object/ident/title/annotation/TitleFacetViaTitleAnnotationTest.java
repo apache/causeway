@@ -28,9 +28,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -43,6 +40,9 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnota
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleFacetViaTitleAnnotationTest {
 

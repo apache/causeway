@@ -22,12 +22,12 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+
+import static org.junit.Assert.assertEquals;
 
 import lombok.val;
 

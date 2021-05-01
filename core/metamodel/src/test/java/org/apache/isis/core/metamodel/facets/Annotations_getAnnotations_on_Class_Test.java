@@ -26,12 +26,12 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.commons.internal.reflection._Annotations;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.apache.isis.applib.events.ui.TitleUiEvent;
-import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 

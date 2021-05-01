@@ -21,11 +21,6 @@ package org.apache.isis.core.metamodel.facets.param.layout.annotation;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,6 +29,11 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 

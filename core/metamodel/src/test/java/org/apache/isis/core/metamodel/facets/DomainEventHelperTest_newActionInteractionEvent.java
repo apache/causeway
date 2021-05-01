@@ -20,17 +20,16 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.id.LogicalType;
 
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertSame;
 
 public class DomainEventHelperTest_newActionInteractionEvent {
 

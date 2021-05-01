@@ -25,15 +25,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import lombok.val;
 

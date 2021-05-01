@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNull;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+
+import static org.junit.Assert.assertNull;
 
 import lombok.val;
 

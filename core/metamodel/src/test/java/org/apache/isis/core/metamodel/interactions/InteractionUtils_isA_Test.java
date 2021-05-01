@@ -25,9 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
-import lombok.val;
-
 import junit.framework.TestCase;
+import lombok.val;
 
 public class InteractionUtils_isA_Test extends TestCase {
 

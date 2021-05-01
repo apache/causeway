@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

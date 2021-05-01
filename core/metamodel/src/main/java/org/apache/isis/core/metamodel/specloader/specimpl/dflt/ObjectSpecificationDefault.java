@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -48,6 +46,8 @@ import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetI
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;

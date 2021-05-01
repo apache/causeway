@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -59,6 +57,8 @@ import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+
+import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;

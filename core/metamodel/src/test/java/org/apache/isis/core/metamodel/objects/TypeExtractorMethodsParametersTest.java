@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.val;
 

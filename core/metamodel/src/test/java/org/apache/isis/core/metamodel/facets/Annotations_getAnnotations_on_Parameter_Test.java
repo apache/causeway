@@ -26,10 +26,10 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.reflection._Annotations;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 

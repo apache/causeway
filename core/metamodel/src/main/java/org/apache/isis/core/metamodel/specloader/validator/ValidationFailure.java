@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsFirst;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
 
 import lombok.NonNull;
 import lombok.Value;
