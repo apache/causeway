@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.config.beans;
 
+import org.springframework.core.env.Environment;
+
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.context._Plugin;
 
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -41,8 +44,15 @@ public interface IsisBeanTypeClassifier {
 
     // -- FACTORY
     
+    /**
+     * in support of JUnit testing
+     */
     static IsisBeanTypeClassifier createInstance() {
-        return new IsisBeanTypeClassifierImpl();
+        return new IsisBeanTypeClassifierImpl(Can.empty());
+    }
+    
+    static IsisBeanTypeClassifier createInstance(final @NonNull Environment environment) {
+        return new IsisBeanTypeClassifierImpl(Can.ofArray(environment.getActiveProfiles()));
     }
     
     // -- LOOKUP

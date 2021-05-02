@@ -108,6 +108,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
             case VALUE:
+            case VETOED:
             case UNKNOWN:
                 return;
             }    

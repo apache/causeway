@@ -18,12 +18,16 @@
  */
 package org.apache.isis.core.config.beans;
 
+import java.util.Objects;
+
 import javax.inject.Named;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -54,16 +58,26 @@ import lombok.extern.log4j.Log4j2;
 })
 @Log4j2
 public class IsisBeanFactoryPostProcessorForSpring
-implements BeanFactoryPostProcessor {
+implements 
+    BeanFactoryPostProcessor,
+    ApplicationContextAware {
 
-    private final IsisBeanTypeClassifier isisBeanTypeClassifier = 
-            IsisBeanTypeClassifier.createInstance();
-    
-    private final IsisComponentScanInterceptor isisComponentScanInterceptor = 
-            IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
+    private IsisBeanTypeClassifier isisBeanTypeClassifier;
+    private IsisComponentScanInterceptor isisComponentScanInterceptor; 
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        val environment = applicationContext.getEnvironment();
+        isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance(environment);
+        isisComponentScanInterceptor = IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
+    }
     
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        
+        // make sure we have an applicationContext before calling post processing
+        Objects.requireNonNull(isisBeanTypeClassifier, 
+                "postProcessBeanFactory() called before app-ctx was made available"); 
         
         val registry = (BeanDefinitionRegistry) beanFactory;
         
@@ -106,7 +120,9 @@ implements BeanFactoryPostProcessor {
     
     @Bean
     public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
-        return isisBeanTypeClassifier;
+        return isisBeanTypeClassifier!=null
+                ? isisBeanTypeClassifier
+                : (isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance()); // JUnit support
     }
     
     @Bean("isis.bean-meta-data")

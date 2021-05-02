@@ -73,7 +73,6 @@ implements IsisComponentScanInterceptor {
     public void intercept(ScannedTypeMetaData typeMeta) {
         
         val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
-        
         if(classOrFailure.isFailure()) {
             log.warn(classOrFailure.getFailure());
             return;

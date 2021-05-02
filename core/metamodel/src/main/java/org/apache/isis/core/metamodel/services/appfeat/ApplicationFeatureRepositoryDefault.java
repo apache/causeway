@@ -330,15 +330,18 @@ implements ApplicationFeatureRepository {
 
     protected boolean exclude(final ObjectSpecification spec) {
 
-        val excluded = spec.isMixin() || spec.isAbstract() ||
-                spec.getBeanSort().isUnknown() ||
-                isBuiltIn(spec) ||
-                isHidden(spec);
+        val excluded = spec.isMixin() 
+                || spec.isAbstract() 
+                || spec.getBeanSort().isVetoed()
+                || spec.getBeanSort().isUnknown() 
+                || isBuiltIn(spec) 
+                || isHidden(spec);
 
         if(excluded && log.isDebugEnabled()) {
-            log.debug("{} excluded because: abstract:{} unknown-sort:{} builtIn:{} hidden:{}",
+            log.debug("{} excluded because: abstract:{} vetoed:{} unknown-sort:{} builtIn:{} hidden:{}",
                     spec.getCorrespondingClass().getSimpleName(),
                     spec.isAbstract(),
+                    spec.getBeanSort().isVetoed(),
                     spec.getBeanSort().isUnknown(),
                     isBuiltIn(spec),
                     isHidden(spec)

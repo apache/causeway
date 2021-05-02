@@ -26,35 +26,45 @@ import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
-import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE) 
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE) 
 //@Log4j2
 final class IsisBeanTypeClassifierImpl 
 implements IsisBeanTypeClassifier {
 
+    private final Can<String> activeProfiles;
     private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
     
     @Override
-    public BeanClassification classify(Class<?> type) {
+    public BeanClassification classify(final @NonNull Class<?> type) {
 
-        requires(type, "type");
-        
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.UNKNOWN); // reject
+        if(findNearestAnnotation(type, Vetoed.class).isPresent()
+                || findNearestAnnotation(type, Programmatic.class).isPresent()) {
+            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+        }
+
+        val profiles = Can.ofArray(findNearestAnnotation(type, Profile.class)
+                .map(Profile::value)
+                .orElse(null));
+        if(profiles.isNotEmpty()
+                && !profiles.stream().anyMatch(this::isProfileActive)) {
+            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
         }
 
         val aDomainService = findNearestAnnotation(type, DomainService.class);
@@ -161,6 +171,12 @@ implements IsisBeanTypeClassifier {
         }
         return null;
     }
-
+    
+    //XXX yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
+    //either we find a Spring Boot utility class that does this logic for us, or we make it clear with the 
+    //docs, that we have only limited support for the @Profile annotation
+    private boolean isProfileActive(final String profile) {
+        return activeProfiles.contains(profile);
+    }
 
 }
