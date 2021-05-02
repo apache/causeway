@@ -30,6 +30,7 @@
 	<properties>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.skip>true</sonar.skip>
+		<spring.profiles.active>demo-jdo</spring.profiles.active>
 	</properties>
 
 	<dependencies>

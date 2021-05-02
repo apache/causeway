@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -30,6 +31,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.val;
 
+@Profile("demo-jdo")
 @Repository
 @Named("demo.numberConstantRepository")
 public class NumberConstantJdoRepository {

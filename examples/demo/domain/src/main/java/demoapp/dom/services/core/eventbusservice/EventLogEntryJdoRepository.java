@@ -23,12 +23,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.RequiredArgsConstructor;
 
+@Profile("demo-jdo")
 @Repository
 @Named("demo.eventLogRepository")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

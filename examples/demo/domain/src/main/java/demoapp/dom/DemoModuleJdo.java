@@ -29,7 +29,7 @@ import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
 
 @Configuration
-@Profile("!jpa")
+@Profile("demo-jdo")
 @Import({
     DemoModuleCommon.class,
     IsisModuleJdoDatanucleus.class,

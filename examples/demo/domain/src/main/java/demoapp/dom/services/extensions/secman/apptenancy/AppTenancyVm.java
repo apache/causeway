@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -39,6 +41,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdo;
 import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdoEntities;
 
+@Profile("demo-jdo")
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType()

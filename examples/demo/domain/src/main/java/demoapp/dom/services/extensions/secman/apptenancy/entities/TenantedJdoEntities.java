@@ -22,12 +22,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.RequiredArgsConstructor;
 
+@Profile("demo-jdo")
 @Service
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class TenantedJdoEntities {

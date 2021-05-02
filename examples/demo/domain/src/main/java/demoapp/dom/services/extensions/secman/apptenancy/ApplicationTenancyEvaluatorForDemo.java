@@ -20,6 +20,7 @@ package demoapp.dom.services.extensions.secman.apptenancy;
 
 import java.util.regex.Pattern;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
@@ -30,6 +31,7 @@ import lombok.val;
 
 import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdo;
 
+@Profile("demo-jdo")
 //tag::class[]
 @Service
 public class ApplicationTenancyEvaluatorForDemo

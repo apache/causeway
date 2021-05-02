@@ -75,6 +75,9 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
     	//IsisPresets.prototyping();
         
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
+        
+        System.setProperty("spring.profiles.active", "demo-jpa");
+        
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 
     }

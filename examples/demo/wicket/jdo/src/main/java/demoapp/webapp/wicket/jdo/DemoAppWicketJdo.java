@@ -76,6 +76,8 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
         
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
+        System.setProperty("spring.profiles.active", "demo-jdo");
+        
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
     }

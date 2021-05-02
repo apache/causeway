@@ -26,7 +26,7 @@ import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
 
 @Configuration
-@Profile("jpa")
+@Profile("demo-jpa")
 @Import({
     DemoModuleCommon.class,
     IsisModuleJpaEclipselink.class,

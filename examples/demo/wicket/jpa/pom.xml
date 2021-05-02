@@ -30,9 +30,7 @@
 	<properties>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.skip>true</sonar.skip>
-		
-		<!--  we have configuration with the demo, that is sensitive to the 'jpa' profile -->
-		<spring.profiles.active>jpa</spring.profiles.active> 
+		<spring.profiles.active>demo-jpa</spring.profiles.active> 
 	</properties>
 
 	<build>
