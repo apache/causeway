@@ -32,7 +32,7 @@ import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.web.DemoAppManifest;
+import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 
 /**
@@ -40,7 +40,8 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifest.class, // TODO we gonna need 2 variants JDO/JPA
+    // App-Manifest (Configuration)
+    DemoAppManifestJpa.class,
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
@@ -74,7 +75,6 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
     	//IsisPresets.prototyping();
         
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
-
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 
     }

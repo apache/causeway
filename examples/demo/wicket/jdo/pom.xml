@@ -42,6 +42,14 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- PERSISTENCE -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdo</artifactId>
+			<type>pom</type>
+		</dependency>
+
 	</dependencies>
 
 	<profiles>

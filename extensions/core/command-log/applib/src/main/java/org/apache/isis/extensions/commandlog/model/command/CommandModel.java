@@ -24,9 +24,13 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
+import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
-public interface CommandModel extends HasCommandDto {
+public interface CommandModel 
+extends 
+    HasCommandDto, 
+    Comparable<CommandModel> {
     
     public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandModel> { }
     public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandModel> { }
@@ -43,8 +47,14 @@ public interface CommandModel extends HasCommandDto {
     String getException();
 
     Timestamp getStartedAt();
-
     Timestamp getCompletedAt();
+    Timestamp getTimestamp();
+
+    Bookmark getTarget();
+    
+    String getLogicalMemberIdentifier();
+    
+    String getUsername();
 
     void saveAnalysis(String analysis);
 
@@ -55,5 +65,22 @@ public interface CommandModel extends HasCommandDto {
     CommandOutcomeHandler outcomeHandler();
 
     void setReplayState(ReplayState excluded);
+    
+    default String toFriendlyString() {
+        return ObjectContracts
+                .toString("interactionId", CommandModel::getInteractionId)
+                .thenToString("username", CommandModel::getUsername)
+                .thenToString("timestamp", CommandModel::getTimestamp)
+                .thenToString("target", CommandModel::getTarget)
+                .thenToString("logicalMemberIdentifier", CommandModel::getLogicalMemberIdentifier)
+                .thenToStringOmitIfAbsent("startedAt", CommandModel::getStartedAt)
+                .thenToStringOmitIfAbsent("completedAt", CommandModel::getCompletedAt)
+                .toString(this);
+    }
+    
+    @Override
+    default int compareTo(final CommandModel other) {
+        return this.getTimestamp().compareTo(other.getTimestamp());
+    }
 
 }

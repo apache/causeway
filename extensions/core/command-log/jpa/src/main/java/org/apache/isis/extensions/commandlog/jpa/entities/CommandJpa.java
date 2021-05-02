@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.entities;
+package org.apache.isis.extensions.commandlog.jpa.entities;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import javax.jdo.annotations.IdentityType;
+import javax.persistence.Entity;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -49,7 +49,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
-import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
@@ -77,6 +76,7 @@ import lombok.val;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface).
  */
+/* TODO migrate to JPA
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION,
         schema = "isisExtensionsCommandLog",
@@ -219,27 +219,13 @@ import lombok.val;
                     + " WHERE replayState == 'PENDING' "
                     + "ORDER BY this.timestamp ASC "
                     + "RANGE 0,10"),    // same as batch size
-//        @javax.jdo.annotations.Query(
-//                name="findReplayableInErrorMostRecent",
-//                value="SELECT "
-//                        + "FROM " + CommandJdo.FQCN
-//                        + " WHERE replayState == 'FAILED' "
-//                        + "ORDER BY this.timestamp DESC "
-//                        + "RANGE 0,2"),
-//    @javax.jdo.annotations.Query(
-//            name="findReplayableMostRecentStarted",
-//            value="SELECT "
-//                    + "FROM " + CommandJdo.FQCN
-//                    + " WHERE replayState = 'PENDING' "
-//                    + "ORDER BY this.timestamp DESC "
-//                    + "RANGE 0,20"),
 })
 @javax.jdo.annotations.Indices({
         @javax.jdo.annotations.Index(name = "CommandJdo__startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
         @javax.jdo.annotations.Index(name = "CommandJdo__timestamp__IDX", members = { "timestamp" }),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
+*/
+@Entity
 @DomainObject(
         objectType = "isis.ext.commandLog.Command",
         editing = Editing.DISABLED
@@ -253,19 +239,19 @@ import lombok.val;
 )
 //@Log4j2
 @NoArgsConstructor
-public class CommandJdo
+public class CommandJpa
 implements
     CommandModel,
     DomainChangeRecord {
 
-    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo"; 
+    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jpa.entities.CommandJpa"; 
 
     /**
      * Intended for use on primary system.
      *
      * @param command
      */
-    public CommandJdo(final Command command) {
+    public CommandJpa(final Command command) {
 
         setInteractionIdStr(command.getInteractionId().toString());
         setUsername(command.getUsername());
@@ -292,7 +278,7 @@ implements
      * @param replayState - controls whether this is to be replayed
      * @param targetIndex - if the command represents a bulk action, then it is flattened out when replayed; this indicates which target to execute against.
      */
-    public CommandJdo(
+    public CommandJpa(
             final CommandDto commandDto,
             final ReplayState replayState,
             final int targetIndex) {
@@ -338,10 +324,10 @@ implements
             if(!Objects.equals(ev.getTitle(), "Command Jdo") || ev.getTranslatableTitle() != null) {
                 return;
             }
-            ev.setTitle(title((CommandJdo)ev.getSource()));
+            ev.setTitle(title((CommandJpa)ev.getSource()));
         }
 
-        private static String title(CommandJdo source) {
+        private static String title(CommandJpa source) {
             // nb: not thread-safe
             // formats defined in https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
             val format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -360,9 +346,9 @@ implements
      * to persist if using h2 (perhaps would need to be mapped differently).
      * @see <a href="https://www.datanucleus.org/products/accessplatform/jdo/mapping.html#_other_types">www.datanucleus.org</a>
      */
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false", name = "interactionId", length = 36)
+//    @javax.jdo.annotations.PrimaryKey
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="false", name = "interactionId", length = 36)
     @Property(domainEvent = InteractionIdDomainEvent.class)
     @PropertyLayout(named = "Interaction Id")
     @Getter @Setter
@@ -372,15 +358,15 @@ implements
 
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> { }
-    @javax.jdo.annotations.Column(allowsNull="false", length = 50)
+//    @javax.jdo.annotations.Column(allowsNull="false", length = 50)
     @Property(domainEvent = UsernameDomainEvent.class)
     @Getter @Setter
     private String username;
 
 
     public static class TimestampDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="false")
     @Property(domainEvent = TimestampDomainEvent.class)
     @Getter @Setter
     private Timestamp timestamp;
@@ -397,7 +383,7 @@ implements
     /**
      * For a replayed command, what the outcome was.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=10)
+//    @javax.jdo.annotations.Column(allowsNull="true", length=10)
     @Property(domainEvent = ReplayStateDomainEvent.class)
     @Getter @Setter
     private ReplayState replayState;
@@ -407,7 +393,7 @@ implements
     /**
      * For a {@link ReplayState#FAILED failed} replayed command, what the reason was for the failure.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=255)
+//    @javax.jdo.annotations.Column(allowsNull="true", length=255)
     @Property(domainEvent = ReplayStateFailureReasonDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
     @Getter @Setter
@@ -418,17 +404,17 @@ implements
 
 
     public static class ParentDomainEvent extends PropertyDomainEvent<Command> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(name="parentId", allowsNull="true")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(name="parentId", allowsNull="true")
     @Property(domainEvent = ParentDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
     @Getter @Setter
-    private CommandJdo parent;
+    private CommandJpa parent;
 
 
     public static class TargetDomainEvent extends PropertyDomainEvent<String> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="target")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="target")
     @Property(domainEvent = TargetDomainEvent.class)
     @PropertyLayout(named = "Object")
     @Getter @Setter
@@ -453,14 +439,14 @@ implements
     public static class LogicalMemberIdentifierDomainEvent extends PropertyDomainEvent<String> { }
     @Property(domainEvent = LogicalMemberIdentifierDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
-    @javax.jdo.annotations.Column(allowsNull="false", length = MemberIdentifierType.Meta.MAX_LEN)
+//    @javax.jdo.annotations.Column(allowsNull="false", length = MemberIdentifierType.Meta.MAX_LEN)
     @Getter @Setter
     private String logicalMemberIdentifier;
 
 
     public static class CommandDtoDomainEvent extends PropertyDomainEvent<CommandDto> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
     @Property(domainEvent = CommandDtoDomainEvent.class)
     @PropertyLayout(multiLine = 9)
     @Getter @Setter
@@ -468,16 +454,16 @@ implements
 
 
     public static class StartedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="true")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="true")
     @Property(domainEvent = StartedAtDomainEvent.class)
     @Getter @Setter
     private Timestamp startedAt;
 
 
     public static class CompletedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="true")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="true")
     @Property(domainEvent = CompletedAtDomainEvent.class)
     @Getter @Setter
     private Timestamp completedAt;
@@ -490,7 +476,7 @@ implements
      * <p>
      * Populated only if it has {@link #getCompletedAt() completed}.
      */
-    @javax.jdo.annotations.NotPersistent
+//    @javax.jdo.annotations.NotPersistent
     @javax.validation.constraints.Digits(integer=5, fraction=3)
     @Property(domainEvent = DurationDomainEvent.class)
     public BigDecimal getDuration() {
@@ -499,7 +485,7 @@ implements
 
 
     public static class IsCompleteDomainEvent extends PropertyDomainEvent<Boolean> { }
-    @javax.jdo.annotations.NotPersistent
+//    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = IsCompleteDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS)
     public boolean isComplete() {
@@ -508,7 +494,7 @@ implements
 
 
     public static class ResultSummaryDomainEvent extends PropertyDomainEvent<String> { }
-    @javax.jdo.annotations.NotPersistent
+//    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = ResultSummaryDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS, named = "Result")
     public String getResultSummary() {
@@ -527,8 +513,8 @@ implements
 
 
     public static class ResultDomainEvent extends PropertyDomainEvent<String> { }
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="result")
+//    @javax.jdo.annotations.Persistent
+//    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="result")
     @Property(domainEvent = ResultDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, named = "Result Bookmark")
     @Getter @Setter
@@ -542,7 +528,7 @@ implements
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
+//    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
     @Property(domainEvent = ExceptionDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5, named = "Exception (if any)")
     @Getter
@@ -555,7 +541,7 @@ implements
     }
 
     public static class IsCausedExceptionDomainEvent extends PropertyDomainEvent<Boolean> { }
-    @javax.jdo.annotations.NotPersistent
+//    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = IsCausedExceptionDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS)
     public boolean isCausedException() {
@@ -588,28 +574,28 @@ implements
     public String toString() {
         return toFriendlyString();
     }
-
+   
     public CommandOutcomeHandler outcomeHandler() {
         return new CommandOutcomeHandler() {
             @Override
             public Timestamp getStartedAt() {
-                return CommandJdo.this.getStartedAt();
+                return CommandJpa.this.getStartedAt();
             }
 
             @Override
             public void setStartedAt(final Timestamp startedAt) {
-                CommandJdo.this.setStartedAt(startedAt);
+                CommandJpa.this.setStartedAt(startedAt);
             }
 
             @Override
             public void setCompletedAt(final Timestamp completedAt) {
-                CommandJdo.this.setCompletedAt(completedAt);
+                CommandJpa.this.setCompletedAt(completedAt);
             }
 
             @Override
             public void setResult(final Result<Bookmark> resultBookmark) {
-                CommandJdo.this.setResult(resultBookmark.getValue().orElse(null));
-                CommandJdo.this.setException(resultBookmark.getFailure().orElse(null));
+                CommandJpa.this.setResult(resultBookmark.getValue().orElse(null));
+                CommandJpa.this.setException(resultBookmark.getFailure().orElse(null));
             }
 
         };
@@ -617,9 +603,9 @@ implements
 
     @Service
     @Order(OrderPrecedence.LATE - 10) // before the framework's own default.
-    public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandJdo> {
+    public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandJpa> {
 
-        public TableColumnOrderDefault() { super(CommandJdo.class); }
+        public TableColumnOrderDefault() { super(CommandJpa.class); }
 
         @Override
         protected List<String> orderParented(Object parent, String collectionId, List<String> propertyIds) {

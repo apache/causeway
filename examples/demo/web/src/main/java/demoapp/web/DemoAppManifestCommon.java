@@ -30,7 +30,6 @@ import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandRepl
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
@@ -39,13 +38,11 @@ import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
-import demoapp.dom.DemoModule;
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
 import demoapp.web.replay.DemoReplayController;
 import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -53,7 +50,6 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
 @Configuration
 @Import({
     // @Configuration's
-    DemoModule.class, // shared demo core module
 
     // commands
     IsisModuleExtCommandReplayPrimary.class,
@@ -65,7 +61,6 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     // Security Manager Extension (secman)
     IsisModuleExtSecmanModel.class,
     IsisModuleExtSecmanRealmShiro.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
     
     // REST
@@ -87,7 +82,7 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
 
 })
 @Log4j2
-public class DemoAppManifest {
+public class DemoAppManifestCommon {
 
     /**
      * If available from {@code System.getProperty("ContextPath")}

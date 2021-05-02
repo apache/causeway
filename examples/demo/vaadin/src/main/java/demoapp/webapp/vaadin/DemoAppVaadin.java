@@ -32,14 +32,14 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.web.DemoAppManifest;
+import demoapp.web.DemoAppManifestCommon;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifest.class,
+    DemoAppManifestCommon.class,
     
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer

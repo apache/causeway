@@ -32,7 +32,7 @@ import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.web.DemoAppManifest;
+import demoapp.web.DemoAppManifestJdo;
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 
 /**
@@ -40,7 +40,8 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifest.class,
+    // App-Manifest (Configuration)
+    DemoAppManifestJdo.class,
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,

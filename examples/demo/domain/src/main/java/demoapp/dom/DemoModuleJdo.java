@@ -18,56 +18,26 @@
  */
 package demoapp.dom;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
+@Profile("!jpa")
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-
+    DemoModuleCommon.class,
     IsisModuleJdoDatanucleus.class,
-
-    IsisModuleTestingFixturesApplib.class,
-
     IsisModuleExtCommandLogJdo.class,
-
 })
 @PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.SilenceWicket),
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
 })
-@ComponentScan(
-        basePackageClasses= {
-                DemoModule.class
-        })
-public class DemoModule {
-
-    @Bean
-    public SecmanConfiguration securityModuleConfigBean() {
-        return SecmanConfiguration.builder()
-                .adminUserName("sven")
-                .adminAdditionalNamespacePermission("demo")
-                .adminAdditionalNamespacePermission("isis")
-                .build();
-    }
-
-    @Bean
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();
-    }
+public class DemoModuleJdo {
 
 }

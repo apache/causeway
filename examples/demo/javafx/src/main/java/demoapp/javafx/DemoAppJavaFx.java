@@ -31,14 +31,14 @@ import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxV
 import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
-import demoapp.dom.DemoModule;
+import demoapp.dom.DemoModuleJdo;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoModule.class,
+    DemoModuleJdo.class,
     
     // INCUBATING
     IsisModuleSecurityBypass.class,
