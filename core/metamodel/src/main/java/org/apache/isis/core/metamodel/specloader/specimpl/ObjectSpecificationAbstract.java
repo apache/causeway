@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
@@ -266,6 +267,10 @@ implements ObjectSpecification {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
 
+        if(getFullIdentifier().contains("ProperElementTypeVm")) {
+            _Probe.errOut("getFullIdentifier %s %s", getFullIdentifier(), upTo);
+        }
+        
         boolean revalidate = false;
 
         switch (introspectionState) {

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.typeextract;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -127,7 +128,23 @@ public class TypeExtractor {
                     if (type instanceof Class) {
                         acceptNonVoid(onClass, (Class<?>) type);
                     }
+                    if (type instanceof WildcardType) {
+                        acceptWildcardType(onClass, (WildcardType) type);
+                    }
                 }
+            }
+        }
+    }
+
+    private static void acceptWildcardType(Consumer<Class<?>> onClass, WildcardType wildcardType) {
+        for (val lower : wildcardType.getLowerBounds()) {
+            if (lower instanceof Class) {
+                acceptNonVoid(onClass, (Class<?>) lower);
+            }
+        }
+        for (val upper : wildcardType.getUpperBounds()) {
+            if (upper instanceof Class) {
+                acceptNonVoid(onClass, (Class<?>) upper);
             }
         }
     }
@@ -135,6 +152,7 @@ public class TypeExtractor {
     private static void acceptNonVoid(
             final Consumer<Class<?>> onClass, 
             final Class<?>... classes) {
+        
         for (val cls : classes) {
             if(cls != void.class 
                     && cls != Void.class) {
@@ -142,5 +160,7 @@ public class TypeExtractor {
             }    
         }
     }
+    
+
     
 }
