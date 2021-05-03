@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -92,11 +93,19 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getClassType() {
-        boolean service = false;
-        for(ObjectSpecification subspecs: spec.subclasses(Hierarchical.Depth.DIRECT)) {
-            service = service || subspecs.isManagedBean();
-        }
-        return service || spec.isManagedBean() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
+        
+        val isService = Stream.concat(
+                    Stream.of(spec), 
+                    spec.subclasses(Hierarchical.Depth.DIRECT).stream())
+                .anyMatch(ObjectSpecification::isManagedBean);
+        
+        return isService 
+                    ? "2 Service"
+                    : spec.isValue()
+                            ? "3 Value"
+                            : spec.isParentedOrFreeCollection()
+                                    ? "4 Collection"
+                                    : "1 Object";
     }
 
     @XmlElement @Override

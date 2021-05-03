@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -137,8 +135,8 @@ implements ObjectSpecification {
     private final List<ObjectAssociation> associations = _Lists.newArrayList();
     
     // defensive immutable lazy copy of associations
-    private final _Lazy<List<ObjectAssociation>> unmodifiableAssociations = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(associations)));
+    private final _Lazy<Can<ObjectAssociation>> unmodifiableAssociations = 
+            _Lazy.threadSafe(()->Can.ofCollection(associations));
     
     // -- ACTIONS
     
@@ -148,8 +146,8 @@ implements ObjectSpecification {
     @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
-    private final _Lazy<List<ObjectAction>> unmodifiableActions = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(objectActions)));
+    private final _Lazy<Can<ObjectAction>> unmodifiableActions = 
+            _Lazy.threadSafe(()->Can.ofCollection(objectActions));
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
     private final ListMultimap<ActionType, ObjectAction> objectActionsByType = 
