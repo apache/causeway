@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -50,6 +51,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
+import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
@@ -280,12 +283,20 @@ class DomainModelTest_usingGoodDomain {
         val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
                 IntrospectionState.FULLY_INTROSPECTED);
         
-        val coll = vmSpec.getCollectionElseFail("myColl");
-        val collSpec = coll.getSpecification();
+        val concreteColl = vmSpec.getCollectionElseFail("concreteColl");
+        val concreteCollSpec = concreteColl.getSpecification();
         
-        val elementTypeSpec = collSpec.getElementSpecification().orElse(null);
-        // TODO add actual checks
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
         
+        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
+        val interfaceCollSpec = interfaceColl.getSpecification();
+        
+        //FIXME yet test fails
+        //assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        //assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        
+        // TODO for the abstract case, we also want to see any members and the title-facet 
     }
 
     // -- HELPER

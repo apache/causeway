@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -380,24 +378,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 __->isisBeanTypeRegistry
                     .lookupIntrospectableType(type)
                     .map(IsisBeanMetaData::getBeanSort)
-                    .orElseGet(()->{
-                        // the isisBeanTypeClassifier is not meant to handle 
-                        // - primitive types
-                        // - non-concrete types
-                        if(type.isPrimitive()) {
-                            return BeanSort.VALUE;
-                        }
-                        if(Collection.class.isAssignableFrom(type)
-                                || Can.class.isAssignableFrom(type)
-                                || type.isArray()) {
-                            return BeanSort.COLLECTION;
-                        }
-                        if(type.isInterface()
-                                || Modifier.isAbstract(type.getModifiers())) {
-                            return BeanSort.ABSTRACT;
-                        }
-                        return isisBeanTypeClassifier.classify(type).getBeanSort();
-                    }), 
+                    .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()), 
                 upTo);
     }
 

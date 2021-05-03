@@ -19,6 +19,7 @@
 package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -54,6 +55,10 @@ implements IsisBeanTypeClassifier {
     @Override
     public BeanClassification classify(final @NonNull Class<?> type) {
 
+        if(type.isPrimitive()) {
+            return BeanClassification.delegated(BeanSort.VALUE);
+        }
+        
         if(findNearestAnnotation(type, Vetoed.class).isPresent()
                 || findNearestAnnotation(type, Programmatic.class).isPresent()) {
             return BeanClassification.selfManaged(BeanSort.VETOED); // reject
@@ -143,6 +148,13 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.selfManaged(BeanSort.COLLECTION);
         }
 
+        if(type.isInterface()
+                // modifier predicate must be called after testing for non-scalar type above, 
+                // otherwise we'd get false positives
+                || Modifier.isAbstract(type.getModifiers())) {
+            return BeanClassification.delegated(BeanSort.ABSTRACT);
+        }
+        
         if(Serializable.class.isAssignableFrom(type)) {
             return BeanClassification.delegated(BeanSort.VALUE);
         }

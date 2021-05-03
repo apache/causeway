@@ -38,8 +38,9 @@ public interface IsisBeanTypeClassifier {
     /**
      * Returns the bean classification for given {@code type}.
      * 
-     * @apiNote we assume, that the {@code type} is not a primitive, 
-     * not an interface and not an abstract type   
+     * @apiNote Initially used to collect all concrete types that are considered by Spring
+     * for type inspection, but later used by the {@code SpecificationLoader} to also
+     * classify non-concrete types (interfaces and abstract classes).  
      */
     BeanClassification classify(Class<?> type);
 
