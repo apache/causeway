@@ -135,6 +135,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> addUnique(@NonNull T element) {
+        return Can.ofSingleton(element);
+    }
+    
+    @Override
     public Can<T> addAll(@NonNull Can<T> other) {
         return other;
     }

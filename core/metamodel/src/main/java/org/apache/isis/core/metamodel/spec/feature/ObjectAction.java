@@ -207,8 +207,6 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Returns a {@link Stream} of {@link ObjectActionParameter} as per
      * {@link #getParameters()}.
-     *
-     * @return
      */
     default Stream<ObjectActionParameter> streamParameters() {
         return getParameters().stream();

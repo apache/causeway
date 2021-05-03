@@ -20,16 +20,15 @@
 package org.apache.isis.core.metamodel.testspec;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -59,7 +58,6 @@ implements ObjectSpecification {
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
-    private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
      * lazily derived, see {@link #getLogicalType()} 
@@ -216,8 +214,8 @@ implements ObjectSpecification {
     }
 
     @Override
-    public List<ObjectSpecification> interfaces() {
-        return Collections.emptyList();
+    public Can<ObjectSpecification> interfaces() {
+        return Can.empty();
     }
 
     @Override
@@ -241,8 +239,8 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Set<ObjectSpecification> subclasses(final Depth depth) {
-        return subclasses;
+    public Can<ObjectSpecification> subclasses(final Depth depth) {
+        return Can.empty();
     }
 
     @Override

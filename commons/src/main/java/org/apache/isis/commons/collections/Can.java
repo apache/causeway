@@ -487,6 +487,19 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- MANIPULATION
     
     Can<T> add(T element);
+    
+    /**
+     * Adds the specified element to the list if it is not already present.  
+     * @param element
+     * @return same or new instance
+     */
+    default Can<T> addUnique(@NonNull T element) {
+        if(contains(element)) {
+            return this;
+        }
+        return add(element);
+    }
+   
     Can<T> addAll(Can<T> other);
     
     /**

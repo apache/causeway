@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +34,7 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -96,50 +96,41 @@ public abstract class ObjectSpecificationAbstract
 extends ObjectMemberContainer
 implements ObjectSpecification {
 
-
+    /** 
+     * @implNote thread-safe
+     */
     private static class Subclasses {
-        private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
+        
+        // List performs better compared to a Set, when the number of elements is low
+        private Can<ObjectSpecification> classes = Can.empty();
+        private final Object $lock = new Object();
 
         public void addSubclass(final ObjectSpecification subclass) {
-            classes.add(subclass);
+            synchronized($lock) {
+                classes = classes.addUnique(subclass);    
+            }
         }
 
         public boolean hasSubclasses() {
-            return !classes.isEmpty();
+            synchronized($lock) {
+                return classes.isNotEmpty();
+            }
         }
 
-        public Collection<ObjectSpecification> toCollection() {
-            return Collections.unmodifiableSet(classes); //just a view, thread-safe only if classes is thread-safe
+        public Can<ObjectSpecification> snapshot() {
+            synchronized($lock) {
+                return classes;
+            }
         }
     }
-
-//XXX drop-in for the above, rather a question which performs better 
-//    private static class Subclasses {
-//        private final List<ObjectSpecification> classes = new ArrayList<>();
-//
-//        public void addSubclass(final ObjectSpecification subclass) {
-//            if(classes.contains(subclass)) {
-//                return;
-//            }
-//            classes.add(subclass);
-//        }
-//
-//        public boolean hasSubclasses() {
-//            return !classes.isEmpty();
-//        }
-//
-//        public List<ObjectSpecification> toCollection() {
-//            return Collections.unmodifiableList(classes);
-//        }
-//    }
     
     
-    // -- fields
-
-    //protected final ServiceInjector servicesInjector;
+    // -- FIELDS
 
     private final PostProcessor postProcessor;
     private final FacetProcessor facetProcessor;
+    
+    @Getter private final BeanSort beanSort;
 
     // -- ASSOCIATIONS
     
@@ -169,8 +160,8 @@ implements ObjectSpecification {
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
     
     // defensive immutable lazy copy of interfaces
-    private final _Lazy<List<ObjectSpecification>> unmodifiableInterfaces = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(interfaces)));
+    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces = 
+            _Lazy.threadSafe(()->Can.ofCollection(interfaces));
     
     
     
@@ -627,14 +618,14 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Collection<ObjectSpecification> interfaces() {
+    public Can<ObjectSpecification> interfaces() {
         return unmodifiableInterfaces.get();
     }
 
     @Override
-    public Collection<ObjectSpecification> subclasses(final Depth depth) {
+    public Can<ObjectSpecification> subclasses(final Depth depth) {
         if (depth == Depth.DIRECT) {
-            return directSubclasses.toCollection();
+            return directSubclasses.snapshot();
         }
 
         // depth == Depth.TRANSITIVE)
@@ -642,7 +633,7 @@ implements ObjectSpecification {
             transitiveSubclasses = transitiveSubclasses();
         }
 
-        return transitiveSubclasses.toCollection();
+        return transitiveSubclasses.snapshot();
     }
 
     private synchronized Subclasses transitiveSubclasses() {
@@ -865,19 +856,6 @@ implements ObjectSpecification {
             final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
-
-    //@Setter(AccessLevel.PROTECTED)
-    @Getter
-    private final BeanSort beanSort;
-
-//    @Override
-//    public BeanSort getBeanSort() {
-//        if(beanSort==null) {
-//            setBeanSort(sortOf(this));
-//        }
-//        return beanSort;
-//    }
-
 
     // -- convenience isXxx (looked up from facets)
     @Override
