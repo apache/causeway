@@ -161,32 +161,19 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(objectSpec == null) {
             return BeanSort.UNKNOWN;
         }
-        if(objectSpec.isManagedBean()) {
-            return BeanSort.MANAGED_BEAN_CONTRIBUTING;
+        
+        if(objectSpec.getBeanSort().isUnknown()
+                && !(mode == Mode.RELAXED)) {
+        
+            throw new IllegalArgumentException(String.format(
+                    "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
+                    objectSpec.getFullIdentifier(),
+                    domainType.getName()
+                    ));
         }
-        if(objectSpec.isViewModel()) {
-            return BeanSort.VIEW_MODEL;
-        }
-        if(objectSpec.isValue()) {
-            return BeanSort.VALUE;
-        }
-        if(objectSpec.isMixin()) {
-            return BeanSort.MIXIN;
-        }
-        if(objectSpec.isParentedOrFreeCollection()) {
-            return BeanSort.COLLECTION;
-        }
-        if(objectSpec.isEntity()) {
-            return objectSpec.getBeanSort();
-        }
-        if(mode == Mode.RELAXED) {
-            return BeanSort.UNKNOWN;
-        }
-        throw new IllegalArgumentException(String.format(
-                "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
-                objectSpec.getFullIdentifier(),
-                domainType.getName()
-                ));
+        
+        return objectSpec.getBeanSort();
+        
     }
 
     @Override

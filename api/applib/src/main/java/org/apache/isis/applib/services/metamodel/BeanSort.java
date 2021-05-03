@@ -22,6 +22,8 @@ import javax.enterprise.inject.Vetoed;
 
 import org.springframework.context.annotation.Profile;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Top level object classification.
  * 
@@ -71,7 +73,12 @@ public enum BeanSort {
      */
     COLLECTION,
     /**
-     * Type must not be added to the meta-model, eg. by means of {@link Vetoed} or {@link Profile} 
+     * A non concrete type, that is a placeholder for a its concrete implementer. 
+     */
+    ABSTRACT,
+    /**
+     * Type must not be added to the meta-model, eg. by means of 
+     * {@link Vetoed}, {@link Profile} or {@link Programmatic}
      */
     VETOED, 
     UNKNOWN;
@@ -100,6 +107,10 @@ public enum BeanSort {
 
     public boolean isEntity() {
         return this == ENTITY;
+    }
+    
+    public boolean isAbstract() {
+        return this == ABSTRACT;
     }
     
     public boolean isVetoed() {

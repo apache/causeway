@@ -36,9 +36,10 @@ public interface IsisBeanTypeClassifier {
     // -- INTERFACE
    
     /**
-     * @param type
-     * @return optionally the bean classification for given {@code type},
-     * based on whether this classifier feels responsible for the {@code type}.  
+     * Returns the bean classification for given {@code type}.
+     * 
+     * @apiNote we assume, that the {@code type} is not a primitive, 
+     * not an interface and not an abstract type   
      */
     BeanClassification classify(Class<?> type);
 

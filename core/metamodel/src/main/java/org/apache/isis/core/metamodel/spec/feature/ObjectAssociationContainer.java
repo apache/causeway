@@ -42,6 +42,20 @@ public interface ObjectAssociationContainer {
         return getAssociation(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
+    
+    default OneToOneAssociation getPropertyElseFail(String id) {
+        return getAssociation(id)
+                .filter(ObjectAssociation.Predicates.PROPERTIES)
+                .map(OneToOneAssociation.class::cast)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
+    }
+    
+    default OneToManyAssociation getCollectionElseFail(String id) {
+        return getAssociation(id)
+                .filter(ObjectAssociation.Predicates.COLLECTIONS)
+                .map(OneToManyAssociation.class::cast)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
+    }
 
     // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITANCE CONSIDERED)
 

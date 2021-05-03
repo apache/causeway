@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
@@ -271,6 +272,20 @@ class DomainModelTest_usingGoodDomain {
                 .filter(prop->prop.getId().equals("samplePropertyOverride"))
                 .count());
 
+    }
+    
+    @Test
+    void elementTypes_shouldBeIntrospected_whenNotConcrete() {
+        
+        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+        
+        val coll = vmSpec.getCollectionElseFail("myColl");
+        val collSpec = coll.getSpecification();
+        
+        val elementTypeSpec = collSpec.getElementSpecification().orElse(null);
+        // TODO add actual checks
+        
     }
 
     // -- HELPER
