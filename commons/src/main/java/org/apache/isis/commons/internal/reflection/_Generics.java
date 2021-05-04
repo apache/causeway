@@ -80,7 +80,7 @@ public final class _Generics {
         
         if (genericType instanceof ParameterizedType) {
             for (val type : ((ParameterizedType) genericType).getActualTypeArguments()) {
-                visitTypeArgument((Class<?>) type, typeArgumentFilter, onTypeArgument);
+                visitTypeArgument(type, typeArgumentFilter, onTypeArgument);
             }
         }
     }
