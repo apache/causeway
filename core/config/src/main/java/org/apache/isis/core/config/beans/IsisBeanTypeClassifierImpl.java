@@ -74,6 +74,8 @@ implements IsisBeanTypeClassifier {
             
             // apiNote: abstract types and interfaces cannot be vetoed 
             // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
+            // however, concrete types that inherit abstract ones with vetoes, 
+            // will effectively be vetoed through means of annotation synthesis
             return BeanClassification.delegated(BeanSort.ABSTRACT);
         }
 
