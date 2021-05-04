@@ -141,13 +141,12 @@ public class ApplicationFeatureViewModels  {
 
     private <T extends ApplicationFeatureViewModel> List<T> asViewModels(
             final Collection<ApplicationFeature> features, 
-            final Class<T> cls) {
-
-        return _Lists.map(
-                features,
-                ApplicationFeatureViewModel.Functions
-                .<T>asViewModel(featureRepository, factory)
-                );
+            final Class<T> viewmodelType) {
+        
+        return features.stream()
+                .map(ApplicationFeature::getFeatureId)
+                .map(ApplicationFeatureViewModel.factory(featureRepository, factory, viewmodelType))
+                .collect(_Lists.toUnmodifiable());
     }
 
     // -- DEPENDENCIES

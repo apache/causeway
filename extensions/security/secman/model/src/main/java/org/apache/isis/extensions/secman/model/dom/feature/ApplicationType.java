@@ -73,7 +73,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             sequence = "20.1")
     public List<ApplicationTypeAction> getActions() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getActions();
-        return asViewModels(members);
+        return asViewModels(members, ApplicationTypeAction.class);
     }
 
 
@@ -91,7 +91,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             sequence = "20.2")
     public List<ApplicationTypeProperty> getProperties() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getProperties();
-        return asViewModels(members);
+        return asViewModels(members, ApplicationTypeProperty.class);
     }
 
 
@@ -107,7 +107,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             sequence = "20.3")
     public List<ApplicationTypeCollection> getCollections() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
-        return asViewModels(members);
+        return asViewModels(members, ApplicationTypeCollection.class);
     }
 
 

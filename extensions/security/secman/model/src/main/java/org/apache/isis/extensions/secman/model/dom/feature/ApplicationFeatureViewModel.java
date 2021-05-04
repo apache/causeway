@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.model.dom.feature;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.SortedSet;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -48,6 +47,7 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -280,10 +280,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
      */
     @Programmatic
     public ApplicationFeatureViewModel getParentNamespace() {
-        return Functions.asViewModelForId(featureRepository, factory)
-                .apply(getFeatureId().getParentNamespaceFeatureId());
+        return ApplicationFeatureViewModel
+        .newViewModel(getFeatureId().getParentNamespaceFeatureId(), featureRepository, factory);
     }
-
 
     // -- equals, hashCode, toString
 
@@ -313,39 +312,31 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return toString.toString(this);
     }
 
+    // -- FACTORY
+    
+    public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> factory(
+            final @NonNull ApplicationFeatureRepository featureRepository, 
+            final @NonNull FactoryService factory,
+            final @NonNull Class<T> viewmodelType) {
 
-    // -- helpers
-    <T extends ApplicationFeatureViewModel> List<T> asViewModels(final SortedSet<ApplicationFeatureId> members) {
-        val viewModelForId = Functions.<T>asViewModelForId(featureRepository, factory);
-        return _Lists.map(members, viewModelForId);
+        return featureId -> _Casts.<T>uncheckedCast(ApplicationFeatureViewModel
+                .newViewModel(featureId, featureRepository, factory));
     }
 
-
-    // -- Functions
-
-    public static final class Functions {
-        private Functions(){}
-
-        public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> asViewModelForId(
-                final ApplicationFeatureRepository applicationFeatureRepository,
-                final FactoryService factoryService) {
-
-            return (ApplicationFeatureId input) ->
-            _Casts.uncheckedCast(ApplicationFeatureViewModel
-                    .newViewModel(input, applicationFeatureRepository, factoryService));
-
-        }
-        public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeature, T> asViewModel(
-                final ApplicationFeatureRepository applicationFeatureRepository,
-                final FactoryService factoryService) {
-
-            return (ApplicationFeature input) ->
-            _Casts.uncheckedCast(ApplicationFeatureViewModel
-                    .newViewModel(input.getFeatureId(), applicationFeatureRepository, factoryService));
-        }
+    // -- HELPER
+    
+    protected <T extends ApplicationFeatureViewModel> List<T> asViewModels(
+            final java.util.Collection<ApplicationFeatureId> featureIds, 
+            final Class<T> viewmodelType) {
+        return featureIds.stream()
+                .map(factory(featureRepository, factory, viewmodelType))
+                .collect(_Lists.toUnmodifiable());
     }
 
-
-
+    protected <T extends ApplicationFeatureViewModel> T asViewModel(
+            final ApplicationFeatureId featureId,
+            final Class<T> viewmodelType) {
+        return factory(featureRepository, factory, viewmodelType).apply(featureId);
+    }
 
 }

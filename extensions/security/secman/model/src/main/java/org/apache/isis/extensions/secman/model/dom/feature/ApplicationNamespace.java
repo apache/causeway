@@ -62,7 +62,7 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
             sequence = "4")
     public List<ApplicationFeatureViewModel> getContents() {
         final SortedSet<ApplicationFeatureId> contents = getFeature().getContents();
-        return asViewModels(contents);
+        return asViewModels(contents, ApplicationFeatureViewModel.class);
     }
     public boolean hideContents() {
         return getSort() != ApplicationFeatureSort.NAMESPACE;
