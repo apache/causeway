@@ -253,17 +253,12 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(typeOf=...)
-        TypeOfFacet typeOfFacet = actionIfAny
+        val typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
-                .orElse(null);
-
-        // infer from generic return type
-        if(typeOfFacet == null) {
-            val cls = processMethodContext.getCls();
-            typeOfFacet = TypeOfFacet.Util.inferFromMethodReturnType(facetedMethod, cls, method);
-        }
+                .<TypeOfFacet>map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
+                // else infer from generic type arg if any
+                .orElseGet(()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method).orElse(null));
 
         super.addFacet(typeOfFacet);
     }

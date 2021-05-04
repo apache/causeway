@@ -109,12 +109,12 @@ public final class CanonicalParameterUtil {
         }
 
         if(_Arrays.isArrayType(parameterType)) {
-            final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
-            if(componentType==null) {
+            final Class<?> elementType = _Arrays.inferComponentType(parameterType).orElse(null);
+            if(elementType==null) {
                 return obj;
             }
             @SuppressWarnings("rawtypes") final List list = (List)obj;
-            return _Arrays.toArray(_Casts.uncheckedCast(list), componentType);
+            return _Arrays.toArray(_Casts.uncheckedCast(list), elementType);
         }
 
         // allow no side effects on Collection arguments

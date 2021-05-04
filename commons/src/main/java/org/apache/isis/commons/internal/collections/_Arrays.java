@@ -326,14 +326,14 @@ public final class _Arrays {
     /**
      * Returns the inferred element type of the specified array type
      * @param arrayType - type of the array for which to infer the element type
-     * @return inferred type or null if inference fails
+     * @return optionally the inferred type, based on whether inference is possible
      */
-    public static @Nullable Class<?> inferComponentTypeIfAny(
+    public static Optional<Class<?>> inferComponentType(
             final @Nullable Class<?> arrayType) {
         if(!isArrayType(arrayType)) {
-            return null;
+            return Optional.empty();
         }
-        return arrayType.getComponentType();
+        return Optional.ofNullable(arrayType.getComponentType());
     }
     
     // -- ACCESSOR

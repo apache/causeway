@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.Parameter;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.commons.internal.reflection._Generics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
@@ -41,80 +41,49 @@ import lombok.val;
  */
 public interface TypeOfFacet extends SingleClassValueFacet {
 
-    public static class Util {
-        private Util(){}
-        
-        public static TypeOfFacet inferFromParameterType(
-                final FacetHolder holder,
-                final Class<?> parameterType,
-                final Type genericParameterType) {
-        
-            TypeOfFacet typeOfFacet = inferFromGenericParamType(holder, parameterType, genericParameterType);
-            
-            if(typeOfFacet == null ) {
-                if (_Arrays.isArrayType(parameterType)) {
-                    typeOfFacet = inferFromArrayType(holder, parameterType);
-                }
-            }
-            
-            return typeOfFacet;
-        }
-        
-        public static TypeOfFacet inferFromMethodReturnType(
-                final FacetHolder holder,
-                final Class<?> methodOwner,
-                final Method method) {
-            
-            // infer from return type
-            val returnType = method.getReturnType();
-            TypeOfFacet typeOfFacet = inferFromArrayType(holder, returnType);
-
-            // infer from generic return type
-            if(typeOfFacet == null) {
-                typeOfFacet = inferFromGenericReturnType(methodOwner, method, holder);
-            }
-            
-            return typeOfFacet;
-        }
-        
-
-        private static TypeOfFacet inferFromGenericReturnType(
-                final Class<?> cls,
-                final Method method,
-                final FacetHolder holder) {
-
-            final Class<?> methodReturnType = method.getReturnType();
-            if (!_Collections.isCollectionType(methodReturnType) 
-                    && !_Collections.isCanType(methodReturnType)) {
-                return null;
-            }
-
-            return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
-                .findFirst()
-                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, holder))
-                .orElse(null);
-        }
-
-        private static TypeOfFacet inferFromArrayType(
-                final FacetHolder holder,
-                final Class<?> type) {
-
-            final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
-            return elementType != null
-                    ? new TypeOfFacetInferredFromArray(elementType, holder)
-                    : null;
-        }
-
-        private static TypeOfFacet inferFromGenericParamType(
-                final FacetHolder holder,
-                final Class<?> parameterType,
-                final Type genericParameterType) {
-
-            Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
-            
-            return elementType != null
-                    ? new TypeOfFacetInferredFromGenerics(elementType, holder)
-                    : null;
-        }
+    // -- FACTORIES
+    
+    static TypeOfFacet inferredFromArray(
+            final FacetHolder holder,
+            final Class<?> elementType) {
+        return new TypeOfFacetInferredFromArray(elementType, holder);
     }
+    
+    static TypeOfFacet inferredFromGenerics(
+            final FacetHolder holder,
+            final Class<?> elementType) {
+        return new TypeOfFacetInferredFromGenerics(elementType, holder);
+    }
+    
+    static Optional<TypeOfFacet> inferFromParameterType(
+            final FacetHolder holder,
+            final Parameter param) {
+        
+        val paramType = param.getType();
+        
+        if (_Arrays.isArrayType(paramType)) {
+            return _Arrays.inferComponentType(paramType)
+                    .map(elementType->inferredFromArray(holder, elementType));
+        }
+        
+        return _Collections.inferElementType(param)
+                .map(elementType->inferredFromGenerics(holder, elementType));    
+    }
+    
+    static Optional<TypeOfFacet> inferFromMethodReturnType(
+            final FacetHolder holder,
+            final Method method) {
+        
+        val returnType = method.getReturnType();
+        
+        if (_Arrays.isArrayType(returnType)) {
+            return _Arrays.inferComponentType(returnType)
+                    .map(elementType->inferredFromArray(holder, elementType));
+        }
+        
+        return _Collections.inferElementType(method)
+                .map(elementType->inferredFromGenerics(holder, elementType));    
+    }
+    
+    
 }

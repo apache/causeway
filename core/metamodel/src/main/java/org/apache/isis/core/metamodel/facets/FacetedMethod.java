@@ -107,39 +107,35 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Class<?> declaringType,
             final Method actionMethod) {
 
-        final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
-        final Type[] genericParameterTypes = actionMethod.getGenericParameterTypes();
-        final List<FacetedMethodParameter> actionParams = _Lists.newArrayList();
-
-        for (int paramNum = 0; paramNum < parameterTypes.length; paramNum++) {
-
-            final Class<?> parameterType = parameterTypes[paramNum];
-            final Type genericParameterType = genericParameterTypes[paramNum];
-
+        final List<FacetedMethodParameter> actionParams = _Lists.newArrayList(actionMethod.getParameterCount());
+        
+        for(val param : actionMethod.getParameters()) {
+            
+            final Class<?> parameterType = param.getType();
+            final Type genericParameterType = param.getParameterizedType();
+            
             final FeatureType featureType =
                     _Collections.inferElementTypeFromArrayOrCollection(parameterType, genericParameterType).isPresent()
                         ? FeatureType.ACTION_PARAMETER_COLLECTION
                         : FeatureType.ACTION_PARAMETER_SCALAR;
 
-            final FacetedMethodParameter fmp = new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
-            actionParams.add(fmp);
+            val facetedMethodParam = 
+                    new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
+            actionParams.add(facetedMethodParam);
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
             if(featureType == FeatureType.ACTION_PARAMETER_COLLECTION) {
 
                 final CollectionSemanticsFacet semanticsFacet =
-                        CollectionSemanticsFacetDefault.forParamType(parameterType, fmp);
+                        CollectionSemanticsFacetDefault.forParamType(parameterType, facetedMethodParam);
                 FacetUtil.addFacet(semanticsFacet);
 
-                TypeOfFacet typeOfFacet = TypeOfFacet.Util
-                        .inferFromParameterType(fmp, parameterType, genericParameterType);
-                
-
-                // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                if(typeOfFacet != null ) {
+                TypeOfFacet.inferFromParameterType(facetedMethodParam, param)
+                .ifPresent(typeOfFacet->{
+                    // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                     FacetUtil.addFacet(typeOfFacet);
-                    fmp.setType(typeOfFacet.value());
-                }
+                    facetedMethodParam.setType(typeOfFacet.value());                    
+                });
             }
 
         }

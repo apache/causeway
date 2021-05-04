@@ -130,7 +130,8 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         }
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
-        final Class<?> elementType = _Collections.inferElementTypeIfAny(field);
+        final Class<?> elementType = _Collections.inferElementType(field)
+                .orElse(null);
         if(elementType!=null) {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;

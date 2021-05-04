@@ -20,6 +20,8 @@
 package org.apache.isis.commons.internal.collections;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -43,7 +45,9 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
+import org.apache.isis.commons.internal.reflection._Generics;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -68,11 +72,11 @@ public final class _Collections {
      * @param cls
      * @return whether {@code cls} implements the java.util.Collection interface
      */
-    public static boolean isCollectionType(@Nullable final Class<?> cls) {
+    public static boolean isCollectionType(final @Nullable Class<?> cls) {
         return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
     }
 
-    public static boolean isCanType(@Nullable final Class<?> cls) {
+    public static boolean isCanType(final @Nullable Class<?> cls) {
         return cls!=null ? Can.class.isAssignableFrom(cls) : false;
     }
 
@@ -106,7 +110,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> Collection<T> asUnmodifiableCollection(@Nullable final List<T> list) {
+    public static <T> Collection<T> asUnmodifiableCollection(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -119,7 +123,7 @@ public final class _Collections {
      *
      * @param list
      */
-    public static <T> List<T> asUnmodifiableList(@Nullable final List<T> list) {
+    public static <T> List<T> asUnmodifiableList(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -135,7 +139,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> Set<T> asUnmodifiableSet(@Nullable final List<T> list) {
+    public static <T> Set<T> asUnmodifiableSet(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -154,7 +158,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> SortedSet<T> asUnmodifiableSortedSet(@Nullable final List<T> list) {
+    public static <T> SortedSet<T> asUnmodifiableSortedSet(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -272,6 +276,31 @@ public final class _Collections {
 
     // -- ELEMENT TYPE INFERENCE
 
+    
+    public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
+        final Class<?> parameterType = param.getType();
+        final Class<?> declaringType = param.getDeclaringExecutable().getDeclaringClass();
+        final Type genericParameterType = param.getParameterizedType();
+        
+        //TODO use _Generics instead
+        return inferElementType(parameterType, genericParameterType);
+    }
+    
+    public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
+        
+        val returnType = method.getReturnType();
+        
+        if (_Collections.isCollectionType(returnType) 
+                || _Collections.isCanType(returnType)) {
+            
+            return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                    .findFirst();
+        }
+
+        return Optional.empty();
+    }
+    
+    
     /**
      * If the {@code collectionType} represents a collection then returns returns the inferred element type of the
      * specified {@code genericType}
@@ -279,18 +308,18 @@ public final class _Collections {
      * @param genericType as associated with {@code collectionType} (as available for fields or method parameters)
      * @return inferred type or null if inference fails
      */
-    public static @Nullable Class<?> inferElementTypeIfAny(
-            @Nullable final Class<?> collectionType,
-            @Nullable final Type genericType) {
+    private static Optional<Class<?>> inferElementType(
+            final @Nullable Class<?> collectionType,
+            final @Nullable Type genericType) {
 
         if(collectionType == null || genericType==null) {
-            return null;
+            return Optional.empty();
         }
 
         if(!isCollectionType(collectionType) && !isCanType(collectionType)) {
-            return null;
+            return Optional.empty();
         }
-
+        
         if(genericType instanceof ParameterizedType) {
             final ParameterizedType parameterizedType = (ParameterizedType) genericType;
             final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
@@ -298,21 +327,19 @@ public final class _Collections {
                 // handle e.g. List<Sometype>
                 final Type actualTypeArgument = actualTypeArguments[0];
                 if(actualTypeArgument instanceof Class) {
-                    final Class<?> actualType = (Class<?>) actualTypeArgument;
-                    return actualType;
+                    return Optional.of((Class<?>) actualTypeArgument);
                 }
                 // also handle e.g. List<Sometype<T>>
                 if(actualTypeArgument instanceof ParameterizedType) {
                     final Type innerParameterizedType = ((ParameterizedType) actualTypeArgument).getRawType();
                     if(innerParameterizedType instanceof Class) {
-                        final Class<?> actualType = (Class<?>) innerParameterizedType;
-                        return actualType;
+                        return Optional.of((Class<?>) innerParameterizedType);
                     }
                 }
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -322,15 +349,14 @@ public final class _Collections {
      * based on whether parameter is a (collection or array) and has an infer-able element type
      */
     public static Optional<Class<?>> inferElementTypeFromArrayOrCollection(
-            @Nullable final Class<?> collectionType,
-            @Nullable final Type genericType) {
+            final @Nullable Class<?> collectionType,
+            final @Nullable Type genericType) {
 
-        val fromArray = Optional.ofNullable(_Arrays.inferComponentTypeIfAny(collectionType));
+        val fromArray = _Arrays.inferComponentType(collectionType);
         if(fromArray.isPresent()) {
             return fromArray;
         }
-        val fromCollection = Optional.ofNullable(_Collections.inferElementTypeIfAny(collectionType, genericType));
-        return fromCollection;
+        return _Collections.inferElementType(collectionType, genericType);
     }
 
     /**
@@ -339,17 +365,18 @@ public final class _Collections {
      * @param field
      * @return inferred type or null if inference fails
      */
-    public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Field field) {
+    public static Optional<Class<?>> inferElementType(final @Nullable Field field) {
         if(field==null) {
             return null;
         }
-        return inferElementTypeIfAny(field.getType(), field.getGenericType());
+        return inferElementType(field.getType(), field.getGenericType());
     }
 
     // -- TO STRING
 
-    public static String toStringJoining(@Nullable Collection<?> collection, String delimiter) {
-        _With.requires(delimiter, "delimiter");
+    public static String toStringJoining(
+            final @Nullable Collection<?> collection, 
+            final @NonNull String delimiter) {
         return _NullSafe.stream(collection)
                 .map(x->""+x)
                 .collect(Collectors.joining(delimiter));
@@ -358,5 +385,9 @@ public final class _Collections {
     public static String toStringJoiningNewLine(@Nullable Collection<?> collection) {
         return toStringJoining(collection, "\n");
     }
+
+
+
+    
 
 }

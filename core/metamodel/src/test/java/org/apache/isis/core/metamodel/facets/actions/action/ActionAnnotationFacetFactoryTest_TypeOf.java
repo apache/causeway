@@ -169,7 +169,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
+        Assert.assertEquals(TypeOfFacetInferredFromGenerics.class, facet.getClass());
         assertThat(facet.value(), classEqualTo(Order.class));
     }
 
