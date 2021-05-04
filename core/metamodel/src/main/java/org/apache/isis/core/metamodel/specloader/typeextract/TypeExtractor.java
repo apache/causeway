@@ -19,13 +19,11 @@
 package org.apache.isis.core.metamodel.specloader.typeextract;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.WildcardType;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Generics;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -62,7 +60,7 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getParameterTypes());
-            visitParameterizedTypes(set::add, method.getGenericParameterTypes());
+            _Generics.visitGenericTypeArgumentsOf(method.getGenericParameterTypes(), set::add);
         }
         
         return set.stream();
@@ -92,7 +90,7 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            visitParameterizedTypes(set::add, method.getGenericReturnType());
+            _Generics.visitGenericTypeArgumentsOf(method.getGenericReturnType(), set::add);
         }
         
         return set.stream();
@@ -108,46 +106,13 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            visitParameterizedTypes(set::add, method.getGenericReturnType());
+            _Generics.visitGenericTypeArgumentsOf(method.getGenericReturnType(), set::add);
         }
         
         return set.stream();
     }
     
     // -- HELPER
-    
-    private static void visitParameterizedTypes(
-            final Consumer<Class<?>> onClass, 
-            final Type... genericTypes) {
-        
-        for (val genericType : genericTypes) {
-            if (genericType instanceof ParameterizedType) {
-                final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                final Type[] typeArguments = parameterizedType.getActualTypeArguments();
-                for (val type : typeArguments) {
-                    if (type instanceof Class) {
-                        acceptNonVoid(onClass, (Class<?>) type);
-                    }
-                    if (type instanceof WildcardType) {
-                        acceptWildcardType(onClass, (WildcardType) type);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void acceptWildcardType(Consumer<Class<?>> onClass, WildcardType wildcardType) {
-        for (val lower : wildcardType.getLowerBounds()) {
-            if (lower instanceof Class) {
-                acceptNonVoid(onClass, (Class<?>) lower);
-            }
-        }
-        for (val upper : wildcardType.getUpperBounds()) {
-            if (upper instanceof Class) {
-                acceptNonVoid(onClass, (Class<?>) upper);
-            }
-        }
-    }
     
     private static void acceptNonVoid(
             final Consumer<Class<?>> onClass, 
@@ -160,7 +125,5 @@ public class TypeExtractor {
             }    
         }
     }
-    
-
     
 }

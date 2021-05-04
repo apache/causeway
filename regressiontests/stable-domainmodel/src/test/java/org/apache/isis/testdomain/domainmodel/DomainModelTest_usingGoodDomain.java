@@ -292,9 +292,22 @@ class DomainModelTest_usingGoodDomain {
         val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
         val interfaceCollSpec = interfaceColl.getSpecification();
         
-        //FIXME yet test fails
-        //assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
-        //assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        
+        // when using generic type wild-cards
+        
+        val concreteColl2 = vmSpec.getCollectionElseFail("concreteColl2");
+        val concreteCollSpec2 = concreteColl2.getSpecification();
+        
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec2.getCorrespondingClass());
+        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec2.getBeanSort());
+        
+        val interfaceColl2 = vmSpec.getCollectionElseFail("interfaceColl2");
+        val interfaceCollSpec2 = interfaceColl2.getSpecification();
+        
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec2.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec2.getBeanSort());
         
         // TODO for the abstract case, we also want to see any members and the title-facet 
     }

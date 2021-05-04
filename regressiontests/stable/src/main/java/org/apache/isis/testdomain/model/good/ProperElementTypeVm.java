@@ -31,9 +31,15 @@ import lombok.Setter;
 public class ProperElementTypeVm {
 
     @Collection
-    @Getter @Setter private List<? extends ElementTypeInterface> interfaceColl;
+    @Getter @Setter private List<ElementTypeInterface> interfaceColl;
     
     @Collection
     @Getter @Setter private List<ElementTypeConcrete> concreteColl;
+    
+    @Collection
+    @Getter @Setter private List<? extends ElementTypeInterface> interfaceColl2;
+    
+    @Collection
+    @Getter @Setter private List<? extends ElementTypeConcrete> concreteColl2;
     
 }
