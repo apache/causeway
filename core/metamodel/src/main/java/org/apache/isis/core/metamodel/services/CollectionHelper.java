@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.services;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,6 +31,8 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.isis.commons.internal.reflection._Generics;
 
 class CollectionHelper {
 
@@ -46,13 +46,9 @@ class CollectionHelper {
         final Class<?> typeToBeInjected = field.getType();
 
         if(Collection.class.isAssignableFrom(typeToBeInjected)) {
-            final Type genericType = field.getGenericType();
-            if(genericType instanceof ParameterizedType) {
-                final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                final Class<?> elementType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-
-                action.accept(elementType);
-            }
+            _Generics.streamGenericTypeArgumentsOfField(field)
+            .findFirst()
+            .ifPresent(action);
         }
 
     }

@@ -18,15 +18,16 @@
  */
 package org.apache.isis.commons.internal.reflection;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
 import lombok.val;
@@ -40,114 +41,66 @@ import lombok.val;
  * @since 2.0
  */
 public final class _Generics {
+    
+    // -- STREAMING TYPE ARGUMENTS
+    
+    /**
+     * Returns a Stream of the actual type arguments for given {@code genericType}. 
+     * @param genericType
+     */
+    public static Stream<Class<?>> streamGenericTypeArgumentsOf(
+            final @NonNull Type genericType) {
 
-    /**
-     * Visits given {@code genericType} for its actual type arguments
-     * and calls back {@code onTypeArgument} on each type argument found. 
-     * @param genericType
-     * @param onTypeArgument
-     */
-    public static void visitGenericTypeArgumentsOf(
-            final @NonNull Type genericType,
-            final @NonNull Consumer<Class<?>> onTypeArgument) {
-        visitGenericTypeArgumentsOf(genericType, _Predicates.alwaysTrue(), onTypeArgument);
+        return (genericType instanceof ParameterizedType) 
+                ? Stream.of(((ParameterizedType) genericType).getActualTypeArguments())
+                        .flatMap(_Generics::streamClassesOfType)
+                : Stream.empty();
     }
     
     /**
-     * Visits given {@code genericTypes} for their actual type arguments
+     * Streams given {@code genericTypes} for their actual type arguments
      * and calls back {@code onTypeArgument} on each type argument found. 
      * @param genericTypes
-     * @param onTypeArgument
      */
-    public static void visitGenericTypeArgumentsOf(
-            final @Nullable Type[] genericTypes,
-            final @NonNull Consumer<Class<?>> onTypeArgument) {
-        visitGenericTypeArgumentsOf(genericTypes, _Predicates.alwaysTrue(), onTypeArgument);
+    public static Stream<Class<?>> streamGenericTypeArgumentsOf(
+            final @Nullable Type[] genericTypes) {
+        
+        return _NullSafe.stream(genericTypes)
+                .flatMap(_Generics::streamGenericTypeArgumentsOf);
     }
     
-    /**
-     * Visits given {@code genericType} for its actual type arguments
-     * and calls back {@code onTypeArgument} on each type argument found, that passes
-     * given {@code typeArgumentFilter}. 
-     * @param genericType
-     * @param typeArgumentFilter
-     * @param onTypeArgument
-     */
-    public static void visitGenericTypeArgumentsOf(
-            final @NonNull Type genericType,
-            final @NonNull Predicate<Class<?>> typeArgumentFilter,
-            final @NonNull Consumer<Class<?>> onTypeArgument) {
-        
-        if (genericType instanceof ParameterizedType) {
-            for (val type : ((ParameterizedType) genericType).getActualTypeArguments()) {
-                visitTypeArgument(type, typeArgumentFilter, onTypeArgument);
-            }
-        }
+    // -- SHORTCUTS
+    
+    public static Stream<Class<?>> streamGenericTypeArgumentsOfField(
+            final @NonNull Field field) {
+        return streamGenericTypeArgumentsOf(field.getGenericType());
     }
     
-    /**
-     * Visits given {@code genericTypes} for their actual type arguments
-     * and calls back {@code onTypeArgument} on each type argument found, that passes
-     * given {@code typeArgumentFilter}. 
-     * @param genericTypes
-     * @param typeArgumentFilter
-     * @param onTypeArgument
-     */
-    public static void visitGenericTypeArgumentsOf(
-            final @Nullable Type[] genericTypes,
-            final @NonNull Predicate<Class<?>> typeArgumentFilter,
-            final @NonNull Consumer<Class<?>> onTypeArgument) {
-        
-        if(genericTypes==null) {
-            return; // no-op
-        }
-        for (val genericType : genericTypes) {
-            visitGenericTypeArgumentsOf(genericType, typeArgumentFilter, onTypeArgument);
-        }
+    public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodParameterTypes(
+            final @NonNull Method method) {
+        return streamGenericTypeArgumentsOf(method.getGenericParameterTypes());
+    }
+    
+    public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodReturnType(
+            final @NonNull Method method) {
+        return streamGenericTypeArgumentsOf(method.getGenericReturnType());
     }
     
     // -- HELPER
-
-    private static void visitTypeArgument(
-            final Type type,
-            final Predicate<Class<?>> filter,
-            final Consumer<Class<?>> onClass) {
-        
-        if (type instanceof WildcardType) {
-            acceptWildcardType((WildcardType) type, filter, onClass);
-        }
+    
+    private static Stream<Class<?>> streamClassesOfType(final Type type) {
         if (type instanceof Class) {
-            acceptNonWildcardType((Class<?>) type, filter, onClass);
+            return Stream.of((Class<?>) type);
         }
-        // unexpected code reach
+        if (type instanceof WildcardType) {
+            val wildcardType = (WildcardType) type;
+            return Stream.concat(
+                        Stream.of(wildcardType.getLowerBounds()),
+                        Stream.of(wildcardType.getUpperBounds()))
+                    .flatMap(_Generics::streamClassesOfType);
+        }
+        return Stream.empty();
     }
     
-    private static void acceptWildcardType(
-            final WildcardType wildcardType, 
-            final Predicate<Class<?>> filter,
-            final Consumer<Class<?>> onClass) {
-        
-        for (val lower : wildcardType.getLowerBounds()) {
-            if (lower instanceof Class) {
-                visitTypeArgument((Class<?>) lower, filter, onClass);
-            }
-        }
-        for (val upper : wildcardType.getUpperBounds()) {
-            if (upper instanceof Class) {
-                visitTypeArgument((Class<?>) upper, filter, onClass);
-            }
-        }
-    }
-    
-    private static void acceptNonWildcardType(
-            final Class<?> cls,
-            final Predicate<Class<?>> filter,
-            final Consumer<Class<?>> onClass) {
-        
-        if(filter.test(cls)) {
-            onClass.accept(cls);
-        }    
-        
-    }
     
 }

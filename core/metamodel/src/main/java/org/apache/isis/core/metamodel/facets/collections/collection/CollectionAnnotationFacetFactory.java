@@ -19,15 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.reflection._Generics;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -195,30 +193,10 @@ extends FacetFactoryAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
-        final Type type = method.getGenericReturnType();
-        if (!(type instanceof ParameterizedType)) {
-            return null;
-        }
-
-        final ParameterizedType parameterizedType = (ParameterizedType) type;
-        final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        if (actualTypeArguments.length == 0) {
-            return null;
-        }
-
-        final Object actualTypeArgument = actualTypeArguments[0];
-        if (actualTypeArgument instanceof Class) {
-            val actualType = (Class<?>) actualTypeArgument;
-            return new TypeOfFacetInferredFromGenerics(actualType, facetHolder);
-        }
-
-        if (actualTypeArgument instanceof TypeVariable) {
-
-            // TODO: what to do here?
-            return null;
-        }
-
-        return null;
+        return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .findFirst()
+                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, facetHolder))
+                .orElse(null);
     }
 
 

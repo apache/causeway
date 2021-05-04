@@ -60,7 +60,8 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getParameterTypes());
-            _Generics.visitGenericTypeArgumentsOf(method.getGenericParameterTypes(), set::add);
+            _Generics.streamGenericTypeArgumentsOfMethodParameterTypes(method)
+                .forEach(set::add);
         }
         
         return set.stream();
@@ -90,7 +91,8 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            _Generics.visitGenericTypeArgumentsOf(method.getGenericReturnType(), set::add);
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .forEach(set::add);
         }
         
         return set.stream();
@@ -106,7 +108,8 @@ public class TypeExtractor {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            _Generics.visitGenericTypeArgumentsOf(method.getGenericReturnType(), set::add);
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .forEach(set::add);
         }
         
         return set.stream();
