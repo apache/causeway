@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -278,7 +277,7 @@ class DomainModelTest_usingGoodDomain {
 
     }
     
-    @Test @Disabled("ISIS-2641,ISIS-2642")
+    @Test
     void elementTypes_shouldBeIntrospected_whenNotConcrete() {
         
         val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,

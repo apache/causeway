@@ -274,6 +274,10 @@ public final class _Collections {
 
     // -- ELEMENT TYPE INFERENCE
 
+    /**
+     * Optionally returns the inferred element type for given {@code param}, based on whether
+     * it represents a collection and inference is possible.
+     */
     public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
         val parameterType = param.getType();
         
@@ -287,6 +291,11 @@ public final class _Collections {
         return Optional.empty();
     }
     
+    /**
+     * Optionally returns the inferred element type for given {@code method}'s return type, 
+     * based on whether
+     * it represents a collection and inference is possible.
+     */
     public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
         
         val returnType = method.getReturnType();
@@ -302,11 +311,8 @@ public final class _Collections {
     }
     
     /**
-     * If the {@code field} represents a collection then returns the inferred element type 
-     * for this collection (if any).
-     *
-     * @param field
-     * @return inferred type or null if inference fails
+     * Optionally returns the inferred element type for given {@code field}, based on whether
+     * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
         
