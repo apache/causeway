@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
@@ -112,12 +112,12 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         for(val param : actionMethod.getParameters()) {
             
             final Class<?> parameterType = param.getType();
-            final Type genericParameterType = param.getParameterizedType();
             
             final FeatureType featureType =
-                    _Collections.inferElementTypeFromArrayOrCollection(parameterType, genericParameterType).isPresent()
-                        ? FeatureType.ACTION_PARAMETER_COLLECTION
-                        : FeatureType.ACTION_PARAMETER_SCALAR;
+                    _Collections.inferElementType(param).isPresent()
+                        || _Arrays.inferComponentType(parameterType).isPresent()
+                    ? FeatureType.ACTION_PARAMETER_COLLECTION
+                    : FeatureType.ACTION_PARAMETER_SCALAR;
 
             val facetedMethodParam = 
                     new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);

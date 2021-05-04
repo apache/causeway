@@ -22,8 +22,6 @@ package org.apache.isis.commons.internal.collections;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -276,14 +274,17 @@ public final class _Collections {
 
     // -- ELEMENT TYPE INFERENCE
 
-    
     public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
-        final Class<?> parameterType = param.getType();
-        final Class<?> declaringType = param.getDeclaringExecutable().getDeclaringClass();
-        final Type genericParameterType = param.getParameterizedType();
+        val parameterType = param.getType();
         
-        //TODO use _Generics instead
-        return inferElementType(parameterType, genericParameterType);
+        if (_Collections.isCollectionType(parameterType) 
+                || _Collections.isCanType(parameterType)) {
+            
+            return _Generics.streamGenericTypeArgumentsOfParameter(param)
+                    .findFirst();
+        }
+
+        return Optional.empty();
     }
     
     public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
@@ -300,76 +301,25 @@ public final class _Collections {
         return Optional.empty();
     }
     
-    
     /**
-     * If the {@code collectionType} represents a collection then returns returns the inferred element type of the
-     * specified {@code genericType}
-     * @param collectionType
-     * @param genericType as associated with {@code collectionType} (as available for fields or method parameters)
-     * @return inferred type or null if inference fails
-     */
-    private static Optional<Class<?>> inferElementType(
-            final @Nullable Class<?> collectionType,
-            final @Nullable Type genericType) {
-
-        if(collectionType == null || genericType==null) {
-            return Optional.empty();
-        }
-
-        if(!isCollectionType(collectionType) && !isCanType(collectionType)) {
-            return Optional.empty();
-        }
-        
-        if(genericType instanceof ParameterizedType) {
-            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            if(actualTypeArguments.length == 1) {
-                // handle e.g. List<Sometype>
-                final Type actualTypeArgument = actualTypeArguments[0];
-                if(actualTypeArgument instanceof Class) {
-                    return Optional.of((Class<?>) actualTypeArgument);
-                }
-                // also handle e.g. List<Sometype<T>>
-                if(actualTypeArgument instanceof ParameterizedType) {
-                    final Type innerParameterizedType = ((ParameterizedType) actualTypeArgument).getRawType();
-                    if(innerParameterizedType instanceof Class) {
-                        return Optional.of((Class<?>) innerParameterizedType);
-                    }
-                }
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * @param collectionType
-     * @param genericType
-     * @return optionally the inferred element type, 
-     * based on whether parameter is a (collection or array) and has an infer-able element type
-     */
-    public static Optional<Class<?>> inferElementTypeFromArrayOrCollection(
-            final @Nullable Class<?> collectionType,
-            final @Nullable Type genericType) {
-
-        val fromArray = _Arrays.inferComponentType(collectionType);
-        if(fromArray.isPresent()) {
-            return fromArray;
-        }
-        return _Collections.inferElementType(collectionType, genericType);
-    }
-
-    /**
-     * If the {@code field} represents a collection then returns the inferred element type for this collection (if any).
+     * If the {@code field} represents a collection then returns the inferred element type 
+     * for this collection (if any).
      *
      * @param field
      * @return inferred type or null if inference fails
      */
-    public static Optional<Class<?>> inferElementType(final @Nullable Field field) {
-        if(field==null) {
-            return null;
+    public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
+        
+        val fieldType = field.getType();
+        
+        if (_Collections.isCollectionType(fieldType) 
+                || _Collections.isCanType(fieldType)) {
+            
+            return _Generics.streamGenericTypeArgumentsOfField(field)
+                    .findFirst();
         }
-        return inferElementType(field.getType(), field.getGenericType());
+
+        return Optional.empty();
     }
 
     // -- TO STRING
@@ -385,9 +335,5 @@ public final class _Collections {
     public static String toStringJoiningNewLine(@Nullable Collection<?> collection) {
         return toStringJoining(collection, "\n");
     }
-
-
-
-    
 
 }
