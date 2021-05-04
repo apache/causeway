@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.stream.Stream;
 
@@ -45,50 +46,59 @@ public final class _Generics {
     // -- STREAMING TYPE ARGUMENTS
     
     /**
-     * Returns a Stream of the actual type arguments for given {@code genericType}. 
+     * Returns a Stream of the actual type arguments for given {@code genericType}.
+     * @param owner - the corresponding class that declares the field or method,
+     *     which uses the {@code genericType}
      * @param genericType
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOf(
+            final @NonNull Class<?> owner, 
             final @NonNull Type genericType) {
 
         return (genericType instanceof ParameterizedType) 
                 ? Stream.of(((ParameterizedType) genericType).getActualTypeArguments())
-                        .flatMap(_Generics::streamClassesOfType)
+                        .flatMap(type->streamClassesOfType(owner, type))
                 : Stream.empty();
     }
     
     /**
      * Streams given {@code genericTypes} for their actual type arguments
-     * and calls back {@code onTypeArgument} on each type argument found. 
+     * and calls back {@code onTypeArgument} on each type argument found.
+     * @param owner - the corresponding class that declares the method, 
+     *     which uses the {@code genericTypes}
      * @param genericTypes
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOf(
+            final @NonNull Class<?> owner,
             final @Nullable Type[] genericTypes) {
         
         return _NullSafe.stream(genericTypes)
-                .flatMap(_Generics::streamGenericTypeArgumentsOf);
+                .flatMap(type->streamGenericTypeArgumentsOf(owner, type));
     }
     
     // -- SHORTCUTS
     
     public static Stream<Class<?>> streamGenericTypeArgumentsOfField(
             final @NonNull Field field) {
-        return streamGenericTypeArgumentsOf(field.getGenericType());
+        return streamGenericTypeArgumentsOf(field.getDeclaringClass(), field.getGenericType());
     }
     
     public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodParameterTypes(
             final @NonNull Method method) {
-        return streamGenericTypeArgumentsOf(method.getGenericParameterTypes());
+        return streamGenericTypeArgumentsOf(method.getDeclaringClass(), method.getGenericParameterTypes());
     }
     
     public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodReturnType(
             final @NonNull Method method) {
-        return streamGenericTypeArgumentsOf(method.getGenericReturnType());
+        return streamGenericTypeArgumentsOf(method.getDeclaringClass(), method.getGenericReturnType());
     }
     
     // -- HELPER
     
-    private static Stream<Class<?>> streamClassesOfType(final Type type) {
+    private static Stream<Class<?>> streamClassesOfType(
+            final Class<?> owner, 
+            final Type type) {
+        
         if (type instanceof Class) {
             return Stream.of((Class<?>) type);
         }
@@ -97,8 +107,24 @@ public final class _Generics {
             return Stream.concat(
                         Stream.of(wildcardType.getLowerBounds()),
                         Stream.of(wildcardType.getUpperBounds()))
-                    .flatMap(_Generics::streamClassesOfType);
+                    .flatMap(x->streamClassesOfType(owner, x)); // recursive call
         }
+        
+        if (type instanceof TypeVariable) {
+
+            // try to match up with the actual type argument of the owner's generic superclass.
+            final Type genericSuperclass = owner.getGenericSuperclass();
+            if(genericSuperclass instanceof ParameterizedType) {
+                val parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
+                val genericDeclaration = ((TypeVariable<?>) type).getGenericDeclaration();
+                if(parameterizedTypeOfSuperclass.getRawType() == genericDeclaration) {
+                    return Stream.of(parameterizedTypeOfSuperclass.getActualTypeArguments())
+                        .flatMap(actualType->streamClassesOfType(owner, actualType)); // recursive call
+                }
+            }
+            // otherwise, what to do?
+        }
+        
         return Stream.empty();
     }
     

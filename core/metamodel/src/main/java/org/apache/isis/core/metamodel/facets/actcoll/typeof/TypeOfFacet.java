@@ -19,15 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.reflection._Generics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
@@ -86,53 +84,15 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final FacetHolder holder) {
 
             final Class<?> methodReturnType = method.getReturnType();
-            if (!_Collections.isCollectionType(methodReturnType) && !_Collections.isCanType(methodReturnType)) {
+            if (!_Collections.isCollectionType(methodReturnType) 
+                    && !_Collections.isCanType(methodReturnType)) {
                 return null;
             }
 
-            final Type type = method.getGenericReturnType();
-            if (!(type instanceof ParameterizedType)) {
-                return null;
-            }
-
-            final ParameterizedType methodParameterizedType = (ParameterizedType) type;
-            final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
-
-            if (methodActualTypeArguments.length == 0) {
-                return null;
-            }
-
-            final Object methodActualTypeArgument = methodActualTypeArguments[0];
-            if (methodActualTypeArgument instanceof Class) {
-                final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-                return new TypeOfFacetInferredFromGenerics(actualType, holder);
-            }
-
-            if (methodActualTypeArgument instanceof TypeVariable) {
-
-                final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
-                final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
-
-                // try to match up with the actual type argument of the generic superclass.
-                final Type genericSuperclass = cls.getGenericSuperclass();
-                if(genericSuperclass instanceof ParameterizedType) {
-                    final ParameterizedType parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
-                    if(parameterizedTypeOfSuperclass.getRawType() == methodGenericClassDeclaration) {
-                        final Type[] genericSuperClassActualTypeArguments = parameterizedTypeOfSuperclass.getActualTypeArguments();
-                        // simplification: if there's just one, then use it.
-                        if(methodActualTypeArguments.length == 1) {
-                            final Type actualType = genericSuperClassActualTypeArguments[0];
-                            if(actualType instanceof Class) {
-                                // just being safe
-                                final Class<?> actualCls = (Class<?>) actualType;
-                                return new TypeOfFacetInferredFromGenerics(actualCls, holder);
-                            }
-                        }
-                    }
-                }
-                // otherwise, what to do?
-            }
-            return null;
+            return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .findFirst()
+                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, holder))
+                .orElse(null);
         }
 
         private static TypeOfFacet inferFromArrayType(
