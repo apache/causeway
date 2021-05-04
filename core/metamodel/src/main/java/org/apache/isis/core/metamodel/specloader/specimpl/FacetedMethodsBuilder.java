@@ -38,7 +38,6 @@ import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -229,11 +228,6 @@ public class FacetedMethodsBuilder {
         
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
         .filter(typeToLoad->typeToLoad!=introspectedClass)
-        .peek(typeToLoad->{
-            if(getClassName().contains("ProperElementTypeVm")) {
-                _Probe.errOut("load %s", typeToLoad);
-            }
-        })
         .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
 
         // now create FacetedMethods for collections and for properties

@@ -45,12 +45,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
@@ -278,7 +280,9 @@ class DomainModelTest_usingGoodDomain {
     }
     
     @Test
-    void elementTypes_shouldBeIntrospected_whenNotConcrete() {
+    void elementTypes_shouldBeIntrospected_whenDiscoveredViaGenerics_usingNoWildcards() {
+        
+        // when using generic type (no wild-cards)
         
         val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
                 IntrospectionState.FULLY_INTROSPECTED);
@@ -288,31 +292,74 @@ class DomainModelTest_usingGoodDomain {
         
         assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
+        assertHasAction(concreteCollSpec, "abstractAction");
+        assertHasAction(concreteCollSpec, "interfaceAction");
+        assertHasProperty(concreteCollSpec, "abstractProp");
+        assertHasProperty(concreteCollSpec, "interfaceProp");
         
         val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
         val interfaceCollSpec = interfaceColl.getSpecification();
         
         assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        assertHasAction(interfaceCollSpec, "interfaceAction");
+        assertHasProperty(interfaceCollSpec, "interfaceProp");
         
-        // when using generic type wild-cards
+        val abstractColl = vmSpec.getCollectionElseFail("abstractColl");
+        val abstractCollSpec = abstractColl.getSpecification();
         
-        val concreteColl2 = vmSpec.getCollectionElseFail("concreteColl2");
-        val concreteCollSpec2 = concreteColl2.getSpecification();
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
+        assertHasAction(abstractCollSpec, "abstractAction");
+        assertHasProperty(abstractCollSpec, "abstractProp");
         
-        assertEquals(ElementTypeConcrete.class, concreteCollSpec2.getCorrespondingClass());
-        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec2.getBeanSort());
+    }
+    
+    @Test
+    void elementTypes_shouldBeIntrospected_whenDiscoveredViaGenerics_usingWildcards() {
         
-        val interfaceColl2 = vmSpec.getCollectionElseFail("interfaceColl2");
-        val interfaceCollSpec2 = interfaceColl2.getSpecification();
+        // when using generic type (w/ wild-cards)
         
-        assertEquals(ElementTypeInterface.class, interfaceCollSpec2.getCorrespondingClass());
-        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec2.getBeanSort());
+        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
+                IntrospectionState.FULLY_INTROSPECTED);
         
-        // TODO for the abstract case, we also want to see any members and the title-facet 
+        val concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
+        val concreteCollSpec = concreteColl.getSpecification();
+        
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
+        assertHasAction(concreteCollSpec, "abstractAction");
+        assertHasAction(concreteCollSpec, "interfaceAction");
+        assertHasProperty(concreteCollSpec, "abstractProp");
+        assertHasProperty(concreteCollSpec, "interfaceProp");
+        
+        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
+        val interfaceCollSpec = interfaceColl.getSpecification();
+        
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        assertHasAction(interfaceCollSpec, "interfaceAction");
+        assertHasProperty(interfaceCollSpec, "interfaceProp");
+        
+        val abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
+        val abstractCollSpec = abstractColl.getSpecification();
+        
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
+        assertHasAction(abstractCollSpec, "abstractAction");
+        assertHasProperty(abstractCollSpec, "abstractProp");
+        
     }
 
     // -- HELPER
+
+    private void assertHasProperty(ObjectSpecification spec, String propertyId) {
+        spec.getPropertyElseFail(propertyId);
+    }
+
+    private void assertHasAction(ObjectSpecification spec, String actionId) {
+        spec.getActionElseFail(actionId);
+    }
 
     private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
         val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);

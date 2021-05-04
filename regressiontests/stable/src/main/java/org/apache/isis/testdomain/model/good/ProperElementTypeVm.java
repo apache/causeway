@@ -27,6 +27,9 @@ import org.apache.isis.applib.annotation.Nature;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @see <a href="https://issues.apache.org/jira/browse/ISIS-2499">ISIS-2499</a>
+ */
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperElementTypeVm {
 
@@ -34,10 +37,16 @@ public class ProperElementTypeVm {
     @Getter @Setter private List<ElementTypeInterface> interfaceColl;
     
     @Collection
+    @Getter @Setter private List<ElementTypeAbstract> abstractColl;
+    
+    @Collection
     @Getter @Setter private List<ElementTypeConcrete> concreteColl;
     
     @Collection
     @Getter @Setter private List<? extends ElementTypeInterface> interfaceColl2;
+    
+    @Collection
+    @Getter @Setter private List<? extends ElementTypeAbstract> abstractColl2;
     
     @Collection
     @Getter @Setter private List<? extends ElementTypeConcrete> concreteColl2;

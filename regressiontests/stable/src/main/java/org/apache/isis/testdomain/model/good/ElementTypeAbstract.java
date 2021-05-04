@@ -21,23 +21,22 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
 
-public interface ElementTypeInterface {
+import lombok.Getter;
+import lombok.Setter;
 
-    default String title() {
-        return "InterfaceTitle";
+public abstract class ElementTypeAbstract {
+
+    public String title() {
+        return "AbstractTitle";
     }
     
     @Action
-    default void interfaceAction(String p0, String p1) {
+    public void abstractAction(String p0, String p1) {
         // no-op, just testing meta-data
     }
     
     @Property
-    default String getInterfaceProp() {
-        return "InterfaceProp";
-    }
-    default void setInterfaceProp(String prop) {
-        // no-op, just testing meta-data
-    }
+    @Getter @Setter
+    private String abstractProp = "abstractProp";
     
 }
