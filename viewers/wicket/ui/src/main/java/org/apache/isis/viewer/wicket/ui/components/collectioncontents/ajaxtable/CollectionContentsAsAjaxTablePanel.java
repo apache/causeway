@@ -196,10 +196,10 @@ implements CollectionCountProvider {
         typeOfSpec.streamAssociations(MixedIn.INCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->property.streamFacets()
-                    .filter(facet -> facet instanceof WhereValueFacet)
+                    .filter(facet -> facet instanceof HiddenFacet)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
-                    .noneMatch(where -> !where.includes(whereContext)))
+                    .noneMatch(where -> where.includes(whereContext)))
         .filter(associationDoesNotReferenceParent(parentSpecIfAny))
         .filter(property->filterColumnsUsingSpi(property, elementType)) // optional SPI to filter columns
         .forEach(property->propertyById.put(property.getId(), property));
