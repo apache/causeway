@@ -75,19 +75,19 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.GridSystemServiceBS3")
+@Named("isis.metamodel.GridSystemServiceBootstrap")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
-@Qualifier("BS3")
+@Qualifier("Bootstrap")
 @Log4j2
-public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
+public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
     @Inject private GridReaderUsingJaxb gridReader;
 
-    public GridSystemServiceBS3() {
+    public GridSystemServiceBootstrap() {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
     }
 
@@ -174,15 +174,15 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         val bs3Grid = (BS3Grid) grid;
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
-        val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
-        val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
+        val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         val objectActionById = ObjectMember.mapById(objectSpec.streamActions(MixedIn.INCLUDED));
 
         val propertyLayoutDataById = bs3Grid.getAllPropertiesById();
         val collectionLayoutDataById = bs3Grid.getAllCollectionsById();
         val actionLayoutDataById = bs3Grid.getAllActionsById();
 
-        val gridModelIfValid = GridModel.createFrom(bs3Grid);
+        val gridModelIfValid = _GridModel.createFrom(bs3Grid);
         if(!gridModelIfValid.isPresent()) { // only present if valid
             return false;
         }
@@ -336,7 +336,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         for (final String actionId : sortedPossiblyMissingActionIds) {
             val objectAction = objectActionById.get(actionId);
-            
+
             val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
             if(layoutGroupFacet == null) {
                 continue;
@@ -401,7 +401,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
         }
 
-        // ... the missing actions are those in the second tuple, excluding those associated 
+        // ... the missing actions are those in the second tuple, excluding those associated
         // (via @Action#associateWith) to a property or collection. (XXX comment might be outdated)
         final List<String> missingActionIds = _Lists.newArrayList(sortedPossiblyMissingActionIds);
         missingActionIds.removeAll(associatedActionIds);

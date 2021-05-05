@@ -41,7 +41,7 @@ import lombok.val;
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class GridModel {
+final class _GridModel {
         private final LinkedHashSet<String> allIds = _Sets.newLinkedHashSet();
         private final LinkedHashMap<String, BS3Row> rows = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, BS3Col> cols = _Maps.newLinkedHashMap();
@@ -77,9 +77,9 @@ final class GridModel {
          * @param bs3Grid
          * @return empty if not valid
          */
-        public static Optional<GridModel> createFrom(BS3Grid bs3Grid) {
+        public static Optional<_GridModel> createFrom(BS3Grid bs3Grid) {
             
-            val gridModel = new GridModel();
+            val gridModel = new _GridModel();
 
             bs3Grid.visit(new BS3Grid.VisitorAdapter(){
                 @Override

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -78,11 +77,8 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedA
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
@@ -100,7 +96,7 @@ implements GridSystemService<G> {
     @Inject protected JaxbService jaxbService;
     @Inject protected MessageService messageService;
     @Inject IsisSystemEnvironment isisSystemEnvironment;
-    
+
     private final Class<G> gridImplementation;
     private final String tns;
     private final String schemaLocation;
@@ -109,7 +105,7 @@ implements GridSystemService<G> {
             final Class<G> gridImplementation,
             final String tns,
             final String schemaLocation) {
-        
+
         this.gridImplementation = gridImplementation;
         this.tns = tns;
         this.schemaLocation = schemaLocation;
@@ -170,7 +166,7 @@ implements GridSystemService<G> {
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
      *
-     * @implNote This code uses {@link FacetUtil#addOrReplaceFacet(Facet)} 
+     * @implNote This code uses {@link FacetUtil#addOrReplaceFacet(Facet)}
      * because the layout might be changed multiple times.
      */
     private void overwriteFacets(
@@ -179,8 +175,8 @@ implements GridSystemService<G> {
 
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
-        val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
-        val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
+        val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         val objectActionById = ObjectMember.mapById(objectSpec.streamActions(MixedIn.INCLUDED));
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
@@ -241,7 +237,7 @@ implements GridSystemService<G> {
                 }
                 addOrReplaceFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
                 addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
-                
+
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
@@ -302,7 +298,7 @@ implements GridSystemService<G> {
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
-                
+
                 addOrReplaceFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
                 addOrReplaceFacet(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
             }
@@ -317,7 +313,7 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));                
+                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 // preserve translations
                 NamedFacet existingNamedFacet = oneToManyAssociation.getFacet(NamedFacet.class);
                 if(existingNamedFacet == null) {
@@ -330,15 +326,6 @@ implements GridSystemService<G> {
             }
         });
     }
-
-    protected static Stream<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
-        return objectSpec.streamProperties(MixedIn.INCLUDED);
-    }
-
-    protected static Stream<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
-        return objectSpec.streamCollections(MixedIn.INCLUDED);
-    }
-
 
     @Value(staticConstructor = "of")
     protected static class SurplusAndMissing {

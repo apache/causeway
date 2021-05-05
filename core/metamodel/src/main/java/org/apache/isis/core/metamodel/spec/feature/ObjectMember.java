@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import javax.annotation.meta.When;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -67,7 +65,6 @@ public interface ObjectMember extends ObjectFeature {
      *
      * <p>
      * Determined as per the {@link HiddenFacet} being present and
-     * {@link HiddenFacet#when()} returning {@link When#ALWAYS}, and
      * {@link HiddenFacet#where()} returning {@link Where#ANYWHERE}.
      */
     boolean isAlwaysHidden();
@@ -179,11 +176,11 @@ public interface ObjectMember extends ObjectFeature {
         public HiddenException() {
             super(null);
         }
-        
+
         public static boolean isInstanceOf(Throwable throwable) {
             return throwable instanceof HiddenException;
         }
-        
+
     }
 
     class DisabledException extends AuthorizationException {
@@ -212,18 +209,18 @@ public interface ObjectMember extends ObjectFeature {
     // -- COMPARATORS
 
     public static class Comparators {
-        
+
         public static <T extends IdentifiedHolder> Comparator<T> byMemberOrderSequence(
                 final boolean ensureInSameGroup) {
-            
+
             return new Comparator<T>() {
 
                 @Override
                 public int compare(final T m1, final T m2) {
-                    
+
                     val orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
                     val orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
-                    
+
                     if (orderFacet1 == null && orderFacet2 == null) {
                         return 0;
                     }
@@ -234,24 +231,24 @@ public interface ObjectMember extends ObjectFeature {
                         return -1; // annotated before non-annotated
                     }
 
-                    if (ensureInSameGroup) { 
-                        
+                    if (ensureInSameGroup) {
+
                         val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
                         val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
                         val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
                         val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
-                        
+
                         if(!Objects.equals(groupId1, groupId2)) {
                             throw _Exceptions.illegalArgument(
-                                    "Not in same fieldSetId1 when comparing: '%s', '%s'", 
-                                    groupId1, 
+                                    "Not in same fieldSetId1 when comparing: '%s', '%s'",
+                                    groupId1,
                                     groupId2);
                         }
                     }
 
                     return _Comparators.deweyOrderCompare(
-                            orderFacet1.getSequence(), 
-                            orderFacet2.getSequence());    
+                            orderFacet1.getSequence(),
+                            orderFacet2.getSequence());
                 }
             };
         }

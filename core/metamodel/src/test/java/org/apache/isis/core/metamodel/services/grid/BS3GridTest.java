@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBootstrap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -50,13 +50,13 @@ public class BS3GridTest {
 
     private JaxbService jaxbService;
     private GridServiceDefault gridServiceDefault;
-    private GridSystemServiceBS3 gridSystemServiceBS3;
+    private GridSystemServiceBootstrap gridSystemServiceBS3;
 
     @Before
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple() {};
         gridServiceDefault = new GridServiceDefault();
-        gridSystemServiceBS3 = new GridSystemServiceBS3();
+        gridSystemServiceBS3 = new GridSystemServiceBootstrap();
         gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
     }
 
