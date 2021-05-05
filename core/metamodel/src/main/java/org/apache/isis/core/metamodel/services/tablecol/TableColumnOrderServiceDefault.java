@@ -49,7 +49,6 @@ public class TableColumnOrderServiceDefault implements TableColumnOrderService {
      * @param collectionId
      * @param collectionType
      * @param propertyIds
-     * @return
      */
     @Override
     public List<String> orderParented(
@@ -63,11 +62,8 @@ public class TableColumnOrderServiceDefault implements TableColumnOrderService {
     /**
      * Just returns the <code>propertyIds</code> unchanged.
      *
-     * @param parent
-     * @param collectionId
      * @param collectionType
      * @param propertyIds
-     * @return
      */
     @Override
     public List<String> orderStandalone(

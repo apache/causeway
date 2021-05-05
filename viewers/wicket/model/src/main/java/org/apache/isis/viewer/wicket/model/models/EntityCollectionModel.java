@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -70,10 +71,10 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ManagedObject}s within
  * the collection are stored as {@link ObjectMemento}s.
  */
-public class EntityCollectionModel 
-extends ModelAbstract<List<ManagedObject>> 
-implements 
-    LinksProvider, 
+public class EntityCollectionModel
+extends ModelAbstract<List<ManagedObject>>
+implements
+    LinksProvider,
     UiHintContainer {
 
     private static final long serialVersionUID = 1L;
@@ -100,16 +101,16 @@ implements
     }
 
     public static EntityCollectionModel createStandalone(
-            ManagedObject collectionAsAdapter, 
+            ManagedObject collectionAsAdapter,
             ModelAbstract<?> model) {
 
         // dynamically determine the spec of the elements
         // (ie so a List<Object> can be rendered according to the runtime type of its elements,
         // rather than the compile-time type
         val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
-        
+
         val mementoService = model.getMementoService();
-        
+
         final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .filter(_NullSafe::isPresent)
                 .peek(commonSuperClassFinder::collect)
@@ -122,11 +123,11 @@ implements
                 .flatMap(specificationLoader::specForType)
                 .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
-        final int pageSize = (elementSpec != null) 
+        final int pageSize = (elementSpec != null)
                 ? pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE)
                 : PAGE_SIZE_DEFAULT_FOR_STANDALONE;
-        
-        val elementType = (elementSpec != null) 
+
+        val elementType = (elementSpec != null)
                 ? elementSpec.getCorrespondingClass()
                 : Object.class;
 
@@ -135,7 +136,7 @@ implements
                 model.getCommonContext(), Variant.STANDALONE, entityModel, elementType, pageSize);
         entityCollectionModel.mementoList = mementoList;
         return entityCollectionModel;
-        
+
     }
 
     // -- VARIANTS
@@ -165,7 +166,7 @@ implements
             @Override
             void setObject(EntityCollectionModel colModel, List<ManagedObject> adapterList) {
 
-                //XXX lombok issue, cannot use val here 
+                //XXX lombok issue, cannot use val here
                 final ObjectMementoService mementoService = colModel.getMementoService();
 
                 colModel.mementoList = _NullSafe.stream(adapterList)
@@ -223,7 +224,7 @@ implements
                 }
 
                 final List<ManagedObject> adapterList =
-                        _Lists.map(objectList, x-> (ManagedObject)colModel.getObjectManager().adapt(x));
+                        _Lists.map(objectList, x-> colModel.getObjectManager().adapt(x));
 
                 return adapterList;
             }
@@ -299,7 +300,7 @@ implements
     }
 
     @Getter private final Variant variant;
-    
+
     private final Class<?> typeOf;
     private transient Optional<ObjectSpecification> typeOfSpec;
 
@@ -343,9 +344,9 @@ implements
 
     private EntityCollectionModel(
             IsisAppCommonContext commonContext,
-            Variant type, 
-            EntityModel entityModel, 
-            Class<?> typeOf, 
+            Variant type,
+            EntityModel entityModel,
+            Class<?> typeOf,
             int pageSize) {
 
         super(commonContext);
@@ -363,10 +364,10 @@ implements
         if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
         }
-        
+
         val collectionId = collectionLayoutData.getId();
         val spec = entityModel.getTypeOfSpecification();
-        
+
         return (OneToManyAssociation) spec.getAssociationElseFail(collectionId);
     }
 
@@ -421,7 +422,7 @@ implements
     protected List<ManagedObject> load() {
         return variant.load(this);
     }
-    
+
     public @Nullable ObjectSpecification getTypeOfSpecification() {
         if (typeOfSpec == null) {
             typeOfSpec = getSpecificationLoader().specForType(typeOf);
@@ -454,7 +455,24 @@ implements
     /**
      * Populated only if {@link Variant#PARENTED}.
      */
-    @Deprecated // don't expose this implementation detail
+    public Optional<Bookmark> getParentObjectBookmark() {
+        return entityModel != null
+                ? entityModel.getManagedObject().getBookmark()
+                : Optional.empty();
+    }
+
+    /**
+     * Populated only if {@link Variant#PARENTED}.
+     */
+    public Optional<ObjectSpecification> getParentObjectSpecification() {
+        return getParentObjectBookmark()
+                .flatMap(bookmark->getCommonContext().getSpecificationLoader().specForBookmark(bookmark));
+    }
+
+    /**
+     * Populated only if {@link Variant#PARENTED}.
+     */
+    @Deprecated // don't expose this implementation detail, use getParentObjectBookmark() instead
     public ObjectMemento getParentObjectAdapterMemento() {
         return entityModel != null? entityModel.memento(): null;
     }
@@ -474,11 +492,11 @@ implements
     public boolean toggleSelectionOn(ManagedObject selectedAdapter) {
         //XXX lombok issue, cannot use val here
         final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
-        final String selectedKey = selectedAsMemento.asString(); 
-        
-        final boolean isSelected = _Maps.toggleElement(toggledMementos, selectedKey, selectedAsMemento); 
+        final String selectedKey = selectedAsMemento.asString();
+
+        final boolean isSelected = _Maps.toggleElement(toggledMementos, selectedKey, selectedAsMemento);
         return isSelected;
-        
+
     }
 
     public Can<ObjectMemento> getToggleMementosList() {
@@ -542,6 +560,8 @@ implements
         }
         getEntityModel().clearHint(component, attributeName);
     }
+
+
 
 
 }

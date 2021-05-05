@@ -313,9 +313,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     // -- FACTORY
-    
+
     public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> factory(
-            final @NonNull ApplicationFeatureRepository featureRepository, 
+            final @NonNull ApplicationFeatureRepository featureRepository,
             final @NonNull FactoryService factory,
             final @NonNull Class<T> viewmodelType) {
 
@@ -324,9 +324,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     // -- HELPER
-    
+
     protected <T extends ApplicationFeatureViewModel> List<T> asViewModels(
-            final java.util.Collection<ApplicationFeatureId> featureIds, 
+            final java.util.Collection<ApplicationFeatureId> featureIds,
             final Class<T> viewmodelType) {
         return featureIds.stream()
                 .map(factory(featureRepository, factory, viewmodelType))

@@ -23,8 +23,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -34,10 +36,10 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -51,7 +53,6 @@ import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
@@ -142,12 +143,17 @@ implements CollectionCountProvider {
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
-        final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
+        val collectionModel = getModel();
+
+        val typeOfSpec = collectionModel.getTypeOfSpecification();
         final Comparator<String> propertyIdComparator;
 
         if(typeOfSpec == null) {
             return;
         }
+
+        val elementType = typeOfSpec.getCorrespondingClass();
+
         // same code also appears in EntityPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via EntityPage.
@@ -177,113 +183,107 @@ implements CollectionCountProvider {
             propertyIdComparator = null;
         }
 
-        final Where whereContext =
-                getModel().isParented()
+        val whereContext = collectionModel.isParented()
                     ? Where.PARENTED_TABLES
                     : Where.STANDALONE_TABLES;
 
-        final ObjectSpecification parentSpecIfAny =
-                getModel().isParented()
-                    ? getCommonContext().reconstructObject(getModel().getParentObjectAdapterMemento())
-                            .getSpecification()
-                        : null;
+        val parentSpecIfAny =  collectionModel.getParentObjectSpecification()
+                .orElse(null);
 
-        final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
+        val propertyById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
-        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
-                .and((final ObjectAssociation association)->{
-                    final Stream<Facet> facets = association.streamFacets()
-                            .filter((final Facet facet)->
-                                    facet instanceof HiddenFacet);
-                    return facets
-                            .map(facet->(WhereValueFacet) facet)
-                            .noneMatch(wawF->wawF.where().includes(whereContext));
+        typeOfSpec.streamAssociations(MixedIn.INCLUDED)
+        .filter(ObjectAssociation.Predicates.PROPERTIES)
+        .filter(property->property.streamFacets()
+                    .filter(facet -> facet instanceof WhereValueFacet)
+                    .map(WhereValueFacet.class::cast)
+                    .map(WhereValueFacet::where)
+                    .noneMatch(where -> !where.includes(whereContext)))
+        .filter(associationDoesNotReferenceParent(parentSpecIfAny))
+        //FIXME is broken
+        //.filter(property->filterColumnsUsingSpi(property, elementType)) // optional SPI to filter
+        .forEach(property->propertyById.put(property.getId(), property));
 
-                })
-                .and(associationDoesNotReferenceParent(parentSpecIfAny))
-                .and(objectAssociation -> {
-                    // optional SPI to filter
-                    final Can<TableColumnVisibilityService> tableColumnVisibilityServices =
-                            getServiceRegistry().select(TableColumnVisibilityService.class);
-
-                    final boolean atLeastOneHidden =
-                            tableColumnVisibilityServices.stream()
-                            .anyMatch(x -> x.hides(collectionType, objectAssociation.getId()));
-                    return !atLeastOneHidden;
-                });
-
-        final Stream<? extends ObjectAssociation> propertyList =
-                typeOfSpec.streamAssociations(MixedIn.INCLUDED)
-                .filter(predicate)
-                ;
-
-        final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
-        propertyList.forEach(property->
-        propertyById.put(property.getId(), property));
-
-        List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
+        val propertyIdsInOrder = _Lists.<String>newArrayList(propertyById.keySet());
 
         if(propertyIdComparator!=null) {
-            propertyIds.sort(propertyIdComparator);
+            propertyIdsInOrder.sort(propertyIdComparator);
         }
 
-        // optional SPI to reorder
-        final Can<TableColumnOrderService> tableColumnOrderServices =
-                getServiceRegistry().select(TableColumnOrderService.class);
+        // optional SPI to reorder columns
+        sortColumnsUsingSpi(propertyIdsInOrder, elementType);
 
-        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
-            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, collectionType, propertyIds);
-            if(propertyReorderedIds != null) {
-                propertyIds = propertyReorderedIds;
-                break;
-            }
-        }
+        // add all ordered columns to the table
+        propertyIdsInOrder.stream()
+        .map(propertyById::get)
+        .filter(_NullSafe::isPresent)
+        .map(this::createObjectAdapterPropertyColumn)
+        .forEach(columns::add);
 
-        for (final String propertyId : propertyIds) {
-            final ObjectAssociation property = propertyById.get(propertyId);
-            if(property != null) {
-                final ColumnAbstract<ManagedObject> nopc = createObjectAdapterPropertyColumn(property);
-                columns.add(nopc);
-            }
-        }
     }
 
-    private List<String> reordered(
-            final TableColumnOrderService tableColumnOrderService,
-            final Class<?> collectionType,
-            final List<String> propertyIds) {
-
-        final ObjectMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
-        if(parentObjectAdapterMemento != null) {
-            val parentObjectAdapter = getCommonContext().reconstructObject(parentObjectAdapterMemento);
-            final Object parent = parentObjectAdapter.getPojo();
-            final String collectionId = getModel().getCollectionMemento().getId();
-
-            return tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);
-        } else {
-            return tableColumnOrderService.orderStandalone(collectionType, propertyIds);
-        }
+    private boolean filterColumnsUsingSpi(
+            final ObjectAssociation property,
+            final Class<?> elementType) {
+        return getServiceRegistry()
+                .select(TableColumnVisibilityService.class)
+                .stream()
+                .noneMatch(x -> x.hides(elementType, property.getId()));
     }
 
-    static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
+    private void sortColumnsUsingSpi(
+            final List<String> propertyIdsInOrder,
+            final Class<?> elementType) {
+
+        val tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
+        if(tableColumnOrderServices.isEmpty()) {
+            return;
+        }
+
+        val parentObject = Optional.ofNullable(getModel().getParentObjectAdapterMemento())
+                .map(getCommonContext()::reconstructObject);
+
+        tableColumnOrderServices.stream()
+        .map(tableColumnOrderService->
+            parentObject.isPresent()
+                ? tableColumnOrderService.orderParented(
+                        parentObject.get().getPojo(),
+                        getModel().getCollectionMemento().getId(),
+                        elementType,
+                        propertyIdsInOrder)
+
+                : tableColumnOrderService.orderStandalone(
+                        elementType,
+                        propertyIdsInOrder)
+
+                )
+        .filter(_NullSafe::isPresent)
+        .findFirst()
+        .filter(propertyReorderedIds->propertyReorderedIds!=propertyIdsInOrder) // skip if its the same object
+        .ifPresent(propertyReorderedIds->{
+            propertyIdsInOrder.clear();
+            propertyIdsInOrder.addAll(propertyReorderedIds);
+        });
+
+    }
+
+    static Predicate<ObjectAssociation> associationDoesNotReferenceParent(
+            final @Nullable ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return __->true;
+            return _Predicates.alwaysTrue();
         }
-        return new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(ObjectAssociation association) {
-                final HiddenFacet facet = association.getFacet(HiddenFacet.class);
-                if(facet == null) {
+        return (ObjectAssociation property) -> {
+                val hiddenFacet = property.getFacet(HiddenFacet.class);
+                if(hiddenFacet == null) {
                     return true;
                 }
-                if (facet.where() != Where.REFERENCES_PARENT) {
+                if (hiddenFacet.where() != Where.REFERENCES_PARENT) {
                     return true;
                 }
-                final ObjectSpecification assocSpec = association.getSpecification();
-                final boolean associationSpecIsOfParentSpec = parentSpec.isOfType(assocSpec);
-                final boolean isVisible = !associationSpecIsOfParentSpec;
+                val propertySpec = property.getSpecification();
+                final boolean propertySpecIsOfParentSpec = parentSpec.isOfType(propertySpec);
+                final boolean isVisible = !propertySpecIsOfParentSpec;
                 return isVisible;
-            }
         };
     }
 

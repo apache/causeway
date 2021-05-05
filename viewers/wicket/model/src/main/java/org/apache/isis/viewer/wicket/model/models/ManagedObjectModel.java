@@ -135,7 +135,7 @@ extends ModelAbstract<ManagedObject> {
                 .map(ObjectMemento::getLogicalType);
     }
     
-    private transient ObjectSpecification objectSpec;
+    private transient ObjectSpecification elementTypeSpec;
     private transient boolean isObjectSpecMemoized = false;
     /**
      * @implNote can be overridden by sub-models (eg {@link ScalarModel}) that know the type of
@@ -146,10 +146,10 @@ extends ModelAbstract<ManagedObject> {
     public ObjectSpecification getTypeOfSpecification() {
         if(!isObjectSpecMemoized) {
             val logicalType = getLogicalElementType().orElse(null);
-            objectSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
+            elementTypeSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
             isObjectSpecMemoized = true;
         }
-        return objectSpec;
+        return elementTypeSpec;
     }
 
     
@@ -204,7 +204,7 @@ extends ModelAbstract<ManagedObject> {
         val manageObject = super.getCommonContext().reconstructObject(memento);
         super.setObject(manageObject);
         this.memento = memento;
-        this.objectSpec = null; // invalidate
+        this.elementTypeSpec = null; // invalidate
     }
 
 
