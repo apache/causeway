@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import lombok.val;
 
 /** package private utility */
-final class Predicates {
+final class _SpecPredicates {
     
     // -- LOWER LEVEL
     

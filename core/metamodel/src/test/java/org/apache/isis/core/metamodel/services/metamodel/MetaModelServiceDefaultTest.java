@@ -105,7 +105,7 @@ class MetaModelServiceDefaultTest {
             }
         });
 
-        action = new ObjectActionDefault(mockFacetedMethod);
+        action = ObjectActionDefault.forMethod(mockFacetedMethod);
 
         mockMetaModelService = context.mock(MetaModelServiceDefault.class);
         context.checking(new Expectations() {
@@ -160,7 +160,7 @@ class MetaModelServiceDefaultTest {
     private OutputStream noopOutput(){
         return new OutputStream() {
             @Override public void write(int b) throws IOException {}
-        };  
+        };
     }
 
     @XmlRootElement(name = "employee")

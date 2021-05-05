@@ -67,33 +67,34 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
     }
 
     // -- fields
-    private final String id;
+
+    private final Identifier identifier;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
 
     protected ObjectMemberAbstract(
+            final Identifier identifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType) {
 
-        final String id = facetedMethod.getIdentifier().getMemberName();
-        if (id == null) {
-            throw new IllegalArgumentException("Id must always be set");
-        }
+        this.identifier = identifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
-        this.id = id;
+        if (getId() == null) {
+            throw new IllegalArgumentException("Id must always be set");
+        }
     }
 
     // -- Identifiers
 
     @Override
-    public String getId() {
-        return id;
+    public final String getId() {
+        return getIdentifier().getMemberName();
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return getFacetedMethod().getIdentifier();
+    public final Identifier getIdentifier() {
+        return identifier;
     }
 
     @Override

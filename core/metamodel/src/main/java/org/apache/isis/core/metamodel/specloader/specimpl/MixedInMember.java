@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -28,13 +27,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  */
 public interface MixedInMember extends ObjectMember {
 
-    /**
-     * The id as it was originally {@link DomainObject#mixinMethod()}.
-     */
-    String getOriginalId();
-
     ObjectSpecification getMixinType();
 
     boolean hasMixinAction(ObjectAction objectAction);
+
+    @Override
+    default boolean isMixedIn() {
+        return true;
+    }
 }
 

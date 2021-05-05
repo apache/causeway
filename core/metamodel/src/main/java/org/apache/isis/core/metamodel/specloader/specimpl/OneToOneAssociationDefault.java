@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
@@ -57,16 +58,20 @@ public class OneToOneAssociationDefault
 extends ObjectAssociationAbstract
 implements OneToOneAssociation {
 
-    public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
-        this(facetedMethod, facetedMethod.getMetaModelContext()
-                .getSpecificationLoader().loadSpecification(facetedMethod.getType()));
+    public static OneToOneAssociationDefault forMethod(final FacetedMethod facetedMethod) {
+        return new OneToOneAssociationDefault(
+                facetedMethod.getIdentifier(),
+                facetedMethod,
+                facetedMethod.getMetaModelContext().getSpecificationLoader()
+                    .loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToOneAssociationDefault(
+            final Identifier identifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
 
-        super(facetedMethod, FeatureType.PROPERTY, objectSpec);
+        super(identifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 
     // -- visible, usable

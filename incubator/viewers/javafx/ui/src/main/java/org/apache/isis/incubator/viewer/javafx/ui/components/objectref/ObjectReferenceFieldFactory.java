@@ -42,7 +42,7 @@ public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
     @Override
     public boolean isHandling(ComponentRequest request) {
         //return request.hasFeatureFacet(StringValueFacet.class);
-        return request.getFeatureTypeSpec().isEntityOrViewModel()
+        return request.getFeatureTypeSpec().isEntityOrViewModelOrAbstract()
                 || request.getFeatureType().isEnum();
     }
 
@@ -57,19 +57,19 @@ public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
 //                .orElse("");
 
         val uiComponent = new Label(request.getManagedFeature().getIdentifier().toString());
-        
+
         if(request.getManagedFeature() instanceof ManagedParameter) {
-            
+
             val managedParameter = (ManagedParameter)request.getManagedFeature();
-            
+
 //            uiComponent.textProperty().
-//            
+//
 //            managedParameter.validate(proposedValue)
-            
+
             //TODO bind to parameter model
-            
+
         } else if(request.getManagedFeature() instanceof ManagedProperty) {
-            
+
             val managedProperty = (ManagedProperty)request.getManagedFeature();
             //TODO bind to property model
         }

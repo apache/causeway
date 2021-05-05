@@ -31,16 +31,16 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator 
+public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
 extends MetaModelVisitingValidatorAbstract {
 
     @Override
     public void validate(@NonNull ObjectSpecification spec) {
-        if(spec.getBeanSort()==BeanSort.UNKNOWN 
+        if(spec.getBeanSort()==BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
-        
-            val actions = spec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
-            
+
+            val actions = spec.streamActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+
             final int numActions = actions.size();
             if (numActions > 0) {
 
@@ -56,7 +56,7 @@ extends MetaModelVisitingValidatorAbstract {
                         numActions,
                         actionIds);
             }
-            
+
         }
     }
 

@@ -135,6 +135,13 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isAction();
 
+    /**
+     * Whether this member originates from a mixin.
+     */
+    default boolean isMixedIn() {
+        return false;
+    }
+
     // /////////////////////////////////////////////////////////////
     // Debugging
     // /////////////////////////////////////////////////////////////

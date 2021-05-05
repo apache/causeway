@@ -25,6 +25,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
@@ -41,9 +44,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class ObjectAssociationAbstractTest {
 
@@ -78,6 +78,7 @@ public class ObjectAssociationAbstractTest {
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
+                facetedMethod.getIdentifier(),
                 facetedMethod, FeatureType.PROPERTY, objectSpecification) {
 
             @Override

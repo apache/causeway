@@ -216,9 +216,9 @@ implements FacetHolder {
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationDefault(facetMethod);
+            return OneToManyAssociationDefault.forMethod(facetMethod);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationDefault(facetMethod);
+            return OneToOneAssociationDefault.forMethod(facetMethod);
         } else {
             return null;
         }
@@ -239,7 +239,7 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionDefault(facetedMethod);
+            return ObjectActionDefault.forMethod(facetedMethod);
         } else {
             return null;
         }

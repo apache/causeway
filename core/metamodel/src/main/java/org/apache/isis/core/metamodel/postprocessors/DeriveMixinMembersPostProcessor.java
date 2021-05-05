@@ -38,19 +38,20 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
 
-        //TODO none of these 3 streams are actually consumed!
-        
+        // calling count on these 3 streams so these are actually consumed,
+        // as a side-effect the meta-model gets (further) populated
+
         // all the actions of this type
         val actionTypes = metaModelContext.getSystemEnvironment().isPrototyping()
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
+        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED).count();
 
         // and all the collections of this type
-        objectSpecification.streamCollections(MixedIn.INCLUDED);
+        objectSpecification.streamCollections(MixedIn.INCLUDED).count();
 
         // and all the properties of this type
-        objectSpecification.streamProperties(MixedIn.INCLUDED);
+        objectSpecification.streamProperties(MixedIn.INCLUDED).count();
 
     }
 
