@@ -240,6 +240,8 @@ implements CollectionCountProvider {
             return;
         }
 
+        //TODO why do we need to reconstruct the owning object, it should be already loaded,
+        // its wrapped within the EntityModel?
         val parentObject = Optional.ofNullable(getModel().getParentObjectAdapterMemento())
                 .map(getCommonContext()::reconstructObject);
 
@@ -248,7 +250,7 @@ implements CollectionCountProvider {
             parentObject.isPresent()
                 ? tableColumnOrderService.orderParented(
                         parentObject.get().getPojo(),
-                        getModel().getCollectionMemento().getId(),
+                        getModel().getCollectionMemento().getId(), //TODO why do we need the memento for that?
                         elementType,
                         propertyIdsInOrder)
 
