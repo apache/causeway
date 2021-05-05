@@ -22,10 +22,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.kv.UiManager
-import org.w3c.workers.Client
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

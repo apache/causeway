@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.ui.builder
 
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.TabGroup
-import org.apache.isis.client.kroviz.ui.kv.RoDisplay
+import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import io.kvision.core.Component
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT

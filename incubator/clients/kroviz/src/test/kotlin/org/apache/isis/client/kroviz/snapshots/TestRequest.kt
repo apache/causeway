@@ -5,7 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.await
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.w3c.fetch.Response
 import kotlin.js.Promise
 

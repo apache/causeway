@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class NavigationDispatcher() : BaseAggregator() {
 

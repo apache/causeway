@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.handler
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 /**
  * Handle responses to XmlHttpRequests asynchronously,

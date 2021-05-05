@@ -24,8 +24,8 @@ import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.kv.Constants
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.xhr.XMLHttpRequest
 

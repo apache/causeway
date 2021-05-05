@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import io.kvision.panel.VPanel
 import kotlin.test.*

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.utils
 
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.w3c.dom.Document
 import org.w3c.dom.Image
 import org.w3c.dom.parsing.DOMParser

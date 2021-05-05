@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.Utils
 
 class ResourceSpecification(

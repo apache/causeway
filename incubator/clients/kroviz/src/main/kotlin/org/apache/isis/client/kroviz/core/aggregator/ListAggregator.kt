@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 /** sequence of operations:
  * (0) list

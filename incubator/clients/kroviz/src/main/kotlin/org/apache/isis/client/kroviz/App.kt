@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz
 
-import org.apache.isis.client.kroviz.ui.kv.RoApp
+import org.apache.isis.client.kroviz.ui.core.RoApp
 import io.kvision.Application
 import io.kvision.pace.Pace
 import io.kvision.panel.root

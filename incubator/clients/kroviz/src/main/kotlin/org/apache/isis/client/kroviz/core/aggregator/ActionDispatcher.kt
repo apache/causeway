@@ -20,8 +20,8 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.*
-import org.apache.isis.client.kroviz.ui.kv.ActionPrompt
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.dialog.ActionPrompt
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Utils
 

@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.core.event
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher

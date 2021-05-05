@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 abstract class AggregatorWithLayout : BaseAggregator() {
 

@@ -23,8 +23,8 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.ErrorDialog
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 /** sequence of operations:
  * (0) Menu Action              User clicks BasicTypes.String -> handled by ActionDispatcher

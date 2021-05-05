@@ -27,7 +27,8 @@ import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.uml.PumlBuilder
 import kotlin.test.*
 
 class PumlBuilderTest {
