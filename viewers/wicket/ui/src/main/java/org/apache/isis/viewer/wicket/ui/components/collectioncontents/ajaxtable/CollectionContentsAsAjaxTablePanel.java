@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -60,6 +61,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -104,17 +106,18 @@ implements CollectionCountProvider {
             bulkActionsProvider.configureBulkActions(toggleboxColumn);
         }
 
-        final EntityCollectionModel model = getModel();
+        final EntityCollectionModel collectionModel = getModel();
         addTitleColumn(
                 columns,
-                model.getParentObjectAdapterMemento(),
+                collectionModel.getParentObjectAdapterMemento(),
                 getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
                 getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
 
         addPropertyColumnsIfRequired(columns);
 
-        val dataProvider = new CollectionContentsSortableDataProvider(model);
-        dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize(), toggleboxColumn);
+        val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
+        dataTable = new IsisAjaxFallbackDataTable<>(
+                ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
 
     }
@@ -143,46 +146,15 @@ implements CollectionCountProvider {
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
+
         val collectionModel = getModel();
-
-        val typeOfSpec = collectionModel.getTypeOfSpecification();
-        final Comparator<String> propertyIdComparator;
-
-        if(typeOfSpec == null) {
+        val elementTypeSpec = collectionModel.getTypeOfSpecification();
+        if(elementTypeSpec == null) {
             return;
         }
 
         // the type that has the properties that make up this table's columns
-        val elementType = typeOfSpec.getCorrespondingClass();
-
-        // same code also appears in EntityPage.
-        // we need to do this here otherwise any tables will render the columns in the wrong order until at least
-        // one object of that type has been rendered via EntityPage.
-        val elementTypeGridFacet = typeOfSpec.getFacet(GridFacet.class);
-        if(elementTypeGridFacet != null) {
-            // the facet should always exist, in fact
-            // just enough to ask for the metadata.
-
-            // don't pass in any object, just need the meta-data
-            val elementTypeGrid = elementTypeGridFacet.getGrid(null);
-
-            final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
-            elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
-                propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
-            });
-
-            // if propertyId is mentioned within grid, put into first 'half' ordered by
-            // occurrence within grid
-            // if propertyId is not mentioned within grid, put into second 'half' ordered by
-            // propertyId (String) in natural order
-            propertyIdComparator = Comparator
-                    .<String>comparingInt(propertyId->
-                    propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
-                    .thenComparing(Comparator.naturalOrder());
-
-        } else {
-            propertyIdComparator = null;
-        }
+        val elementType = elementTypeSpec.getCorrespondingClass();
 
         val whereContext = collectionModel.isParented()
                     ? Where.PARENTED_TABLES
@@ -193,8 +165,7 @@ implements CollectionCountProvider {
 
         val propertyById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
-        typeOfSpec.streamAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.PROPERTIES)
+        elementTypeSpec.streamProperties(MixedIn.INCLUDED)
         .filter(property->property.streamFacets()
                     .filter(facet -> facet instanceof HiddenFacet)
                     .map(WhereValueFacet.class::cast)
@@ -206,9 +177,9 @@ implements CollectionCountProvider {
 
         val propertyIdsInOrder = _Lists.<String>newArrayList(propertyById.keySet());
 
-        if(propertyIdComparator!=null) {
-            propertyIdsInOrder.sort(propertyIdComparator);
-        }
+        // sort by order of occurrence within associated layout, if any
+        propertyIdComparator(elementTypeSpec)
+        .ifPresent(propertyIdsInOrder::sort);
 
         // optional SPI to reorder columns
         sortColumnsUsingSpi(propertyIdsInOrder, elementType);
@@ -220,6 +191,40 @@ implements CollectionCountProvider {
         .map(this::createObjectAdapterPropertyColumn)
         .forEach(columns::add);
 
+    }
+
+    // comparator based on grid facet, that is by order of occurrence within associated layout
+    private Optional<Comparator<String>> propertyIdComparator(
+            final @NonNull ObjectSpecification elementTypeSpec) {
+
+        // same code also appears in EntityPage.
+        // we need to do this here otherwise any tables will render the columns in the wrong order until at least
+        // one object of that type has been rendered via EntityPage.
+        val elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
+
+        if(elementTypeGridFacet == null) {
+            return Optional.empty();
+        }
+
+        // the facet should always exist, in fact
+        // just enough to ask for the metadata.
+
+        // don't pass in any object, just need the meta-data
+        val elementTypeGrid = elementTypeGridFacet.getGrid(null);
+
+        final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
+        elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
+            propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
+        });
+
+        // if propertyId is mentioned within grid, put into first 'half' ordered by
+        // occurrence within grid
+        // if propertyId is not mentioned within grid, put into second 'half' ordered by
+        // propertyId (String) in natural order
+        return Optional.of(Comparator
+                .<String>comparingInt(propertyId->
+                propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
+                .thenComparing(Comparator.naturalOrder()));
     }
 
     private boolean filterColumnsUsingSpi(
@@ -240,17 +245,24 @@ implements CollectionCountProvider {
             return;
         }
 
-        //TODO why do we need to reconstruct the owning object, it should be already loaded,
+        val collectionModel = getModel();
+
+        //TODO remove comment block once we know the new code works ...
+        // why do we need to reconstruct the owning object, it should be already loaded,
         // its wrapped within the EntityModel?
-        val parentObject = Optional.ofNullable(getModel().getParentObjectAdapterMemento())
-                .map(getCommonContext()::reconstructObject);
+        // legacy of ...
+//        val parentObject = Optional.ofNullable(collectionModel.getParentObjectAdapterMemento())
+//                .map(getCommonContext()::reconstructObject);
+
+        val parentObject = Optional.ofNullable(collectionModel.getEntityModel())
+                .map(EntityModel::getManagedObject);
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->
             parentObject.isPresent()
                 ? tableColumnOrderService.orderParented(
                         parentObject.get().getPojo(),
-                        getModel().getCollectionMemento().getId(), //TODO why do we need the memento for that?
+                        collectionModel.getIdentifier().getMemberName(),
                         elementType,
                         propertyIdsInOrder)
 

@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
@@ -92,7 +93,12 @@ implements
         val sortedByFacet = oneToManyAssociation.getFacet(SortedByFacet.class);
 
         val entityCollectionModel = new EntityCollectionModel(
-                entityModel.getCommonContext(), Variant.PARENTED, entityModel, typeOf, pageSize);
+                entityModel.getCommonContext(),
+                Variant.PARENTED,
+                oneToManyAssociation.getIdentifier(),
+                entityModel,
+                typeOf,
+                pageSize);
         entityCollectionModel.collectionMemento = new CollectionMemento(oneToManyAssociation);
         entityCollectionModel.sortedBy = (sortedByFacet != null)
                 ? sortedByFacet.value()
@@ -131,9 +137,13 @@ implements
                 ? elementSpec.getCorrespondingClass()
                 : Object.class;
 
-        val entityModel = (EntityModel)null;
         val entityCollectionModel = new EntityCollectionModel(
-                model.getCommonContext(), Variant.STANDALONE, entityModel, elementType, pageSize);
+                model.getCommonContext(),
+                Variant.STANDALONE,
+                /*Identifier*/ null,
+                /*EntityModel*/null,
+                elementType,
+                pageSize);
         entityCollectionModel.mementoList = mementoList;
         return entityCollectionModel;
 
@@ -319,13 +329,21 @@ implements
      */
     private final EntityModel entityModel;
 
+    /**
+     * Populated only if {@link Variant#PARENTED}.
+     * <p>
+     * This collection's <i>feature</i> {@link Identifier}.
+     * @see Identifier
+     */
+    @Getter private final Identifier identifier;
+
 
     /**
      * Populated only if {@link Variant#PARENTED}.
      */
     private CollectionMemento collectionMemento;
 
-    private final int pageSize;
+    @Getter private final int pageSize;
 
     /**
      * Additional links to render (if any)
@@ -345,12 +363,14 @@ implements
     private EntityCollectionModel(
             IsisAppCommonContext commonContext,
             Variant type,
+            Identifier identifier,
             EntityModel entityModel,
             Class<?> typeOf,
             int pageSize) {
 
         super(commonContext);
         this.variant = type;
+        this.identifier = identifier;
         this.entityModel = entityModel;
         this.typeOf = typeOf;
         this.pageSize = pageSize;
@@ -387,10 +407,6 @@ implements
 
     public boolean isStandalone() {
         return variant == Variant.STANDALONE;
-    }
-
-    public int getPageSize() {
-        return pageSize;
     }
 
     /**
@@ -519,7 +535,7 @@ implements
 
     public EntityCollectionModel asDummy() {
         final EntityCollectionModel dummy = new EntityCollectionModel(
-                super.getCommonContext(), Variant.STANDALONE, null, typeOf, pageSize);
+                super.getCommonContext(), Variant.STANDALONE, null, null, typeOf, pageSize);
         dummy.mementoList = Collections.<ObjectMemento>emptyList();
         return dummy;
     }
