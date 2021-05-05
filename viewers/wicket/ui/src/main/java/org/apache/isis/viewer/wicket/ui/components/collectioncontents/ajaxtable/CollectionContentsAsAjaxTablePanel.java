@@ -152,6 +152,7 @@ implements CollectionCountProvider {
             return;
         }
 
+        // the type that has the properties that make up this table's columns
         val elementType = typeOfSpec.getCorrespondingClass();
 
         // same code also appears in EntityPage.
@@ -200,8 +201,7 @@ implements CollectionCountProvider {
                     .map(WhereValueFacet::where)
                     .noneMatch(where -> !where.includes(whereContext)))
         .filter(associationDoesNotReferenceParent(parentSpecIfAny))
-        //FIXME is broken
-        //.filter(property->filterColumnsUsingSpi(property, elementType)) // optional SPI to filter
+        .filter(property->filterColumnsUsingSpi(property, elementType)) // optional SPI to filter columns
         .forEach(property->propertyById.put(property.getId(), property));
 
         val propertyIdsInOrder = _Lists.<String>newArrayList(propertyById.keySet());

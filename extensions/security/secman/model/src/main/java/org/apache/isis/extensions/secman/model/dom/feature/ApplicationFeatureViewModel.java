@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -53,6 +54,9 @@ import lombok.val;
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
  */
+@DomainObject(
+        objectType = "isis.ext.secman.ApplicationFeatureViewModel"
+        )
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}

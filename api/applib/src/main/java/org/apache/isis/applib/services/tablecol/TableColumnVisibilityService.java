@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.tablecol;
 
-import java.util.List;
-
 /**
  * Provides the ability to suppress columns in tables.
  *
