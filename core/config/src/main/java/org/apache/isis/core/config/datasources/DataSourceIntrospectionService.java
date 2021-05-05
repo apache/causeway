@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.config.datasources;
 
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
@@ -33,17 +35,19 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Lazy;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.Value;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * For a given <i>Spring</i> context, makes information about configured data-sources available.
- * 
+ *
  * @apiNote The {@link DataSourceInfo} value type can be extended as needed.
- *  
+ *
  * @since 2.0 {@index}
  * @see <a href="https://stackoverflow.com/questions/44446597/where-does-the-default-datasource-url-for-h2-come-from-on-spring-boot">stackoverflow.com</a>
  */
@@ -57,29 +61,53 @@ public class DataSourceIntrospectionService {
 
     @Autowired(required = false)
     private List<DataSource> dataSources;
-    
+
     @Value
     public static class DataSourceInfo {
-        private final String jdbcUrl; 
+        private final String jdbcUrl;
+
+        @SneakyThrows
+        private static DataSourceInfo fromMetaData(final @NonNull DatabaseMetaData databaseMetaData) {
+            return new DataSourceInfo(databaseMetaData.getURL());
+        }
     }
-    
-    public Stream<DataSourceInfo> streamDataSourceInfos() {
-        
-        log.debug("about to introspect data-sources: {}", 
-                ()->Can.ofCollection(dataSources).map(ds->ds.getClass().getName()));
-        
-        return _NullSafe.stream(dataSources)
-        .map(dataSource->{
-            try {
-                return dataSource.getConnection().getMetaData().getURL();
-            } catch (SQLException e) { 
-                log.warn("failed to get metadata from SQL connection using datasource of type {}", 
-                        dataSource.getClass());
-                return (String) null;
-            }
-        })
-        .filter(_Strings::isNotEmpty)
-        .map(DataSourceInfo::new);
+
+    public Can<DataSourceInfo> getDataSourceInfos() {
+        return dataSourceInfos.get();
     }
-    
+
+    // -- HELPER
+
+    private final _Lazy<Can<DataSourceInfo>> dataSourceInfos =
+            _Lazy.threadSafe(()->Can.ofStream(streamDataSourceInfos()));
+
+    private Stream<DataSourceInfo> streamDataSourceInfos() {
+
+        val registeredDataSources = Can.ofCollection(dataSources);
+
+        log.debug("about to introspect data-sources: {}",
+                ()->registeredDataSources.map(ds->ds.getClass().getName()));
+
+        return registeredDataSources
+                .stream()
+                .map(this::dsInfoForDataSource)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
+    private Optional<DataSourceInfo> dsInfoForDataSource(
+            final @NonNull DataSource dataSource) {
+
+        // make sure we close any connection after having consumed the meta-data
+        try(val connection = dataSource.getConnection()){
+            return Optional.ofNullable(connection.getMetaData())
+                    .map(DataSourceInfo::fromMetaData);
+        } catch (SQLException e) {
+            log.warn("failed to get metadata from SQL connection using datasource of type {}",
+                    dataSource.getClass());
+        }
+        return Optional.empty();
+    }
+
+
 }
