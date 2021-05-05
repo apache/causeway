@@ -43,9 +43,9 @@ import lombok.val;
  * @since 2.0
  */
 public final class _Generics {
-    
+
     // -- STREAMING TYPE ARGUMENTS
-    
+
     /**
      * Returns a Stream of the actual type arguments for given {@code genericType}.
      * @param owner - the corresponding class that declares the field or method,
@@ -53,61 +53,77 @@ public final class _Generics {
      * @param genericType
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOf(
-            final @NonNull Class<?> owner, 
+            final @NonNull Class<?> owner,
             final @NonNull Type genericType) {
 
-        return (genericType instanceof ParameterizedType) 
+        return (genericType instanceof ParameterizedType)
                 ? Stream.of(((ParameterizedType) genericType).getActualTypeArguments())
                         .flatMap(type->streamClassesOfType(owner, type))
                 : Stream.empty();
     }
-    
+
     /**
-     * Streams given {@code genericTypes} for their actual type arguments
-     * and calls back {@code onTypeArgument} on each type argument found.
-     * @param owner - the corresponding class that declares the method, 
+     * Returns a Stream of the actual type arguments for given {@code genericTypes}.
+     * @param owner - the corresponding class that declares the method,
      *     which uses the {@code genericTypes}
      * @param genericTypes
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOf(
             final @NonNull Class<?> owner,
             final @Nullable Type[] genericTypes) {
-        
+
         return _NullSafe.stream(genericTypes)
                 .flatMap(type->streamGenericTypeArgumentsOf(owner, type));
     }
-    
+
     // -- SHORTCUTS
-    
+
+    /**
+     * Returns a Stream of the actual type arguments for given {@code field}.
+     */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfField(
             final @NonNull Field field) {
-        return streamGenericTypeArgumentsOf(field.getDeclaringClass(), field.getGenericType());
+        return streamGenericTypeArgumentsOf(
+                field.getDeclaringClass(),
+                field.getGenericType());
     }
-    
+
+    /**
+     * Returns a Stream of the actual type arguments for given {@code method}'s return type.
+     */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodParameterTypes(
             final @NonNull Method method) {
-        return streamGenericTypeArgumentsOf(method.getDeclaringClass(), method.getGenericParameterTypes());
+        return streamGenericTypeArgumentsOf(
+                method.getDeclaringClass(),
+                method.getGenericParameterTypes());
     }
-    
+
+    /**
+     * Returns a Stream of the actual type arguments for given {@code method}'s parameter types.
+     */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfMethodReturnType(
             final @NonNull Method method) {
-        return streamGenericTypeArgumentsOf(method.getDeclaringClass(), method.getGenericReturnType());
+        return streamGenericTypeArgumentsOf(
+                method.getDeclaringClass(),
+                method.getGenericReturnType());
     }
-    
+
+    /**
+     * Returns a Stream of the actual type arguments for given {@code param}.
+     */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfParameter(
             final @NonNull Parameter param) {
         return streamGenericTypeArgumentsOf(
-                param.getDeclaringExecutable().getDeclaringClass(), 
+                param.getDeclaringExecutable().getDeclaringClass(),
                 param.getParameterizedType());
     }
-    
-    
+
     // -- HELPER
-    
+
     private static Stream<Class<?>> streamClassesOfType(
-            final Class<?> owner, 
+            final Class<?> owner,
             final Type type) {
-        
+
         if (type instanceof Class) {
             return Stream.of((Class<?>) type);
         }
@@ -118,7 +134,7 @@ public final class _Generics {
                         Stream.of(wildcardType.getUpperBounds()))
                     .flatMap(x->streamClassesOfType(owner, x)); // recursive call
         }
-        
+
         if (type instanceof TypeVariable) {
 
             // try to match up with the actual type argument of the owner's generic superclass.
@@ -133,8 +149,8 @@ public final class _Generics {
             }
             // otherwise, what to do?
         }
-        
+
         return Stream.empty();
     }
-    
+
 }
