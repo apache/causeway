@@ -128,8 +128,8 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         entityFacet = targetAdapter.getSpecification()
                 .getFacet(EntityFacet.class);
-        
-        this.mixeeAdapter = mixeeAdapter; 
+
+        this.mixeeAdapter = mixeeAdapter;
     }
 
     /**
@@ -226,7 +226,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
                 if (mixeeAdapter == null) {
                     throw _Exceptions.illegalState(
-                            "Missing the required mixeeAdapter for action '%s'", 
+                            "Missing the required mixeeAdapter for action '%s'",
                             objectAction.getId());
                 }
                 final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
@@ -262,7 +262,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             return null;
         }
         val specification = domainObjectAdapter.getSpecification();
-        val objectActions = specification.streamActions(MixedIn.INCLUDED);
+        val objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
         val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
         final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);

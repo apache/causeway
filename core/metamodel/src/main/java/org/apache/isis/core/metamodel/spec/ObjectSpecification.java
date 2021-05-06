@@ -130,7 +130,7 @@ extends
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
-        return streamActions(MixedIn.INCLUDED)
+        return streamAnyActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
@@ -439,8 +439,8 @@ extends
     default Stream<FacetHolder> streamFacetHolders(){
 
         val self = Stream.of(this);
-        val actions = streamActions(MixedIn.EXCLUDED);
-        val actionParameters = streamActions(MixedIn.EXCLUDED)
+        val actions = streamAnyActions(MixedIn.EXCLUDED);
+        val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                         : Stream.empty());

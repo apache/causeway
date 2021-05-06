@@ -39,7 +39,7 @@ extends MetaModelVisitingValidatorAbstract {
         if(spec.getBeanSort()==BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
 
-            val actions = spec.streamActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+            val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 
             final int numActions = actions.size();
             if (numActions > 0) {

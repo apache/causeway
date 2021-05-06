@@ -442,7 +442,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         // (contributed properties and collections are read-only).
         final ObjectActionMixedIn targetAction = specificationLoader
         .specForType(mixedInClass)
-        .flatMap(mixedInSpec->mixedInSpec.streamActions(MixedIn.INCLUDED)
+        .flatMap(mixedInSpec->mixedInSpec.streamAnyActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))
@@ -606,18 +606,18 @@ public class WrapperFactoryDefault implements WrapperFactory {
             serviceInjector.injectServicesInto(this);
             return interactionFactory.callAuthenticated(authentication, this::updateDomainObjectHonoringTransactionalPropagation);
         }
-        
+
         private R updateDomainObjectHonoringTransactionalPropagation() {
             return transactionService.callTransactional(propagation, this::updateDomainObject)
                     .optionalElseFail()
-                    .orElse(null);            
+                    .orElse(null);
         }
-        
+
         private R updateDomainObject() {
-            
+
             val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
             childCommand.updater().setParent(parentCommand);
-            
+
             val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
             if (bookmark == null) {
                 return null;
@@ -627,9 +627,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 domainObject = repositoryService.detach(domainObject);
             }
             return domainObject;
-                        
+
         }
-        
-        
+
+
     }
 }

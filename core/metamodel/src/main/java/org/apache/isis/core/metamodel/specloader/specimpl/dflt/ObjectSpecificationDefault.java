@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -270,39 +270,24 @@ implements FacetHolder {
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(
+            final @Nullable String id,
+            final @Nullable ActionType type) {
+
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        final Stream<ObjectAction> actions =
-                streamDeclaredActions(
+        return id == null
+                ? Optional.empty()
+                : streamDeclaredActions(
                         type==null
                             ? ActionType.ANY
                             : ImmutableEnumSet.of(type),
-                        MixedIn.INCLUDED);
-        return firstAction(actions, id);
-    }
-
-    private static Optional<ObjectAction> firstAction(
-            final Stream<ObjectAction> candidateActions,
-            final String id) {
-
-        if (id == null) {
-            return Optional.empty();
-        }
-
-        return candidateActions
-                .filter(action->{
-                    final Identifier identifier = action.getIdentifier();
-
-                    if (id.equals(identifier.getMemberNameAndParameterClassNamesIdentityString())) {
-                        return true;
-                    }
-                    if (id.equals(identifier.getMemberName())) {
-                        return true;
-                    }
-                    return false;
-                })
-                .findFirst();
+                        MixedIn.INCLUDED)
+                    .filter(action->
+                        id.equals(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                                || id.equals(action.getIdentifier().getMemberName())
+                    )
+                    .findFirst();
     }
 
     @Override

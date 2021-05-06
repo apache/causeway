@@ -267,7 +267,7 @@ class MetaModelExporter {
         }
 
         final List<Action> actions = domainClass.getActions().getAct();
-        specification.streamActions(MixedIn.INCLUDED)
+        specification.streamAnyActions(MixedIn.INCLUDED)
         .map(action->asXsdType(action, domainClassByObjectSpec, config))
         .forEach(actions::add);
 

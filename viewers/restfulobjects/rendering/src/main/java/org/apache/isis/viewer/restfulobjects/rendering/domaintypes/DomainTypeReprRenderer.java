@@ -18,14 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import java.util.stream.Stream;
-
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -96,7 +93,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        
+
         objectSpecification.streamAssociations(MixedIn.EXCLUDED)
         .forEach(association->{
             if (association.isOneToOneAssociation()) {
@@ -110,12 +107,11 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             }
         });
 
-        final Stream<ObjectAction> actions = objectSpecification.streamActions(MixedIn.INCLUDED);
-
-        actions.forEach(action->{
+        objectSpecification.streamAnyActions(MixedIn.INCLUDED)
+        .forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer
                     .newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
-            membersList.arrayAdd(linkBuilder.build());            
+            membersList.arrayAdd(linkBuilder.build());
         });
 
     }

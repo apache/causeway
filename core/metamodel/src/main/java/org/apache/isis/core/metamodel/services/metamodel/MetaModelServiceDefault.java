@@ -79,7 +79,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        
+
         return specificationLoader.specForType(domainType)
         .flatMap(spec->spec.lookupFacet(ObjectSpecIdFacet.class))
         .map(ObjectSpecIdFacet::value)
@@ -116,7 +116,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             .filter(otma->!exclude(otma))
             .forEach(otma->rows.add(new DomainMemberDefault(spec, otma)));
 
-            spec.streamActions(MixedIn.INCLUDED)
+            spec.streamAnyActions(MixedIn.INCLUDED)
             .filter(action->!exclude(action))
             .forEach(action->rows.add(new DomainMemberDefault(spec, action)));
         }
@@ -161,19 +161,19 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(objectSpec == null) {
             return BeanSort.UNKNOWN;
         }
-        
+
         if(objectSpec.getBeanSort().isUnknown()
                 && !(mode == Mode.RELAXED)) {
-        
+
             throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
                     objectSpec.getFullIdentifier(),
                     domainType.getName()
                     ));
         }
-        
+
         return objectSpec.getBeanSort();
-        
+
     }
 
     @Override

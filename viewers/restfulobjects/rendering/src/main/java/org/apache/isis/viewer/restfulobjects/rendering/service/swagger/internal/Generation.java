@@ -173,7 +173,7 @@ class Generation {
         for (final ObjectSpecification objectSpec :  allSpecs) {
             objectSpec.streamAssociations(MixedIn.INCLUDED)
             .collect(Collectors.toList());
-            objectSpec.streamActions(MixedIn.INCLUDED)
+            objectSpec.streamAnyActions(MixedIn.INCLUDED)
             .collect(Collectors.toList());
         }
     }

@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import lombok.Synchronized;
 import lombok.val;
 
-public class ObjectSpecificationStub 
+public class ObjectSpecificationStub
 extends FacetHolderImpl
 implements ObjectSpecification {
 
@@ -60,7 +60,7 @@ implements ObjectSpecification {
     public List<ObjectAssociation> fields = _Lists.newArrayList();
     private String title;
     /**
-     * lazily derived, see {@link #getLogicalType()} 
+     * lazily derived, see {@link #getLogicalType()}
      */
     private LogicalType logicalType;
 
@@ -163,17 +163,17 @@ implements ObjectSpecification {
     public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
-        
+
         if(type==null) {
             return action;
         }
-        
+
         if (action.isPresent()
                 && action.get().getType() == type) {
             return action;
         }
         return Optional.empty();
-        
+
     }
 
     @Override
@@ -304,7 +304,7 @@ implements ObjectSpecification {
     public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return null;
     }
-    
+
     // /////////////////////////////////////////////////////////
     // view models and wizards
     // /////////////////////////////////////////////////////////
@@ -355,16 +355,16 @@ implements ObjectSpecification {
         // poorly implemented, inheritance not supported
         return getDeclaredAction(id, type);
     }
-    
+
     @Override
     public Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> types, 
+            ImmutableEnumSet<ActionType> types,
             MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
         return streamDeclaredActions(contributed);
     }
-    
+
     @Override
     public Optional<ObjectAssociation> getAssociation(String id) {
         // poorly implemented, inheritance not supported
@@ -375,6 +375,14 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
         // poorly implemented, inheritance not supported
         return streamDeclaredAssociations(contributed);
+    }
+
+    @Override
+    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
+                ? ActionType.USER_AND_PROTOTYPE
+                : ActionType.USER_ONLY;
+        return streamActions(actionTypes, mixedIn);
     }
 
 }

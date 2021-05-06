@@ -698,11 +698,6 @@ implements ObjectSpecification {
         return Optional.empty();
     }
 
-
-
-    /**
-     * The association with the given {@link ObjectAssociation#getId() id}.
-     */
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
@@ -711,7 +706,13 @@ implements ObjectSpecification {
                 .findFirst();
     }
 
-
+    @Override
+    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
+                ? ActionType.USER_AND_PROTOTYPE
+                : ActionType.USER_ONLY;
+        return streamActions(actionTypes, mixedIn);
+    }
 
     @Override
     public Stream<ObjectAction> streamDeclaredActions(

@@ -26,30 +26,30 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
-    
+
     // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITANCE CONSIDERED)
-    
+
     /**
      * Same as {@link #getDeclaredAssociation(String)}, but also considering any inherited object members.
      * @param id
-     * 
-     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
-     * and if nothing found there, search the interfaces.  
+     *
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types,
+     * and if nothing found there, search the interfaces.
      */
     Optional<ObjectAssociation> getAssociation(String id);
-    
+
     default ObjectAssociation getAssociationElseFail(String id) {
         return getAssociation(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
-    
+
     default OneToOneAssociation getPropertyElseFail(String id) {
         return getAssociation(id)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(OneToOneAssociation.class::cast)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
-    
+
     default OneToManyAssociation getCollectionElseFail(String id) {
         return getAssociation(id)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
@@ -61,24 +61,25 @@ public interface ObjectAssociationContainer {
 
     /**
      * Get the field object representing the field with the specified field
-     * identifier.
+     * identifier, that is the association with the given
+     * {@link ObjectAssociation#getId() id}.
      *
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
      */
     Optional<ObjectAssociation> getDeclaredAssociation(String id);
-    
+
     // -- ASSOCIATION STREAMS (INHERITANCE CONSIDERED)
 
     /**
      * Same as {@link #streamDeclaredAssociations(MixedIn)}, but also considering any inherited object members.
      * @param contributed
-     * 
-     * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream, 
+     *
+     * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream,
      * except don't add ObjectAssociations that already have been added (due to inheritance).
      */
     Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
-    
+
 
     /**
      * All {@link ObjectAssociation association}s that represent
@@ -99,9 +100,9 @@ public interface ObjectAssociationContainer {
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .map(OneToManyAssociation.class::cast);
     }
-    
+
     // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
-    
+
     /**
      * Return all the fields that exist in an object of this specification,
      * although they need not all be accessible or visible.

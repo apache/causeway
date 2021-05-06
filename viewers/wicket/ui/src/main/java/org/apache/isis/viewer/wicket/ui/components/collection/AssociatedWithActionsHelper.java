@@ -19,19 +19,13 @@
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 
@@ -49,35 +43,28 @@ public class AssociatedWithActionsHelper implements Serializable {
         this.collectionModel = collectionModel;
     }
 
-    public List<ObjectAction> getAssociatedActions(final SpecificationLoader specLoader) {
+    //TODO refactor: move to EntityCollectionModel
+    public Can<ObjectAction> getAssociatedActions(final SpecificationLoader specLoader) {
 
         if(collectionModel.isStandalone()) {
-            return Collections.emptyList();
+            return Can.empty();
         }
         final OneToManyAssociation collection = collectionModel.getCollectionMemento()
                 .getCollection(specLoader);
 
-        final ObjectSpecification objectSpec = getObjectSpecification();
-
-        val actionTypes = inferActionTypes(collectionModel.getCommonContext());
-        final Stream<ObjectAction> objectActions = objectSpec.streamActions(actionTypes, MixedIn.INCLUDED);
-
-        return objectActions
+        return getObjectSpecification()
+                .streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collection))
-                .collect(Collectors.toList());
+                .collect(Can.toCan());
     }
 
+    // -- HELPER
+
+    //TODO refactor: move to EntityCollectionModel
     private ObjectSpecification getObjectSpecification() {
         val parentMemento = collectionModel.getParentObjectAdapterMemento();
         val parentAdapter = collectionModel.getCommonContext().reconstructObject(parentMemento);
         return parentAdapter.getSpecification();
-    }
-
-    private ImmutableEnumSet<ActionType> inferActionTypes(IsisAppCommonContext commonContext) {
-        if (commonContext.getSystemEnvironment().isPrototyping()) {
-            return ActionType.USER_AND_PROTOTYPE;
-        }
-        return ActionType.USER_ONLY;
     }
 
 }

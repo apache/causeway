@@ -81,9 +81,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
     }
 
     private static ObjectSpecIdFacet createObjectSpecIdFacet(
-            final FacetHolder facetHolder, 
+            final FacetHolder facetHolder,
             final Class<?> substitutedClass) {
-        
+
         val serviceId = getServiceId(facetHolder);
         val isService = serviceId!=null;
 
@@ -112,11 +112,11 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         }
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec-> {
-                    
+
             if(!check(objectSpec)) {
                 return;
             }
-            
+
             val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
             if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
                 ValidationFailure.raiseFormatted(
@@ -129,15 +129,15 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                                 + "@PersistenceCapable(schema=...) to specify explicitly.",
                         objectSpec.getFullIdentifier(),
                         "isis.core.meta-model.validator.explicit-object-type");
-            } 
-                
+            }
+
             });
 
     }
 
     public static boolean check(final ObjectSpecification objectSpec) {
             //TODO
-            // as a special case, don't enforce this for fixture scripts... 
+            // as a special case, don't enforce this for fixture scripts...
             // we never invoke actions on fixture scripts anyway
 
         if(objectSpec.isAbstract()) {
@@ -163,9 +163,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             if(!DomainServiceFacet.getNatureOfService(objectSpec).isPresent()) {
                 return false; //skip validation
             }
-            
+
             // don't check if domain service has only programmatic methods
-            return objectSpec.streamActions(MixedIn.INCLUDED).count()>0L;
+            return objectSpec.streamAnyActions(MixedIn.INCLUDED).count()>0L;
 
         }
         return false; //skip validation

@@ -56,8 +56,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel 
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
+public class CollectionPanel
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionSelectorProvider, BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
@@ -138,7 +138,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
     public ObjectAdapterToggleboxColumn getToggleboxColumn() {
 
         if(toggleboxColumn == null) {
-            final List<ObjectAction> associatedActions =
+            val associatedActions =
                     associatedWithActionsHelper.getAssociatedActions(getSpecificationLoader());
 
             val entityCollectionModel = getModel();
@@ -147,7 +147,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
             }
 
             toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
-            
+
             val handler = new OnSelectionHandler() {
 
                 private static final long serialVersionUID = 1L;
@@ -157,9 +157,9 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                         final Component context,
                         final ManagedObject selectedAdapter,
                         final AjaxRequestTarget ajaxRequestTarget) {
-                    
+
                     val togglePanel = (ContainedToggleboxPanel) context;
-                    
+
                     val isSelected = getModel().toggleSelectionOn(selectedAdapter);
                     togglePanel.setModel(isSelected); // sync the checkbox's model
                 }
