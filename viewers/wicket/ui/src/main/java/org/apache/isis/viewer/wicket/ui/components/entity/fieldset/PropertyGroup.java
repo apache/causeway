@@ -126,15 +126,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             panelHeading.setVisibilityAllowed(false);
         } else {
             panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, groupName));
-            final Can<LinkAndLabel> actionsPanel = memberGroupActions
-                    .stream()
-                    .filter(LinkAndLabel.positioned(ActionLayout.Position.PANEL))
-                    .collect(Can.toCan());
-            final Can<LinkAndLabel> actionsPanelDropDown = memberGroupActions
-                    .stream()
-                    .filter(LinkAndLabel.positioned(ActionLayout.Position.PANEL_DROPDOWN))
-                    .collect(Can.toCan());
-
+            final Can<LinkAndLabel> actionsPanel = LinkAndLabel
+                    .positioned(ActionLayout.Position.PANEL, memberGroupActions.stream());
+            final Can<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
+                    .positioned(ActionLayout.Position.PANEL_DROPDOWN, memberGroupActions.stream());
             AdditionalLinksPanel.addAdditionalLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                     actionsPanel,

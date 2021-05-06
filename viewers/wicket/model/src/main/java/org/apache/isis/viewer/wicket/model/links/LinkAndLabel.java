@@ -64,7 +64,6 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
     public static Can<LinkAndLabel> positioned(Position pos, Stream<LinkAndLabel> stream) {
         return stream.filter(LinkAndLabel.positioned(pos))
         .collect(Can.toCan());
-        //.collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Predicate<LinkAndLabel> positioned(Position pos) {
