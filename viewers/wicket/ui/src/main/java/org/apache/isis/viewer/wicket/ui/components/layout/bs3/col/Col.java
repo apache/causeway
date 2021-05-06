@@ -33,6 +33,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -53,8 +54,8 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public class Col 
-extends PanelAbstract<ManagedObject, EntityModel> 
+public class Col
+extends PanelAbstract<ManagedObject, EntityModel>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -122,15 +123,16 @@ implements HasDynamicallyVisibleContent {
 
         // actions
         // (rendering depends on whether also showing the icon/title)
-        final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
-        val visibleActions = _NullSafe.stream(actionLayoutDatas)
-                .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
-                .filter(_NullSafe::isPresent)
-                .map(actionLayoutData -> 
-                    getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
-                )
-                .filter(_NullSafe::isPresent)
-                .collect(Collectors.toList());
+        final List<ActionLayoutData> actionLayoutDataList = bs3Col.getActions();
+
+        val visibleActions = _NullSafe.stream(actionLayoutDataList)
+        .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
+        .filter(_NullSafe::isPresent)
+        .map(actionLayoutData ->
+            getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
+        )
+        .filter(_NullSafe::isPresent);
+
         //
         // visibility needs to be determined at point of rendering, by ActionLink itself
         //
@@ -142,8 +144,9 @@ implements HasDynamicallyVisibleContent {
         //    }
         //})
 
-        final List<LinkAndLabel> entityActionLinks =
-                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
+        final Can<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
+        .asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null)
+        .collect(Can.toCan());
 
         if (!entityActionLinks.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
@@ -172,12 +175,12 @@ implements HasDynamicallyVisibleContent {
         final List<BS3TabGroup> tabGroupsWithNonEmptyTabs =
                 _NullSafe.stream(bs3Col.getTabGroups())
                 .filter(_NullSafe::isPresent)
-                .filter(bs3TabGroup -> 
+                .filter(bs3TabGroup ->
                         _NullSafe.stream(bs3TabGroup.getTabs())
                                 .anyMatch(BS3Tab.Predicates.notEmpty())
                 )
                 .collect(Collectors.toList());
-        
+
         if(!tabGroupsWithNonEmptyTabs.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
@@ -220,12 +223,12 @@ implements HasDynamicallyVisibleContent {
 
 
         // fieldsets
-        final List<FieldSet> fieldSetsWithProperties = 
+        final List<FieldSet> fieldSetsWithProperties =
                 _NullSafe.stream(bs3Col.getFieldSets())
                 .filter(_NullSafe::isPresent)
                 .filter(fieldSet -> ! _NullSafe.isEmpty(fieldSet.getProperties()))
                 .collect(Collectors.toList());
-        
+
         if(!fieldSetsWithProperties.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent fieldSetRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_FIELD_SETS);

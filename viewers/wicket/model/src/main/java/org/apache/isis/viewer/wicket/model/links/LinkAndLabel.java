@@ -21,14 +21,17 @@ package org.apache.isis.viewer.wicket.model.links;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
@@ -41,7 +44,7 @@ import lombok.val;
 public final class LinkAndLabel extends LinkAndLabelAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static LinkAndLabel of(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
@@ -49,7 +52,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             final ObjectAction objectAction) {
         return new LinkAndLabel(uiComponentFactory, named, actionHolderModel, objectAction);
     }
-    
+
     private LinkAndLabel(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
@@ -58,14 +61,22 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         super(uiComponentFactory, named, actionHolderModel, objectAction);
     }
 
-    public static List<LinkAndLabel> positioned(List<LinkAndLabel> list, Position pos) {
-        return _Lists.filter(list, ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel));
+    public static Can<LinkAndLabel> positioned(Position pos, Stream<LinkAndLabel> stream) {
+        return stream.filter(LinkAndLabel.positioned(pos))
+        .collect(Can.toCan());
+        //.collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static List<LinkAndLabel> recoverFromIncompleteDeserialization(List<SerializationProxy> list) {
-        return _Casts.uncheckedCast(_Lists.map(list, SerializationProxy::readResolve));
+    public static Predicate<LinkAndLabel> positioned(Position pos) {
+        return ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel);
     }
-    
+
+    public static List<LinkAndLabel> recoverFromIncompleteDeserialization(List<SerializationProxy> proxies) {
+        return proxies.stream()
+                .map(SerializationProxy::readResolve)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     // -- SERIALIZATION PROXY
 
     private Object writeReplace() {
@@ -83,18 +94,18 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         @NonNull  private final EntityModel actionHolder;
         @NonNull  private final LogicalType actionHolderLogicalType;
         @NonNull  private final String objectActionId;
-        
+
         private SerializationProxy(LinkAndLabel target) {
-            this.uiComponentFactory = (ActionLinkUiComponentFactoryWkt)target.uiComponentFactory;
+            this.uiComponentFactory = target.uiComponentFactory;
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
             // make sure we do this without side-effects
             this.actionHolderLogicalType = actionHolder.getLogicalElementType()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach); 
+                    .orElseThrow(_Exceptions::unexpectedCodeReach);
             this.objectActionId = target.getObjectAction().getId();
         }
 
-        private Object readResolve() {
+        private LinkAndLabel readResolve() {
             val commonContext = CommonContextUtils.getCommonContext();
             val objectMember = commonContext.getSpecificationLoader()
             .specForLogicalType(actionHolderLogicalType)
@@ -104,5 +115,5 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
         }
     }
-    
+
 }

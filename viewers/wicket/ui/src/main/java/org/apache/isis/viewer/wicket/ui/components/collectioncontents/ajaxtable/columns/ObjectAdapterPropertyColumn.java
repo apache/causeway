@@ -62,7 +62,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     private final String describedAs;
 
     public ObjectAdapterPropertyColumn(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             EntityCollectionModel.Variant collectionVariant,
             IModel<String> columnNameModel,
             String sortProperty,
@@ -70,7 +70,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
             boolean escaped,
             String parentTypeName,
             String describedAs) {
-        
+
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
         this.propertyExpression = propertyName;
@@ -99,10 +99,10 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem, 
-            final String componentId, 
+            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final String componentId,
             final IModel<ManagedObject> rowModel) {
-        
+
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
     }
@@ -114,7 +114,8 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociationElseFail(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property);
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, collectionVariant.renderingHint());
+        final ScalarModel scalarModel = entityModel
+                .getPropertyModel(pm, EntityModel.Mode.VIEW, collectionVariant.getColumnRenderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         return componentFactory.createComponent(id, scalarModel);

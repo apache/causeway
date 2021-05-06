@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,8 +58,8 @@ import lombok.Setter;
  *
  */
 //@Log4j2
-public abstract class ScalarModel 
-extends ManagedObjectModel 
+public abstract class ScalarModel
+extends ManagedObjectModel
 implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
@@ -72,18 +71,18 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     @NonNull private final Kind kind;
     public boolean isProperty() { return kind == Kind.PROPERTY; }
     public boolean isParameter() { return kind == Kind.PARAMETER; }
-    
+
 
     private final EntityModel parentEntityModel;
-    
-    @Getter(onMethod = @__(@Override)) 
-    @Setter(onMethod = @__(@Override)) 
+
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private Mode mode;
-    
-    @Getter(onMethod = @__(@Override)) 
-    @Setter(onMethod = @__(@Override)) 
+
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
-    
+
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -91,9 +90,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * value (if any) of that action parameter.
      */
     protected ScalarModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
-        
+
         super(parentEntityModel.getCommonContext());
-        
+
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
@@ -107,11 +106,11 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * property.
      */
     protected ScalarModel(
-            EntityModel parentEntityModel, 
+            EntityModel parentEntityModel,
             PropertyMemento pm,
-            ObjectUiModel.Mode mode, 
+            ObjectUiModel.Mode mode,
             ObjectUiModel.RenderingHint renderingHint) {
-        
+
         super(parentEntityModel.getCommonContext());
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
@@ -134,12 +133,12 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     @Override
     public ManagedObject getOwner() {
 //        if(owner==null) {
-//            owner = getParentUiModel().load(); 
+//            owner = getParentUiModel().load();
 //        }
 //        return owner;
         return getParentUiModel().load();
     }
-    
+
     /**
      * Whether the scalar represents a {@link Kind#PROPERTY property} or a
      * {@link Kind#PARAMETER}.
@@ -151,7 +150,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
      * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
-     * without there necessarily having any adapter 
+     * without there necessarily having any adapter
      * {@link #setObject(ManagedObject) set}.
      */
     @Override
@@ -164,7 +163,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return Optional.ofNullable(getScalarTypeSpec())
                 .map(ObjectSpecification::getLogicalType);
     }
-    
+
 
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getTypeOfSpecification().getFullIdentifier();
@@ -221,8 +220,8 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     private List<LinkAndLabel> linkAndLabels = _Lists.newArrayList();
 
     @Override
-    public List<LinkAndLabel> getLinks() {
-        return Collections.unmodifiableList(linkAndLabels);
+    public Can<LinkAndLabel> getLinks() {
+        return Can.ofCollection(linkAndLabels);
     }
 
     @Override
@@ -322,7 +321,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * @return <tt>true</tt> if the widget for this model must be editable.
      */
     public boolean mustBeEditable() {
-        return getMode() == Mode.EDIT 
+        return getMode() == Mode.EDIT
                 || getKind() == Kind.PARAMETER
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
@@ -334,7 +333,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     @Override
     public boolean isInlinePrompt() {
-        return (getPromptStyle().isInline() && canEnterEditMode()) 
+        return (getPromptStyle().isInline() && canEnterEditMode())
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
 
@@ -355,15 +354,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         }
         return associatedActions;
     }
-    
+
     protected abstract Can<ObjectAction> calcAssociatedActions();
-    
+
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
     }
-    
+
     // -- PENDING STUFF
-    
+
     @Getter(value = AccessLevel.PACKAGE)
     private final PendingModel pendingModel;
 
@@ -375,7 +374,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         pendingModel.clearPending();
     }
 
-    
+
     // --
-    
+
 }

@@ -19,13 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.header;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -40,7 +38,7 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
  * actions) of an entity, as per the provided {@link EntityModel}.
  */
-public class EntityHeaderPanel 
+public class EntityHeaderPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
@@ -82,13 +80,14 @@ extends PanelAbstract<ManagedObject, EntityModel> {
         final EntityModel model = getModel();
         val adapter = model.getObject();
         if (adapter != null) {
-            final List<ObjectAction> topLevelActions = ObjectAction.Util
-                    .findTopLevel(adapter);
+            val topLevelActions = ObjectAction.Util.streamTopLevelActions(adapter);
+            val entityActionLinks = LinkAndLabelUtil
+                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null)
+                    .collect(Can.toCan());
 
-            final List<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
-                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null);
-
-            AdditionalLinksPanel.addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
+            AdditionalLinksPanel
+                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks,
+                            AdditionalLinksPanel.Style.INLINE_LIST);
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -41,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class StandaloneCollectionPanel 
+public class StandaloneCollectionPanel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionCountProvider, CollectionSelectorProvider {
 
@@ -57,24 +58,24 @@ implements CollectionCountProvider, CollectionSelectorProvider {
 
     private MarkupContainer outerDiv = this;
 
-    public StandaloneCollectionPanel(final String id, final EntityCollectionModel entityCollectionModel) {
-        super(id, entityCollectionModel);
+    public StandaloneCollectionPanel(final String id, final EntityCollectionModelStandalone collectionModel) {
+        super(id, collectionModel);
 
         outerDiv = new WebMarkupContainer(ID_STANDALONE_COLLECTION);
 
         addOrReplace(outerDiv);
 
-        ActionModel actionModel = entityCollectionModel.getActionModelHint();
+        ActionModel actionModel = collectionModel.getActionModel();
         ObjectAction action = actionModel.getMetaModel();
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + action.getOnType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getLogicalTypeName().replace('.','-')));
+                CssClassAppender.asCssStyle("isis-" + collectionModel.getTypeOfSpecification().getLogicalTypeName().replace('.','-')));
 
         // selector
-        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
+        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry());
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
@@ -82,7 +83,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
             Components.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
             this.selectorDropdownPanel = null;
         } else {
-            CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel);
+            CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -98,7 +99,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         }
 
         final ComponentFactoryRegistry componentFactoryRegistry = getComponentFactoryRegistry();
-        componentFactoryRegistry.addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
+        componentFactoryRegistry.addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, collectionModel);
     }
 
 

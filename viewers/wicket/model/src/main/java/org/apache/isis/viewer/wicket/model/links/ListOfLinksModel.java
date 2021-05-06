@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.val;
 
@@ -33,9 +33,8 @@ public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>
 
     private List<LinkAndLabel> links;
 
-    public ListOfLinksModel(List<LinkAndLabel> links) {
-        // copy, in case supplied list is a non-serializable guava list using lazy evaluation;
-        this.links = _Lists.newArrayList(links);
+    public ListOfLinksModel(Can<LinkAndLabel> links) {
+        this.links = links.toList();
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>
         if(links.size()>0) {
             if(! (links.get(0) instanceof LinkAndLabel)) {
                 return links = LinkAndLabel.recoverFromIncompleteDeserialization(_Casts.uncheckedCast(links));
-            } 
+            }
         }
         return links;
     }

@@ -30,14 +30,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -57,8 +58,8 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityCollectionPanel 
-extends PanelAbstract<ManagedObject, EntityModel> 
+public class EntityCollectionPanel
+extends PanelAbstract<ManagedObject, EntityModel>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -79,7 +80,7 @@ implements HasDynamicallyVisibleContent {
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(), getSelectorDropdownPanel(), EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
+        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(), getSelectorDropdownPanel(), EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
         div = buildGui();
     }
 
@@ -106,46 +107,47 @@ implements HasDynamicallyVisibleContent {
     private WebMarkupContainer buildGui() {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
-        final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
-        div.setMarkupId("collection-" + entityCollectionModel.getLayoutData().getId());
+        val collectionModel = EntityCollectionModel.createParented(getModel());
+        div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
-        CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
-        CssClassAppender.appendCssClassTo(div, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
+        val collectionMetaModel = collectionModel.getMetaModel();
 
-        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection(
-                entityCollectionModel.getSpecificationLoader());
+        CssClassAppender.appendCssClassTo(div, collectionModel.getIdentifier().getMemberName());
+        CssClassAppender.appendCssClassTo(div, collectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
+
         val objectAdapter = getModel().getObject();
-        final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+        final Consent visibility = collectionMetaModel
+                .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
         if(visibility.isAllowed()) {
 
             visible = true;
 
-            final CssClassFacet facet = association.getFacet(CssClassFacet.class);
+            final CssClassFacet facet = collectionMetaModel.getFacet(CssClassFacet.class);
             if(facet != null) {
                 final String cssClass = facet.cssClass(objectAdapter);
                 CssClassAppender.appendCssClassTo(div, cssClass);
             }
 
-            final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, entityCollectionModel);
+            final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
 
 
-            Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
-            final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
+            Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, collectionMetaModel.getName());
+            final NamedFacet namedFacet = collectionMetaModel.getFacet(NamedFacet.class);
             labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
             div.add(labelComponent);
 
-            final String description = association.getDescription();
+            final String description = collectionMetaModel.getDescription();
             if(description != null) {
                 Tooltips.addTooltip(labelComponent, description);
             }
 
-            final List<LinkAndLabel> links = entityCollectionModel.getLinks();
-            AdditionalLinksPanel.addAdditionalLinks (div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+            final Can<LinkAndLabel> links = collectionModel.getLinks();
+            AdditionalLinksPanel.addAdditionalLinks(div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
             final CollectionSelectorHelper selectorHelper =
-                    new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(),
+                    new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                             selectedItemHintKey);
 
             final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
@@ -154,7 +156,7 @@ implements HasDynamicallyVisibleContent {
                 permanentlyHide(ID_SELECTOR_DROPDOWN);
             } else {
                 selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
-                        entityCollectionModel, selectedItemHintKey);
+                        collectionModel, selectedItemHintKey);
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -172,7 +174,7 @@ implements HasDynamicallyVisibleContent {
         return div;
     }
 
-    protected CollectionPanel newCollectionModel(String id, EntityCollectionModel entityCollectionModel) {
+    protected CollectionPanel newCollectionModel(String id, EntityCollectionModelParented entityCollectionModel) {
         return new CollectionPanel(id, entityCollectionModel);
     }
 

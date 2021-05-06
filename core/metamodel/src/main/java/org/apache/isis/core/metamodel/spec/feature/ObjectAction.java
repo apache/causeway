@@ -17,8 +17,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -37,12 +35,10 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -268,13 +264,6 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Util {
 
-        private Util() {
-        }
-
-        private static boolean isPrototyping(ManagedObject adapter) {
-            return MetaModelContext.from(adapter).getSystemEnvironment().isPrototyping();
-        }
-
         public static String nameFor(final ObjectAction objAction) {
             final String actionName = objAction.getName();
             if (actionName != null) {
@@ -343,60 +332,28 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
-        public static List<ObjectAction> findTopLevel(
+        public static Stream<ObjectAction> streamTopLevelActions(
                 final ManagedObject adapter) {
-
-            val topLevelActions = _Lists.<ObjectAction>newArrayList();
-
-            addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(isPrototyping(adapter)) {
-                addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
-            }
-            return topLevelActions;
-        }
-
-        static void addTopLevelActions(
-                final ManagedObject adapter,
-                final ActionType actionType,
-                final List<ObjectAction> topLevelActions) {
 
             val spec = adapter.getSpecification();
 
-            spec.streamDeclaredActions(actionType, MixedIn.INCLUDED)
+            return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec))
             .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
                     InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(ObjectAction.Predicates.excludeWizardActions(spec))
-            .forEach(topLevelActions::add);
-
+            .filter(ObjectAction.Predicates.excludeWizardActions(spec));
         }
 
-        public static List<ObjectAction> findForAssociation(
+        public static Stream<ObjectAction> findForAssociation(
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            val associatedActions = _Lists.<ObjectAction>newArrayList();
+            val spec = adapter.getSpecification();
 
-            addActions(adapter, ActionType.USER, association, associatedActions);
-            if(isPrototyping(adapter)) {
-                addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
-            }
-
-            Collections.sort(associatedActions, Comparators.byMemberOrderSequence(false));
-            return associatedActions;
-        }
-
-        static void addActions(
-                final ManagedObject adapter,
-                final ActionType type,
-                final ObjectAssociation association, final List<ObjectAction> associatedActions) {
-
-            val objectSpecification = adapter.getSpecification();
-
-            objectSpecification.streamDeclaredActions(type, MixedIn.INCLUDED)
+            return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.actionIsAssociatedWith(association))
-            .filter(ObjectAction.Predicates.excludeWizardActions(objectSpecification))
-            .forEach(associatedActions::add);
+            .filter(ObjectAction.Predicates.excludeWizardActions(spec))
+            .sorted(Comparators.byMemberOrderSequence(false));
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
@@ -433,9 +390,6 @@ public interface ObjectAction extends ObjectMember {
     // -- Predicates
 
     public static final class Predicates {
-
-        private Predicates() {
-        }
 
         public static Predicate<ObjectAction> associatedWith(final ObjectAssociation objectAssociation) {
             return new AssociatedWith(objectAssociation);
