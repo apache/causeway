@@ -84,7 +84,7 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
+implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Comparable<ApplicationRole> {
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
@@ -126,7 +126,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             )
     @CollectionLayout(
             defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class, 
+            sortedBy = ApplicationPermission.DefaultComparator.class,
             sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
@@ -141,7 +141,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table", 
+            defaultView="table",
             sequence = "20")
     @Getter @Setter
     private Set<ApplicationUser> users = new TreeSet<>();

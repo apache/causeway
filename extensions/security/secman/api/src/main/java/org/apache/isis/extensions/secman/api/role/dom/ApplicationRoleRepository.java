@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.role;
+package org.apache.isis.extensions.secman.api.role.dom;
 
 import java.util.Collection;
 import java.util.Optional;

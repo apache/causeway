@@ -33,8 +33,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 

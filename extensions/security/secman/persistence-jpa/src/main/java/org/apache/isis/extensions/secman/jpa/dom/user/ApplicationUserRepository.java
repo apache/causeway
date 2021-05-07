@@ -141,7 +141,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
 
     @Override
     public Collection<ApplicationUser> findByRole(
-            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
+            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         return _NullSafe.stream(role.getUsers())

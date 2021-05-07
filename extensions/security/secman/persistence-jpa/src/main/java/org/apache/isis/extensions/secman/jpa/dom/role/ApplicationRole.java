@@ -92,7 +92,7 @@ import lombok.Setter;
         )
 public class ApplicationRole
 implements
-    org.apache.isis.extensions.secman.api.role.ApplicationRole,
+        org.apache.isis.extensions.secman.api.role.dom.ApplicationRole,
     Comparable<ApplicationRole> {
 
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
@@ -127,7 +127,7 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION, 
+            typicalLength=TYPICAL_LENGTH_DESCRIPTION,
             sequence = "2")
     @Getter @Setter
     private String description;
@@ -140,7 +140,7 @@ implements
             )
     @CollectionLayout(
             defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class, 
+            sortedBy = ApplicationPermission.DefaultComparator.class,
             sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
@@ -155,7 +155,7 @@ implements
             domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table", 
+            defaultView="table",
             sequence = "20")
     @Getter @Setter
     private Set<ApplicationUser> users = new TreeSet<>();

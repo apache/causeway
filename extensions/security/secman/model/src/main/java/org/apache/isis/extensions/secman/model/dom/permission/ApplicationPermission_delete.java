@@ -25,17 +25,17 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.DeleteDomainEvent;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class, 
+        domainEvent = DeleteDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @RequiredArgsConstructor
 public class ApplicationPermission_delete {
-    
+
     @Inject private RepositoryService repository;
 
     private final ApplicationPermission target;

@@ -23,7 +23,7 @@ import java.util.Set;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.HasAtPath;
 
 /**

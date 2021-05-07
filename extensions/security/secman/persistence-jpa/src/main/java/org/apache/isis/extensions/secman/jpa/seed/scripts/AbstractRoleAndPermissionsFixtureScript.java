@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -35,7 +35,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    
+
     private final String roleName;
     private final String roleDescription;
 
@@ -70,7 +70,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         if(securityRole == null) {
             securityRole = applicationRoleRepository.newRole(roleName, roleDescription);
         }
-        
+
         for(ApplicationFeatureId featureId : featureIds) {
             val featureFqn = featureId.getFullyQualifiedName();
 
@@ -82,7 +82,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
                     (org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
-                    featureId.getSort(), 
+                    featureId.getSort(),
                     featureFqn);
         }
     }

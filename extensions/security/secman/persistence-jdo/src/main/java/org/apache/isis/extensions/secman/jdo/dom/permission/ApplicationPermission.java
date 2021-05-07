@@ -134,7 +134,7 @@ implements
     private ApplicationRole role;
 
     @Override
-    public void setRole(org.apache.isis.extensions.secman.api.role.ApplicationRole applicationRole) {
+    public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole applicationRole) {
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
     }
 

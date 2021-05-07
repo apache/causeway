@@ -44,7 +44,7 @@ import lombok.val;
 @Service
 @Named("isis.ext.secman.ApplicationRoleRepository")
 public class ApplicationRoleRepository
-implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<ApplicationRole> {
+implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository<ApplicationRole> {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
@@ -118,7 +118,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public void addRoleToUser(
-            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
+            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole,
             org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
@@ -132,7 +132,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public void removeRoleFromUser(
-            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
+            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole,
             org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
@@ -145,13 +145,13 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     }
 
     @Override
-    public boolean isAdminRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
+    public boolean isAdminRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole) {
         final ApplicationRole adminRole = findByNameCached(configBean.getAdminRoleName()).orElse(null);
         return Objects.equals(adminRole, genericRole);
     }
 
     @Override
-    public void deleteRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
+    public void deleteRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 

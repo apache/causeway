@@ -26,23 +26,23 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.DeleteDomainEvent;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class, 
+        domainEvent = DeleteDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
-    
+
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    
+
     private final ApplicationRole holder;
-    
+
     @MemberSupport
     public Collection<? extends ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);

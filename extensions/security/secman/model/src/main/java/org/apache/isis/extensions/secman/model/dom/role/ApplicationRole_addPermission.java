@@ -34,8 +34,8 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.AddPermissionDomainEvent;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action(
-        domainEvent = AddPermissionDomainEvent.class, 
+        domainEvent = AddPermissionDomainEvent.class,
         associateWith = "permissions")
 @ActionLayout(
 		named="Add",
@@ -51,13 +51,13 @@ import lombok.experimental.Accessors;
 		promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
-    
+
     @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
-    
+
     private final ApplicationRole target;
-    
-    @Value @Accessors(fluent = true)           
+
+    @Value @Accessors(fluent = true)
     public static class Parameters {
         ApplicationPermissionRule rule; // ALLOW/VETO
         ApplicationPermissionMode mode; // r/w
@@ -69,21 +69,21 @@ public class ApplicationRole_addPermission {
      * {@link ApplicationFeature feature}.
      */
     public ApplicationRole act(
-            
+
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
-            
+
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-            
+
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
                     named = "Feature",
                     describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
             final ApplicationFeatureChoices.AppFeat feature) {
-        
+
         applicationPermissionRepository.newPermission(target, rule, mode, feature.getFeatureId());
         return target;
     }
@@ -104,5 +104,5 @@ public class ApplicationRole_addPermission {
             final @MinLength(3) String search) {
         return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
     }
-    
+
 }

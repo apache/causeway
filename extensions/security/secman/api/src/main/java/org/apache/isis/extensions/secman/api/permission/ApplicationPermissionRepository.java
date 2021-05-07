@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 /**
  * @since 2.0 {@index}
@@ -73,6 +73,6 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
             ApplicationFeatureId featureId);
-    
-    
+
+
 }

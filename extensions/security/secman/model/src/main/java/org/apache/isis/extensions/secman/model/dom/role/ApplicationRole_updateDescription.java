@@ -25,20 +25,20 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.types.DescriptionType;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.UpdateDescriptionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.UpdateDescriptionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateDescriptionDomainEvent.class, 
+        domainEvent = UpdateDescriptionDomainEvent.class,
         associateWith = "description")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_updateDescription {
-    
+
     private final ApplicationRole target;
-    
+
     @MemberSupport
     public ApplicationRole act(
             @Parameter(
@@ -46,10 +46,10 @@ public class ApplicationRole_updateDescription {
                     optionality = Optionality.OPTIONAL
                     )
             @ParameterLayout(
-                    named="Description", 
+                    named="Description",
                     typicalLength=ApplicationRole.TYPICAL_LENGTH_DESCRIPTION)
             final String description) {
-        
+
         target.setDescription(description);
         return target;
     }

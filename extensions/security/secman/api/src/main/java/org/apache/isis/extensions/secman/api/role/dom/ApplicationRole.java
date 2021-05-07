@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.role;
+package org.apache.isis.extensions.secman.api.role.dom;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
@@ -37,7 +37,7 @@ public interface ApplicationRole {
 
     public static class AddUserDomainEvent extends ActionDomainEvent {}
     public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-    
+
     public static class AddPermissionDomainEvent extends ActionDomainEvent {}
     public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
 

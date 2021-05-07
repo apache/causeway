@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 import lombok.val;
 
@@ -40,7 +40,7 @@ import lombok.val;
  *
  * <p>
  *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
- *     {@link ApplicationPermissionRule rule} determines whether the permission 
+ *     {@link ApplicationPermissionRule rule} determines whether the permission
  *     {@link ApplicationPermissionRule#ALLOW grants}
  *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
  *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
@@ -130,7 +130,7 @@ public interface ApplicationPermission {
     @Property
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT,
-            fieldSetId="Role", 
+            fieldSetId="Role",
             sequence = "1")
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
