@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.DeleteDomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 import lombok.RequiredArgsConstructor;

@@ -44,9 +44,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
@@ -58,7 +58,7 @@ import lombok.val;
 @Service
 @Named("isis.ext.secman.ApplicationPermissionRepository")
 public class ApplicationPermissionRepository
-implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {
+implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository<ApplicationPermission> {
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepository featureRepository;

@@ -59,8 +59,8 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
@@ -126,7 +126,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @Inject private transient UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
-     * {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
+     * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a {@link org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService#DEFAULT default}
      * implementation.
      */

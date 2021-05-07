@@ -33,9 +33,9 @@ public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvalu
      * Returns the lists unchanged.
      *
      * <p>
-     * This implementation relies on the fact that the {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue}s are
+     * This implementation relies on the fact that the {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue}s are
      * passed through in natural order, with the leading part based on the
-     * {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue#getRule() rule} and with
+     * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue#getRule() rule} and with
      * {@link ApplicationPermissionRule} in turn comparable so that {@link ApplicationPermissionRule#ALLOW allow}
      * is ordered before {@link ApplicationPermissionRule#VETO veto}.
      * </p>

@@ -19,9 +19,9 @@
 package org.apache.isis.extensions.secman.model.dom.permission;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.VetoDomainEvent;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.VetoDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 
 import lombok.RequiredArgsConstructor;
 

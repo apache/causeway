@@ -54,9 +54,9 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
@@ -119,7 +119,7 @@ import lombok.experimental.UtilityClass;
         )
 public class ApplicationPermission
 implements
-    org.apache.isis.extensions.secman.api.permission.ApplicationPermission,
+    org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission,
     Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest

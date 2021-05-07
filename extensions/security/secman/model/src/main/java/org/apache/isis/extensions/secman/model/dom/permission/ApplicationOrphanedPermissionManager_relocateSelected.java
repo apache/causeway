@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.RelocateNamespaceDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.RelocateNamespaceDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

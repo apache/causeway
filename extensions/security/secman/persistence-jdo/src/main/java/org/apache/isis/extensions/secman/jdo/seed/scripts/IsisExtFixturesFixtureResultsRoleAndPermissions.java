@@ -21,8 +21,8 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 
 /**
  * @since 2.0 {@index}

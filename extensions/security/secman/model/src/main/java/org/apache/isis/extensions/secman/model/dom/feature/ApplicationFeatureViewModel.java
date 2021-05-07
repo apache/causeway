@@ -45,8 +45,8 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 
 import lombok.NonNull;
 import lombok.val;

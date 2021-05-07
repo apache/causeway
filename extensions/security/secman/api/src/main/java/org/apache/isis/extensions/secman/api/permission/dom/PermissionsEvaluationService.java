@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
  *
  * <p>
  *     All implementations of this interface must be {@link java.io.Serializable}, because
- *     an instance is serialized into {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet}.
+ *     an instance is serialized into {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet}.
  * </p>
  *
  * @since 2.0 {@index}
@@ -38,8 +38,8 @@ public interface PermissionsEvaluationService extends Serializable {
 
     /**
      * @param targetMemberId - the target (member) feature to be evaluated
-     * @param mode - the mode required, ie {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode#VIEWING viewing} or {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode#CHANGING changing}.
-     * @param permissionValues - permissions to evaluate, guaranteed to passed through in natural order, as per {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue.Comparators#natural()}.
+     * @param mode - the mode required, ie {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode#VIEWING viewing} or {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode#CHANGING changing}.
+     * @param permissionValues - permissions to evaluate, guaranteed to passed through in natural order, as per {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue.Comparators#natural()}.
      */
     ApplicationPermissionValueSet.Evaluation evaluate(
             final ApplicationFeatureId targetMemberId,

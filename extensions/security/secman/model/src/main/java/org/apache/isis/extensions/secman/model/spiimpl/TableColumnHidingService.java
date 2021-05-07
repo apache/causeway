@@ -11,7 +11,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.model.dom.user.MeService;
 
 import lombok.RequiredArgsConstructor;
