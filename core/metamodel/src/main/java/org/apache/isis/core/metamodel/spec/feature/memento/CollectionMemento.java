@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -46,18 +46,17 @@ public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter private final LogicalType owningType;
-
     /**
      * The id of the collection as referenced
      * from the parent object (eg <tt>lineItems</tt>).
      */
-    @Getter private final String identifier;
+    @Getter private final Identifier identifier;
+
+    // -- FACTORY
 
     public static CollectionMemento forCollection(final @NonNull OneToManyAssociation collection) {
         return new CollectionMemento(
-                collection.getOnType().getLogicalType(),
-                collection.getName(),
+                collection.getIdentifier(),
                 collection);
     }
 
@@ -68,8 +67,8 @@ public class CollectionMemento implements Serializable {
     @Synchronized
     public OneToManyAssociation getCollection(final @NonNull SpecificationLoader specLoader) {
         if (collection == null) {
-            collection = specLoader.specForLogicalTypeElseFail(owningType)
-                    .getCollectionElseFail(getIdentifier());
+            collection = specLoader.specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                    .getCollectionElseFail(getIdentifier().getMemberName());
         }
         return collection;
     }
@@ -78,7 +77,7 @@ public class CollectionMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getOwningType().getLogicalTypeName() + "#" + getIdentifier();
+        return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberName();
     }
 
 }

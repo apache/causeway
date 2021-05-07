@@ -257,12 +257,12 @@ implements
             }
 
             @Override public String getId(_EntityCollectionModelLegacy colModel) {
-                return colModel.getCollectionMemento().getIdentifier();
+                return colModel.getCollectionMemento().getIdentifier().getMemberName();
             }
 
             @Override
             protected String getName(_EntityCollectionModelLegacy colModel) {
-                return colModel.getCollectionMemento().getIdentifier();
+                return colModel.getCollectionMemento().getIdentifier().getMemberNaturalName();
             }
 
             @Override

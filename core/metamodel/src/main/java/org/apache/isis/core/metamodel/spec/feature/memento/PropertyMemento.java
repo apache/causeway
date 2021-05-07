@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -45,23 +45,19 @@ public class PropertyMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EqualsAndHashCode.Exclude
-    @Getter private final @NonNull LogicalType owningType;
-
-    //TODO equality by identifier required by EntityModel, need to investigate why
-    @EqualsAndHashCode.Include
-    @Getter private final @NonNull String identifier;
+    //TODO equality by member name required by EntityModel, need to investigate why
+    @EqualsAndHashCode.Include @Deprecated
+    private final @NonNull String id;
 
     @EqualsAndHashCode.Exclude
-    @Getter private final @NonNull LogicalType type;
+    @Getter private final @NonNull Identifier identifier;
 
     // -- FACTORY
 
     public static PropertyMemento forProperty(final @NonNull OneToOneAssociation property) {
         return new PropertyMemento(
-                property.getOnType().getLogicalType(),
-                property.getIdentifier().getMemberName(),
-                property.getSpecification().getLogicalType(),
+                property.getIdentifier().getMemberName(), // deprecated
+                property.getIdentifier(),
                 property);
     }
 
@@ -73,8 +69,8 @@ public class PropertyMemento implements Serializable {
     @Synchronized
     public OneToOneAssociation getProperty(final SpecificationLoader specLoader) {
         if (property == null) {
-            property = specLoader.specForLogicalTypeElseFail(owningType)
-                    .getPropertyElseFail(identifier);
+            property = specLoader.specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                    .getPropertyElseFail(getIdentifier().getMemberName());
         }
         return property;
     }
@@ -83,7 +79,7 @@ public class PropertyMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getOwningType().getLogicalTypeName() + "#" + getIdentifier();
+        return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberName();
     }
 
 
