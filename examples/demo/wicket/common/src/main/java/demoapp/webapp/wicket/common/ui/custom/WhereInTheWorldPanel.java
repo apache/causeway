@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -100,7 +99,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
     private Component createPropertyComponent(final String propertyId) {
         val managedObject = getModel().getManagedObject();
         val spec = managedObject.getSpecification();                               // <.>
-        val otoa = (OneToOneAssociation) spec.getAssociationElseFail(propertyId);  // <.>
+        val otoa = spec.getPropertyElseFail(propertyId);                           // <.>
         val pm = PropertyMemento.forProperty(otoa);                                // <.>
 
         val scalarModel =

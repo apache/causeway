@@ -45,18 +45,13 @@ public class PropertyMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //TODO equality by member name required by EntityModel, need to investigate why
-    @EqualsAndHashCode.Include @Deprecated
-    private final @NonNull String id;
-
-    @EqualsAndHashCode.Exclude
+    @EqualsAndHashCode.Include
     @Getter private final @NonNull Identifier identifier;
 
     // -- FACTORY
 
     public static PropertyMemento forProperty(final @NonNull OneToOneAssociation property) {
         return new PropertyMemento(
-                property.getIdentifier().getMemberName(), // deprecated
                 property.getIdentifier(),
                 property);
     }
