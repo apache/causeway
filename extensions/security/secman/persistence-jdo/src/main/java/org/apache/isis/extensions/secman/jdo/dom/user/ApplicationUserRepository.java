@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.events.UserCreatedEvent;
+import org.apache.isis.extensions.secman.api.user.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
@@ -61,15 +61,15 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Inject private SecmanConfiguration configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
-    @Inject private EventBusService eventBusService;  
- 
+    @Inject private EventBusService eventBusService;
+
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-    
+
     @Override
     public ApplicationUser newApplicationUser() {
         return factoryService.detachedEntity(new ApplicationUser());
     }
-    
+
     // -- findOrCreateUserByUsername (programmatic)
 
     /**
@@ -85,14 +85,14 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
         return queryResultsCacheProvider.get().execute(()->
-            findByUsername(username).orElseGet(()->newDelegateUser(username, null)), 
+            findByUsername(username).orElseGet(()->newDelegateUser(username, null)),
             ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
     }
 
     // -- findByUsername
 
     public Optional<ApplicationUser> findByUsernameCached(final String username) {
-        return queryResultsCacheProvider.get().execute(this::findByUsername, 
+        return queryResultsCacheProvider.get().execute(this::findByUsername,
                 ApplicationUserRepository.class, "findByUsernameCached", username);
     }
 
@@ -105,7 +105,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- findByEmailAddress (programmatic)
 
     public Optional<ApplicationUser> findByEmailAddressCached(final String emailAddress) {
-        return queryResultsCacheProvider.get().execute(this::findByEmailAddress, 
+        return queryResultsCacheProvider.get().execute(this::findByEmailAddress,
                 ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
     }
 
@@ -134,20 +134,20 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
-    
+
     @Override
     public Collection<ApplicationUser> findByRole(
             org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
-        
+
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         return _NullSafe.stream(role.getUsers())
                 .collect(_Sets.toUnmodifiableSorted());
     }
-    
+
     @Override
     public Collection<ApplicationUser> findByTenancy(
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
-        return findByAtPath(genericTenancy.getPath()) 
+        return findByAtPath(genericTenancy.getPath())
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -168,9 +168,9 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         }
         return Collections.emptySortedSet();
     }
-    
+
     // -- UPDATE USER STATE
-    
+
     @Override
     public void enable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.ENABLED) {
@@ -194,10 +194,10 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public ApplicationUser newUser(
-            @NonNull String username, 
+            @NonNull String username,
             @Nullable AccountType accountType,
             Consumer<ApplicationUser> beforePersist) {
-        
+
         val user = newApplicationUser();
         user.setUsername(username);
         user.setAccountType(accountType);
@@ -205,18 +205,18 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         if(user.getAccountType().equals(AccountType.LOCAL)) {
         	// keep null when is set for status in accept() call above
         } else {
-			user.setStatus(configBean.isAutoEnableIfDelegatedAndAuthenticated() 
-			        ?  ApplicationUserStatus.ENABLED 
+			user.setStatus(configBean.isAutoEnableIfDelegatedAndAuthenticated()
+			        ?  ApplicationUserStatus.ENABLED
 	                :  ApplicationUserStatus.DISABLED);
         }
         repository.persistAndFlush(user);
         eventBusService.post(UserCreatedEvent.of(user));
         return user;
     }
-    
+
     @Override
     public boolean updatePassword(
-            final org.apache.isis.extensions.secman.api.user.ApplicationUser user, 
+            final org.apache.isis.extensions.secman.api.user.ApplicationUser user,
             final String password) {
         // in case called programmatically
         if(!isPasswordFeatureEnabled(user)) {
@@ -227,15 +227,15 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         repository.persistAndFlush(user);
         return true;
     }
-    
+
     @Override
     public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
-        return user.isLocalAccount() 
+        return user.isLocalAccount()
                 /*sonar-ignore-on*/
                 && passwordEncryptionService!=null // if for any reason injection fails
                 /*sonar-ignore-off*/
                 && passwordEncryptionService.isPresent();
     }
 
-    
+
 }
