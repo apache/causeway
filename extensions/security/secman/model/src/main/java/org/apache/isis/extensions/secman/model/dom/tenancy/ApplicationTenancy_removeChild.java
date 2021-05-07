@@ -25,19 +25,19 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveChildDomainEvent;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveChildDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveChildDomainEvent.class, 
+        domainEvent = RemoveChildDomainEvent.class,
         associateWith = "children")
 @ActionLayout(sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeChild {
-    
+
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
     private final ApplicationTenancy target;
@@ -47,12 +47,12 @@ public class ApplicationTenancy_removeChild {
         applicationTenancyRepository.clearParentOnTenancy(child);
         return target;
     }
-    
+
     @MemberSupport
     public Collection<? extends ApplicationTenancy> choices0Act() {
         return applicationTenancyRepository.getChildren(target);
     }
-    
+
     @MemberSupport
     public String disableAct() {
         return choices0Act().isEmpty()? "No children to remove": null;

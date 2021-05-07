@@ -84,7 +84,7 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
-org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
+        org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
     // -- name (property, title)
 

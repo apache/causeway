@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 
 import lombok.NonNull;
 

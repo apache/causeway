@@ -25,28 +25,28 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.UpdateParentDomainEvent;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateParentDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateParentDomainEvent.class, 
+        domainEvent = UpdateParentDomainEvent.class,
         associateWith = "parent")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateParent {
-    
+
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
-    
+
     private final ApplicationTenancy target;
 
     @MemberSupport
     public ApplicationTenancy act(
             @Parameter(optionality = Optionality.OPTIONAL)
             final ApplicationTenancy parent) {
-        
+
         applicationTenancyRepository.setParentOnTenancy(target, parent);
         return target;
     }

@@ -41,7 +41,7 @@ import lombok.val;
 @Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
-implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository<ApplicationTenancy> {
+implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository<ApplicationTenancy> {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
@@ -127,7 +127,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     public ApplicationTenancy newTenancy(
             final String name,
             final String path,
-            final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy parent) {
+            final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
         ApplicationTenancy tenancy = findByPath(path);
         if (tenancy == null) {
             tenancy = newApplicationTenancy();
@@ -166,7 +166,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public void setTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy,
             @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
@@ -184,8 +184,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public void setParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericParent) {
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericParent) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val parent = _Casts.<ApplicationTenancy>uncheckedCast(genericParent);
         // although explicit maintenance of the children is normally not needed,
@@ -196,7 +196,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public void clearParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         // although explicit maintenance of the children is normally not needed,
         // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
@@ -209,7 +209,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public Collection<ApplicationTenancy> getChildren(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         return tenancy.getChildren()
                 .stream()

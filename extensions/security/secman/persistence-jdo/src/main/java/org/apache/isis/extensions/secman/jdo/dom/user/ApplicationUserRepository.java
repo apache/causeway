@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.user.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
@@ -146,7 +147,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
 
     @Override
     public Collection<ApplicationUser> findByTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+            @NonNull final ApplicationTenancy genericTenancy) {
         return findByAtPath(genericTenancy.getPath())
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
