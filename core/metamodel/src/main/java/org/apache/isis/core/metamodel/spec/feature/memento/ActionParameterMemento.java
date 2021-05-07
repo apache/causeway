@@ -27,13 +27,14 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;
 
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
- * of a {@link ObjectAction}.
+ * that belongs to an {@link ObjectAction}.
  *
  * @implNote thread-safe memoization
  *
@@ -41,12 +42,16 @@ import lombok.Synchronized;
  *
  * @since 2.0 {index}
  */
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActionParameterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @EqualsAndHashCode.Include
     @Getter private final @NonNull ActionMemento actionMemento;
+
+    @EqualsAndHashCode.Include
     @Getter private final int number;
 
     // -- FACTORY
@@ -61,6 +66,7 @@ public class ActionParameterMemento implements Serializable {
 
     // -- LOAD/UNMARSHAL
 
+    @EqualsAndHashCode.Exclude
     private transient ObjectActionParameter actionParameter;
 
     @Synchronized

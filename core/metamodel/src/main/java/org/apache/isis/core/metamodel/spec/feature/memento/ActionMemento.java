@@ -21,15 +21,14 @@ package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
-
-import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -41,35 +40,40 @@ import lombok.Synchronized;
  *
  * @since 2.0 {index}
  */
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter private final @NonNull LogicalType owningType;
-    @Getter private final @NonNull ActionType actionType;
-    @Getter private final @Nullable String nameParmsId; //nullable?
+    @EqualsAndHashCode.Include
+    @Getter private final @NonNull Identifier identifier;
+
+    @EqualsAndHashCode.Exclude
+    private final @NonNull ActionType actionType; // not strictly required, but helps with load/unmarshal
 
     // -- FACTORY
 
     public static ActionMemento forAction(final @NonNull ObjectAction action) {
         return new ActionMemento(
-                action.getOnType().getLogicalType(),
+                action.getIdentifier(),
                 action.getType(),
-                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
                 action);
     }
 
     // -- LOAD/UNMARSHAL
 
+    @EqualsAndHashCode.Exclude
     private transient ObjectAction action;
 
     @Synchronized
     public ObjectAction getAction(final @NonNull SpecificationLoader specLoader) {
         if (action == null) {
             action = specLoader
-                    .specForLogicalTypeElseFail(owningType)
-                    .getActionElseFail(nameParmsId, actionType);
+                    .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                    .getActionElseFail(
+                            getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
+                            actionType);
         }
         return action;
     }
@@ -78,7 +82,8 @@ public class ActionMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getOwningType().getLogicalTypeName() + "#" + getNameParmsId();
+        return getIdentifier().getLogicalTypeName() + "#"
+                + getIdentifier().getMemberNameAndParameterClassNamesIdentityString();
     }
 
 }

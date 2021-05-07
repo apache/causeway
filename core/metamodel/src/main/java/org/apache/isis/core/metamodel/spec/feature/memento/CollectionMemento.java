@@ -46,10 +46,7 @@ public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The id of the collection as referenced
-     * from the parent object (eg <tt>lineItems</tt>).
-     */
+    @EqualsAndHashCode.Include
     @Getter private final Identifier identifier;
 
     // -- FACTORY
@@ -62,6 +59,7 @@ public class CollectionMemento implements Serializable {
 
     // -- LOAD/UNMARSHAL
 
+    @EqualsAndHashCode.Exclude
     private transient OneToManyAssociation collection;
 
     @Synchronized
