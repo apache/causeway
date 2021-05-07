@@ -412,7 +412,10 @@ extends
     }
 
     default boolean isEntityOrViewModelOrAbstract() {
-        return isViewModel() || isEntity() || getBeanSort().isAbstract();
+        // optimized, no need to check facets
+        return getBeanSort().isViewModel()
+                || getBeanSort().isEntity()
+                || getBeanSort().isAbstract();
     }
 
     /**
