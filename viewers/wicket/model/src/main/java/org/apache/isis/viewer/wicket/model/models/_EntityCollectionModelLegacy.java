@@ -101,7 +101,7 @@ implements
                 entityModel,
                 typeOf,
                 pageSize);
-        entityCollectionModel.collectionMemento = CollectionMemento.forCollection(oneToManyAssociation);
+        entityCollectionModel.collectionMemento = oneToManyAssociation.getMemento();
         entityCollectionModel.sortedBy = (sortedByFacet != null)
                 ? sortedByFacet.value()
                 : null;
