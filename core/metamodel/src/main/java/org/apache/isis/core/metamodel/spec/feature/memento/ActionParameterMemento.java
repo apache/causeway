@@ -59,7 +59,7 @@ public class ActionParameterMemento implements Serializable {
     public static ActionParameterMemento forActionParameter(
             final @NonNull ObjectActionParameter actionParameter) {
         return new ActionParameterMemento(
-                ActionMemento.forAction(actionParameter.getAction()),
+                actionParameter.getAction().getMemento(),
                 actionParameter.getNumber(),
                 actionParameter);
     }

@@ -83,7 +83,7 @@ public final class ActionUiMetaModel implements Serializable {
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
 
-        this(   ActionMemento.forAction(objectAction),
+        this(   objectAction.getMemento(),
                 ObjectAction.Util.nameFor(objectAction),
                 getDescription(objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),

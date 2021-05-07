@@ -155,7 +155,7 @@ public class PageParameterUtil {
                 .specForLogicalTypeElseFail(owningLogicalType)
                 .getActionElseFail(actionNameParms, actionType);
 
-        return ActionMemento.forAction(action);
+        return action.getMemento();
     }
 
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");

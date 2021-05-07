@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -258,6 +259,13 @@ public interface ObjectAction extends ObjectMember {
     default String getCssClass(String prefix) {
         final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
+    }
+
+    /**
+     * Returns a serializable representation of this action.
+     */
+    default ActionMemento getMemento() {
+        return ActionMemento.forAction(this);
     }
 
     // -- UTIL

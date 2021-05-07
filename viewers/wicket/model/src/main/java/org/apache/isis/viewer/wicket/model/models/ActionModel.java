@@ -78,7 +78,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     // -- FACTORY METHODS
 
     public static ActionModel of(EntityModel actionOwner, ObjectAction action) {
-        return of(actionOwner, ActionMemento.forAction(action));
+        return of(actionOwner, action.getMemento());
     }
 
     public static ActionModel of(EntityModel actionOwner, ActionMemento actionMemento) {

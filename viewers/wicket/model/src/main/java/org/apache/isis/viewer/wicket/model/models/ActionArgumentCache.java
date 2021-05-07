@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -95,8 +96,7 @@ class ActionArgumentCache implements PendingParameterManager {
 
     @Override
     public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
-        val actionParameterMemento = ActionParameterMemento.forActionParameter(actionParameter);
-        val actionArgumentModel = computeIfAbsent(actionParameterMemento);
+        val actionArgumentModel = computeIfAbsent(actionParameter.getNumber(), actionParameter::getMemento);
         actionArgumentModel.setValue(newParamValue);
     }
 
@@ -114,8 +114,7 @@ class ActionArgumentCache implements PendingParameterManager {
 
     private ParameterUiModel createArgumentModel(int paramIndex) {
         val param = action.getParameters().getElseFail(paramIndex);
-        val paramMemento =  ActionParameterMemento.forActionParameter(param);
-        val actionArgumentModel = new ScalarParameterModel(entityModel, paramMemento);
+        val actionArgumentModel = new ScalarParameterModel(entityModel, param.getMemento());
         return actionArgumentModel;
     }
 
@@ -125,11 +124,13 @@ class ActionArgumentCache implements PendingParameterManager {
                 (int)streamParamUiModels().count());
     }
 
-    private ParameterUiModel computeIfAbsent(final ActionParameterMemento apm) {
-        final int i = apm.getNumber();
-        ParameterUiModel actionArgumentModel = arguments.get(i);
+    private ParameterUiModel computeIfAbsent(
+            final int paramNumber,
+            final Supplier<ActionParameterMemento> apm) {
+
+        ParameterUiModel actionArgumentModel = arguments.get(paramNumber);
         if (actionArgumentModel == null) {
-            actionArgumentModel = new ScalarParameterModel(entityModel, apm);
+            actionArgumentModel = new ScalarParameterModel(entityModel, apm.get());
             final int number = actionArgumentModel.getNumber();
             arguments.put(number, actionArgumentModel);
         }
