@@ -16,31 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
+package org.apache.isis.extensions.secman.api.permission.dom.mixins;
+
+import java.util.Collection;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.VetoDomainEvent;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.UpdateRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = VetoDomainEvent.class, 
-        associateWith = "rule")
+        domainEvent = UpdateRoleDomainEvent.class,
+        associateWith = "role")
 @RequiredArgsConstructor
-public class ApplicationPermission_veto {
+public class ApplicationPermission_updateRole {
+
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
 
     private final ApplicationPermission target;
 
-    //@PropertyLayout(group = "Rule", sequence = "1")
-    public ApplicationPermission act() {
-        target.setRule(ApplicationPermissionRule.VETO);
+    @MemberSupport
+    public ApplicationPermission act(final ApplicationRole applicationRole) {
+        target.setRole(applicationRole);
         return target;
     }
-    public String disableAct() {
-        return target.getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
+
+    @MemberSupport
+    public ApplicationRole default0Act() {
+        return target.getRole();
     }
-    
+
+    @MemberSupport
+    public Collection<? extends ApplicationRole> choices0Act() {
+        return applicationRoleRepository.allRoles();
+    }
 
 }

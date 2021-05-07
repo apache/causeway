@@ -16,30 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
+package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.ChangingDomainEvent;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.VetoDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = ChangingDomainEvent.class, associateWith = "mode")
+@Action(
+        domainEvent = VetoDomainEvent.class,
+        associateWith = "rule")
 @RequiredArgsConstructor
-public class ApplicationPermission_changing {
+public class ApplicationPermission_veto {
 
     private final ApplicationPermission target;
 
-    //@PropertyLayout(group = "Mode", sequence = "2")
+    //@PropertyLayout(group = "Rule", sequence = "1")
     public ApplicationPermission act() {
-        target.setMode(ApplicationPermissionMode.CHANGING);
+        target.setRule(ApplicationPermissionRule.VETO);
         return target;
     }
-    
     public String disableAct() {
-        return target.getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
+        return target.getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
     }
-    
+
 
 }

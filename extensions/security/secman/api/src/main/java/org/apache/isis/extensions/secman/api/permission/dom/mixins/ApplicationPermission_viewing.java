@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
+package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
@@ -26,22 +26,22 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = ViewingDomainEvent.class, 
+        domainEvent = ViewingDomainEvent.class,
         associateWith = "mode")
 @RequiredArgsConstructor
 public class ApplicationPermission_viewing {
 
     private final ApplicationPermission target;
-    
+
     //@PropertyLayout(group = "Mode", sequence = "1")
     public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.VIEWING);
         return target;
     }
-    
+
     public String disableAct() {
         return target.getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
     }
-    
+
 
 }

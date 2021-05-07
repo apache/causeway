@@ -16,45 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
-
-import java.util.Collection;
+package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.UpdateRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.DeleteDomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
-        domainEvent = UpdateRoleDomainEvent.class,
-        associateWith = "role")
+        domainEvent = DeleteDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @RequiredArgsConstructor
-public class ApplicationPermission_updateRole {
+public class ApplicationPermission_delete {
 
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject private RepositoryService repository;
 
     private final ApplicationPermission target;
 
-    @MemberSupport
-    public ApplicationPermission act(final ApplicationRole applicationRole) {
-        target.setRole(applicationRole);
-        return target;
-    }
-
-    @MemberSupport
-    public ApplicationRole default0Act() {
-        return target.getRole();
-    }
-
-    @MemberSupport
-    public Collection<? extends ApplicationRole> choices0Act() {
-        return applicationRoleRepository.allRoles();
+    public ApplicationRole act() {
+        val owningRole = target.getRole();
+        repository.remove(target);
+        return owningRole;
     }
 
 }

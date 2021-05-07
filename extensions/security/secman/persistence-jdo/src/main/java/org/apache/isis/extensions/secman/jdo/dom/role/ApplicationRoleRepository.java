@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
 
 import lombok.val;
 

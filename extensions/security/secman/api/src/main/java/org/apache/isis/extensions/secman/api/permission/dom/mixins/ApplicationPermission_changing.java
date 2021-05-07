@@ -16,34 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
-
-import javax.inject.Inject;
+package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.DeleteDomainEvent;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.ChangingDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
-@Action(
-        domainEvent = DeleteDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@Action(domainEvent = ChangingDomainEvent.class, associateWith = "mode")
 @RequiredArgsConstructor
-public class ApplicationPermission_delete {
-
-    @Inject private RepositoryService repository;
+public class ApplicationPermission_changing {
 
     private final ApplicationPermission target;
 
-    public ApplicationRole act() {
-        val owningRole = target.getRole();
-        repository.remove(target);
-        return owningRole;
+    //@PropertyLayout(group = "Mode", sequence = "2")
+    public ApplicationPermission act() {
+        target.setMode(ApplicationPermissionMode.CHANGING);
+        return target;
     }
+
+    public String disableAct() {
+        return target.getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
+    }
+
 
 }
