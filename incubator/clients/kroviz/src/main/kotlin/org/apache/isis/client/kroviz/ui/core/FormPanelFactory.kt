@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.panel
+package org.apache.isis.client.kroviz.ui.core
 
 import io.kvision.core.Component
 import io.kvision.core.Overflow
@@ -42,7 +42,7 @@ import io.kvision.utils.auto
 import io.kvision.utils.perc
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DateHelper
 import org.apache.isis.client.kroviz.utils.UUID
 

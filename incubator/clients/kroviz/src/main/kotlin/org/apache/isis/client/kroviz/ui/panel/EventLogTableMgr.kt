@@ -22,7 +22,7 @@ package org.apache.isis.client.kroviz.ui.panel
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
-import org.apache.isis.client.kroviz.ui.uml.UmlDiagram
+import org.apache.isis.client.kroviz.ui.diagram.UmlDiagram
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.IconManager

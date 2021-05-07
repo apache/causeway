@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
-import org.apache.isis.client.kroviz.ui.uml.UmlDiagram
+import org.apache.isis.client.kroviz.ui.diagram.UmlDiagram
 import org.apache.isis.client.kroviz.utils.IconManager
 import io.kvision.core.*
 import io.kvision.html.Button

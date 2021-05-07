@@ -31,7 +31,6 @@ import io.kvision.utils.perc
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.dialog.Command
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
-import org.apache.isis.client.kroviz.ui.panel.FormPanelFactory
 import org.apache.isis.client.kroviz.ui.kv.override.RoWindow
 import org.apache.isis.client.kroviz.utils.Direction
 import org.apache.isis.client.kroviz.utils.IconManager

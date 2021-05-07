@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.ui.dialog
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
-import org.apache.isis.client.kroviz.ui.uml.PumlBuilder
+import org.apache.isis.client.kroviz.ui.diagram.PumlBuilder
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.utils.Utils
