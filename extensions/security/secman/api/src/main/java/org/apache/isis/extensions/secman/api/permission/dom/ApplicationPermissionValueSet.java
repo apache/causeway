@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.permission;
+package org.apache.isis.extensions.secman.api.permission.dom;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -142,7 +142,7 @@ public class ApplicationPermissionValueSet implements Serializable {
     public Evaluation evaluate(
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
-        
+
         for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             final Collection<ApplicationPermissionValue> permissionValues = permissionsByFeature.get(pathId);
             final Evaluation evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
