@@ -26,7 +26,7 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.common.model.mementos.PropertyMemento;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

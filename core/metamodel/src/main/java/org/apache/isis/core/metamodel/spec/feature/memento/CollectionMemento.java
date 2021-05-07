@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.common.model.mementos;
+package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
 

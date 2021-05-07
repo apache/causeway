@@ -33,9 +33,9 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
-import org.apache.isis.viewer.common.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.common.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;

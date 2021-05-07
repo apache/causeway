@@ -33,10 +33,10 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.AccessLevel;
 import lombok.Getter;
