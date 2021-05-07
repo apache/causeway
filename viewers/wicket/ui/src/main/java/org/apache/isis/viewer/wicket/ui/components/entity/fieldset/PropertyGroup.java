@@ -42,8 +42,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.common.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -200,7 +200,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             final WebMarkupContainer container,
             final Consumer<LinkAndLabel> onEntityAction) {
 
-        final PropertyMemento pm = new PropertyMemento(otoa);
+        final PropertyMemento pm = PropertyMemento.forProperty(otoa);
 
         final ScalarModel scalarModel =
                 entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);

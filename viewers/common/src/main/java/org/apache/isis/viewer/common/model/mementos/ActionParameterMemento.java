@@ -26,57 +26,43 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
  * of a {@link ObjectAction}.
  *
  * @see ActionMemento
  */
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActionParameterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final ActionMemento actionMemento;
-    private final int number;
+    @Getter private final @NonNull ActionMemento actionMemento;
+    @Getter private final int number;
 
-    private transient ObjectActionParameter actionParameter;
+    // -- FACTORY
 
     public static ActionParameterMemento forActionParameter(final ObjectActionParameter actionParameter) {
-        return new ActionParameterMemento(ActionMemento.forAction(actionParameter.getAction()),
+        return new ActionParameterMemento(
+                ActionMemento.forAction(actionParameter.getAction()),
                 actionParameter.getNumber(),
                 actionParameter);
     }
 
-    protected ActionParameterMemento(
-            final ActionMemento actionMemento,
-            final int number,
-            final ObjectActionParameter actionParameter) {
-        this.actionMemento = actionMemento;
-        this.number = number;
-        this.actionParameter = actionParameter;
-    }
+    // -- LOAD/UNMARSHAL
 
-    public ActionMemento getActionMemento() {
-        return actionMemento;
-    }
-
-    public int getNumber() {
-        return number;
-    }
+    private transient ObjectActionParameter actionParameter;
 
     public ObjectActionParameter getActionParameter(final SpecificationLoader specLoader) {
         if (actionParameter == null) {
             this.actionParameter = actionParameterFor(actionMemento, number, specLoader);
         }
         return actionParameter;
-    }
-
-    private static ObjectActionParameter actionParameterFor(
-            final ActionMemento actionMemento,
-            final int paramIndex,
-            final SpecificationLoader specLoader) {
-        final ObjectAction action = actionMemento.getAction(specLoader);
-        return action.getParameters().getElseFail(paramIndex);
     }
 
     /**
@@ -89,6 +75,16 @@ public class ActionParameterMemento implements Serializable {
     @Override
     public String toString() {
         return getActionMemento().getNameParmsId() + "#" + getNumber();
+    }
+
+    // -- HELPER
+
+    private static ObjectActionParameter actionParameterFor(
+            final ActionMemento actionMemento,
+            final int paramIndex,
+            final SpecificationLoader specLoader) {
+        final ObjectAction action = actionMemento.getAction(specLoader);
+        return action.getParameters().getElseFail(paramIndex);
     }
 
 }

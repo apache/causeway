@@ -21,79 +21,54 @@ package org.apache.isis.viewer.common.model.mementos;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * {@link Serializable} representation of a {@link ObjectAction}
+ *
+ * @since 2.0 {index}
  */
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter private final LogicalType owningType;
-    private final ActionType actionType;
-    private final String nameParmsId;
+    @Getter private final @NonNull LogicalType owningType;
+    @Getter private final @NonNull ActionType actionType;
+    @Getter private final @Nullable String nameParmsId; //nullable?
 
-    private transient ObjectAction action;
+    // -- FACTORY
 
     public static ActionMemento forAction(final ObjectAction action) {
-        return new ActionMemento(action.getOnType().getLogicalType(),
+        return new ActionMemento(
+                action.getOnType().getLogicalType(),
                 action.getType(),
                 action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
                 action);
     }
 
-    public ActionMemento(
-            final LogicalType owningType,
-            final ActionType actionType,
-            final String nameParmsId,
-            final SpecificationLoader specificationLoader) {
-        this(owningType, actionType, nameParmsId,
-                actionFor(owningType, actionType, nameParmsId, specificationLoader));
-    }
+    // -- LOAD/UNMARSHAL
 
-    protected ActionMemento(
-            final LogicalType owningType,
-            final ActionType actionType,
-            final String nameParmsId,
-            final ObjectAction action) {
-        this.owningType = owningType;
-        this.actionType = actionType;
-        this.nameParmsId = nameParmsId;
-        this.action = action;
-    }
+    private transient ObjectAction action;
 
-    public ActionType getActionType() {
-        return actionType;
-    }
-
-    public String getNameParmsId() {
-        return nameParmsId;
-    }
-
-    public ObjectAction getAction(final SpecificationLoader specificationLoader) {
+    public ObjectAction getAction(final SpecificationLoader specLoader) {
         if (action == null) {
-            action = actionFor(owningType, actionType, nameParmsId, specificationLoader);
+            action = specLoader
+                    .specForLogicalTypeElseFail(owningType)
+                    .getActionElseFail(nameParmsId, actionType);
         }
         return action;
     }
 
-    // -- HELPER
-
-    private static ObjectAction actionFor(
-            LogicalType owningType,
-            ActionType actionType,
-            String nameParmsId,
-            SpecificationLoader specificationLoader) {
-
-        return specificationLoader
-                .specForLogicalTypeElseFail(owningType)
-                .getActionElseFail(nameParmsId, actionType);
-    }
 
 }

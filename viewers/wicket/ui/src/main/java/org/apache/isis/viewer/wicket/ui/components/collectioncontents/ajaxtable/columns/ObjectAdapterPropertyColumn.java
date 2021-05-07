@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.common.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -111,8 +111,8 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
         val adapter = rowModel.getObject();
         final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
-        final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociationElseFail(propertyExpression);
-        final PropertyMemento pm = new PropertyMemento(property);
+        final OneToOneAssociation property = adapter.getSpecification().getPropertyElseFail(propertyExpression);
+        final PropertyMemento pm = PropertyMemento.forProperty(property);
 
         final ScalarModel scalarModel = entityModel
                 .getPropertyModel(pm, EntityModel.Mode.VIEW, collectionVariant.getColumnRenderingHint());
