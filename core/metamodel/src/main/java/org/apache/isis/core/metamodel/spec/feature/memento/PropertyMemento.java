@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.spec.feature.memento;
 import java.io.Serializable;
 
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -32,10 +30,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+import lombok.Synchronized;
 
 /**
  * {@link Serializable} representation of a {@link OneToOneAssociation}
+ *
+ * @implNote thread-safe memoization
  *
  * @since 2.0 {index}
  */
@@ -57,9 +57,9 @@ public class PropertyMemento implements Serializable {
 
     // -- FACTORY
 
-    public static PropertyMemento forProperty(final OneToOneAssociation property) {
+    public static PropertyMemento forProperty(final @NonNull OneToOneAssociation property) {
         return new PropertyMemento(
-                parentObjectSpecFor(property).getLogicalType(),
+                property.getOnType().getLogicalType(),
                 property.getIdentifier().getMemberName(),
                 property.getSpecification().getLogicalType(),
                 property);
@@ -70,6 +70,7 @@ public class PropertyMemento implements Serializable {
     @EqualsAndHashCode.Exclude
     private transient OneToOneAssociation property;
 
+    @Synchronized
     public OneToOneAssociation getProperty(final SpecificationLoader specLoader) {
         if (property == null) {
             property = specLoader.specForLogicalTypeElseFail(owningType)
@@ -78,22 +79,11 @@ public class PropertyMemento implements Serializable {
         return property;
     }
 
+    // -- OBJECT CONTRACT
+
     @Override
     public String toString() {
         return getOwningType().getLogicalTypeName() + "#" + getIdentifier();
-    }
-
-    // -- HELPER
-
-    @Deprecated
-    private static ObjectSpecification parentObjectSpecFor(OneToOneAssociation property) {
-        val result = property.getMetaModelContext().getSpecificationLoader()
-                .specForLogicalTypeElseFail(property.getIdentifier().getLogicalType());
-
-        //TODO simplify based on ...
-        _Assert.assertEquals(result, property.getOnType());
-
-        return result;
     }
 
 

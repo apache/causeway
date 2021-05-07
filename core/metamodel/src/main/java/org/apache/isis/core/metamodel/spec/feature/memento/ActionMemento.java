@@ -32,9 +32,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Synchronized;
 
 /**
  * {@link Serializable} representation of a {@link ObjectAction}
+ *
+ * @implNote thread-safe memoization
  *
  * @since 2.0 {index}
  */
@@ -49,7 +52,7 @@ public class ActionMemento implements Serializable {
 
     // -- FACTORY
 
-    public static ActionMemento forAction(final ObjectAction action) {
+    public static ActionMemento forAction(final @NonNull ObjectAction action) {
         return new ActionMemento(
                 action.getOnType().getLogicalType(),
                 action.getType(),
@@ -61,7 +64,8 @@ public class ActionMemento implements Serializable {
 
     private transient ObjectAction action;
 
-    public ObjectAction getAction(final SpecificationLoader specLoader) {
+    @Synchronized
+    public ObjectAction getAction(final @NonNull SpecificationLoader specLoader) {
         if (action == null) {
             action = specLoader
                     .specForLogicalTypeElseFail(owningType)
@@ -70,5 +74,11 @@ public class ActionMemento implements Serializable {
         return action;
     }
 
+    // -- OBJECT CONTRACT
+
+    @Override
+    public String toString() {
+        return getOwningType().getLogicalTypeName() + "#" + getNameParmsId();
+    }
 
 }

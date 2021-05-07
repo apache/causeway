@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -30,12 +29,17 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Synchronized;
 
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
  * of a {@link ObjectAction}.
  *
+ * @implNote thread-safe memoization
+ *
  * @see ActionMemento
+ *
+ * @since 2.0 {index}
  */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActionParameterMemento implements Serializable {
@@ -47,7 +51,8 @@ public class ActionParameterMemento implements Serializable {
 
     // -- FACTORY
 
-    public static ActionParameterMemento forActionParameter(final ObjectActionParameter actionParameter) {
+    public static ActionParameterMemento forActionParameter(
+            final @NonNull ObjectActionParameter actionParameter) {
         return new ActionParameterMemento(
                 ActionMemento.forAction(actionParameter.getAction()),
                 actionParameter.getNumber(),
@@ -58,33 +63,22 @@ public class ActionParameterMemento implements Serializable {
 
     private transient ObjectActionParameter actionParameter;
 
-    public ObjectActionParameter getActionParameter(final SpecificationLoader specLoader) {
+    @Synchronized
+    public ObjectActionParameter getActionParameter(final @NonNull SpecificationLoader specLoader) {
         if (actionParameter == null) {
-            this.actionParameter = actionParameterFor(actionMemento, number, specLoader);
+            this.actionParameter = actionMemento
+                    .getAction(specLoader)
+                    .getParameters()
+                    .getElseFail(number);
         }
         return actionParameter;
     }
 
-    /**
-     * Convenience.
-     */
-    public ObjectSpecification getSpecification(final SpecificationLoader specLoader) {
-        return getActionParameter(specLoader).getSpecification();
-    }
+    // -- OBJECT CONTRACT
 
     @Override
     public String toString() {
-        return getActionMemento().getNameParmsId() + "#" + getNumber();
-    }
-
-    // -- HELPER
-
-    private static ObjectActionParameter actionParameterFor(
-            final ActionMemento actionMemento,
-            final int paramIndex,
-            final SpecificationLoader specLoader) {
-        final ObjectAction action = actionMemento.getAction(specLoader);
-        return action.getParameters().getElseFail(paramIndex);
+        return getActionMemento().toString() + "[" + getNumber() + "]";
     }
 
 }
