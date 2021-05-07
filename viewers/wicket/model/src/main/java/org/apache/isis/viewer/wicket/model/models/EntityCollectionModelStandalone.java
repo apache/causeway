@@ -121,7 +121,7 @@ extends EntityCollectionModelAbstract {
 
     @Override
     public ObjectMemento getParentObjectAdapterMemento() {
-        return legacy.getParentObjectAdapterMemento();
+        return null;
     }
 
     @Override

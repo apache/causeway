@@ -65,8 +65,8 @@ import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 import lombok.NonNull;
 import lombok.val;
 
-public final class ActionModel 
-extends ManagedObjectModel 
+public final class ActionModel
+extends ManagedObjectModel
 implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
@@ -78,20 +78,20 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     // -- FACTORY METHODS
 
     public static ActionModel of(EntityModel actionOwner, ObjectAction action) {
-        return of(actionOwner, new ActionMemento(action));
+        return of(actionOwner, ActionMemento.forAction(action));
     }
-    
+
     public static ActionModel of(EntityModel actionOwner, ActionMemento actionMemento) {
         return new ActionModel(actionOwner, actionMemento);
     }
 
     public static ActionModel ofPageParameters(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
-        
+
         return PageParameterUtil.actionModelFor(commonContext, pageParameters);
     }
-  
+
 
     // -- BOOKMARKABLE
 
@@ -108,12 +108,12 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     // --
-    
+
     private transient ObjectAction objectAction;
     @Override
     public ObjectAction getMetaModel() {
         if(objectAction==null) {
-            objectAction = actionMemento.getAction(this::getSpecificationLoader); 
+            objectAction = actionMemento.getAction(getSpecificationLoader());
         }
         return objectAction;
     }
@@ -122,7 +122,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     public boolean hasAsRootPolicy() {
         return true;
     }
-    
+
     @Override
     public EntityModel getParentUiModel() {
         return ownerModel;
@@ -142,8 +142,8 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
     private ActionArgumentCache createActionArgumentCache() {
         return new ActionArgumentCache(
-                ownerModel, 
-                actionMemento, 
+                ownerModel,
+                actionMemento,
                 getMetaModel());
     }
 
@@ -160,7 +160,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         super(actionModel.getCommonContext());
         this.ownerModel = actionModel.ownerModel;
         this.actionMemento = actionModel.actionMemento;
-        this.argCache = actionModel.argCache().copy(); 
+        this.argCache = actionModel.argCache().copy();
     }
 
     @Override
@@ -192,9 +192,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         val targetAdapter = getOwner();
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
-        
+
         val head = action.interactionHead(targetAdapter);
-        
+
         val resultAdapter =
                 action.executeWithRuleChecking(
                         head, arguments,
@@ -268,9 +268,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     // //////////////////////////////////////
 
     public static IRequestHandler redirectHandler(
-            final Object value, 
+            final Object value,
             final @NonNull OpenUrlStrategy openUrlStrategy) {
-        
+
         if(value instanceof java.net.URL) {
             val url = (java.net.URL) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
@@ -278,7 +278,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         if(value instanceof LocalResourcePath) {
             val localResourcePath = (LocalResourcePath) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(
-                    localResourcePath.getPath(), 
+                    localResourcePath.getPath(),
                     localResourcePath.getOpenUrlStrategy());
         }
         return null;
@@ -323,12 +323,12 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     private IRequestHandler handlerFor(
-            final IResourceStream resourceStream, 
+            final IResourceStream resourceStream,
             final NamedWithMimeType namedWithMimeType) {
         val handler =
                 new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-        
+
         //ISIS-1619, prevent clients from caching the response content
         return isIdempotentOrCachable()
                 ? handler
@@ -412,7 +412,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         val pendingArgs = getArgumentsAsParamModel();
 
         val head = InteractionHead.of(owner, target);
-        
+
         return argCache()
         .streamParamUiModels()
         .map(paramUiModel->{
@@ -436,9 +436,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
             val hasAutoComplete = actionParameter.hasAutoComplete();
             val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue);
             // if we have choices or autoSelect, don't override any param value, already chosen by the user
-            val vetoDefaultsToBeSet = !isEmpty 
+            val vetoDefaultsToBeSet = !isEmpty
                     && (hasChoices||hasAutoComplete);
-            
+
             if(!vetoDefaultsToBeSet) {
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
                 if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
@@ -449,33 +449,33 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                 return;
             }
 
-            // We could automatically make sure the parameter value is one of the (reassessed) choices, 
+            // We could automatically make sure the parameter value is one of the (reassessed) choices,
             // if not then blank it out.
             // corner case: the parameter value might be non-scalar
-            //     we could remove from the parameter value (collection) all that no longer 
+            //     we could remove from the parameter value (collection) all that no longer
             //     conform to the available (reassessed) choices,
 
             //XXX HOWEVER ...
             // there are pros and cons to that depending on the situation
-            // I'd rather not risk a bad user experience by blanking out values, 
+            // I'd rather not risk a bad user experience by blanking out values,
             // instead let the user control the situation, we have validation to signal what to do
-            
+
 //            val paramIsScalar = actionParameter.getSpecification().isNotCollection();
-//            
+//
 //            boolean shouldBlankout = false;
-//                        
+//
 //            if(!isEmpty && paramIsScalar) {
-//                
+//
 //                if(hasChoices) {
 //                    val choices = actionParameter
 //                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
 //
-//                    shouldBlankout = 
+//                    shouldBlankout =
 //                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
 //
 //                } else if(hasAutoComplete) {
 //
-//                    //don't blank-out, even though could fail validation later 
+//                    //don't blank-out, even though could fail validation later
 //                    shouldBlankout = false;
 //                }
 //            }
@@ -487,15 +487,15 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         });
 
     }
-    
+
     // -- HELPER
-    
+
     private boolean isIdempotentOrCachable() {
         return ObjectAction.Util.isIdempotentOrCachable(getMetaModel());
     }
 
 //    private boolean isPartOfChoicesConsideringDependentArgs(
-//            ManagedObject paramValue, 
+//            ManagedObject paramValue,
 //            Can<ManagedObject> choices) {
 //
 //        val pendingValue = paramValue.getPojo();

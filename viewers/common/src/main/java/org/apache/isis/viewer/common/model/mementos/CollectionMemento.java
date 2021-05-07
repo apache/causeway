@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.mementos;
+package org.apache.isis.viewer.common.model.mementos;
 
 import java.io.Serializable;
 
@@ -30,31 +30,28 @@ import lombok.Getter;
 import lombok.val;
 
 /**
- * {@link Serializable} representation of a {@link OneToManyAssociation} 
+ * {@link Serializable} representation of a {@link OneToManyAssociation}
  * (a parented collection of entities).
  */
 public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
-        val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
-        val logicalType = association.getIdentifier().getLogicalTypeName();
-        return specificationLoader.specForLogicalTypeNameElseFail(logicalType);
-    }
-
     @Getter private final LogicalType owningType;
     private final String id;
     private final String collectionId;
     private final String collectionName;
 
-    private transient OneToManyAssociation collection;
-
     public CollectionMemento(final OneToManyAssociation collection) {
-        this(owningSpecFor(collection).getLogicalType(), collection.getIdentifier().getMemberName(), collection);
+        this(parentObjectSpecFor(collection).getLogicalType(),
+                collection.getIdentifier().getMemberName(),
+                collection);
     }
 
-    private CollectionMemento(final LogicalType owningType, final String id, final OneToManyAssociation collection) {
+    private CollectionMemento(
+            final LogicalType owningType,
+            final String id,
+            final OneToManyAssociation collection) {
         this.owningType = owningType;
         this.id = id;
         this.collection = collection;
@@ -63,18 +60,16 @@ public class CollectionMemento implements Serializable {
     }
 
     /**
-     * Only applies to parented collections, being the id of the collection in
-     * the parent (eg <tt>lineItems</tt>).
-     *
-     * <p>
-     * Will return <tt>null</tt> otherwise.
+     * The id of the collection as referenced
+     * from the parent object (eg <tt>lineItems</tt>).
      */
     public String getId() {
         return id;
     }
 
     /**
-     * {@link OneToManyAssociation#getId() id} of the {@link OneToManyAssociation collection} passed into the constructor.
+     * {@link OneToManyAssociation#getId() id} of the {@link OneToManyAssociation collection}
+     * passed into the constructor.
      *
      * <p>
      *     Is (I think) the same value as {@link #getId()}, though derived more directly.
@@ -88,19 +83,22 @@ public class CollectionMemento implements Serializable {
         return collectionName;
     }
 
+    private transient OneToManyAssociation collection;
+
     public OneToManyAssociation getCollection(final SpecificationLoader specificationLoader) {
         if (collection == null) {
-            collection = collectionFor(owningType, id, specificationLoader);
+            collection = specificationLoader.specForLogicalTypeElseFail(owningType)
+                    .getCollectionElseFail(id);
         }
         return collection;
     }
 
-    private static OneToManyAssociation collectionFor(
-            LogicalType owningType,
-            String id,
-            final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) specificationLoader.specForLogicalTypeElseFail(owningType)
-                .getAssociationElseFail(id);
+    // -- HELPER
+
+    private static ObjectSpecification parentObjectSpecFor(final OneToManyAssociation collection) {
+        val specificationLoader = collection.getMetaModelContext().getSpecificationLoader();
+        val logicalType = collection.getIdentifier().getLogicalType();
+        return specificationLoader.specForLogicalTypeElseFail(logicalType);
     }
 
 }

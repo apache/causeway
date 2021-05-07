@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.action.form.PendingParameterManager;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.common.model.mementos.ActionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
+import org.apache.isis.viewer.common.model.mementos.ActionParameterMemento;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -40,17 +40,17 @@ import lombok.val;
 
 @RequiredArgsConstructor
 class ActionArgumentCache implements PendingParameterManager {
-    
+
     @NonNull private final EntityModel entityModel;
     @NonNull private final ActionMemento actionMemento;
     @NonNull private final ObjectAction action;
 
     private final Map<Integer, ParameterUiModel> arguments = _Maps.newHashMap();
-    
+
     public ActionArgumentCache copy() {
         val copy = new ActionArgumentCache(
-                entityModel, 
-                actionMemento, 
+                entityModel,
+                actionMemento,
                 action);
         primeArgumentModels();
         for (val argumentEntry : arguments.entrySet()) {
@@ -58,11 +58,11 @@ class ActionArgumentCache implements PendingParameterManager {
         }
         return copy;
     }
-    
+
     public Can<ManagedObject> snapshot() {
-        
+
         val paramTypes = action.getParameterTypes();
-        
+
         return streamParamNumbers()
         .mapToObj(paramIndex->{
             val actionArgumentModel = Optional.ofNullable(arguments.get(paramIndex));
@@ -70,15 +70,15 @@ class ActionArgumentCache implements PendingParameterManager {
                     .map(ParameterUiModel::getValue)
                     .orElse(ManagedObject.empty(paramTypes.getElseFail(paramIndex)));
             return adapter;
-        
+
         })
         .collect(Can.toCan());
     }
-    
+
     public void resetTo(Can<ManagedObject> defaultsFixedPoint) {
-        
+
         arguments.clear();
-        
+
         streamParamUiModels()
         .forEach(actionArgumentModel -> {
             int paramIndex = actionArgumentModel.getNumber();
@@ -86,27 +86,27 @@ class ActionArgumentCache implements PendingParameterManager {
             actionArgumentModel.setValue(paramDefaultValue);
         });
     }
-    
+
     public Stream<ParameterUiModel> streamParamUiModels() {
         return streamParamNumbers()
                 .mapToObj(paramIndex->
                     arguments.computeIfAbsent(paramIndex, this::createArgumentModel));
     }
-    
+
     @Override
     public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
-        val actionParameterMemento = new ActionParameterMemento(actionParameter);
+        val actionParameterMemento = ActionParameterMemento.forActionParameter(actionParameter);
         val actionArgumentModel = computeIfAbsent(actionParameterMemento);
         actionArgumentModel.setValue(newParamValue);
     }
-    
+
     @Override
     public void clearParameterValue(ObjectActionParameter actionParameter) {
         setParameterValue(actionParameter, null);
     }
-    
+
     // //////////////////////////////////////
-    
+
     private IntStream streamParamNumbers() {
         val paramCount = action.getParameterCount();
         return IntStream.range(0, paramCount);
@@ -114,17 +114,17 @@ class ActionArgumentCache implements PendingParameterManager {
 
     private ParameterUiModel createArgumentModel(int paramIndex) {
         val param = action.getParameters().getElseFail(paramIndex);
-        val paramMemento =  new ActionParameterMemento(param);
+        val paramMemento =  ActionParameterMemento.forActionParameter(param);
         val actionArgumentModel = new ScalarParameterModel(entityModel, paramMemento);
         return actionArgumentModel;
     }
-    
+
     private void primeArgumentModels() {
         _Assert.assertEquals(
                 action.getParameterCount(),
                 (int)streamParamUiModels().count());
     }
-    
+
     private ParameterUiModel computeIfAbsent(final ActionParameterMemento apm) {
         final int i = apm.getNumber();
         ParameterUiModel actionArgumentModel = arguments.get(i);
@@ -141,5 +141,5 @@ class ActionArgumentCache implements PendingParameterManager {
         setParameterValue(actionParam, argumentAdapter);
     }
 
-    
+
 }

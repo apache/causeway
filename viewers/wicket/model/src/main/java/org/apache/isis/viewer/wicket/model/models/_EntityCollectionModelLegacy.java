@@ -53,10 +53,10 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.core.runtime.memento.ObjectMementoService;
+import org.apache.isis.viewer.common.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
-import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

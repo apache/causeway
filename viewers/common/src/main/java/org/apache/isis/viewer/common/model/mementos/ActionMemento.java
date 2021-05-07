@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.common.model.mementos;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -42,10 +41,10 @@ public class ActionMemento implements Serializable {
 
     private transient ObjectAction action;
 
-    public ActionMemento(final ObjectAction action) {
-        this(action.getOnType().getLogicalType(), 
-                action.getType(), 
-                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(), 
+    public static ActionMemento forAction(final ObjectAction action) {
+        return new ActionMemento(action.getOnType().getLogicalType(),
+                action.getType(),
+                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
                 action);
     }
 
@@ -54,10 +53,11 @@ public class ActionMemento implements Serializable {
             final ActionType actionType,
             final String nameParmsId,
             final SpecificationLoader specificationLoader) {
-        this(owningType, actionType, nameParmsId, actionFor(owningType, actionType, nameParmsId, specificationLoader));
+        this(owningType, actionType, nameParmsId,
+                actionFor(owningType, actionType, nameParmsId, specificationLoader));
     }
 
-    private ActionMemento(
+    protected ActionMemento(
             final LogicalType owningType,
             final ActionType actionType,
             final String nameParmsId,
@@ -76,19 +76,21 @@ public class ActionMemento implements Serializable {
         return nameParmsId;
     }
 
-    public ObjectAction getAction(final Supplier<SpecificationLoader> specificationLoaderSupplier) {
+    public ObjectAction getAction(final SpecificationLoader specificationLoader) {
         if (action == null) {
-            action = actionFor(owningType, actionType, nameParmsId, specificationLoaderSupplier.get());
+            action = actionFor(owningType, actionType, nameParmsId, specificationLoader);
         }
         return action;
     }
+
+    // -- HELPER
 
     private static ObjectAction actionFor(
             LogicalType owningType,
             ActionType actionType,
             String nameParmsId,
             SpecificationLoader specificationLoader) {
-        
+
         return specificationLoader
                 .specForLogicalTypeElseFail(owningType)
                 .getActionElseFail(nameParmsId, actionType);

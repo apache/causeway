@@ -49,27 +49,27 @@ import lombok.experimental.UtilityClass;
 public final class ServiceActionUtil {
 
     static void addLeafItem(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             CssMenuItem menuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
-        
+
         val actionUiModel = menuItem.getLinkAndLabel();
         val menuItemActionLink = actionUiModel.getUiComponent();
 
         val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
-        
+
         Decorators.getActionLink().decorateMenuItem(
-                listItem, 
+                listItem,
                 actionUiModel,
                 commonContext.getTranslationService());
-        
+
         val actionMeta = actionUiModel.getActionUiMetaModel();
         val fontAwesome = actionMeta.getFontAwesomeUiModel();
         Decorators.getIcon().decorate(menuItemLabel, fontAwesome);
         Decorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
-        
+
         val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
 
@@ -111,37 +111,37 @@ public final class ServiceActionUtil {
     private static class LinkAndLabelFactoryWkt {
 
         private final IsisAppCommonContext commonContext;
-        
+
         public LinkAndLabel newActionLink(
-                final String named, 
+                final String named,
                 final ManagedAction managedAction) {
-        
+
             val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
-            
+
             val actionLinkFactory = new MenuActionLinkFactory(
-                    PageAbstract.ID_MENU_LINK, 
+                    PageAbstract.ID_MENU_LINK,
                     serviceModel);
-            
+
             return LinkAndLabel.of(
                     model->actionLinkFactory.newActionLink(
-                            model.getObjectAction(()->CommonContextUtils.getCommonContext().getSpecificationLoader()),
+                            model.getObjectAction(CommonContextUtils.getCommonContext().getSpecificationLoader()),
                             named)
                             .getUiComponent(),
                     named,
                     serviceModel,
                     managedAction.getAction());
         }
-        
+
     }
 
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuBuilderWkt implements MenuVisitor {
-        
+
         private final Consumer<CssMenuItem> onNewMenuItem;
         private final LinkAndLabelFactoryWkt linkAndLabelFactory;
-        
+
         private CssMenuItem currentTopLevelMenu = null;
-        
+
         @Override
         public void addTopLevel(MenuItemDto menuDto) {
             currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
@@ -157,10 +157,10 @@ public final class ServiceActionUtil {
         @Override
         public void addSubMenu(MenuItemDto menuDto) {
             val managedAction = menuDto.getManagedAction();
-            
+
             val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
-            
+
             menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(menuDto.getName(), managedAction));
         }
 
@@ -169,14 +169,14 @@ public final class ServiceActionUtil {
             val menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
-        
+
     }
-    
+
     public static void buildMenu(
             final IsisAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
-        
+
         menuUiModel.buildMenuItems(commonContext, MenuBuilderWkt.of(
                 onNewMenuItem,
                 LinkAndLabelFactoryWkt.of(commonContext)));
