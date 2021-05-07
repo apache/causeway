@@ -25,7 +25,9 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
+import org.apache.isis.client.kroviz.utils.XmlHelper
 import kotlin.js.Date
 
 // use color codes from css instead?

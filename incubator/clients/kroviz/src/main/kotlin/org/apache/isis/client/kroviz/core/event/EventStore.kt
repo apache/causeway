@@ -18,13 +18,14 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
+import io.kvision.panel.SimplePanel
+import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import io.kvision.panel.SimplePanel
-import io.kvision.state.observableListOf
-import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UUID
 
 /**
@@ -65,9 +66,10 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
+    fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel, obj: Any?) {
         val entry = LogEntry(title = title, aggregator = aggregator)
         entry.obj = panel
+ //       entry.obj = obj
         log(entry)
         updateStatus(entry)
     }
@@ -128,9 +130,17 @@ object EventStore {
         return log.firstOrNull { it.getAggregator() == aggregator }
     }
 
-    fun findBy(uuid: UUID): LogEntry {
-        return log.first { it.getAggregator() is SvgDispatcher
-                && (it.getAggregator() as SvgDispatcher).callBack == uuid }
+    fun findByDispatcher(uuid: UUID): LogEntry {
+        return log.first {
+            it.getAggregator() is SvgDispatcher
+                    && (it.getAggregator() as SvgDispatcher).callBack == uuid
+        }
+    }
+
+    fun findByView(uuid: UUID): LogEntry? {
+        return log.firstOrNull() {
+            (it.obj is ScalableVectorGraphic) && ((it.obj as ScalableVectorGraphic).uuid == uuid)
+        }
     }
 
     fun findMenuBars(): LogEntry? {

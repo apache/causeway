@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.utils
 import kotlin.random.Random
 
 class UUID() {
-    val value: String
+    var value: String
 
     // Returns a 36-character string in the form
     // XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -37,6 +37,10 @@ class UUID() {
         val s4 = strHex.substring(16, 4)
         val s5 = strHex.substring(20, 12)
         value = "$s1-$s2-$s3-$s4-$s5"
+    }
+
+    constructor(string: String) : this() {
+        value = string
     }
 
     @OptIn(kotlin.ExperimentalUnsignedTypes::class)

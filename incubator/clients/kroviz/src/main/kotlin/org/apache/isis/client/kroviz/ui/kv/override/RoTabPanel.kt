@@ -35,6 +35,7 @@ import io.kvision.utils.obj
 import io.kvision.utils.perc
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.ui.core.RoView
+import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * Tab position.
@@ -141,6 +142,11 @@ open class RoTabPanel(
         }
         init?.invoke(this)
     }
+
+    override fun render(): VNode {
+        return render("div", childrenVNodes())
+    }
+
 
     private fun calculateSideClasses(): Pair<String, String> {
         return when (sideTabSize) {
@@ -315,9 +321,10 @@ open class RoTabPanel(
      */
     open fun addTab(
             title: String, panel: Component, icon: String? = null,
-            image: ResString? = null, closable: Boolean = false, route: String? = null
+            image: ResString? = null, closable: Boolean = false, route: String? = null,
+            uuid: UUID? = null
     ): RoTabPanel {
-        addTab(RoTab(title, panel, icon, image, closable, route))
+        addTab(RoTab(title, panel, icon, image, closable, route, uuid))
         refresh()
         return this
     }

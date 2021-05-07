@@ -36,6 +36,10 @@ import io.kvision.routing.RoutingManager
 import io.kvision.state.ObservableState
 import io.kvision.state.bind
 import io.kvision.utils.obj
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.utils.DomUtil
+import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
+import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * The single Tab component inside the TabPanel container.
@@ -49,8 +53,12 @@ import io.kvision.utils.obj
  * @param init an initializer extension function
  */
 open class RoTab(
-        label: String? = null, icon: String? = null,
-        image: ResString? = null, closable: Boolean = false, val route: String? = null,
+        label: String? = null,
+        icon: String? = null,
+        image: ResString? = null,
+        closable: Boolean = false,
+        val route: String? = null,
+        val uuid: UUID? = null,
         init: (RoTab.() -> Unit)? = null
 ) : Tag(TAG.LI, classes = setOf("nav-item")) {
 
@@ -61,16 +69,28 @@ open class RoTab(
             image: ResString? = null,
             closable: Boolean = false,
             route: String? = null,
+            uuid: UUID? = null,
             init: (RoTab.() -> Unit)? = null
-    ) : this(label, icon, image, closable, route, init) {
+    ) : this(label, icon, image, closable, route, uuid, init) {
         @Suppress("LeakingThis")
         add(child)
     }
 
-    override fun focus() {
-        console.log("[RT.focus]")
-        if (getElementJQuery()?.attr("tabindex") == undefined) getElementJQuery()?.attr("tabindex", "-1")
-        super.focus()
+    override fun render(): VNode {
+        if (uuid != null) {
+            console.log("[RT.render]")
+            console.log(uuid)
+            val logEntry = EventStore.findByView(uuid)
+            if (logEntry != null) {
+                val svgStr = logEntry.getResponse()
+                console.log(svgStr)
+                val newImage = ScalableVectorGraphic(svgStr)
+                val uuid = UUID(this.id!!)
+                console.log(uuid)
+                DomUtil.replaceWith(uuid, newImage)
+            }
+        }
+        return super.render()
     }
 
     /**
@@ -185,7 +205,7 @@ fun RoTabPanel.tab(
         image: ResString? = null, closable: Boolean = false, route: String? = null,
         init: (RoTab.() -> Unit)? = null
 ): RoTab {
-    val tab = RoTab(label, icon, image, closable, route, init)
+    val tab = RoTab(label, icon, image, closable, route, null, init)
     this.add(tab)
     return tab
 }

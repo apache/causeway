@@ -18,6 +18,10 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
+import io.kvision.core.Widget
+import io.kvision.dropdown.ContextMenu
+import io.kvision.panel.SimplePanel
+import io.kvision.utils.ESC_KEY
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
@@ -31,12 +35,10 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
+import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
-import io.kvision.core.Widget
-import io.kvision.dropdown.ContextMenu
-import io.kvision.panel.SimplePanel
-import io.kvision.utils.ESC_KEY
 
 /**
  * Single point of contact for view components consisting of:
@@ -49,7 +51,7 @@ object UiManager {
 
     private var session: Session? = null
     private val popups = mutableListOf<Widget>()
-    private val settings = mutableMapOf<String,Any>()
+    private val settings = mutableMapOf<String, Any>()
 
     init {
         window.addEventListener("keydown", fun(event) {
@@ -76,9 +78,13 @@ object UiManager {
         return null
     }
 
-    fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
-        RoView.addTab(title, panel)
-        EventStore.addView(title, aggregator, panel)
+    fun add(title: String, panel: SimplePanel, obj: Any? = null, aggregator: BaseAggregator = UndefinedDispatcher()) {
+        var uuid: UUID? = null
+        if (obj is ScalableVectorGraphic) {
+            uuid = obj.uuid
+        }
+        RoView.addTab(title, panel, uuid)
+        EventStore.addView(title, aggregator, panel, obj)
     }
 
     fun closeView(tab: SimplePanel) {
@@ -106,7 +112,7 @@ object UiManager {
         val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as ListDM)
-        add(title, panel, aggregator)
+        add(title, panel, null, aggregator)
         displayable.isRendered = true
     }
 

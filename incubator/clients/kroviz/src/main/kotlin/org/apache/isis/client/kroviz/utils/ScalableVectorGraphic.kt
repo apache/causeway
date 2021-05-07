@@ -33,7 +33,7 @@ enum class Direction(val id: String) {
 }
 
 // see: https://vecta.io/blog/best-way-to-embed-svg
-class ScalableVectorGraphic(val data: String) {
+class ScalableVectorGraphic(val data: String, val uuid:UUID? = null) {
 
     var document: Document = DOMParser().parseFromString(data, Constants.svgMimeType)
     private var root: SVGSVGElement

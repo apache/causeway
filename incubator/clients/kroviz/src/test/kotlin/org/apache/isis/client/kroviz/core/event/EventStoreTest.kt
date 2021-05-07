@@ -116,9 +116,9 @@ class EventStoreTest : IntegrationTest() {
 
         // construct list with urls
         EventStore.add(h1Spec)
-        EventStore.addView(i1, agg, VPanel())
+        EventStore.addView(i1, agg, VPanel(), null)
         EventStore.add(h2Spec)
-        EventStore.addView(i2, agg, VPanel())
+        EventStore.addView(i2, agg, VPanel(), null)
 
         val le1 = EventStore.find(h1Spec)!!
         assertEquals(h1, le1.url)   //1
