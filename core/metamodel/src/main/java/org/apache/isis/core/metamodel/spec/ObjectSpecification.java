@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -56,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
@@ -233,8 +235,6 @@ extends
      */
     String getCssClass(ManagedObject objectAdapter);
 
-    boolean isAbstract();
-
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet
      * @since 2.0
@@ -385,10 +385,6 @@ extends
      */
     String getManagedBeanName();
 
-    default boolean isViewModel() {
-        return getBeanSort().isViewModel();
-    }
-
     default boolean isMixin() {
         return getBeanSort().isMixin();
     }
@@ -396,16 +392,27 @@ extends
     boolean isViewModelCloneable(ManagedObject targetAdapter);
     boolean isWizard();
 
+    //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
+    boolean isAbstract();
+
+    default boolean isEntity() {
+        return getBeanSort().isEntity()
+                || (getBeanSort().isAbstract()
+                        && lookupFacet(EntityFacet.class).isPresent());
+    }
+
+    default boolean isViewModel() {
+        return getBeanSort().isViewModel()
+                || (getBeanSort().isAbstract()
+                        && lookupFacet(ViewModelFacet.class).isPresent());
+    }
+
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }
 
     default boolean isEntityOrViewModelOrAbstract() {
-        return isViewModel() || isEntity() || isAbstract();
-    }
-
-    default boolean isEntity() {
-        return getBeanSort().isEntity();
+        return isViewModel() || isEntity() || getBeanSort().isAbstract();
     }
 
     /**
