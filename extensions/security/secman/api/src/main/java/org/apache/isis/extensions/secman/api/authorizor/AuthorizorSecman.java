@@ -31,8 +31,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 /**
  * @since 2.0 {@index}

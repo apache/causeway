@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
         domainEvent = HasUsername_open.ActionDomainEvent.class,
         associateWith = "User" // associate with a 'User' property (if any)
         )
-@ActionLayout(sequence = "1") 
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class HasUsername_open {
 

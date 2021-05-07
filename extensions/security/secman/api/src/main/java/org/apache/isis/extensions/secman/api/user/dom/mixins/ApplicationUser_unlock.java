@@ -16,44 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
-
-import javax.inject.Inject;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.LockDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UnlockDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = LockDomainEvent.class,
+        domainEvent = UnlockDomainEvent.class,
         associateWith = "status")
-@ActionLayout(named="Disable", sequence = "2")
+@ActionLayout(
+        named="Enable", // symmetry with lock (disable)
+        sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_lock {
-
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private SecmanConfiguration configBean;
+public class ApplicationUser_unlock {
 
     private final ApplicationUser target;
 
     @MemberSupport
     public ApplicationUser act() {
-        target.setStatus(ApplicationUserStatus.DISABLED);
+        target.setStatus(ApplicationUserStatus.ENABLED);
         return target;
     }
 
     @MemberSupport
     public String disableAct() {
-        if(applicationUserRepository.isAdminUser(target)) {
-            return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
-        }
-        return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
+        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
     }
 }

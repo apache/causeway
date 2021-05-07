@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.api.role;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 /**
  * @since 2.0 {@index}

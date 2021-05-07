@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
@@ -36,16 +36,16 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    
+
     private final String username;
     private final String password;
     private final String emailAddress;
     private final String tenancyPath;
     private final AccountType accountType;
     private final Can<String> roleNames;
-    
+
     /**
-     * The {@link org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser} 
+     * The {@link org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser}
      * updated/created by the fixture.
      */
     @Getter private ApplicationUser applicationUser;
@@ -53,7 +53,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
     public AbstractUserAndRolesFixtureScript(
             final String username,
             final String password,
-            final AccountType accountType, 
+            final AccountType accountType,
             final Can<String> roleNames) {
         this(username, password, null, null, accountType, roleNames);
     }
@@ -65,7 +65,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             final String tenancyPath,
             final AccountType accountType,
             final Can<String> roleNames) {
-        
+
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
@@ -81,7 +81,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
         applicationUser = applicationUserRepository.findByUsername(username)
                 .orElse(null);
         if(applicationUser == null) {
-            
+
             switch (accountType) {
             case DELEGATED:
                 applicationUser = (ApplicationUser) applicationUserRepository
@@ -97,11 +97,11 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             if(applicationUser == null) {
                 throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", username);
             }
-            
+
             // update tenancy (repository checks for null)
             applicationUser.setAtPath(tenancyPath);
         }
-            
+
         for (final String roleName : roleNames) {
             applicationRoleRepository.findByName(roleName)
             .map(securityRole->{
@@ -110,7 +110,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             })
             .orElseThrow(()->_Exceptions.unrecoverable("role not found by name: "+roleName));
         }
-        
+
     }
 
 

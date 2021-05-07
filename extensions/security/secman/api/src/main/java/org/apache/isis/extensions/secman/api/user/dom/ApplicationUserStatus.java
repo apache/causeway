@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user;
+package org.apache.isis.extensions.secman.api.user.dom;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 

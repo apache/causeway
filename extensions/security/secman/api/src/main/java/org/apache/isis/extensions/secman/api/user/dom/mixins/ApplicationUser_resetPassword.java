@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -28,34 +27,28 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdatePasswordDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.ResetPasswordDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
-        domainEvent = UpdatePasswordDomainEvent.class,
+        domainEvent = ResetPasswordDomainEvent.class,
         associateWith = "hasPassword")
-@ActionLayout(sequence = "10")
+@ActionLayout(sequence = "20")
 @RequiredArgsConstructor
-public class ApplicationUser_updatePassword {
+public class ApplicationUser_resetPassword {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 
     private final ApplicationUser target;
 
     @MemberSupport
     public ApplicationUser act(
-            @ParameterLayout(named="Existing password")
-            final Password existingPassword,
             @ParameterLayout(named="New password")
             final Password newPassword,
-            @ParameterLayout(named="Re-enter password")
+            @ParameterLayout(named="Repeat password")
             final Password newPasswordRepeat) {
 
         applicationUserRepository.updatePassword(target, newPassword.getPassword());
@@ -68,35 +61,12 @@ public class ApplicationUser_updatePassword {
     }
 
     @MemberSupport
-    public String disableAct() {
-
-        if(!target.isForSelfOrRunAsAdministrator()) {
-            return "Can only update password for your own user account.";
-        }
-        if (!target.isHasPassword()) {
-            return "Password must be reset by administrator.";
-        }
-        return null;
-    }
-
-    @MemberSupport
     public String validateAct(
-            final Password existingPassword,
             final Password newPassword,
             final Password newPasswordRepeat) {
 
         if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
-        }
-
-        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
-
-        val encryptedPassword = target.getEncryptedPassword();
-
-        if(target.getEncryptedPassword() != null) {
-            if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
-                return "Existing password is incorrect";
-            }
         }
 
         if (!Objects.equals(newPassword, newPasswordRepeat)) {

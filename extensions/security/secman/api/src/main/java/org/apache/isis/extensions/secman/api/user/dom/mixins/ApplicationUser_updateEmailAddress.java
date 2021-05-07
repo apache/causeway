@@ -16,39 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateUsernameDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdateEmailAddressDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateUsernameDomainEvent.class,
-        associateWith = "username")
+        domainEvent = UpdateEmailAddressDomainEvent.class,
+        associateWith = "emailAddress")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateUsername {
+public class ApplicationUser_updateEmailAddress {
 
     private final ApplicationUser target;
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
-            @ParameterLayout(named="Username")
-            final String username) {
-        target.setUsername(username);
+            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
+            @ParameterLayout(named="Email")
+            final String emailAddress) {
+        target.setEmailAddress(emailAddress);
         return target;
     }
 
     @MemberSupport
     public String default0Act() {
-        return target.getUsername();
+        return target.getEmailAddress();
+    }
+
+    @MemberSupport
+    public String disableAct() {
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
 }

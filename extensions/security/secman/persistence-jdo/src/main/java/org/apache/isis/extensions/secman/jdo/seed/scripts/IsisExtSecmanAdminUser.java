@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.user.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 
 /**
  * @since 2.0 {@index}

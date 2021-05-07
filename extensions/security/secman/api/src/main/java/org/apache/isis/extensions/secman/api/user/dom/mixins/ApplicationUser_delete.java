@@ -16,45 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
+
+import java.util.Collection;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateFaxNumberDomainEvent;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateFaxNumberDomainEvent.class,
-        associateWith = "faxNumber")
+        domainEvent = DeleteDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateFaxNumber {
+public class ApplicationUser_delete {
 
-    private final ApplicationUser holder;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private RepositoryService repository;
 
-    @MemberSupport
-    public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Fax")
-            final String faxNumber) {
-        holder.setFaxNumber(faxNumber);
-        return holder;
-    }
+    private final ApplicationUser target;
 
     @MemberSupport
-    public String default0Act() {
-        return holder.getFaxNumber();
+    public Collection<? extends ApplicationUser> act() {
+        repository.removeAndFlush(target);
+        return applicationUserRepository.allUsers();
     }
 
     @MemberSupport
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
-
 }

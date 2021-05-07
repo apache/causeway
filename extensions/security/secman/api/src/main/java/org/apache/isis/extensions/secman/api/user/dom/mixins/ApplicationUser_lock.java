@@ -16,44 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateEmailAddressDomainEvent;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.LockDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateEmailAddressDomainEvent.class,
-        associateWith = "emailAddress")
-@ActionLayout(sequence = "1")
+        domainEvent = LockDomainEvent.class,
+        associateWith = "status")
+@ActionLayout(named="Disable", sequence = "2")
 @RequiredArgsConstructor
-public class ApplicationUser_updateEmailAddress {
+public class ApplicationUser_lock {
+
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private SecmanConfiguration configBean;
 
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
-            @ParameterLayout(named="Email")
-            final String emailAddress) {
-        target.setEmailAddress(emailAddress);
+    public ApplicationUser act() {
+        target.setStatus(ApplicationUserStatus.DISABLED);
         return target;
     }
 
     @MemberSupport
-    public String default0Act() {
-        return target.getEmailAddress();
-    }
-
-    @MemberSupport
     public String disableAct() {
-        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        if(applicationUserRepository.isAdminUser(target)) {
+            return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
+        }
+        return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
-
 }

@@ -52,8 +52,8 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModel;
 
 import lombok.val;
@@ -76,7 +76,7 @@ public class UserPermissionViewModel implements ViewModel {
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<UserPermissionViewModel> {}
 
     private static final int TYPICAL_LENGTH_VERB = 12;
-    
+
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
@@ -84,15 +84,15 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- constructors, factory methods
     public static UserPermissionViewModel newViewModel(
-            final ApplicationFeatureId featureId, 
-            final ApplicationUser user, 
-            final ApplicationPermissionValueSet.Evaluation viewingEvaluation, 
-            final ApplicationPermissionValueSet.Evaluation changingEvaluation, 
+            final ApplicationFeatureId featureId,
+            final ApplicationUser user,
+            final ApplicationPermissionValueSet.Evaluation viewingEvaluation,
+            final ApplicationPermissionValueSet.Evaluation changingEvaluation,
             final FactoryService factory) {
 
         return factory
                 .viewModel(
-                        UserPermissionViewModel.class, 
+                        UserPermissionViewModel.class,
                         asEncodedString(featureId, user.getUsername(), viewingEvaluation, changingEvaluation));
     }
 
@@ -144,21 +144,21 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationFeatureId changingEvaluationCauseFeatureId = changingEvaluationCause != null? changingEvaluationCause.getFeatureId(): null;
 
         return join(
-        username, 
-        
+        username,
+
         viewingEvaluationGranted,
         viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getSort(): "",
         viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
         viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
         viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
-        
+
         changingEvaluationGranted,
         changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getSort(): "",
         changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
         changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
         changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
-        
-        featureId.getSort(), 
+
+        featureId.getSort(),
         featureId.getFullyQualifiedName()
         );
     }
@@ -185,7 +185,7 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationFeatureSort viewingEvaluationFeatureIdType =  !viewingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(viewingEvaluationCauseFeatureIdType) : null;
         final String viewingEvaluationFeatureFqn = iterator.next();
         this.viewingFeatureId = viewingEvaluationFeatureIdType != null
-                ? ApplicationFeatureId.newFeature(viewingEvaluationFeatureIdType, viewingEvaluationFeatureFqn) 
+                ? ApplicationFeatureId.newFeature(viewingEvaluationFeatureIdType, viewingEvaluationFeatureFqn)
                 : null;
 
         final String viewingEvaluationCauseRule = iterator.next();
@@ -199,7 +199,7 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationFeatureSort changingEvaluationFeatureIdType =  !changingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(changingEvaluationCauseFeatureIdType) : null;
         final String changingEvaluationFeatureFqn = iterator.next();
         this.changingFeatureId = changingEvaluationFeatureIdType != null
-                ? ApplicationFeatureId.newFeature(changingEvaluationFeatureIdType, changingEvaluationFeatureFqn) 
+                ? ApplicationFeatureId.newFeature(changingEvaluationFeatureIdType, changingEvaluationFeatureFqn)
                 : null;
 
         final String changingEvaluationCauseRule = iterator.next();
@@ -371,7 +371,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- toString
 
-    private static final ToString<UserPermissionViewModel> toString = 
+    private static final ToString<UserPermissionViewModel> toString =
             ObjectContracts
             .toString("user", UserPermissionViewModel::getUser)
             .thenToString("featureId", UserPermissionViewModel::getFeatureId);
@@ -384,7 +384,7 @@ public class UserPermissionViewModel implements ViewModel {
     // -- Factory
 
     public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(
-            final ApplicationUser user, 
+            final ApplicationUser user,
             final FactoryService factoryService) {
 
         return (final ApplicationFeature feature) -> {
@@ -393,10 +393,10 @@ public class UserPermissionViewModel implements ViewModel {
             val viewingEvaluation = permissionSet.evaluate(feature.getFeatureId(), ApplicationPermissionMode.VIEWING);
             return UserPermissionViewModel
                     .newViewModel(
-                            feature.getFeatureId(), 
-                            user, 
-                            viewingEvaluation, 
-                            changingEvaluation, 
+                            feature.getFeatureId(),
+                            user,
+                            viewingEvaluation,
+                            changingEvaluation,
                             factoryService);
         };
     }

@@ -16,43 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
-
-import java.util.Collection;
-
-import javax.inject.Inject;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.DeleteDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdatePhoneNumberDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+        domainEvent = UpdatePhoneNumberDomainEvent.class,
+        associateWith = "phoneNumber")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_delete {
-
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private RepositoryService repository;
+public class ApplicationUser_updatePhoneNumber {
 
     private final ApplicationUser target;
 
     @MemberSupport
-    public Collection<? extends ApplicationUser> act() {
-        repository.removeAndFlush(target);
-        return applicationUserRepository.allUsers();
+    public ApplicationUser act(
+            @ParameterLayout(named="Phone")
+            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
+            final String phoneNumber) {
+        target.setPhoneNumber(phoneNumber);
+        return target;
     }
 
     @MemberSupport
     public String disableAct() {
-        return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+    }
+
+    @MemberSupport
+    public String default0Act() {
+        return target.getPhoneNumber();
     }
 }

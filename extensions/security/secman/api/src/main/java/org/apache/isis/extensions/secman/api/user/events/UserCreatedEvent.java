@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user;
+package org.apache.isis.extensions.secman.api.user.events;
 
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 import lombok.NonNull;
 import lombok.Value;

@@ -31,9 +31,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.DeleteDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_updateAtPath;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateAtPath;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

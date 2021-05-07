@@ -28,10 +28,10 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_updateEmailAddress;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateEmailAddress;
 
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,

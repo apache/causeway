@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import java.util.Collection;
 
@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.AddRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.AddRoleDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

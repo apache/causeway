@@ -31,8 +31,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.val;
 
@@ -52,7 +52,7 @@ public class ApplicationUserMenu {
     //@Inject private SecurityRealmService securityRealmService;
     @Inject private FactoryService factory;
 
-    public static abstract class PropertyDomainEvent<T> 
+    public static abstract class PropertyDomainEvent<T>
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUserMenu, T> {
     }
 
@@ -60,7 +60,7 @@ public class ApplicationUserMenu {
     extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUserMenu, T> {
     }
 
-    public static abstract class ActionDomainEvent 
+    public static abstract class ActionDomainEvent
     extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserMenu> {
     }
 
@@ -81,10 +81,10 @@ public class ApplicationUserMenu {
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
     }
-    
+
     public static class ApplicationUserManagerDomainEvent extends ActionDomainEvent {
     }
-    
+
     @Action(
             domainEvent = ApplicationUserManagerDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
@@ -115,7 +115,7 @@ public class ApplicationUserMenu {
 //            @Parameter(optionality = Optionality.OPTIONAL)
 //            @ParameterLayout(named = "Enabled?")
 //            final Boolean enabled) {
-//        
+//
 //        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
 //        val newDelegateUserMixin = factory.mixin(
 //                ApplicationUserManager_newDelegateUser.class, applicationUserManager);
@@ -157,7 +157,7 @@ public class ApplicationUserMenu {
 //            @Parameter(optionality = Optionality.OPTIONAL)
 //            @ParameterLayout(named = "Email Address")
 //            final String emailAddress) {
-//        
+//
 //        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
 //        val newLocalUserMixin = factory.mixin(
 //                ApplicationUserManager_newLocalUser.class, applicationUserManager);
@@ -171,11 +171,11 @@ public class ApplicationUserMenu {
 //            final ApplicationRole initialRole,
 //            final Boolean enabled,
 //            final String emailAddress) {
-//        
+//
 //        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
 //        val newLocalUserMixin = factory.mixin(
 //                ApplicationUserManager_newLocalUser.class, applicationUserManager);
-//        
+//
 //        return newLocalUserMixin.doValidate(
 //                username, password, passwordRepeat, initialRole, enabled, emailAddress);
 //    }

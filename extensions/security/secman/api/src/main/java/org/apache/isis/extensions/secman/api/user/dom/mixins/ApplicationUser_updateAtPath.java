@@ -16,36 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UnlockDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdateAtPathDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UnlockDomainEvent.class,
-        associateWith = "status")
-@ActionLayout(
-        named="Enable", // symmetry with lock (disable)
-        sequence = "1")
+        domainEvent = UpdateAtPathDomainEvent.class,
+        associateWith = "atPath")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_unlock {
+public class ApplicationUser_updateAtPath {
 
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act() {
-        target.setStatus(ApplicationUserStatus.ENABLED);
+    public ApplicationUser act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(named = "AtPath")
+            final String atPath) {
+        target.setAtPath(atPath);
         return target;
     }
 
     @MemberSupport
-    public String disableAct() {
-        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
+    public String default0Act() {
+        return target.getAtPath();
     }
+
+
 }

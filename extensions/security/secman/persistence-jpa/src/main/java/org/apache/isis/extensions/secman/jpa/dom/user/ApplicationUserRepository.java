@@ -42,13 +42,13 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.user.UserCreatedEvent;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.events.UserCreatedEvent;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_lock;
-import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_unlock;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unlock;
 
 import lombok.NonNull;
 import lombok.val;
@@ -56,7 +56,7 @@ import lombok.val;
 @Service
 @Named("isis.ext.secman.ApplicationUserRepository")
 public class ApplicationUserRepository
-implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<ApplicationUser> {
+implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository<ApplicationUser> {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
@@ -175,7 +175,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- UPDATE USER STATE
 
     @Override
-    public void enable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+    public void enable(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.ENABLED) {
              factoryService.mixin(ApplicationUser_unlock.class, user)
              .act();
@@ -183,7 +183,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     }
 
     @Override
-    public void disable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+    public void disable(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.DISABLED) {
             factoryService.mixin(ApplicationUser_lock.class, user)
             .act();
@@ -191,7 +191,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     }
 
     @Override
-    public boolean isAdminUser(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+    public boolean isAdminUser(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
         return configBean.getAdminUserName().equals(user.getName());
     }
 
@@ -219,7 +219,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public boolean updatePassword(
-            final org.apache.isis.extensions.secman.api.user.ApplicationUser user,
+            final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user,
             final String password) {
         // in case called programmatically
         if(!isPasswordFeatureEnabled(user)) {
@@ -232,7 +232,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     }
 
     @Override
-    public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+    public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
         return user.isLocalAccount()
                 /*sonar-ignore-on*/
                 && passwordEncryptionService!=null // if for any reason injection fails

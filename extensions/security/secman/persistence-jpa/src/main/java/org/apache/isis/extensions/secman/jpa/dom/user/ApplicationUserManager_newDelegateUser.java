@@ -23,43 +23,43 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.NewDelegateUserDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewDelegateUserDomainEvent;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = NewDelegateUserDomainEvent.class, 
+        domainEvent = NewDelegateUserDomainEvent.class,
         associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newDelegateUser
 extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_newDelegateUser<ApplicationRole>{
-    
+
     private final ApplicationUserManager target;
-    
+
     @MemberSupport
     public ApplicationUserManager act(
-            
+
           @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
           @ParameterLayout(named = "Name")
           final String username,
-            
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Initial role")
           final ApplicationRole initialRole,
-            
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Enabled?")
           final Boolean enabled
-            
+
             ) {
-        
+
         super.doAct(username, initialRole, enabled);
         return target;
     }
-    
+
     @MemberSupport
     public boolean hideAct() {
         return super.doHide();

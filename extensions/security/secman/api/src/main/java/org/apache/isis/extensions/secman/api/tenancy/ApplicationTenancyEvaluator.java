@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.tenancy;
 
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 /**
  * Optional SPI interface to be implemented by a domain service, providing an alternative mechanism for evaluating the

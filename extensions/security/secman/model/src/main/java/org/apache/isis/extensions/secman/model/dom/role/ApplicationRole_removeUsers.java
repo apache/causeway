@@ -30,8 +30,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.RemoveUserDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,32 +41,32 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationRole_removeUsers {
-    
+
     @Inject private MessageService messageService;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+
     private final ApplicationRole target;
 
     @MemberSupport
     public ApplicationRole act(Collection<ApplicationUser> users) {
-        
+
         _NullSafe.stream(users)
         .filter(this::canRemove)
         .forEach(user->applicationRoleRepository.removeRoleFromUser(target, user));
 
         return target;
     }
-    
+
     public boolean canRemove(ApplicationUser applicationUser) {
-        if(applicationUserRepository.isAdminUser(applicationUser) 
+        if(applicationUserRepository.isAdminUser(applicationUser)
                 && applicationRoleRepository.isAdminRole(target)) {
             messageService.warnUser("Cannot remove admin user from the admin role.");
             return false;
         }
         return true;
     }
-    
-    
-    
+
+
+
 }

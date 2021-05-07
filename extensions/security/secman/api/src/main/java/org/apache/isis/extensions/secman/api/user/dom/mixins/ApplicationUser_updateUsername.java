@@ -16,48 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
-
-import javax.inject.Inject;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdateUsernameDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateAccountTypeDomainEvent.class,
-        associateWith = "accountType")
+        domainEvent = UpdateUsernameDomainEvent.class,
+        associateWith = "username")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateAccountType {
-
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+public class ApplicationUser_updateUsername {
 
     private final ApplicationUser target;
 
     @MemberSupport
     public ApplicationUser act(
-            final AccountType accountType) {
-        target.setAccountType(accountType);
+            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
+            @ParameterLayout(named="Username")
+            final String username) {
+        target.setUsername(username);
         return target;
     }
 
     @MemberSupport
-    public String disableAct() {
-        return applicationUserRepository.isAdminUser(target)
-                ? "Cannot change account type for admin user"
-                        : null;
-    }
-
-    @MemberSupport
-    public AccountType default0Act() {
-        return target.getAccountType();
+    public String default0Act() {
+        return target.getUsername();
     }
 
 }

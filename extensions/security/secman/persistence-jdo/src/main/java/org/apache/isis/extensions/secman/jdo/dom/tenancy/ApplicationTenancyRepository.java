@@ -167,7 +167,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     @Override
     public void setTenancyOnUser(
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
@@ -176,7 +176,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public void clearTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to remove from users set, since will be done by JDO/DN.
         user.setAtPath(null);

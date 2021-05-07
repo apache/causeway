@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 import lombok.Getter;
 import lombok.val;

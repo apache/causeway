@@ -26,24 +26,24 @@ import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.val;
 
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types 
- * and the ApplicationRole here is just an interface that the framework has not much 
+ * since action's type parameters are inspected for their compile time types
+ * and the ApplicationRole here is just an interface that the framework has not much
  * meta-model information to derive UI behavior from.
- * 
+ *
  * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses. 
- * 
+ * overridden with the concrete subclasses.
+ *
  */
 public abstract class ApplicationUserManager_newDelegateUser<R extends ApplicationRole> {
-    
+
     @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
@@ -54,7 +54,7 @@ public abstract class ApplicationUserManager_newDelegateUser<R extends Applicati
           final String username,
           final R initialRole,
           final Boolean enabled) {
-        
+
         final ApplicationUser user = applicationUserRepository
                 .newDelegateUser(username, ApplicationUserStatus.parse(enabled));
 
@@ -64,7 +64,7 @@ public abstract class ApplicationUserManager_newDelegateUser<R extends Applicati
         repository.persist(user);
         return user;
     }
-    
+
     protected boolean doHide() {
         return hasNoDelegateAuthenticationRealm();
     }
@@ -74,12 +74,12 @@ public abstract class ApplicationUserManager_newDelegateUser<R extends Applicati
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);
     }
-    
+
     // -- HELPER
-    
+
     private boolean hasNoDelegateAuthenticationRealm() {
         val realm = securityRealmService.getCurrentRealm();
-        return realm == null 
+        return realm == null
                 || !realm.getCharacteristics()
                     .contains(SecurityRealmCharacteristic.DELEGATING);
     }

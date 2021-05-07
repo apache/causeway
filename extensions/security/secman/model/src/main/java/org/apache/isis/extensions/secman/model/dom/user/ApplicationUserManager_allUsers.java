@@ -22,25 +22,25 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types 
- * and the ApplicationRole here is just an interface that the framework has not much 
+ * since action's type parameters are inspected for their compile time types
+ * and the ApplicationRole here is just an interface that the framework has not much
  * meta-model information to derive UI behavior from.
- * 
+ *
  * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses. 
- * 
+ * overridden with the concrete subclasses.
+ *
  */
 public abstract class ApplicationUserManager_allUsers<U extends ApplicationUser> {
-    
+
     @Inject private ApplicationUserRepository<U> applicationUserRepository;
-    
+
     protected Collection<U> doColl() {
-        return applicationUserRepository.allUsers();        
+        return applicationUserRepository.allUsers();
     }
 
 

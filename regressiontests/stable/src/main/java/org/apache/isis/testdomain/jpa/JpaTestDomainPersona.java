@@ -26,9 +26,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
@@ -40,7 +40,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWitho
 
 import lombok.val;
 
-public enum JpaTestDomainPersona 
+public enum JpaTestDomainPersona
 implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
     PurgeAll {
@@ -61,11 +61,11 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                     .forEach(repository::remove);
 
                 }
-                
+
                 @Inject private RepositoryService repository;
 
             };
-        }    
+        }
     },
 
     InventoryWith1Book {
@@ -84,17 +84,17 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                     val inventory = new JpaInventory("Sample Inventory", products);
                     repository.persist(inventory);
-                    
+
                     return inventory;
 
                 }
-                
+
                 @Inject private RepositoryService repository;
 
             };
-        }    
+        }
     },
-    
+
     SvenApplicationUser {
         @Override
         public BuilderScriptAbstract<?> builder() {
@@ -111,21 +111,21 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                         svenUser = applicationUserRepository
                                 .newDelegateUser(username, ApplicationUserStatus.ENABLED);
                         applicationRoleRepository.addRoleToUser(regularUserRole, svenUser);
-                        
+
                     } else {
                         applicationUserRepository.enable(svenUser);
                     }
-                    
+
                 }
-                
+
                 @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
                 @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
                 @Inject private SecmanConfiguration securityConfig;
 
             };
-        }    
-        
-        
+        }
+
+
     },
 
 

@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.api.tenancy;
 
 import java.util.Collection;
 
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 /**
  * @since 2.0 {@index}

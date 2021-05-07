@@ -41,19 +41,19 @@ import lombok.val;
 
 @Service
 @Named("isis.ext.secman.ApplicationTenancyRepository")
-public class ApplicationTenancyRepository 
+public class ApplicationTenancyRepository
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository<ApplicationTenancy> {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
-    
+
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-    
+
     @Override
     public ApplicationTenancy newApplicationTenancy() {
         return factory.detachedEntity(new ApplicationTenancy());
     }
-    
+
     // -- findByNameOrPathMatching
 
     @Override
@@ -140,7 +140,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         return tenancy;
     }
 
-    // -- 
+    // --
 
     @Override
     public Collection<ApplicationTenancy> allTenancies() {
@@ -158,20 +158,20 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
                 .map(ApplicationTenancy.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-    
+
     @Override
     public void setTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy, 
-            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
         user.setAtPath(tenancy.getPath());
     }
-    
+
     @Override
     public void clearTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to remove from users set, since will be done by JDO/DN.
         user.setAtPath(null);

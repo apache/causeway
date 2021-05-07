@@ -51,8 +51,8 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
@@ -119,7 +119,7 @@ import lombok.val;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationUser implements Comparable<ApplicationUser>,
-org.apache.isis.extensions.secman.api.user.ApplicationUser {
+        org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
@@ -145,7 +145,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             )
     @PropertyLayout(
             hidden=Where.OBJECT_FORMS,
-            fieldSetId="Id", 
+            fieldSetId="Id",
             sequence = "1")
     public String getName() {
         final StringBuilder buf = new StringBuilder();
@@ -177,7 +177,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             )
     @PropertyLayout(
             hidden=Where.PARENTED_TABLES,
-            fieldSetId="Id", 
+            fieldSetId="Id",
             sequence = "1")
     @Getter @Setter
     private String username;
@@ -213,7 +213,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             )
     @PropertyLayout(
             hidden=Where.ALL_TABLES,
-            fieldSetId="Name", 
+            fieldSetId="Name",
             sequence = "2.2")
     @Getter @Setter
     private String givenName;
@@ -277,7 +277,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             )
     @PropertyLayout(
             hidden=Where.PARENTED_TABLES,
-            fieldSetId="Contact Details", 
+            fieldSetId="Contact Details",
             sequence = "3.3")
     @Getter @Setter
     private String faxNumber;

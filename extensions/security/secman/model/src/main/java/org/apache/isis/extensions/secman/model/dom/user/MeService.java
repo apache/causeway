@@ -31,8 +31,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 /**
  * @since 2.0 {@index}
@@ -69,10 +69,10 @@ public class MeService {
     @ActionLayout(
             cssClassFa = "fa-user",
             describedAs = "Looks up ApplicationUser entity corresponding to your user account",
-            //group = "Security", 
-            sequence = "100" 
+            //group = "Security",
+            sequence = "100"
             )
-    
+
     public ApplicationUser me() {
         return queryResultsCacheProvider.get().execute(new Callable<ApplicationUser>() {
             @Override

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.mixins;
+package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -24,33 +24,37 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAtPathDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdateFaxNumberDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateAtPathDomainEvent.class,
-        associateWith = "atPath")
+        domainEvent = UpdateFaxNumberDomainEvent.class,
+        associateWith = "faxNumber")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateAtPath {
+public class ApplicationUser_updateFaxNumber {
 
-    private final ApplicationUser target;
+    private final ApplicationUser holder;
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "AtPath")
-            final String atPath) {
-        target.setAtPath(atPath);
-        return target;
+            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
+            @ParameterLayout(named="Fax")
+            final String faxNumber) {
+        holder.setFaxNumber(faxNumber);
+        return holder;
     }
 
     @MemberSupport
     public String default0Act() {
-        return target.getAtPath();
+        return holder.getFaxNumber();
     }
 
+    @MemberSupport
+    public String disableAct() {
+        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+    }
 
 }

@@ -24,51 +24,51 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.NewLocalUserDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewLocalUserDomainEvent;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = NewLocalUserDomainEvent.class, 
+        domainEvent = NewLocalUserDomainEvent.class,
         associateWith = "allUsers")
 @RequiredArgsConstructor
-public class ApplicationUserManager_newLocalUser 
+public class ApplicationUserManager_newLocalUser
 extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_newLocalUser<ApplicationRole> {
-    
+
     private final ApplicationUserManager target;
-    
+
     @MemberSupport
     public ApplicationUserManager act(
           @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
           @ParameterLayout(named = "Name")
           final String username,
-          
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Password")
           final Password password,
-          
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Repeat password")
           final Password passwordRepeat,
-          
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Initial role")
           final ApplicationRole initialRole,
-          
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Enabled?")
           final Boolean enabled,
-          
+
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Email Address")
           final String emailAddress) {
         super.doAct(username, password, passwordRepeat, initialRole, enabled, emailAddress);
         return target;
     }
-    
+
     @MemberSupport
     public String validateAct(
             final String username,
@@ -77,10 +77,10 @@ extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_
             final ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
-        
+
         return super.doValidate(username, newPassword, newPasswordRepeat, initialRole, enabled, emailAddress);
     }
-    
+
     @MemberSupport
     public ApplicationRole default3Act() {
         return super.doDefault3();

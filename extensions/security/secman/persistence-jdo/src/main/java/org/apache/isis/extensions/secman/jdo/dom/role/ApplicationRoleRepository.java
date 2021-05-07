@@ -124,7 +124,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     @Override
     public void addRoleToUser(
             org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
-            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
@@ -135,7 +135,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     @Override
     public void removeRoleFromUser(
             org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
-            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
@@ -165,7 +165,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public Collection<ApplicationRole> getRoles(
-            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         return user.getRoles();
     }

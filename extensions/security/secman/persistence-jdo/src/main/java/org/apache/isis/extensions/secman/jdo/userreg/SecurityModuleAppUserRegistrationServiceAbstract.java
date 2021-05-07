@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
@@ -40,7 +40,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    
+
     @Override
     public boolean usernameExists(final String username) {
         return applicationUserRepository.findByUsername(username).isPresent();
@@ -52,19 +52,19 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
         final Password password = new Password(userDetails.getPassword());
         final ApplicationRole initialRole = getInitialRole();
-        
+
         final String username = userDetails.getUsername();
         final String emailAddress = userDetails.getEmailAddress();
         final ApplicationUser applicationUser = (ApplicationUser) applicationUserRepository
                 .newLocalUser(username, password, ApplicationUserStatus.ENABLED);
-        
+
         if(_Strings.isNotEmpty(emailAddress)) {
             applicationUser.setEmailAddress(emailAddress);
         }
         if(initialRole!=null) {
             applicationRoleRepository.addRoleToUser(initialRole, applicationUser);
         }
-        
+
         final Set<ApplicationRole> additionalRoles = getAdditionalInitialRoles();
         if(additionalRoles != null) {
             for (final ApplicationRole additionalRole : additionalRoles) {
@@ -99,5 +99,5 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
      * @return Additional roles for newly created local users
      */
     protected abstract Set<ApplicationRole> getAdditionalInitialRoles();
-    
+
 }

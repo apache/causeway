@@ -28,34 +28,34 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveUserDomainEvent.class, 
+        domainEvent = RemoveUserDomainEvent.class,
         associateWith = "users")
 @ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
-    
+
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+
     private final ApplicationTenancy target;
-    
+
     @MemberSupport
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.clearTenancyOnUser(applicationUser);
         return target;
     }
-    
+
     @MemberSupport
     public Collection<? extends ApplicationUser> choices0Act() {
         return applicationUserRepository.findByTenancy(target);
     }
-    
+
     @MemberSupport
     public String disableAct() {
         return choices0Act().isEmpty()? "No users to remove": null;

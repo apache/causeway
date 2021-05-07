@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
 
 import lombok.RequiredArgsConstructor;
@@ -59,18 +59,18 @@ public class ApplicationUser_filterPermissions {
 
     @MemberSupport
     public List<UserPermissionViewModel> act(
-            
+
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
                     named = "Feature",
                     describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
             final ApplicationFeatureChoices.AppFeat feature) {
-        
+
         val featureId = feature.getFeatureId();
-        
+
         final String namespace = featureId.getNamespace();
         final String typeSimpleName = featureId.getTypeSimpleName();
-        
+
         val allMembers = featureRepository.allMembers();
         val filtered = _Lists.filter(allMembers, within(namespace, typeSimpleName));
         return asViewModels(filtered);
@@ -81,7 +81,7 @@ public class ApplicationUser_filterPermissions {
             final @MinLength(3) String search) {
         return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
     }
-    
+
     // -- HELPER XXX left over from refactoring, could be simplified ..
 
     private static Predicate<ApplicationFeature> within(final String namespace, final String logicalTypeSimpleName) {
@@ -95,7 +95,7 @@ public class ApplicationUser_filterPermissions {
             }
 
             // match on class (if specified)
-            return logicalTypeSimpleName == null 
+            return logicalTypeSimpleName == null
                     || Objects.equals(inputFeatureId.getTypeSimpleName(), logicalTypeSimpleName);
         };
     }
