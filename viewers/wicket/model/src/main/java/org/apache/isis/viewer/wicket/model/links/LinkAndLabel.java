@@ -72,7 +72,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
 
     public static List<LinkAndLabel> recoverFromIncompleteDeserialization(List<SerializationProxy> proxies) {
         return proxies.stream()
-                .map(SerializationProxy::readResolve)
+                .map(SerializationProxy::restore)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -88,11 +88,11 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
 
     private static class SerializationProxy implements Serializable {
         private static final long serialVersionUID = 1L;
-        @NonNull  private final ActionLinkUiComponentFactoryWkt uiComponentFactory;
-        @Nullable private final String named;
-        @NonNull  private final EntityModel actionHolder;
-        @NonNull  private final LogicalType actionHolderLogicalType;
-        @NonNull  private final String objectActionId;
+        private final @NonNull ActionLinkUiComponentFactoryWkt uiComponentFactory;
+        private final @Nullable String named;
+        private final @NonNull EntityModel actionHolder;
+        private final @NonNull LogicalType actionHolderLogicalType;
+        private final @NonNull String objectActionId;
 
         private SerializationProxy(LinkAndLabel target) {
             this.uiComponentFactory = target.uiComponentFactory;
@@ -104,7 +104,11 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             this.objectActionId = target.getObjectAction().getId();
         }
 
-        private LinkAndLabel readResolve() {
+        private Object readResolve() {
+            return restore();
+        }
+
+        private LinkAndLabel restore() {
             val commonContext = CommonContextUtils.getCommonContext();
             val objectMember = commonContext.getSpecificationLoader()
             .specForLogicalType(actionHolderLogicalType)
@@ -113,6 +117,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
                 _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
             return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
         }
+
     }
 
 }
