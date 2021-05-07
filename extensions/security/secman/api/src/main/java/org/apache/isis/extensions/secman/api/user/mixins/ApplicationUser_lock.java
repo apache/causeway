@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import javax.inject.Inject;
 
@@ -32,15 +32,15 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = LockDomainEvent.class, 
+        domainEvent = LockDomainEvent.class,
         associateWith = "status")
 @ActionLayout(named="Disable", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
-    
+
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
-    
+
     private final ApplicationUser target;
 
     @MemberSupport
@@ -48,7 +48,7 @@ public class ApplicationUser_lock {
         target.setStatus(ApplicationUserStatus.DISABLED);
         return target;
     }
-    
+
     @MemberSupport
     public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {

@@ -16,44 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateEmailAddressDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UnlockDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateEmailAddressDomainEvent.class, 
-        associateWith = "emailAddress")
-@ActionLayout(sequence = "1")
+        domainEvent = UnlockDomainEvent.class,
+        associateWith = "status")
+@ActionLayout(
+        named="Enable", // symmetry with lock (disable)
+        sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateEmailAddress {
-    
+public class ApplicationUser_unlock {
+
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
-            @ParameterLayout(named="Email")
-            final String emailAddress) {
-        target.setEmailAddress(emailAddress);
+    public ApplicationUser act() {
+        target.setStatus(ApplicationUserStatus.ENABLED);
         return target;
     }
 
     @MemberSupport
-    public String default0Act() {
-        return target.getEmailAddress();
-    }
-
-    @MemberSupport
     public String disableAct() {
-        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
     }
-
 }

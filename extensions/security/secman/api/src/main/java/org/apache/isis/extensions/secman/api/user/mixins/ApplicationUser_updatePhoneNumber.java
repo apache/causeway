@@ -16,36 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UnlockDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdatePhoneNumberDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UnlockDomainEvent.class, 
-        associateWith = "status")
-@ActionLayout(
-        named="Enable", // symmetry with lock (disable)
-        sequence = "1")
+        domainEvent = UpdatePhoneNumberDomainEvent.class,
+        associateWith = "phoneNumber")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_unlock {
-    
+public class ApplicationUser_updatePhoneNumber {
+
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act() {
-        target.setStatus(ApplicationUserStatus.ENABLED);
+    public ApplicationUser act(
+            @ParameterLayout(named="Phone")
+            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
+            final String phoneNumber) {
+        target.setPhoneNumber(phoneNumber);
         return target;
     }
-    
+
     @MemberSupport
     public String disableAct() {
-        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+    }
+
+    @MemberSupport
+    public String default0Act() {
+        return target.getPhoneNumber();
     }
 }

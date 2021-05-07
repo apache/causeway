@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import java.util.Collection;
 
@@ -24,40 +24,35 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.AddRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
-        domainEvent = AddRoleDomainEvent.class, 
-        associateWith = "roles")
-@ActionLayout(named="Add", sequence = "1")
+        domainEvent = DeleteDomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_addRole {
-    
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    
+public class ApplicationUser_delete {
+
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private RepositoryService repository;
+
     private final ApplicationUser target;
 
-    public ApplicationUser act(final ApplicationRole role) {
-        applicationRoleRepository.addRoleToUser(role, target);
-        return target;
+    @MemberSupport
+    public Collection<? extends ApplicationUser> act() {
+        repository.removeAndFlush(target);
+        return applicationUserRepository.allUsers();
     }
 
-    public Collection<? extends ApplicationRole> choices0Act() {
-        val allRoles = applicationRoleRepository.allRoles();
-        val applicationRoles = _Sets.newTreeSet(allRoles);
-        applicationRoles.removeAll(target.getRoles());
-        return applicationRoles;
-    }
-
+    @MemberSupport
     public String disableAct() {
-        return choices0Act().isEmpty()? "All roles added": null;
+        return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
-
 }

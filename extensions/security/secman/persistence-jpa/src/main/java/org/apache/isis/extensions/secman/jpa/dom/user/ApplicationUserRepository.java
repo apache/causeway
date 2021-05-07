@@ -47,8 +47,8 @@ import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
+import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_lock;
+import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_unlock;
 
 import lombok.NonNull;
 import lombok.val;

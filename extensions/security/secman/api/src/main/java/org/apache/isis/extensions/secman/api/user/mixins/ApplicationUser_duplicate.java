@@ -16,60 +16,53 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
-
-import java.util.Collection;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.RemoveRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UserDuplicateDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveRoleDomainEvent.class, 
-        associateWith = "roles")
-@ActionLayout(named="Remove", sequence = "2")
+        domainEvent = UserDuplicateDomainEvent.class
+        )
 @RequiredArgsConstructor
-public class ApplicationUser_removeRoles {
-    
-    @Inject private MessageService messageService;
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+public class ApplicationUser_duplicate {
+
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+
     private final ApplicationUser target;
 
-    
     @MemberSupport
-    public ApplicationUser act(Collection<ApplicationRole> roles) {
-        
-        _NullSafe.stream(roles)
-        .filter(this::canRemove)
-        .forEach(role->applicationRoleRepository.removeRoleFromUser(role, target));
-        
-        return target;
+    public ApplicationUser act(
+            @Parameter(optionality = Optionality.MANDATORY)
+            final String username,
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final String emailAddress) {
+
+        return applicationUserRepository
+                .newUser(username, target.getAccountType(), user->{
+
+                    user.setStatus(ApplicationUserStatus.DISABLED);
+                    user.setEmailAddress(emailAddress);
+
+                    for (ApplicationRole role : target.getRoles()) {
+                        applicationRoleRepository.addRoleToUser(role, user);
+                    }
+
+                });
+
     }
 
-    // same logic in ApplicationRole_removeUsers
-    public boolean canRemove(
-            final ApplicationRole applicationRole) {
-        
-        if(applicationUserRepository.isAdminUser(target) 
-                && applicationRoleRepository.isAdminRole(applicationRole)) {
-            messageService.warnUser("Cannot remove admin user from the admin role.");
-            return false;
-        }
-        return true;
-    }
-     
-    
 }

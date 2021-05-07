@@ -33,18 +33,18 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.DeleteDo
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateAtPath;
+import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_updateAtPath;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Action(domainEvent = 
-        DeleteDomainEvent.class, 
+@Action(domainEvent =
+        DeleteDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_delete {
-    
+
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factoryService;
@@ -52,7 +52,7 @@ public class ApplicationTenancy_delete {
 
     private final ApplicationTenancy target;
 
-    
+
     @MemberSupport
     public Collection<? extends ApplicationTenancy> act() {
         for (val user : applicationUserRepository.findByTenancy(target)) {

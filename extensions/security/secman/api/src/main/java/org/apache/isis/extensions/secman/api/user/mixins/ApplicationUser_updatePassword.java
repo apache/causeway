@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -38,15 +38,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = UpdatePasswordDomainEvent.class, 
+        domainEvent = UpdatePasswordDomainEvent.class,
         associateWith = "hasPassword")
 @ActionLayout(sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
-    
+
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
-    
+
     private final ApplicationUser target;
 
     @MemberSupport
@@ -57,7 +57,7 @@ public class ApplicationUser_updatePassword {
             final Password newPassword,
             @ParameterLayout(named="Re-enter password")
             final Password newPasswordRepeat) {
-        
+
         applicationUserRepository.updatePassword(target, newPassword.getPassword());
         return target;
     }
@@ -90,9 +90,9 @@ public class ApplicationUser_updatePassword {
         }
 
         val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
-        
+
         val encryptedPassword = target.getEncryptedPassword();
-        
+
         if(target.getEncryptedPassword() != null) {
             if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
                 return "Existing password is incorrect";
@@ -105,6 +105,6 @@ public class ApplicationUser_updatePassword {
 
         return null;
     }
-    
+
 
 }

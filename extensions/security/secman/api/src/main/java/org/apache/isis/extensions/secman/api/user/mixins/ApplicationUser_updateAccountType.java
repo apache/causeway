@@ -16,44 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdatePhoneNumberDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdatePhoneNumberDomainEvent.class, 
-        associateWith = "phoneNumber")
+        domainEvent = UpdateAccountTypeDomainEvent.class,
+        associateWith = "accountType")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updatePhoneNumber {
-    
+public class ApplicationUser_updateAccountType {
+
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+
     private final ApplicationUser target;
 
     @MemberSupport
     public ApplicationUser act(
-            @ParameterLayout(named="Phone")
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
-            final String phoneNumber) {
-        target.setPhoneNumber(phoneNumber);
+            final AccountType accountType) {
+        target.setAccountType(accountType);
         return target;
     }
 
     @MemberSupport
     public String disableAct() {
-        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return applicationUserRepository.isAdminUser(target)
+                ? "Cannot change account type for admin user"
+                        : null;
     }
-    
+
     @MemberSupport
-    public String default0Act() {
-        return target.getPhoneNumber();
+    public AccountType default0Act() {
+        return target.getAccountType();
     }
+
 }

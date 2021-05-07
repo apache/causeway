@@ -16,48 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.api.user.AccountType;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.AddRoleDomainEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
-        domainEvent = UpdateAccountTypeDomainEvent.class, 
-        associateWith = "accountType")
-@ActionLayout(sequence = "1")
+        domainEvent = AddRoleDomainEvent.class,
+        associateWith = "roles")
+@ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationUser_updateAccountType {
-    
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+public class ApplicationUser_addRole {
+
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
-            final AccountType accountType) {
-        target.setAccountType(accountType);
+    public ApplicationUser act(final ApplicationRole role) {
+        applicationRoleRepository.addRoleToUser(role, target);
         return target;
     }
-    
-    @MemberSupport
-    public String disableAct() {
-        return applicationUserRepository.isAdminUser(target)
-                ? "Cannot change account type for admin user"
-                        : null;
+
+    public Collection<? extends ApplicationRole> choices0Act() {
+        val allRoles = applicationRoleRepository.allRoles();
+        val applicationRoles = _Sets.newTreeSet(allRoles);
+        applicationRoles.removeAll(target.getRoles());
+        return applicationRoles;
     }
-    
-    @MemberSupport
-    public AccountType default0Act() {
-        return target.getAccountType();
+
+    public String disableAct() {
+        return choices0Act().isEmpty()? "All roles added": null;
     }
 
 }

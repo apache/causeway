@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import java.util.Objects;
 
@@ -34,14 +34,14 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = ResetPasswordDomainEvent.class, 
+        domainEvent = ResetPasswordDomainEvent.class,
         associateWith = "hasPassword")
 @ActionLayout(sequence = "20")
 @RequiredArgsConstructor
 public class ApplicationUser_resetPassword {
-    
+
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+
     private final ApplicationUser target;
 
     @MemberSupport
@@ -50,7 +50,7 @@ public class ApplicationUser_resetPassword {
             final Password newPassword,
             @ParameterLayout(named="Repeat password")
             final Password newPasswordRepeat) {
-        
+
         applicationUserRepository.updatePassword(target, newPassword.getPassword());
         return target;
     }
@@ -64,11 +64,11 @@ public class ApplicationUser_resetPassword {
     public String validateAct(
             final Password newPassword,
             final Password newPasswordRepeat) {
-        
+
         if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
-        
+
         if (!Objects.equals(newPassword, newPasswordRepeat)) {
             return "Passwords do not match";
         }

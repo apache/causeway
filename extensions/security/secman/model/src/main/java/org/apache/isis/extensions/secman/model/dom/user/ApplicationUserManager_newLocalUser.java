@@ -31,25 +31,26 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.mixins.ApplicationUser_updateEmailAddress;
 
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types 
- * and the ApplicationRole here is just an interface that the framework has not much 
+ * since action's type parameters are inspected for their compile time types
+ * and the ApplicationRole here is just an interface that the framework has not much
  * meta-model information to derive UI behavior from.
- * 
+ *
  * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses. 
- * 
+ * overridden with the concrete subclasses.
+ *
  */
 public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationRole> {
-    
+
     @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
-    
+
     protected ApplicationUser doAct(
             final String username,
             final Password password,
@@ -57,7 +58,7 @@ public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationR
             final R initialRole,
             final Boolean enabled,
             final String emailAddress) {
-        
+
         ApplicationUser user = applicationUserRepository.findByUsername(username).orElse(null);
         if (user == null) {
             user = applicationUserRepository
@@ -81,19 +82,19 @@ public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationR
             final R initialRole,
             final Boolean enabled,
             final String emailAddress) {
-        
+
         if (!Objects.equals(newPassword, newPasswordRepeat)) {
             return "Passwords do not match";
         }
 
         return null;
     }
-    
+
     protected R doDefault3() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);
     }
-   
+
 
 }

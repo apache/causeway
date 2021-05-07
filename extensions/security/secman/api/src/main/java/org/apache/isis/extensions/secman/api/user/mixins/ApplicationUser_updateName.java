@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -30,12 +30,12 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateNameDoma
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateNameDomainEvent.class, 
+        domainEvent = UpdateNameDomainEvent.class,
         associateWith = "knownAs")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateName {
-    
+
     private final ApplicationUser target;
 
     @MemberSupport
