@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.dom.permission.api;
+package org.apache.isis.extensions.secman.api.permission.dom;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,11 +39,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 

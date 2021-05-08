@@ -18,39 +18,11 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.permission;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
-import org.apache.isis.extensions.secman.jdo.dom.permission.api.ApplicationPermissionRepositoryAbstract;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-
-import lombok.NonNull;
-import lombok.val;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepositoryAbstract;
 
 @Repository
 @Named("isis.ext.secman.ApplicationPermissionRepository")
