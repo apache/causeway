@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.secman.model.menu;
+package org.apache.isis.extensions.secman.model.spiimpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
