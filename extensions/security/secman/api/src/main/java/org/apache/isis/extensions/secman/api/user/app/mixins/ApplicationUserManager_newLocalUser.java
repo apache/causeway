@@ -16,21 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.app;
+package org.apache.isis.extensions.secman.api.user.app.mixins;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
-import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-
-import lombok.val;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateEmailAddress;
 
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
@@ -42,46 +43,57 @@ import lombok.val;
  * overridden with the concrete subclasses.
  *
  */
-public abstract class ApplicationUserManager_newDelegateUser<R extends ApplicationRole> {
+public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationRole> {
 
     @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
+    @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
-    @Inject private SecurityRealmService securityRealmService;
 
     protected ApplicationUser doAct(
-          final String username,
-          final R initialRole,
-          final Boolean enabled) {
+            final String username,
+            final Password password,
+            final Password passwordRepeat,
+            final R initialRole,
+            final Boolean enabled,
+            final String emailAddress) {
 
-        final ApplicationUser user = applicationUserRepository
-                .newDelegateUser(username, ApplicationUserStatus.parse(enabled));
-
+        ApplicationUser user = applicationUserRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            user = applicationUserRepository
+                    .newLocalUser(username, password, ApplicationUserStatus.parse(enabled));
+        }
         if (initialRole != null) {
             applicationRoleRepository.addRoleToUser(initialRole, user);
+        }
+        if (emailAddress != null) {
+            factory.mixin(ApplicationUser_updateEmailAddress.class, user)
+            .act(emailAddress);
         }
         repository.persist(user);
         return user;
     }
 
-    protected boolean doHide() {
-        return hasNoDelegateAuthenticationRealm();
+    protected String doValidate(
+            final String username,
+            final Password newPassword,
+            final Password newPasswordRepeat,
+            final R initialRole,
+            final Boolean enabled,
+            final String emailAddress) {
+
+        if (!Objects.equals(newPassword, newPasswordRepeat)) {
+            return "Passwords do not match";
+        }
+
+        return null;
     }
 
-    protected R doDefault1() {
+    protected R doDefault3() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);
-    }
-
-    // -- HELPER
-
-    private boolean hasNoDelegateAuthenticationRealm() {
-        val realm = securityRealmService.getCurrentRealm();
-        return realm == null
-                || !realm.getCharacteristics()
-                    .contains(SecurityRealmCharacteristic.DELEGATING);
     }
 
 

@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newLocalUser
-extends org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager_newLocalUser<ApplicationRole> {
+extends org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser<ApplicationRole> {
 
     private final ApplicationUserManager target;
 

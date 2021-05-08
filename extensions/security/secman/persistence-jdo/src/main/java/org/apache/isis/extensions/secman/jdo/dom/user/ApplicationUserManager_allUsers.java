@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @org.apache.isis.applib.annotation.Collection
 @RequiredArgsConstructor
 public class ApplicationUserManager_allUsers
-extends org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager_allUsers<ApplicationUser> {
+extends org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_allUsers<ApplicationUser> {
 
     @SuppressWarnings("unused")
     private final ApplicationUserManager target;

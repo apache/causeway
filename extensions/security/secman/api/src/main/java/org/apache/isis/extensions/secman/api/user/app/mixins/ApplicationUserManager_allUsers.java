@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.user.app;
+package org.apache.isis.extensions.secman.api.user.app.mixins;
 
 import java.util.Collection;
 
