@@ -40,6 +40,11 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     public static final int MAX_LENGTH_EMAIL_ADDRESS = 120;
     public static final int MAX_LENGTH_PHONE_NUMBER = 120;
 
+    String NAMED_QUERY_FIND_BY_USERNAME = "ApplicationUser.findByUsername";
+    String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS = "ApplicationUser.findByEmailAddress";
+    String NAMED_QUERY_FIND = "ApplicationUser.find";
+    String NAMED_QUERY_FIND_BY_ATPATH = "ApplicationUser.findByAtPath";
+
     // -- DOMAIN EVENTS
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}

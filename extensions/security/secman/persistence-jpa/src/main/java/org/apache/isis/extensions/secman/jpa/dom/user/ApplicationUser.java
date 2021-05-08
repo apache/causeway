@@ -64,7 +64,6 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import org.apache.isis.extensions.secman.api.permission.dom.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
@@ -85,22 +84,22 @@ import lombok.val;
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_USERNAME,
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.username = :username"),
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_EMAIL,
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_ATPATH,
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.atPath = :atPath"),
     @NamedQuery(
-            name = NamedQueryNames.USER_FIND,
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.username LIKE :regex"

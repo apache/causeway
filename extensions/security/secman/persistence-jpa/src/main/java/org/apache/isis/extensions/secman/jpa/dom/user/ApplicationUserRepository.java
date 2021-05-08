@@ -46,7 +46,6 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.user.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unlock;
@@ -101,7 +100,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
 
     @Override
     public Optional<ApplicationUser> findByUsername(final String username) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_USERNAME)
+        return repository.uniqueMatch(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME)
                 .withParameter("username", username));
     }
 
@@ -113,7 +112,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
     }
 
     public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_EMAIL)
+        return repository.uniqueMatch(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS)
                 .withParameter("emailAddress", emailAddress));
     }
 
@@ -123,7 +122,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
     public Collection<ApplicationUser> find(final @Nullable String _search) {
         val search = _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_");
         val regex  = _Strings.suffix(_Strings.prefix(search, "%"), "%");
-        return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_FIND)
+        return repository.allMatches(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -133,7 +132,7 @@ implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserReposit
 
     @Override
     public Collection<ApplicationUser> findByAtPath(final String atPath) {
-        return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_ATPATH)
+        return repository.allMatches(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH)
                 .withParameter("atPath", atPath))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

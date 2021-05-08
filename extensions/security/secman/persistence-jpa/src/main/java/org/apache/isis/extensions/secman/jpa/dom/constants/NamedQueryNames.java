@@ -20,9 +20,4 @@ package org.apache.isis.extensions.secman.jpa.dom.constants;
 
 public final class NamedQueryNames {
 
-    public static final String USER_BY_USERNAME = "ApplicationUser.findByUsername";
-    public static final String USER_BY_EMAIL = "ApplicationUser.findByEmailAddress";
-    public static final String USER_FIND = "ApplicationUser.find";
-    public static final String USER_BY_ATPATH = "ApplicationUser.findByAtPath";
-
 }
