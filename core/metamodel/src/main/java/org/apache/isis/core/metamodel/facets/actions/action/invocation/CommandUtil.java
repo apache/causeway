@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /**
- * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> 
+ * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt>
  * and <tt>BackgroundServiceDefault</tt>.
  */
 public class CommandUtil {
@@ -51,7 +51,7 @@ public class CommandUtil {
     public static String targetClassNameFor(final ManagedObject targetAdapter) {
         return targetClassNameFor(targetAdapter.getSpecification());
     }
-    
+
     public static String targetClassNameFor(final ObjectSpecification spec) {
         return StringExtensions.asNaturalName2(spec.getSingularName());
     }
@@ -94,11 +94,11 @@ public class CommandUtil {
         }
         return buf.toString();
     }
-    
+
     public static String argDescriptionFor(
             final ObjectAction owningAction,
             final List<ManagedObject> arguments) {
-        
+
         val argsBuf = new StringBuilder();
         val parameters = owningAction.getParameters();
         if(parameters.size() == arguments.size()) {
@@ -120,7 +120,7 @@ public class CommandUtil {
             final StringBuilder buf,
             final ObjectActionParameter param,
             final ManagedObject objectAdapter) {
-        
+
         final String name = param.getName();
         appendArg(buf, name, objectAdapter);
     }
@@ -129,15 +129,15 @@ public class CommandUtil {
             final StringBuilder buf,
             final String name,
             final ManagedObject objectAdapter) {
-        
-        String titleOf = objectAdapter != null? objectAdapter.titleString(null): "null";
+
+        String titleOf = objectAdapter != null? objectAdapter.titleString(): "null";
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
     public static ManagedObject[] adaptersFor(
-            final Object[] args, 
+            final Object[] args,
             final ObjectManager objectManager) {
-        
+
         return _NullSafe.stream(args)
                 .map(objectManager::adapt)
                 .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));

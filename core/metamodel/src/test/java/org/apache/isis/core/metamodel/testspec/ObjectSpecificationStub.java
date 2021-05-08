@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
@@ -203,7 +204,7 @@ implements ObjectSpecification {
 
     @Override
     public String getTitle(
-            final ManagedObject contextAdapterIfAny,
+            final Predicate<ManagedObject> isContextAdapter,
             final ManagedObject targetAdapter) {
         return title;
     }

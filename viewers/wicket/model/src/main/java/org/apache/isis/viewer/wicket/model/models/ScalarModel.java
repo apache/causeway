@@ -183,7 +183,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         if (adapter == null) {
             return null;
         }
-        return adapter.titleString(null);
+        return adapter.titleString();
     }
 
     public void setObjectAsString(final String enteredText) {

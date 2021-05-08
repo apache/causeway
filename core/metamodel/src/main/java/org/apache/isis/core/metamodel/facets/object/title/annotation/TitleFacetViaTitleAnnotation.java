@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
@@ -41,7 +41,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     private final List<TitleComponent> components;
 
     public static class TitleComponent {
-        public static final Function<Annotations.Evaluator<Title>, TitleComponent> FROM_EVALUATORS = 
+        public static final Function<Annotations.Evaluator<Title>, TitleComponent> FROM_EVALUATORS =
                 titleEvaluator -> TitleComponent.of(titleEvaluator);
 
                 private final String prepend;
@@ -107,7 +107,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         if (adapter == null) {
             return null;
         }
-        return adapter.titleString(null);
+        return adapter.titleString();
     }
 
     public List<TitleComponent> getComponents() {
@@ -119,14 +119,14 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
+    public String title(final Predicate<ManagedObject> isContextAdapter, final ManagedObject targetAdapter) {
         val pojo = targetAdapter.getPojo();
         if(pojo==null) {
             return "";
         }
         val stringBuilder = new StringBuilder();
         val objectManager = getObjectManager();
-        
+
         try {
             for (final TitleComponent component : this.components) {
                 final Object titlePart = component.getTitleEvaluator().value(pojo);
@@ -135,7 +135,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 }
                 // ignore context, if provided
                 val titlePartAdapter = objectManager.adapt(titlePart);
-                if(Objects.equals(contextAdapter, titlePartAdapter)) {
+                if(isContextAdapter.test(titlePartAdapter)) {
                     continue;
                 }
                 String title = titleOf(titlePartAdapter);
@@ -154,11 +154,11 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            
+
             val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
-            
+
             if(!isUnitTesting) {
-                log.warn("Title failure", ex);    
+                log.warn("Title failure", ex);
             }
             return "Failed Title";
         }

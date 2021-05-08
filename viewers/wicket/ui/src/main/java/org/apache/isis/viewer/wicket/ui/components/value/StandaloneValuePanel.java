@@ -42,7 +42,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         super(id, valueModel);
         val objectAdapter = getModel().getObject();
 
-        final String label = objectAdapter.titleString(null);
+        final String label = objectAdapter.titleString();
         add(new Label(ID_STANDALONE_VALUE, label));
     }
 

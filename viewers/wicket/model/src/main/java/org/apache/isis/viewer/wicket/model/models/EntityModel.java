@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -48,6 +49,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.Synchronized;
 import lombok.val;
 
 /**
@@ -66,7 +68,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
 
-    private ObjectMemento contextAdapterIfAny;
+    @Setter
+    private @Nullable ObjectMemento contextAdapterIfAny;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
@@ -92,7 +95,6 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public static EntityModel ofAdapter(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-
         val adapterMemento = commonContext.mementoFor(adapter);
         return ofMemento(commonContext, adapterMemento);
     }
@@ -208,7 +210,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     @Override
     public String getTitle() {
-        return getObject().titleString(null);
+        return getObject().titleString();
     }
 
     @Override
@@ -260,17 +262,6 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     // //////////////////////////////////////////////////////////
 
     @Override
-    public ObjectMemento getContextAdapterIfAny() {
-        return contextAdapterIfAny;
-    }
-
-    @Override
-    public void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny) {
-        this.contextAdapterIfAny = contextAdapterIfAny;
-    }
-
-
-    @Override
     public EntityModel toEditMode() {
         setMode(Mode.EDIT);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
@@ -316,6 +307,16 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     public void setCollectionLayoutData(final CollectionLayoutData collectionLayoutData) {
         this.collectionLayoutData = collectionLayoutData;
+    }
+
+    private transient ManagedObject contextObject;
+
+    @Override @Synchronized
+    public boolean isContextAdapter(ManagedObject other) {
+        if(contextObject==null) {
+            contextObject = getMementoService().reconstructObject(contextAdapterIfAny);
+        }
+        return Objects.equals(contextObject, other);
     }
 
 

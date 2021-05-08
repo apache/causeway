@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -40,8 +41,8 @@ import lombok.Value;
 import lombok.val;
 
 /**
- * Represents an instance of some element of the meta-model managed by the framework, 
- * that is IoC-container provided beans, persistence-stack provided entities or view-models.  
+ * Represents an instance of some element of the meta-model managed by the framework,
+ * that is IoC-container provided beans, persistence-stack provided entities or view-models.
  *
  */
 public interface ManagedObject {
@@ -52,31 +53,31 @@ public interface ManagedObject {
     ObjectSpecification getSpecification();
 
     /**
-     * Returns the adapted domain object, the 'plain old java' object this managed object 
+     * Returns the adapted domain object, the 'plain old java' object this managed object
      * represents with the framework.
      */
     Object getPojo();
-    
+
     /**
-     * Returns the object's bookmark as identified by the ObjectManager. 
+     * Returns the object's bookmark as identified by the ObjectManager.
      * Bookmarks are considered immutable, hence will be memoized once fetched.
      */
     Optional<Bookmark> getBookmark();
-    
+
     boolean isBookmarkMemoized();
-    
+
     // -- TITLE
 
     public default String titleString() {
-        return titleString(null);
+        return titleString(__->false);
     }
 
-    default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
-        return ManagedObjectInternalUtil.titleString(this, contextAdapterIfAny);
+    default String titleString(final @NonNull Predicate<ManagedObject> isContextAdapter) {
+        return ManagedObjectInternalUtil.titleString(this, isContextAdapter);
     }
-    
+
     // -- SHORTCUT - OBJECT MANAGER
-    
+
     default ObjectManager getObjectManager() {
         return ManagedObjectInternalUtil.objectManager(this)
                 .orElseThrow(()->_Exceptions
@@ -113,37 +114,37 @@ public interface ManagedObject {
      * @param pojo - might also be a collection of pojos
      */
     public static ManagedObject of(
-            @NonNull ObjectSpecification specification, 
+            @NonNull ObjectSpecification specification,
             @Nullable Object pojo) {
-        
+
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
-        
+
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above
-        if(pojo==null 
+        if(pojo==null
                 || pojo.getClass().equals(specification.getCorrespondingClass())
                 ) {
-            // if actual type matches spec's, we assume, that we don't need to reload, 
-            // so this is a shortcut for performance reasons  
+            // if actual type matches spec's, we assume, that we don't need to reload,
+            // so this is a shortcut for performance reasons
             return SimpleManagedObject.of(specification, pojo);
         }
-        
+
         //_Probe.errOut("upgrading spec %s on type %s", specification, pojo.getClass());
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
-        
+
         val specLoader = specification.getMetaModelContext().getSpecificationLoader();
         return ManagedObject.lazy(specLoader, pojo);
     }
-    
+
     /**
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
     public static ManagedObject bookmarked(
-            @NonNull ObjectSpecification specification, 
-            @NonNull Object pojo, 
+            @NonNull ObjectSpecification specification,
+            @NonNull Object pojo,
             @NonNull Bookmark bookmark) {
-        
+
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
@@ -157,26 +158,26 @@ public interface ManagedObject {
     }
 
     /**
-     * For cases, when the pojo's specification is not available and needs to be looked up. 
+     * For cases, when the pojo's specification is not available and needs to be looked up.
      * @param specLoader
      * @param pojo
      */
     public static ManagedObject lazy(
-            SpecificationLoader specLoader, 
+            SpecificationLoader specLoader,
             Object pojo) {
         ManagedObjects.assertPojoNotManaged(pojo);
         val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
         return adapter;
     }
-    
+
     // -- EMPTY
-    
+
     /** has no ObjectSpecification and no value (pojo) */
     static ManagedObject unspecified() {
         return ManagedObjectInternalUtil.UNSPECIFIED;
     }
-    
+
     /** has an ObjectSpecification, but no value (pojo) */
     static ManagedObject empty(@NonNull final ObjectSpecification spec) {
         return ManagedObject.of(spec, null);
@@ -184,21 +185,21 @@ public interface ManagedObject {
 
     // -- SIMPLE
 
-    @Value 
-    @RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE) 
+    @Value
+    @RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = "pojo")
     @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
     static final class SimpleManagedObject implements ManagedObject {
-        
+
         public static ManagedObject identified(
-                @NonNull  final ObjectSpecification spec, 
-                @Nullable final Object pojo, 
+                @NonNull  final ObjectSpecification spec,
+                @Nullable final Object pojo,
                 @NonNull  final Bookmark bookmark) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
             managedObject.bookmarkLazy.set(Optional.of(bookmark));
             return managedObject;
         }
-        
+
         @NonNull private final ObjectSpecification specification;
         @Nullable private final Object pojo;
 
@@ -206,16 +207,16 @@ public interface ManagedObject {
         public Optional<Bookmark> getBookmark() {
             return bookmarkLazy.get();
         }
-        
+
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Bookmark>> bookmarkLazy = 
+        private final _Lazy<Optional<Bookmark>> bookmarkLazy =
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
 
         @Override
         public boolean isBookmarkMemoized() {
             return bookmarkLazy.isMemoized();
-        }  
-        
+        }
+
     }
 
     // -- LAZY
@@ -223,23 +224,23 @@ public interface ManagedObject {
     @EqualsAndHashCode(of = "pojo")
     static final class LazyManagedObject implements ManagedObject {
 
-        @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
+        @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;
 
         @Getter @NonNull private final Object pojo;
-        
+
         @Override
         public Optional<Bookmark> getBookmark() {
             return bookmarkLazy.get();
         }
-        
+
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<Bookmark>> bookmarkLazy = 
+        private final _Lazy<Optional<Bookmark>> bookmarkLazy =
                 _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
-        
+
         @Override
         public boolean isBookmarkMemoized() {
             return bookmarkLazy.isMemoized();
-        }  
+        }
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
@@ -247,7 +248,7 @@ public interface ManagedObject {
             this.specLoader = specLoader;
             this.pojo = pojo;
         }
-        
+
         @Override
         public ObjectSpecification getSpecification() {
             return specification.get();
@@ -264,13 +265,13 @@ public interface ManagedObject {
                     "[lazy not loaded]",
                     ""+getPojo());
         }
-        
+
         private ObjectSpecification loadSpec() {
             return specLoader.apply(pojo.getClass());
         }
 
     }
 
-    
+
 
 }

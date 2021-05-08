@@ -54,11 +54,6 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         return parser.displayTitleOf(_Casts.uncheckedCast(object));
     }
 
-    @Override
-    public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
-        return title(targetAdapter);
-    }
-
     /**
      * not API
      */

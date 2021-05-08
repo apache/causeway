@@ -240,7 +240,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             return;
         } 
 
-        final String objectAsStr = valueAdapter.titleString(null);
+        final String objectAsStr = valueAdapter.titleString();
         cell.setCellValue(objectAsStr);
         return;
     }

@@ -64,7 +64,7 @@ import lombok.val;
 /**
  * Rreturns representations according to the
  * <a href="https://restfulobjects.org">Restful Objects</a> spec.
- * 
+ *
  * @since 1.x {@index}
  */
 @Service
@@ -268,7 +268,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     }
 
     private static String titleOf(final ManagedObject argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
+        return argumentAdapter!=null?argumentAdapter.titleString():"";
     }
 
     private static String abbreviated(final String str, final int maxLength) {

@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -247,15 +246,7 @@ implements CollectionCountProvider {
 
         val collectionModel = getModel();
 
-        //TODO remove comment block once we know the new code works ...
-        // why do we need to reconstruct the owning object, it should be already loaded,
-        // its wrapped within the EntityModel?
-        // legacy of ...
-//        val parentObject = Optional.ofNullable(collectionModel.getParentObjectAdapterMemento())
-//                .map(getCommonContext()::reconstructObject);
-
-        final Optional<ManagedObject> parentObject = collectionModel.getManagedCollection()
-                .map(ManagedCollection::getOwner);
+        final Optional<ManagedObject> parentObject = collectionModel.getParentObject();
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->

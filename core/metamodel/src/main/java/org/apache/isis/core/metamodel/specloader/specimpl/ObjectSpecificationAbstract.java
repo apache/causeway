@@ -404,11 +404,11 @@ implements ObjectSpecification {
 
     @Override
     public String getTitle(
-            final ManagedObject contextAdapterIfAny,
+            final Predicate<ManagedObject> isContextAdapter,
             final ManagedObject targetAdapter) {
 
         if (titleFacet != null) {
-            val titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
+            val titleString = titleFacet.title(isContextAdapter, targetAdapter);
             if (!_Strings.isEmpty(titleString)) {
                 return titleString;
             }
@@ -604,7 +604,7 @@ implements ObjectSpecification {
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
 
-        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
+        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(),
                 interactionMethod);
     }
 

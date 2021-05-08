@@ -62,7 +62,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef;
-        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString());
     }
 
     public static LinkBuilder newLinkToObjectLayoutBuilder(
@@ -184,7 +184,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             }
 
             // title
-            final String title = objectAdapter.titleString(null);
+            final String title = objectAdapter.titleString();
             representation.mapPut("title", title);
 
             // serviceId or instance Id

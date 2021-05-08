@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.title;
 
+import java.util.function.Predicate;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -40,7 +42,7 @@ public interface TitleFacet extends Facet {
     /**
      * Provide a title for the target object.
      */
-    String title(final ManagedObject targetAdapter);
+    String title(ManagedObject targetAdapter);
 
     /**
      * Provide a title for the target object, in the context of the context object.
@@ -50,6 +52,9 @@ public interface TitleFacet extends Facet {
      * context object would be the parent.  Thus, the title might be shortened so that it does not
      * needlessly incorporate the title of the parent (context) object.
      */
-    String title(final ManagedObject contextAdapter, final ManagedObject targetAdapter);
+    default String title(Predicate<ManagedObject> isContextAdapter, ManagedObject targetAdapter) {
+        //Default implementation that simply delegates to {@link TitleFacet#title(ManagedObject)}.
+        return title(targetAdapter);
+    }
 
 }

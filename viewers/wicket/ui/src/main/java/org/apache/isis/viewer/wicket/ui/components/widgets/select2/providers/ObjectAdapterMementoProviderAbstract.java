@@ -45,7 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ObjectAdapterMementoProviderAbstract 
+public abstract class ObjectAdapterMementoProviderAbstract
 extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
@@ -73,7 +73,7 @@ extends ChoiceProvider<ObjectMemento> {
         final IConverter<Object> converter = findConverter(choice);
         return converter != null
                 ? converter.convertToString(choice.getPojo(), getLocale())
-                : choice.titleString(null);
+                : choice.titleString();
     }
 
     protected Locale getLocale() {
@@ -105,8 +105,8 @@ extends ChoiceProvider<ObjectMemento> {
 
     @Override
     public void query(
-            final String term, 
-            final int page, 
+            final String term,
+            final int page,
             final org.wicketstuff.select2.Response<ObjectMemento> response) {
 
         final List<ObjectMemento> mementos = _Lists.newArrayList(obtainMementos(term));
@@ -121,52 +121,52 @@ extends ChoiceProvider<ObjectMemento> {
 
     /**
      * Filters all choices against a term by using their
-     * {@link ManagedObject#titleString(ManagedObject) title string}
+     * {@link ManagedObject#titleString() title string}
      *
      * @param term The term entered by the user
      * @param choicesMementos The collections of choices to filter
      * @return A list of all matching choices
      */
     protected final Can<ObjectMemento> obtainMementos(
-            String term, 
+            String term,
             Can<ObjectMemento> choicesMementos) {
-        
+
         if (Strings.isEmpty(term)) {
             return choicesMementos;
-        } 
-            
+        }
+
         val commonContext = getCommonContext();
-        
+
         return choicesMementos.filter((ObjectMemento candidate)->{
-            val objectAdapter = commonContext.reconstructObject(candidate); 
-            val title = objectAdapter.titleString(objectAdapter);
+            val objectAdapter = commonContext.reconstructObject(candidate);
+            val title = objectAdapter.titleString();
             return title.toLowerCase().contains(term.toLowerCase());
         });
-        
+
     }
 
     @Override
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        
+
         return _NullSafe.stream(ids)
                 .map(this::idToMemento)
                 .collect(Collectors.toList());
     }
-    
+
     /** whether this adapter is dependent on previous (pending) arguments */
     public boolean dependsOnPreviousArgs() {
         return true;
     }
-    
+
     // -- DEPS
-    
+
     protected IsisAppCommonContext getCommonContext() {
         if(commonContext==null) {
             commonContext = scalarModel.getCommonContext();
         }
         return commonContext;
     }
-    
+
     protected WicketViewerSettings getWicketViewerSettings() {
         if(wicketViewerSettings==null) {
             wicketViewerSettings = getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
@@ -175,7 +175,7 @@ extends ChoiceProvider<ObjectMemento> {
     }
 
     // -- HELPER
-    
+
     private @Nullable ObjectMemento idToMemento(String id) {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;

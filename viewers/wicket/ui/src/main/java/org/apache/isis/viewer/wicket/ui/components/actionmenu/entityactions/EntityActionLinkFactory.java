@@ -53,7 +53,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
         if (!isIdentifiable) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",
-                    objectAdapter.titleString(null)));
+                    objectAdapter.titleString()));
         }
 
         // previously we computed visibility and usability here, but

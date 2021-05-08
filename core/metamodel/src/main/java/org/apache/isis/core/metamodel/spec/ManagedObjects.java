@@ -66,14 +66,14 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * A collection of utilities for {@link ManagedObject}. 
+ * A collection of utilities for {@link ManagedObject}.
  * @since 2.0
  *
  */
 @UtilityClass
 @Log4j2
 public final class ManagedObjects {
-    
+
     // -- CATEGORISATION
 
     /** is null or has neither an ObjectSpecification and a value (pojo) */
@@ -83,22 +83,22 @@ public final class ManagedObjects {
         }
         return adapter.getPojo()==null;
     }
-    
+
     /** whether has at least a spec */
     public static boolean isSpecified(@Nullable ManagedObject adapter) {
         return adapter!=null && adapter!=ManagedObject.unspecified();
     }
-    
+
     /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
-     * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
+     * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
      */
     public static boolean isIdentifiable(@Nullable ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isIdentifiable)
                 .orElse(false);
     }
-    
+
     public static boolean isEntity(ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isEntity)
@@ -110,58 +110,58 @@ public final class ManagedObjects {
                 .map(ObjectSpecification::isValue)
                 .orElse(false);
     }
-    
+
     public static Optional<String> getDomainType(ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::getLogicalTypeName);
     }
-    
+
     // -- IDENTIFICATION
-    
+
     public static Optional<ObjectSpecification> spec(@Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty(); 
+        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
     }
-    
+
     public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty(); 
+        return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty();
     }
-    
+
     public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
-    
+
     /**
      * @param managedObject
-     * @return optionally a String representing a reference to the <em>identifiable</em> 
+     * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, usually made up of the object's type and its ID.
      */
     public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .map(Bookmark::stringify);
     }
-    
+
     public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
         return stringify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
-    
+
     /**
-     * 
+     *
      * @param managedObject
      * @param separator custom separator
-     * @return optionally a String representing a reference to the <em>identifiable</em> 
+     * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, made of the form &lt;object-type&gt; &lt;separator&gt; &lt;object-id&gt;.
      */
     public static Optional<String> stringify(
-            @Nullable ManagedObject managedObject, 
+            @Nullable ManagedObject managedObject,
             @NonNull final String separator) {
         return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
-            @Nullable ManagedObject managedObject, 
+            @Nullable ManagedObject managedObject,
             @NonNull final String separator) {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
@@ -176,8 +176,8 @@ public final class ManagedObjects {
 
     public static Comparator<ManagedObject> orderingBy(ObjectAssociation sortProperty, boolean ascending) {
 
-        final Comparator<ManagedObject> comparator = ascending 
-                ? NATURAL_NULL_FIRST 
+        final Comparator<ManagedObject> comparator = ascending
+                ? NATURAL_NULL_FIRST
                 : NATURAL_NULL_FIRST.reversed();
 
         return (p, q) -> {
@@ -212,32 +212,32 @@ public final class ManagedObjects {
         }
 
     };
-    
+
     // -- COPY UTILITIES
-    
-    @Nullable 
+
+    @Nullable
     public static ManagedObject copyIfClonable(@Nullable ManagedObject adapter) {
 
         if(adapter==null) {
             return null;
         }
-        
+
         val viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         if(viewModelFacet != null) {
             val viewModelPojo = adapter.getPojo();
             if(viewModelFacet.isCloneable(viewModelPojo)) {
                 return ManagedObject.of(
-                        adapter.getSpecification(), 
+                        adapter.getSpecification(),
                         viewModelFacet.clone(viewModelPojo));
             }
         }
-        
+
         return adapter;
-        
+
     }
-    
+
     // -- DEFAULTS UTILITIES
-    
+
     public static ManagedObject emptyToDefault(boolean mandatory, @NonNull ManagedObject input) {
         if(!isSpecified(input)) {
             return input;
@@ -245,11 +245,11 @@ public final class ManagedObjects {
         if(input.getPojo()!=null) {
             return input;
         }
-        
+
         // there are 2 cases to handle here
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
-        
+
         val spec = input.getSpecification();
         val expectedType = spec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
@@ -258,41 +258,41 @@ public final class ManagedObjects {
         if(Boolean.class.equals(expectedType) && mandatory) {
             return ManagedObject.of(spec, Boolean.FALSE);
         }
-        
+
         return input;
     }
-    
+
     // -- TITLE UTILITIES
-    
+
     public static String abbreviatedTitleOf(ManagedObject adapter, int maxLength, String suffix) {
         return abbreviated(titleOf(adapter), maxLength, suffix);
     }
-    
+
     public static String titleOf(ManagedObject adapter) {
-        return adapter!=null?adapter.titleString(null):"";
+        return adapter!=null?adapter.titleString():"";
     }
 
     private static String abbreviated(final String str, final int maxLength, String suffix) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
     }
-    
+
     // -- COMMON SUPER TYPE FINDER
-    
+
     /**
-     * Find an ObjectSpecification that is common to all provided {@code objects} 
+     * Find an ObjectSpecification that is common to all provided {@code objects}
      * @param objects
      * @return optionally the common ObjectSpecification based on whether provided {@code objects}
      * are not empty
      */
     public static Optional<ObjectSpecification> commonSpecification(
             @Nullable final Can<ManagedObject> objects) {
-        
+
         if (_NullSafe.isEmpty(objects)) {
             return Optional.empty();
         }
         val firstElement = objects.getFirstOrFail();
         val firstElementSpec = firstElement.getSpecification();
-        
+
         if(objects.getCardinality().isOne()) {
             return Optional.of(firstElementSpec);
         }
@@ -302,22 +302,22 @@ public final class ManagedObjects {
         .map(ManagedObject::getPojo)
         .filter(_NullSafe::isPresent)
         .forEach(commonSuperClassFinder::collect);
-        
+
         val commonSuperClass = commonSuperClassFinder.getCommonSuperclass().orElse(null);
         if(commonSuperClass!=null && commonSuperClass!=firstElement.getSpecification().getCorrespondingClass()) {
             val specificationLoader = firstElementSpec.getMetaModelContext().getSpecificationLoader();
             return specificationLoader.specForType(commonSuperClass);
         }
-        
+
         return Optional.of(firstElementSpec);
     }
-    
+
     // -- ADABT UTILITIES
-    
+
     public static Can<ManagedObject> adaptMultipleOfType(
             @NonNull  final ObjectSpecification elementSpec,
             @Nullable final Object collectionOrArray) {
-        
+
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
         .collect(Can.toCan());
@@ -328,9 +328,9 @@ public final class ManagedObjects {
      */
     public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
             @NonNull  final ObjectSpecification elementSpec,
-            @Nullable final Object collectionOrArray, 
+            @Nullable final Object collectionOrArray,
             @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
         .map(ManagedObjects.EntityUtil::reattach)
@@ -343,6 +343,7 @@ public final class ManagedObjects {
      * print stacktrace to console, if {@code pojo} is an attached entity
      * @deprecated
      */
+    @Deprecated
     @SneakyThrows
     public static void warnIfAttachedEntity(ManagedObject adapter, String logMessage) {
         if(isNullOrUnspecifiedOrEmpty(adapter)) {
@@ -350,10 +351,10 @@ public final class ManagedObjects {
         }
         if(EntityUtil.isAttached(adapter)) {
             _Probe.errOut("%s [%s]", logMessage, adapter.getSpecification().getFullIdentifier());
-            _Exceptions.dumpStackTrace();    
+            _Exceptions.dumpStackTrace();
         }
     }
-    
+
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
@@ -362,7 +363,7 @@ public final class ManagedObjects {
         if(pojo==null) {
             return;
         }
-        
+
         if(pojo instanceof ManagedObject) {
             throw _Exceptions.illegalArgument(
                     "Cannot adapt a pojo of type ManagedObject, " +
@@ -374,10 +375,10 @@ public final class ManagedObjects {
 
 
     // -- ENTITY UTILITIES
-    
+
     @UtilityClass
     public static final class EntityUtil {
-        
+
         @NonNull
         public static Optional<PersistenceStandard> getPersistenceStandard(@Nullable ManagedObject adapter) {
             if(adapter==null) {
@@ -392,10 +393,10 @@ public final class ManagedObjects {
             if(entityFacet==null) {
                 return Optional.empty();
             }
-            
+
             return Optional.of(entityFacet.getPersistenceStandard());
         }
-        
+
         @NonNull
         public static EntityState getEntityState(@Nullable ManagedObject adapter) {
             if(isNullOrUnspecifiedOrEmpty(adapter)) {
@@ -403,7 +404,7 @@ public final class ManagedObjects {
             }
             val spec = adapter.getSpecification();
             val pojo = adapter.getPojo();
-            
+
             if(!spec.isEntity()) {
                 return EntityState.NOT_PERSISTABLE;
             }
@@ -415,21 +416,21 @@ public final class ManagedObjects {
 
             return entityFacet.getEntityState(pojo);
         }
-        
+
         public static void persistInCurrentTransaction(ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             entityFacet.persist(spec, managedObject.getPojo());
         }
-        
+
         public static void destroyInCurrentTransaction(ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             entityFacet.delete(spec, managedObject.getPojo());
         }
-        
+
         public static void requiresEntity(ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
@@ -437,15 +438,15 @@ public final class ManagedObjects {
             val spec = managedObject.getSpecification();
             if(!spec.isEntity()) {
                 throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
-                        spec.getCorrespondingClass(), 
-                        spec.getBeanSort());                
+                        spec.getCorrespondingClass(),
+                        spec.getBeanSort());
             }
         }
-        
+
         /**
          * @param managedObject
          * @return managedObject
-         * @throws AssertionError if managedObject is a detached entity  
+         * @throws AssertionError if managedObject is a detached entity
          */
         @NonNull
         public static ManagedObject requiresAttached(@NonNull ManagedObject managedObject) {
@@ -453,14 +454,14 @@ public final class ManagedObjects {
             if(entityState.isPersistable()) {
                 // ensure we have an attached entity
                 _Assert.assertEquals(
-                        EntityState.PERSISTABLE_ATTACHED, 
+                        EntityState.PERSISTABLE_ATTACHED,
                         entityState,
-                        ()-> String.format("entity %s is required to be attached (not detached)", 
+                        ()-> String.format("entity %s is required to be attached (not detached)",
                                 managedObject.getSpecification().getLogicalTypeName()));
             }
             return managedObject;
         }
-        
+
         @Nullable
         public static ManagedObject reattach(@Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
@@ -473,31 +474,31 @@ public final class ManagedObjects {
             if(!entityState.isDetached()) {
                 return managedObject;
             }
-            
+
             val spec = managedObject.getSpecification();
-            
+
             // identification (on JDO) fails, when detached object, where oid was not previously memoized
             if(EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)
                     && !managedObject.isBookmarkMemoized()) {
                 val msg = String.format("entity %s is required to have a memoized ID, "
-                        + "otherwise cannot re-attach", 
+                        + "otherwise cannot re-attach",
                         spec.getLogicalTypeName());
                 log.error(msg); // in case exception gets swallowed
                 throw _Exceptions.illegalState(msg);
             }
-            
+
             val objectManager = managedObject.getObjectManager();
-            
+
             return bookmark(managedObject)
             .map(bookmark->objectManager.loadObject(
                     ObjectLoader.Request.of(
-                                    spec, 
+                                    spec,
                                     bookmark.getIdentifier())))
             .orElse(managedObject);
         }
-        
+
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(
                 ManagedObject first,
                 ManagedObject second) {
@@ -514,35 +515,35 @@ public final class ManagedObjects {
                 throw _Exceptions.illegalArgument(
                         "can't set a reference to a transient object [%s] from a persistent one [%s]",
                         second,
-                        first.titleString(null));
+                        first.titleString());
             }
         }
-        
+
         // -- SHORTCUTS
-        
+
         public static boolean isAttached(@Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isAttached();
         }
-        
+
         public static boolean isDetached(@Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isDetached();
         }
-        
+
         public static boolean isDestroyed(@Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isDestroyed();
         }
-        
+
     }
 
     // -- VISIBILITY UTIL
-    
+
     @UtilityClass
     public static final class VisibilityUtil {
-    
+
         public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
             return $->ManagedObjects.VisibilityUtil.isVisible($, interactionInitiatedBy);
         }
-    
+
         /**
          * Filters a collection (an adapter around either a Collection or an Object[]) and returns a stream of
          * {@link ManagedObject}s of those that are visible (as per any facet(s) installed on the element class
@@ -553,40 +554,40 @@ public final class ManagedObjects {
         public static Stream<ManagedObject> streamVisibleAdapters(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
-    
+
             return CollectionFacet.streamAdapters(collectionAdapter)
                     .filter(VisibilityUtil.filterOn(interactionInitiatedBy));
         }
-        
+
         private static Stream<Object> streamVisiblePojos(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
-    
+
             return CollectionFacet.streamAdapters(collectionAdapter)
                     .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
                     .map(UnwrapUtil::single);
         }
-        
+
         public static Object[] visiblePojosAsArray(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
-    
+
             return streamVisiblePojos(collectionAdapter, interactionInitiatedBy)
                     .collect(_Arrays.toArray(Object.class));
         }
-        
+
         public static Object visiblePojosAutofit(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Class<?> requiredContainerType) {
-            
+
             val visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
             val autofittedObjectContainer = CollectionFacet.AutofitUtils
                     .collect(visiblePojoStream, requiredContainerType);
             return autofittedObjectContainer;
         }
-        
-        
+
+
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
          * @param interactionInitiatedBy
@@ -594,7 +595,7 @@ public final class ManagedObjects {
         public static boolean isVisible(
                 ManagedObject adapter,
                 InteractionInitiatedBy interactionInitiatedBy) {
-    
+
             if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
@@ -605,78 +606,78 @@ public final class ManagedObjects {
                     return false;
                 }
             }
-            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
-                return true; 
+            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) {
+                return true;
             }
             val visibilityContext = createVisibleInteractionContext(
                     adapter,
                     InteractionInitiatedBy.USER,
                     Where.OBJECT_FORMS);
-    
+
             return InteractionUtils.isVisibleResult(spec, visibilityContext)
                     .isNotVetoing();
         }
-        
+
         private static VisibilityContext createVisibleInteractionContext(
                 final ManagedObject adapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            
+
             return new ObjectVisibilityContext(
                     adapter,
                     adapter.getSpecification().getIdentifier(),
                     interactionInitiatedBy,
                     where);
         }
-    
+
     }
-    
-    
+
+
     // -- INVOCATION UTILITY
-    
+
     @UtilityClass
     public static final class InvokeUtil {
-    
+
         public static Object invokeWithPPM(
-                final Constructor<?> ppmConstructor, 
-                final Method method, 
-                final ManagedObject adapter, 
+                final Constructor<?> ppmConstructor,
+                final Method method,
+                final ManagedObject adapter,
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
-            
+
             val ppmTuple = MethodExtensions.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
-        
+
         public static Object invokeWithPPM(
-                final Constructor<?> ppmConstructor, 
-                final Method method, 
-                final ManagedObject adapter, 
+                final Constructor<?> ppmConstructor,
+                final Method method,
+                final ManagedObject adapter,
                 final Can<ManagedObject> argumentAdapters) {
             return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
-        
+
         public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
             MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
         }
-    
+
         public static Object invoke(Method method, ManagedObject adapter) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter));
         }
-    
+
         public static Object invoke(Method method, ManagedObject adapter, Object arg0) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
         }
-    
+
         public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
-    
+
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
             return invoke(method, adapter, UnwrapUtil.single(arg0Adapter));
         }
-    
+
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
@@ -692,7 +693,7 @@ public final class ManagedObjects {
         public static Object invokeAutofit(Method method, ManagedObject adapter) {
             return invoke(method, adapter, new ManagedObject[method.getParameterTypes().length]);
         }
-    
+
         /**
          * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
          * <p>
@@ -704,47 +705,47 @@ public final class ManagedObjects {
          * </ul>
          */
         public static Object invokeAutofit(
-                final Method method, 
-                final ManagedObject target, 
+                final Method method,
+                final ManagedObject target,
                 final Can<? extends ManagedObject> pendingArgs,
                 final List<Object> additionalArgValues) {
-    
+
             val argArray = adjust(method, pendingArgs, additionalArgValues);
-            
+
             return MethodExtensions.invoke(method, UnwrapUtil.single(target), argArray);
         }
-    
+
         /**
          * same as {@link #invokeAutofit(Method, ManagedObject, Can, List)} w/o additionalArgValues
          */
         public static Object invokeAutofit(
-                final Method method, 
-                final ManagedObject target, 
+                final Method method,
+                final ManagedObject target,
                 final Can<? extends ManagedObject> pendingArgs) {
-            
+
             return invokeAutofit(method, target, pendingArgs, Collections.emptyList());
         }
-    
+
         private static Object[] adjust(
-                final Method method, 
+                final Method method,
                 final Can<? extends ManagedObject> pendingArgs,
                 final List<Object> additionalArgValues) {
-            
+
             val parameterTypes = method.getParameterTypes();
             val paramCount = parameterTypes.length;
             val additionalArgCount = additionalArgValues.size();
             val pendingArgsToConsiderCount = paramCount - additionalArgCount;
-            
+
             val argIterator = argIteratorFrom(pendingArgs);
             val adjusted = new Object[paramCount];
             for(int i=0; i<pendingArgsToConsiderCount; i++) {
-                
+
                 val paramType = parameterTypes[i];
                 val arg = argIterator.hasNext() ? UnwrapUtil.single(argIterator.next()) : null;
-                
+
                 adjusted[i] = honorPrimitiveDefaults(paramType, arg);
             }
-            
+
             // add the additional parameter values (if any)
             int paramIndex = pendingArgsToConsiderCount;
             for(val additionalArg : additionalArgValues) {
@@ -752,42 +753,42 @@ public final class ManagedObjects {
                 adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg);
                 ++paramIndex;
             }
-            
+
             return adjusted;
-    
+
         }
-    
+
         private static Iterator<? extends ManagedObject> argIteratorFrom(Can<? extends ManagedObject> pendingArgs) {
             return pendingArgs!=null ? pendingArgs.iterator() : Collections.emptyIterator();
         }
-    
+
         private static Object honorPrimitiveDefaults(
-                final Class<?> expectedType, 
+                final Class<?> expectedType,
                 final @Nullable Object value) {
-            
+
             if(value == null && expectedType.isPrimitive()) {
                 return ClassExtensions.toDefault(expectedType);
             }
             return value;
         }
-        
-    
+
+
     }
-    
+
     // -- UNWRAP UTILITY
-    
+
     @UtilityClass
     public static final class UnwrapUtil {
-        
+
         // -- SINGLE
-        
+
         @Nullable
         public static Object single(@Nullable final ManagedObject adapter) {
             return ManagedObjects.isSpecified(adapter)
-                    ? adapter.getPojo() 
+                    ? adapter.getPojo()
                     : null;
         }
-        
+
         @Nullable
         public static String singleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
             final Object obj = UnwrapUtil.single(adapter);
@@ -799,15 +800,15 @@ public final class ManagedObjects {
             }
             return orElse;
         }
-        
+
         // -- AS ARRAY
-        
+
         @Nullable
         public static Object[] multipleAsArray(@NonNull final Can<ManagedObject> adapters) {
             val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
             return unwrappedObjects;
         }
-        
+
         @Nullable
         public static Object[] multipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
             val unwrappedObjects = _Arrays.mapCollection(adapters, UnwrapUtil::single);
@@ -819,11 +820,11 @@ public final class ManagedObjects {
             val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
             return unwrappedObjects;
         }
-        
+
         // -- AS LIST
 
         /**
-         * 
+         *
          * @param adapters
          * @return non-null, unmodifiable
          */
@@ -835,9 +836,9 @@ public final class ManagedObjects {
                     .map(UnwrapUtil::single)
                     .collect(_Lists.toUnmodifiable());
         }
-        
+
         /**
-         * 
+         *
          * @param adapters
          * @return non-null, unmodifiable
          */
@@ -852,7 +853,7 @@ public final class ManagedObjects {
 
 
         /**
-         * 
+         *
          * @param adapters
          * @return non-null, unmodifiable
          */
@@ -864,8 +865,8 @@ public final class ManagedObjects {
                     .map(UnwrapUtil::single)
                     .collect(_Sets.toUnmodifiable());
         }
-        
+
     }
-    
+
 
 }

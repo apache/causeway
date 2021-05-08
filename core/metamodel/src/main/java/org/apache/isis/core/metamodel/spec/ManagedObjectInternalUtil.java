@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +30,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
+import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -59,7 +62,7 @@ final class ManagedObjectInternalUtil {
         public boolean isBookmarkMemoized() {
             return false;
         }
-        
+
     };
 
     static Optional<ObjectManager> objectManager(@Nullable ManagedObject adapter) {
@@ -67,39 +70,35 @@ final class ManagedObjectInternalUtil {
         .map(ObjectSpecification::getMetaModelContext)
         .map(MetaModelContext::getObjectManager);
     }
-    
+
     static Optional<Bookmark> identify(@Nullable ManagedObject adapter) {
         return objectManager(adapter)
-                .map(objectManager->objectManager.bookmarkObject(adapter)); 
+                .map(objectManager->objectManager.bookmarkObject(adapter));
     }
-    
+
     // -- TITLE SUPPORT
-    
-    static String titleString(@Nullable ManagedObject managedObject, @Nullable ManagedObject contextAdapterIfAny) {
-        
+
+    static String titleString(@Nullable ManagedObject managedObject, @NonNull Predicate<ManagedObject> isContextAdapter) {
+
         if(!ManagedObjects.isSpecified(managedObject)) {
             return "unspecified object";
         }
-        
+
         if (managedObject.getSpecification().isParentedOrFreeCollection()) {
             final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
             return collectionTitleString(managedObject, facet);
         } else {
-            return objectTitleString(managedObject, contextAdapterIfAny);
+            return objectTitleString(managedObject, isContextAdapter);
         }
     }
 
-    private static String objectTitleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
+    private static String objectTitleString(ManagedObject managedObject, Predicate<ManagedObject> isContextAdapter) {
         if (managedObject.getPojo() instanceof String) {
             return (String) managedObject.getPojo();
         }
-        final ObjectSpecification specification = managedObject.getSpecification();
-        String title = specification.getTitle(contextAdapterIfAny, managedObject);
-
-        if (title == null) {
-            title = getDefaultTitle(managedObject);
-        }
-        return title;
+        val spec = managedObject.getSpecification();
+        return Optional.ofNullable(spec.getTitle(isContextAdapter, managedObject))
+                .orElseGet(()->getDefaultTitle(managedObject));
     }
 
     private static String collectionTitleString(ManagedObject managedObject, final CollectionFacet facet) {

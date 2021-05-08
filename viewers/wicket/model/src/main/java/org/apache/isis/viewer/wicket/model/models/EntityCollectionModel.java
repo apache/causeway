@@ -114,6 +114,10 @@ extends
 
     // -- INTERACTION SUPPORT
 
+    /**
+     * Returns optionally the a {@link ManagedCollection}, based on whether
+     * this is a parented collection.
+     */
     Optional<ManagedCollection> getManagedCollection();
 
     default Optional<ManagedObject> getParentObject() {

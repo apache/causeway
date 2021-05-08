@@ -22,16 +22,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 /**
- * 
+ *
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
  *
  */
@@ -41,10 +38,6 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
 
     private final ScalarModel scalarModel;
 
-    @Getter(onMethod = @__(@Override)) 
-    @Setter(onMethod = @__(@Override))
-    private ObjectMemento contextAdapterIfAny;
-    
     public AdapterForObjectReference(final ScalarModel scalarModel) {
         this.scalarModel = scalarModel;
     }
@@ -53,12 +46,12 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
     public ManagedObject getObject() {
         return scalarModel.getPendingElseCurrentAdapter();
     }
-    
+
     @Override
     public RenderingHint getRenderingHint() {
         return scalarModel.getRenderingHint();
     }
-    
+
     @Override
     public void setRenderingHint(RenderingHint renderingHint) {
         scalarModel.setRenderingHint(renderingHint);
@@ -73,12 +66,12 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
     public EntityModel.Mode getMode() {
         return EntityModel.Mode.VIEW;
     }
-    
+
     @Override
     public void setMode(Mode mode) {
         // no-op
     }
-    
+
     @Override
     public void setObject(final ManagedObject adapter) {
         // no-op
@@ -95,7 +88,7 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
         HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, scalarModel);
         return pageParameters;
     }
-    
+
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
         return PageParameterUtil.createPageParametersForObject(getObject());
@@ -106,5 +99,10 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
         return scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit()
                 && scalarModel.isEnabled();
     }
-    
+
+    @Override
+    public boolean isContextAdapter(ManagedObject other) {
+        return false;
+    }
+
 }

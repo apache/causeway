@@ -27,6 +27,7 @@ import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -204,9 +205,9 @@ extends
      * of some other adapter (if any).
      *
      * <p>
-     * @see TitleFacet#title(ManagedObject, ManagedObject)
+     * @see TitleFacet#title(Predicate, ManagedObject)
      */
-    String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter);
+    String getTitle(Predicate<ManagedObject> isContextAdapter, ManagedObject targetAdapter);
 
     /**
      * Returns the name of an icon to use for the specified object.
