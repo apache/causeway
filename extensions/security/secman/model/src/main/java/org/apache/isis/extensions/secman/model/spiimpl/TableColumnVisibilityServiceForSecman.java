@@ -18,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.secman.TableColumnHidingService")
-@Order(OrderPrecedence.LATE - 10) // ensure comes before TableColumnOrderServiceDefault
+@Named("isis.ext.secman.TableColumnVisibilityServiceForSecman")
+@Order(OrderPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class TableColumnHidingService implements TableColumnVisibilityService {
+public class TableColumnVisibilityServiceForSecman implements TableColumnVisibilityService {
 
     final MeService meService;
     final MetaModelService metaModelService;

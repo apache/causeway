@@ -79,7 +79,7 @@ import org.apache.isis.extensions.secman.api.user.contributions.HasUsername_open
 import org.apache.isis.extensions.secman.api.user.menu.MeService;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
-import org.apache.isis.extensions.secman.model.spiimpl.TableColumnHidingService;
+import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServiceForSecman;
 
 /**
  * @since 2.0 {@index}
@@ -102,7 +102,7 @@ import org.apache.isis.extensions.secman.model.spiimpl.TableColumnHidingService;
 
         // @Component
         TenantedAuthorizationPostProcessor.Register.class,
-        TableColumnHidingService.class,
+        TableColumnVisibilityServiceForSecman.class,
 
         // -- ViewModels
 
