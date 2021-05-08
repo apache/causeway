@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -60,8 +61,8 @@ import lombok.val;
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */
-abstract class ScalarPanelAbstractLegacy 
-extends PanelAbstract<ManagedObject, ScalarModel> 
+abstract class ScalarPanelAbstractLegacy
+extends PanelAbstract<ManagedObject, ScalarModel>
 implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
@@ -186,7 +187,7 @@ implements ScalarModelProvider {
         } else {
             if (scalarModel.isViewMode()) {
                 onBeforeRenderWhenViewMode();
-            } else {        
+            } else {
                 onBeforeRenderWhenEnabled();
             }
         }
@@ -310,16 +311,23 @@ implements ScalarModelProvider {
      * @param markupContainer The form group element
      * @param entityActionLinks
      */
-    protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
+    protected void addPositioningCssTo(
+            final MarkupContainer markupContainer,
+            final Can<LinkAndLabel> entityActionLinks) {
         CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
         CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
     }
 
-    protected void addEntityActionLinksBelowAndRight(final MarkupContainer labelIfRegular, final List<LinkAndLabel> entityActions) {
-        final List<LinkAndLabel> entityActionsBelow = LinkAndLabel.positioned(entityActions, ActionLayout.Position.BELOW);
+    protected void addEntityActionLinksBelowAndRight(
+            final MarkupContainer labelIfRegular,
+            final Can<LinkAndLabel> entityActions) {
+
+        final Can<LinkAndLabel> entityActionsBelow = entityActions
+                .filter(LinkAndLabel.positioned(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        final List<LinkAndLabel> entityActionsRight = LinkAndLabel.positioned(entityActions, ActionLayout.Position.RIGHT);
+        final Can<LinkAndLabel> entityActionsRight = entityActions
+                .filter(LinkAndLabel.positioned(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
@@ -342,12 +350,12 @@ implements ScalarModelProvider {
         return "label-left";
     }
 
-    private static String determineActionLayoutPositioningCss(List<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(Can<LinkAndLabel> entityActionLinks) {
         boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
         return actionsPositionedOnRight ? "actions-right" : null;
     }
 
-    private static boolean hasActionsPositionedOn(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
+    private static boolean hasActionsPositionedOn(final Can<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
         for (LinkAndLabel entityActionLink : entityActionLinks) {
             if(entityActionLink.getActionUiMetaModel().getPosition() == position) {
                 return true;

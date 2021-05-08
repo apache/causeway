@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,10 +42,10 @@ extends ScalarModel
 implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final ActionParameterMemento paramMemento;
-    
-    @Getter(onMethod = @__(@Override)) 
+
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private transient ParameterNegotiationModel pendingParameterModel;
 
@@ -58,26 +58,26 @@ implements ParameterUiModel {
         super(parentEntityModel, paramMemento);
         this.paramMemento = paramMemento;
     }
-    
+
     private transient ObjectActionParameter actionParameter;
-    
+
     @Override
     public ObjectActionParameter getMetaModel() {
         if(actionParameter==null) {
-            actionParameter = paramMemento.getActionParameter(this::getSpecificationLoader); 
+            actionParameter = paramMemento.getActionParameter(this::getSpecificationLoader);
         }
-        return actionParameter;  
+        return actionParameter;
     }
-    
+
     private transient ManagedAction managedAction;
-    
+
     public ManagedAction getManagedAction() {
         if(managedAction==null) {
             val actionOwner = getParentUiModel().load();
             // TODO 'where' is not used until whetherDisabled and whetherHidden are implemented
-            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction(), Where.ANYWHERE);  
+            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction(), Where.ANYWHERE);
         }
-        return managedAction;  
+        return managedAction;
     }
 
     @Override
@@ -110,13 +110,13 @@ implements ParameterUiModel {
     @Override
     public String validate(final ManagedObject proposedValue) {
         final ObjectActionParameter parameter = getMetaModel();
-        
+
         val action = parameter.getAction();
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
-            
-            val head = action.interactionHead(parentAdapter);    
-            
+
+            val head = action.interactionHead(parentAdapter);
+
             final String invalidReasonIfAny = parameter
                     .isValid(head, proposedValue, InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
@@ -134,7 +134,7 @@ implements ParameterUiModel {
     public String toStringOf() {
         return getName() + ": " + paramMemento.toString();
     }
-    
+
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
         return Can.empty();
@@ -149,16 +149,16 @@ implements ParameterUiModel {
     public void setValue(ManagedObject paramValue) {
         super.setObject(paramValue);
     }
-    
+
     // -- HELPER
-    
+
     private ManagedObject toNonNull(@Nullable ManagedObject adapter) {
         if(adapter == null) {
             adapter = ManagedObject.empty(getMetaModel().getSpecification());
         }
         return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }
-    
 
-    
+
+
 }

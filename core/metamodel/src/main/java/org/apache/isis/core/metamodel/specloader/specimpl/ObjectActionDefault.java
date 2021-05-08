@@ -109,8 +109,7 @@ implements ObjectAction {
 
     @Override
     public ObjectSpecification getReturnType() {
-        final ActionInvocationFacet facet = getActionInvocationFacet();
-        return facet.getReturnType();
+        return getActionInvocationFacet().getReturnType();
     }
 
     /**

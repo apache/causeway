@@ -42,6 +42,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -82,8 +84,8 @@ import lombok.val;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
-public abstract class ScalarPanelAbstract 
-extends PanelAbstract<ManagedObject, ScalarModel> 
+public abstract class ScalarPanelAbstract
+extends PanelAbstract<ManagedObject, ScalarModel>
 implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
@@ -135,10 +137,10 @@ implements ScalarModelSubscriber {
                 onInitializeEditable();
             } else {
                 onInitializeReadonly(usabilityConsent.getReason());
-            }            
-        }; 
+            }
+        };
     }
-    
+
     /**
      *
      * @param argsAndConsents - the action being invoked
@@ -149,9 +151,9 @@ implements ScalarModelSubscriber {
     public Repaint updateIfNecessary(
             @NonNull final FormPendingParamUiModel argsAndConsents,
             @NonNull final Optional<AjaxRequestTarget> target) {
-        
+
         val argModel = argsAndConsents.getParamModel();
-        
+
         // visibility
         val visibilityConsent = argsAndConsents.getVisibilityConsent();
         val visibilityBefore = isVisible();
@@ -169,8 +171,8 @@ implements ScalarModelSubscriber {
         }
 
         val paramValue = argModel.getValue();
-        val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue); 
-        
+        val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
+
         if(valueChanged) {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
                 scalarModel.setObject(null);
@@ -179,7 +181,7 @@ implements ScalarModelSubscriber {
             }
             scalarModel.clearPending();
         }
-        
+
 
         // repaint the entire form if visibility has changed
         if (!visibilityBefore || !visibilityAfter) {
@@ -274,7 +276,7 @@ implements ScalarModelSubscriber {
             postInit.run();
             postInit=null;
         } else {
-        
+
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
@@ -286,7 +288,7 @@ implements ScalarModelSubscriber {
         } else {
             if (scalarModel.isViewMode()) {
                 onInitializeNotEditable();
-            } else {        
+            } else {
                 onInitializeEditable();
             }
         }
@@ -344,13 +346,15 @@ implements ScalarModelSubscriber {
 
         // find associated actions for this scalar property (only properties will have any.)
         final ScalarModel.AssociatedActions associatedActions =
-                scalarModel.getAssociatedActions(); 
+                scalarModel.getAssociatedActions();
         final ObjectAction inlineActionIfAny =
                 associatedActions.getFirstAssociatedWithInlineAsIfEdit();
-        final List<ObjectAction> remainingAssociated = associatedActions.getRemainingAssociated();
+        val remainingAssociated = associatedActions.getRemainingAssociated();
 
         // convert those actions into UI layer widgets
-        final List<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil.asActionLinks(this.scalarModel, remainingAssociated);
+        final Can<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil
+                .asActionLinks(this.scalarModel, remainingAssociated.stream())
+                .collect(Can.toCan());
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
@@ -369,38 +373,45 @@ implements ScalarModelSubscriber {
 
             // start off assuming that neither the property nor any of the associated actions
             // are using inline prompts
-            Component componentToHideIfAny = inlinePromptLink;
+
+            val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
+            //Component componentToHideIfAny = inlinePromptLink;
 
             if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 configureInlinePromptLinkCallback(inlinePromptLink);
-                componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+                componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
 
             } else {
 
                 // not editable property, but maybe one of the actions is.
                 if(inlineActionIfAny != null) {
 
-                    final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny);
-                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getUiComponent();
+                    LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny)
+                    .findFirst()
+                    .map(LinkAndLabel::getUiComponent)
+                    .map(ActionLink.class::cast)
+                    .ifPresent(actionLinkInlineAsIfEdit->{
 
-                    if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
-                        configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
-                        componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
-                    }
+                        if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
+                            configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
+                            componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
+                        }
+
+                    });
+
                 }
             }
 
+            componentToHideRef.getValue()
+            .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
 
-            if(componentToHideIfAny != null) {
-                componentToHideIfAny.setVisibilityAllowed(false);
-            }
         }
 
         // prevent from tabbing into non-editable widgets.
-        if(scalarModel.isProperty() 
+        if(scalarModel.isProperty()
                 && scalarModel.getMode() == EntityModel.Mode.VIEW
-                && (scalarModel.getPromptStyle().isDialog() 
+                && (scalarModel.getPromptStyle().isDialog()
                         || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
@@ -508,11 +519,11 @@ implements ScalarModelSubscriber {
 
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
-            
+
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
-            
+
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
@@ -732,7 +743,7 @@ implements ScalarModelSubscriber {
 
             @Override
             protected void onEvent(final AjaxRequestTarget target) {
-                
+
                 _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                         + "originating from User clicking on an editable Property to start inline editing.");
 
@@ -858,11 +869,14 @@ implements ScalarModelSubscriber {
 
     private void addActionLinksBelowAndRight(
             final MarkupContainer labelIfRegular,
-            final List<LinkAndLabel> linkAndLabels) {
-        final List<LinkAndLabel> linksBelow = LinkAndLabel.positioned(linkAndLabels, ActionLayout.Position.BELOW);
+            final Can<LinkAndLabel> linkAndLabels) {
+
+        val linksBelow = linkAndLabels
+                .filter(LinkAndLabel.positioned(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        final List<LinkAndLabel> linksRight = LinkAndLabel.positioned(linkAndLabels, ActionLayout.Position.RIGHT);
+        val linksRight = linkAndLabels
+                .filter(LinkAndLabel.positioned(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
@@ -876,7 +890,7 @@ implements ScalarModelSubscriber {
      */
     private void addPositioningCssTo(
             final MarkupContainer markupContainer,
-            final List<LinkAndLabel> actionLinks) {
+            final Can<LinkAndLabel> actionLinks) {
         CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
         CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
@@ -902,12 +916,12 @@ implements ScalarModelSubscriber {
         return "label-left";
     }
 
-    private static String determineActionLayoutPositioningCss(List<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(Can<LinkAndLabel> entityActionLinks) {
         boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
         return actionsPositionedOnRight ? "actions-right" : null;
     }
 
-    private static boolean hasActionsPositionedOn(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
+    private static boolean hasActionsPositionedOn(final Can<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
         for (LinkAndLabel entityActionLink : entityActionLinks) {
             if(entityActionLink.getActionUiMetaModel().getPosition() == position) {
                 return true;

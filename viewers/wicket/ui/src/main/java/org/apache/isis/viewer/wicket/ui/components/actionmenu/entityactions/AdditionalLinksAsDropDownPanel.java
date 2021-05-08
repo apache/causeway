@@ -19,15 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import java.util.List;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 
 public class AdditionalLinksAsDropDownPanel extends AdditionalLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalLinksAsDropDownPanel(String id, List<LinkAndLabel> links) {
+    public AdditionalLinksAsDropDownPanel(String id, Can<LinkAndLabel> links) {
         super(id, links);
     }
 }

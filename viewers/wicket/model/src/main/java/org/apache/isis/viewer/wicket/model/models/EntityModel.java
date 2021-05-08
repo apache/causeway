@@ -34,13 +34,13 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -58,41 +58,41 @@ import lombok.val;
  * stored as a {@link ObjectMemento}.
  */
 //@Log4j2
-public class EntityModel 
-extends ManagedObjectModel 
+public class EntityModel
+extends ManagedObjectModel
 implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
-    
+
     private ObjectMemento contextAdapterIfAny;
 
-    @Getter(onMethod = @__(@Override)) 
-    @Setter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private Mode mode;
-    
-    @Getter(onMethod = @__(@Override)) 
-    @Setter(onMethod = @__(@Override)) 
+
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
 
     // -- FACTORIES
 
     public static EntityModel ofParameters(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
         val memento = bookmarkFrom(pageParameters)
                 .map(commonContext::mementoForBookmark)
                 .orElse(null);
-        
+
         return ofMemento(commonContext, memento);
     }
-    
+
     public static EntityModel ofAdapter(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
+
         val adapterMemento = commonContext.mementoFor(adapter);
         return ofMemento(commonContext, adapterMemento);
     }
@@ -100,7 +100,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public static EntityModel ofMemento(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento) {
-        
+
         return ofMemento(commonContext, adapterMemento, /*propertyScalarModels*/null);
     }
 
@@ -108,29 +108,29 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento,
             final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
-        
-        return new EntityModel(commonContext, adapterMemento, propertyScalarModels, 
+
+        return new EntityModel(commonContext, adapterMemento, propertyScalarModels,
                 Mode.VIEW, RenderingHint.REGULAR);
     }
-    
+
     /**
      * As used by TreeModel (same as {@link #ofAdapter(IsisAppCommonContext, ManagedObject)}
      */
     protected EntityModel(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
-        this(commonContext, 
-                commonContext.mementoFor(adapter), 
-                /*propertyScalarModels*/null, 
+
+        this(commonContext,
+                commonContext.mementoFor(adapter),
+                /*propertyScalarModels*/null,
                 Mode.VIEW, RenderingHint.REGULAR);
     }
-    
+
     /**
      * As used by ScalarModel
      */
     protected EntityModel(IsisAppCommonContext commonContext, Mode mode, RenderingHint renderingHint) {
-        this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(), 
+        this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(),
                 mode, renderingHint);
     }
 
@@ -140,11 +140,11 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
             Mode mode,
             RenderingHint renderingHint) {
-        
+
         super(requires(commonContext, "commonContext"), adapterMemento);
-        
-        this.propertyScalarModels = propertyScalarModels!=null 
-                ? propertyScalarModels 
+
+        this.propertyScalarModels = propertyScalarModels!=null
+                ? propertyScalarModels
                 : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
@@ -175,7 +175,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public PageParameters getPageParametersWithoutUiHints() {
         return PageParameterUtil.createPageParametersForObject(getObject());
     }
-    
+
     @Override
     public boolean isInlinePrompt() {
         return false;
@@ -224,9 +224,12 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
      * Lazily populates with the current value of each property.
      */
     public ScalarModel getPropertyModel(
-            final PropertyMemento pm,
+            final OneToOneAssociation property,
             final Mode mode,
             final RenderingHint renderingHint) {
+
+        val pm = property.getMemento();
+
         ScalarModel scalarModel = propertyScalarModels.get(pm);
         if (scalarModel == null) {
             scalarModel = new ScalarPropertyModel(this, pm, mode, renderingHint);
@@ -245,7 +248,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public void resetPropertyModels() {
         //adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(super.getSpecificationLoader());
+            OneToOneAssociation otoa = pm.getProperty(super::getSpecificationLoader);
             val scalarModel = propertyScalarModels.get(pm);
             val adapter = getObject();
             val associatedAdapter =

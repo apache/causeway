@@ -34,10 +34,10 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -49,7 +49,7 @@ import lombok.val;
 public final class ActionUiMetaModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter private final ActionMemento actionMemento;
     @Getter private final String label;
     @Getter private final String description;
@@ -73,47 +73,47 @@ public final class ActionUiMetaModel implements Serializable {
             final ManagedAction managedAction) {
         return new ActionUiMetaModel(managedAction.getOwner(), managedAction.getAction());
     }
-    
+
     public static <T> ActionUiMetaModel of(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
         return new ActionUiMetaModel(actionHolder, objectAction);
     };
-    
+
     private ActionUiMetaModel(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
-        
-        this(   new ActionMemento(objectAction),
+
+        this(   objectAction.getMemento(),
                 ObjectAction.Util.nameFor(objectAction),
                 getDescription(objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
-                ObjectAction.Util.cssClassFor(objectAction, actionHolder), 
+                ObjectAction.Util.cssClassFor(objectAction, actionHolder),
                 FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFacetFor(objectAction)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),
                 Parameters.fromParameterCount(objectAction.getParameterCount()),
                 disabledUiModelFor(actionHolder, objectAction),
-                ObjectAction.Util.isAreYouSureSemantics(objectAction) 
+                ObjectAction.Util.isAreYouSureSemantics(objectAction)
                 && ObjectAction.Util.isNoParameters(objectAction)
                 );
     }
-    
+
     public static <R> Predicate<R> positioned(
             final ActionLayout.Position position,
             final Function<R, ActionUiMetaModel> posAccessor) {
         return x -> posAccessor.apply(x).getPosition() == position;
     }
-    
-    public ObjectAction getObjectAction(Supplier<SpecificationLoader> specLoader) { 
+
+    public ObjectAction getObjectAction(final Supplier<SpecificationLoader> specLoader) {
         return actionMemento.getAction(specLoader);
     }
-    
+
     // -- PARAMETERS
-    
+
     public enum Parameters {
         NO_PARAMETERS,
         TAKES_PARAMETERS;
@@ -126,32 +126,32 @@ public final class ActionUiMetaModel implements Serializable {
             return this == NO_PARAMETERS;
         }
     }
-    
+
     // -- USABILITY
-    
+
     private static Optional<DisablingUiModel> disabledUiModelFor(
-            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ManagedObject actionHolder,
             @NonNull final ObjectAction objectAction) {
-            
+
         // check usability
         final Consent usability = objectAction.isUsable(
                 actionHolder,
                 InteractionInitiatedBy.USER,
                 Where.ANYWHERE
                 );
-        
+
         val enabled = usability.getReason() == null;
         return DisablingUiModel.of(!enabled, usability.getReason()) ;
     }
-    
+
     // -- DESCRIBED AS
-    
+
     private static Optional<String> getDescription(
             @NonNull final ObjectAction objectAction) {
-        
+
         val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
         return Optional.ofNullable(describedAsFacet)
                 .map(DescribedAsFacet::value);
     }
-    
+
 }

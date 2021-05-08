@@ -27,17 +27,17 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
 import lombok.val;
 
-public class ScalarPropertyModel 
-extends ScalarModel 
+public class ScalarPropertyModel
+extends ScalarModel
 implements PropertyUiModel {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private final PropertyMemento propertyMemento;
 
     /**
@@ -46,47 +46,42 @@ implements PropertyUiModel {
      * property.
      */
     public ScalarPropertyModel(
-            EntityModel parentEntityModel, 
+            EntityModel parentEntityModel,
             PropertyMemento propertyMemento,
-            EntityModel.Mode mode, 
+            EntityModel.Mode mode,
             EntityModel.RenderingHint renderingHint) {
-        
+
         super(parentEntityModel, propertyMemento, mode, renderingHint);
         this.propertyMemento = propertyMemento;
         reset();
     }
-    
+
     public ScalarPropertyModel copyHaving(
-            EntityModel.Mode mode, 
+            EntityModel.Mode mode,
             EntityModel.RenderingHint renderingHint) {
         return new ScalarPropertyModel(
-                getParentUiModel(), 
+                getParentUiModel(),
                 propertyMemento,
                 mode,
                 renderingHint);
     }
-    
-    private transient OneToOneAssociation property;
-    
+
     @Override
     public OneToOneAssociation getMetaModel() {
-        if(property==null) {
-            property = propertyMemento.getProperty(getSpecificationLoader()); 
-        }
-        return property;  
+        return propertyMemento.getProperty(this::getSpecificationLoader);
     }
 
     private transient ManagedProperty managedProperty;
-    
+
     public ManagedProperty getManagedProperty() {
         if(managedProperty==null) {
             val owner = getParentUiModel().getObject();
             val where = this.getRenderingHint().asWhere();
-            managedProperty = ManagedProperty.of(owner, getMetaModel(), where); 
+            managedProperty = ManagedProperty.of(owner, getMetaModel(), where);
         }
-        return managedProperty;  
-    } 
-    
+        return managedProperty;
+    }
+
     @Override
     public ObjectSpecification getScalarTypeSpec() {
         return getMetaModel().getSpecification();
@@ -96,7 +91,7 @@ implements PropertyUiModel {
     public String getIdentifier() {
         return getMetaModel().getIdentifier().getMemberName();
     }
-    
+
     @Override
     public String getCssClass() {
         return getMetaModel().getCssClass("isis-");
@@ -130,10 +125,10 @@ implements PropertyUiModel {
         val presentationValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
                 ? null
                 : propertyValue;
-        
+
         this.setObject(presentationValue);
     }
-    
+
 
     @Override
     public ManagedObject load() {
@@ -149,12 +144,12 @@ implements PropertyUiModel {
     public String toStringOf() {
         return getName() + ": " + propertyMemento.toString();
     }
-    
+
     public String getReasonInvalidIfAny() {
         val associate = getObject();
         return validate(associate);
     }
-    
+
     /**
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
@@ -162,16 +157,16 @@ implements PropertyUiModel {
      *  (specifically, if operating on a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ManagedObject applyValue() {
-        
+
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
         return getManagedProperty().getOwner();
 
     }
-    
+
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
         return getManagedProperty().getAssociatedActions();
     }
-    
+
 }

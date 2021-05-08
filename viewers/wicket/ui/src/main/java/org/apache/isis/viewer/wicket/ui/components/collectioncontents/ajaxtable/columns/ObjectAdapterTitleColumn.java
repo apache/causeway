@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
@@ -41,49 +43,53 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
     private static final long serialVersionUID = 1L;
     private final ObjectMemento parentAdapterMementoIfAny;
 
-    private static String columnName(final ObjectMemento parentAdapterMementoIfAny, final int maxTitleLength) {
-        if(maxTitleLength == 0) {
-            return "";
-        }
-        return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
-    }
-
     public ObjectAdapterTitleColumn(
-            IsisAppCommonContext commonContext, 
-            ObjectMemento parentAdapterMementoIfAny, 
+            IsisAppCommonContext commonContext,
+            ObjectMemento parentAdapterMementoIfAny,
             int maxTitleLength) {
-        
+
         super(commonContext, columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
         this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
     }
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem, 
-            final String componentId, 
+            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final String componentId,
             final IModel<ManagedObject> rowModel) {
-        
+
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
         cellItem.add(new CssClassAppender("title-column"));
     }
 
+    // -- HELPER
+
+    private static String columnName(
+            final @Nullable ObjectMemento parentAdapterMementoIfAny,
+            final int maxTitleLength) {
+        if(maxTitleLength == 0) {
+            return "";
+        }
+        return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
+    }
+
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
         val adapter = rowModel.getObject();
-        
+
         if(ManagedObjects.isValue(adapter)) {
             val valueModel = new ValueModel(super.getCommonContext(), adapter);
-            
+
             val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);
             return componentFactory.createComponent(id, valueModel);
         }
-        
+
         val entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         entityModel.setRenderingHint(parentAdapterMementoIfAny != null
                 ? RenderingHint.PARENTED_TITLE_COLUMN
-                        : RenderingHint.STANDALONE_TITLE_COLUMN);
+                : RenderingHint.STANDALONE_TITLE_COLUMN);
         entityModel.setContextAdapterIfAny(parentAdapterMementoIfAny);
-        
+
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
         val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);
         return componentFactory.createComponent(id, entityModel);

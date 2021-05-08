@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -53,7 +52,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
  * {@link org.apache.isis.viewer.wicket.ui.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
-public class CollectionSelectorPanel 
+public class CollectionSelectorPanel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -76,7 +75,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model) {
-        this(id, model, ComponentHintKey.<String>noop());
+        this(id, model, ComponentHintKey.noop());
     }
 
     public CollectionSelectorPanel(
@@ -150,11 +149,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
                         }
 
                         Bookmark domainObjectBookmarkIfAny() {
-                            final EntityCollectionModel entityCollectionModel = CollectionSelectorPanel.this.getModel();
-                            final EntityModel entityModel = entityCollectionModel.getEntityModel();
-                            return entityModel != null
-                                    ? entityModel.asHintingBookmarkIfSupported()
-                                    : null;
+                            return CollectionSelectorPanel.this.getModel().asHintingBookmarkIfSupported();
                         }
 
                         @Override

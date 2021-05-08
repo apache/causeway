@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.paged;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -27,5 +29,19 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface PagedFacet extends Facet {
 
     int value();
+
+    /**
+     * Returns the page-size as held by given {@code pagedFacet} if present, otherwise
+     * falls back to {@code defaultPageSize}.
+     * @param pagedFacet - null-able
+     * @param defaultPageSize
+     */
+    static int pageSizeOrDefault(
+            final @Nullable PagedFacet pagedFacet,
+            final int defaultPageSize) {
+        return pagedFacet != null
+                ? pagedFacet.value()
+                : defaultPageSize;
+    }
 
 }

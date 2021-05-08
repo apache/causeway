@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
 
 import lombok.NonNull;
 
@@ -110,20 +111,20 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             ParameterNegotiationModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
-    /** 
+    /**
      * Needs to account for 2 scenarios,
      * <ul>
-     * <li>there is no default providing facet associated with this parameter, 
+     * <li>there is no default providing facet associated with this parameter,
      * we return the corresponding value from the given {@link ParameterNegotiationModel}</li>
-     * <li>there is a default providing facet associated with this parameter, 
-     * it may return {@code null}, but in any case the value is wrapped in a 
+     * <li>there is a default providing facet associated with this parameter,
+     * it may return {@code null}, but in any case the value is wrapped in a
      * non-null {@link ManagedObject}</li>
      * </ul>
-     * @return a {@link ManagedObject}, {@code null} is represented by an empty 
+     * @return a {@link ManagedObject}, {@code null} is represented by an empty
      * but non-null {@link ManagedObject}
      */
     @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
-    
+
     @NonNull default ManagedObject getEmpty() {
         return ManagedObject.of(getSpecification(), null);
     }
@@ -135,7 +136,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
                 .getParamValues()
                 .getElseFail(getNumber());
     }
-    
+
 
     /**
      * Whether this parameter is visible given the entered previous arguments
@@ -185,7 +186,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             ManagedObject proposedValue,
             InteractionInitiatedBy interactionInitiatedBy);
 
-    
+
     @Vetoed
     public static class Predicates {
         private Predicates(){}
@@ -263,4 +264,12 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     default String getCssClass(String prefix) {
         return getAction().getCssClass(prefix) + "-" + getId();
     }
+
+    /**
+     * Returns a serializable representation of this parameter.
+     */
+    default ActionParameterMemento getMemento() {
+        return ActionParameterMemento.forActionParameter(this);
+    }
+
 }

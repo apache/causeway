@@ -25,10 +25,8 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -40,7 +38,7 @@ import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
-public class WhereInTheWorldPanel 
+public class WhereInTheWorldPanel
 extends PanelAbstract<ManagedObject, EntityModel>  {
 
     private static final long serialVersionUID = 1L;    // <.>
@@ -100,12 +98,12 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
     private Component createPropertyComponent(final String propertyId) {
         val managedObject = getModel().getManagedObject();
         val spec = managedObject.getSpecification();                               // <.>
-        val otoa = (OneToOneAssociation) spec.getAssociationElseFail(propertyId);  // <.>
-        val pm = new PropertyMemento(otoa);                                        // <.>
+        val property = spec.getPropertyElseFail(propertyId);                       // <.>
+        //val pm = otoa.getMemento();                                              // <.>
 
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
-                    pm, ObjectUiModel.Mode.VIEW,
+                    property, ObjectUiModel.Mode.VIEW,
                     ObjectUiModel.RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
                 ComponentType.SCALAR_NAME_AND_VALUE, propertyId, scalarModel);

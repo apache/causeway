@@ -23,8 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -39,18 +38,13 @@ public class StandaloneCollectionPage extends PageAbstract {
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
-    public StandaloneCollectionPage(final EntityCollectionModel model) {
-        super(PageParametersUtils.newPageParameters(), actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
-        addChildComponents(themeDiv, model);
+    public StandaloneCollectionPage(final EntityCollectionModelStandalone collectionModel) {
+        super(PageParametersUtils.newPageParameters(),
+                collectionModel.getActionModel().getMetaModel().getName(),
+                ComponentType.STANDALONE_COLLECTION);
 
+        addChildComponents(themeDiv, collectionModel);
         addBookmarkedPages(themeDiv);
     }
 
-    private static String actionNameFrom(final EntityCollectionModel model) {
-        ActionModel actionModel = model.getActionModelHint();
-        if(actionModel != null) {
-            return actionModel.getMetaModel().getName();
-        }
-        return "Results"; // fallback, probably not required because hint should always exist on the model.
-    }
 }

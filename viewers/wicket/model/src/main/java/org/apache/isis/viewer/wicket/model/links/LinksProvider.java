@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.links;
 
-import java.util.List;
-
 import org.apache.wicket.markup.html.link.Link;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 /**
@@ -29,5 +28,5 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
  * additional list of {@link Link}s to be rendered.
  */
 public interface LinksProvider {
-    List<LinkAndLabel> getLinks();
+    Can<LinkAndLabel> getLinks();
 }

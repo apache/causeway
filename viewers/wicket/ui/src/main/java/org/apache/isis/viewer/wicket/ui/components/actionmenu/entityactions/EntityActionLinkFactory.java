@@ -44,7 +44,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
     @Override
     public LinkAndLabel newActionLink(
-            final ObjectAction objectAction, 
+            final ObjectAction objectAction,
             final String named) {
 
         val objectAdapter = this.targetEntityModel.getManagedObject();
@@ -52,7 +52,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
         val isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
         if (!isIdentifiable) {
             throw new IllegalArgumentException(String.format(
-                    "Object '%s' is not identifiable (has no identifier).", 
+                    "Object '%s' is not identifiable (has no identifier).",
                     objectAdapter.titleString(null)));
         }
 
@@ -61,12 +61,12 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(()->CommonContextUtils.getCommonContext().getSpecificationLoader()), 
+                        model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
                         toggledMementosProviderIfAny),
-                named, 
-                this.targetEntityModel, 
+                named,
+                this.targetEntityModel,
                 objectAction);
     }
-    
-    
+
+
 }

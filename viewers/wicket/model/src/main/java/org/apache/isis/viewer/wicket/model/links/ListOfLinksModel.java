@@ -18,34 +18,38 @@
  */
 package org.apache.isis.viewer.wicket.model.links;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>> {
 
     private static final long serialVersionUID = 1L;
 
-    private List<LinkAndLabel> links;
+    private transient Can<LinkAndLabel> links;
 
-    public ListOfLinksModel(List<LinkAndLabel> links) {
-        // copy, in case supplied list is a non-serializable guava list using lazy evaluation;
-        this.links = _Lists.newArrayList(links);
+    public ListOfLinksModel(final @NonNull Can<LinkAndLabel> links) {
+        this.links = links;
     }
 
     @Override
     protected List<LinkAndLabel> load() {
-        return getAsList();
+        return links.toList();
     }
 
     public boolean hasAnyVisibleLink() {
 
-        for (val linkAndLabel : getAsList()) {
+        for (val linkAndLabel : links) {
             val link = linkAndLabel.getUiComponent();
             if(link.isVisible()) {
                 return true;
@@ -54,15 +58,35 @@ public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>
         return false;
     }
 
-    // -- INCOMPLETE DESERIALIZATION WORKAROUND
+    // -- SERIALIZATION PROXY
 
-    private List<LinkAndLabel> getAsList() {
-        if(links.size()>0) {
-            if(! (links.get(0) instanceof LinkAndLabel)) {
-                return links = LinkAndLabel.recoverFromIncompleteDeserialization(_Casts.uncheckedCast(links));
-            } 
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final @NonNull ArrayList<LinkAndLabel> links;
+
+        private SerializationProxy(ListOfLinksModel model) {
+            this.links = new ArrayList<LinkAndLabel>(model.links.toList());
         }
-        return links;
+
+        private Object readResolve() {
+            return recover();
+        }
+
+        private ListOfLinksModel recover() {
+            val linksToUse = (links.size()>0
+                    && !(links.get(0) instanceof LinkAndLabel))
+                ? LinkAndLabel.recoverFromIncompleteDeserialization(_Casts.uncheckedCast(links))
+                : links;
+            return new ListOfLinksModel(Can.ofCollection(linksToUse));
+        }
     }
 
 

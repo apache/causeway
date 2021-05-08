@@ -45,13 +45,13 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -106,7 +106,7 @@ implements CollectionCountProvider {
             bulkActionsProvider.configureBulkActions(toggleboxColumn);
         }
 
-        final EntityCollectionModel collectionModel = getModel();
+        val collectionModel = getModel();
         addTitleColumn(
                 columns,
                 collectionModel.getParentObjectAdapterMemento(),
@@ -254,8 +254,8 @@ implements CollectionCountProvider {
 //        val parentObject = Optional.ofNullable(collectionModel.getParentObjectAdapterMemento())
 //                .map(getCommonContext()::reconstructObject);
 
-        val parentObject = Optional.ofNullable(collectionModel.getEntityModel())
-                .map(EntityModel::getManagedObject);
+        final Optional<ManagedObject> parentObject = collectionModel.getManagedCollection()
+                .map(ManagedCollection::getOwner);
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->
