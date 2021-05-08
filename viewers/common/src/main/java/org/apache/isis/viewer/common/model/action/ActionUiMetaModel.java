@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -107,7 +108,7 @@ public final class ActionUiMetaModel implements Serializable {
         return x -> posAccessor.apply(x).getPosition() == position;
     }
 
-    public ObjectAction getObjectAction(final SpecificationLoader specLoader) {
+    public ObjectAction getObjectAction(final Supplier<SpecificationLoader> specLoader) {
         return actionMemento.getAction(specLoader);
     }
 

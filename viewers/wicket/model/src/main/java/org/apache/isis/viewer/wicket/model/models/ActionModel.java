@@ -109,13 +109,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // --
 
-    private transient ObjectAction objectAction;
     @Override
     public ObjectAction getMetaModel() {
-        if(objectAction==null) {
-            objectAction = actionMemento.getAction(getSpecificationLoader());
-        }
-        return objectAction;
+        return actionMemento.getAction(this::getSpecificationLoader);
     }
 
     @Override

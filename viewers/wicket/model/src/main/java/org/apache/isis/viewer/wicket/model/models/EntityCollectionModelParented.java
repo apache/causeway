@@ -176,7 +176,7 @@ implements
 
     @Override
     public OneToManyAssociation getMetaModel() {
-        return collectionMetaModelMemento.getCollection(getSpecificationLoader());
+        return collectionMetaModelMemento.getCollection(this::getSpecificationLoader);
     }
 
     public CollectionLayoutData getLayoutData() {

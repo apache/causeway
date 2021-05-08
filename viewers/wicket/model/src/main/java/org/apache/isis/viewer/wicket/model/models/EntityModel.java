@@ -248,7 +248,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public void resetPropertyModels() {
         //adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(super.getSpecificationLoader());
+            OneToOneAssociation otoa = pm.getProperty(super::getSpecificationLoader);
             val scalarModel = propertyScalarModels.get(pm);
             val adapter = getObject();
             val associatedAdapter =

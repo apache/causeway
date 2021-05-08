@@ -221,7 +221,7 @@ implements
                         .reconstructObject(colModel.getParentObjectAdapterMemento());
 
                 final OneToManyAssociation collection = colModel.collectionMemento
-                        .getCollection(colModel.getSpecificationLoader());
+                        .getCollection(colModel::getSpecificationLoader);
 
                 final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 

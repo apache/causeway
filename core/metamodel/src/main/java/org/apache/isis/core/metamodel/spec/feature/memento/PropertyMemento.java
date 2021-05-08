@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -62,9 +63,10 @@ public class PropertyMemento implements Serializable {
     private transient OneToOneAssociation property;
 
     @Synchronized
-    public OneToOneAssociation getProperty(final SpecificationLoader specLoader) {
+    public OneToOneAssociation getProperty(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (property == null) {
-            property = specLoader.specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+            property = specLoader.get()
+                    .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
                     .getPropertyElseFail(getIdentifier().getMemberName());
         }
         return property;

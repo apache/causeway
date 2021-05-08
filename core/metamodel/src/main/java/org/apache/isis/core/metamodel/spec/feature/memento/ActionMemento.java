@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -67,9 +68,9 @@ public class ActionMemento implements Serializable {
     private transient ObjectAction action;
 
     @Synchronized
-    public ObjectAction getAction(final @NonNull SpecificationLoader specLoader) {
+    public ObjectAction getAction(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (action == null) {
-            action = specLoader
+            action = specLoader.get()
                     .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
                     .getActionElseFail(
                             getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
@@ -77,6 +78,10 @@ public class ActionMemento implements Serializable {
         }
         return action;
     }
+
+//    public ObjectAction getAction(final @NonNull SpecificationLoader specLoader) {
+//
+//    }
 
     // -- OBJECT CONTRACT
 

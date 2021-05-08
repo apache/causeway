@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -63,9 +64,10 @@ public class CollectionMemento implements Serializable {
     private transient OneToManyAssociation collection;
 
     @Synchronized
-    public OneToManyAssociation getCollection(final @NonNull SpecificationLoader specLoader) {
+    public OneToManyAssociation getCollection(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (collection == null) {
-            collection = specLoader.specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+            collection = specLoader.get()
+                    .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
                     .getCollectionElseFail(getIdentifier().getMemberName());
         }
         return collection;

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature.memento;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -70,7 +71,7 @@ public class ActionParameterMemento implements Serializable {
     private transient ObjectActionParameter actionParameter;
 
     @Synchronized
-    public ObjectActionParameter getActionParameter(final @NonNull SpecificationLoader specLoader) {
+    public ObjectActionParameter getActionParameter(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (actionParameter == null) {
             this.actionParameter = actionMemento
                     .getAction(specLoader)

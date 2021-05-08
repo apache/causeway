@@ -61,7 +61,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(CommonContextUtils.getCommonContext().getSpecificationLoader()),
+                        model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
                         toggledMementosProviderIfAny),
                 named,
                 this.targetEntityModel,

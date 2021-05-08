@@ -124,7 +124,7 @@ public final class ServiceActionUtil {
 
             return LinkAndLabel.of(
                     model->actionLinkFactory.newActionLink(
-                            model.getObjectAction(CommonContextUtils.getCommonContext().getSpecificationLoader()),
+                            model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
                             named)
                             .getUiComponent(),
                     named,
