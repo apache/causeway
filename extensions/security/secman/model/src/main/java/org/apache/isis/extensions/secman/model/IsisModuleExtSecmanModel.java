@@ -57,7 +57,7 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenan
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_updateParent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_users;
 import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
+import org.apache.isis.extensions.secman.api.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_delete;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_duplicate;
