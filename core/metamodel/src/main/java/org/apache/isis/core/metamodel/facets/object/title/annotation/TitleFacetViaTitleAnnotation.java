@@ -100,7 +100,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     @Override
     public String title(final ManagedObject targetAdapter) {
-        return title(null, targetAdapter);
+        return title(__->false, targetAdapter);
     }
 
     private String titleOf(final ManagedObject adapter) {
