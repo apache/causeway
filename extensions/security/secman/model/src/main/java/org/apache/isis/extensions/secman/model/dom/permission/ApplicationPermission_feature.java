@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModel;
+import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationPermission_feature {
 
-    public static class PropertyDomainEvent 
+    public static class PropertyDomainEvent
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
     final ApplicationPermission target;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.api.feature.dom;
 
 public class ApplicationFeatureConstants {
 
@@ -24,5 +24,5 @@ public class ApplicationFeatureConstants {
     public static final int TYPICAL_LENGTH_NAMESPACE = 50;
     public static final int TYPICAL_LENGTH_TYPE_SIMPLE_NAME = 50;
     public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
-    
+
 }

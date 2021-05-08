@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.api.feature.dom;
 
 import java.util.List;
 import java.util.SortedSet;
@@ -37,13 +37,13 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
         )
 public class ApplicationType extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<T> 
+    public static abstract class PropertyDomainEvent<T>
     extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationType, T> {}
 
-    public static abstract class CollectionDomainEvent<T> 
+    public static abstract class CollectionDomainEvent<T>
     extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
-    public static abstract class ActionDomainEvent 
+    public static abstract class ActionDomainEvent
     extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationType> {}
 
 
@@ -62,7 +62,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
     // -- actions (collection)
 
-    public static class ActionsDomainEvent 
+    public static class ActionsDomainEvent
     extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(
@@ -79,7 +79,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
     // -- properties (collection)
 
-    public static class PropertiesCollectionDomainEvent 
+    public static class PropertiesCollectionDomainEvent
     extends CollectionDomainEvent<ApplicationTypeAction> {}
 
 
@@ -96,7 +96,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
 
     // -- collections (collection)
-    public static class CollectionsCollectionDomainEvent 
+    public static class CollectionsCollectionDomainEvent
     extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(

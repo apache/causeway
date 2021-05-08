@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.api.feature.dom;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -89,9 +89,9 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     @PropertyLayout(fieldSetId="Detail", sequence = "2.8")
     public Integer getMaxLength() {
         val maxLen = getFeature().getPropertyMaxLength();
-        return maxLen.isPresent() 
+        return maxLen.isPresent()
                 ? maxLen.getAsInt()
-                : null; // unexpected code path, as this case should be hidden 
+                : null; // unexpected code path, as this case should be hidden
     }
 
     public boolean hideMaxLength() {
@@ -114,9 +114,9 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     @PropertyLayout(fieldSetId="Detail", sequence = "2.9")
     public Integer getTypicalLength() {
         val maxLen = getFeature().getPropertyTypicalLength();
-        return maxLen.isPresent() 
+        return maxLen.isPresent()
                 ? maxLen.getAsInt()
-                : null; // unexpected code path, as this case should be hidden 
+                : null; // unexpected code path, as this case should be hidden
     }
 
     public boolean hideTypicalLength() {

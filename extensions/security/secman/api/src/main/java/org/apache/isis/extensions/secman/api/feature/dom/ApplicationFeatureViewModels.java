@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.api.feature.dom;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,13 +47,13 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
         )
 public class ApplicationFeatureViewModels  {
 
-    public static abstract class PropertyDomainEvent<T> 
+    public static abstract class PropertyDomainEvent<T>
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class CollectionDomainEvent<T> 
+    public static abstract class CollectionDomainEvent<T>
     extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class ActionDomainEvent 
+    public static abstract class ActionDomainEvent
     extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationFeatureViewModels> {}
 
     // -- ICON NAME
@@ -140,9 +140,9 @@ public class ApplicationFeatureViewModels  {
     // -- HELPERS
 
     private <T extends ApplicationFeatureViewModel> List<T> asViewModels(
-            final Collection<ApplicationFeature> features, 
+            final Collection<ApplicationFeature> features,
             final Class<T> viewmodelType) {
-        
+
         return features.stream()
                 .map(ApplicationFeature::getFeatureId)
                 .map(ApplicationFeatureViewModel.factory(featureRepository, factory, viewmodelType))

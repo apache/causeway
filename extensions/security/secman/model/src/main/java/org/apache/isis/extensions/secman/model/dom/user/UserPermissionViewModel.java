@@ -54,7 +54,7 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModel;
+import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModel;
 
 import lombok.val;
 
