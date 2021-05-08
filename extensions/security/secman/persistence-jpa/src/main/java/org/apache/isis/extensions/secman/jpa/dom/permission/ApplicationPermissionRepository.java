@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
@@ -54,7 +54,7 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import lombok.NonNull;
 import lombok.val;
 
-@Service
+@Repository
 @Named("isis.ext.secman.ApplicationPermissionRepository")
 public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository<ApplicationPermission> {
@@ -94,11 +94,16 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
         return findByUser(user.getUsername());
     }
 
+    //TODO NAMED_QUERY_FIND_BY_USER not working yet, using workaround  ...
+    private List<ApplicationPermission> findByUser_NotWorkingYet(final String username) {
+        return repository.allMatches(
+                Query.named(ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER)
+                    .withParameter("username", username));
+    }
+
     @Inject private ApplicationUserRepository userRepository;
 
     private List<ApplicationPermission> findByUser(final String username) {
-
-        //TODO named query PERMISSION_BY_USER not working yet, using workaround  ...
 
         return userRepository.findByUsername(username)
         .map(ApplicationUser::getRoles)
@@ -109,10 +114,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
                 .collect(Collectors.toList()))
         .orElse(Collections.emptyList())
         ;
-
-//        return repository.allMatches(
-//                Query.named(ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_USER)
-//                    .withParameter("username", username));
     }
 
 
@@ -296,7 +297,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
             final ApplicationFeatureId featureId) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-
         val featureSort = featureId.getSort();
         val featureFqn = featureId.getFullyQualifiedName();
 

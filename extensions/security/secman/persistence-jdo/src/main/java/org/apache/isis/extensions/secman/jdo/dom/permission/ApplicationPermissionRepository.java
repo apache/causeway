@@ -76,7 +76,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     public List<ApplicationPermission> findByRole(@NonNull final ApplicationRole role) {
         return repository.allMatches(
-                Query.named(ApplicationPermission.class, "findByRole")
+                Query.named(ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE)
                     .withParameter("role", role));
     }
 
@@ -93,7 +93,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     private List<ApplicationPermission> findByUser(final String username) {
         return repository.allMatches(
-                Query.named(ApplicationPermission.class, "findByUser")
+                Query.named(ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER)
                     .withParameter("username", username));
     }
 
@@ -155,12 +155,12 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(
             org.apache.isis.extensions.secman.api.role.dom.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureSort type) {
+            final ApplicationFeatureSort featureSort) {
         return repository.allMatches(Query.named(
-                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType")
+                        ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE)
                     .withParameter("role", role)
                     .withParameter("rule", rule)
-                    .withParameter("featureSort", type))
+                    .withParameter("featureSort", featureSort))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -187,7 +187,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
         return repository
                 .uniqueMatch(Query.named(
-                                ApplicationPermission.class, "findByRoleAndRuleAndFeature")
+                                ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN)
                         .withParameter("role", role)
                         .withParameter("rule", rule)
                         .withParameter("featureSort", featureSort)
@@ -207,7 +207,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     public Collection<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
                 Query.named(
-                        ApplicationPermission.class, "findByFeature")
+                        ApplicationPermission.class, org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE)
                 .withParameter("featureSort", featureId.getSort())
                 .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()

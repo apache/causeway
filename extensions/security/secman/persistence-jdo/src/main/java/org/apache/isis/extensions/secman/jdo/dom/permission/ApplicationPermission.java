@@ -68,24 +68,24 @@ import lombok.experimental.UtilityClass;
         column = "version")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name = "findByRole", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role"),
     @javax.jdo.annotations.Query(
-            name = "findByUser", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE (u.roles.contains(role) && u.username == :username) "
                     + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
     @javax.jdo.annotations.Query(
-            name = "findByFeature", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @javax.jdo.annotations.Query(
-            name = "findByRoleAndRuleAndFeature", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
@@ -93,7 +93,7 @@ import lombok.experimental.UtilityClass;
                     + "   && featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn "),
     @javax.jdo.annotations.Query(
-            name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
