@@ -29,6 +29,10 @@ public interface ApplicationTenancy {
     public static final int MAX_LENGTH_NAME = 120;
     public static final int TYPICAL_LENGTH_NAME = 20;
 
+    String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
+    String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
+    String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
+
     // -- DOMAIN EVENTS
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}

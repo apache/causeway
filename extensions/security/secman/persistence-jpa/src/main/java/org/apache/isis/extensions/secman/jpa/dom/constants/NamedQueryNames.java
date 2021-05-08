@@ -20,10 +20,6 @@ package org.apache.isis.extensions.secman.jpa.dom.constants;
 
 public final class NamedQueryNames {
 
-    public static final String TENANCY_BY_NAME = "ApplicationTenancy.findByName";
-    public static final String TENANCY_BY_PATH = "ApplicationTenancy.findByPath";
-    public static final String TENANCY_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
-
     public static final String USER_BY_USERNAME = "ApplicationUser.findByUsername";
     public static final String USER_BY_EMAIL = "ApplicationUser.findByEmailAddress";
     public static final String USER_FIND = "ApplicationUser.find";
