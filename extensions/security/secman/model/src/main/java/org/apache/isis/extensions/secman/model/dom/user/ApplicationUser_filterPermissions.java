@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
+import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

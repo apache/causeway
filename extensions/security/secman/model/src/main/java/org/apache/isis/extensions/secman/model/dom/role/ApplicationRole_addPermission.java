@@ -36,7 +36,7 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.AddPermissionDomainEvent;
-import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
+import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

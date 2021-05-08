@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.api.feature.dom;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,8 +33,6 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_addPermission;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_filterPermissions;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -43,23 +41,21 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 
 /**
- * Supports mixins {@link ApplicationRole_addPermission} 
- * and {@link ApplicationUser_filterPermissions}.
- *
+ * Supports mixins to add and filter permissions on {@link org.apache.isis.extensions.secman.api.role.dom.ApplicationRole} and {@link org.apache.isis.extensions.secman.api.user.dom.ApplicationUser}.
  */
 public final class ApplicationFeatureChoices {
 
     public static final String DESCRIBED_AS = "To refine the search by feature-sort (namespace, type, member), "
             + "use one of "
             + "sort:n sort:t sort:m.";
-    
+
     public static Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final ApplicationFeatureRepository featureRepository,
             final @MinLength(3) String search) {
-        
-        final Predicate<ApplicationFeatureId> searchRefine; 
+
+        final Predicate<ApplicationFeatureId> searchRefine;
         final String searchTerm;
-        
+
         if(search.startsWith("sort:n")) {
             searchRefine = ApplicationFeatureChoices::isNamespace;
             searchTerm = search.substring(6).trim();
@@ -73,9 +69,9 @@ public final class ApplicationFeatureChoices {
             searchRefine = _Predicates.alwaysTrue();
             searchTerm = search.trim();
         }
-        
+
         val idsByName = featureRepository.getFeatureIdentifiersByName();
-        
+
         return idsByName.entrySet().stream()
         .filter(entry->searchRefine.test(entry.getValue()))
         .filter(entry->matches(entry.getKey(), entry.getValue(), searchTerm))
@@ -87,43 +83,43 @@ public final class ApplicationFeatureChoices {
     private static boolean matches(String featureName, ApplicationFeatureId featureId, String search) {
         return featureName.contains(search);
     }
-    
+
     private static boolean isNamespace(ApplicationFeatureId featureId) {
         return featureId.getSort().isNamespace();
     }
-    
+
     private static boolean isType(ApplicationFeatureId featureId) {
         return featureId.getSort().isType();
     }
-    
+
     private static boolean isMember(ApplicationFeatureId featureId) {
         return featureId.getSort().isMember();
     }
-    
-    // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE 
+
+    // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE
 
     /**
      * Viewmodel wrapper around value type {@link ApplicationFeatureId}. Introduced,
-     * because at the time of writing, 
+     * because at the time of writing,
      * autoComplete/choices do not support value types.
      */
     @DomainObject(
-            nature = Nature.VIEW_MODEL, 
+            nature = Nature.VIEW_MODEL,
             objectType = "isis.ext.secman.AppFeat")
     @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
-    public static class AppFeat 
-    implements 
+    public static class AppFeat
+    implements
         Comparable<AppFeat>,
         ViewModel {
-        
+
         @Property
-        @Getter  
+        @Getter
         private ApplicationFeatureId featureId;
-        
+
         public String title() {
             return toString();
         }
-        
+
         @Override
         public int compareTo(AppFeat o) {
             val thisId = this.getFeatureId();
@@ -139,18 +135,18 @@ public final class ApplicationFeatureChoices {
             }
             return this.getFeatureId().compareTo(o.getFeatureId());
         }
-        
+
         @Override
         public String toString() {
-            return featureId!=null 
+            return featureId!=null
                     ? featureId.getSort().name() + ": " + featureId.getFullyQualifiedName()
                     : "<no id>";
         }
 
         @Override
         public String viewModelMemento() {
-            return featureId!=null 
-                    ? featureId.asEncodedString() 
+            return featureId!=null
+                    ? featureId.asEncodedString()
                     : "<no id>";
         }
 
@@ -158,7 +154,7 @@ public final class ApplicationFeatureChoices {
         public void viewModelInit(String memento) {
             featureId = ApplicationFeatureId.parseEncoded(memento); // fail by intention if memento is '<no id>'
         }
-        
+
     }
-    
+
 }
