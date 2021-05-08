@@ -79,10 +79,6 @@ public class ActionMemento implements Serializable {
         return action;
     }
 
-//    public ObjectAction getAction(final @NonNull SpecificationLoader specLoader) {
-//
-//    }
-
     // -- OBJECT CONTRACT
 
     @Override

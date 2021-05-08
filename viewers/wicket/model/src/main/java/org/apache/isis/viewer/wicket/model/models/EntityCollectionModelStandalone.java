@@ -26,6 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -53,7 +54,9 @@ extends EntityCollectionModelAbstract {
             final @NonNull ManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
-        val typeOfSpecification = actionModel.getMetaModel().getReturnType().getElementSpecification()
+        val actionMetaModel = actionModel.getMetaModel();
+        val typeOfSpecification = actionMetaModel.lookupFacet(TypeOfFacet.class)
+                .map(TypeOfFacet::valueSpec)
                 .orElseThrow(()->_Exceptions
                         .illegalArgument("ActionModel must have an ElementSpecification for its return type"));
 
