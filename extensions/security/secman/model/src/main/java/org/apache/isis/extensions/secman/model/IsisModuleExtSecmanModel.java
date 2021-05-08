@@ -40,10 +40,10 @@ import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPe
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_veto;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_viewing;
 import org.apache.isis.extensions.secman.api.role.menu.ApplicationRoleMenu;
-import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_addPermission;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_addPermission;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_addUser;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_delete;
-import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_removePermissions;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removePermissions;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removeUsers;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateDescription;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateName;
