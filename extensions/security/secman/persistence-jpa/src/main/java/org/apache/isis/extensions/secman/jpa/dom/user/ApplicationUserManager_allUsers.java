@@ -21,21 +21,21 @@ package org.apache.isis.extensions.secman.jpa.dom.user;
 import java.util.Collection;
 
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 
 @org.apache.isis.applib.annotation.Collection
 @RequiredArgsConstructor
 public class ApplicationUserManager_allUsers
-extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_allUsers<ApplicationUser>{
-    
+extends org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager_allUsers<ApplicationUser> {
+
     @SuppressWarnings("unused")
     private final ApplicationUserManager target;
-    
+
     @MemberSupport
     public Collection<ApplicationUser> coll() {
-        return super.doColl();        
+        return super.doColl();
     }
 
 }

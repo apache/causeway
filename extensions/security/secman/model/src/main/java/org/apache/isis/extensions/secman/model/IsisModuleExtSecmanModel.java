@@ -39,7 +39,7 @@ import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermiss
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_updateRole;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_veto;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_viewing;
-import org.apache.isis.extensions.secman.model.dom.role.ApplicationRoleMenu;
+import org.apache.isis.extensions.secman.api.role.menu.ApplicationRoleMenu;
 import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_addPermission;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_addUser;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_delete;
@@ -56,7 +56,7 @@ import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_re
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_updateName;
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_updateParent;
 import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_users;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_delete;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.user;
+package org.apache.isis.extensions.secman.api.user.app;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -30,13 +30,13 @@ public class ApplicationUserManager {
 //    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     public String title() {
-        return "Application User Manager"; 
+        return "Application User Manager";
     }
 
-//XXX provided via mixins, that is one specific to JPA the other specific to JDO    
+//XXX provided via mixins, that is one specific to JPA the other specific to JDO
 //    @Collection
 //    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
 //        return applicationUserRepository.allUsers();
 //    }
-    
+
 }

@@ -27,7 +27,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewLocalUserDomainEvent;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newLocalUser
-extends org.apache.isis.extensions.secman.model.dom.user.ApplicationUserManager_newLocalUser<ApplicationRole> {
+extends org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager_newLocalUser<ApplicationRole> {
 
     private final ApplicationUserManager target;
 
