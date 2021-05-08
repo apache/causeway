@@ -49,7 +49,6 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
@@ -69,12 +68,12 @@ import lombok.Setter;
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.ROLE_BY_NAME,
+            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT r "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING,
+            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
                   + "WHERE r.name LIKE '%:nameRegex%'"),

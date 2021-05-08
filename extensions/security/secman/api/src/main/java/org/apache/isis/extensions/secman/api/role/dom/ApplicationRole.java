@@ -29,6 +29,9 @@ public interface ApplicationRole {
     public static final int TYPICAL_LENGTH_NAME = 30;
     public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
 
+    String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
+    String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
+
     // -- EVENTS
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRole, T> {}

@@ -20,9 +20,6 @@ package org.apache.isis.extensions.secman.jpa.dom.constants;
 
 public final class NamedQueryNames {
 
-    public static final String ROLE_BY_NAME = "ApplicationRole.findByName";
-    public static final String ROLE_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
-
     public static final String TENANCY_BY_NAME = "ApplicationTenancy.findByName";
     public static final String TENANCY_BY_PATH = "ApplicationTenancy.findByPath";
     public static final String TENANCY_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
