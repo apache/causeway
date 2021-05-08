@@ -24,12 +24,13 @@ import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.user.menu.MeService;
 
 import lombok.val;
 
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
- * {@link org.apache.isis.extensions.secman.model.dom.user.MeService}, and for viewing and maintaining their user details.
+ * {@link MeService}, and for viewing and maintaining their user details.
  *
  * @since 2.0 {@index}
  */
@@ -47,7 +48,7 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationRole", "name"),
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationRole", "description")
                 );
-        
+
         val allowChanging = Can.of(
                 ApplicationFeatureId.newMember(LogoutMenu.OBJECT_TYPE, "logout"),
                 ApplicationFeatureId.newMember("isis.ext.secman.MeService", "me"),
@@ -57,7 +58,7 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updatePhoneNumber"),
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updateFaxNumber")
                 );
-        
+
         val vetoViewing = Can.of(
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "filterPermissions"),
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "resetPassword"),
@@ -66,17 +67,17 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "addRole"),
                 ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "removeRoles")
                 );
-        
+
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
                 allowViewing);
-        
+
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 allowChanging);
-        
+
         newPermissions(
                 ApplicationPermissionRule.VETO,
                 ApplicationPermissionMode.VIEWING,

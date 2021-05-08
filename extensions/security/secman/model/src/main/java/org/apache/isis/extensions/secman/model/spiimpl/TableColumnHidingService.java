@@ -12,7 +12,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.model.dom.user.MeService;
+import org.apache.isis.extensions.secman.api.user.menu.MeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

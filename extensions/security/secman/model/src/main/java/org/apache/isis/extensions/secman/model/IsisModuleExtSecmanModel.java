@@ -76,7 +76,7 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updatePhoneNumber;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateUsername;
 import org.apache.isis.extensions.secman.api.user.contributions.HasUsername_open;
-import org.apache.isis.extensions.secman.model.dom.user.MeService;
+import org.apache.isis.extensions.secman.api.user.menu.MeService;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
 import org.apache.isis.extensions.secman.model.spiimpl.TableColumnHidingService;
