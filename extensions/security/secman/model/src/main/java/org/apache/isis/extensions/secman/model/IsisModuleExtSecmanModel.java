@@ -61,9 +61,9 @@ import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_delete;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_duplicate;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_filterPermissions;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.perms.ApplicationUser_filterPermissions;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_permissions;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.perms.ApplicationUser_permissions;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_removeRoles;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_resetPassword;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unlock;
@@ -77,7 +77,7 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateUsername;
 import org.apache.isis.extensions.secman.model.dom.user.HasUsername_open;
 import org.apache.isis.extensions.secman.model.dom.user.MeService;
-import org.apache.isis.extensions.secman.model.dom.user.UserPermissionViewModel;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
 import org.apache.isis.extensions.secman.model.spiimpl.TableColumnHidingService;
 
