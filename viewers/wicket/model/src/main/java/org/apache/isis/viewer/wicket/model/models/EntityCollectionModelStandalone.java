@@ -24,19 +24,14 @@ import java.util.Optional;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class EntityCollectionModelStandalone
 extends EntityCollectionModelAbstract {
@@ -54,32 +49,20 @@ extends EntityCollectionModelAbstract {
             final @NonNull ManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
-        val actionMetaModel = actionModel.getMetaModel();
-        val typeOfSpecification = actionMetaModel.lookupFacet(TypeOfFacet.class)
-                .map(TypeOfFacet::valueSpec)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("ActionModel must have an ElementSpecification for its return type"));
-
-        final Can<FacetHolder> facetHolders = Can.of(actionModel.getMetaModel(), typeOfSpecification);
-
         // take a copy of the actionModel,
         // because the original can get mutated (specifically: its arguments cleared)
         return new EntityCollectionModelStandalone(
-                typeOfSpecification, collectionAsAdapter, actionModel.copy(), facetHolders);
+                actionModel.copy(), collectionAsAdapter);
     }
 
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelStandalone(
-            final @NonNull ObjectSpecification typeOfSpecification,
-            final @NonNull ManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel,
-            final @NonNull Can<FacetHolder> facetHolders) {
+            final @NonNull ManagedObject collectionAsAdapter) {
         super(
                 actionModel.getCommonContext(),
-                actionModel.getMetaModel().getIdentifier(),
-                typeOfSpecification,
-                facetHolders);
+                actionModel.getMetaModel());
         this.actionModel = actionModel;
         this.mementoList = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo()) // pojos
                 .filter(_NullSafe::isPresent)

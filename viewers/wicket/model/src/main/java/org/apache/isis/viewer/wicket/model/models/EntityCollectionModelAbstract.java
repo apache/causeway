@@ -31,12 +31,15 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -58,13 +61,20 @@ implements EntityCollectionModel {
 
     protected EntityCollectionModelAbstract(
             final @NonNull IsisAppCommonContext commonContext,
-            final @NonNull Identifier identifier,
-            final @NonNull ObjectSpecification typeOfSpecification,
-            final @NonNull Can<FacetHolder> facetHolders) {
+            final @NonNull ObjectMember objectMember) {
         super(commonContext);
-        this.identifier = identifier;
+        this.identifier = objectMember.getIdentifier();
+
+        val typeOfSpecification = objectMember.lookupFacet(TypeOfFacet.class)
+                .map(TypeOfFacet::valueSpec)
+                .orElseThrow(()->_Exceptions
+                        .illegalArgument("Action or Collection MetaModel must have a TypeOfFacet"));
+
         this.typeOfSpecification = Optional.of(typeOfSpecification); // as an optimization: memoize transient
         this.elementType = typeOfSpecification.getCorrespondingClass();
+
+        final Can<FacetHolder> facetHolders = Can.of(objectMember, typeOfSpecification);
+
         this.pageSize = facetHolders.stream()
             .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
             .filter(_NullSafe::isPresent)

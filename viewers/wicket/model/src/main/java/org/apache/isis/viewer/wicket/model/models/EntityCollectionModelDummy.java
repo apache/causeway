@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -45,9 +44,7 @@ extends EntityCollectionModelAbstract {
     protected EntityCollectionModelDummy(
             final @NonNull EntityCollectionModel collectionModel) {
         super(collectionModel.getCommonContext(),
-                collectionModel.getIdentifier(),
-                collectionModel.getTypeOfSpecification(),
-                Can.empty());
+                collectionModel.getMetaModel());
     }
 
     @Override

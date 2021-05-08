@@ -30,11 +30,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -74,30 +71,18 @@ implements
                 .orElseThrow(()->_Exceptions
                         .illegalArgument("EntityModel must have CollectionLayoutMetadata"));
 
-        val typeOfFacet = collectionMetaModel.lookupFacet(TypeOfFacet.class)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("CollectionMetaModel must have a TypeOfFacet"));
-
-        val typeOfSpecification = typeOfFacet.valueSpec();
-
-        final Can<FacetHolder> facetHolders = Can.of(collectionMetaModel, typeOfSpecification);
-
         return new EntityCollectionModelParented(
-                collectionMetaModel, typeOfSpecification, entityModel, facetHolders);
+                collectionMetaModel, entityModel);
     }
 
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelParented(
             final @NonNull OneToManyAssociation collectionMetaModel,
-            final @NonNull ObjectSpecification typeOfSpecification,
-            final @NonNull EntityModel parentObjectModel,
-            final @NonNull Can<FacetHolder> facetHolders) {
+            final @NonNull EntityModel parentObjectModel) {
         super(
                 parentObjectModel.getCommonContext(),
-                collectionMetaModel.getIdentifier(),
-                typeOfSpecification,
-                facetHolders);
+                collectionMetaModel);
         this.collectionMetaModelMemento = collectionMetaModel.getMemento();
         this.entityModel = parentObjectModel;
     }
