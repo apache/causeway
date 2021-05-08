@@ -47,7 +47,7 @@ import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_removePe
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removeUsers;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateDescription;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateName;
-import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancyMenu;
+import org.apache.isis.extensions.secman.api.tenancy.menu.ApplicationTenancyMenu;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addChild;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addUser;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_delete;
