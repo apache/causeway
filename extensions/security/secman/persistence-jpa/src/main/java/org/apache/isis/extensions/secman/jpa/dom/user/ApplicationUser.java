@@ -56,6 +56,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
@@ -394,7 +395,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
         val permissions = applicationPermissionRepository.findByUser(this);
         return cachedPermissionSet =
                 new ApplicationPermissionValueSet(
-                        _Lists.map(permissions, ApplicationPermission.Functions.AS_VALUE),
+                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
                         permissionsEvaluationService);
     }
 

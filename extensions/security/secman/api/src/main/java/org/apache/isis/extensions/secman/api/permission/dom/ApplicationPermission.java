@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission.dom;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -33,6 +34,7 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Specifies how a particular {@link #getRole() application role} may interact with a specific
@@ -73,6 +75,7 @@ public interface ApplicationPermission {
     String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
     String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
     String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
+
 
     // -- DOMAIN EVENTS
 
@@ -130,6 +133,7 @@ public interface ApplicationPermission {
     }
 
     ApplicationFeatureSort getFeatureSort();
+    void setFeatureSort(ApplicationFeatureSort featureSort);
 
     // -- ROLE
 
@@ -184,6 +188,20 @@ public interface ApplicationPermission {
     default Optional<ApplicationFeatureId> asFeatureId() {
         return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
+    }
+
+    @UtilityClass
+    public static final class Functions {
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
+                new Function<ApplicationPermission, ApplicationPermissionValue>() {
+                    @Override
+                    public ApplicationPermissionValue apply(ApplicationPermission input) {
+                        return new ApplicationPermissionValue(
+                                input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                                input.getRule(),
+                                input.getMode());
+                    }
+                };
     }
 
 

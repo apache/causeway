@@ -289,17 +289,6 @@ implements
 
     // -- Functions
 
-    @UtilityClass
-    public static final class Functions {
-
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
-                (ApplicationPermission input) ->
-                    new ApplicationPermissionValue(
-                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
-                            input.getRule(),
-                            input.getMode());
-
-    }
 
     @Inject private ApplicationFeatureRepository featureRepository;
 

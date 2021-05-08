@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -45,15 +46,18 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.dom.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 
@@ -386,7 +390,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
         val permissions = applicationPermissionRepository.findByUser(this);
         return cachedPermissionSet =
                 new ApplicationPermissionValueSet(
-                        _Lists.map(permissions, ApplicationPermission.Functions.AS_VALUE),
+                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
                         permissionsEvaluationService);
     }
 

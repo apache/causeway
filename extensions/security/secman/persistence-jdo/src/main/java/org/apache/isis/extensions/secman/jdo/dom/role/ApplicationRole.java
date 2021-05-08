@@ -128,7 +128,7 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
             defaultView="table",
             sortedBy = ApplicationPermission.DefaultComparator.class,
             sequence = "10")
-    public List<ApplicationPermission> getPermissions() {
+    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
 
