@@ -25,6 +25,10 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MinLength;
@@ -38,19 +42,25 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Supports mixins to add and filter permissions on {@link org.apache.isis.extensions.secman.api.role.dom.ApplicationRole} and {@link org.apache.isis.extensions.secman.api.user.dom.ApplicationUser}.
+ * Supports mixins to add and filter permissions of
+ * {@link org.apache.isis.extensions.secman.api.role.dom.ApplicationRole}
+ * and {@link org.apache.isis.extensions.secman.api.user.dom.ApplicationUser}.
  */
-public final class ApplicationFeatureChoices {
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ApplicationFeatureChoices {
+
+    final ApplicationFeatureRepository featureRepository;
 
     public static final String DESCRIBED_AS = "To refine the search by feature-sort (namespace, type, member), "
             + "use one of "
             + "sort:n sort:t sort:m.";
 
-    public static Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
-            final ApplicationFeatureRepository featureRepository,
+    public Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final @MinLength(3) String search) {
 
         final Predicate<ApplicationFeatureId> searchRefine;
@@ -74,14 +84,10 @@ public final class ApplicationFeatureChoices {
 
         return idsByName.entrySet().stream()
         .filter(entry->searchRefine.test(entry.getValue()))
-        .filter(entry->matches(entry.getKey(), entry.getValue(), searchTerm))
+        .filter(entry -> entry.getKey().contains(searchTerm))
         .map(Map.Entry::getValue)
         .map(ApplicationFeatureChoices.AppFeat::new)
         .collect(Collectors.toCollection(TreeSet::new));
-    }
-
-    private static boolean matches(String featureName, ApplicationFeatureId featureId, String search) {
-        return featureName.contains(search);
     }
 
     private static boolean isNamespace(ApplicationFeatureId featureId) {
@@ -95,6 +101,7 @@ public final class ApplicationFeatureChoices {
     private static boolean isMember(ApplicationFeatureId featureId) {
         return featureId.getSort().isMember();
     }
+
 
     // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE
 

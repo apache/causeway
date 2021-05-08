@@ -54,6 +54,7 @@ public class ApplicationRole_addPermission {
 
     @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationFeatureChoices applicationFeatureChoices;
 
     private final ApplicationRole target;
 
@@ -102,7 +103,7 @@ public class ApplicationRole_addPermission {
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final Parameters params,
             final @MinLength(3) String search) {
-        return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
+        return applicationFeatureChoices.autoCompleteFeature(search);
     }
 
 }

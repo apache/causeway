@@ -19,11 +19,17 @@
 package org.apache.isis.extensions.secman.api;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
+@Import({
+        ApplicationFeatureChoices.class
+})
 public class IsisModuleExtSecmanApi {
 
     public abstract static class ActionDomainEvent<S>

@@ -54,6 +54,7 @@ public class ApplicationUser_filterPermissions {
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
+    @Inject private ApplicationFeatureChoices applicationFeatureChoices;
 
     private final ApplicationUser target;
 
@@ -79,7 +80,7 @@ public class ApplicationUser_filterPermissions {
     @MemberSupport
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
             final @MinLength(3) String search) {
-        return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
+        return applicationFeatureChoices.autoCompleteFeature(search);
     }
 
     // -- HELPER XXX left over from refactoring, could be simplified ..
