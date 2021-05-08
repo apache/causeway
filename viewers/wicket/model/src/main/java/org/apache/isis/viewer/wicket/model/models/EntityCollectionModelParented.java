@@ -27,8 +27,9 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
@@ -37,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.memento.CollectionMemento;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
@@ -51,10 +53,12 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull _EntityCollectionModelLegacy legacy;
-
-    // TODO parent object model, should be private
+    // TODO parent object model, maybe should not be exposed
     @Getter private final @NonNull EntityModel entityModel;
+
+    @Getter(onMethod_ = {@Override}) private int count;
+
+    private final @NonNull CollectionMemento collectionMetaModelMemento;
 
     // -- FACTORIES
 
@@ -78,13 +82,6 @@ implements
 
         final Can<FacetHolder> facetHolders = Can.of(collectionMetaModel, typeOfSpecification);
 
-//      val sortedByFacet = collectionMetaModel.getFacet(SortedByFacet.class);
-//
-//        entityCollectionModel.collectionMemento = new CollectionMemento(collectionMetaModel);
-//        entityCollectionModel.sortedBy = (sortedByFacet != null)
-//                ? sortedByFacet.value()
-//                : null;
-
         return new EntityCollectionModelParented(
                 collectionMetaModel, typeOfSpecification, entityModel, facetHolders);
     }
@@ -101,8 +98,8 @@ implements
                 collectionMetaModel.getIdentifier(),
                 typeOfSpecification,
                 facetHolders);
+        this.collectionMetaModelMemento = collectionMetaModel.getMemento();
         this.entityModel = parentObjectModel;
-        this.legacy = _EntityCollectionModelLegacy.createParented(entityModel);
     }
 
     // -- VARIANT SUPPORT
@@ -148,7 +145,22 @@ implements
 
     @Override
     protected List<ManagedObject> load() {
-        return legacy.load();
+        final ManagedObject adapter = getCommonContext()
+                .reconstructObject(getParentObjectAdapterMemento());
+
+        final OneToManyAssociation collection = getMetaModel();
+
+        final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
+
+        val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
+        .filter(_NullSafe::isPresent) // pojos
+        .map(getObjectManager()::adapt)
+        .sorted(super.getElementComparator())
+        .collect(Can.toCan());
+
+        this.count = elements.size();
+
+        return elements.toList();
     }
 
     @Override
@@ -158,19 +170,13 @@ implements
     }
 
     @Override
-    public int getCount() {
-        return legacy.getCount();
-    }
-
-    @Override
     public String getName() {
-        _Assert.assertEquals(getMetaModel().getName(), legacy.getName());
-        return getMetaModel().getName();
+        return getIdentifier().getMemberName();
     }
 
     @Override
     public OneToManyAssociation getMetaModel() {
-        return legacy.getCollectionMemento().getCollection(getSpecificationLoader());
+        return collectionMetaModelMemento.getCollection(getSpecificationLoader());
     }
 
     public CollectionLayoutData getLayoutData() {

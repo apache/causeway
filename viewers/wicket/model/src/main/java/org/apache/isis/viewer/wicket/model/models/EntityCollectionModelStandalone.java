@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -41,11 +42,10 @@ extends EntityCollectionModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull _EntityCollectionModelLegacy legacy;
-
-    // parent object model
-    @Getter
-    private final @NonNull ActionModel actionModel;
+    /**
+     * model of the action this collection is the returned result of
+     */
+    @Getter private final @NonNull ActionModel actionModel;
 
     // -- FACTORIES
 
@@ -78,7 +78,11 @@ extends EntityCollectionModelAbstract {
                 typeOfSpecification,
                 facetHolders);
         this.actionModel = actionModel;
-        this.legacy = _EntityCollectionModelLegacy.createStandalone(collectionAsAdapter, actionModel);
+        this.mementoList = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo()) // pojos
+                .filter(_NullSafe::isPresent)
+                .map(actionModel.getMementoService()::mementoForPojo)
+                .collect(Can.toCan());
+
     }
 
     // -- VARIANT SUPPORT
@@ -97,21 +101,27 @@ extends EntityCollectionModelAbstract {
 
     // --
 
+    private Can<ObjectMemento> mementoList;
+
     @Override
     protected List<ManagedObject> load() {
-        return legacy.load();
+        return mementoList.stream()
+        .map(getCommonContext()::reconstructObject)
+        .sorted(super.getElementComparator())
+        .collect(Can.toCan())
+        .toList();
     }
 
     @Override
     public int getCount() {
-        return legacy.getCount();
+        return mementoList.size();
     }
 
     @Override
     public String getName() {
         return getTypeOfSpecification().lookupFacet(PluralFacet.class)
                 .map(PluralFacet::value)
-                .orElse(getMetaModel().getName());
+                .orElse(getIdentifier().getMemberName());
     }
 
     @Override
