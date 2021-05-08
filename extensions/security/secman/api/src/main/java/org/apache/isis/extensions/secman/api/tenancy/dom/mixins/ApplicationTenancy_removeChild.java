@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -24,17 +26,17 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddChildDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddChildDomainEvent.class,
+        domainEvent = RemoveChildDomainEvent.class,
         associateWith = "children")
-@ActionLayout(sequence = "1")
+@ActionLayout(sequence = "2")
 @RequiredArgsConstructor
-public class ApplicationTenancy_addChild {
+public class ApplicationTenancy_removeChild {
 
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
@@ -42,7 +44,17 @@ public class ApplicationTenancy_addChild {
 
     @MemberSupport
     public ApplicationTenancy act(final ApplicationTenancy child) {
-        applicationTenancyRepository.setParentOnTenancy(child, target);
+        applicationTenancyRepository.clearParentOnTenancy(child);
         return target;
+    }
+
+    @MemberSupport
+    public Collection<? extends ApplicationTenancy> choices0Act() {
+        return applicationTenancyRepository.getChildren(target);
+    }
+
+    @MemberSupport
+    public String disableAct() {
+        return choices0Act().isEmpty()? "No children to remove": null;
     }
 }

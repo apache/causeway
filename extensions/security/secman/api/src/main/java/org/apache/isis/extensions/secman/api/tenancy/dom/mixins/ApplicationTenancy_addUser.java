@@ -16,17 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddUserDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
@@ -34,11 +36,11 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveUserDomainEvent.class,
+        domainEvent = AddUserDomainEvent.class,
         associateWith = "users")
-@ActionLayout(named="Remove", sequence = "2")
+@ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeUser {
+public class ApplicationTenancy_addUser {
 
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
@@ -47,18 +49,15 @@ public class ApplicationTenancy_removeUser {
 
     @MemberSupport
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
+        applicationTenancyRepository.setTenancyOnUser(target, applicationUser);
         return target;
     }
 
     @MemberSupport
-    public Collection<? extends ApplicationUser> choices0Act() {
-        return applicationUserRepository.findByTenancy(target);
+    public List<? extends ApplicationUser> autoComplete0Act(final String search) {
+        final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
+        final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
+        list.removeAll(applicationUserRepository.findByTenancy(target));
+        return list;
     }
-
-    @MemberSupport
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
-    }
-
 }

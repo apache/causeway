@@ -16,37 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.CollectionDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Collection(
-        domainEvent = ApplicationTenancy_users.UsersDomainEvent.class)
-@CollectionLayout(
-        defaultView="table"
-        )
+@Action(
+        domainEvent = RemoveUserDomainEvent.class,
+        associateWith = "users")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
-public class ApplicationTenancy_users {
+public class ApplicationTenancy_removeUser {
 
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     private final ApplicationTenancy target;
 
-    // -- users (collection)
+    @MemberSupport
+    public ApplicationTenancy act(final ApplicationUser applicationUser) {
+        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
+        return target;
+    }
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+    @MemberSupport
+    public Collection<? extends ApplicationUser> choices0Act() {
+        return applicationUserRepository.findByTenancy(target);
+    }
 
-    public java.util.Collection<? extends ApplicationUser> coll() {
-        return applicationUserRepository.findByAtPath(target.getPath());
+    @MemberSupport
+    public String disableAct() {
+        return choices0Act().isEmpty()? "No users to remove": null;
     }
 
 }

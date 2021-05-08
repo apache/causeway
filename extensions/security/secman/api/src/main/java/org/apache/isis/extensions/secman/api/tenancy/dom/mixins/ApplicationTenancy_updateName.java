@@ -16,43 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
-
-import javax.inject.Inject;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateParentDomainEvent;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateNameDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateParentDomainEvent.class,
-        associateWith = "parent")
+        domainEvent = UpdateNameDomainEvent.class,
+        associateWith = "name")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_updateParent {
-
-    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+public class ApplicationTenancy_updateName {
 
     private final ApplicationTenancy target;
 
     @MemberSupport
     public ApplicationTenancy act(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            final ApplicationTenancy parent) {
-
-        applicationTenancyRepository.setParentOnTenancy(target, parent);
+            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
+            @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
+            final String name) {
+        target.setName(name);
         return target;
     }
 
     @MemberSupport
-    public ApplicationTenancy default0Act() {
-        return target.getParent();
+    public String default0Act() {
+        return target.getName();
     }
 }

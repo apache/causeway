@@ -16,38 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import javax.inject.Inject;
+
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateNameDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.CollectionDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-        domainEvent = UpdateNameDomainEvent.class,
-        associateWith = "name")
-@ActionLayout(sequence = "1")
+@Collection(
+        domainEvent = ApplicationTenancy_users.UsersDomainEvent.class)
+@CollectionLayout(
+        defaultView="table"
+        )
 @RequiredArgsConstructor
-public class ApplicationTenancy_updateName {
+public class ApplicationTenancy_users {
+
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(
-            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
-            @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
-            final String name) {
-        target.setName(name);
-        return target;
+    // -- users (collection)
+
+    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+
+    public java.util.Collection<? extends ApplicationUser> coll() {
+        return applicationUserRepository.findByAtPath(target.getPath());
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getName();
-    }
 }

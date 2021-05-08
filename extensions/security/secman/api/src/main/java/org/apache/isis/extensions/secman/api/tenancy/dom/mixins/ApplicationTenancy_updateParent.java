@@ -16,45 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
-
-import java.util.Collection;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveChildDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateParentDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveChildDomainEvent.class,
-        associateWith = "children")
-@ActionLayout(sequence = "2")
+        domainEvent = UpdateParentDomainEvent.class,
+        associateWith = "parent")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeChild {
+public class ApplicationTenancy_updateParent {
 
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
     private final ApplicationTenancy target;
 
     @MemberSupport
-    public ApplicationTenancy act(final ApplicationTenancy child) {
-        applicationTenancyRepository.clearParentOnTenancy(child);
+    public ApplicationTenancy act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final ApplicationTenancy parent) {
+
+        applicationTenancyRepository.setParentOnTenancy(target, parent);
         return target;
     }
 
     @MemberSupport
-    public Collection<? extends ApplicationTenancy> choices0Act() {
-        return applicationTenancyRepository.getChildren(target);
-    }
-
-    @MemberSupport
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No children to remove": null;
+    public ApplicationTenancy default0Act() {
+        return target.getParent();
     }
 }

@@ -16,48 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.tenancy;
-
-import java.util.Collection;
-import java.util.List;
+package org.apache.isis.extensions.secman.api.tenancy.dom.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class,
-        associateWith = "users")
-@ActionLayout(named="Add", sequence = "1")
+        domainEvent = AddChildDomainEvent.class,
+        associateWith = "children")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_addUser {
+public class ApplicationTenancy_addChild {
 
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     private final ApplicationTenancy target;
 
     @MemberSupport
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.setTenancyOnUser(target, applicationUser);
+    public ApplicationTenancy act(final ApplicationTenancy child) {
+        applicationTenancyRepository.setParentOnTenancy(child, target);
         return target;
-    }
-
-    @MemberSupport
-    public List<? extends ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationUserRepository.findByTenancy(target));
-        return list;
     }
 }
