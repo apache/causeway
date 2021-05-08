@@ -20,19 +20,13 @@ package org.apache.isis.extensions.secman.jpa.dom.constants;
 
 public final class NamedQueryNames {
 
-    public static final String PERMISSION_BY_FEATURE = "ApplicationPermission.findByFeature";
-    public static final String PERMISSION_BY_ROLE = "ApplicationPermission.findByRole";
-    public static final String PERMISSION_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
-    public static final String PERMISSION_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
-    public static final String PERMISSION_BY_USER = "ApplicationPermission.findByUser";
-    
     public static final String ROLE_BY_NAME = "ApplicationRole.findByName";
     public static final String ROLE_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
-    
+
     public static final String TENANCY_BY_NAME = "ApplicationTenancy.findByName";
     public static final String TENANCY_BY_PATH = "ApplicationTenancy.findByPath";
     public static final String TENANCY_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
-    
+
     public static final String USER_BY_USERNAME = "ApplicationUser.findByUsername";
     public static final String USER_BY_EMAIL = "ApplicationUser.findByEmailAddress";
     public static final String USER_FIND = "ApplicationUser.find";

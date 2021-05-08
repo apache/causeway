@@ -57,7 +57,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
-import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
@@ -76,12 +75,12 @@ import lombok.experimental.UtilityClass;
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE,
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_USER,
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             //TODO this query returns empty result
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
@@ -89,13 +88,13 @@ import lombok.experimental.UtilityClass;
                   + "WHERE u.username = :username"
                   + "    AND p.role MEMBER OF u.roles"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_FEATURE,
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             query = "SELECT p "
                     + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                     + "WHERE p.featureSort = :featureSort "
                     + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN,
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "
@@ -103,7 +102,7 @@ import lombok.experimental.UtilityClass;
                   + "   AND p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE,
+            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "

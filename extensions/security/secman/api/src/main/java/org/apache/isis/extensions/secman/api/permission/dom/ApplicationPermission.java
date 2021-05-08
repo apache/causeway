@@ -68,6 +68,12 @@ import lombok.val;
 @DomainObject(objectType = "isis.ext.secman.IApplicationPermission")
 public interface ApplicationPermission {
 
+    String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
+    String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
+    String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
+    String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
+    String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
+
     // -- DOMAIN EVENTS
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
