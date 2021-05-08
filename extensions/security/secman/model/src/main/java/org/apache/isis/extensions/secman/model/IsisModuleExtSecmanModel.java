@@ -31,7 +31,7 @@ import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeMember
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationTypeProperty;
 import org.apache.isis.extensions.secman.api.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationOrphanedPermissionManager_relocateSelected;
-import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermissionMenu;
+import org.apache.isis.extensions.secman.api.permission.menu.ApplicationPermissionMenu;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_changing;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
