@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.extensions.secman.api.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.RelocateNamespaceDomainEvent;
 
@@ -40,22 +41,22 @@ import lombok.val;
 
 @Action(
         associateWith = "orphanedPermissions",
-        domainEvent = RelocateNamespaceDomainEvent.class, 
+        domainEvent = RelocateNamespaceDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(describedAs = "for the selected permissions renames the namespace")
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
     @Inject private ApplicationFeatureRepository featureRepository;
-    
+
     private final ApplicationOrphanedPermissionManager target;
-    
+
     public ApplicationOrphanedPermissionManager act(
             final Collection<ApplicationPermission> permissions,
-            
+
             @Parameter(optionality = Optionality.MANDATORY)
             final String targetNamespace) {
-        
+
         permissions.forEach(perm->relocate(perm, targetNamespace));
         return target;
     }
@@ -65,20 +66,20 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
                     .map(ApplicationFeature::getFullyQualifiedName)
                     .collect(Collectors.toCollection(TreeSet::new));
     }
-    
+
     private void relocate(
-            final ApplicationPermission permission, 
+            final ApplicationPermission permission,
             final String targetNamespace) {
-        
+
         val appFeatureId = ApplicationFeatureId.newFeature(
-                permission.getFeatureSort(), 
+                permission.getFeatureSort(),
                 permission.getFeatureFqn());
-        
+
         val relocatedFqn = appFeatureId
                 .withNamespace(targetNamespace)
                 .getFullyQualifiedName();
-        
+
         permission.setFeatureFqn(relocatedFqn);
     }
-    
+
 }

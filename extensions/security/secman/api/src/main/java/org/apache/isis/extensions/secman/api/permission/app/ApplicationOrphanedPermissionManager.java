@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.permission;
+package org.apache.isis.extensions.secman.api.permission.app;
 
 import java.util.Collection;
 
@@ -34,19 +34,19 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 public class ApplicationOrphanedPermissionManager {
 
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
-    
+
     public String title() {
         return "Manage Orphaned Permissions";
     }
-    
+
     @org.apache.isis.applib.annotation.Collection(typeOf = ApplicationPermission.class)
     public Collection<? extends ApplicationPermission> getOrphanedPermissions() {
         return applicationPermissionRepository.findOrphaned();
     }
-    
+
 //    @Action
 //    public Collection<? extends ApplicationPermission> debugOrphanedPermissions() {
 //        return applicationPermissionRepository.findOrphaned();
 //    }
-    
+
 }
