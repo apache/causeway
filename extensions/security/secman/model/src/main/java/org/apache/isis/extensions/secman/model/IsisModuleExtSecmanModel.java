@@ -35,7 +35,7 @@ import org.apache.isis.extensions.secman.api.permission.menu.ApplicationPermissi
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_changing;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
-import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_feature;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_feature;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_updateRole;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_veto;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_viewing;
