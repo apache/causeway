@@ -18,6 +18,11 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -47,13 +52,23 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
 
     // -- memberName (properties)
 
-    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationTypeMember, String> {}
+
+    @ApplicationFeatureViewModel.MemberName
+    @Property(
+            domainEvent = MemberName.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId="Id",
+            sequence = "2.4"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MemberName {
+        class DomainEvent extends PropertyDomainEvent<ApplicationTypeMember, String> {}
+    }
 
     @Override
-    @Property(
-            domainEvent = MemberNameDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Id", sequence = "2.4")
+    @MemberName
     public String getMemberName() {
         return super.getMemberName();
     }

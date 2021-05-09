@@ -18,6 +18,11 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Optionality;
@@ -44,12 +49,21 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
     // -- returnType
 
-    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {}
-
+    @ApplicationFeatureViewModel.TypeSimpleName
     @Property(
-            domainEvent = ReturnTypeDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
+            domainEvent = ReturnType.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetName = "Data Type",
+            sequence = "2.6"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ReturnType {
+        class DomainEvent extends PropertyDomainEvent<String> {}
+    }
+
+    @ReturnType
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -58,12 +72,21 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
 
     // -- derived
-    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
-            domainEvent = DerivedDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Detail", sequence = "2.7")
+            domainEvent = Derived.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "detail",
+            sequence = "2.7"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Derived {
+        class DomainEvent extends PropertyDomainEvent<Boolean> {}
+    }
+
+    @Derived
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }
@@ -71,13 +94,23 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
 
     // -- maxLength
-    public static class MaxLengthDomainEvent extends PropertyDomainEvent<Integer> {}
 
     @Property(
-            domainEvent = MaxLengthDomainEvent.class,
+            domainEvent = MaxLength.DomainEvent.class,
             optionality = Optionality.OPTIONAL
-            )
-    @PropertyLayout(fieldSetId="Detail", sequence = "2.8")
+    )
+    @PropertyLayout(
+            fieldSetId = "detail",
+            sequence = "2.8"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MaxLength {
+
+        class DomainEvent extends PropertyDomainEvent<Integer> {}
+    }
+
+    @MaxLength
     public Integer getMaxLength() {
         val maxLen = getFeature().getPropertyMaxLength();
         return maxLen.isPresent()
@@ -95,13 +128,22 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
 
     // -- typicalLength
-    public static class TypicalLengthDomainEvent extends PropertyDomainEvent<Integer> {}
 
     @Property(
-            domainEvent = TypicalLengthDomainEvent.class,
+            domainEvent = TypicalLength.DomainEvent.class,
             optionality = Optionality.OPTIONAL
-            )
-    @PropertyLayout(fieldSetId="Detail", sequence = "2.9")
+    )
+    @PropertyLayout(
+            fieldSetId = "detail",
+            sequence = "2.9"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TypicalLength {
+        class DomainEvent extends PropertyDomainEvent<Integer> {}
+    }
+
+    @TypicalLength
     public Integer getTypicalLength() {
         val maxLen = getFeature().getPropertyTypicalLength();
         return maxLen.isPresent()
@@ -115,8 +157,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         }
         return !String.class.getSimpleName().equals(getReturnType());
     }
-
-
 
 }
 
