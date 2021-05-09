@@ -18,6 +18,11 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -42,12 +47,20 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
     // -- returnTypeName (property)
 
-    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {}
-
     @Property(
-            domainEvent = ReturnTypeDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
+            domainEvent = ReturnType.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetName = "Data Type",
+            sequence = "2.6"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ReturnType {
+        class DomainEvent extends PropertyDomainEvent<String> {}
+    }
+
+    @ReturnType
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -56,12 +69,22 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
 
     // -- actionSemantics (property)
-    public static class ActionSemanticsDomainEvent extends PropertyDomainEvent<SemanticsOf> {}
 
     @Property(
-            domainEvent = ActionSemanticsDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Detail", sequence = "2.8")
+            domainEvent = ActionSemantics.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "detail",
+            sequence = "2.8"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ActionSemantics {
+
+        class DomainEvent extends PropertyDomainEvent<SemanticsOf> {}
+    }
+
+    @ActionSemantics
     public SemanticsOf getActionSemantics() {
         return getFeature().getActionSemantics()
                 .orElse(null);
