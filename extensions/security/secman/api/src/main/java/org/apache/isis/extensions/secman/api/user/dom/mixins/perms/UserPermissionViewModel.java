@@ -77,7 +77,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     private static final int TYPICAL_LENGTH_VERB = 12;
 
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;

@@ -49,7 +49,7 @@ public class ApplicationUserMenu {
 
     //@Inject private SecmanConfiguration configBean;
     //@Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
     //@Inject private SecurityRealmService securityRealmService;
     @Inject private FactoryService factory;
 

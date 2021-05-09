@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Nature;
         )
 public class ApplicationUserManager {
 
-//    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+//    @Inject private ApplicationUserRepository applicationUserRepository;
 
     public String title() {
         return "Application User Manager";

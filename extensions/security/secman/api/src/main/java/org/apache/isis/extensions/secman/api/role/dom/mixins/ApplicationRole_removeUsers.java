@@ -44,7 +44,7 @@ public class ApplicationRole_removeUsers {
 
     @Inject private MessageService messageService;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
 
     private final ApplicationRole target;
 

@@ -110,7 +110,7 @@ public class TenantedAuthorizationPostProcessor
     @Inject ServiceRegistry serviceRegistry;
     @Inject ServiceInjector serviceInjector;
     @Inject UserService userService;
-    @Inject @Lazy ApplicationUserRepository<? extends ApplicationUser> userRepository;
+    @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

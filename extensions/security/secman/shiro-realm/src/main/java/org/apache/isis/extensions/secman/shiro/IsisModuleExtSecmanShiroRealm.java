@@ -246,7 +246,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 val applicationUser = applicationUserRepository.findByUsername(username).orElse(null);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+            @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
 
@@ -258,7 +258,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 val applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+            @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
 

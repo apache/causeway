@@ -30,7 +30,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
 
-    final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    final ApplicationUserRepository applicationUserRepository;
     final ApplicationRoleRepository applicationRoleRepository;
 
     final UserService userService;

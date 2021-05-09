@@ -47,7 +47,7 @@ import lombok.val;
 public class ApplicationUserManager_newDelegateUser {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
     @Inject private SecurityRealmService securityRealmService;

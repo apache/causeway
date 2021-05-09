@@ -50,7 +50,7 @@ public class MeService {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<MeService, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<MeService> {}
 
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private UserService userService;
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 

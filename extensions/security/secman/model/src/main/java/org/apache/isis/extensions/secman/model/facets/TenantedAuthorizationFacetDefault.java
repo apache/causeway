@@ -41,13 +41,13 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     }
 
     private final List<ApplicationTenancyEvaluator> evaluators;
-    private final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    private final ApplicationUserRepository applicationUserRepository;
     private final Provider<QueryResultsCache> queryResultsCacheProvider;
     private final UserService userService;
 
     public TenantedAuthorizationFacetDefault(
             final List<ApplicationTenancyEvaluator> evaluators,
-            final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository,
+            final ApplicationUserRepository applicationUserRepository,
             final Provider<QueryResultsCache> queryResultsCacheProvider,
             final UserService userService,
             final FacetHolder holder) {

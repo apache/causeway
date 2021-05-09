@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_addUser {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
 
     private final ApplicationRole target;
 

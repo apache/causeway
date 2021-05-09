@@ -43,7 +43,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 
-    @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
 
     @Override
     public boolean isVisible(final Authentication authentication, final Identifier identifier) {

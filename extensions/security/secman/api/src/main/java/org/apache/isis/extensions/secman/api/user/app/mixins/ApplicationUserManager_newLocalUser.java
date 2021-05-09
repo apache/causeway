@@ -50,7 +50,7 @@ public class ApplicationUserManager_newLocalUser
 extends ApplicationUserManager_newLocalUserAbstract {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
