@@ -62,6 +62,8 @@ public interface ApplicationRole {
     @interface Name {
         int MAX_LENGTH = 120;
         int TYPICAL_LENGTH = 30;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Name
@@ -75,6 +77,8 @@ public interface ApplicationRole {
     @Retention(RetentionPolicy.RUNTIME)
     @interface Description {
         int TYPICAL_LENGTH = 50;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Description
@@ -86,6 +90,7 @@ public interface ApplicationRole {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Users {
+        class DomainEvent extends CollectionDomainEvent<ApplicationUser> {}
     }
 
     @Users
@@ -97,6 +102,7 @@ public interface ApplicationRole {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Permissions {
+        class DomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
     }
 
     @Permissions

@@ -96,18 +96,17 @@ implements
 
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
 
+
     @Id
     @GeneratedValue
     private Long id;
 
+
     // -- NAME
-
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
-
 
     @Column(nullable=false, length= Name.MAX_LENGTH)
     @Property(
-            domainEvent = NameDomainEvent.class,
+            domainEvent = Name.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
@@ -117,12 +116,9 @@ implements
 
     // -- DESCRIPTION
 
-    public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
-
-
     @Column(nullable=true, length=DescriptionType.Meta.MAX_LEN)
     @Property(
-            domainEvent = DescriptionDomainEvent.class,
+            domainEvent = Description.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(
@@ -134,11 +130,9 @@ implements
 
     // -- USERS
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
-
     @ManyToMany
     @Collection(
-            domainEvent = UsersDomainEvent.class
+            domainEvent = Users.DomainEvent.class
             )
     @CollectionLayout(
             defaultView="table",
@@ -159,10 +153,9 @@ implements
 
     // -- PERMISSIONS
     // (derived collection)
-    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
 
     @Collection(
-            domainEvent = PermissionsCollectionDomainEvent.class
+            domainEvent = Permissions.DomainEvent.class
     )
     @CollectionLayout(
             defaultView="table",

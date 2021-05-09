@@ -91,12 +91,9 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     // -- NAME
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
-
-
     @javax.jdo.annotations.Column(allowsNull="false", length = Name.MAX_LENGTH)
     @Property(
-            domainEvent = NameDomainEvent.class,
+            domainEvent = Name.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
@@ -106,12 +103,9 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     // -- DESCRIPTION
 
-    public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
-
-
     @javax.jdo.annotations.Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
     @Property(
-            domainEvent = DescriptionDomainEvent.class,
+            domainEvent = Description.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(
@@ -123,12 +117,10 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     // -- USERS
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
-
     @javax.jdo.annotations.Persistent(mappedBy = "roles")
     @Collection(
-            domainEvent = UsersDomainEvent.class
-            )
+            domainEvent = Users.DomainEvent.class
+        )
     @CollectionLayout(
             defaultView="table",
             sequence = "20")
@@ -148,10 +140,9 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     // -- PERMISSIONS
     // (derived collection)
-    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
 
     @Collection(
-            domainEvent = PermissionsCollectionDomainEvent.class
+            domainEvent = Permissions.DomainEvent.class
     )
     @CollectionLayout(
             defaultView="table",
