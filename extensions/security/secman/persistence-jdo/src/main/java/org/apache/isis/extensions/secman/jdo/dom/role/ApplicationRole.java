@@ -63,12 +63,12 @@ import lombok.Setter;
 })
 @javax.jdo.annotations.Queries({
     @javax.jdo.annotations.Query(
-            name = "findByName", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
                     + "WHERE name == :name"),
     @javax.jdo.annotations.Query(
-            name = "findByNameContaining", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
                     + "WHERE name.matches(:nameRegex) ")
@@ -114,7 +114,8 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION, sequence = "2")
+            typicalLength=TYPICAL_LENGTH_DESCRIPTION,
+            sequence = "2")
     @Getter @Setter
     private String description;
 
@@ -191,8 +192,6 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     public String toString() {
         return toString.toString(this);
     }
-
-
 
 
 }
