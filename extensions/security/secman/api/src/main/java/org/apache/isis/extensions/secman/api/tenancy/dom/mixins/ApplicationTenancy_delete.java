@@ -45,7 +45,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationTenancy_delete {
 
-    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;

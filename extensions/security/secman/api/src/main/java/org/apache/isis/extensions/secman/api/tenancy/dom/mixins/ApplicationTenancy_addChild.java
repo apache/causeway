@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationTenancy_addChild {
 
-    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
     private final ApplicationTenancy target;
 

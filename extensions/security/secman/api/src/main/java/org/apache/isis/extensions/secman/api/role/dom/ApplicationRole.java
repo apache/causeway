@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.role.dom;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -70,6 +71,6 @@ public interface ApplicationRole {
     void setDescription(String description);
 
     Set<ApplicationUser> getUsers();
-    Set<ApplicationPermission> getPermissions();
+    List<ApplicationPermission> getPermissions();
 
 }

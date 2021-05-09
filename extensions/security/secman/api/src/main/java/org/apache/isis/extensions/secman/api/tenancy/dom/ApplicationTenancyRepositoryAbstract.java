@@ -35,7 +35,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ApplicationTenancyRepositoryAbstract<T extends ApplicationTenancy>
-implements ApplicationTenancyRepository<ApplicationTenancy> {
+implements ApplicationTenancyRepository {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;

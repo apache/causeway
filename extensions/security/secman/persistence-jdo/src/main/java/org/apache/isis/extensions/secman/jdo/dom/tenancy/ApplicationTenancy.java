@@ -40,6 +40,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -130,8 +131,13 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     @PropertyLayout(
             hidden = Where.PARENTED_TABLES
             )
-    @Getter @Setter
+    @Getter(onMethod = @__(@Override))
     private ApplicationTenancy parent;
+
+    @Override
+    public void setParent(org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
+        this.parent = _Casts.uncheckedCast(parent);
+    }
 
 
     // -- children

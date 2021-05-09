@@ -26,6 +26,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -45,6 +46,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -125,6 +127,7 @@ implements
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
 
+    @ManyToOne
     @JoinColumn(name="parentPath", nullable=true)
     @Property(
             domainEvent = ParentDomainEvent.class,
@@ -133,8 +136,13 @@ implements
     @PropertyLayout(
             hidden = Where.PARENTED_TABLES
             )
-    @Getter @Setter
+    @Getter(onMethod = @__(@Override))
     private ApplicationTenancy parent;
+
+    @Override
+    public void setParent(org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
+        this.parent = _Casts.uncheckedCast(parent);
+    }
 
 
     // -- children

@@ -28,9 +28,9 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_allUsers;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_newDelegateUser;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserManager_newLocalUser;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_allUsers;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -51,14 +51,14 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         SeedSecurityModuleService.class,
 
         // JDO entities
-        // required to be listed in order for Spring to pick them up, 
+        // required to be listed in order for Spring to pick them up,
         // such that as a side-effect these get eagerly introspected by the framework;
         // whereas the JPA counterpart makes use of the @EntityScan annotation instead
         ApplicationPermission.class,
         ApplicationRole.class,
         ApplicationTenancy.class,
         ApplicationUser.class,
-        
+
         // mixins
         ApplicationUserManager_allUsers.class,
         ApplicationUserManager_newDelegateUser.class,

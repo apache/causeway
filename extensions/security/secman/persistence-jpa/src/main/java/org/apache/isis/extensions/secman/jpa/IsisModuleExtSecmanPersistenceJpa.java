@@ -29,9 +29,6 @@ import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_allUsers;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_newDelegateUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -56,7 +53,7 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 //    ApplicationRole.class,
 //    ApplicationTenancy.class,
 //    ApplicationUser.class,
-    
+
     // mixins
     ApplicationUserManager_allUsers.class,
     ApplicationUserManager_newDelegateUser.class,

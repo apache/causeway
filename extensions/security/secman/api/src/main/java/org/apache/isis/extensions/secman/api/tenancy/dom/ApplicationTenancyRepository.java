@@ -25,25 +25,25 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
-public interface ApplicationTenancyRepository<T extends ApplicationTenancy> {
+public interface ApplicationTenancyRepository {
 
     /**
      *
      * @return detached entity
      */
-    T newApplicationTenancy();
+    ApplicationTenancy newApplicationTenancy();
 
-    Collection<T> allTenancies();
-    Collection<T> getChildren(ApplicationTenancy tenancy);
-    Collection<T> findByNameOrPathMatchingCached(String partialNameOrPath);
+    Collection<ApplicationTenancy> allTenancies();
+    Collection<ApplicationTenancy> getChildren(ApplicationTenancy tenancy);
+    Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
 
     /**
      * auto-complete support
      * @param search
      */
-    Collection<T> findMatching(String search);
+    Collection<ApplicationTenancy> findMatching(String search);
 
-    T newTenancy(String name, String path, ApplicationTenancy parent);
+    ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
 
     void setTenancyOnUser(ApplicationTenancy tenancy, ApplicationUser user);
     void clearTenancyOnUser(ApplicationUser user);

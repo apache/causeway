@@ -20,6 +20,11 @@ package org.apache.isis.extensions.secman.api.user.app.mixins;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
@@ -27,22 +32,19 @@ import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewDelegateUserDomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-/**
- * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types
- * and the ApplicationRole here is just an interface that the framework has not much
- * meta-model information to derive UI behavior from.
- *
- * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses.
- *
- */
-public abstract class ApplicationUserManager_newDelegateUser {
+@Action(
+        domainEvent = NewDelegateUserDomainEvent.class,
+        associateWith = "allUsers")
+@RequiredArgsConstructor
+public class ApplicationUserManager_newDelegateUser {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
@@ -50,10 +52,24 @@ public abstract class ApplicationUserManager_newDelegateUser {
     @Inject private RepositoryService repository;
     @Inject private SecurityRealmService securityRealmService;
 
-    protected ApplicationUser doAct(
+    private final ApplicationUserManager target;
+
+    @MemberSupport
+    public ApplicationUserManager act(
+
+          @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
+          @ParameterLayout(named = "Name")
           final String username,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Initial role")
           final ApplicationRole initialRole,
-          final Boolean enabled) {
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Enabled?")
+          final Boolean enabled
+
+            ) {
 
         final ApplicationUser user = applicationUserRepository
                 .newDelegateUser(username, ApplicationUserStatus.parse(enabled));
@@ -62,18 +78,21 @@ public abstract class ApplicationUserManager_newDelegateUser {
             applicationRoleRepository.addRoleToUser(initialRole, user);
         }
         repository.persist(user);
-        return user;
+        return target;
     }
 
-    protected boolean doHide() {
+    @MemberSupport
+    public boolean hideAct() {
         return hasNoDelegateAuthenticationRealm();
     }
 
-    protected ApplicationRole doDefault1() {
+    @MemberSupport
+    public ApplicationRole default1Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);
     }
+
 
     // -- HELPER
 
@@ -81,8 +100,7 @@ public abstract class ApplicationUserManager_newDelegateUser {
         val realm = securityRealmService.getCurrentRealm();
         return realm == null
                 || !realm.getCharacteristics()
-                    .contains(SecurityRealmCharacteristic.DELEGATING);
+                .contains(SecurityRealmCharacteristic.DELEGATING);
     }
-
 
 }

@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateParent {
 
-    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
     private final ApplicationTenancy target;
 

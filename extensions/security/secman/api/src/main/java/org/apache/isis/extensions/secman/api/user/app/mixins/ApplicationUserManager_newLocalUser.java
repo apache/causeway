@@ -22,6 +22,11 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
@@ -29,21 +34,20 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewLocalUserDomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateEmailAddress;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 
-/**
- * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types
- * and the ApplicationRole here is just an interface that the framework has not much
- * meta-model information to derive UI behavior from.
- *
- * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses.
- *
- */
-public abstract class ApplicationUserManager_newLocalUser {
+import lombok.RequiredArgsConstructor;
+
+@Action(
+        domainEvent = NewLocalUserDomainEvent.class,
+        associateWith = "allUsers")
+@RequiredArgsConstructor
+public class ApplicationUserManager_newLocalUser
+extends ApplicationUserManager_newLocalUserAbstract {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
@@ -51,13 +55,33 @@ public abstract class ApplicationUserManager_newLocalUser {
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
 
-    protected ApplicationUser doAct(
-            final String username,
-            final Password password,
-            final Password passwordRepeat,
-            final ApplicationRole initialRole,
-            final Boolean enabled,
-            final String emailAddress) {
+    private final ApplicationUserManager target;
+
+    @MemberSupport
+    public ApplicationUserManager act(
+          @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
+          @ParameterLayout(named = "Name")
+          final String username,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Password")
+          final Password password,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Repeat password")
+          final Password passwordRepeat,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Initial role")
+          final ApplicationRole initialRole,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Enabled?")
+          final Boolean enabled,
+
+          @Parameter(optionality = Optionality.OPTIONAL)
+          @ParameterLayout(named = "Email Address")
+          final String emailAddress) {
 
         ApplicationUser user = applicationUserRepository.findByUsername(username).orElse(null);
         if (user == null) {
@@ -69,13 +93,14 @@ public abstract class ApplicationUserManager_newLocalUser {
         }
         if (emailAddress != null) {
             factory.mixin(ApplicationUser_updateEmailAddress.class, user)
-            .act(emailAddress);
+                    .act(emailAddress);
         }
         repository.persist(user);
-        return user;
+        return target;
     }
 
-    protected String doValidate(
+    @MemberSupport
+    public String validateAct(
             final String username,
             final Password newPassword,
             final Password newPasswordRepeat,
@@ -90,7 +115,8 @@ public abstract class ApplicationUserManager_newLocalUser {
         return null;
     }
 
-    protected ApplicationRole doDefault3() {
+    @MemberSupport
+    public ApplicationRole default3Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);

@@ -135,7 +135,7 @@ implements
 
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole applicationRole) {
-        role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
+        role = _Casts.uncheckedCast(applicationRole);
     }
 
     // -- rule (property)

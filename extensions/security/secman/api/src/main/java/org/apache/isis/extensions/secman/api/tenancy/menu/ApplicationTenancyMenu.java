@@ -52,7 +52,7 @@ public class ApplicationTenancyMenu {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancyMenu, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancyMenu> {}
 
-    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
     // -- iconName
     public String iconName() {
