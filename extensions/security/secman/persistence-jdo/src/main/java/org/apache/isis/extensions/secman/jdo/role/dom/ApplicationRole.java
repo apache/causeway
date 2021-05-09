@@ -88,7 +88,8 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
-    // -- name (property)
+
+    // -- NAME
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -103,7 +104,7 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     private String name;
 
 
-    // -- description (property)
+    // -- DESCRIPTION
 
     public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -119,21 +120,8 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     @Getter @Setter
     private String description;
 
-    // -- permissions (derived collection)
-    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
 
-    @Collection(
-            domainEvent = PermissionsCollectionDomainEvent.class
-            )
-    @CollectionLayout(
-            defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class,
-            sequence = "10")
-    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
-        return applicationPermissionRepository.findByRole(this);
-    }
-
-    // -- users (collection)
+    // -- USERS
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
@@ -155,6 +143,22 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     // necessary for integration tests
     public void removeFromUsers(final ApplicationUser applicationUser) {
         getUsers().remove(applicationUser);
+    }
+
+
+    // -- PERMISSIONS
+    // (derived collection)
+    public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
+
+    @Collection(
+            domainEvent = PermissionsCollectionDomainEvent.class
+    )
+    @CollectionLayout(
+            defaultView="table",
+            sortedBy = ApplicationPermission.DefaultComparator.class,
+            sequence = "10")
+    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
+        return applicationPermissionRepository.findByRole(this);
     }
 
 

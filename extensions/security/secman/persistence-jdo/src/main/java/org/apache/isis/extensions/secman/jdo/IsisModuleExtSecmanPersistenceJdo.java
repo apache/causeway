@@ -29,8 +29,7 @@ import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.jdo.user.dom.RegexReplacer;
-import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.jdo.util.RegexReplacer;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**

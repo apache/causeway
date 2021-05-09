@@ -19,6 +19,8 @@
 package org.apache.isis.extensions.secman.api.tenancy.dom;
 
 
+import org.apache.isis.extensions.secman.api.tenancy.spi.ApplicationTenancyEvaluator;
+
 /**
  * Role interface for domain objects to implement, indicating that these are characteristics of the entity that
  * can be used to determine its visibility/editability.

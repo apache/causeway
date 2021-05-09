@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jpa.user.dom;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -127,17 +128,19 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
-     * else will fallback to a {@link PermissionsEvaluationService#DEFAULT default}
-     * implementation.
+     * else will fallback to a default implementation.
      */
     @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
     @Inject private transient SecmanConfiguration configBean;
+
 
     @Id
     @GeneratedValue
     private Long id;
 
-    // -- name (derived property)
+
+    // -- NAME
+    // (derived property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -169,7 +172,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     }
 
 
-    // -- username (property)
+    // -- USERNAME
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -186,7 +189,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String username;
 
 
-    // -- familyName (property)
+    // -- FAMILY NAME
 
     public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -203,7 +206,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String familyName;
 
 
-    // -- givenName (property)
+    // -- GIVEN NAME
 
     public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -220,7 +223,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String givenName;
 
 
-    // -- knownAs (property)
+    // -- KNOWN AS
 
     public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -238,7 +241,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String knownAs;
 
 
-    // -- emailAddress (property)
+    // -- EMAIL ADDRESS
 
     public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -252,7 +255,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String emailAddress;
 
 
-    // -- phoneNumber (property)
+    // -- PHONE NUMBER
 
     public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -267,7 +270,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String phoneNumber;
 
 
-    // -- faxNumber (property)
+    // -- FAX NUMBER
 
     public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -284,7 +287,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String faxNumber;
 
 
-    // -- atPath (property)
+    // -- AT PATH
 
     public static class AtPathDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -298,7 +301,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @Getter @Setter
     private String atPath;
 
-    // -- accountType (property)
+
+    // -- ACCOUNT TYPE
 
     public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {}
 
@@ -314,7 +318,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private AccountType accountType;
 
 
-    // -- status (property), visible (action), usable (action)
+    // -- STATUS
 
     public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
 
@@ -330,7 +334,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private ApplicationUserStatus status;
 
 
-    // -- encryptedPassword (hidden property)
+    // -- ENCRYPTED PASSWORD
 
 
     @Column(nullable=true)
@@ -343,7 +347,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     }
 
 
-    // -- hasPassword (derived property)
+    // -- HAS PASSWORD
+    // (derived property)
 
     public static class HasPasswordDomainEvent extends PropertyDomainEvent<Boolean> {}
 
@@ -361,12 +366,12 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
         return !applicationUserRepository.isPasswordFeatureEnabled(this);
     }
 
-    // -- roles (collection)
+
+
+    // ROLES
+
     public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
 
-//    @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
-//    @javax.jdo.annotations.Join(column="userId")
-//    @javax.jdo.annotations.Element(column="roleId")
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JoinTable(
             name = "ApplicationUserRoles",
@@ -378,14 +383,11 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @CollectionLayout(
             defaultView="table",
             sequence = "20")
-    private Set<ApplicationRole> roles = new TreeSet<>();
+    @Getter @Setter
+    private SortedSet<ApplicationRole> roles = new TreeSet<>();
 
-    @Override
-    public Set<org.apache.isis.extensions.secman.api.role.dom.ApplicationRole> getRoles() {
-        return _Casts.uncheckedCast(roles);
-    }
 
-    // -- PermissionSet (programmatic)
+    // -- PERMISSION SET
 
     // short-term caching
     private transient ApplicationPermissionValueSet cachedPermissionSet;
@@ -402,12 +404,16 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
                         permissionsEvaluationService);
     }
 
+
+    // -- IS FOR SELF OR RUN AS ADMINISTRATOR
+
     @Override
     public boolean isForSelfOrRunAsAdministrator() {
         return isForSelf() || isRunAsAdministrator();
     }
 
-    // -- helpers
+    // -- HELPERS
+
     boolean isForSelf() {
         final String currentUserName = userService.currentUserElseFail().getName();
         return Objects.equals(getUsername(), currentUserName);

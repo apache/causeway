@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.user.dom;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -64,47 +65,91 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
         return getStatus().isEnabled() ? "enabled" : "disabled";
     }
 
+    // -- NAME
+
     String getName();
 
-    String getEncryptedPassword();
+    // -- USERNAME
 
-    AccountType getAccountType();
-    void setAccountType(AccountType accountType);
+    void setUsername(String username);
 
-    ApplicationPermissionValueSet getPermissionSet();
-
-    Set<ApplicationRole> getRoles();
-
-    ApplicationUserStatus getStatus();
-    void setStatus(ApplicationUserStatus disabled);
-
-    void setAtPath(String atPath);
-
-    String getEmailAddress();
-    void setEmailAddress(String emailAddress);
-
-    String getFaxNumber();
-    void setFaxNumber(String faxNumber);
+    // -- FAMILY NAME
 
     String getFamilyName();
     void setFamilyName(String familyName);
 
+    // -- GIVEN NAME
+
     String getGivenName();
     void setGivenName(String givenName);
+
+    // -- KNOWN AS
 
     String getKnownAs();
     void setKnownAs(String knownAs);
 
+
+    // -- EMAIL ADDRESS
+
+    String getEmailAddress();
+    void setEmailAddress(String emailAddress);
+
+    // -- PHONE NUMBER
+
     String getPhoneNumber();
     void setPhoneNumber(String phoneNumber);
 
-    void setUsername(String username);
 
+    // -- FAX NUMBER
+
+    String getFaxNumber();
+    void setFaxNumber(String faxNumber);
+
+
+    // -- AT PATH
+
+    void setAtPath(String atPath);
+
+
+    // -- ACCOUNT TYPE
+
+    AccountType getAccountType();
+    void setAccountType(AccountType accountType);
+
+
+    // -- STATUS
+
+    ApplicationUserStatus getStatus();
+    void setStatus(ApplicationUserStatus disabled);
+
+
+    // -- ENCRYPTED PASSWORD
+
+    String getEncryptedPassword();
     void setEncryptedPassword(String encryptedPassword);
+
+
+    // -- HAS PASSWORD
+
+    boolean isHasPassword();
+
+
+    // ROLES
+
+    SortedSet<ApplicationRole> getRoles();
+
+
+    // -- PERMISSION SET
+
+    ApplicationPermissionValueSet getPermissionSet();
+
+
+    // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     boolean isForSelfOrRunAsAdministrator();
 
-    boolean isHasPassword();
+
+    // -- HELPERS
 
     default boolean isLocalAccount() {
         return getAccountType() == AccountType.LOCAL;

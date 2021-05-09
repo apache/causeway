@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.user.dom;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -75,7 +76,8 @@ import lombok.val;
         column = "version")
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
-            name = "ApplicationUser_username_UNQ", members = { "username" })
+            name = "ApplicationUser_username_UNQ",
+            members = { "username" })
 })
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
@@ -125,7 +127,9 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @Inject private PermissionsEvaluationService permissionsEvaluationService;
     @Inject private SecmanConfiguration configBean;
 
-    // -- name (derived property)
+
+    // -- NAME
+    // (derived property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -157,10 +161,9 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     }
 
 
-    // -- username (property)
+    // -- USERNAME
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
-
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_USERNAME)
     @Property(
@@ -175,7 +178,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String username;
 
 
-    // -- familyName (property)
+    // -- FAMILY NAME
 
     public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -193,7 +196,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String familyName;
 
 
-    // -- givenName (property)
+    // -- GIVEN NAME
 
     public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -211,7 +214,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String givenName;
 
 
-    // -- knownAs (property)
+    // -- KNOWN AS
 
     public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -229,7 +232,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String knownAs;
 
 
-    // -- emailAddress (property)
+    // -- EMAIL ADDRESS
 
     public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -243,7 +246,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String emailAddress;
 
 
-    // -- phoneNumber (property)
+    // -- PHONE NUMBER
 
     public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -258,7 +261,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String phoneNumber;
 
 
-    // -- faxNumber (property)
+    // -- FAX NUMBER
 
     public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -275,7 +278,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private String faxNumber;
 
 
-    // -- atPath (property)
+    // -- AT PATH
 
     public static class AtPathDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -289,7 +292,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @Getter @Setter
     private String atPath;
 
-    // -- accountType (property)
+
+    // -- ACCOUNT TYPE
 
     public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {}
 
@@ -304,7 +308,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private AccountType accountType;
 
 
-    // -- status (property), visible (action), usable (action)
+    // -- STATUS
 
     public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
 
@@ -319,7 +323,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     private ApplicationUserStatus status;
 
 
-    // -- encryptedPassword (hidden property)
+    // -- ENCRYPTED PASSWORD
 
 
     @javax.jdo.annotations.Column(allowsNull="true")
@@ -332,7 +336,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     }
 
 
-    // -- hasPassword (derived property)
+    // -- HAS PASSWORD
+    // (derived property)
 
     public static class HasPasswordDomainEvent extends PropertyDomainEvent<Boolean> {}
 
@@ -350,7 +355,10 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
         return !applicationUserRepository.isPasswordFeatureEnabled(this);
     }
 
-    // -- roles (collection)
+
+
+    // ROLES
+
     public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
 
     @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
@@ -363,10 +371,10 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
             defaultView="table",
             sequence = "20")
     @Getter @Setter
-    private Set<ApplicationRole> roles = new TreeSet<>();
+    private SortedSet<ApplicationRole> roles = new TreeSet<>();
 
 
-    // -- PermissionSet (programmatic)
+    // -- PERMISSION SET
 
     // short-term caching
     private transient ApplicationPermissionValueSet cachedPermissionSet;
@@ -383,12 +391,16 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
                         permissionsEvaluationService);
     }
 
+
+    // -- IS FOR SELF OR RUN AS ADMINISTRATOR
+
     @Override
     public boolean isForSelfOrRunAsAdministrator() {
         return isForSelf() || isRunAsAdministrator();
     }
 
-    // -- helpers
+    // -- HELPERS
+
     boolean isForSelf() {
         final String currentUserName = userService.currentUserElseFail().getName();
         return Objects.equals(getUsername(), currentUserName);

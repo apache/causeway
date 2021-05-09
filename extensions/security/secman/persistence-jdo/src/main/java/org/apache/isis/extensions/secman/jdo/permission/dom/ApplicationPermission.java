@@ -115,7 +115,7 @@ implements
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
 
 
-    // -- role (property)
+    // -- ROLE
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
@@ -134,7 +134,8 @@ implements
         role = _Casts.uncheckedCast(applicationRole);
     }
 
-    // -- rule (property)
+    // -- RULE
+
     public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
 
 
@@ -148,7 +149,7 @@ implements
     private ApplicationPermissionRule rule;
 
 
-    // -- mode (property)
+    // -- MODE
     public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
 
 
@@ -168,7 +169,7 @@ implements
                 .map(featureId -> featureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberSort of associated feature)
+    // -- SORT
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -198,8 +199,8 @@ implements
     // -- FEATURE SORT
 
     /**
-     * The {@link ApplicationFeatureId#getSort() feature sort} of the
-     * feature.
+     * Which {@link ApplicationFeatureId#getSort() sort} of
+     * feature this is.
      *
      * <p>
      *     The combination of the feature type and the {@link #getFeatureFqn() fully qualified name} is used to build
@@ -220,7 +221,7 @@ implements
 
 
 
-    // -- featureFqn
+    // -- FQN
 
     public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -282,8 +283,6 @@ implements
         }
     }
 
-
-    // -- Functions
 
 
     @Inject private ApplicationFeatureRepository featureRepository;

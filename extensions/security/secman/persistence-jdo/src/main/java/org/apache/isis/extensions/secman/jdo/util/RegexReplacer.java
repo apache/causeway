@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.user.dom;
+package org.apache.isis.extensions.secman.jdo.util;
 
 import javax.inject.Named;
 

@@ -130,7 +130,7 @@ implements
     @GeneratedValue
     private Long id;
 
-    // -- role (property)
+    // -- ROLE
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
@@ -150,7 +150,8 @@ implements
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
     }
 
-    // -- rule (property)
+    // -- RULE
+
     public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
 
 
@@ -165,7 +166,7 @@ implements
     private ApplicationPermissionRule rule;
 
 
-    // -- mode (property)
+    // -- MODE
     public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
 
 
@@ -186,7 +187,7 @@ implements
                 .map(featureId -> featureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberSort of associated feature)
+    // -- SORT
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -213,11 +214,11 @@ implements
     }
 
 
-    // -- featureSort
+    // -- FEATURE SORT
 
     /**
-     * The {@link ApplicationFeatureId#getType() feature type} of the
-     * feature.
+     * Which {@link ApplicationFeatureId#getSort() sort} of
+     * feature this is.
      *
      * <p>
      *     The combination of the feature type and the {@link #getFeatureFqn() fully qualified name} is used to build
@@ -239,7 +240,7 @@ implements
 
 
 
-    // -- featureFqn
+    // -- FQN
 
     public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -302,19 +303,6 @@ implements
     }
 
 
-    // -- Functions
-
-    @UtilityClass
-    public static final class Functions {
-
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
-                (ApplicationPermission input) ->
-                    new ApplicationPermissionValue(
-                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
-                            input.getRule(),
-                            input.getMode());
-
-    }
 
 
 

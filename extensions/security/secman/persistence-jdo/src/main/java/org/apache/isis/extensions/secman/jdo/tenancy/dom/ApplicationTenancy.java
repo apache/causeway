@@ -87,7 +87,7 @@ import lombok.Setter;
 public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
         org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
-    // -- name (property, title)
+    // -- NAME
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -103,7 +103,7 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     private String name;
 
 
-    // -- path
+    // -- PATH
 
     public static class PathDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -118,7 +118,7 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     private String path;
 
 
-    // -- parent (property)
+    // -- PARENT
 
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
@@ -140,7 +140,7 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     }
 
 
-    // -- children
+    // -- CHILDREN
 
     public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
 

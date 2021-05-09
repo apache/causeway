@@ -53,13 +53,22 @@ public interface ApplicationRole {
         return getName();
     }
 
+    // -- NAME
+
     String getName();
     void setName(String name);
+
+    // -- DESCRIPTION
 
     String getDescription();
     void setDescription(String description);
 
+    // -- USERS
+
     Set<ApplicationUser> getUsers();
+
+    // -- PERMISSIONS
+
     List<ApplicationPermission> getPermissions();
 
 }

@@ -49,14 +49,21 @@ public interface ApplicationTenancy {
         return getName();
     }
 
-    public String getPath();
-    void setPath(String path);
+    // -- NAME
 
     public String getName();
     public void setName(String name);
 
+    // -- PATH
+    public String getPath();
+    void setPath(String path);
+
+    // -- PARENT
+
     public ApplicationTenancy getParent();
     void setParent(ApplicationTenancy parent);
+
+    // -- CHILDREN
 
     Collection<ApplicationTenancy> getChildren();
 

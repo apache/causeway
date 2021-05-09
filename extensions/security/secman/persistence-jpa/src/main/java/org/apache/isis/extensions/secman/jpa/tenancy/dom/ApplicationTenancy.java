@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
@@ -74,9 +75,9 @@ import lombok.Setter;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
                   + "WHERE t.name LIKE :regex "
-                  + "    OR t.path LIKE :regex"),
+                  + "   OR t.path LIKE :regex"),
 })
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationTenancy",
@@ -86,12 +87,10 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationTenancy
-implements
-    Comparable<ApplicationTenancy>,
+public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
         org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
-    // -- name (property, title)
+    // -- NAME
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -107,7 +106,7 @@ implements
     private String name;
 
 
-    // -- path
+    // -- PATH
 
     public static class PathDomainEvent extends PropertyDomainEvent<String> {}
 
@@ -122,7 +121,7 @@ implements
     private String path;
 
 
-    // -- parent (property)
+    // -- PARENT
 
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
@@ -145,11 +144,11 @@ implements
     }
 
 
-    // -- children
+    // -- CHILDREN
 
     public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
 
-    @OneToMany(mappedBy="parent")
+    @OneToMany(mappedBy = "parent")
     @Collection(
             domainEvent = ChildrenDomainEvent.class
             )
@@ -157,7 +156,7 @@ implements
             defaultView="table"
             )
     @Getter @Setter
-    private Set<ApplicationTenancy> children = new TreeSet<>();
+    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
 
 
     // necessary for integration tests
