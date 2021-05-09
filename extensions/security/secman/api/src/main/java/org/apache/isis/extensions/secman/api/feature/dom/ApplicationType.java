@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -44,26 +48,29 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
     // -- constructors
 
-    public ApplicationType() {
-    }
-
+    public ApplicationType() { }
     public ApplicationType(final ApplicationFeatureId featureId) {
         super(featureId);
     }
 
 
 
-
     // -- actions (collection)
 
-    public static class ActionsDomainEvent extends CollectionDomainEvent<ApplicationTypeAction> {}
-
     @Collection(
-            domainEvent = ActionsDomainEvent.class
-            )
+            domainEvent = Actions.DomainEvent.class
+    )
     @CollectionLayout(
             defaultView="table",
-            sequence = "20.1")
+            sequence = "20.1"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Actions {
+        class DomainEvent extends CollectionDomainEvent<ApplicationTypeAction> {}
+    }
+
+    @Actions
     public List<ApplicationTypeAction> getActions() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getActions();
         return asViewModels(members, ApplicationTypeAction.class);
@@ -72,32 +79,43 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
     // -- properties (collection)
 
-    public static class PropertiesCollectionDomainEvent
-    extends CollectionDomainEvent<ApplicationTypeAction> {}
-
-
     @Collection(
-            domainEvent = PropertiesCollectionDomainEvent.class
-            )
+            domainEvent = Properties.CollectionDomainEvent.class
+    )
     @CollectionLayout(
             defaultView="table",
-            sequence = "20.2")
+            sequence = "20.2"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Properties {
+        class CollectionDomainEvent extends ApplicationType.CollectionDomainEvent<ApplicationTypeProperty> {}
+    }
+
+    @Properties
     public List<ApplicationTypeProperty> getProperties() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getProperties();
         return asViewModels(members, ApplicationTypeProperty.class);
     }
 
 
+
     // -- collections (collection)
-    public static class CollectionsCollectionDomainEvent
-    extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(
-            domainEvent = CollectionsCollectionDomainEvent.class
-            )
+            domainEvent = Collections.DomainEvent.class
+    )
     @CollectionLayout(
             defaultView="table",
-            sequence = "20.3")
+            sequence = "20.3"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Collections {
+        class DomainEvent extends CollectionDomainEvent<ApplicationTypeCollection> {}
+    }
+
+    @Collections
     public List<ApplicationTypeCollection> getCollections() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
         return asViewModels(members, ApplicationTypeCollection.class);

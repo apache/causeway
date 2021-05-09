@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -46,15 +50,20 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
     // -- contents (collection, for packages only)
 
-    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel> {}
-
     @Collection(
-            domainEvent = ContentsDomainEvent.class
-            )
+            domainEvent = Contents.DomainEvent.class
+    )
     @CollectionLayout(
             defaultView="table",
             sequence = "4"
     )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Contents {
+        class DomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel> {}
+    }
+
+    @Contents
     public List<ApplicationFeatureViewModel> getContents() {
         final SortedSet<ApplicationFeatureId> contents = getFeature().getContents();
         return asViewModels(contents, ApplicationFeatureViewModel.class);
