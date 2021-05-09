@@ -117,12 +117,9 @@ implements
 
     // -- ROLE
 
-    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
-
-
     @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
     @Property(
-            domainEvent = RoleDomainEvent.class,
+            domainEvent = Role.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(hidden = Where.REFERENCES_PARENT)
@@ -134,14 +131,12 @@ implements
         role = _Casts.uncheckedCast(applicationRole);
     }
 
+
     // -- RULE
-
-    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
-
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
-            domainEvent = RuleDomainEvent.class,
+            domainEvent = Rule.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter(onMethod = @__(@Override))
@@ -150,12 +145,10 @@ implements
 
 
     // -- MODE
-    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
-
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
-            domainEvent = ModeDomainEvent.class,
+            domainEvent = Mode.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter(onMethod = @__(@Override))
@@ -171,13 +164,11 @@ implements
 
     // -- SORT
 
-    public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
-
     /**
      * Combines {@link #getFeatureSort() feature type} and member type.
      */
     @Property(
-            domainEvent = TypeDomainEvent.class,
+            domainEvent = Sort.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
@@ -223,8 +214,6 @@ implements
 
     // -- FQN
 
-    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
-
     /**
      * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
      * of the feature.
@@ -238,11 +227,12 @@ implements
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
-            domainEvent = FeatureFqnDomainEvent.class,
+            domainEvent = FeatureFqn.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter @Setter
     private String featureFqn;
+
 
 
     // -- CONTRACT

@@ -130,15 +130,13 @@ implements
     @GeneratedValue
     private Long id;
 
+
     // -- ROLE
-
-    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
-
 
     @ManyToOne
     @JoinColumn(name="roleId", nullable=false)
     @Property(
-            domainEvent = RoleDomainEvent.class,
+            domainEvent = Role.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(hidden = Where.REFERENCES_PARENT)
@@ -150,15 +148,13 @@ implements
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
     }
 
+
     // -- RULE
-
-    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
-
 
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     @Property(
-            domainEvent = RuleDomainEvent.class,
+            domainEvent = Rule.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter(onMethod = @__(@Override))
@@ -167,18 +163,17 @@ implements
 
 
     // -- MODE
-    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
-
 
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     @Property(
-            domainEvent = ModeDomainEvent.class,
+            domainEvent = Mode.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
+
 
     // -- featureId (derived property)
 
@@ -189,13 +184,11 @@ implements
 
     // -- SORT
 
-    public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
-
     /**
      * Combines {@link #getFeatureSort() feature sort} and member sort.
      */
     @Property(
-            domainEvent = TypeDomainEvent.class,
+            domainEvent = Sort.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
@@ -242,8 +235,6 @@ implements
 
     // -- FQN
 
-    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
-
     /**
      * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
      * of the feature.
@@ -257,7 +248,7 @@ implements
      */
     @Column(nullable=false)
     @Property(
-            domainEvent = FeatureFqnDomainEvent.class,
+            domainEvent = FeatureFqn.DomainEvent.class,
             editing = Editing.DISABLED
             )
     @Getter @Setter
@@ -293,6 +284,7 @@ implements
         return contract.toString(this);
     }
 
+
     // --
 
     public static class DefaultComparator implements Comparator<ApplicationPermission> {
@@ -301,9 +293,5 @@ implements
             return Objects.compare(o1, o2, (a, b) -> a.compareTo(b) );
         }
     }
-
-
-
-
 
 }

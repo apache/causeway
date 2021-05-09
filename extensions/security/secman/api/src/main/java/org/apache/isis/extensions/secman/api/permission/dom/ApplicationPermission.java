@@ -135,6 +135,7 @@ public interface ApplicationPermission {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Role {
+        class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
     }
 
     @Property
@@ -144,9 +145,7 @@ public interface ApplicationPermission {
             sequence = "1"
     )
     @Role
-    default ApplicationRole getRole() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
+    ApplicationRole getRole();
     void setRole(ApplicationRole applicationRole);
 
 
@@ -155,14 +154,13 @@ public interface ApplicationPermission {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Rule {
+        class DomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
     }
 
     @Property
     @PropertyLayout(fieldSetId="Permissions", sequence = "2")
     @Rule
-    default ApplicationPermissionRule getRule() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
+    ApplicationPermissionRule getRule();
     void setRule(ApplicationPermissionRule rule);
 
 
@@ -171,6 +169,7 @@ public interface ApplicationPermission {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Mode {
+        class DomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
     }
 
     @Property
@@ -181,11 +180,13 @@ public interface ApplicationPermission {
     }
     void setMode(ApplicationPermissionMode changing);
 
+
     // -- SORT
 
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Sort {
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Property
@@ -201,6 +202,7 @@ public interface ApplicationPermission {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface FeatureFqn {
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Property
