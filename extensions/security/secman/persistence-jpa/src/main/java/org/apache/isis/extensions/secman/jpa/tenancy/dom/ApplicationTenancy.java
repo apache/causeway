@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Comparator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -94,13 +93,13 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=false, length=MAX_LENGTH_NAME)
+    @Column(nullable=false, length= Name.MAX_LENGTH)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_NAME,
+            typicalLength= Name.TYPICAL_LENGTH,
             sequence = "1")
     @Getter @Setter
     private String name;
@@ -112,7 +111,7 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 
 
     @Id
-    @Column(nullable=false, length=MAX_LENGTH_PATH)
+    @Column(nullable=false, length= Path.MAX_LENGTH)
     @Property(
             domainEvent = PathDomainEvent.class,
             editing = Editing.DISABLED

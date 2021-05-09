@@ -56,7 +56,7 @@ public class ApplicationRole_updateDescription {
                     )
             @ParameterLayout(
                     named="Description",
-                    typicalLength=ApplicationRole.TYPICAL_LENGTH_DESCRIPTION)
+                    typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
             final String description) {
 
         target.setDescription(description);

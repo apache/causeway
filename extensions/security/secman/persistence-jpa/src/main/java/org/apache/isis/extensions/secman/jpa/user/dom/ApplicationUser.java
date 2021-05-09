@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.jpa.user.dom;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -64,7 +63,6 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
@@ -176,7 +174,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=false, length=MAX_LENGTH_USERNAME)
+    @Column(nullable=false, length= Username.MAX_LENGTH)
     @Property(
             domainEvent = UsernameDomainEvent.class,
             editing = Editing.DISABLED
@@ -193,7 +191,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=true, length=MAX_LENGTH_FAMILY_NAME)
+    @Column(nullable=true, length= FamilyName.MAX_LENGTH)
     @Property(
             domainEvent = FamilyNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -210,7 +208,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=true, length=MAX_LENGTH_GIVEN_NAME)
+    @Column(nullable=true, length= GivenName.MAX_LENGTH)
     @Property(
             domainEvent = GivenNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -228,7 +226,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @Column(nullable=true, length=MAX_LENGTH_KNOWN_AS)
+    @Column(nullable=true, length= KnownAs.MAX_LENGTH)
     @Property(
             domainEvent = KnownAsDomainEvent.class,
             editing = Editing.DISABLED
@@ -245,7 +243,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=true, length=MAX_LENGTH_EMAIL_ADDRESS)
+    @Column(nullable=true, length= EmailAddress.MAX_LENGTH)
     @Property(
             domainEvent = EmailAddressDomainEvent.class,
             editing = Editing.DISABLED
@@ -260,7 +258,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @Column(nullable=true, length=MAX_LENGTH_PHONE_NUMBER)
+    @Column(nullable=true, length= PhoneNumber.MAX_LENGTH)
     @Property(
             domainEvent = PhoneNumberDomainEvent.class,
             editing = Editing.DISABLED
@@ -274,7 +272,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=true, length=MAX_LENGTH_PHONE_NUMBER)
+    @Column(nullable=true, length= FaxNumber.MAX_LENGTH)
     @Property(
             domainEvent = FaxNumberDomainEvent.class,
             editing = Editing.DISABLED

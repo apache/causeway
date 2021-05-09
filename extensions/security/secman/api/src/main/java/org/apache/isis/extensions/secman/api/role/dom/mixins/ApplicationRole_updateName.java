@@ -46,8 +46,8 @@ public class ApplicationRole_updateName {
     private final ApplicationRole target;
 
     public ApplicationRole act(
-            @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
-            @ParameterLayout(named="Name", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
+            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
+            @ParameterLayout(named="Name", typicalLength = ApplicationRole.Name.TYPICAL_LENGTH)
             final String name) {
 
         target.setName(name);

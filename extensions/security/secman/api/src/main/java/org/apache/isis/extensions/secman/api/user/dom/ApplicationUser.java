@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.user.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -34,13 +38,6 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     // -- CONSTANTS
 
-    public static final int MAX_LENGTH_USERNAME = 120;
-    public static final int MAX_LENGTH_FAMILY_NAME = 120;
-    public static final int MAX_LENGTH_GIVEN_NAME = 120;
-    public static final int MAX_LENGTH_KNOWN_AS = 120;
-    public static final int MAX_LENGTH_EMAIL_ADDRESS = 120;
-    public static final int MAX_LENGTH_PHONE_NUMBER = 120;
-
     String NAMED_QUERY_FIND_BY_USERNAME = "ApplicationUser.findByUsername";
     String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS = "ApplicationUser.findByEmailAddress";
     String NAMED_QUERY_FIND = "ApplicationUser.find";
@@ -48,8 +45,8 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     // -- DOMAIN EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
+    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
+    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
 
     // -- MODEL
 
@@ -65,56 +62,131 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
         return getStatus().isEnabled() ? "enabled" : "disabled";
     }
 
+
     // -- NAME
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Name {
+    }
+
+    @Name
     String getName();
+
 
     // -- USERNAME
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Username {
+        int MAX_LENGTH = 120;
+    }
+
+    @Username
+    String getUsername();
     void setUsername(String username);
+
 
     // -- FAMILY NAME
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface FamilyName {
+        int MAX_LENGTH = 120;
+    }
+
+    @FamilyName
     String getFamilyName();
     void setFamilyName(String familyName);
 
+
     // -- GIVEN NAME
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface GivenName {
+        int MAX_LENGTH = 120;
+    }
+
+    @GivenName
     String getGivenName();
     void setGivenName(String givenName);
 
+
     // -- KNOWN AS
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface KnownAs {
+        int MAX_LENGTH = 120;
+    }
+
+    @KnownAs
     String getKnownAs();
     void setKnownAs(String knownAs);
 
 
     // -- EMAIL ADDRESS
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface EmailAddress {
+        int MAX_LENGTH = 120;
+    }
+
+    @EmailAddress
     String getEmailAddress();
     void setEmailAddress(String emailAddress);
 
+
     // -- PHONE NUMBER
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface PhoneNumber {
+        int MAX_LENGTH = 120;
+    }
+
+    @PhoneNumber
     String getPhoneNumber();
     void setPhoneNumber(String phoneNumber);
 
 
     // -- FAX NUMBER
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface FaxNumber {
+        int MAX_LENGTH = 120;
+    }
+
+    @FaxNumber
     String getFaxNumber();
     void setFaxNumber(String faxNumber);
 
 
     // -- AT PATH
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface AtPath {
+    }
+
+    @AtPath
+    String getAtPath();
     void setAtPath(String atPath);
 
 
     // -- ACCOUNT TYPE
 
-    AccountType getAccountType();
-    void setAccountType(AccountType accountType);
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface AccountType {
+    }
+
+    @AccountType
+    org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType();
+    void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType);
 
 
     // -- STATUS
@@ -152,7 +224,7 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     // -- HELPERS
 
     default boolean isLocalAccount() {
-        return getAccountType() == AccountType.LOCAL;
+        return getAccountType() == org.apache.isis.extensions.secman.api.user.dom.AccountType.LOCAL;
     }
 
 }

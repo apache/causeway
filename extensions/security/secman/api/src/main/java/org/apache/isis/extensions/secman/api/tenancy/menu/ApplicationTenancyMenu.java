@@ -86,10 +86,10 @@ public class ApplicationTenancyMenu {
             )
     @ActionLayout(sequence = "100.30.3")
     public ApplicationTenancy newTenancy(
-            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
-            @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.TYPICAL_LENGTH_NAME)
+            @Parameter(maxLength = ApplicationTenancy.Name.MAX_LENGTH)
+            @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.Name.TYPICAL_LENGTH)
             final String name,
-            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_PATH)
+            @Parameter(maxLength = ApplicationTenancy.Path.MAX_LENGTH)
             @ParameterLayout(named = "Path")
             final String path,
             @Parameter(optionality = Optionality.OPTIONAL)

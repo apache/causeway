@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jdo.role.dom;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -94,12 +94,12 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
+    @javax.jdo.annotations.Column(allowsNull="false", length = Name.MAX_LENGTH)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME, sequence = "1")
+    @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
     @Getter @Setter
     private String name;
 
@@ -115,7 +115,7 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION,
+            typicalLength= Description.TYPICAL_LENGTH,
             sequence = "2")
     @Getter @Setter
     private String description;
@@ -133,7 +133,7 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
             defaultView="table",
             sequence = "20")
     @Getter @Setter
-    private Set<ApplicationUser> users = new TreeSet<>();
+    private SortedSet<ApplicationUser> users = new TreeSet<>();
 
 
     // necessary for integration tests

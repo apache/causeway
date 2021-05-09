@@ -48,8 +48,8 @@ public class ApplicationTenancy_updateName {
 
     @MemberSupport
     public ApplicationTenancy act(
-            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
-            @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
+            @Parameter(maxLength = ApplicationTenancy.Name.MAX_LENGTH)
+            @ParameterLayout(named="Name", typicalLength= ApplicationTenancy.Name.TYPICAL_LENGTH)
             final String name) {
         target.setName(name);
         return target;

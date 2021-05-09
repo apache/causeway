@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.jdo.user.dom;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -54,7 +53,6 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
@@ -165,7 +163,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_USERNAME)
+    @javax.jdo.annotations.Column(allowsNull="false", length = Username.MAX_LENGTH)
     @Property(
             domainEvent = UsernameDomainEvent.class,
             editing = Editing.DISABLED
@@ -183,7 +181,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_FAMILY_NAME)
+    @javax.jdo.annotations.Column(allowsNull="true", length = FamilyName.MAX_LENGTH)
     @Property(
             domainEvent = FamilyNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -201,7 +199,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_GIVEN_NAME)
+    @javax.jdo.annotations.Column(allowsNull="true", length = GivenName.MAX_LENGTH)
     @Property(
             domainEvent = GivenNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -219,7 +217,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_KNOWN_AS)
+    @javax.jdo.annotations.Column(allowsNull="true", length = KnownAs.MAX_LENGTH)
     @Property(
             domainEvent = KnownAsDomainEvent.class,
             editing = Editing.DISABLED
@@ -236,7 +234,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_EMAIL_ADDRESS)
+    @javax.jdo.annotations.Column(allowsNull="true", length = EmailAddress.MAX_LENGTH)
     @Property(
             domainEvent = EmailAddressDomainEvent.class,
             editing = Editing.DISABLED
@@ -251,7 +249,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_PHONE_NUMBER)
+    @javax.jdo.annotations.Column(allowsNull="true", length = PhoneNumber.MAX_LENGTH)
     @Property(
             domainEvent = PhoneNumberDomainEvent.class,
             editing = Editing.DISABLED
@@ -265,7 +263,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_PHONE_NUMBER)
+    @javax.jdo.annotations.Column(allowsNull="true", length = FaxNumber.MAX_LENGTH)
     @Property(
             domainEvent = FaxNumberDomainEvent.class,
             editing = Editing.DISABLED

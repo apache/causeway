@@ -72,8 +72,8 @@ public class ApplicationRoleMenu {
             )
     @ActionLayout(sequence = "100.20.1")
     public Collection<? extends ApplicationRole> findRoles(
-            @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
-            @ParameterLayout(named = "Search", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
+            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
+            @ParameterLayout(named = "Search", typicalLength = ApplicationRole.Name.TYPICAL_LENGTH)
             final String search) {
         return applicationRoleRepository.findNameContaining(search);
     }
@@ -88,11 +88,11 @@ public class ApplicationRoleMenu {
             )
     @ActionLayout(sequence = "100.20.2")
     public ApplicationRole newRole(
-            @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
-            @ParameterLayout(named="Name", typicalLength=ApplicationRole.TYPICAL_LENGTH_NAME)
+            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
+            @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
             final String name,
             @Parameter(maxLength = DescriptionType.Meta.MAX_LEN, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Description", typicalLength=ApplicationRole.TYPICAL_LENGTH_DESCRIPTION)
+            @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
             final String description) {
         return applicationRoleRepository.newRole(name, description);
     }

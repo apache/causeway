@@ -18,8 +18,13 @@
  */
 package org.apache.isis.extensions.secman.api.role.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
@@ -30,18 +35,15 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
  */
 public interface ApplicationRole {
 
-    public static final int MAX_LENGTH_NAME = 120;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
-
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
     String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
 
+
     // -- EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRole, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRole, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole> {}
+    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRole, T> {}
+    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRole, T> {}
+
 
     // -- MODEL
 
@@ -55,20 +57,49 @@ public interface ApplicationRole {
 
     // -- NAME
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Name {
+        int MAX_LENGTH = 120;
+        int TYPICAL_LENGTH = 30;
+    }
+
+    @Name
     String getName();
     void setName(String name);
 
+
     // -- DESCRIPTION
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Description {
+        int TYPICAL_LENGTH = 50;
+    }
+
+    @Description
     String getDescription();
     void setDescription(String description);
 
     // -- USERS
 
-    Set<ApplicationUser> getUsers();
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Users {
+    }
+
+    @Users
+    SortedSet<ApplicationUser> getUsers();
+
 
     // -- PERMISSIONS
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Permissions {
+    }
+
+    @Permissions
     List<ApplicationPermission> getPermissions();
 
 }

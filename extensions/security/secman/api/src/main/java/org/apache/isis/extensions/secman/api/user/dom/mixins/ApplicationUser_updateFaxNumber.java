@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -50,7 +49,7 @@ public class ApplicationUser_updateFaxNumber {
     @MemberSupport
     public ApplicationUser act(
             @Parameter(
-                    maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER,
+                    maxLength = ApplicationUser.FaxNumber.MAX_LENGTH,
                     optionality = Optionality.OPTIONAL
             )
             final String fax) {

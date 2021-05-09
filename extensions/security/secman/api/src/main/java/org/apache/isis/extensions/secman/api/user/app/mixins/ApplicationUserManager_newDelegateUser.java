@@ -61,7 +61,7 @@ public class ApplicationUserManager_newDelegateUser {
     @MemberSupport
     public ApplicationUserManager act(
 
-          @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
+          @Parameter(maxLength = ApplicationUser.Username.MAX_LENGTH)
           @ParameterLayout(named = "Name")
           final String username,
 

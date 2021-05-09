@@ -91,13 +91,13 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
+    @javax.jdo.annotations.Column(allowsNull="false", length = Name.MAX_LENGTH)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_NAME,
+            typicalLength= Name.TYPICAL_LENGTH,
             sequence = "1")
     @Getter @Setter
     private String name;
@@ -109,7 +109,7 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 
 
     @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(length = MAX_LENGTH_PATH, allowsNull = "false")
+    @javax.jdo.annotations.Column(length = Path.MAX_LENGTH, allowsNull = "false")
     @Property(
             domainEvent = PathDomainEvent.class,
             editing = Editing.DISABLED

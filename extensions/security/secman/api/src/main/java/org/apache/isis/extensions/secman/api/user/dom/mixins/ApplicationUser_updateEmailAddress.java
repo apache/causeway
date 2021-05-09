@@ -48,7 +48,7 @@ public class ApplicationUser_updateEmailAddress {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
+            @Parameter(maxLength = ApplicationUser.EmailAddress.MAX_LENGTH)
             @ParameterLayout(named="Email")
             final String emailAddress) {
         target.setEmailAddress(emailAddress);

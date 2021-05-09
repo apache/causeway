@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jpa.role.dom;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -105,12 +105,12 @@ implements
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @Column(nullable=false, length=MAX_LENGTH_NAME)
+    @Column(nullable=false, length= Name.MAX_LENGTH)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME, sequence = "1")
+    @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
     @Getter @Setter
     private String name;
 
@@ -126,7 +126,7 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION,
+            typicalLength= Description.TYPICAL_LENGTH,
             sequence = "2")
     @Getter @Setter
     private String description;
@@ -144,7 +144,7 @@ implements
             defaultView="table",
             sequence = "20")
     @Getter @Setter
-    private Set<ApplicationUser> users = new TreeSet<>();
+    private SortedSet<ApplicationUser> users = new TreeSet<>();
 
 
     // necessary for integration tests

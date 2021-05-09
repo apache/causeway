@@ -22,7 +22,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -48,7 +47,7 @@ public class ApplicationUser_updateUsername {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
+            @Parameter(maxLength = ApplicationUser.Username.MAX_LENGTH)
             final String username) {
         target.setUsername(username);
         return target;

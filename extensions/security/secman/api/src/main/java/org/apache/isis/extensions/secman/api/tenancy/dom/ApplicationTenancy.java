@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.tenancy.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Collection;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -27,10 +31,6 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
  */
 public interface ApplicationTenancy {
 
-    public static final int MAX_LENGTH_PATH = 255;
-    public static final int MAX_LENGTH_NAME = 120;
-    public static final int TYPICAL_LENGTH_NAME = 20;
-
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
     String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
@@ -39,9 +39,9 @@ public interface ApplicationTenancy {
 
     // -- DOMAIN EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
+    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
+    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
+    abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
 
     // -- MODEL
 
@@ -49,22 +49,54 @@ public interface ApplicationTenancy {
         return getName();
     }
 
+
     // -- NAME
 
-    public String getName();
-    public void setName(String name);
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Name {
+        int MAX_LENGTH = 120;
+        int TYPICAL_LENGTH = 20;
+    }
+
+    @Name
+    String getName();
+    void setName(String name);
+
 
     // -- PATH
-    public String getPath();
+
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Path {
+        int MAX_LENGTH = 255;
+    }
+
+    @Path
+    String getPath();
     void setPath(String path);
+
 
     // -- PARENT
 
-    public ApplicationTenancy getParent();
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Parent {
+    }
+
+    @Parent
+    ApplicationTenancy getParent();
     void setParent(ApplicationTenancy parent);
+
 
     // -- CHILDREN
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Children {
+    }
+
+    @Children
     Collection<ApplicationTenancy> getChildren();
 
 
