@@ -27,8 +27,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addUser.DomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
@@ -36,11 +37,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "users")
 @ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_addUser {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_addUser> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
@@ -60,4 +64,5 @@ public class ApplicationTenancy_addUser {
         list.removeAll(applicationUserRepository.findByTenancy(target));
         return list;
     }
+
 }

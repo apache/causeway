@@ -23,18 +23,22 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.AddChildDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddChildDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "children")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_addChild {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_addChild> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
@@ -45,4 +49,5 @@ public class ApplicationTenancy_addChild {
         applicationTenancyRepository.setParentOnTenancy(child, target);
         return target;
     }
+
 }

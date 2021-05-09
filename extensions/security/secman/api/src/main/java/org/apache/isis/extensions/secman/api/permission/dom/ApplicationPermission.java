@@ -79,18 +79,8 @@ public interface ApplicationPermission {
 
     // -- DOMAIN EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission> {}
-
-    public static class AllowDomainEvent extends ActionDomainEvent {}
-    public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
-    public static class VetoDomainEvent extends ActionDomainEvent {}
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-    public static class ChangingDomainEvent extends ActionDomainEvent {}
-    public static class ViewingDomainEvent extends ActionDomainEvent {}
-
-    public static class RelocateNamespaceDomainEvent extends ActionDomainEvent {}
+    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
+    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
 
     // -- MODEL
 

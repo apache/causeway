@@ -19,17 +19,20 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.ViewingDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_viewing.DomainEvent;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = ViewingDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "mode")
 @RequiredArgsConstructor
 public class ApplicationPermission_viewing {
+
+    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_viewing> {}
 
     private final ApplicationPermission target;
 
@@ -42,6 +45,5 @@ public class ApplicationPermission_viewing {
     public String disableAct() {
         return target.getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
     }
-
 
 }

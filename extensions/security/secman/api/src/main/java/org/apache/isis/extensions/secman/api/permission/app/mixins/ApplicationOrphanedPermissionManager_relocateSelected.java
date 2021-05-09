@@ -32,20 +32,25 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.RelocateNamespaceDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.app.mixins.ApplicationOrphanedPermissionManager_relocateSelected.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
         associateWith = "orphanedPermissions",
-        domainEvent = RelocateNamespaceDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+        domainEvent = DomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
 @ActionLayout(describedAs = "for the selected permissions renames the namespace")
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationOrphanedPermissionManager_relocateSelected> {}
 
     @Inject private ApplicationFeatureRepository featureRepository;
 

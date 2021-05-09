@@ -19,15 +19,18 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.ChangingDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_changing.DomainEvent;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = ChangingDomainEvent.class, associateWith = "mode")
+@Action(domainEvent = DomainEvent.class, associateWith = "mode")
 @RequiredArgsConstructor
 public class ApplicationPermission_changing {
+
+    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_changing> {}
 
     private final ApplicationPermission target;
 
@@ -40,6 +43,5 @@ public class ApplicationPermission_changing {
     public String disableAct() {
         return target.getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
     }
-
 
 }

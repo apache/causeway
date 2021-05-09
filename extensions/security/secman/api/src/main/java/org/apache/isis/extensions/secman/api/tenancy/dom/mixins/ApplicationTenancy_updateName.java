@@ -23,17 +23,21 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.UpdateNameDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_updateName.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateNameDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "name")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateName {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_updateName> {}
 
     private final ApplicationTenancy target;
 
@@ -50,4 +54,5 @@ public class ApplicationTenancy_updateName {
     public String default0Act() {
         return target.getName();
     }
+
 }

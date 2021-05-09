@@ -23,20 +23,23 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdateAccountTypeDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateAccountType.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateAccountTypeDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "accountType")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateAccountType {
 
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_updateAccountType> {}
     @Inject private ApplicationUserRepository applicationUserRepository;
 
     private final ApplicationUser target;

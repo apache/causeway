@@ -43,14 +43,6 @@ public interface ApplicationTenancy {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
 
-    public static class AddUserDomainEvent extends ActionDomainEvent {}
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-    public static class AddChildDomainEvent extends ActionDomainEvent {}
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-    public static class RemoveChildDomainEvent extends ActionDomainEvent {}
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
-    public static class UpdateParentDomainEvent extends ActionDomainEvent {}
-
     // -- MODEL
 
     default String title() {

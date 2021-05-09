@@ -25,18 +25,22 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.RemoveChildDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_removeChild.DomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveChildDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "children")
 @ActionLayout(sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeChild {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_removeChild> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
@@ -57,4 +61,5 @@ public class ApplicationTenancy_removeChild {
     public String disableAct() {
         return choices0Act().isEmpty()? "No children to remove": null;
     }
+
 }

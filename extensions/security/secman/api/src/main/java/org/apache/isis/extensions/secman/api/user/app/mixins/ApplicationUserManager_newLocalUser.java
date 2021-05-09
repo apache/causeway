@@ -30,11 +30,12 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewLocalUserDomainEvent;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateEmailAddress;
@@ -43,11 +44,14 @@ import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = NewLocalUserDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newLocalUser
 extends ApplicationUserManager_newLocalUserAbstract {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

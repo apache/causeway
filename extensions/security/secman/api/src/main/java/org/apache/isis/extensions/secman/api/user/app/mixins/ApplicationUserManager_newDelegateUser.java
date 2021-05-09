@@ -26,13 +26,14 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NewDelegateUserDomainEvent;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
@@ -41,10 +42,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = NewDelegateUserDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newDelegateUser {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserManager_newDelegateUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

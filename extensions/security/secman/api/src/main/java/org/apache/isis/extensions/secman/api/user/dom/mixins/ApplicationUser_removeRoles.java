@@ -27,20 +27,24 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.RemoveRoleDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_removeRoles.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemoveRoleDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "roles")
 @ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_removeRoles {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_removeRoles> {}
 
     @Inject private MessageService messageService;
     @Inject private ApplicationRoleRepository applicationRoleRepository;

@@ -23,20 +23,24 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.LockDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = LockDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "status")
 @ActionLayout(named="Disable", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_lock> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
@@ -56,4 +60,5 @@ public class ApplicationUser_lock {
         }
         return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
+
 }

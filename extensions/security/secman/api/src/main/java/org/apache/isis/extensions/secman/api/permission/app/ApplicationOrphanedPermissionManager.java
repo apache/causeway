@@ -39,14 +39,11 @@ public class ApplicationOrphanedPermissionManager {
         return "Manage Orphaned Permissions";
     }
 
-    @org.apache.isis.applib.annotation.Collection(typeOf = ApplicationPermission.class)
-    public Collection<? extends ApplicationPermission> getOrphanedPermissions() {
+    @org.apache.isis.applib.annotation.Collection(
+            typeOf = ApplicationPermission.class
+    )
+    public Collection<ApplicationPermission> getOrphanedPermissions() {
         return applicationPermissionRepository.findOrphaned();
     }
-
-//    @Action
-//    public Collection<? extends ApplicationPermission> debugOrphanedPermissions() {
-//        return applicationPermissionRepository.findOrphaned();
-//    }
 
 }

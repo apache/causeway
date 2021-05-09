@@ -27,18 +27,22 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.ResetPasswordDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_resetPassword.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = ResetPasswordDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "hasPassword")
 @ActionLayout(sequence = "20")
 @RequiredArgsConstructor
 public class ApplicationUser_resetPassword {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_resetPassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
 

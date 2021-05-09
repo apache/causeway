@@ -29,20 +29,24 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdatePasswordDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updatePassword.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = UpdatePasswordDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "hasPassword")
 @ActionLayout(sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_updatePassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available

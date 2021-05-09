@@ -16,24 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.permission.dom;
+package org.apache.isis.extensions.secman.api.permission.spi;
 
 import java.util.Collection;
+import java.util.Collections;
+
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
+
+import lombok.val;
 
 /**
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
  *
  * @since 2.0 {@index}
  */
-public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvaluationServiceAbstract {
+public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvaluationServiceAbstract {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Returns the lists unchanged.
+     * Reverses the natural order of the {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue}s.
      *
      * <p>
-     * This implementation relies on the fact that the {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue}s are
+     *     This implementation relies on the fact that the {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue}s are
      * passed through in natural order, with the leading part based on the
      * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue#getRule() rule} and with
      * {@link ApplicationPermissionRule} in turn comparable so that {@link ApplicationPermissionRule#ALLOW allow}
@@ -44,7 +51,9 @@ public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvalu
     protected Collection<ApplicationPermissionValue> ordered(
             final Collection<ApplicationPermissionValue> permissionValues) {
 
-        return permissionValues;
+        val reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
+        Collections.reverse(reversed);
+        return reversed;
     }
 
 }

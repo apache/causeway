@@ -27,18 +27,22 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_delete.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class,
+        domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_delete> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private RepositoryService repository;
@@ -55,4 +59,5 @@ public class ApplicationUser_delete {
     public String disableAct() {
         return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
+
 }

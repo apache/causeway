@@ -24,20 +24,24 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UserDuplicateDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_duplicate.DomainEvent;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UserDuplicateDomainEvent.class
+        domainEvent = DomainEvent.class
         )
 @RequiredArgsConstructor
 public class ApplicationUser_duplicate {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_duplicate> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;

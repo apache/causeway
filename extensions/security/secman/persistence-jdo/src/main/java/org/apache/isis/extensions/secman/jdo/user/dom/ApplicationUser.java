@@ -52,7 +52,7 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.permission.dom.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;

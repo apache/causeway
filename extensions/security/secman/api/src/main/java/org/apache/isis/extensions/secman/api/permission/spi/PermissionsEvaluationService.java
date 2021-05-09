@@ -16,12 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.permission.dom;
+package org.apache.isis.extensions.secman.api.permission.spi;
 
 import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 
 /**
  * Strategy for determining which permission should apply when there are multiple that apply for a particular target

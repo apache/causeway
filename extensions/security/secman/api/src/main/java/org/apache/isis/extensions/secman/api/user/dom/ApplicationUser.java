@@ -51,24 +51,6 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
 
-    public static class AddRoleDomainEvent extends ActionDomainEvent {}
-    public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
-    public static class UpdateUsernameDomainEvent extends ActionDomainEvent {}
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
-    public static class UpdateEmailAddressDomainEvent extends ActionDomainEvent {}
-    public static class UpdatePhoneNumberDomainEvent extends ActionDomainEvent {}
-    public static class UpdateFaxNumberDomainEvent extends ActionDomainEvent {}
-    public static class UpdateAccountTypeDomainEvent extends ActionDomainEvent {}
-    public static class UnlockDomainEvent extends ActionDomainEvent {}
-    public static class LockDomainEvent extends ActionDomainEvent {}
-    public static class UpdatePasswordDomainEvent extends ActionDomainEvent {}
-    public static class ResetPasswordDomainEvent extends ActionDomainEvent {}
-    public static class RemoveRoleDomainEvent extends ActionDomainEvent {}
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-    public static class NewDelegateUserDomainEvent extends ActionDomainEvent {}
-    public static class NewLocalUserDomainEvent extends ActionDomainEvent {}
-    public static class UserDuplicateDomainEvent extends ActionDomainEvent {}
-
     // -- MODEL
 
     /**

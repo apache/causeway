@@ -19,17 +19,20 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.VetoDomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_veto.DomainEvent;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = VetoDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "rule")
 @RequiredArgsConstructor
 public class ApplicationPermission_veto {
+
+    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_veto> {}
 
     private final ApplicationPermission target;
 
@@ -41,6 +44,5 @@ public class ApplicationPermission_veto {
     public String disableAct() {
         return target.getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
     }
-
 
 }

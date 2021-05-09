@@ -24,17 +24,21 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.UpdatePhoneNumberDomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updatePhoneNumber.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdatePhoneNumberDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "phoneNumber")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePhoneNumber {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_updatePhoneNumber> {}
 
     private final ApplicationUser target;
 
@@ -56,4 +60,5 @@ public class ApplicationUser_updatePhoneNumber {
     public String default0Act() {
         return target.getPhoneNumber();
     }
+
 }
