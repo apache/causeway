@@ -303,7 +303,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
             )
     @PropertyLayout(fieldSetId="Status", sequence = "3")
     @Getter @Setter
-    private AccountType accountType;
+    private org.apache.isis.extensions.secman.api.user.dom.AccountType accountType;
 
 
     // -- STATUS

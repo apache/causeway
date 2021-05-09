@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.permission.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -125,7 +129,13 @@ public interface ApplicationPermission {
     ApplicationFeatureSort getFeatureSort();
     void setFeatureSort(ApplicationFeatureSort featureSort);
 
+
     // -- ROLE
+
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Role {
+    }
 
     @Property
     @PropertyLayout(
@@ -133,24 +143,39 @@ public interface ApplicationPermission {
             fieldSetId="Role",
             sequence = "1"
     )
+    @Role
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setRole(ApplicationRole applicationRole);
 
+
     // -- RULE
+
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Rule {
+    }
 
     @Property
     @PropertyLayout(fieldSetId="Permissions", sequence = "2")
+    @Rule
     default ApplicationPermissionRule getRule() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setRule(ApplicationPermissionRule rule);
 
+
     // -- MODE
+
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Mode {
+    }
 
     @Property
     @PropertyLayout(fieldSetId="Permissions", sequence = "3")
+    @Mode
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -158,20 +183,34 @@ public interface ApplicationPermission {
 
     // -- SORT
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Sort {
+    }
+
     @Property
     @PropertyLayout(fieldSetId="Feature", sequence = "5")
+    @Sort
     default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
 
+
     // -- FQN
+
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface FeatureFqn {
+    }
 
     @Property
     @PropertyLayout(fieldSetId="Feature", sequence = "5.1")
+    @FeatureFqn
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setFeatureFqn(String featureFqn);
+
 
     // -- HELPER
 
