@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.userreg;
+package org.apache.isis.extensions.secman.model.userreg;
 
 import java.util.Set;
 
