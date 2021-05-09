@@ -238,7 +238,7 @@ implements ApplicationUserRepository {
     public boolean isPasswordFeatureEnabled(ApplicationUser user) {
         return user.isLocalAccount()
                 /*sonar-ignore-on*/
-                && passwordEncryptionService!=null // if for any reason injection fails
+                && passwordEncryptionService != null // if for any reason injection fails
                 /*sonar-ignore-off*/
                 && passwordEncryptionService.isPresent();
     }

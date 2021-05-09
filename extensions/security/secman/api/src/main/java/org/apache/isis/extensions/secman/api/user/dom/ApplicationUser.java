@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
@@ -191,38 +192,65 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     // -- STATUS
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Status {
+    }
+
+    @Status
     ApplicationUserStatus getStatus();
     void setStatus(ApplicationUserStatus disabled);
 
 
     // -- ENCRYPTED PASSWORD
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface EncryptedPassword {
+    }
+
+    @EncryptedPassword
     String getEncryptedPassword();
     void setEncryptedPassword(String encryptedPassword);
 
 
     // -- HAS PASSWORD
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface HasPassword {
+    }
+
+    @HasPassword
     boolean isHasPassword();
 
 
     // ROLES
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Roles {
+    }
+
+    @Roles
     SortedSet<ApplicationRole> getRoles();
 
 
     // -- PERMISSION SET
 
+    @Programmatic
     ApplicationPermissionValueSet getPermissionSet();
 
 
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
+    @Programmatic
     boolean isForSelfOrRunAsAdministrator();
 
 
     // -- HELPERS
 
+    @Programmatic
     default boolean isLocalAccount() {
         return getAccountType() == org.apache.isis.extensions.secman.api.user.dom.AccountType.LOCAL;
     }
