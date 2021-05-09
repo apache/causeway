@@ -42,9 +42,9 @@ import lombok.val;
  * overridden with the concrete subclasses.
  *
  */
-public abstract class ApplicationUserManager_newDelegateUser<R extends ApplicationRole> {
+public abstract class ApplicationUserManager_newDelegateUser {
 
-    @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
@@ -69,7 +69,7 @@ public abstract class ApplicationUserManager_newDelegateUser<R extends Applicati
         return hasNoDelegateAuthenticationRealm();
     }
 
-    protected R doDefault1() {
+    protected ApplicationRole doDefault1() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);

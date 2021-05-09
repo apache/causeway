@@ -31,7 +31,7 @@ import lombok.val;
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
 
     final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    final ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    final ApplicationRoleRepository applicationRoleRepository;
 
     final UserService userService;
     final MessageService messageService;

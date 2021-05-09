@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_removeUsers {
 
     @Inject private MessageService messageService;
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
 
     private final ApplicationRole target;

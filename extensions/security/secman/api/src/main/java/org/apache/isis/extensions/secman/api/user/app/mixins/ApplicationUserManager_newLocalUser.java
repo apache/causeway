@@ -43,9 +43,9 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
  * overridden with the concrete subclasses.
  *
  */
-public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationRole> {
+public abstract class ApplicationUserManager_newLocalUser {
 
-    @Inject private ApplicationRoleRepository<R> applicationRoleRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private FactoryService factory;
@@ -55,7 +55,7 @@ public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationR
             final String username,
             final Password password,
             final Password passwordRepeat,
-            final R initialRole,
+            final ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
 
@@ -79,7 +79,7 @@ public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationR
             final String username,
             final Password newPassword,
             final Password newPasswordRepeat,
-            final R initialRole,
+            final ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
 
@@ -90,7 +90,7 @@ public abstract class ApplicationUserManager_newLocalUser<R extends ApplicationR
         return null;
     }
 
-    protected R doDefault3() {
+    protected ApplicationRole doDefault3() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);

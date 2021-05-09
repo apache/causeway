@@ -40,7 +40,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationUser_addRole {
 
-    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
 
     private final ApplicationUser target;
 

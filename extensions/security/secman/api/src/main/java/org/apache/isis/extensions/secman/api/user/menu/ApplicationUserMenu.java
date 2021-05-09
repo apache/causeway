@@ -48,7 +48,7 @@ import lombok.val;
 public class ApplicationUserMenu {
 
     //@Inject private SecmanConfiguration configBean;
-    //@Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    //@Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     //@Inject private SecurityRealmService securityRealmService;
     @Inject private FactoryService factory;

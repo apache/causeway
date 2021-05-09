@@ -54,7 +54,7 @@ public class ApplicationRoleMenu {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRoleMenu, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRoleMenu> {}
 
-    private final ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    private final ApplicationRoleRepository applicationRoleRepository;
 
 
     // -- iconName
