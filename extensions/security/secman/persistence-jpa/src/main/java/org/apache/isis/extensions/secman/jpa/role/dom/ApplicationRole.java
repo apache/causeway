@@ -104,40 +104,30 @@ implements
 
     // -- NAME
 
-    @Column(nullable=false, length= Name.MAX_LENGTH)
-    @Property(
-            domainEvent = Name.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
+    @Name
+    @Column(nullable = false, length = Name.MAX_LENGTH)
     @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
-    @Getter @Setter
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
+
     private String name;
 
 
     // -- DESCRIPTION
 
+    @Description
     @Column(nullable=true, length=DescriptionType.Meta.MAX_LEN)
-    @Property(
-            domainEvent = Description.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            typicalLength= Description.TYPICAL_LENGTH,
-            sequence = "2")
-    @Getter @Setter
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private String description;
 
 
     // -- USERS
 
+    @Users
     @ManyToMany
-    @Collection(
-            domainEvent = Users.DomainEvent.class
-            )
-    @CollectionLayout(
-            defaultView="table",
-            sequence = "20")
-    @Getter @Setter
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private SortedSet<ApplicationUser> users = new TreeSet<>();
 
 
@@ -152,15 +142,8 @@ implements
 
 
     // -- PERMISSIONS
-    // (derived collection)
 
-    @Collection(
-            domainEvent = Permissions.DomainEvent.class
-    )
-    @CollectionLayout(
-            defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class,
-            sequence = "10")
+    @Permissions
     public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
@@ -200,6 +183,5 @@ implements
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

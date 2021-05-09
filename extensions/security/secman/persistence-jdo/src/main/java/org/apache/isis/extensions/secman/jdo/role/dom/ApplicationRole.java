@@ -24,9 +24,18 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.Queries;
+import javax.jdo.annotations.Query;
+import javax.jdo.annotations.Unique;
+import javax.jdo.annotations.Uniques;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
@@ -49,25 +58,25 @@ import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 import lombok.Getter;
 import lombok.Setter;
 
-@javax.jdo.annotations.PersistenceCapable(
+@PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = "isisExtensionsSecman",
         table = "ApplicationRole")
-@javax.jdo.annotations.Inheritance(
+@Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
+@DatastoreIdentity(
         strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
+@Uniques({
+    @Unique(
             name = "ApplicationRole_name_UNQ", members = { "name" })
 })
-@javax.jdo.annotations.Queries({
-    @javax.jdo.annotations.Query(
+@Queries({
+    @Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
                     + "WHERE name == :name"),
-    @javax.jdo.annotations.Query(
+    @Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
@@ -91,40 +100,28 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
     // -- NAME
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = Name.MAX_LENGTH)
-    @Property(
-            domainEvent = Name.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(typicalLength= Name.TYPICAL_LENGTH, sequence = "1")
-    @Getter @Setter
+    @Name
+    @Column(allowsNull="false", length = Name.MAX_LENGTH)
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private String name;
 
 
     // -- DESCRIPTION
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
-    @Property(
-            domainEvent = Description.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            typicalLength= Description.TYPICAL_LENGTH,
-            sequence = "2")
-    @Getter @Setter
+    @Description
+    @Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private String description;
 
 
     // -- USERS
 
-    @javax.jdo.annotations.Persistent(mappedBy = "roles")
-    @Collection(
-            domainEvent = Users.DomainEvent.class
-        )
-    @CollectionLayout(
-            defaultView="table",
-            sequence = "20")
-    @Getter @Setter
+    @Users
+    @Persistent(mappedBy = "roles")
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private SortedSet<ApplicationUser> users = new TreeSet<>();
 
 
@@ -139,15 +136,8 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
 
 
     // -- PERMISSIONS
-    // (derived collection)
 
-    @Collection(
-            domainEvent = Permissions.DomainEvent.class
-    )
-    @CollectionLayout(
-            defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class,
-            sequence = "10")
+    @Permissions
     public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
@@ -187,6 +177,5 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole, Compa
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

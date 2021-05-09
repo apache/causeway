@@ -26,6 +26,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -57,6 +62,14 @@ public interface ApplicationRole {
 
     // -- NAME
 
+    @Property(
+            domainEvent = Name.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            sequence = "1",
+            typicalLength= Name.TYPICAL_LENGTH
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Name {
@@ -73,6 +86,14 @@ public interface ApplicationRole {
 
     // -- DESCRIPTION
 
+    @Property(
+            domainEvent = Description.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            sequence = "2",
+            typicalLength= Description.TYPICAL_LENGTH
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Description {
@@ -85,8 +106,16 @@ public interface ApplicationRole {
     String getDescription();
     void setDescription(String description);
 
+
     // -- USERS
 
+    @Collection(
+            domainEvent = Users.DomainEvent.class
+    )
+    @CollectionLayout(
+            defaultView="table",
+            sequence = "20"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Users {
@@ -99,6 +128,14 @@ public interface ApplicationRole {
 
     // -- PERMISSIONS
 
+    @Collection(
+            domainEvent = Permissions.DomainEvent.class
+    )
+    @CollectionLayout(
+            defaultView="table",
+            sequence = "10",
+            sortedBy = ApplicationPermission.DefaultComparator.class
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Permissions {
