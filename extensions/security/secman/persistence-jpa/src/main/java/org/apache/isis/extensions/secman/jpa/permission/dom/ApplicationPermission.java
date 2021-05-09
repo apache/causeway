@@ -113,18 +113,16 @@ import lombok.experimental.UtilityClass;
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationPermission"
-        )
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
-        )
+)
 public class ApplicationPermission
-implements
-    org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission,
+implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission,
     Comparable<ApplicationPermission> {
 
-    private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
-
     @Inject private transient ApplicationFeatureRepository featureRepository;
+
 
     @Id
     @GeneratedValue
@@ -133,30 +131,23 @@ implements
 
     // -- ROLE
 
+    @Role
     @ManyToOne
     @JoinColumn(name="roleId", nullable=false)
-    @Property(
-            domainEvent = Role.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(hidden = Where.REFERENCES_PARENT)
     @Getter(onMethod = @__(@Override))
     private ApplicationRole role;
 
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole applicationRole) {
-        role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
+        role = _Casts.uncheckedCast(applicationRole);
     }
 
 
     // -- RULE
 
-    @Column(nullable=false)
+    @Rule
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Property(
-            domainEvent = Rule.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
@@ -164,34 +155,17 @@ implements
 
     // -- MODE
 
-    @Column(nullable=false)
+    @Mode
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Property(
-            domainEvent = Mode.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
 
 
-    // -- featureId (derived property)
-
-    private Optional<ApplicationFeature> getFeature() {
-        return asFeatureId()
-                .map(featureId -> featureRepository.findFeature(featureId));
-    }
-
     // -- SORT
 
-    /**
-     * Combines {@link #getFeatureSort() feature sort} and member sort.
-     */
-    @Property(
-            domainEvent = Sort.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
+    @Sort
     @Override
     public String getSort() {
         final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
@@ -200,6 +174,15 @@ implements
         return e != null ? e.name(): null;
     }
 
+
+    // -- FEATURE SORT
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Getter(onMethod = @__({@Override,@Programmatic}))
+    @Setter(onMethod = @__(@Override))
+    private ApplicationFeatureSort featureSort;
+
     @Programmatic
     private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
@@ -207,52 +190,21 @@ implements
     }
 
 
-    // -- FEATURE SORT
-
-    /**
-     * Which {@link ApplicationFeatureId#getSort() sort} of
-     * feature this is.
-     *
-     * <p>
-     *     The combination of the feature type and the {@link #getFeatureFqn() fully qualified name} is used to build
-     *     the corresponding {@link #getFeature() feature} (view model).
-     * </p>
-     *
-     * @see #getFeatureFqn()
-     */
-    @Column(nullable=false)
-    @Enumerated(EnumType.STRING)
-    @Setter
-    private ApplicationFeatureSort featureSort;
-
-    @Override
-    @Programmatic
-    public ApplicationFeatureSort getFeatureSort() {
-        return featureSort;
-    }
-
-
-
     // -- FQN
 
-    /**
-     * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
-     * of the feature.
-     *
-     * <p>
-     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
-     *     the corresponding {@link #getFeature() feature} (view model).
-     * </p>
-     *
-     * @see #getFeatureSort()
-     */
-    @Column(nullable=false)
-    @Property(
-            domainEvent = FeatureFqn.DomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @Getter @Setter
+    @FeatureFqn
+    @Column(nullable = false)
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
     private String featureFqn;
+
+
+    // -- featureId (derived property)
+
+    private Optional<ApplicationFeature> getFeature() {
+        return asFeatureId()
+                .map(featureId -> featureRepository.findFeature(featureId));
+    }
 
 
     // -- CONTRACT
@@ -290,7 +242,7 @@ implements
     public static class DefaultComparator implements Comparator<ApplicationPermission> {
         @Override
         public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
-            return Objects.compare(o1, o2, (a, b) -> a.compareTo(b) );
+            return Objects.compare(o1, o2, Comparator.naturalOrder());
         }
     }
 

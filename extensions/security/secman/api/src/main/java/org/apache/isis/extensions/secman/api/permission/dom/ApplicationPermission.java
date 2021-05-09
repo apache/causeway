@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -126,24 +127,25 @@ public interface ApplicationPermission {
         return buf.toString();
     }
 
-    ApplicationFeatureSort getFeatureSort();
-    void setFeatureSort(ApplicationFeatureSort featureSort);
 
 
     // -- ROLE
 
+    @Property(
+            domainEvent = Role.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            hidden=Where.REFERENCES_PARENT,
+            fieldSetId="Role",
+            sequence = "1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Role {
         class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
     }
 
-    @Property
-    @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT,
-            fieldSetId="Role",
-            sequence = "1"
-    )
     @Role
     ApplicationRole getRole();
     void setRole(ApplicationRole applicationRole);
@@ -151,14 +153,20 @@ public interface ApplicationPermission {
 
     // -- RULE
 
+    @Property(
+            domainEvent = Rule.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "permissions",
+            sequence = "2"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Rule {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
     }
 
-    @Property
-    @PropertyLayout(fieldSetId="Permissions", sequence = "2")
     @Rule
     ApplicationPermissionRule getRule();
     void setRule(ApplicationPermissionRule rule);
@@ -166,14 +174,20 @@ public interface ApplicationPermission {
 
     // -- MODE
 
+    @Property(
+            domainEvent = Mode.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "permissions",
+            sequence = "3"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Mode {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
     }
 
-    @Property
-    @PropertyLayout(fieldSetId="Permissions", sequence = "3")
     @Mode
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
@@ -183,30 +197,77 @@ public interface ApplicationPermission {
 
     // -- SORT
 
+    /**
+     * Combines {@link #getFeatureSort() feature type} and member type.
+     */
+    @Property(
+            domainEvent = Sort.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "feature",
+            sequence = "5",
+            typicalLength= Sort.TYPICAL_LENGTH
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Sort {
+        int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
+
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
-    @Property
-    @PropertyLayout(fieldSetId="Feature", sequence = "5")
     @Sort
     default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
 
 
+    // -- FEATURE SORT
+
+    /**
+     * Which {@link ApplicationFeatureId#getSort() sort} of
+     * feature this is.
+     *
+     * <p>
+     *     The combination of the feature type and the {@link #getFeatureFqn() fully qualified name} is used to build
+     *     the corresponding {@link #getFeature() feature} (view model).
+     * </p>
+     *
+     * @see #getFeatureFqn()
+     */
+    @Programmatic
+    ApplicationFeatureSort getFeatureSort();
+    void setFeatureSort(ApplicationFeatureSort featureSort);
+
+
     // -- FQN
 
+    /**
+     * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
+     * of the feature.
+     *
+     * <p>
+     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
+     *     the corresponding feature view model.
+     * </p>
+     *
+     * @see #getFeatureSort()
+     */
+    @Property(
+            domainEvent = FeatureFqn.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "feature",
+            sequence = "5.1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface FeatureFqn {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
-    @Property
-    @PropertyLayout(fieldSetId="Feature", sequence = "5.1")
     @FeatureFqn
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
@@ -235,6 +296,5 @@ public interface ApplicationPermission {
                     }
                 };
     }
-
 
 }
