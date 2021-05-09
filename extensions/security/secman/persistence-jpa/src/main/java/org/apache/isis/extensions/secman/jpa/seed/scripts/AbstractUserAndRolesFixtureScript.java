@@ -25,10 +25,10 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
@@ -85,12 +85,12 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
             switch (accountType) {
             case DELEGATED:
-                applicationUser = (ApplicationUser) applicationUserRepository
+                applicationUser = applicationUserRepository
                     .newDelegateUser(username, ApplicationUserStatus.ENABLED);
                 break;
             case LOCAL:
                 final Password pwd = new Password(password);
-                applicationUser = (ApplicationUser) applicationUserRepository
+                applicationUser = applicationUserRepository
                         .newLocalUser(username, pwd, ApplicationUserStatus.ENABLED);
                 applicationUser.setEmailAddress(emailAddress);
             }
