@@ -111,6 +111,7 @@ implements ApplicationUserRepository {
                 ApplicationUserRepositoryAbstract.class, "findByEmailAddressCached", emailAddress);
     }
 
+    @Override
     public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
         return _Casts.uncheckedCast(
                 repository.uniqueMatch(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS)

@@ -378,9 +378,12 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     @CollectionLayout(
             defaultView="table",
             sequence = "20")
-    @Getter @Setter
     private Set<ApplicationRole> roles = new TreeSet<>();
 
+    @Override
+    public Set<org.apache.isis.extensions.secman.api.role.dom.ApplicationRole> getRoles() {
+        return _Casts.uncheckedCast(roles);
+    }
 
     // -- PermissionSet (programmatic)
 

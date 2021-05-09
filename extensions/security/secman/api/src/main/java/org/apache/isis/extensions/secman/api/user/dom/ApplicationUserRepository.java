@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 
@@ -48,6 +49,7 @@ public interface ApplicationUserRepository {
     Collection<ApplicationUser> findByAtPath(String atPath);
     Collection<ApplicationUser> findByRole(ApplicationRole role);
     Collection<ApplicationUser> findByTenancy(ApplicationTenancy tenancy);
+    Optional<ApplicationUser> findByEmailAddress(String emailAddress);
 
     /**
      * auto-complete support
@@ -98,8 +100,5 @@ public interface ApplicationUserRepository {
         });
 
     }
-
-
-
 
 }

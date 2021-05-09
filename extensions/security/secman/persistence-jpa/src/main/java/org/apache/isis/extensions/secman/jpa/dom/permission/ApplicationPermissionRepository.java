@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.jpa.dom.permission;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -27,11 +28,11 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepositoryAbstract;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 
 import lombok.NonNull;
 
@@ -46,19 +47,17 @@ extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
 
     // TODO NAMED_QUERY_FIND_BY_USER not working yet, using workaround  ...
     @Override
-    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> findByUser(@NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
+    public List<ApplicationPermission> findByUser(@NonNull final ApplicationUser user) {
         final String username = user.getUsername();
 
-        return _Casts.uncheckedCast(
-                userRepository.findByUsername(username)
-                    .map(ApplicationUser::getRoles)
-                    .map(_NullSafe::stream)
-                    .map(roleStream->roleStream
-                            .map(this::findByRole)
-                            .flatMap(List::stream)
-                            .collect(Collectors.toList()))
-                    .orElse(Collections.emptyList())
-        );
+        return userRepository.findByUsername(username)
+                .map(ApplicationUser::getRoles)
+                .map(_NullSafe::stream)
+                .map(roleStream -> roleStream
+                        .map(this::findByRole)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
     }
 
     @Inject private ApplicationUserRepository userRepository;

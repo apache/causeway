@@ -26,11 +26,11 @@ import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 
 /**
  * An abstract implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
