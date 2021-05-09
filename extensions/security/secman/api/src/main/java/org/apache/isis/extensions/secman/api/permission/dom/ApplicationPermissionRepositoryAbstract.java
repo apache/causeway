@@ -46,7 +46,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ApplicationPermissionRepositoryAbstract<P extends ApplicationPermission>
-implements ApplicationPermissionRepository<ApplicationPermission> {
+implements ApplicationPermissionRepository {
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepository featureRepository;

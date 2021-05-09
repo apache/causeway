@@ -28,21 +28,21 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 /**
  * @since 2.0 {@index}
  */
-public interface ApplicationPermissionRepository<P extends ApplicationPermission> {
+public interface ApplicationPermissionRepository {
 
-    Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue);
+    Optional<ApplicationPermission> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue);
 
-    Optional<P> findByRoleAndRuleAndFeature(
+    Optional<ApplicationPermission> findByRoleAndRuleAndFeature(
             ApplicationRole holder,
             ApplicationPermissionRule rule,
             ApplicationFeatureSort type,
             String featureFqn);
 
-    Collection<P> allPermissions();
+    Collection<ApplicationPermission> allPermissions();
 
-    Collection<P> findOrphaned();
-    Collection<P> findByFeatureCached(ApplicationFeatureId featureId);
-    Collection<P> findByRoleAndRuleAndFeatureTypeCached(
+    Collection<ApplicationPermission> findOrphaned();
+    Collection<ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
+    Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
             ApplicationRole holder,
             ApplicationPermissionRule rule,
             ApplicationFeatureSort type);
@@ -51,9 +51,9 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
     /**
      * @return detached entity
      */
-    P newApplicationPermission();
+    ApplicationPermission newApplicationPermission();
 
-    P newPermission(
+    ApplicationPermission newPermission(
             ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
@@ -61,14 +61,14 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
             String className,
             String memberName);
 
-    P newPermission(
+    ApplicationPermission newPermission(
             ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
             ApplicationFeatureSort featureSort,
             String featureFqn);
 
-    P newPermission(
+    ApplicationPermission newPermission(
             ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
