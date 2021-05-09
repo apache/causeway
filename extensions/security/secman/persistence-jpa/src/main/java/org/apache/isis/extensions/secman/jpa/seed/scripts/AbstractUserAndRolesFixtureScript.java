@@ -23,9 +23,10 @@ import javax.inject.Inject;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -104,7 +105,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
         for (final String roleName : roleNames) {
             applicationRoleRepository.findByName(roleName)
-            .map(securityRole->{
+            .map(securityRole ->{
                 applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
                 return Boolean.TRUE;
             })

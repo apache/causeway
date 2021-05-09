@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -43,6 +43,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryAbstract;
 import org.apache.isis.extensions.secman.api.user.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
@@ -53,191 +54,19 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unl
 import lombok.NonNull;
 import lombok.val;
 
-@Service
+@Repository
 @Named("isis.ext.secman.ApplicationUserRepository")
 public class ApplicationUserRepository
-implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository<ApplicationUser> {
+extends ApplicationUserRepositoryAbstract<ApplicationUser> {
 
-    @Inject private FactoryService factoryService;
-    @Inject private RepositoryService repository;
-    @Inject private SecmanConfiguration configBean;
-    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
-	@Inject protected IsisConfiguration isisConfiguration;
-    @Inject private EventBusService eventBusService;
-
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    @Override
-    public ApplicationUser newApplicationUser() {
-        return factoryService.detachedEntity(new ApplicationUser());
-    }
-
-    // -- findOrCreateUserByUsername (programmatic)
-
-    /**
-     * Uses the {@link QueryResultsCache} in order to support
-     * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
-     * <p>
-     * <p>
-     * If the user does not exist, it will be automatically created.
-     * </p>
-     */
-    @Override
-    public ApplicationUser findOrCreateUserByUsername(
-            final String username) {
-        // slightly unusual to cache a function that modifies state, but safe because this is idempotent
-        return queryResultsCacheProvider.get().execute(()->
-            findByUsername(username).orElseGet(()->newDelegateUser(username, null)),
-            ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
-    }
-
-    // -- findByUsername
-
-    public Optional<ApplicationUser> findByUsernameCached(final String username) {
-        return queryResultsCacheProvider.get().execute(this::findByUsername,
-                ApplicationUserRepository.class, "findByUsernameCached", username);
+    public ApplicationUserRepository() {
+        super(ApplicationUser.class);
     }
 
     @Override
-    public Optional<ApplicationUser> findByUsername(final String username) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME)
-                .withParameter("username", username));
-    }
-
-    // -- findByEmailAddress (programmatic)
-
-    public Optional<ApplicationUser> findByEmailAddressCached(final String emailAddress) {
-        return queryResultsCacheProvider.get().execute(this::findByEmailAddress,
-                ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
-    }
-
-    public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS)
-                .withParameter("emailAddress", emailAddress));
-    }
-
-    // -- findByName
-
-    @Override
-    public Collection<ApplicationUser> find(final @Nullable String _search) {
+    protected String asRegex(String _search) {
         val search = _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_");
-        val regex  = _Strings.suffix(_Strings.prefix(search, "%"), "%");
-        return repository.allMatches(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND)
-                .withParameter("regex", regex))
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    // -- allUsers
-
-    @Override
-    public Collection<ApplicationUser> findByAtPath(final String atPath) {
-        return repository.allMatches(Query.named(ApplicationUser.class, org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH)
-                .withParameter("atPath", atPath))
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
-    public Collection<ApplicationUser> findByRole(
-            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole) {
-
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        return _NullSafe.stream(role.getUsers())
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
-    public Collection<ApplicationUser> findByTenancy(
-            @NonNull final ApplicationTenancy genericTenancy) {
-        return findByAtPath(genericTenancy.getPath())
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    // -- allUsers
-
-    @Override
-    public Collection<ApplicationUser> allUsers() {
-        return repository.allInstances(ApplicationUser.class)
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
-    public Collection<ApplicationUser> findMatching(final String search) {
-        if (search != null && search.length() > 0) {
-            return find(search);
-        }
-        return Collections.emptySortedSet();
-    }
-
-    // -- UPDATE USER STATE
-
-    @Override
-    public void enable(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.ENABLED) {
-             factoryService.mixin(ApplicationUser_unlock.class, user)
-             .act();
-        }
-    }
-
-    @Override
-    public void disable(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.DISABLED) {
-            factoryService.mixin(ApplicationUser_lock.class, user)
-            .act();
-        }
-    }
-
-    @Override
-    public boolean isAdminUser(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
-        return configBean.getAdminUserName().equals(user.getName());
-    }
-
-    @Override
-    public ApplicationUser newUser(
-            @NonNull String username,
-            @Nullable AccountType accountType,
-            Consumer<ApplicationUser> beforePersist) {
-
-        val user = newApplicationUser();
-        user.setUsername(username);
-        user.setAccountType(accountType);
-        beforePersist.accept(user);
-        if(user.getAccountType().equals(AccountType.LOCAL)) {
-        	// keep null when is set for status in accept() call above
-        } else {
-			user.setStatus(configBean.isAutoEnableIfDelegatedAndAuthenticated()
-			        ?  ApplicationUserStatus.ENABLED
-	                :  ApplicationUserStatus.DISABLED);
-        }
-        repository.persistAndFlush(user);
-        eventBusService.post(UserCreatedEvent.of(user));
-        return user;
-    }
-
-    @Override
-    public boolean updatePassword(
-            final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user,
-            final String password) {
-        // in case called programmatically
-        if(!isPasswordFeatureEnabled(user)) {
-            return false;
-        }
-        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
-        user.setEncryptedPassword(encrypter.encrypt(password));
-        repository.persistAndFlush(user);
-        return true;
-    }
-
-    @Override
-    public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
-        return user.isLocalAccount()
-                /*sonar-ignore-on*/
-                && passwordEncryptionService!=null // if for any reason injection fails
-                /*sonar-ignore-off*/
-                && passwordEncryptionService.isPresent();
+        return _Strings.suffix(_Strings.prefix(search, "%"), "%");
     }
 
 

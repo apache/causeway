@@ -82,30 +82,22 @@ import lombok.val;
 })
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name = "findByUsername", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE username == :username"),
     @javax.jdo.annotations.Query(
-            name = "findByEmailAddress", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE emailAddress == :emailAddress"),
     @javax.jdo.annotations.Query(
-            name = "findByAtPath", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE atPath == :atPath"),
     @javax.jdo.annotations.Query(
-            name = "findByName", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                    + "WHERE username.matches(:nameRegex)"
-                    + "   || familyName.matches(:nameRegex)"
-                    + "   || givenName.matches(:nameRegex)"
-                    + "   || knownAs.matches(:nameRegex)"),
-    @javax.jdo.annotations.Query(
-            name = "find", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE username.matches(:regex)"

@@ -33,27 +33,27 @@ import lombok.NonNull;
 /**
  * @since 2.0 {@index}
  */
-public interface ApplicationUserRepository<U extends ApplicationUser> {
+public interface ApplicationUserRepository {
 
     /**
      * @return detached entity
      */
-    U newApplicationUser();
+    ApplicationUser newApplicationUser();
 
-    Optional<U> findByUsername(String username);
-    U findOrCreateUserByUsername(String username);
+    Optional<ApplicationUser> findByUsername(String username);
+    ApplicationUser findOrCreateUserByUsername(String username);
 
-    Collection<U> allUsers();
-    Collection<U> find(String search);
-    Collection<U> findByAtPath(String atPath);
-    Collection<U> findByRole(ApplicationRole role);
-    Collection<U> findByTenancy(ApplicationTenancy tenancy);
+    Collection<ApplicationUser> allUsers();
+    Collection<ApplicationUser> find(String search);
+    Collection<ApplicationUser> findByAtPath(String atPath);
+    Collection<ApplicationUser> findByRole(ApplicationRole role);
+    Collection<ApplicationUser> findByTenancy(ApplicationTenancy tenancy);
 
     /**
      * auto-complete support
      * @param search
      */
-    Collection<U> findMatching(String search);
+    Collection<ApplicationUser> findMatching(String search);
 
     void enable(ApplicationUser user);
     void disable(ApplicationUser user);
@@ -63,9 +63,9 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
 
     boolean updatePassword(ApplicationUser user, String password);
 
-    U newUser(String username, AccountType accountType, Consumer<U> beforePersist);
+    ApplicationUser newUser(String username, AccountType accountType, Consumer<ApplicationUser> beforePersist);
 
-    default U upsertLocal(
+    default ApplicationUser upsertLocal(
             @NonNull String username,
             @Nullable Password password,
             @NonNull ApplicationUserStatus status) {
@@ -73,7 +73,7 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
                 .orElseGet(() -> newLocalUser(username, password, status));
     }
 
-    default U newLocalUser(
+    default ApplicationUser newLocalUser(
             @NonNull String username,
             @Nullable Password password,
             @NonNull ApplicationUserStatus status) {
@@ -89,7 +89,7 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
         });
     }
 
-    default U newDelegateUser(
+    default ApplicationUser newDelegateUser(
             String username,
             ApplicationUserStatus status) {
 
