@@ -38,6 +38,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.util.RegexReplacer;
 
 import lombok.val;
 
@@ -49,6 +50,7 @@ implements ApplicationRoleRepository {
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private SecmanConfiguration configBean;
+    @Inject RegexReplacer regexReplacer;
 
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
@@ -90,15 +92,16 @@ implements ApplicationRoleRepository {
     public Collection<ApplicationRole> findNameContaining(final String search) {
 
         if(search != null && search.length() > 0) {
-            String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
+            val nameRegex = regexReplacer.asRegex(search);
             return repository.allMatches(
                     Query.named(applicationRoleClass, ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING)
-                    .withParameter("nameRegex", nameRegex))
+                    .withParameter("regex", nameRegex))
                     .stream()
                     .collect(_Sets.toUnmodifiableSorted());
         }
         return Collections.emptySortedSet();
     }
+
 
     @Override
     public ApplicationRole newRole(

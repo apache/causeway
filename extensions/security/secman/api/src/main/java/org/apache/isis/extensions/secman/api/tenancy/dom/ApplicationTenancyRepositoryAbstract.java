@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.util.RegexReplacer;
 
 import lombok.NonNull;
 import lombok.val;
@@ -40,6 +41,8 @@ implements ApplicationTenancyRepository {
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
+    @Inject RegexReplacer regexReplacer;
+
 
     private final Class<T> applicationTenancyClass;
 
@@ -66,8 +69,9 @@ implements ApplicationTenancyRepository {
         if (search == null) {
             return Collections.emptySortedSet();
         }
+        val regex = regexReplacer.asRegex(search);
         return repository.allMatches(Query.named(this.applicationTenancyClass, ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING)
-                .withParameter("regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
+                .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }

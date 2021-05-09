@@ -87,22 +87,22 @@ import lombok.val;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
                   + "WHERE u.username = :username"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
                   + "WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
                   + "WHERE u.atPath = :atPath"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
                   + "WHERE u.username LIKE :regex"
                   + "  OR u.familyName LIKE :regex"
                   + "  OR u.givenName LIKE :regex"

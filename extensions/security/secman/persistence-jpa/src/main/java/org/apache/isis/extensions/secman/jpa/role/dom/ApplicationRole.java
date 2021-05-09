@@ -70,13 +70,13 @@ import lombok.Setter;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT r "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
+                  + "FROM org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
-                  + "WHERE r.name LIKE '%:nameRegex%'"),
+                  + "FROM org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole r "
+                  + "WHERE r.name LIKE :regex"),
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

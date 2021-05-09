@@ -43,6 +43,7 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unlock;
 import org.apache.isis.extensions.secman.api.user.events.UserCreatedEvent;
+import org.apache.isis.extensions.secman.api.util.RegexReplacer;
 
 import lombok.NonNull;
 import lombok.val;
@@ -56,6 +57,7 @@ implements ApplicationUserRepository {
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
     @Inject private EventBusService eventBusService;
+    @Inject RegexReplacer regexReplacer;
 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
@@ -123,14 +125,13 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> find(final @Nullable String _search) {
-        final String regex = asRegex(_search);
+        val regex = regexReplacer.asRegex(_search);
         return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    protected abstract String asRegex(String _search);
 
     // -- allUsers
 

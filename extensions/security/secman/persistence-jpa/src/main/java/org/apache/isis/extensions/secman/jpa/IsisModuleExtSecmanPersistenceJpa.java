@@ -30,6 +30,7 @@ import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jpa.util.RegexReplacer;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
@@ -37,14 +38,15 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
  */
 @Configuration
 @Import({
-    // modules
-    IsisModuleExtSecmanModel.class,
+        // modules
+        IsisModuleExtSecmanModel.class,
 
-    // services
-    ApplicationPermissionRepository.class,
-    ApplicationRoleRepository.class,
-    ApplicationTenancyRepository.class,
-    ApplicationUserRepository.class,
+        // services
+        ApplicationPermissionRepository.class,
+        ApplicationRoleRepository.class,
+        ApplicationTenancyRepository.class,
+        ApplicationUserRepository.class,
+        RegexReplacer.class,
 
 })
 @EntityScan(basePackageClasses = {

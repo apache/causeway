@@ -29,6 +29,7 @@ import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jdo.user.dom.RegexReplacer;
 import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
@@ -45,6 +46,7 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationRoleRepository.class,
         ApplicationTenancyRepository.class,
         ApplicationUserRepository.class,
+        RegexReplacer.class,
 
         // JDO entities
         // required to be listed in order for Spring to pick them up,

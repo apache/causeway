@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.user.dom;
+package org.apache.isis.extensions.secman.jpa.util;
 
 import javax.inject.Named;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -27,13 +28,15 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryA
 
 import lombok.val;
 
-@Repository
-@Named("isis.ext.secman.ApplicationUserRepository")
-public class ApplicationUserRepository
-extends ApplicationUserRepositoryAbstract<ApplicationUser> {
+@Component
+@Named("isis.ext.secman.RegexReplacer")
+public class RegexReplacer implements org.apache.isis.extensions.secman.api.util.RegexReplacer {
 
-    public ApplicationUserRepository() {
-        super(ApplicationUser.class);
+    @Override
+    public String asRegex(String str) {
+        val search = _Strings.nullToEmpty(str).replace("*", "%").replace("?", "_");
+        return _Strings.suffix(_Strings.prefix(search, "%"), "%");
     }
+
 
 }

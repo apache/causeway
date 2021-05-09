@@ -64,19 +64,19 @@ import lombok.Setter;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
                   + "WHERE t.path = :path"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
                   + "WHERE t.name = :name"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
-                  + "WHERE t.name LIKE '%:regex%' "
-                  + "    OR t.path LIKE '%:regex%'"),
+                  + "WHERE t.name LIKE :regex "
+                  + "    OR t.path LIKE :regex"),
 })
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationTenancy",

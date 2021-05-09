@@ -35,10 +35,4 @@ extends ApplicationUserRepositoryAbstract<ApplicationUser> {
         super(ApplicationUser.class);
     }
 
-    @Override
-    protected String asRegex(String _search) {
-        val search = _search.replace("*", ".*").replace("?", ".");
-        return String.format("(?i).*%s.*", search);
-    }
-
 }

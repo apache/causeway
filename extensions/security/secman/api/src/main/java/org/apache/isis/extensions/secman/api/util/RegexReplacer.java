@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.user.dom;
+package org.apache.isis.extensions.secman.api.util;
 
 import javax.inject.Named;
 
-import org.springframework.stereotype.Repository;
-
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryAbstract;
+import org.springframework.stereotype.Component;
 
 import lombok.val;
 
-@Repository
-@Named("isis.ext.secman.ApplicationUserRepository")
-public class ApplicationUserRepository
-extends ApplicationUserRepositoryAbstract<ApplicationUser> {
+public interface RegexReplacer {
 
-    public ApplicationUserRepository() {
-        super(ApplicationUser.class);
-    }
+    public String asRegex(String str);
 
 }
