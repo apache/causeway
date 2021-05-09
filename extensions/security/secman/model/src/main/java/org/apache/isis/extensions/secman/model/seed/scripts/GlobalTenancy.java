@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts;
 
+import org.apache.isis.extensions.secman.api.tenancy.fixtures.AbstractTenancyFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**

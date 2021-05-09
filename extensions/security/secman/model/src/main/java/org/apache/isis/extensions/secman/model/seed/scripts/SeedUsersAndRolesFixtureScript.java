@@ -16,24 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed;
+package org.apache.isis.extensions.secman.model.seed.scripts;
 
 import javax.inject.Inject;
 
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.GlobalTenancy;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanAdminUser;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanFixtureRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanRegularUserRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * This fixture script will be run automatically on start-up by virtue of the fact that the
- * {@link org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService} is a
+ * {@link SeedSecurityModuleService} is a
  * {@link org.apache.isis.applib.annotation.DomainService} and calls the setup during its
- * {@link org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService#onMetamodelEvent(org.apache.isis.core.metamodel.events.MetamodelEvent) init}
+ * {@link SeedSecurityModuleService#onMetamodelEvent(org.apache.isis.core.metamodel.events.MetamodelEvent) init}
  * ({@link javax.annotation.PostConstruct}) method.
  *
  * @since 2.0 {@index}

@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
+ * Role to run in the prototype fixture scripts for the example webapp for the security module.
+ *
  * @since 2.0 {@index}
  */
-public class IsisExtFixturesFixtureResultsRoleAndPermissions
-extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSecmanFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";
-
-    public IsisExtFixturesFixtureResultsRoleAndPermissions() {
-        super(ROLE_NAME, "Access results of running Fixture Scripts");
+    public IsisExtSecmanFixtureRoleAndPermissions(SecmanConfiguration configBean) {
+        super(configBean.getFixtureRoleName(), "Security module fixtures");
     }
 
     @Override
@@ -42,6 +42,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.ofSingleton(
-                        ApplicationFeatureId.newType(FixtureResult.OBJECT_TYPE)));
+                        ApplicationFeatureId.newNamespace("isis.ext.secman")));
+
     }
 }

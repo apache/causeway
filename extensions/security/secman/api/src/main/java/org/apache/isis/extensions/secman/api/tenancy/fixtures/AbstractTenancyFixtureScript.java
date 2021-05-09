@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed.scripts;
+package org.apache.isis.extensions.secman.api.tenancy.fixtures;
 
 import javax.inject.Inject;
 

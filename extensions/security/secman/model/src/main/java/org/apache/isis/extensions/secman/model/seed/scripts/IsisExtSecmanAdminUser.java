@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.fixtures.AbstractUserAndRolesFixtureScript;
 
 /**
  * @since 2.0 {@index}

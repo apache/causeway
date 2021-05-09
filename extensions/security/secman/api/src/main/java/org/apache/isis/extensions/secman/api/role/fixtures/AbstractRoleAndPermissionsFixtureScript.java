@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.seed.scripts;
+package org.apache.isis.extensions.secman.api.role.fixtures;
 
 import javax.inject.Inject;
 

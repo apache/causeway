@@ -16,19 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed.scripts;
+package org.apache.isis.extensions.secman.api.user.fixtures;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
@@ -46,7 +45,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
     private final Can<String> roleNames;
 
     /**
-     * The {@link org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser}
+     * The {@link ApplicationUser}
      * updated/created by the fixture.
      */
     @Getter private ApplicationUser applicationUser;
@@ -105,7 +104,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
         for (final String roleName : roleNames) {
             applicationRoleRepository.findByName(roleName)
-            .map(securityRole ->{
+            .map(securityRole->{
                 applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
                 return Boolean.TRUE;
             })
@@ -113,8 +112,5 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
         }
 
     }
-
-
-
 
 }

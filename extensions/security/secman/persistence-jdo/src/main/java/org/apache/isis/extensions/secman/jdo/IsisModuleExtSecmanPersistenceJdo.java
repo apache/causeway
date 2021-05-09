@@ -32,7 +32,7 @@ import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserMana
 import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser;
 import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
@@ -59,10 +59,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationTenancy.class,
         ApplicationUser.class,
 
-        // mixins
-        ApplicationUserManager_allUsers.class,
-        ApplicationUserManager_newDelegateUser.class,
-        ApplicationUserManager_newLocalUser.class,
 })
 public class IsisModuleExtSecmanPersistenceJdo {
 
