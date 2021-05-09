@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.dom.tenancy;
+package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Comparator;
 import java.util.Set;

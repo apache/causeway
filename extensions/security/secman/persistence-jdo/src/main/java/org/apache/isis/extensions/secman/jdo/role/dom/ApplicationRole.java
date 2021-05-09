@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.role;
+package org.apache.isis.extensions.secman.jdo.role.dom;
 
 import java.util.Comparator;
 import java.util.List;
@@ -42,9 +42,9 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -65,12 +65,12 @@ import lombok.Setter;
     @javax.jdo.annotations.Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+                    + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
                     + "WHERE name == :name"),
     @javax.jdo.annotations.Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+                    + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
                     + "WHERE name.matches(:nameRegex) ")
 })
 @DomainObject(

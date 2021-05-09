@@ -22,15 +22,14 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
@@ -46,14 +45,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
     ApplicationRoleRepository.class,
     ApplicationTenancyRepository.class,
     ApplicationUserRepository.class,
-    SeedSecurityModuleService.class,
-
-    // pretty sure we don't need to import/register these view models
-//    ApplicationPermission.class,
-//    ApplicationRole.class,
-//    ApplicationTenancy.class,
-//    ApplicationUser.class,
-
 
 })
 @EntityScan(basePackageClasses = {

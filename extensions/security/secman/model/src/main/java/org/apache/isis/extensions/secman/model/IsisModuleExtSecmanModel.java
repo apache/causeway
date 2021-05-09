@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
+import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServiceForSecman;
 
 /**
@@ -37,6 +38,8 @@ import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServ
         TenantedAuthorizationPostProcessor.Register.class,
         TableColumnVisibilityServiceForSecman.class,
         // ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
+
+        SeedSecurityModuleService.class,
 
 })
 public class IsisModuleExtSecmanModel {

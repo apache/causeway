@@ -16,37 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.dom.role;
+package org.apache.isis.extensions.secman.jdo.role.dom;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepositoryAbstract;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
-
-import lombok.val;
 
 @Repository
 @Named("isis.ext.secman.ApplicationRoleRepository")
 public class ApplicationRoleRepository
-extends ApplicationRoleRepositoryAbstract {
+extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
 
-    public ApplicationRoleRepository(Class applicationRoleClass) {
+    public ApplicationRoleRepository() {
         super(ApplicationRole.class);
     }
 

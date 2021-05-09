@@ -16,28 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.dom.tenancy;
+package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.Callable;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepositoryAbstract;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-
-import lombok.NonNull;
-import lombok.val;
 
 @Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")

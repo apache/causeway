@@ -16,19 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.user;
+package org.apache.isis.extensions.secman.jpa.user.dom;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.VersionStrategy;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
@@ -49,63 +59,57 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.dom.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType = IdentityType.DATASTORE,
+@Entity
+@Table(
         schema = "isisExtensionsSecman",
-        table = "ApplicationUser")
-@javax.jdo.annotations.Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name = "ApplicationUser_username_UNQ", members = { "username" })
-})
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
+        name = "ApplicationUser",
+        uniqueConstraints =
+            @UniqueConstraint(
+                    name = "ApplicationUser_username_UNQ",
+                    columnNames={"username"})
+)
+@NamedQueries({
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                    + "WHERE username == :username"),
-    @javax.jdo.annotations.Query(
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username = :username"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                    + "WHERE emailAddress == :emailAddress"),
-    @javax.jdo.annotations.Query(
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.emailAddress = :emailAddress"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                    + "WHERE atPath == :atPath"),
-    @javax.jdo.annotations.Query(
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.atPath = :atPath"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                    + "WHERE username.matches(:regex)"
-                    + " || familyName.matches(:regex)"
-                    + " || givenName.matches(:regex)"
-                    + " || knownAs.matches(:regex)"
-                    + " || emailAddress.matches(:regex)")
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username LIKE :regex"
+                  + "  OR u.familyName LIKE :regex"
+                  + "  OR u.givenName LIKE :regex"
+                  + "  OR u.knownAs LIKE :regex"
+                  + "  OR u.emailAddress LIKE :regex")
 })
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationUser",
         autoCompleteRepository = ApplicationUserRepository.class,
@@ -117,23 +121,28 @@ import lombok.val;
 public class ApplicationUser implements Comparable<ApplicationUser>,
         org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private UserService userService;
+    @Inject private transient ApplicationUserRepository applicationUserRepository;
+    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private transient UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
-     * else will fallback to a default implementation.
+     * else will fallback to a {@link org.apache.isis.extensions.secman.api.permission.dom.PermissionsEvaluationService#DEFAULT default}
+     * implementation.
      */
-    @Inject private PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private SecmanConfiguration configBean;
+    @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
+    @Inject private transient SecmanConfiguration configBean;
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     // -- name (derived property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
     @Override
-    @javax.jdo.annotations.NotPersistent
+    @javax.persistence.Transient
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
@@ -164,8 +173,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
 
-
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_USERNAME)
+    @Column(nullable=false, length=MAX_LENGTH_USERNAME)
     @Property(
             domainEvent = UsernameDomainEvent.class,
             editing = Editing.DISABLED
@@ -182,8 +190,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
-
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_FAMILY_NAME)
+    @Column(nullable=true, length=MAX_LENGTH_FAMILY_NAME)
     @Property(
             domainEvent = FamilyNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -200,8 +207,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
 
-
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_GIVEN_NAME)
+    @Column(nullable=true, length=MAX_LENGTH_GIVEN_NAME)
     @Property(
             domainEvent = GivenNameDomainEvent.class,
             editing = Editing.DISABLED
@@ -219,7 +225,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_KNOWN_AS)
+    @Column(nullable=true, length=MAX_LENGTH_KNOWN_AS)
     @Property(
             domainEvent = KnownAsDomainEvent.class,
             editing = Editing.DISABLED
@@ -236,7 +242,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_EMAIL_ADDRESS)
+    @Column(nullable=true, length=MAX_LENGTH_EMAIL_ADDRESS)
     @Property(
             domainEvent = EmailAddressDomainEvent.class,
             editing = Editing.DISABLED
@@ -251,7 +257,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_PHONE_NUMBER)
+    @Column(nullable=true, length=MAX_LENGTH_PHONE_NUMBER)
     @Property(
             domainEvent = PhoneNumberDomainEvent.class,
             editing = Editing.DISABLED
@@ -265,7 +271,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
     public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = MAX_LENGTH_PHONE_NUMBER)
+    @Column(nullable=true, length=MAX_LENGTH_PHONE_NUMBER)
     @Property(
             domainEvent = FaxNumberDomainEvent.class,
             editing = Editing.DISABLED
@@ -283,7 +289,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class AtPathDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(name = "atPath", allowsNull="true")
+    @Column(name="atPath", nullable=true)
     @Property(
             domainEvent = AtPathDomainEvent.class,
             editing = Editing.DISABLED
@@ -297,7 +303,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = AccountTypeDomainEvent.class,
             editing = Editing.DISABLED
@@ -312,7 +319,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = StatusDomainEvent.class,
             editing = Editing.DISABLED
@@ -325,7 +333,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     // -- encryptedPassword (hidden property)
 
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @PropertyLayout(hidden=Where.EVERYWHERE)
     @Getter @Setter
     private String encryptedPassword;
@@ -356,18 +364,26 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
     // -- roles (collection)
     public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
 
-    @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
-    @javax.jdo.annotations.Join(column="userId")
-    @javax.jdo.annotations.Element(column="roleId")
+//    @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
+//    @javax.jdo.annotations.Join(column="userId")
+//    @javax.jdo.annotations.Element(column="roleId")
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "ApplicationUserRoles",
+            joinColumns = {@JoinColumn(name = "userId")},
+            inverseJoinColumns = {@JoinColumn(name = "roleId")})
     @Collection(
             domainEvent = RolesDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table",
             sequence = "20")
-    @Getter @Setter
     private Set<ApplicationRole> roles = new TreeSet<>();
 
+    @Override
+    public Set<org.apache.isis.extensions.secman.api.role.dom.ApplicationRole> getRoles() {
+        return _Casts.uncheckedCast(roles);
+    }
 
     // -- PermissionSet (programmatic)
 

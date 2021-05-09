@@ -21,17 +21,14 @@ package org.apache.isis.extensions.secman.jdo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_allUsers;
-import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser;
-import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
@@ -48,7 +45,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationRoleRepository.class,
         ApplicationTenancyRepository.class,
         ApplicationUserRepository.class,
-        SeedSecurityModuleService.class,
 
         // JDO entities
         // required to be listed in order for Spring to pick them up,

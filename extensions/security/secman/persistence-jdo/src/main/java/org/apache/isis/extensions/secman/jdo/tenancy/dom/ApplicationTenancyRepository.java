@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.role;
+package org.apache.isis.extensions.secman.jdo.tenancy.dom;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepositoryAbstract;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 
 @Repository
-@Named("isis.ext.secman.ApplicationRoleRepository")
-public class ApplicationRoleRepository
-extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
+@Named("isis.ext.secman.ApplicationTenancyRepository")
+public class ApplicationTenancyRepository
+extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
 
-    public ApplicationRoleRepository() {
-        super(ApplicationRole.class);
+    public ApplicationTenancyRepository() {
+        super(ApplicationTenancy.class);
     }
 
 }

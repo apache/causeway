@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.dom.role;
+package org.apache.isis.extensions.secman.jpa.role.dom;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,9 +49,9 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;

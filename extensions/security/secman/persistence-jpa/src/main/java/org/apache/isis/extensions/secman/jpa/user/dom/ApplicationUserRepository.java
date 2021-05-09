@@ -16,21 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.tenancy;
+package org.apache.isis.extensions.secman.jpa.user.dom;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepositoryAbstract;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryAbstract;
+
+import lombok.val;
 
 @Repository
-@Named("isis.ext.secman.ApplicationTenancyRepository")
-public class ApplicationTenancyRepository
-extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
+@Named("isis.ext.secman.ApplicationUserRepository")
+public class ApplicationUserRepository
+extends ApplicationUserRepositoryAbstract<ApplicationUser> {
 
-    public ApplicationTenancyRepository() {
-        super(ApplicationTenancy.class);
+    public ApplicationUserRepository() {
+        super(ApplicationUser.class);
     }
+
+    @Override
+    protected String asRegex(String _search) {
+        val search = _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_");
+        return _Strings.suffix(_Strings.prefix(search, "%"), "%");
+    }
+
 
 }

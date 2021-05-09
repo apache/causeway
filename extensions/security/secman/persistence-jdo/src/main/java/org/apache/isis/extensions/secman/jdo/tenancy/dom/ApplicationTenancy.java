@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.tenancy;
+package org.apache.isis.extensions.secman.jdo.tenancy.dom;
 
 import java.util.Comparator;
 import java.util.SortedSet;
@@ -64,17 +64,17 @@ import lombok.Setter;
     @javax.jdo.annotations.Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
                     + "WHERE path == :path"),
     @javax.jdo.annotations.Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
                     + "WHERE name == :name"),
     @javax.jdo.annotations.Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
                     + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationTenancy",

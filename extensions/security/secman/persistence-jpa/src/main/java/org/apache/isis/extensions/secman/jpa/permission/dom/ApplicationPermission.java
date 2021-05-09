@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.permission;
+package org.apache.isis.extensions.secman.jpa.permission.dom;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -24,10 +24,18 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.VersionStrategy;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -49,62 +57,59 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType = IdentityType.DATASTORE,
+@Entity
+@Table(
         schema = "isisExtensionsSecman",
-        table = "ApplicationPermission")
-@javax.jdo.annotations.Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
+        name = "ApplicationPermission",
+        uniqueConstraints=
+            @UniqueConstraint(
+                    name = "ApplicationPermission_role_feature_rule_UNQ",
+                    columnNames={"roleId", "featureSort", "featureFqn", "rule"})
+)
+@NamedQueries({
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role"),
-    @javax.jdo.annotations.Query(
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE (u.roles.contains(role) && u.username == :username) "
-                    + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
-    @javax.jdo.annotations.Query(
+            //TODO this query returns empty result
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + ", org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username = :username"
+                  + "    AND p.role MEMBER OF u.roles"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn"),
-    @javax.jdo.annotations.Query(
+            query = "SELECT p "
+                    + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                    + "WHERE p.featureSort = :featureSort "
+                    + "   AND p.featureFqn = :featureFqn"),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn "),
-    @javax.jdo.annotations.Query(
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role "
+                  + "   AND p.rule = :rule "
+                  + "   AND p.featureSort = :featureSort "
+                  + "   AND p.featureFqn = :featureFqn "),
+    @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "),
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role "
+                  + "   AND p.rule = :rule "
+                  + "   AND p.featureSort = :featureSort "),
 })
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ",
-            members = { "role", "featureSort", "featureFqn", "rule" })
-})
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationPermission"
         )
@@ -118,13 +123,18 @@ implements
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
 
+    @Inject private transient ApplicationFeatureRepository featureRepository;
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     // -- role (property)
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
 
-    @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
+    @JoinColumn(name="roleId", nullable=false)
     @Property(
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
@@ -135,14 +145,15 @@ implements
 
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole applicationRole) {
-        role = _Casts.uncheckedCast(applicationRole);
+        role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
     }
 
     // -- rule (property)
     public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
@@ -156,7 +167,8 @@ implements
     public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
@@ -177,7 +189,7 @@ implements
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureSort() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature sort} and member sort.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
@@ -199,10 +211,10 @@ implements
     }
 
 
-    // -- FEATURE SORT
+    // -- featureSort
 
     /**
-     * The {@link ApplicationFeatureId#getSort() feature sort} of the
+     * The {@link ApplicationFeatureId#getType() feature type} of the
      * feature.
      *
      * <p>
@@ -212,7 +224,8 @@ implements
      *
      * @see #getFeatureFqn()
      */
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Setter
     private ApplicationFeatureSort featureSort;
 
@@ -239,7 +252,7 @@ implements
      *
      * @see #getFeatureSort()
      */
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Property(
             domainEvent = FeatureFqnDomainEvent.class,
             editing = Editing.DISABLED
@@ -289,7 +302,18 @@ implements
 
     // -- Functions
 
+    @UtilityClass
+    public static final class Functions {
 
-    @Inject private ApplicationFeatureRepository featureRepository;
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
+                (ApplicationPermission input) ->
+                    new ApplicationPermissionValue(
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                            input.getRule(),
+                            input.getMode());
+
+    }
+
+
 
 }
