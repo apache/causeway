@@ -47,6 +47,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
     // -- returnTypeName (property)
 
+    @ApplicationFeatureViewModel.TypeSimpleName
     @Property(
             domainEvent = ReturnType.DomainEvent.class
     )

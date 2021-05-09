@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -38,14 +42,21 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
         super(featureId);
     }
 
-    // -- returnType
 
-    public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {}
+    // -- elementType
 
+    @ApplicationFeatureViewModel.TypeSimpleName
     @Property(
-            domainEvent = ElementTypeDomainEvent.class
+            domainEvent = ElementType.DomainEvent.class
     )
     @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
+    @Target({ java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ElementType {
+        class DomainEvent extends PropertyDomainEvent<String> {}
+    }
+
+    @ElementType
     public String getElementType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -55,12 +66,20 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
 
     // -- derived
 
-    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
-
     @Property(
-            domainEvent = DerivedDomainEvent.class
-            )
-    @PropertyLayout(fieldSetId="Detail", sequence = "2.7")
+            domainEvent = Derived.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId="detail",
+            sequence = "2.7"
+    )
+    @Target({ java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Derived {
+        class DomainEvent extends PropertyDomainEvent<Boolean> {}
+    }
+
+    @Derived
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }
