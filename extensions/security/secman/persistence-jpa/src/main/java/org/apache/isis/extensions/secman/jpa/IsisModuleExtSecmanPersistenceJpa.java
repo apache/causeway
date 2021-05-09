@@ -54,10 +54,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 //    ApplicationTenancy.class,
 //    ApplicationUser.class,
 
-    // mixins
-    ApplicationUserManager_allUsers.class,
-    ApplicationUserManager_newDelegateUser.class,
-    ApplicationUserManager_newLocalUser.class,
 
 })
 @EntityScan(basePackageClasses = {

@@ -18,16 +18,16 @@
  */
 package org.apache.isis.extensions.secman.jpa.seed.scripts;
 
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsisExtFixturesFixtureResultsRoleAndPermissions 
+public class IsisExtFixturesFixtureResultsRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
     public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";

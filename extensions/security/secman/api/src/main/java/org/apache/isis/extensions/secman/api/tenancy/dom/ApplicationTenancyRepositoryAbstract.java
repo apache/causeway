@@ -96,6 +96,7 @@ implements ApplicationTenancyRepository {
                 path);
     }
 
+    @Override
     public ApplicationTenancy findByPath(final String path) {
         if (path == null) {
             return null;

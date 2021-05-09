@@ -20,9 +20,9 @@ package org.apache.isis.extensions.secman.jpa.seed.scripts;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository;
 
 public abstract class AbstractTenancyFixtureScript extends FixtureScript {
 
@@ -33,7 +33,9 @@ public abstract class AbstractTenancyFixtureScript extends FixtureScript {
             final String parentPath,
             final ExecutionContext executionContext) {
 
-        final ApplicationTenancy parent = parentPath != null? applicationTenancyRepository.findByPath(parentPath): null;
+        final ApplicationTenancy parent = parentPath != null
+                ? applicationTenancyRepository.findByPath(parentPath)
+                : null;
         applicationTenancy = applicationTenancyRepository.newTenancy(name, path, parent);
         executionContext.addResult(this, name, applicationTenancy);
         return applicationTenancy;
@@ -42,7 +44,7 @@ public abstract class AbstractTenancyFixtureScript extends FixtureScript {
     private ApplicationTenancy applicationTenancy;
 
     /**
-     * The {@link org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy} created by this fixture.
+     * The {@link ApplicationTenancy} created by this fixture.
      */
     public ApplicationTenancy getApplicationTenancy() {
         return applicationTenancy;

@@ -74,5 +74,13 @@ public interface ApplicationPermissionRepository {
             ApplicationPermissionMode mode,
             ApplicationFeatureId featureId);
 
-
+    /**
+     * Intended for use by fixture scripts.
+     */
+    ApplicationPermission newPermissionNoCheck(
+            ApplicationRole role,
+            ApplicationPermissionRule rule,
+            ApplicationPermissionMode mode,
+            ApplicationFeatureSort sort,
+            String featureFqn);
 }

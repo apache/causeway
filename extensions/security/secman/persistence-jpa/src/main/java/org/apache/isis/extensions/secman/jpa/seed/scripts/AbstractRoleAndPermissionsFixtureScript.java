@@ -23,10 +23,9 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;
@@ -66,20 +65,17 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             return;
         }
 
-        ApplicationRole securityRole = applicationRoleRepository.findByName(roleName).orElse(null);
-        if(securityRole == null) {
-            securityRole = applicationRoleRepository.newRole(roleName, roleDescription);
-        }
+        val securityRole = applicationRoleRepository.findByName(roleName)
+                .orElseGet(() -> applicationRoleRepository.newRole(roleName, roleDescription));
 
-        for(ApplicationFeatureId featureId : featureIds) {
+        for(val featureId : featureIds) {
             val featureFqn = featureId.getFullyQualifiedName();
 
             // can't use role#addPackage because that does a check for existence of the package, which is
             // not guaranteed to exist yet (the SecurityFeatures#init() may not have run).
-            ((org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository)
-                    applicationPermissionRepository)
+            applicationPermissionRepository
             .newPermissionNoCheck(
-                    (org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole)securityRole,
+                    securityRole,
                     rule,
                     mode,
                     featureId.getSort(),

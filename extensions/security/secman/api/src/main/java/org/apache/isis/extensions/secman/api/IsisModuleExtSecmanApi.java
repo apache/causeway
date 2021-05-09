@@ -57,6 +57,9 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenan
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_users;
 import org.apache.isis.extensions.secman.api.tenancy.menu.ApplicationTenancyMenu;
 import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_allUsers;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser;
+import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.api.user.contributions.HasUsername_open;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_delete;
@@ -98,6 +101,7 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
 
 
         // -- ViewModels
+        // TODO: not sure we need to register view models?
 
         ApplicationNamespace.class,
         ApplicationType.class,
@@ -107,10 +111,11 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
         ApplicationTypeProperty.class,
         ApplicationUserManager.class,
         UserPermissionViewModel.class,
+        ApplicationOrphanedPermissionManager.class,
 
         // -- Mixins
+        // TODO: not sure we need to register mixins?
 
-        //ApplicationOrphanedPermissionManager
         ApplicationOrphanedPermissionManager_relocateSelected.class,
 
         //ApplicationPermission
@@ -161,10 +166,9 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
         ApplicationUser_updateUsername.class,
         HasUsername_open.class,
 
-        //ApplicationUserManager (abstract, concrete classes are in JDO/JPA)
-        //ApplicationUserManager_allUsers.class,
-        //ApplicationUserManager_newDelegateUser.class,
-        //ApplicationUserManager_newLocalUser.class,
+        ApplicationUserManager_allUsers.class,
+        ApplicationUserManager_newDelegateUser.class,
+        ApplicationUserManager_newLocalUser.class,
 
 })
 public class IsisModuleExtSecmanApi {

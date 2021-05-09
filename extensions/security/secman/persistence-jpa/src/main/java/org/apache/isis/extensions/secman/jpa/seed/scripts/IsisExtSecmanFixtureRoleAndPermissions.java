@@ -42,5 +42,6 @@ public class IsisExtSecmanFixtureRoleAndPermissions extends AbstractRoleAndPermi
                 ApplicationPermissionMode.CHANGING,
                 Can.ofSingleton(
                         ApplicationFeatureId.newNamespace("isis.ext.secman")));
+
     }
 }
