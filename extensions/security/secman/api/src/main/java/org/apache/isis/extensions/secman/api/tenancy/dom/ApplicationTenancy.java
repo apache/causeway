@@ -36,6 +36,7 @@ public interface ApplicationTenancy {
     String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
 
 
+
     // -- DOMAIN EVENTS
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
@@ -57,6 +58,7 @@ public interface ApplicationTenancy {
     }
 
     public String getPath();
+    void setPath(String path);
 
     public String getName();
     public void setName(String name);

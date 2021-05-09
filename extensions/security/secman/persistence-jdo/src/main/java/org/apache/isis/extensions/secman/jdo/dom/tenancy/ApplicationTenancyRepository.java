@@ -18,192 +18,19 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.tenancy;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.Callable;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-
-import lombok.NonNull;
-import lombok.val;
+import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 
 @Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
-implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository<ApplicationTenancy> {
+extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
 
-    @Inject private FactoryService factory;
-    @Inject private RepositoryService repository;
-
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    @Override
-    public ApplicationTenancy newApplicationTenancy() {
-        return factory.detachedEntity(new ApplicationTenancy());
-    }
-
-    // -- findByNameOrPathMatching
-
-    @Override
-    public Collection<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
-        return queryResultsCacheProvider.get().execute(new Callable<Collection<ApplicationTenancy>>() {
-            @Override public Collection<ApplicationTenancy> call() throws Exception {
-                return findByNameOrPathMatching(search);
-            }
-        }, ApplicationTenancyRepository.class, "findByNameOrPathMatchingCached", search);
-    }
-
-    public Collection<ApplicationTenancy> findByNameOrPathMatching(final String search) {
-        if (search == null) {
-            return Collections.emptySortedSet();
-        }
-        return repository.allMatches(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING)
-                .withParameter("regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    // -- findByName
-
-    public ApplicationTenancy findByNameCached(final String name) {
-        return queryResultsCacheProvider.get().execute(new Callable<ApplicationTenancy>() {
-            @Override
-            public ApplicationTenancy call() throws Exception {
-                return findByName(name);
-            }
-        }, ApplicationTenancyRepository.class, "findByNameCached", name);
-    }
-
-    public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME)
-                .withParameter("name", name)).orElse(null);
-    }
-
-
-    // -- findByPath
-
-    public ApplicationTenancy findByPathCached(final String path) {
-        return queryResultsCacheProvider.get().execute(new Callable<ApplicationTenancy>() {
-            @Override
-            public ApplicationTenancy call() throws Exception {
-                return findByPath(path);
-            }
-        }, ApplicationTenancyRepository.class, "findByPathCached", path);
-    }
-
-    public ApplicationTenancy findByPath(final String path) {
-        if (path == null) {
-            return null;
-        }
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH)
-                .withParameter("path", path))
-                .orElse(null);
-    }
-
-
-    // -- autoComplete
-    @Override
-    public Collection<ApplicationTenancy> findMatching(final String search) {
-        if (search != null && search.length() > 0) {
-            return findByNameOrPathMatching(search);
-        }
-        return Collections.emptySortedSet();
-    }
-
-    // -- newTenancy
-
-    @Override
-    public ApplicationTenancy newTenancy(
-            final String name,
-            final String path,
-            final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
-        ApplicationTenancy tenancy = findByPath(path);
-        if (tenancy == null) {
-            tenancy = newApplicationTenancy();
-            tenancy.setName(name);
-            tenancy.setPath(path);
-            tenancy.setParent(parent);
-            if(parent != null) {
-                parent.getChildren().add(tenancy);
-            }
-            repository.persist(tenancy);
-        }
-        return tenancy;
-    }
-
-    // --
-
-    @Override
-    public Collection<ApplicationTenancy> allTenancies() {
-        return queryResultsCacheProvider.get().execute(new Callable<Collection<ApplicationTenancy>>() {
-            @Override
-            public Collection<ApplicationTenancy> call() throws Exception {
-                return allTenanciesNoCache();
-            }
-        }, ApplicationTenancyRepository.class, "allTenancies");
-    }
-
-    public Collection<ApplicationTenancy> allTenanciesNoCache() {
-        return repository.allInstances(ApplicationTenancy.class)
-                .stream()
-                .map(ApplicationTenancy.class::cast)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
-    public void setTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
-        // no need to add to users set, since will be done by JDO/DN.
-        user.setAtPath(tenancy.getPath());
-    }
-
-    @Override
-    public void clearTenancyOnUser(
-            @NonNull final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
-        val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
-        // no need to remove from users set, since will be done by JDO/DN.
-        user.setAtPath(null);
-    }
-
-    @Override
-    public void setParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
-        tenancy.setParent(parent);
-        parent.getChildren().add(tenancy);
-    }
-
-    @Override
-    public void clearParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy) {
-        val parent = tenancy.getParent();
-        if(parent != null) {
-            parent.getChildren().add(tenancy);
-            tenancy.setParent(null);
-        }
-    }
-
-    @Override
-    public Collection<ApplicationTenancy> getChildren(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        return tenancy.getChildren()
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
+    public ApplicationTenancyRepository() {
+        super(ApplicationTenancy.class);
     }
 
 }

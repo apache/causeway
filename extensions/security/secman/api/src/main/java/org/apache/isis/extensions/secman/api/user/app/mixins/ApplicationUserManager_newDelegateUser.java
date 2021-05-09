@@ -52,7 +52,7 @@ public abstract class ApplicationUserManager_newDelegateUser {
 
     protected ApplicationUser doAct(
           final String username,
-          final R initialRole,
+          final ApplicationRole initialRole,
           final Boolean enabled) {
 
         final ApplicationUser user = applicationUserRepository
