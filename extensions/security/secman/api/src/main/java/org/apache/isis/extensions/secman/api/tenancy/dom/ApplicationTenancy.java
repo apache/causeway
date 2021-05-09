@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.api.tenancy.dom;
 
+import java.util.Collection;
+
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 /**
@@ -32,6 +34,7 @@ public interface ApplicationTenancy {
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
     String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
+
 
     // -- DOMAIN EVENTS
 
@@ -59,6 +62,9 @@ public interface ApplicationTenancy {
     public void setName(String name);
 
     public ApplicationTenancy getParent();
+    void setParent(ApplicationTenancy parent);
+
+    Collection<ApplicationTenancy> getChildren();
 
 
 }

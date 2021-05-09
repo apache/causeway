@@ -61,17 +61,17 @@ import lombok.Setter;
 })
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name = "findByPath", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
                     + "WHERE path == :path"),
     @javax.jdo.annotations.Query(
-            name = "findByName", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
                     + "WHERE name == :name"),
     @javax.jdo.annotations.Query(
-            name = "findByNameOrPathMatching", language = "JDOQL",
+            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
                     + "WHERE name.matches(:regex) || path.matches(:regex) ")})

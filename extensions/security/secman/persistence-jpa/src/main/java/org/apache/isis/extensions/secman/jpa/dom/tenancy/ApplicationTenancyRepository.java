@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import lombok.NonNull;
 import lombok.val;
 
-@Service
+@Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
 implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository<ApplicationTenancy> {
@@ -133,7 +133,10 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
             tenancy = newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
-            tenancy.setParent((ApplicationTenancy) parent);
+            tenancy.setParent(parent);
+            if(parent != null) {
+                parent.getChildren().add(tenancy);
+            }
             repository.persist(tenancy);
         }
         return tenancy;
@@ -178,20 +181,20 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
 
     @Override
     public void setParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericParent) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        val parent = _Casts.<ApplicationTenancy>uncheckedCast(genericParent);
-        // no need to add to children set, since will be done by JDO/DN.
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
         tenancy.setParent(parent);
+        parent.getChildren().add(tenancy);
     }
 
     @Override
     public void clearParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        // no need to remove from children set, since will be done by JDO/DN.
-        tenancy.setParent(null);
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy) {
+        val parent = tenancy.getParent();
+        if(parent != null) {
+            parent.getChildren().add(tenancy);
+            tenancy.setParent(null);
+        }
     }
 
     @Override

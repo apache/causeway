@@ -68,7 +68,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
         if (search == null) {
             return Collections.emptySortedSet();
         }
-        return repository.allMatches(Query.named(ApplicationTenancy.class, "findByNameOrPathMatching")
+        return repository.allMatches(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING)
                 .withParameter("regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -86,7 +86,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
     }
 
     public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByName")
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME)
                 .withParameter("name", name)).orElse(null);
     }
 
@@ -106,7 +106,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
         if (path == null) {
             return null;
         }
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByPath")
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH)
                 .withParameter("path", path))
                 .orElse(null);
     }
@@ -133,12 +133,9 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
             tenancy = newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
-            final ApplicationTenancy parentJdo = (ApplicationTenancy) parent;
-            tenancy.setParent(parentJdo);
-            if(parentJdo != null) {
-                // although explicit maintenance of the children is normally not needed,
-                // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
-                parentJdo.getChildren().add(tenancy);
+            tenancy.setParent(parent);
+            if(parent != null) {
+                parent.getChildren().add(tenancy);
             }
             repository.persist(tenancy);
         }
@@ -184,23 +181,16 @@ implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyR
 
     @Override
     public void setParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy,
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericParent) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        val parent = _Casts.<ApplicationTenancy>uncheckedCast(genericParent);
-        // although explicit maintenance of the children is normally not needed,
-        // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
         tenancy.setParent(parent);
         parent.getChildren().add(tenancy);
     }
 
     @Override
     public void clearParentOnTenancy(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy genericTenancy) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        // although explicit maintenance of the children is normally not needed,
-        // DN 5.x by default logs a warning if it discovers a mismatch; this quietens that
-        final ApplicationTenancy parent = tenancy.getParent();
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy tenancy) {
+        val parent = tenancy.getParent();
         if(parent != null) {
             parent.getChildren().add(tenancy);
             tenancy.setParent(null);
