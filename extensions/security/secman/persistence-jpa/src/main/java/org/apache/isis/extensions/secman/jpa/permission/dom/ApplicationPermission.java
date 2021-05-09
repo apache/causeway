@@ -32,6 +32,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -134,6 +135,7 @@ implements
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
 
+    @ManyToOne
     @JoinColumn(name="roleId", nullable=false)
     @Property(
             domainEvent = RoleDomainEvent.class,

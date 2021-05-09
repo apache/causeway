@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.feature.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -29,6 +33,8 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -173,35 +179,70 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return getFeatureId().getSort();
     }
 
-    // -- packageName
-    public static class NamespaceNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
-
     @Property(
-            domainEvent = NamespaceNameDomainEvent.class
-            )
+            domainEvent = NamespaceName.DomainEvent.class,
+            maxLength = NamespaceName.MAX_LENGTH
+    )
     @PropertyLayout(
-            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE,
-            fieldSetId="Id",
-            sequence = "2.2")
+            fieldSetId ="identity",
+            sequence = "2.2",
+            typicalLength = NamespaceName.TYPICAL_LENGTH
+    )
+    @Parameter(
+            maxLength = NamespaceName.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Namespace Name",
+            typicalLength = NamespaceName.TYPICAL_LENGTH
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface NamespaceName {
+        int MAX_LENGTH = 50;
+        int TYPICAL_LENGTH = 50;
+
+        class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    }
+
+    @NamespaceName
     public String getNamespaceName() {
         return getFeatureId().getNamespace();
     }
 
     // -- className
 
-    public static class TypeSimpleNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
-
     /**
      * For packages, will be null. Is in this class (rather than subclasses) so is shown in
      * {@link ApplicationNamespace#getContents() package contents}.
      */
+
     @Property(
-            domainEvent = TypeSimpleNameDomainEvent.class
-            )
+            domainEvent = TypeSimpleName.DomainEvent.class,
+            maxLength = TypeSimpleName.MAX_LENGTH
+    )
     @PropertyLayout(
-            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME,
-            fieldSetId="Id",
-            sequence = "2.3")
+            typicalLength = TypeSimpleName.TYPICAL_LENGTH,
+            fieldSetId="identity",
+            sequence = "2.3"
+    )
+    @Parameter(
+            maxLength = TypeSimpleName.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Type Simple Name",
+            typicalLength = TypeSimpleName.TYPICAL_LENGTH
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TypeSimpleName {
+
+        int MAX_LENGTH = 50;
+        int TYPICAL_LENGTH = 50;
+
+        class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    }
+
+    @TypeSimpleName
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
@@ -209,20 +250,40 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return getSort().isNamespace();
     }
 
+
     // -- memberName
 
-    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    @Property(
+            domainEvent = MemberName.DomainEvent.class,
+            maxLength = MemberName.MAX_LENGTH
+    )
+    @PropertyLayout(
+            typicalLength= MemberName.TYPICAL_LENGTH,
+            fieldSetId="identity",
+            sequence = "2.4"
+    )
+    @Parameter(
+            maxLength = MemberName.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Member Name",
+            typicalLength = MemberName.TYPICAL_LENGTH
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MemberName {
+
+        int MAX_LENGTH = 50;
+        int TYPICAL_LENGTH = 50;
+
+        class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    }
+
 
     /**
      * For packages and class names, will be null.
      */
-    @Property(
-            domainEvent = MemberNameDomainEvent.class
-            )
-    @PropertyLayout(
-            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME,
-            fieldSetId="Id",
-            sequence = "2.4")
+    @MemberName
     public String getMemberName() {
         return getFeatureId().getMemberName();
     }
@@ -232,18 +293,28 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
 
+
     // -- parent (property)
 
-    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {}
-
     @Property(
-            domainEvent = ParentDomainEvent.class
-            )
+            domainEvent = Parent.DomainEvent.class
+    )
     @PropertyLayout(
-            navigable = Navigable.PARENT,
+            fieldSetId = "parent",
             hidden = Where.ALL_TABLES,
-            fieldSetId = "Parent",
-            sequence = "2.6")
+            navigable = Navigable.PARENT,
+            sequence = "2.6"
+    )
+    @ParameterLayout(
+            named = "Parent"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Parent {
+        class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {}
+    }
+
+    @Parent
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
         parentId = getSort() == ApplicationFeatureSort.MEMBER
@@ -263,15 +334,22 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 
     // -- permissions (collection)
-    public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
 
     @Collection(
-            domainEvent = PermissionsDomainEvent.class
-            )
+            domainEvent = Permissions.DomainEvent.class
+    )
     @CollectionLayout(
-            defaultView="table",
+            defaultView = "table",
             sequence = "10"
-            )
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Permissions {
+
+        class DomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
+    }
+
+    @Permissions
     public java.util.Collection<? extends ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByFeatureCached(getFeatureId());
     }
@@ -288,8 +366,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         .newViewModel(getFeatureId().getParentNamespaceFeatureId(), featureRepository, factory);
     }
 
-    // -- equals, hashCode, toString
 
+    // -- equals, hashCode, toString
 
     private static final Equality<ApplicationFeatureViewModel> equality =
             ObjectContracts.checkEquals(ApplicationFeatureViewModel::getFeatureId);
@@ -316,12 +394,13 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return toString.toString(this);
     }
 
+
     // -- FACTORY
 
     public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> factory(
             final @NonNull ApplicationFeatureRepository featureRepository,
             final @NonNull FactoryService factory,
-            final @NonNull Class<T> viewmodelType) {
+            final @NonNull Class<T> viewModelType) {
 
         return featureId -> _Casts.<T>uncheckedCast(ApplicationFeatureViewModel
                 .newViewModel(featureId, featureRepository, factory));
@@ -331,16 +410,16 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     protected <T extends ApplicationFeatureViewModel> List<T> asViewModels(
             final java.util.Collection<ApplicationFeatureId> featureIds,
-            final Class<T> viewmodelType) {
+            final Class<T> viewModelType) {
         return featureIds.stream()
-                .map(factory(featureRepository, factory, viewmodelType))
+                .map(factory(featureRepository, factory, viewModelType))
                 .collect(_Lists.toUnmodifiable());
     }
 
     protected <T extends ApplicationFeatureViewModel> T asViewModel(
             final ApplicationFeatureId featureId,
-            final Class<T> viewmodelType) {
-        return factory(featureRepository, factory, viewmodelType).apply(featureId);
+            final Class<T> viewModelType) {
+        return factory(featureRepository, factory, viewModelType).apply(featureId);
     }
 
 }

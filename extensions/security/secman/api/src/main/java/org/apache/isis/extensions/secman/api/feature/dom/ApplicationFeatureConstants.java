@@ -20,9 +20,4 @@ package org.apache.isis.extensions.secman.api.feature.dom;
 
 public class ApplicationFeatureConstants {
 
-    // using same value for all to neaten up rendering
-    public static final int TYPICAL_LENGTH_NAMESPACE = 50;
-    public static final int TYPICAL_LENGTH_TYPE_SIMPLE_NAME = 50;
-    public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
-
 }
