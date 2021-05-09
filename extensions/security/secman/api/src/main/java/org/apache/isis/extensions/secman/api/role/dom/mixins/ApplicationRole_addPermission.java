@@ -52,8 +52,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
 
-    @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private ApplicationFeatureChoices applicationFeatureChoices;
 
     private final ApplicationRole target;

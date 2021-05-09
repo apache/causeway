@@ -65,7 +65,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
     // -- constructors
     public static ApplicationFeatureViewModel newViewModel(

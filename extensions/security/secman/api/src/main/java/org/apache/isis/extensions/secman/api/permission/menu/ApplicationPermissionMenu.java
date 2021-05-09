@@ -50,7 +50,7 @@ public class ApplicationPermissionMenu {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermissionMenu> {}
 
-    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private FactoryService factoryService;
 
     // -- iconName

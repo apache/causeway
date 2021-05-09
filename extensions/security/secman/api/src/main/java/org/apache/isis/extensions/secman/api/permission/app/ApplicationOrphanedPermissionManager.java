@@ -33,7 +33,7 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
         )
 public class ApplicationOrphanedPermissionManager {
 
-    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
     public String title() {
         return "Manage Orphaned Permissions";

@@ -92,7 +92,7 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     ApplicationPermissionValueSet getPermissionSet();
 
-    Set<? extends ApplicationRole> getRoles();
+    Set<ApplicationRole> getRoles();
 
     ApplicationUserStatus getStatus();
     void setStatus(ApplicationUserStatus disabled);

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jdo.dom.role.api;
+package org.apache.isis.extensions.secman.api.role.dom;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,8 +36,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_delete;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 
 import lombok.val;
 
@@ -60,7 +58,7 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleReposit
 
     @Override
     public org.apache.isis.extensions.secman.api.role.dom.ApplicationRole newApplicationRole() {
-        return factoryService.detachedEntity(new ApplicationRole());
+        return factoryService.detachedEntity(applicationRoleClass);
     }
 
     @Override
@@ -131,11 +129,9 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleReposit
 
     @Override
     public void addRoleToUser(
-            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole,
-            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
+            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole role,
+            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         user.getRoles().add(role);
         role.getUsers().add(user);
 
@@ -144,11 +140,9 @@ implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleReposit
 
     @Override
     public void removeRoleFromUser(
-            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole genericRole,
-            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser genericUser) {
+            org.apache.isis.extensions.secman.api.role.dom.ApplicationRole role,
+            org.apache.isis.extensions.secman.api.user.dom.ApplicationUser user) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         user.getRoles().remove(role);
         role.getUsers().remove(user);
 

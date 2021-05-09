@@ -80,7 +80,7 @@ public class UserPermissionViewModel implements ViewModel {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
     // -- constructors, factory methods
     public static UserPermissionViewModel newViewModel(
