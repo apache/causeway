@@ -33,11 +33,13 @@ import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_delete {
 
-    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_delete> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_delete> {}
 
     @Inject private RepositoryService repository;
 

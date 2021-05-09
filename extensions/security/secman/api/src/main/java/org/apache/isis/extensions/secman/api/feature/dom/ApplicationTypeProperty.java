@@ -35,16 +35,8 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeProperty, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationTypeMember.CollectionDomainEvent<ApplicationTypeProperty, T> {}
-
-    public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeProperty> {}
-
-
-
     // -- constructors
-    public ApplicationTypeProperty() {
-    }
-
+    public ApplicationTypeProperty() { }
     public ApplicationTypeProperty(final ApplicationFeatureId featureId) {
         super(featureId);
     }
@@ -66,7 +58,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
 
 
     // -- derived
-
     public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
@@ -100,7 +91,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         }
         return !String.class.getSimpleName().equals(getReturnType());
     }
-
 
 
 

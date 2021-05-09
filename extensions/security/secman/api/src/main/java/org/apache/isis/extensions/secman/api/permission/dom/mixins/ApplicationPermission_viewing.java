@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_viewing.DomainEvent;
@@ -27,16 +28,18 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "mode",
         domainEvent = DomainEvent.class,
-        associateWith = "mode")
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_viewing {
 
-    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_viewing> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_viewing> {}
 
     private final ApplicationPermission target;
 
-    //@PropertyLayout(group = "Mode", sequence = "1")
     public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.VIEWING);
         return target;

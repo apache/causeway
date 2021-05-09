@@ -29,13 +29,13 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.AddPermissionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_addPermission.DomainEvent;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
 
 import lombok.RequiredArgsConstructor;
@@ -43,14 +43,19 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action(
-        domainEvent = AddPermissionDomainEvent.class,
-        associateWith = "permissions")
+        domainEvent = DomainEvent.class,
+        associateWith = "permissions"
+)
 @ActionLayout(
 		named="Add",
-		sequence = "0",
-		promptStyle = PromptStyle.DIALOG_MODAL)
+		promptStyle = PromptStyle.DIALOG_MODAL,
+		sequence = "0"
+)
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_addPermission> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private ApplicationFeatureChoices applicationFeatureChoices;

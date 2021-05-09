@@ -45,7 +45,9 @@ import lombok.val;
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
-@ActionLayout(describedAs = "for the selected permissions renames the namespace")
+@ActionLayout(
+        describedAs = "For the selected permissions, relocates to the specified namespace"
+)
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
@@ -58,7 +60,6 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
 
     public ApplicationOrphanedPermissionManager act(
             final Collection<ApplicationPermission> permissions,
-
             @Parameter(optionality = Optionality.MANDATORY)
             final String targetNamespace) {
 

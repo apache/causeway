@@ -26,18 +26,22 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_delete.DomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DeleteDomainEvent.class,
+        domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_delete> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

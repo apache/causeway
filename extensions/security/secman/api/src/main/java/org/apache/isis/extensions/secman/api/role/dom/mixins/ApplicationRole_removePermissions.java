@@ -30,16 +30,17 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.RemovePermissionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removePermissions.DomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = RemovePermissionDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "permissions")
 @ActionLayout(
 		named="Remove",
@@ -47,6 +48,9 @@ import lombok.RequiredArgsConstructor;
 		promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_removePermissions> {}
 
     @Inject private MessageService messageService;
     @Inject private SecmanConfiguration configBean;

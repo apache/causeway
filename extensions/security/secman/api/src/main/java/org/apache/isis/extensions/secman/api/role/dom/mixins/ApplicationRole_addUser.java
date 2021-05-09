@@ -27,8 +27,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.AddUserDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_addUser.DomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
@@ -36,11 +37,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "users")
 @ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_addUser {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_addUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
@@ -60,4 +64,5 @@ public class ApplicationRole_addUser {
         list.removeAll(applicationUserRepository.findByRole(target));
         return list;
     }
+
 }

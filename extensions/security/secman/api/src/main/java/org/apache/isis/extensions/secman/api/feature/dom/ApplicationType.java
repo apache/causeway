@@ -37,14 +37,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
         )
 public class ApplicationType extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<T>
-    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationType, T> {}
-
     public static abstract class CollectionDomainEvent<T>
-    extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
-
-    public static abstract class ActionDomainEvent
-    extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationType> {}
+            extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
 
 
@@ -62,8 +56,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
 
     // -- actions (collection)
 
-    public static class ActionsDomainEvent
-    extends CollectionDomainEvent<ApplicationTypeAction> {}
+    public static class ActionsDomainEvent extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(
             domainEvent = ActionsDomainEvent.class

@@ -38,10 +38,6 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
 
     public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
 
-    public static abstract class CollectionDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.CollectionDomainEvent<S, T> {}
-
-    public static abstract class ActionDomainEvent<S extends ApplicationTypeMember> extends ApplicationFeatureViewModel.ActionDomainEvent<S> {}
-
 
     // -- constructors
     public ApplicationTypeMember(final ApplicationFeatureId featureId) {
@@ -61,8 +57,6 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
     public String getMemberName() {
         return super.getMemberName();
     }
-
-
 
 
 }

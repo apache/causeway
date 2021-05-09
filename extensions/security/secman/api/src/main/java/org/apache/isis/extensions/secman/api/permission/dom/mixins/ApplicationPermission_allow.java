@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow.DomainEvent;
@@ -26,15 +27,19 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = DomainEvent.class, associateWith = "rule")
+@Action(
+        associateWith = "rule",
+        domainEvent = DomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_allow {
 
-    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_allow> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_allow> {}
 
     private final ApplicationPermission target;
 
-    //@PropertyLayout(group = "Rule", sequence = "1")
     public ApplicationPermission act() {
         target.setRule(ApplicationPermissionRule.ALLOW);
         return target;

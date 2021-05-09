@@ -32,14 +32,8 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeCollection, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationTypeMember.CollectionDomainEvent<ApplicationTypeCollection, T> {}
-
-    public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeCollection> {}
-
     // -- constructors
-
     public ApplicationTypeCollection() {}
-
     public ApplicationTypeCollection(final ApplicationFeatureId featureId) {
         super(featureId);
     }
@@ -50,13 +44,14 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
 
     @Property(
             domainEvent = ElementTypeDomainEvent.class
-            )
+    )
     @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
     public String getElementType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
                 .orElse("<none>");
     }
+
 
     // -- derived
 

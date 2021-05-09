@@ -43,17 +43,6 @@ public interface ApplicationRole {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRole, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole> {}
 
-    public static class AddUserDomainEvent extends ActionDomainEvent {}
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-
-    public static class AddPermissionDomainEvent extends ActionDomainEvent {}
-    public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
-
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-
-    public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {}
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
-
     // -- MODEL
 
     /**

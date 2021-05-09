@@ -25,17 +25,21 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.types.DescriptionType;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.UpdateDescriptionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateDescription.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = UpdateDescriptionDomainEvent.class,
+        domainEvent = DomainEvent.class,
         associateWith = "description")
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_updateDescription {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_updateDescription> {}
 
     private final ApplicationRole target;
 

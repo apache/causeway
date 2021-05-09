@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_changing.DomainEvent;
@@ -26,15 +27,19 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = DomainEvent.class, associateWith = "mode")
+@Action(
+        associateWith = "mode",
+        domainEvent = DomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_changing {
 
-    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_changing> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_changing> {}
 
     private final ApplicationPermission target;
 
-    //@PropertyLayout(group = "Mode", sequence = "2")
     public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.CHANGING);
         return target;

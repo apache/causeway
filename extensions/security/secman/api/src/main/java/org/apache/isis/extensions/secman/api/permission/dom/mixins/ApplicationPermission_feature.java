@@ -35,16 +35,16 @@ import lombok.RequiredArgsConstructor;
 
 @Property(
         domainEvent = ApplicationPermission_feature.PropertyDomainEvent.class
-        )
+)
 @PropertyLayout(
-        hidden=Where.REFERENCES_PARENT,
-        fieldSetId="Feature", sequence = "4"
-        )
+        fieldSetId="feature", sequence = "4",
+        hidden=Where.REFERENCES_PARENT
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_feature {
 
     public static class PropertyDomainEvent
-    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
+            extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
     final ApplicationPermission target;
 

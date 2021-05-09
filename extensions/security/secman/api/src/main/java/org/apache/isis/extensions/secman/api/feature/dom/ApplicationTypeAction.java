@@ -33,15 +33,8 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationTypeMember.CollectionDomainEvent<ApplicationTypeAction, T> {}
-
-    public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeAction> {}
-
     // -- constructors
-
-    public ApplicationTypeAction() {
-    }
-
+    public ApplicationTypeAction() { }
     public ApplicationTypeAction(final ApplicationFeatureId featureId) {
         super(featureId);
     }
@@ -61,6 +54,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
                 .orElse("<none>");
     }
 
+
     // -- actionSemantics (property)
     public static class ActionSemanticsDomainEvent extends PropertyDomainEvent<SemanticsOf> {}
 
@@ -72,6 +66,5 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
         return getFeature().getActionSemantics()
                 .orElse(null);
     }
-
 
 }

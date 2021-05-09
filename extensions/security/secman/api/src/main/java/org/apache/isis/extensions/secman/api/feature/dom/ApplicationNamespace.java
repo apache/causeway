@@ -34,17 +34,11 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationType, T> {}
-
-    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
-
-    public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationType> {}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 
     // -- constructors
 
-    public ApplicationNamespace() {
-    }
-
+    public ApplicationNamespace() { }
     public ApplicationNamespace(final ApplicationFeatureId featureId) {
         super(featureId);
     }
@@ -52,14 +46,15 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
     // -- contents (collection, for packages only)
 
-    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationNamespace> {}
+    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel> {}
 
     @Collection(
             domainEvent = ContentsDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table",
-            sequence = "4")
+            sequence = "4"
+    )
     public List<ApplicationFeatureViewModel> getContents() {
         final SortedSet<ApplicationFeatureId> contents = getFeature().getContents();
         return asViewModels(contents, ApplicationFeatureViewModel.class);

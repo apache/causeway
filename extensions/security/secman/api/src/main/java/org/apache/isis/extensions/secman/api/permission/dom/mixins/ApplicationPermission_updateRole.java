@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_updateRole.DomainEvent;
@@ -33,12 +34,15 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "role",
         domainEvent = DomainEvent.class,
-        associateWith = "role")
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @RequiredArgsConstructor
 public class ApplicationPermission_updateRole {
 
-    public static class DomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_updateRole> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_updateRole> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

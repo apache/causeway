@@ -131,7 +131,8 @@ public interface ApplicationPermission {
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT,
             fieldSetId="Role",
-            sequence = "1")
+            sequence = "1"
+    )
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
