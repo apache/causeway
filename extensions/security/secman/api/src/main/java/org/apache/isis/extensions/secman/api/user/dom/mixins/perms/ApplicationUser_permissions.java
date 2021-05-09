@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -37,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Collection(
-        domainEvent = ApplicationUser_permissions.CollectionDomainEvent.class)
+        domainEvent = ApplicationUser_permissions.DomainEvent.class)
 @CollectionLayout(
         paged=50,
         defaultView = "table"
@@ -45,8 +44,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationUser_permissions {
 
-    public static class CollectionDomainEvent
-    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;
@@ -56,15 +55,11 @@ public class ApplicationUser_permissions {
     @MemberSupport
     public List<UserPermissionViewModel> coll() {
         val allMembers = applicationFeatureRepository.allMembers();
-        return asViewModels(allMembers);
-    }
-
-    List<UserPermissionViewModel> asViewModels(final java.util.Collection<ApplicationFeature> features) {
         return _Lists.map(
-                features,
-                UserPermissionViewModel.asViewModel(target, factory));
+                allMembers,
+                UserPermissionViewModel.asViewModel(target, factory)
+        );
     }
-
 
 
 }

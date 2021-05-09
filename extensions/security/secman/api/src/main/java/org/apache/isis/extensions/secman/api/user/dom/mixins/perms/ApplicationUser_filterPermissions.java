@@ -39,18 +39,25 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
+import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_addRole;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "permissions")
+        associateWith = "permissions",
+        domainEvent = ApplicationUser_filterPermissions.DomainEvent.class,
+        semantics = SemanticsOf.SAFE
+)
 @ActionLayout(sequence = "1", promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
+
+    public static class DomainEvent
+            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_filterPermissions> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;

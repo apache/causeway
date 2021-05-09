@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -39,9 +40,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
+        associateWith = "hasPassword",
         domainEvent = DomainEvent.class,
-        associateWith = "hasPassword")
-@ActionLayout(sequence = "10")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "10"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
 
@@ -55,12 +60,9 @@ public class ApplicationUser_updatePassword {
 
     @MemberSupport
     public ApplicationUser act(
-            @ParameterLayout(named="Existing password")
             final Password existingPassword,
-            @ParameterLayout(named="New password")
             final Password newPassword,
-            @ParameterLayout(named="Re-enter password")
-            final Password newPasswordRepeat) {
+            final Password repeatNewPassword) {
 
         applicationUserRepository.updatePassword(target, newPassword.getPassword());
         return target;
@@ -87,7 +89,7 @@ public class ApplicationUser_updatePassword {
     public String validateAct(
             final Password existingPassword,
             final Password newPassword,
-            final Password newPasswordRepeat) {
+            final Password repeatNewPassword) {
 
         if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
@@ -103,7 +105,7 @@ public class ApplicationUser_updatePassword {
             }
         }
 
-        if (!Objects.equals(newPassword, newPasswordRepeat)) {
+        if (!Objects.equals(newPassword, repeatNewPassword)) {
             return "Passwords do not match";
         }
 

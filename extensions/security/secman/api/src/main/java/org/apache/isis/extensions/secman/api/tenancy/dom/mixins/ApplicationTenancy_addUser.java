@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
@@ -37,9 +38,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "users",
         domainEvent = DomainEvent.class,
-        associateWith = "users")
-@ActionLayout(named="Add", sequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        named="Add",
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationTenancy_addUser {
 

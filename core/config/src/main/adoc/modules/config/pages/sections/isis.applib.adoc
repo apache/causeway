@@ -116,7 +116,7 @@ isis.applib.annotation.collection. +
 domain-event.post-for-default
 
 |  true
-| Influences whether an ``CollectionDomainEvent`` should be published (on the internal ``EventBusService``) whenever a collection is being interacted with.
+| Influences whether an ``DomainEvent`` should be published (on the internal ``EventBusService``) whenever a collection is being interacted with.
 
 Up to two different events can be fired during an interaction, with the event's phase determining which (hide, disable)Subscribers can influence the behaviour at each of these phases.
 

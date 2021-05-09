@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_removeUser.DomainEvent;
@@ -35,9 +36,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "users",
         domainEvent = DomainEvent.class,
-        associateWith = "users")
-@ActionLayout(named="Remove", sequence = "2")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        named="Remove",
+        sequence = "2"
+)
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
 

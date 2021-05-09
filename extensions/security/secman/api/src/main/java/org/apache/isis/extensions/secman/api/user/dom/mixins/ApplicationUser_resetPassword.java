@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -35,9 +36,13 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "hasPassword",
         domainEvent = DomainEvent.class,
-        associateWith = "hasPassword")
-@ActionLayout(sequence = "20")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "20"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_resetPassword {
 
@@ -50,10 +55,8 @@ public class ApplicationUser_resetPassword {
 
     @MemberSupport
     public ApplicationUser act(
-            @ParameterLayout(named="New password")
             final Password newPassword,
-            @ParameterLayout(named="Repeat password")
-            final Password newPasswordRepeat) {
+            final Password repeatPassword) {
 
         applicationUserRepository.updatePassword(target, newPassword.getPassword());
         return target;
@@ -67,13 +70,13 @@ public class ApplicationUser_resetPassword {
     @MemberSupport
     public String validateAct(
             final Password newPassword,
-            final Password newPasswordRepeat) {
+            final Password repeatPassword) {
 
         if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
 
-        if (!Objects.equals(newPassword, newPasswordRepeat)) {
+        if (!Objects.equals(newPassword, repeatPassword)) {
             return "Passwords do not match";
         }
 

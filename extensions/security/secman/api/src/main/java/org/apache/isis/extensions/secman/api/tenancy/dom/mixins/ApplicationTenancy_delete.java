@@ -38,10 +38,13 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Action(domainEvent =
-        DomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
-@ActionLayout(sequence = "1")
+@Action(
+        domainEvent = DomainEvent.class,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
+@ActionLayout(
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationTenancy_delete {
 

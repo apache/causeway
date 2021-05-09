@@ -36,8 +36,11 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = DomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
-@ActionLayout(sequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
+@ActionLayout(
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
 
@@ -50,7 +53,7 @@ public class ApplicationUser_delete {
     private final ApplicationUser target;
 
     @MemberSupport
-    public Collection<? extends ApplicationUser> act() {
+    public Collection<ApplicationUser> act() {
         repository.removeAndFlush(target);
         return applicationUserRepository.allUsers();
     }

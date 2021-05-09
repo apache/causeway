@@ -35,7 +35,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = DomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
 @ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_delete {

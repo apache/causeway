@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -32,9 +33,13 @@ import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "description",
         domainEvent = DomainEvent.class,
-        associateWith = "description")
-@ActionLayout(sequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationRole_updateDescription {
 

@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateUsername.DomainEvent;
@@ -30,9 +31,13 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "username",
         domainEvent = DomainEvent.class,
-        associateWith = "username")
-@ActionLayout(sequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_updateUsername {
 
@@ -44,7 +49,6 @@ public class ApplicationUser_updateUsername {
     @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
-            @ParameterLayout(named="Username")
             final String username) {
         target.setUsername(username);
         return target;

@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateFaxNumber.DomainEvent;
@@ -31,9 +32,13 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "faxNumber",
         domainEvent = DomainEvent.class,
-        associateWith = "faxNumber")
-@ActionLayout(sequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_updateFaxNumber {
 
@@ -44,10 +49,12 @@ public class ApplicationUser_updateFaxNumber {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Fax")
-            final String faxNumber) {
-        holder.setFaxNumber(faxNumber);
+            @Parameter(
+                    maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER,
+                    optionality = Optionality.OPTIONAL
+            )
+            final String fax) {
+        holder.setFaxNumber(fax);
         return holder;
     }
 

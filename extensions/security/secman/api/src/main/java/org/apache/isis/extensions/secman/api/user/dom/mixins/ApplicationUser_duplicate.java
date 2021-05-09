@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
@@ -35,7 +36,8 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DomainEvent.class
+        domainEvent = DomainEvent.class,
+        semantics = SemanticsOf.NON_IDEMPOTENT
         )
 @RequiredArgsConstructor
 public class ApplicationUser_duplicate {

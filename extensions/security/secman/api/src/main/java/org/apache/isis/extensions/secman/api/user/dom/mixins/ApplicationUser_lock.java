@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -33,9 +34,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "status",
         domainEvent = DomainEvent.class,
-        associateWith = "status")
-@ActionLayout(named="Disable", sequence = "2")
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        named="Disable",
+        sequence = "2"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
 

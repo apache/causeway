@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -40,12 +41,15 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "permissions",
         domainEvent = DomainEvent.class,
-        associateWith = "permissions")
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @ActionLayout(
 		named="Remove",
 		sequence = "10",
-		promptStyle = PromptStyle.DIALOG_MODAL)
+		promptStyle = PromptStyle.DIALOG_MODAL
+)
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {
 

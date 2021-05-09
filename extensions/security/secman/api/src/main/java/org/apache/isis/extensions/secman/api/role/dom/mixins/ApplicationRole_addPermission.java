@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
@@ -43,8 +44,9 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action(
+        associateWith = "permissions",
         domainEvent = DomainEvent.class,
-        associateWith = "permissions"
+        semantics = SemanticsOf.NON_IDEMPOTENT
 )
 @ActionLayout(
 		named="Add",

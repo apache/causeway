@@ -30,10 +30,10 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Collection(
-        domainEvent = ApplicationTenancy_users.UsersDomainEvent.class)
+        domainEvent = ApplicationTenancy_users.DomainEvent.class)
 @CollectionLayout(
         defaultView="table"
-        )
+)
 @RequiredArgsConstructor
 public class ApplicationTenancy_users {
 
@@ -41,11 +41,11 @@ public class ApplicationTenancy_users {
 
     private final ApplicationTenancy target;
 
-    // -- users (collection)
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+    public static class DomainEvent
+            extends CollectionDomainEvent<ApplicationUser> {}
 
-    public java.util.Collection<? extends ApplicationUser> coll() {
+    public java.util.Collection<ApplicationUser> coll() {
         return applicationUserRepository.findByAtPath(target.getPath());
     }
 
