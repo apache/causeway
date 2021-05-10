@@ -19,13 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.all.hide;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+
+import lombok.NonNull;
 
 /**
  * Hide a property, collection or action.
  */
 public interface HiddenFacet extends WhereValueFacet, HidingInteractionAdvisor {
 
+    // -- UTILS
+
+    static boolean isAlwaysHidden(final @NonNull FacetHolder facetHolder) {
+        return hiddenWhere(facetHolder)
+                .map(Where.ANYWHERE::equals)
+                .orElse(false);
+    }
+
+    static Optional<Where> hiddenWhere(final @NonNull FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(HiddenFacet.class)
+                .map(HiddenFacet::where);
+    }
 
 }

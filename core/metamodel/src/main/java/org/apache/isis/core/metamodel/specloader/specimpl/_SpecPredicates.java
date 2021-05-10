@@ -18,24 +18,18 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
+import lombok.NonNull;
 
 /** package private utility */
 final class _SpecPredicates {
-    
+
     // -- LOWER LEVEL
-    
-    static boolean isRequiredType(final ObjectAction objectAction) {
-        return objectAction instanceof ObjectActionDefault;
-    }
-    
-    static boolean isGetterCandidate(final ObjectAction action) {
+
+    static boolean isGetterCandidate(final @NonNull ObjectAction action) {
         if(action.getParameterCount() != 0) {
             return false;
         }
@@ -44,19 +38,11 @@ final class _SpecPredicates {
         }
         return true;
     }
-    
-    static boolean isAlwaysHidden(final FacetHolder holder) {
-        val hiddenFacet = holder.getFacet(HiddenFacet.class);
-        return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
-    }
-    
+
     // -- HIGHER LEVEL - MIXINS
-    
-    static boolean isMixedInAction(ObjectAction mixinTypeAction) {
-        if(!isRequiredType(mixinTypeAction)) {
-            return false;
-        }
-        if(isAlwaysHidden(mixinTypeAction)) {
+
+    static boolean isMixedInAction(final @NonNull ObjectAction mixinTypeAction) {
+        if(HiddenFacet.isAlwaysHidden(mixinTypeAction)) {
             return false;
         }
         if(ContributingFacet.isActionContributionVetoed(mixinTypeAction)) {
@@ -64,27 +50,23 @@ final class _SpecPredicates {
         }
         return true;
     }
-    
-    static boolean isMixedInAssociation(ObjectAction mixinAction) {
-        if(!isRequiredType(mixinAction)) {
-            return false;
-        }
-        if(isAlwaysHidden(mixinAction)) {
-            return false;
-        }
-        if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {
-            return false;
-        }
+
+    static boolean isMixedInAssociation(final @NonNull ObjectAction mixinAction) {
         if(!isGetterCandidate(mixinAction)) {
             return false;
         }
         if(!mixinAction.getSemantics().isSafeInNature()) {
             return false;
         }
+        if(HiddenFacet.isAlwaysHidden(mixinAction)) {
+            return false;
+        }
+        if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {
+            return false;
+        }
         return true;
-        
     }
-    
-    
+
+
 
 }
