@@ -22,6 +22,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -73,7 +75,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @DomainObject(objectType = "isis.ext.secman.IApplicationPermission")
-public interface ApplicationPermission {
+public interface ApplicationPermission extends Comparable<ApplicationPermission> {
 
     String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
     String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
@@ -297,4 +299,10 @@ public interface ApplicationPermission {
                 };
     }
 
+    class DefaultComparator implements Comparator<ApplicationPermission> {
+        @Override
+        public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
+            return Objects.compare(o1, o2, Comparator.naturalOrder());
+        }
+    }
 }

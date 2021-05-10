@@ -35,7 +35,8 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.HasAtPath;
 /**
  * @since 2.0 {@index}
  */
-public interface ApplicationUser extends HasUsername, HasAtPath {
+public interface ApplicationUser
+        extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
     // -- CONSTANTS
 

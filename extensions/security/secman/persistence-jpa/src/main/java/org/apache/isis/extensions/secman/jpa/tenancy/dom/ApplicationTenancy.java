@@ -64,19 +64,19 @@ import lombok.Setter;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
-                  + "WHERE t.path = :path"),
+                  + "  FROM ApplicationTenancy t "
+                  + " WHERE t.path = :path"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
-                  + "WHERE t.name = :name"),
+                  + "  FROM ApplicationTenancy t "
+                  + " WHERE t.name = :name"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
-                  + "FROM org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy t "
-                  + "WHERE t.name LIKE :regex "
-                  + "   OR t.path LIKE :regex"),
+                  + "  FROM ApplicationTenancy t "
+                  + " WHERE t.name LIKE :regex "
+                  + "    OR t.path LIKE :regex"),
 })
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationTenancy",
@@ -86,8 +86,8 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
-        org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
+public class ApplicationTenancy
+    implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
     // -- NAME
 
@@ -183,6 +183,11 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     private static final Comparator<ApplicationTenancy> comparator =
             Comparator.comparing(ApplicationTenancy::getPath);
 
+    @Override
+    public int compareTo(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy other) {
+        return comparator.compare(this, (ApplicationTenancy)other);
+    }
+
 
     @Override
     public boolean equals(final Object other) {
@@ -197,11 +202,6 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
     @Override
     public String toString() {
         return toString.toString(this);
-    }
-
-    @Override
-    public int compareTo(final ApplicationTenancy o) {
-        return comparator.compare(this, o);
     }
 
 }

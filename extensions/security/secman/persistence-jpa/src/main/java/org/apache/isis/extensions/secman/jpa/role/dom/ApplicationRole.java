@@ -57,6 +57,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 import lombok.Getter;
 import lombok.Setter;
 
+@SuppressWarnings("JpaQlInspection")
 @Entity
 @Table(
         schema = "isisExtensionsSecman",
@@ -90,9 +91,7 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-implements
-        org.apache.isis.extensions.secman.api.role.dom.ApplicationRole,
-    Comparable<ApplicationRole> {
+    implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
 
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
 
@@ -165,8 +164,8 @@ implements
 
 
     @Override
-    public int compareTo(final ApplicationRole o) {
-        return comparator.compare(this, o);
+    public int compareTo(final org.apache.isis.extensions.secman.api.role.dom.ApplicationRole other) {
+        return comparator.compare(this, (ApplicationRole)other);
     }
 
     @Override

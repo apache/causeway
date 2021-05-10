@@ -116,8 +116,7 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_CHILD
 )
 public class ApplicationPermission
-implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission,
-    Comparable<ApplicationPermission> {
+    implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
 
     @Inject private ApplicationFeatureRepository featureRepository;
 
@@ -207,8 +206,8 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
             .thenUse("mode", ApplicationPermission::getMode);
 
     @Override
-    public int compareTo(final ApplicationPermission other) {
-        return contract.compare(this, other);
+    public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
+        return contract.compare(this, (ApplicationPermission) other);
     }
 
     @Override
@@ -224,16 +223,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     @Override
     public String toString() {
         return contract.toString(this);
-    }
-
-
-    // --
-
-    public static class DefaultComparator implements Comparator<ApplicationPermission> {
-        @Override
-        public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
-            return Objects.compare(o1, o2, Comparator.naturalOrder());
-        }
     }
 
 }

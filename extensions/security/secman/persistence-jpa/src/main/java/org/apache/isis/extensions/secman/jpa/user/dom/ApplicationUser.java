@@ -86,27 +86,27 @@ import lombok.val;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
-                  + "WHERE u.username = :username"),
+                  + "  FROM ApplicationUser u "
+                  + " WHERE u.username = :username"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
-                  + "WHERE u.emailAddress = :emailAddress"),
+                  + "  FROM ApplicationUser u "
+                  + " WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
-                  + "WHERE u.atPath = :atPath"),
+                  + "  FROM ApplicationUser u "
+                  + " WHERE u.atPath = :atPath"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             query = "SELECT u "
-                  + "FROM org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser u "
-                  + "WHERE u.username LIKE :regex"
-                  + "  OR u.familyName LIKE :regex"
-                  + "  OR u.givenName LIKE :regex"
-                  + "  OR u.knownAs LIKE :regex"
-                  + "  OR u.emailAddress LIKE :regex")
+                  + "  FROM ApplicationUser u "
+                  + " WHERE u.username LIKE :regex"
+                  + "    OR u.familyName LIKE :regex"
+                  + "    OR u.givenName LIKE :regex"
+                  + "    OR u.knownAs LIKE :regex"
+                  + "    OR u.emailAddress LIKE :regex")
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
@@ -117,8 +117,8 @@ import lombok.val;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationUser implements Comparable<ApplicationUser>,
-        org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+public class ApplicationUser
+    implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
@@ -443,8 +443,9 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
 
     @Override
-    public int compareTo(final ApplicationUser o) {
-        return contract.compare(this, o);
+    public int compareTo(final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser other) {
+
+        return contract.compare(this, (ApplicationUser)other);
     }
 
     @Override

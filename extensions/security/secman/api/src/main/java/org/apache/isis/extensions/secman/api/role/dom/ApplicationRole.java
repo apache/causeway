@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
-public interface ApplicationRole {
+public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
     String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";

@@ -18,10 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jpa.permission.dom;
 
-import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.inject.Inject;
 import javax.persistence.Column;
@@ -41,29 +38,21 @@ import javax.persistence.UniqueConstraint;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValue;
-import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.UtilityClass;
 
 @Entity
 @Table(
@@ -78,35 +67,35 @@ import lombok.experimental.UtilityClass;
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             query = "SELECT p "
-                  + "FROM org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission p "
-                  + "WHERE p.role = :role"),
+                  + "  FROM ApplicationPermission p "
+                  + " WHERE p.role = :role"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             //TODO this query returns empty result
             query = "SELECT p "
-                  + "FROM org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission p "
-                  + ", org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "FROM ApplicationPermission p "
+                  + "   , ApplicationUser u "
                   + "WHERE u.username = :username"
-                  + "    AND p.role MEMBER OF u.roles"),
+                  + "  AND p.role MEMBER OF u.roles"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             query = "SELECT p "
-                    + "FROM org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission p "
-                    + "WHERE p.featureSort = :featureSort "
-                    + "   AND p.featureFqn = :featureFqn"),
+                  + "  FROM ApplicationPermission p "
+                  + " WHERE p.featureSort = :featureSort "
+                  + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             query = "SELECT p "
-                  + "FROM org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission p "
-                  + "WHERE p.role = :role "
+                  + "  FROM ApplicationPermission p "
+                  + " WHERE p.role = :role "
                   + "   AND p.rule = :rule "
                   + "   AND p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             query = "SELECT p "
-                  + "FROM org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission p "
-                  + "WHERE p.role = :role "
+                  + "  FROM ApplicationPermission p "
+                  + " WHERE p.role = :role "
                   + "   AND p.rule = :rule "
                   + "   AND p.featureSort = :featureSort "),
 })
@@ -118,8 +107,7 @@ import lombok.experimental.UtilityClass;
         bookmarking = BookmarkPolicy.AS_CHILD
 )
 public class ApplicationPermission
-implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission,
-    Comparable<ApplicationPermission> {
+implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
 
     @Inject private transient ApplicationFeatureRepository featureRepository;
 
@@ -131,36 +119,51 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     // -- ROLE
 
-    @Role
     @ManyToOne
     @JoinColumn(name="roleId", nullable=false)
-    @Getter(onMethod = @__(@Override))
-    private ApplicationRole role;
+    private org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole role;
 
+    @Role
     @Override
-    public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole applicationRole) {
+    public ApplicationRole getRole() {
+        return role;
+    }
+    @Override
+    public void setRole(ApplicationRole applicationRole) {
         role = _Casts.uncheckedCast(applicationRole);
     }
 
 
     // -- RULE
 
-    @Rule
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
+
+    @Rule
+    public ApplicationPermissionRule getRule() {
+        return rule;
+    }
+    public void setRule(ApplicationPermissionRule rule) {
+        this.rule = rule;
+    }
 
 
     // -- MODE
 
-    @Mode
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
+
+    @Mode
+    @Override
+    public ApplicationPermissionMode getMode() {
+        return mode;
+    }
+    @Override
+    public void setMode(ApplicationPermissionMode mode) {
+        this.mode = mode;
+    }
 
 
     // -- SORT
@@ -179,9 +182,17 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Getter(onMethod = @__({@Override,@Programmatic}))
-    @Setter(onMethod = @__(@Override))
     private ApplicationFeatureSort featureSort;
+
+    @Programmatic
+    @Override
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
+    }
+    @Override
+    public void setFeatureSort(ApplicationFeatureSort featureSort) {
+        this.featureSort = featureSort;
+    }
 
     @Programmatic
     private Optional<ApplicationMemberSort> getMemberSort() {
@@ -192,11 +203,18 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     // -- FQN
 
-    @FeatureFqn
     @Column(nullable = false)
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private String featureFqn;
+
+    @FeatureFqn
+    @Override
+    public String getFeatureFqn() {
+        return featureFqn;
+    }
+    @Override
+    public void setFeatureFqn(String featureFqn) {
+        this.featureFqn = featureFqn;
+    }
 
 
     // -- featureId (derived property)
@@ -217,8 +235,8 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
             .thenUse("mode", ApplicationPermission::getMode);
 
     @Override
-    public int compareTo(final ApplicationPermission other) {
-        return contract.compare(this, other);
+    public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
+        return contract.compare(this, (ApplicationPermission)other);
     }
 
     @Override
@@ -234,16 +252,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     @Override
     public String toString() {
         return contract.toString(this);
-    }
-
-
-    // --
-
-    public static class DefaultComparator implements Comparator<ApplicationPermission> {
-        @Override
-        public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
-            return Objects.compare(o1, o2, Comparator.naturalOrder());
-        }
     }
 
 }

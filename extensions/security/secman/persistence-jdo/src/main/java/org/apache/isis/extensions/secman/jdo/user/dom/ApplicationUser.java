@@ -111,8 +111,8 @@ import lombok.val;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationUser implements Comparable<ApplicationUser>,
-        org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+public class ApplicationUser
+    implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
@@ -430,8 +430,8 @@ public class ApplicationUser implements Comparable<ApplicationUser>,
 
 
     @Override
-    public int compareTo(final ApplicationUser o) {
-        return contract.compare(this, o);
+    public int compareTo(final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser other) {
+        return contract.compare(this, (ApplicationUser) other);
     }
 
     @Override
