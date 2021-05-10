@@ -817,7 +817,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        mixinSpec.streamActions(ActionType.ANY, MixedIn.INCLUDED)
+        mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
