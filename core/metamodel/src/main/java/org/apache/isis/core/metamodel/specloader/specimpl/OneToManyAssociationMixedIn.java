@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -139,7 +138,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where() == Where.ANYWHERE) {
+                originalFacet.where().isAlways()) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled

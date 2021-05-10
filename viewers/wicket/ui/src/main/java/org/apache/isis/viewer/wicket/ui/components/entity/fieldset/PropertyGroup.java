@@ -180,9 +180,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
                 .filter(_NullSafe::isPresent)
                 .filter(objectAssociation -> {
                     val hiddenFacet = objectAssociation.getFacet(HiddenFacet.class);
-                    if(hiddenFacet != null && !hiddenFacet.isFallback()) {
+                    if(hiddenFacet != null) {
                         // static invisible.
-                        if(hiddenFacet.where() == Where.EVERYWHERE || hiddenFacet.where() == Where.OBJECT_FORMS) {
+                        if(hiddenFacet.where().isAlways()
+                                || hiddenFacet.where() == Where.OBJECT_FORMS) {
                             return false;
                         }
                     }

@@ -165,11 +165,10 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     @Override
     public boolean isAlwaysHidden() {
-        final HiddenFacet facet = getFacet(HiddenFacet.class);
-        return facet != null &&
-                !facet.isFallback() &&
-                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE)
-                ;
+
+        return HiddenFacet.isAlwaysHidden(getFacetHolder());
+
+
 
     }
 

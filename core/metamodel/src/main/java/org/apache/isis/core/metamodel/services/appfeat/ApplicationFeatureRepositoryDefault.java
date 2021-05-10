@@ -37,7 +37,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -352,10 +351,7 @@ implements ApplicationFeatureRepository {
     }
 
     protected boolean isHidden(final ObjectSpecification spec) {
-        final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
-        return facet != null &&
-                !facet.isFallback() &&
-                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
+        return HiddenFacet.isAlwaysHidden(spec);
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {

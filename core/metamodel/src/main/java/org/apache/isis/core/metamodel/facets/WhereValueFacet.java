@@ -19,11 +19,34 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
 
 public interface WhereValueFacet extends Facet {
 
     public Where where();
+
+    // -- UTILS
+
+    static Optional<Where> where(
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull Class<? extends WhereValueFacet> facetType) {
+        return facetHolder.lookupFacet(facetType)
+                .map(WhereValueFacet::where);
+    }
+
+    // -- PREDICATES
+
+    static boolean isAlways(final @NonNull FacetHolder facetHolder,
+            final @NonNull Class<? extends WhereValueFacet> facetType) {
+        return WhereValueFacet.where(facetHolder, facetType)
+                .map(Where::isAlways)
+                .orElse(false);
+    }
 
 }
