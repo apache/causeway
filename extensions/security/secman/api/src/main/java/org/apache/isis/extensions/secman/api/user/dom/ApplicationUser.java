@@ -22,15 +22,27 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.HasAtPath;
+
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -67,21 +79,57 @@ public interface ApplicationUser
 
     // -- NAME
 
+    @Property(
+            domainEvent = Name.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            hidden= Where.OBJECT_FORMS,
+            fieldSetId = "identity",
+            sequence = "1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Name {
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Name
-    String getName();
+    default String getName() {
+        final StringBuilder buf = new StringBuilder();
+        if(getFamilyName() != null) {
+            if(getKnownAs() != null) {
+                buf.append(getKnownAs());
+            } else {
+                buf.append(getGivenName());
+            }
+            buf.append(' ')
+                    .append(getFamilyName())
+                    .append(" (").append(getUsername()).append(')');
+        } else {
+            buf.append(getUsername());
+        }
+        return buf.toString();
+    }
 
 
     // -- USERNAME
 
+    @Property(
+            domainEvent = Username.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId="identity",
+            hidden = Where.PARENTED_TABLES,
+            sequence = "1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Username {
         int MAX_LENGTH = 120;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Username
@@ -91,10 +139,21 @@ public interface ApplicationUser
 
     // -- FAMILY NAME
 
+    @Property(
+            domainEvent = FamilyName.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "name",
+            hidden = Where.ALL_TABLES,
+            sequence = "2.1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface FamilyName {
         int MAX_LENGTH = 120;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @FamilyName
@@ -104,10 +163,21 @@ public interface ApplicationUser
 
     // -- GIVEN NAME
 
+    @Property(
+            domainEvent = GivenName.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "name",
+            hidden = Where.ALL_TABLES,
+            sequence = "2.2"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface GivenName {
         int MAX_LENGTH = 120;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @GivenName
@@ -117,10 +187,21 @@ public interface ApplicationUser
 
     // -- KNOWN AS
 
+    @Property(
+            domainEvent = KnownAs.KnownAsDomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "name",
+            hidden = Where.ALL_TABLES,
+            sequence = "2.3"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface KnownAs {
         int MAX_LENGTH = 120;
+
+        class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @KnownAs
@@ -130,10 +211,20 @@ public interface ApplicationUser
 
     // -- EMAIL ADDRESS
 
+    @Property(
+            domainEvent = EmailAddress.EmailAddressDomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetName = "Contact Details",
+            sequence = "3.1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface EmailAddress {
         int MAX_LENGTH = 120;
+
+        class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @EmailAddress
@@ -143,10 +234,20 @@ public interface ApplicationUser
 
     // -- PHONE NUMBER
 
+    @Property(
+            domainEvent = PhoneNumber.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetName = "Contact Details",
+            sequence = "3.2"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface PhoneNumber {
         int MAX_LENGTH = 120;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @PhoneNumber
@@ -156,10 +257,21 @@ public interface ApplicationUser
 
     // -- FAX NUMBER
 
+    @Property(
+            domainEvent = FaxNumber.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetName = "Contact Details",
+            hidden = Where.PARENTED_TABLES,
+            sequence = "3.3"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface FaxNumber {
         int MAX_LENGTH = 120;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @FaxNumber
@@ -169,9 +281,18 @@ public interface ApplicationUser
 
     // -- AT PATH
 
+    @Property(
+            domainEvent = AtPath.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId="atPath",
+            sequence = "3.4"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface AtPath {
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @AtPath
@@ -181,9 +302,18 @@ public interface ApplicationUser
 
     // -- ACCOUNT TYPE
 
+    @Property(
+            domainEvent = AccountType.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "status",
+            sequence = "3"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface AccountType {
+        class DomainEvent extends PropertyDomainEvent<AccountType> {}
     }
 
     @AccountType
@@ -193,9 +323,18 @@ public interface ApplicationUser
 
     // -- STATUS
 
+    @Property(
+            domainEvent = Status.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "status",
+            sequence = "4"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Status {
+        class DomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
     }
 
     @Status
@@ -205,6 +344,9 @@ public interface ApplicationUser
 
     // -- ENCRYPTED PASSWORD
 
+    @PropertyLayout(
+            hidden = Where.EVERYWHERE
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface EncryptedPassword {
@@ -217,20 +359,41 @@ public interface ApplicationUser
 
     // -- HAS PASSWORD
 
+    @Property(
+            domainEvent = HasPassword.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId = "status",
+            sequence = "4"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface HasPassword {
+        class DomainEvent extends PropertyDomainEvent<Boolean> {}
     }
 
     @HasPassword
-    boolean isHasPassword();
+    default boolean isHasPassword() {
+        return _Strings.isNotEmpty(getEncryptedPassword());
+    }
+
+    boolean hideHasPassword();
 
 
     // ROLES
 
+    @Collection(
+            domainEvent = Roles.RolesDomainEvent.class
+    )
+    @CollectionLayout(
+            defaultView="table",
+            sequence = "20"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Roles {
+        class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
     }
 
     @Roles
@@ -246,7 +409,37 @@ public interface ApplicationUser
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     @Programmatic
-    boolean isForSelfOrRunAsAdministrator();
+    default boolean isForSelfOrRunAsAdministrator() {
+        val currentUser = currentUser();
+        val currentUserName = currentUser.getName();
+        // is for self?
+        val forSelf = Objects.equals(getUsername(), currentUserName);
+        if(forSelf) {
+            return true;
+        }
+
+        // is runAsAdministrator?
+        final List<RoleMemento> roles = currentUser.getRoles();
+
+        val adminRoleSuffix = ":" + getAdminRoleName();
+
+        for (final RoleMemento role : roles) {
+            final String roleName = role.getName();
+            // format is realmName:roleName.
+            // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
+            // simply check that the last part matches the role name.
+            if(roleName.endsWith(adminRoleSuffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Programmatic
+    String getAdminRoleName();
+
+    @Programmatic
+    UserMemento currentUser();
 
 
     // -- HELPERS

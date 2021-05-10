@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jpa.user.dom;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -38,39 +36,30 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 @Entity
@@ -125,7 +114,7 @@ public class ApplicationUser
     @Inject private transient UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
-     * {@link org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
+     * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a default implementation.
      */
     @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
@@ -138,207 +127,189 @@ public class ApplicationUser
 
 
     // -- NAME
-    // (derived property)
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
-
+    @Name
+    @Transient
     @Override
-    @javax.persistence.Transient
-    @Property(
-            domainEvent = NameDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.OBJECT_FORMS,
-            fieldSetId="Id",
-            sequence = "1")
     public String getName() {
-        final StringBuilder buf = new StringBuilder();
-        if(getFamilyName() != null) {
-            if(getKnownAs() != null) {
-                buf.append(getKnownAs());
-            } else {
-                buf.append(getGivenName());
-            }
-            buf.append(' ')
-            .append(getFamilyName())
-            .append(" (").append(getUsername()).append(')');
-        } else {
-            buf.append(getUsername());
-        }
-        return buf.toString();
+        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.getName();
     }
 
 
     // -- USERNAME
 
-    public static class UsernameDomainEvent extends PropertyDomainEvent<String> {}
-
-    @Column(nullable=false, length= Username.MAX_LENGTH)
-    @Property(
-            domainEvent = UsernameDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.PARENTED_TABLES,
-            fieldSetId="Id",
-            sequence = "1")
-    @Getter @Setter
+    @Column(nullable = false, length = Username.MAX_LENGTH)
     private String username;
+
+    @Username
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) { this.username = username; }
 
 
     // -- FAMILY NAME
 
-    public static class FamilyNameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @Column(nullable=true, length= FamilyName.MAX_LENGTH)
-    @Property(
-            domainEvent = FamilyNameDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.ALL_TABLES,
-            fieldSetId="Name",
-            sequence = "2.1")
-    @Getter @Setter
+    @Column(nullable = true, length = FamilyName.MAX_LENGTH)
     private String familyName;
+
+    @FamilyName
+    @Override
+    public String getFamilyName() {
+        return familyName;
+    }
+    @Override
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
 
 
     // -- GIVEN NAME
 
-    public static class GivenNameDomainEvent extends PropertyDomainEvent<String> {}
-
-    @Column(nullable=true, length= GivenName.MAX_LENGTH)
-    @Property(
-            domainEvent = GivenNameDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.ALL_TABLES,
-            fieldSetId="Name",
-            sequence = "2.2")
-    @Getter @Setter
+    @Column(nullable = true, length = GivenName.MAX_LENGTH)
     private String givenName;
+
+    @GivenName
+    @Override
+    public String getGivenName() {
+        return givenName;
+    }
+    @Override
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
 
 
     // -- KNOWN AS
 
-    public static class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
-
-
-    @Column(nullable=true, length= KnownAs.MAX_LENGTH)
-    @Property(
-            domainEvent = KnownAsDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.ALL_TABLES,
-            fieldSetId="Name",
-            sequence = "2.3")
-    @Getter @Setter
+    @Column(nullable = true, length = KnownAs.MAX_LENGTH)
     private String knownAs;
+
+    @KnownAs
+    @Override
+    public String getKnownAs() {
+        return knownAs;
+    }
+    @Override
+    public void setKnownAs(String knownAs) {
+        this.knownAs = knownAs;
+    }
 
 
     // -- EMAIL ADDRESS
 
-    public static class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
-
-    @Column(nullable=true, length= EmailAddress.MAX_LENGTH)
-    @Property(
-            domainEvent = EmailAddressDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="Contact Details", sequence = "3.1")
-    @Getter @Setter
+    @Column(nullable = true, length = EmailAddress.MAX_LENGTH)
     private String emailAddress;
+
+    @EmailAddress
+    @Override
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+    @Override
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
 
 
     // -- PHONE NUMBER
 
-    public static class PhoneNumberDomainEvent extends PropertyDomainEvent<String> {}
-
-
-    @Column(nullable=true, length= PhoneNumber.MAX_LENGTH)
-    @Property(
-            domainEvent = PhoneNumberDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="Contact Details", sequence = "3.2")
-    @Getter @Setter
+    @Column(nullable = true, length = PhoneNumber.MAX_LENGTH)
     private String phoneNumber;
+
+    @PhoneNumber
+    @Override
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
 
     // -- FAX NUMBER
 
-    public static class FaxNumberDomainEvent extends PropertyDomainEvent<String> {}
-
-    @Column(nullable=true, length= FaxNumber.MAX_LENGTH)
-    @Property(
-            domainEvent = FaxNumberDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden=Where.PARENTED_TABLES,
-            fieldSetId="Contact Details",
-            sequence = "3.3")
-    @Getter @Setter
+    @Column(nullable = true, length= FaxNumber.MAX_LENGTH)
     private String faxNumber;
+
+    @FaxNumber
+    @Override
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+    @Override
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
 
 
     // -- AT PATH
 
-    public static class AtPathDomainEvent extends PropertyDomainEvent<String> {}
-
-
-    @Column(name="atPath", nullable=true)
-    @Property(
-            domainEvent = AtPathDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="atPath", sequence = "3.4")
-    @Getter @Setter
+    @Column(nullable = true)
     private String atPath;
+
+    @AtPath
+    @Override
+    public String getAtPath() {
+        return atPath;
+    }
+    @Override
+    public void setAtPath(String atPath) {
+        this.atPath = atPath;
+    }
 
 
     // -- ACCOUNT TYPE
 
-    public static class AccountTypeDomainEvent extends PropertyDomainEvent<AccountType> {}
-
-
-    @Column(nullable=false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Property(
-            domainEvent = AccountTypeDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="Status", sequence = "3")
-    @Getter @Setter
     private org.apache.isis.extensions.secman.api.user.dom.AccountType accountType;
+
+    @AccountType
+    @Override
+    public org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType() {
+        return accountType;
+    }
+    @Override
+    public void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType) {
+        this.accountType = accountType;
+    }
 
 
     // -- STATUS
 
-    public static class StatusDomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
-
-
-    @Column(nullable=false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Property(
-            domainEvent = StatusDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="Status", sequence = "4")
-    @Getter @Setter
     private ApplicationUserStatus status;
+
+    @Status
+    @Override
+    public ApplicationUserStatus getStatus() {
+        return status;
+    }
+    @Override
+    public void setStatus(ApplicationUserStatus status) {
+        this.status = status;
+    }
 
 
     // -- ENCRYPTED PASSWORD
 
-
-    @Column(nullable=true)
-    @PropertyLayout(hidden=Where.EVERYWHERE)
-    @Getter @Setter
+    @Column(nullable = true)
     private String encryptedPassword;
+
+    @EncryptedPassword
+    @Override
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+    @Override
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
 
     public boolean hideEncryptedPassword() {
         return !applicationUserRepository.isPasswordFeatureEnabled(this);
@@ -346,20 +317,14 @@ public class ApplicationUser
 
 
     // -- HAS PASSWORD
-    // (derived property)
 
-    public static class HasPasswordDomainEvent extends PropertyDomainEvent<Boolean> {}
-
-    @Property(
-            domainEvent = HasPasswordDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(fieldSetId="Status", sequence = "4")
+    @HasPassword
     @Override
     public boolean isHasPassword() {
-        return _Strings.isNotEmpty(getEncryptedPassword());
+        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.isHasPassword();
     }
 
+    @Override
     public boolean hideHasPassword() {
         return !applicationUserRepository.isPasswordFeatureEnabled(this);
     }
@@ -368,21 +333,18 @@ public class ApplicationUser
 
     // ROLES
 
-    public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
-
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JoinTable(
             name = "ApplicationUserRoles",
             joinColumns = {@JoinColumn(name = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "roleId")})
-    @Collection(
-            domainEvent = RolesDomainEvent.class
-            )
-    @CollectionLayout(
-            defaultView="table",
-            sequence = "20")
-    @Getter @Setter
-    private SortedSet<ApplicationRole> roles = new TreeSet<>();
+    private SortedSet<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
+
+    @Roles
+    @Override
+    public SortedSet<ApplicationRole> getRoles() {
+        return _Casts.uncheckedCast(roles);
+    }
 
 
     // -- PERMISSION SET
@@ -403,35 +365,19 @@ public class ApplicationUser
     }
 
 
-    // -- IS FOR SELF OR RUN AS ADMINISTRATOR
-
-    @Override
-    public boolean isForSelfOrRunAsAdministrator() {
-        return isForSelf() || isRunAsAdministrator();
-    }
-
     // -- HELPERS
 
-    boolean isForSelf() {
-        final String currentUserName = userService.currentUserElseFail().getName();
-        return Objects.equals(getUsername(), currentUserName);
+
+    @Programmatic
+    @Override
+    public String getAdminRoleName() {
+        return configBean.getAdminRoleName();
     }
-    boolean isRunAsAdministrator() {
-        final UserMemento currentUser = userService.currentUserElseFail();
-        final List<RoleMemento> roles = currentUser.getRoles();
 
-        val adminRoleSuffix = ":" + configBean.getAdminRoleName();
-
-        for (final RoleMemento role : roles) {
-            final String roleName = role.getName();
-            // format is realmName:roleName.
-            // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
-            // simply check that the last part matches the role name.
-            if(roleName.endsWith(adminRoleSuffix)) {
-                return true;
-            }
-        }
-        return false;
+    @Programmatic
+    @Override
+    public UserMemento currentUser() {
+        return userService.currentUserElseFail();
     }
 
 
