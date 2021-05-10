@@ -118,15 +118,15 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 val link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public String getObject() {
-                        final ActionLink actionLink = (ActionLink) link;
-                        final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                        return first(reasonDisabledIfAny, actionMeta.getDescription());
-                    }
-                }
-                : Model.of(actionMeta.getDescription());
+                            private static final long serialVersionUID = 1L;
+                            @Override
+                            public String getObject() {
+                                return firstNonNull(
+                                        ((ActionLink) link).getReasonDisabledIfAny(),
+                                        actionMeta.getDescription());
+                            }
+                        }
+                        : Model.of(actionMeta.getDescription());
 
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
@@ -171,7 +171,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
         container.addOrReplace(listView);
     }
 
-    private static String first(String... str) {
+    private static String firstNonNull(String... str) {
         for (String s : str) {
             if(s != null) return s;
         }

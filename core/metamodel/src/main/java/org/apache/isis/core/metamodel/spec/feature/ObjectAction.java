@@ -340,6 +340,9 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
+        /**
+         * Those to be rendered with the entity header panel.
+         */
         public static Stream<ObjectAction> streamTopLevelActions(
                 final ManagedObject adapter) {
 

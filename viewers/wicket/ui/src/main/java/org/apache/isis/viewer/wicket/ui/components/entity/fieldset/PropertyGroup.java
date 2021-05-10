@@ -195,12 +195,12 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
     private Component addPropertyToForm(
             final EntityModel entityModel,
-            final OneToOneAssociation otoa,
+            final OneToOneAssociation property,
             final WebMarkupContainer container,
             final Consumer<LinkAndLabel> onEntityAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(otoa, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
@@ -210,7 +210,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         }
 
         val adapter = entityModel.getManagedObject();
-        val associatedActions = ObjectAction.Util.findForAssociation(adapter, otoa);
+        val associatedActions = ObjectAction.Util.findForAssociation(adapter, property);
 
         LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null)
         .forEach(onEntityAction);
