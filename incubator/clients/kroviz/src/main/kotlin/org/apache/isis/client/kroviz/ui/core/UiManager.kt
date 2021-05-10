@@ -34,7 +34,10 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.kv.override.RoTab
+import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.Utils
@@ -78,13 +81,35 @@ object UiManager {
         return null
     }
 
-    fun add(title: String, panel: SimplePanel, obj: Any? = null, aggregator: BaseAggregator = UndefinedDispatcher()) {
-        var uuid: UUID? = null
-        if (obj is ScalableVectorGraphic) {
-            uuid = obj.uuid
-        }
-        RoView.addTab(title, panel, uuid)
-        EventStore.addView(title, aggregator, panel, obj)
+    fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
+        RoView.addTab(title, panel)
+        EventStore.addView(title, aggregator, panel)
+    }
+
+    /**
+     * SVG code added to Tabs disappears after a refresh, therefore an SVG object (code, uuid)
+     * is added as attribute to the tab in order to being able to recreate it on refresh.
+     */
+    fun addSvg(title: String, svgCode: String) {
+        val uuid = UUID()
+        DomUtil.appendTo(uuid, svgCode)
+
+        val panel = buildSvgPanel(uuid)
+        RoView.addTab(title, panel)
+        val tab = RoView.findActive()!! as RoTab
+
+        val svg = ScalableVectorGraphic(svgCode, uuid)
+        tab.svg = svg
+
+        val aggregator: BaseAggregator = UndefinedDispatcher()
+        EventStore.addView(title, aggregator, panel)
+    }
+
+    private fun buildSvgPanel(uuid: UUID): FormPanelFactory {
+        val formItems = mutableListOf<FormItem>()
+        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = uuid)
+        formItems.add(newFi)
+        return FormPanelFactory(formItems)
     }
 
     fun closeView(tab: SimplePanel) {
@@ -112,7 +137,7 @@ object UiManager {
         val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as ListDM)
-        add(title, panel, null, aggregator)
+        add(title, panel, aggregator)
         displayable.isRendered = true
     }
 

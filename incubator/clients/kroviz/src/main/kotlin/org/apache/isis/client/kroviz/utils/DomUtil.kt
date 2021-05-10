@@ -29,8 +29,14 @@ external fun encodeURIComponent(encodedURI: String): String
  */
 object DomUtil {
 
-    fun appendTo(uuid: UUID, response: String) {
-        val svgDoc = ScalableVectorGraphic(response).document
+    fun appendTo(svg: ScalableVectorGraphic) {
+        val uuid = svg.uuid!!
+        val svgCode = svg.data
+        appendTo(uuid, svgCode)
+    }
+
+    fun appendTo(uuid: UUID, svgCode: String) {
+        val svgDoc = ScalableVectorGraphic(svgCode).document
         append(uuid, svgDoc, false)
     }
 

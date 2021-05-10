@@ -18,10 +18,12 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.*
+import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.core.MenuFactory
+import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.*
 import io.kvision.html.Link as KvisionHtmlLink
 
@@ -58,33 +60,20 @@ class DiagramDialog(
     }
 
     private fun pin() {
-        val newUuid = UUID()
-        val newSvg= getDiagram(newUuid)
-        val panel = buildNewPanel(newUuid)
-        console.log("[DD.pin]")
-        console.log(panel)
-        console.log(panel.panel!!.getChildren().first())
-        UiManager.add("Diagram", panel, newSvg)
-        DomUtil.replaceWith(newUuid, newSvg)
+        val svgCode = getDiagramCode()
+        UiManager.addSvg("Diagram", svgCode)
         dialog.close()
     }
 
-    private fun getDiagram(newUuid:UUID?): ScalableVectorGraphic {
+    private fun getDiagramCode(): String {
         val logEntry = EventStore.findByDispatcher(callBack as UUID)
-        val svgStr = logEntry.getResponse()
-        return ScalableVectorGraphic(svgStr, newUuid)
-    }
-
-    private fun buildNewPanel(newUuid: UUID): FormPanelFactory {
-        val formItems = mutableListOf<FormItem>()
-        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = newUuid)
-        formItems.add(newFi)
-        return FormPanelFactory(formItems)
+        return logEntry.getResponse()
     }
 
     @Deprecated("use leaflet/svg")
     fun scale(direction: Direction) {
-        val svg = getDiagram(null)
+        val svgCode = getDiagramCode()
+        val svg = ScalableVectorGraphic(svgCode)
         when (direction) {
             Direction.UP -> svg.scaleUp()
             Direction.DOWN -> svg.scaleDown()

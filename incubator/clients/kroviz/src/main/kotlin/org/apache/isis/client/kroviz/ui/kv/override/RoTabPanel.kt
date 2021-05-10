@@ -35,7 +35,6 @@ import io.kvision.utils.obj
 import io.kvision.utils.perc
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.ui.core.RoView
-import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * Tab position.
@@ -321,10 +320,9 @@ open class RoTabPanel(
      */
     open fun addTab(
             title: String, panel: Component, icon: String? = null,
-            image: ResString? = null, closable: Boolean = false, route: String? = null,
-            uuid: UUID? = null
+            image: ResString? = null, closable: Boolean = false, route: String? = null
     ): RoTabPanel {
-        addTab(RoTab(title, panel, icon, image, closable, route, uuid))
+        addTab(RoTab(title, panel, icon, image, closable, route))
         refresh()
         return this
     }

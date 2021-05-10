@@ -36,10 +36,8 @@ import io.kvision.routing.RoutingManager
 import io.kvision.state.ObservableState
 import io.kvision.state.bind
 import io.kvision.utils.obj
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * The single Tab component inside the TabPanel container.
@@ -58,7 +56,6 @@ open class RoTab(
         image: ResString? = null,
         closable: Boolean = false,
         val route: String? = null,
-        val uuid: UUID? = null,
         init: (RoTab.() -> Unit)? = null
 ) : Tag(TAG.LI, classes = setOf("nav-item")) {
 
@@ -69,27 +66,16 @@ open class RoTab(
             image: ResString? = null,
             closable: Boolean = false,
             route: String? = null,
-            uuid: UUID? = null,
             init: (RoTab.() -> Unit)? = null
-    ) : this(label, icon, image, closable, route, uuid, init) {
+    ) : this(label, icon, image, closable, route, init) {
         @Suppress("LeakingThis")
         add(child)
     }
 
+    var svg: ScalableVectorGraphic? = null
+
     override fun render(): VNode {
-        if (uuid != null) {
-            console.log("[RT.render]")
-            console.log(uuid)
-            val logEntry = EventStore.findByView(uuid)
-            if (logEntry != null) {
-                val svgStr = logEntry.getResponse()
-                console.log(svgStr)
-                val newImage = ScalableVectorGraphic(svgStr)
-                val uuid = UUID(this.id!!)
-                console.log(uuid)
-                DomUtil.replaceWith(uuid, newImage)
-            }
-        }
+        if (svg != null) DomUtil.appendTo(svg!!)
         return super.render()
     }
 
@@ -205,7 +191,7 @@ fun RoTabPanel.tab(
         image: ResString? = null, closable: Boolean = false, route: String? = null,
         init: (RoTab.() -> Unit)? = null
 ): RoTab {
-    val tab = RoTab(label, icon, image, closable, route, null, init)
+    val tab = RoTab(label, icon, image, closable, route, init)
     this.add(tab)
     return tab
 }

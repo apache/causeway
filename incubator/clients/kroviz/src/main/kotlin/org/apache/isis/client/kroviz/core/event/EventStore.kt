@@ -66,10 +66,9 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel, obj: Any?) {
+    fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
         val entry = LogEntry(title = title, aggregator = aggregator)
-        entry.obj = panel
- //       entry.obj = obj
+        entry.panel = panel
         log(entry)
         updateStatus(entry)
     }
@@ -134,12 +133,6 @@ object EventStore {
         return log.first {
             it.getAggregator() is SvgDispatcher
                     && (it.getAggregator() as SvgDispatcher).callBack == uuid
-        }
-    }
-
-    fun findByView(uuid: UUID): LogEntry? {
-        return log.firstOrNull() {
-            (it.obj is ScalableVectorGraphic) && ((it.obj as ScalableVectorGraphic).uuid == uuid)
         }
     }
 

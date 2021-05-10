@@ -19,15 +19,14 @@
 package org.apache.isis.client.kroviz.core.event
 
 import io.kvision.html.ButtonStyle
+import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
-import org.apache.isis.client.kroviz.utils.XmlHelper
 import kotlin.js.Date
 
 // use color codes from css instead?
@@ -63,7 +62,8 @@ data class LogEntry(
     init {
         state = EventState.RUNNING
         title = url // stripHostPort(url)
-        requestLength = request?.length ?: 0 // if this is simplyfied to request.length, Tabulator.js goes in ERROR and EventLogTable shows no entries
+        requestLength = request?.length
+                ?: 0 // if this is simplyfied to request.length, Tabulator.js goes in ERROR and EventLogTable shows no entries
     }
 
     @Contextual
@@ -84,6 +84,9 @@ data class LogEntry(
 
     @Contextual
     var obj: Any? = null
+
+    @Contextual
+    var panel: SimplePanel? = null
 
     // alternative constructor for UI events (eg. from user interaction)
     @JsName("secondaryConstructor")
