@@ -18,10 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jdo.permission.dom;
 
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -40,24 +36,17 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -123,76 +112,89 @@ public class ApplicationPermission
 
     // -- ROLE
 
-    @Role
     @Column(name = "roleId", allowsNull = "false")
-    @Getter(onMethod = @__(@Override))
-    private ApplicationRole role;
+    private org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole role;
 
+    @Role
     @Override
-    public void setRole(org.apache.isis.extensions.secman.api.role.dom.ApplicationRole role) {
+    public ApplicationRole getRole() {
+        return role;
+    }
+    @Override
+    public void setRole(ApplicationRole role) {
         this.role = _Casts.uncheckedCast(role);
     }
 
 
     // -- RULE
 
-    @Rule
     @Column(allowsNull = "false")
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
+
+    @Rule
+    public ApplicationPermissionRule getRule() {
+        return rule;
+    }
+    public void setRule(ApplicationPermissionRule rule) {
+        this.rule = rule;
+    }
 
 
     // -- MODE
 
-    @Mode
     @Column(allowsNull = "false")
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
 
-
-    // -- SORT
-
-    @Sort
+    @Mode
     @Override
-    public String getSort() {
-        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
-                ? getFeatureSort()
-                : getMemberSort().orElse(null);
-        return e != null ? e.name(): null;
+    public ApplicationPermissionMode getMode() {
+        return mode;
     }
+    @Override
+    public void setMode(ApplicationPermissionMode mode) {
+        this.mode = mode;
+    }
+
+
 
 
     // -- FEATURE SORT
 
-    @Column(allowsNull="false")
-    @Getter(onMethod = @__({@Override,@Programmatic}))
-    @Setter(onMethod = @__(@Override))
+    @Column(allowsNull = "false")
     private ApplicationFeatureSort featureSort;
 
     @Programmatic
-    private Optional<ApplicationMemberSort> getMemberSort() {
-        return getFeature()
-                .flatMap(ApplicationFeature::getMemberSort);
+    @Override
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
+    }
+    @Override
+    public void setFeatureSort(ApplicationFeatureSort featureSort) {
+        this.featureSort = featureSort;
     }
 
 
     // -- FQN
 
-    @FeatureFqn
     @Column(allowsNull = "false")
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private String featureFqn;
 
+    @FeatureFqn
+    @Override
+    public String getFeatureFqn() {
+        return featureFqn;
+    }
+    @Override
+    public void setFeatureFqn(String featureFqn) {
+        this.featureFqn = featureFqn;
+    }
 
 
-    // -- featureId (derived property)
+    // FIND FEATURE
 
-    private Optional<ApplicationFeature> getFeature() {
-        return asFeatureId()
-                .map(featureId -> featureRepository.findFeature(featureId));
+    @Programmatic
+    public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
+        return featureRepository.findFeature(featureId);
     }
 
 
@@ -207,7 +209,7 @@ public class ApplicationPermission
 
     @Override
     public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
-        return contract.compare(this, (ApplicationPermission) other);
+        return contract.compare(this, (ApplicationPermission)other);
     }
 
     @Override

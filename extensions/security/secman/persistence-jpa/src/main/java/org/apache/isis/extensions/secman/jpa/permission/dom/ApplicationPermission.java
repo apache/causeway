@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jpa.permission.dom;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,9 +38,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
@@ -50,9 +48,6 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(
@@ -166,16 +161,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     }
 
 
-    // -- SORT
-
-    @Sort
-    @Override
-    public String getSort() {
-        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
-                ? getFeatureSort()
-                : getMemberSort().orElse(null);
-        return e != null ? e.name(): null;
-    }
 
 
     // -- FEATURE SORT
@@ -192,12 +177,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     @Override
     public void setFeatureSort(ApplicationFeatureSort featureSort) {
         this.featureSort = featureSort;
-    }
-
-    @Programmatic
-    private Optional<ApplicationMemberSort> getMemberSort() {
-        return getFeature()
-                .flatMap(ApplicationFeature::getMemberSort);
     }
 
 
@@ -217,11 +196,11 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     }
 
 
-    // -- featureId (derived property)
+    // FIND FEATURE
 
-    private Optional<ApplicationFeature> getFeature() {
-        return asFeatureId()
-                .map(featureId -> featureRepository.findFeature(featureId));
+    @Programmatic
+    public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
+        return featureRepository.findFeature(featureId);
     }
 
 

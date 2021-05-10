@@ -28,7 +28,6 @@ public class DescriptionType {
 
     @UtilityClass
     public static class Meta {
-        public static final int MAX_LEN = 254;
     }
 
 }

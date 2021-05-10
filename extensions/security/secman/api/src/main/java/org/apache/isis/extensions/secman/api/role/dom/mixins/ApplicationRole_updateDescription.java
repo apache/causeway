@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_updateDescription.DomainEvent;
@@ -51,7 +50,7 @@ public class ApplicationRole_updateDescription {
     @MemberSupport
     public ApplicationRole act(
             @Parameter(
-                    maxLength = DescriptionType.Meta.MAX_LEN,
+                    maxLength = ApplicationRole.Description.MAX_LENGTH,
                     optionality = Optionality.OPTIONAL
                     )
             @ParameterLayout(

@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -221,7 +222,10 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
 
     @Sort
     default String getSort() {
-        throw _Exceptions.unsupportedOperation("please implement me");
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
+                ? getFeatureSort()
+                : getMemberSort().orElse(null);
+        return e != null ? e.name(): null;
     }
 
 
@@ -271,10 +275,32 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     }
 
     @FeatureFqn
-    default String getFeatureFqn() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
+    String getFeatureFqn();
     void setFeatureFqn(String featureFqn);
+
+
+    // -- FIND FEATURE
+
+    @Programmatic
+    ApplicationFeature findFeature(ApplicationFeatureId featureId);
+
+
+    // -- MEMBER SORT
+
+    @Programmatic
+    default Optional<ApplicationMemberSort> getMemberSort() {
+        return getFeature()
+                .flatMap(ApplicationFeature::getMemberSort);
+    }
+
+
+    // -- FEATURE ID
+
+    @Programmatic
+    default Optional<ApplicationFeature> getFeature() {
+        return asFeatureId()
+                .map(this::findFeature);
+    }
 
 
     // -- HELPER

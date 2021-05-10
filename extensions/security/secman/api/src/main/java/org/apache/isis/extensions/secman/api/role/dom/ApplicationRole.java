@@ -97,6 +97,7 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Description {
+        int MAX_LENGTH = 254;
         int TYPICAL_LENGTH = 50;
 
         class DomainEvent extends PropertyDomainEvent<String> {}

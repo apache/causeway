@@ -39,24 +39,16 @@ import javax.jdo.annotations.Uniques;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 
-import lombok.Getter;
-import lombok.Setter;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -100,38 +92,47 @@ public class ApplicationRole
 
     // -- NAME
 
-    @Name
-    @Column(allowsNull="false", length = Name.MAX_LENGTH)
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Column(allowsNull = "false", length = Name.MAX_LENGTH)
     private String name;
 
-
+    @Name
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
     // -- DESCRIPTION
 
-    @Description
-    @Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Column(allowsNull = "true", length = Description.MAX_LENGTH)
     private String description;
+
+    @Description
+    @Override
+    public String getDescription() {
+        return description;
+    }
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 
     // -- USERS
 
-    @Users
     @Persistent(mappedBy = "roles")
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
-    private SortedSet<ApplicationUser> users = new TreeSet<>();
+    private SortedSet<org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser> users = new TreeSet<>();
 
-
+    @Users
+    @Override
+    public SortedSet<ApplicationUser> getUsers() {
+        return _Casts.uncheckedCast(users);
+    }
     // necessary for integration tests
     public void addToUsers(final ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
-    }
-    // necessary for integration tests
-    public void removeFromUsers(final ApplicationUser applicationUser) {
-        getUsers().remove(applicationUser);
     }
 
 

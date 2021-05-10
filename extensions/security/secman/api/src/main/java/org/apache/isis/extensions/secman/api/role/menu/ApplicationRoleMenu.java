@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
@@ -91,7 +90,7 @@ public class ApplicationRoleMenu {
             @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
             @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
             final String name,
-            @Parameter(maxLength = DescriptionType.Meta.MAX_LEN, optionality = Optionality.OPTIONAL)
+            @Parameter(maxLength = ApplicationRole.Description.MAX_LENGTH, optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
             final String description) {
         return applicationRoleRepository.newRole(name, description);
