@@ -309,14 +309,14 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         this.collectionLayoutData = collectionLayoutData;
     }
 
-    private transient ManagedObject contextObject;
+    private transient Optional<ManagedObject> contextObject;
 
     @Override @Synchronized
-    public boolean isContextAdapter(ManagedObject other) {
+    public boolean isContextAdapter(final ManagedObject other) {
         if(contextObject==null) {
-            contextObject = getMementoService().reconstructObject(contextAdapterIfAny);
+            contextObject = Optional.ofNullable(getMementoService().reconstructObject(contextAdapterIfAny));
         }
-        return Objects.equals(contextObject, other);
+        return Objects.equals(contextObject.orElse(null), other);
     }
 
 

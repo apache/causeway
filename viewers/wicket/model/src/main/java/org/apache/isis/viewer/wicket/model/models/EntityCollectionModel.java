@@ -112,24 +112,6 @@ extends
         return Can.empty();
     }
 
-    // -- INTERACTION SUPPORT
-
-    /**
-     * Returns optionally the a {@link ManagedCollection}, based on whether
-     * this is a parented collection.
-     */
-    Optional<ManagedCollection> getManagedCollection();
-
-    default Optional<ManagedObject> getParentObject() {
-        return getManagedCollection()
-                .map(ManagedCollection::getOwner);
-    }
-
-    default Optional<ObjectSpecification> getParentObjectSpecification() {
-        return getParentObject()
-                .map(ManagedObject::getSpecification);
-    }
-
     // -- TOGGLE SUPPORT
 
     Can<ObjectMemento> getToggleMementosList();
@@ -142,12 +124,41 @@ extends
     String getName();
     int getPageSize();
 
-    // -- REFACTORING TODO ...
+    // -- PARENTED STUFF
 
-    @Deprecated
-    ObjectMemento getParentObjectAdapterMemento();
+    default Optional<EntityCollectionModelParented> parented() {
+        return this instanceof EntityCollectionModelParented
+            ? Optional.of((EntityCollectionModelParented)this)
+            : Optional.empty();
+    }
 
-    @Deprecated
-    Bookmark asHintingBookmarkIfSupported();
+    default Optional<Bookmark> parentedHintingBookmark() {
+        return parented()
+                .map(EntityCollectionModelParented::asHintingBookmark);
+    }
+
+    default Optional<ObjectMemento> parentedObjectAdapterMemento() {
+        return parented()
+                .map(EntityCollectionModelParented::getParentObjectAdapterMemento);
+    }
+
+    /**
+     * Returns optionally the a {@link ManagedCollection}, based on whether
+     * this is a parented collection.
+     */
+    default Optional<ManagedCollection> parentedManagedCollection() {
+        return parented()
+                .map(EntityCollectionModelParented::getManagedCollection);
+    }
+
+    default Optional<ManagedObject> parentedParentObject() {
+        return parentedManagedCollection()
+                .map(ManagedCollection::getOwner);
+    }
+
+    default Optional<ObjectSpecification> parentedParentObjectSpecification() {
+        return parentedParentObject()
+                .map(ManagedObject::getSpecification);
+    }
 
 }

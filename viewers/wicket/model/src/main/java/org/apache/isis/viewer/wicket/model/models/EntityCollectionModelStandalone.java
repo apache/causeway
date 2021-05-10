@@ -19,13 +19,10 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
@@ -78,13 +75,6 @@ extends EntityCollectionModelAbstract {
         return Variant.STANDALONE;
     }
 
-    // -- INTERACTION SUPPORT
-
-    @Override
-    public Optional<ManagedCollection> getManagedCollection() {
-        return Optional.empty();
-    }
-
     // --
 
     private Can<ObjectMemento> mementoList;
@@ -113,16 +103,6 @@ extends EntityCollectionModelAbstract {
     @Override
     public ObjectMember getMetaModel() {
         return actionModel.getMetaModel();
-    }
-
-    @Override
-    public ObjectMemento getParentObjectAdapterMemento() {
-        return null;
-    }
-
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
-        return null;
     }
 
 

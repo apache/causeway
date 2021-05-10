@@ -149,7 +149,8 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
                         }
 
                         Bookmark domainObjectBookmarkIfAny() {
-                            return CollectionSelectorPanel.this.getModel().asHintingBookmarkIfSupported();
+                            return CollectionSelectorPanel.this.getModel().parentedHintingBookmark().orElse(null);
+
                         }
 
                         @Override

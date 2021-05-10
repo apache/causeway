@@ -20,14 +20,10 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.NonNull;
 
@@ -53,11 +49,6 @@ extends EntityCollectionModelAbstract {
     }
 
     @Override
-    public Optional<ManagedCollection> getManagedCollection() {
-        return Optional.empty();
-    }
-
-    @Override
     public int getCount() {
         return 0;
     }
@@ -75,16 +66,6 @@ extends EntityCollectionModelAbstract {
     @Override
     public OneToManyAssociation getMetaModel() {
         throw _Exceptions.unsupportedOperation();
-    }
-
-    @Override
-    public ObjectMemento getParentObjectAdapterMemento() {
-        throw _Exceptions.unsupportedOperation();
-    }
-
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
-        return null;
     }
 
 }

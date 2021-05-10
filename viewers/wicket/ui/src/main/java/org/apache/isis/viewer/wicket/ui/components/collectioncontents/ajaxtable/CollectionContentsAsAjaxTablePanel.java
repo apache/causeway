@@ -108,7 +108,7 @@ implements CollectionCountProvider {
         val collectionModel = getModel();
         addTitleColumn(
                 columns,
-                collectionModel.getParentObjectAdapterMemento(),
+                collectionModel.parentedObjectAdapterMemento().orElse(null),
                 getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
                 getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
 
@@ -159,7 +159,7 @@ implements CollectionCountProvider {
                     ? Where.PARENTED_TABLES
                     : Where.STANDALONE_TABLES;
 
-        val parentSpecIfAny =  collectionModel.getParentObjectSpecification()
+        val parentSpecIfAny =  collectionModel.parentedParentObjectSpecification()
                 .orElse(null);
 
         val propertyById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
@@ -246,7 +246,7 @@ implements CollectionCountProvider {
 
         val collectionModel = getModel();
 
-        final Optional<ManagedObject> parentObject = collectionModel.getParentObject();
+        final Optional<ManagedObject> parentObject = collectionModel.parentedParentObject();
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->

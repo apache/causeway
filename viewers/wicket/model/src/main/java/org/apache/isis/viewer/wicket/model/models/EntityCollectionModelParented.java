@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -51,6 +50,7 @@ implements
     private static final long serialVersionUID = 1L;
 
     // TODO parent object model, maybe should not be exposed
+    // maybe could be resolved in the process of decoupling the ActionModel from Wicket
     @Getter private final @NonNull EntityModel entityModel;
 
     @Getter(onMethod_ = {@Override}) private int count;
@@ -98,7 +98,7 @@ implements
 
     @Override
     public Can<ObjectAction> getAssociatedActions() {
-        val managedCollection = getManagedCollection().orElse(null);
+        val managedCollection = getManagedCollection();
         if(managedCollection==null) {
             return Can.empty();
         }
@@ -130,12 +130,8 @@ implements
 
     @Override
     protected List<ManagedObject> load() {
-        final ManagedObject adapter = getCommonContext()
-                .reconstructObject(getParentObjectAdapterMemento());
 
-        final OneToManyAssociation collection = getMetaModel();
-
-        final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
+        final ManagedObject collectionAsAdapter = getManagedCollection().getCollectionValue();
 
         val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
         .filter(_NullSafe::isPresent) // pojos
@@ -149,12 +145,6 @@ implements
     }
 
     @Override
-    public Optional<ManagedCollection> getManagedCollection() {
-        return Optional.of(ManagedCollection
-                .of(entityModel.getManagedObject(), getMetaModel(), Where.NOT_SPECIFIED));
-    }
-
-    @Override
     public String getName() {
         return getIdentifier().getMemberName();
     }
@@ -164,18 +154,21 @@ implements
         return collectionMetaModelMemento.getCollection(this::getSpecificationLoader);
     }
 
+    public ManagedCollection getManagedCollection() {
+        return ManagedCollection
+                .of(entityModel.getManagedObject(), getMetaModel(), Where.NOT_SPECIFIED);
+    }
+
     public CollectionLayoutData getLayoutData() {
         return entityModel.getCollectionLayoutData();
     }
 
-    @Override
-    public ObjectMemento getParentObjectAdapterMemento() {
-        return entityModel.memento();
+    public Bookmark asHintingBookmark() {
+        return entityModel.asHintingBookmarkIfSupported();
     }
 
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
-        return entityModel.asHintingBookmarkIfSupported();
+    public ObjectMemento getParentObjectAdapterMemento() {
+        return entityModel.memento();
     }
 
 

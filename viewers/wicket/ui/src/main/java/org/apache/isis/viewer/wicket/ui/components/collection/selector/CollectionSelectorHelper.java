@@ -116,7 +116,7 @@ public class CollectionSelectorHelper implements Serializable {
     private String determineInitialFactory() {
 
         // try to load from session, if can
-        final Bookmark bookmark = bookmarkHintIfAny();
+        final Bookmark bookmark = collectionModel.parentedHintingBookmark().orElse(null);
         final String sessionAttribute = componentHintKey.get(bookmark);
         if(sessionAttribute != null) {
             return sessionAttribute;
@@ -151,10 +151,6 @@ public class CollectionSelectorHelper implements Serializable {
                 ? CollectionContentsAsAjaxTablePanelFactory.NAME
                 : CollectionContentsHiddenPanelFactory.NAME;
 
-    }
-
-    private Bookmark bookmarkHintIfAny() {
-        return collectionModel.asHintingBookmarkIfSupported();
     }
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
