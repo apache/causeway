@@ -24,6 +24,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
 
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 /**
@@ -52,11 +57,21 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     // -- NAME
 
+    @Property(
+            domainEvent = Name.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            typicalLength = Name.TYPICAL_LENGTH,
+            sequence = "1"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Name {
         int MAX_LENGTH = 120;
         int TYPICAL_LENGTH = 20;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Name
@@ -66,10 +81,19 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     // -- PATH
 
+    @Property(
+            domainEvent = Parent.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            hidden = Where.PARENTED_TABLES
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Path {
         int MAX_LENGTH = 255;
+
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Path
@@ -79,9 +103,18 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     // -- PARENT
 
+
+    @Property(
+            domainEvent = Parent.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            hidden = Where.PARENTED_TABLES
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Parent {
+        class DomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
     }
 
     @Parent
@@ -91,9 +124,16 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     // -- CHILDREN
 
+    @org.apache.isis.applib.annotation.Collection(
+            domainEvent = Children.DomainEvent.class
+    )
+    @CollectionLayout(
+            defaultView="table"
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Children {
+        class DomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
     }
 
     @Children

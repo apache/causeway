@@ -22,56 +22,59 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.Queries;
+import javax.jdo.annotations.Query;
+import javax.jdo.annotations.Unique;
+import javax.jdo.annotations.Uniques;
+import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@javax.jdo.annotations.PersistenceCapable(
+@PersistenceCapable(
         identityType = IdentityType.APPLICATION,
         schema = "isisExtensionsSecman",
         table = "ApplicationTenancy")
-@javax.jdo.annotations.Inheritance(
+@Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
+@DatastoreIdentity(
         strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Version(
+@Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
+@Uniques({
+    @Unique(
             name = "ApplicationTenancy_name_UNQ", members = { "name" })
 })
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
+@Queries( {
+    @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
                     + "WHERE path == :path"),
-    @javax.jdo.annotations.Query(
+    @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
                     + "WHERE name == :name"),
-    @javax.jdo.annotations.Query(
+    @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
@@ -87,53 +90,51 @@ import lombok.Setter;
 public class ApplicationTenancy
     implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
+
     // -- NAME
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
-
-    @javax.jdo.annotations.Column(allowsNull="false", length = Name.MAX_LENGTH)
-    @Property(
-            domainEvent = NameDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            typicalLength= Name.TYPICAL_LENGTH,
-            sequence = "1")
-    @Getter @Setter
+    @Column(allowsNull  ="false", length = Name.MAX_LENGTH)
     private String name;
+
+    @Name
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     // -- PATH
 
-    public static class PathDomainEvent extends PropertyDomainEvent<String> {}
-
-
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(length = Path.MAX_LENGTH, allowsNull = "false")
-    @Property(
-            domainEvent = PathDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @Getter @Setter
+    @PrimaryKey
+    @Column(allowsNull = "false", length = Path.MAX_LENGTH)
     private String path;
+
+    @Path
+    @Override
+    public String getPath() {
+        return path;
+    }
+    @Override
+    public void setPath(String path) {
+        this.path = path;
+    }
 
 
     // -- PARENT
 
-    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
-
-    @javax.jdo.annotations.Column(name = "parentPath", allowsNull = "true")
-    @Property(
-            domainEvent = ParentDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @PropertyLayout(
-            hidden = Where.PARENTED_TABLES
-            )
-    @Getter(onMethod = @__(@Override))
+    @Column(name = "parentPath", allowsNull = "true")
     private ApplicationTenancy parent;
 
+    @Parent
+    @Override
+    public org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy getParent() {
+        return parent;
+    }
     @Override
     public void setParent(org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
@@ -142,25 +143,19 @@ public class ApplicationTenancy
 
     // -- CHILDREN
 
-    public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
-
-    @javax.jdo.annotations.Persistent(mappedBy = "parent")
-    @Collection(
-            domainEvent = ChildrenDomainEvent.class
-            )
-    @CollectionLayout(
-            defaultView="table"
-            )
-    @Getter @Setter
+    @Persistent(mappedBy = "parent")
     private SortedSet<ApplicationTenancy> children = new TreeSet<>();
 
-
-    // necessary for integration tests
-    public void addToChildren(final ApplicationTenancy applicationTenancy) {
-        getChildren().add(applicationTenancy);
+    @Children
+    @Override
+    public SortedSet<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> getChildren() {
+        return _Casts.uncheckedCast(children);
+    }
+    public void setChildren(SortedSet<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> children) {
+        this.children = _Casts.uncheckedCast(children);
     }
     // necessary for integration tests
-    public void removeFromChildren(final ApplicationTenancy applicationTenancy) {
+    public void removeFromChildren(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
     }
 
@@ -199,6 +194,5 @@ public class ApplicationTenancy
     public String toString() {
         return toString.toString(this);
     }
-
 
 }
