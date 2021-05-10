@@ -36,7 +36,8 @@ public interface WhereValueFacet extends Facet {
     static Optional<Where> where(
             final @NonNull FacetHolder facetHolder,
             final @NonNull Class<? extends WhereValueFacet> facetType) {
-        return facetHolder.lookupFacet(facetType)
+        //TODO why do we treat fallback facets as no-op?
+        return facetHolder.lookupNonFallbackFacet(facetType)
                 .map(WhereValueFacet::where);
     }
 

@@ -165,11 +165,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     @Override
     public boolean isAlwaysHidden() {
-
         return HiddenFacet.isAlwaysHidden(getFacetHolder());
-
-
-
     }
 
     /**
