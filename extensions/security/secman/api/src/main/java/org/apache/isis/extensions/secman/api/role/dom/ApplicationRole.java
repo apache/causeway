@@ -88,11 +88,12 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     @Property(
             domainEvent = Description.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Description.MAX_LENGTH
     )
     @PropertyLayout(
             sequence = "2",
-            typicalLength= Description.TYPICAL_LENGTH
+            typicalLength = Description.TYPICAL_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)

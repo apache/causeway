@@ -104,6 +104,8 @@ public class ApplicationRole
     public void setName(String name) {
         this.name = name;
     }
+
+
     // -- DESCRIPTION
 
     @Column(allowsNull = "true", length = Description.MAX_LENGTH)
