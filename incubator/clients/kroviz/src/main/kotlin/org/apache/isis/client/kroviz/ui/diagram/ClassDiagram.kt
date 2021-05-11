@@ -18,18 +18,32 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.core.model.meta.MetaClass
 import org.apache.isis.client.kroviz.core.model.meta.MetaPackage
 import org.apache.isis.client.kroviz.to.DomainType
-import org.apache.isis.client.kroviz.to.HasLinks
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Relation
-import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class PumlBuilder {
+object ClassDiagram {
+
+    fun build(dd: DiagramDM): String {
+        val domainTypeList: Set<DomainType> = dd.classes
+        //TODO properties needed to set type
+        //val properties: Set<Property> = dd.properties
+        val packages = mutableSetOf<MetaPackage>()
+        domainTypeList.forEach { dt ->
+            val cls = MetaClass(dt)
+            val pkgName = cls.pkg.name
+            var pkg = packages.find { p -> p.name == pkgName }
+            if (pkg == null) {
+                pkg = cls.pkg
+                pkg.classes.add(cls)
+                packages.add(pkg)
+            } else {
+                pkg.classes.add(cls)
+            }
+        }
+        return with(packages)
+    }
 
     private val Q = "\""
     private val NL = "\\n"
@@ -84,49 +98,5 @@ class PumlBuilder {
         return pumlCode
     }
 
-    fun with(rootLE: LogEntry): String {
-        var code = "$Q@startuml$NL"
-        code += iterateOverChildren(rootLE)
-        code += "@enduml$Q"
-        return code
-    }
-
-    fun asJsonDiagram(json: String): String {
-        return "@startjson" + "\n" + json + "\n" + "@endjson"
-    }
-
-    private fun iterateOverChildren(logEntry: LogEntry): String {
-        var code = ""
-        val tObj = logEntry.obj
-        val parentUrl = logEntry.url
-        if (tObj is HasLinks) {
-            tObj.getLinks().forEach { l ->
-                val rel = l.relation()
-                if (rel != Relation.UP && rel != Relation.SELF) {
-                    code += amendWithChild(parentUrl, l)
-                }
-            }
-        }
-        return code
-    }
-
-    private fun amendWithChild(parentUrl: String, child: Link): String {
-        // kroki.io can not handle / (slash) in strings; escaping doesn't work either
-        val baseUrl = UiManager.getUrl()
-        var source = parentUrl.replace(baseUrl, "")
-        source = source.replace("/" , "_")
-        val childUrl = child.href
-        var target = childUrl.replace(baseUrl, "")
-        target = target.replace("/" , "_")
-        var code = "$source -> $target $NL"
-
-        val rs = ResourceSpecification(childUrl)
-        val childLE = EventStore.find(rs)
-        if (childLE != null) {
-            code += iterateOverChildren(childLE)
-        }
-        return code
-    }
 
 }
-

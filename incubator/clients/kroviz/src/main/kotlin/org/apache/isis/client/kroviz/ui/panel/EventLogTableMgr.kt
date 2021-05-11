@@ -22,9 +22,10 @@ package org.apache.isis.client.kroviz.ui.panel
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
-import org.apache.isis.client.kroviz.ui.diagram.UmlDiagram
+import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.diagram.SequenceDiagram
 import org.apache.isis.client.kroviz.utils.IconManager
 
 class EventLogTableMgr {
@@ -59,7 +60,7 @@ class EventLogTableMgr {
     }
 
     private fun eventDiagram() {
-        val code = UmlDiagram.buildSequence(EventStore.log)!!
+        val code = SequenceDiagram.build(EventStore.log)!!
         DiagramDialog("Event Diagram", code).open()
     }
 

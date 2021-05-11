@@ -18,6 +18,10 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
+import org.apache.isis.client.kroviz.layout.ColsLt
+import org.apache.isis.client.kroviz.layout.Layout
+import org.apache.isis.client.kroviz.layout.RowLt
+
 object LayoutDiagram {
 
     @Deprecated("pass in as arg")
@@ -29,14 +33,33 @@ object LayoutDiagram {
             "}\n" +
             "@endsalt"
 
-    fun build(json: String): String {
-        var pumlCode = sampleCode
-        return pumlCode
+    fun build(layout: Layout): String {
+        var pumlCode = "@startsalt\n{#\n"
+        layout.row.forEach {
+            pumlCode += buildRow(it)
+        }
+        return pumlCode + "}\n@endsalt"
     }
 
-    private fun buildRow(): String {
-        val span = 1
-        return ""
+    private fun buildRow(row: RowLt): String {
+        var s = ""
+        row.cols.forEach {
+            s += buildCol(it)
+        }
+        return s
+    }
+
+    private fun buildCol(cols: ColsLt): String {
+        var s = ". "
+        val span: Int? = cols.col.span
+        if (span == null) {
+            s += "| . "
+        } else {
+            for (i in 1..span) {
+                s += "| * "
+            }
+        }
+        return s + "\n"
     }
 
 }

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.isis.client.kroviz.ui
+package org.apache.isis.client.kroviz.ui.table
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
@@ -25,13 +25,12 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.*
 import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
-import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.diagram.PumlBuilder
+import org.apache.isis.client.kroviz.ui.diagram.SequenceDiagram
 import kotlin.test.*
 
-class PumlBuilderTest {
+class SequenceDiagramTest {
 
     @BeforeTest
     fun setup() {
@@ -41,24 +40,6 @@ class PumlBuilderTest {
         UiManager.login(url, user, pw)
     }
 
-    @Test
-    fun testSimpleObject() {
-        //given
-        val pkg = "domainapp.modules.simple.dom.impl"
-        val cls = "SimpleObject"
-
-        val jsonStr = SO.str
-        val domainType = DomainTypeHandler().parse(jsonStr) as DomainType
-
-        //when
-        val actual = PumlBuilder().with(domainType)
-        //then
-        assertTrue(actual.startsWith("\"@startuml"))
-        assertTrue(actual.endsWith("@enduml\""))
-        assertTrue(actual.contains("package $pkg {\\n"))
-        assertTrue(actual.contains("class $cls\\n"))
-    }
-
     //@Test   //TODO IntegrationTest ?
     fun testSequenceDiagram() {
         //given
@@ -66,7 +47,7 @@ class PumlBuilderTest {
         fillEventStoreWith(RESTFUL_SERVICES)
         fillEventStoreWith(RESTFUL_MENUBARS)
         //when
-        val actual = PumlBuilder().with(rootLe)
+        val actual = SequenceDiagram.with(rootLe)
         //then
         assertEquals(3, EventStore.log.size)
         console.log("[PBT.testSequenceDiagram]")
@@ -102,7 +83,7 @@ class PumlBuilderTest {
         assertNotNull(rootLogEntry)  //1
 
         // when
-        val code = PumlBuilder().with(rootLogEntry)
+        val code = SequenceDiagram.with(rootLogEntry)
         // then
         console.log("[PumlBuilderTest.testEventDiagram]")
         console.log(code)
@@ -111,7 +92,7 @@ class PumlBuilderTest {
     }
 
     private fun load(response: Response, handler: BaseHandler) {
-        val rs =  ResourceSpecification(response.url)
+        val rs = ResourceSpecification(response.url)
         EventStore.start(rs, Method.GET.operation)
         val le = EventStore.end(rs, response.str)!!
         val tObj = handler.parse(response.str)!!

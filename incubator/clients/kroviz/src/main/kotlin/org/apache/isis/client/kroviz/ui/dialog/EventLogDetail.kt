@@ -19,11 +19,13 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.FormItem
-import org.apache.isis.client.kroviz.ui.diagram.PumlBuilder
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
+import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.utils.Utils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
@@ -56,22 +58,17 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 widthPerc = 60).open()
     }
 
-
     override fun execute() {
         val str = logEntry.response
-        val json = when {
+        val pumlCode = when {
             str.startsWith("<") -> {
-                XmlHelper.xml2json(str)
+                LayoutDiagram.build(logEntry.obj as Layout)
             }
-            str.startsWith("{") -> str
+            str.startsWith("{") ->
+                JsonDiagram.build(str)
             else -> "{}"
         }
-        val pumlCode = PumlBuilder().asJsonDiagram(json)
         DiagramDialog("Response Diagram", pumlCode).open()
-    }
-
-    fun executeConsole() {
-        console.log(logEntry)
     }
 
 }

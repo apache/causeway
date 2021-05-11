@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
-import org.apache.isis.client.kroviz.ui.diagram.UmlDiagram
+import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import org.apache.isis.client.kroviz.utils.IconManager
 import io.kvision.core.*
 import io.kvision.html.Button
@@ -65,7 +65,7 @@ object RoStatusBar {
         classDiagram.style = ButtonStyle.OUTLINESUCCESS
         classDiagram.onClick {
             val title = dd.title
-            val code = UmlDiagram.buildClass(dd)
+            val code = ClassDiagram.build(dd)
             DiagramDialog(title, code).open()
         }
     }

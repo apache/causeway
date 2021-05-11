@@ -85,7 +85,7 @@ class DiagramDialog(
         val menu = mutableListOf<KvisionHtmlLink>()
         val action = MenuFactory.buildActionLink(
                 label = "Pin",
-                menuTitle = "pin")
+                menuTitle = "Pin")
         action.onClick {
             pin()
         }
