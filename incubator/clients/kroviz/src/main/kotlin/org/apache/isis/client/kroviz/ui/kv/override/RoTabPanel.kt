@@ -21,7 +21,6 @@ package org.apache.isis.client.kroviz.ui.kv.override
 /**
  * Copied from TabPanel in order to:
  * * add IconMenu to (Ro)Tab
- * * recreate svg from LogEntry on focus
  */
 
 import com.github.snabbdom.VNode
@@ -31,8 +30,8 @@ import io.kvision.panel.VPanel
 import io.kvision.routing.RoutingManager
 import io.kvision.state.ObservableState
 import io.kvision.state.bind
+import io.kvision.utils.auto
 import io.kvision.utils.obj
-import io.kvision.utils.perc
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.ui.core.RoView
 
@@ -117,7 +116,7 @@ open class RoTabPanel(
         }
 
     init {
-        width = 100.perc
+        width = auto
         marginTop = CssSize(40, UNIT.px)
         when (tabPosition) {
             TabPosition.TOP -> {
@@ -145,7 +144,6 @@ open class RoTabPanel(
     override fun render(): VNode {
         return render("div", childrenVNodes())
     }
-
 
     private fun calculateSideClasses(): Pair<String, String> {
         return when (sideTabSize) {

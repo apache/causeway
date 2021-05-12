@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
@@ -62,12 +62,15 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         val str = logEntry.response
         val pumlCode = when {
             str.startsWith("<") -> {
-                LayoutDiagram.build(logEntry.obj as Layout)
+                val grid = logEntry.obj as Grid
+                LayoutDiagram.build(grid)
             }
             str.startsWith("{") ->
                 JsonDiagram.build(str)
             else -> "{}"
         }
+        console.log("[ELD.execute]")
+        console.log(pumlCode)
         DiagramDialog("Response Diagram", pumlCode).open()
     }
 

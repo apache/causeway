@@ -18,9 +18,9 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
-import org.apache.isis.client.kroviz.layout.ColsLt
-import org.apache.isis.client.kroviz.layout.Layout
-import org.apache.isis.client.kroviz.layout.RowLt
+import org.apache.isis.client.kroviz.to.bs3.Col
+import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs3.Row
 
 object LayoutDiagram {
 
@@ -33,33 +33,35 @@ object LayoutDiagram {
             "}\n" +
             "@endsalt"
 
-    fun build(layout: Layout): String {
+    fun build(grid: Grid): String {
         var pumlCode = "@startsalt\n{#\n"
-        layout.row.forEach {
+        grid.rows.forEach {
             pumlCode += buildRow(it)
         }
         return pumlCode + "}\n@endsalt"
     }
 
-    private fun buildRow(row: RowLt): String {
+    val blue = "<color:Blue>"
+    val green = "<color:Green>"
+    private fun buildRow(row: Row): String {
         var s = ""
-        row.cols.forEach {
-            s += buildCol(it)
+        row.colList.forEachIndexed() { index, it ->
+            if (index % 2 == 0)
+                s += buildCol(it, blue)
+            else
+                s += buildCol(it, green)
         }
-        return s
+        s = s.dropLast(1)
+        return s + "\n"
     }
 
-    private fun buildCol(cols: ColsLt): String {
-        var s = ". "
-        val span: Int? = cols.col.span
-        if (span == null) {
-            s += "| . "
-        } else {
-            for (i in 1..span) {
-                s += "| * "
-            }
+    private fun buildCol(col: Col, colorCode: String): String {
+        var s = ""
+        val span: Int = col.span
+        repeat(span) {
+            s += "$colorCode C |"
         }
-        return s + "\n"
+        return s
     }
 
 }
