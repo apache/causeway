@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.postprocessors.all;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.layout.AssociateWithFacet;
-import org.apache.isis.core.metamodel.facets.actions.layout.AssociateWithFacetDerivedFromChoicesByFacet;
+import org.apache.isis.core.metamodel.facets.actions.layout.AssociateWithFacetDerivedFromChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * Replaces some of the functionality in {@link DescribedAsFacetOnMemberFactory} and
  * {@link DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory}.
  */
-public class DeriveAssociateWithFromChoicesByPostProcessor
+public class DeriveAssociateWithFromChoicesFromPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
@@ -49,7 +49,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(objectAction.containsNonFallbackFacet(AssociateWithFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(AssociateWithFacetDerivedFromChoicesByFacet.create(
+        FacetUtil.addFacet(AssociateWithFacetDerivedFromChoicesFromFacet.create(
                 objectAction.lookupNonFallbackFacet(ChoicesFromFacet.class),
                 facetedMethodFor(objectAction)));
     }

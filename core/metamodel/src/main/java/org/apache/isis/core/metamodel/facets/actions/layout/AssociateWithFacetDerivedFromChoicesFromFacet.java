@@ -25,20 +25,20 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 
-public class AssociateWithFacetDerivedFromChoicesByFacet extends AssociateWithFacetAbstract {
+public class AssociateWithFacetDerivedFromChoicesFromFacet extends AssociateWithFacetAbstract {
 
-    public static AssociateWithFacetDerivedFromChoicesByFacet create(
+    public static AssociateWithFacetDerivedFromChoicesFromFacet create(
             final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
             final FacetHolder holder) {
 
         return choicesFromFacetIfAny
                 .map(ChoicesFromFacet::value)
                 .filter(_Strings::isNotEmpty)
-                .map(associateWith -> new AssociateWithFacetDerivedFromChoicesByFacet(associateWith, holder))
+                .map(associateWith -> new AssociateWithFacetDerivedFromChoicesFromFacet(associateWith, holder))
                 .orElse(null);
     }
 
-    private AssociateWithFacetDerivedFromChoicesByFacet(
+    private AssociateWithFacetDerivedFromChoicesFromFacet(
             final String value,
             final FacetHolder holder) {
         super(value, holder);

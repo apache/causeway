@@ -416,7 +416,7 @@ public interface ObjectAction extends ObjectMember {
 
             final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
 
-            return new ChoicesBy(collection)
+            return new ChoicesFrom(collection)
                     .and(new HasParameterMatching(
                             new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
                             ));
@@ -450,11 +450,11 @@ public interface ObjectAction extends ObjectMember {
 
         }
 
-        private static class ChoicesBy implements Predicate<ObjectAction> {
+        private static class ChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;
             private final @NonNull String memberName;
 
-            public ChoicesBy(final @NonNull ObjectAssociation objectAssociation) {
+            public ChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
                 this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
                 this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
             }
