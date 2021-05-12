@@ -41,9 +41,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.tenancy.spi.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 import lombok.val;
 
@@ -110,7 +109,7 @@ public class TenantedAuthorizationPostProcessor
     @Inject ServiceRegistry serviceRegistry;
     @Inject ServiceInjector serviceInjector;
     @Inject UserService userService;
-    @Inject @Lazy ApplicationUserRepository<? extends ApplicationUser> userRepository;
+    @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

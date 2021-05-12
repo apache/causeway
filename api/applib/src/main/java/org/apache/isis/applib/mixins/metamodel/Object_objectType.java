@@ -20,12 +20,14 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -56,16 +58,25 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_objectType {
 
-    @Inject private BookmarkService bookmarkService;
+    @Inject BookmarkService bookmarkService;
+    @Inject MetaModelService metaModelService;
 
     private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectType> {}
 
+    @Action(
+            domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)
+    )
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getObjectType();
+    }
+
+    public boolean hideProp() {
+        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        return !metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED).isEntity();
     }
 
 }

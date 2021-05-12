@@ -18,7 +18,7 @@ These are explored in the sections below.
 Domain events are fired -- through the internal xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
 
 By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()] attribute allows a custom subclass to be specified if necessary.
-Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.
+Similarly, rendering a collection causes a `DomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.
 
 In fact, each event can be fired up to five times, with the event's `getEventPhase()` method indicating to the subscriber the phase:
 
