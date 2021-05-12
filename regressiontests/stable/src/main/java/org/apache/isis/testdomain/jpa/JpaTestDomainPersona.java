@@ -118,8 +118,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                 }
 
-                @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-                @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+                @Inject private ApplicationUserRepository applicationUserRepository;
+                @Inject private ApplicationRoleRepository applicationRoleRepository;
                 @Inject private SecmanConfiguration securityConfig;
 
             };
