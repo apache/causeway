@@ -16,17 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.services;
+package org.apache.isis.core.webapp.impersonation;
 
 import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
@@ -38,38 +39,47 @@ import org.apache.isis.applib.services.user.UserMemento;
  *
  * @since 2.0 {@index}
  */
-@Service
-@Named("isis.runtimeservices.ImpersonatedUserHolderWicket")
+@Component
+@RequestScope
+@Named("isis.webapp.ImpersonatedUserHolderUsingHttpSession")
 @Order(OrderPrecedence.MIDPOINT)
-@Qualifier("HttpSession")
-public class ImpersonatedUserHolderWicket implements ImpersonatedUserHolder {
+public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserHolder {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Inject private final HttpSession httpSession;
+    private final Optional<HttpSession> httpSession;
 
-    private static final String HTTP_SESSION_KEY_IMPERSONATED_USER = ImpersonatedUserHolderWicket.class.getName() + "#userMemento";
+    private static final String HTTP_SESSION_KEY_IMPERSONATED_USER =
+            ImpersonatedUserHolderUsingHttpSession.class.getName() + "#userMemento";
 
-    public ImpersonatedUserHolderWicket(HttpSession httpSession) {
-        this.httpSession = httpSession;
+    @Inject
+    public ImpersonatedUserHolderUsingHttpSession(final HttpServletRequest httpServletRequest) {
+        this.httpSession = Optional.ofNullable(httpServletRequest.getSession(false));
     }
 
     @Override
     public boolean supportsImpersonation() {
-        return true;
+        return httpSession.isPresent();
     }
 
+    @Override
     public void setUserMemento(final UserMemento userMemento) {
-        this.httpSession.setAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER, userMemento);
+        httpSession
+        .ifPresent(session->
+            session.setAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER, userMemento));
     }
 
+    @Override
     public Optional<UserMemento> getUserMemento() {
-        final Object attribute = this.httpSession.getAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER);
-        return attribute instanceof UserMemento
-                ? Optional.of((UserMemento)attribute)
-                : Optional.empty();
+        return httpSession
+            .map(session->session.getAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER))
+            .filter(UserMemento.class::isInstance)
+            .map(UserMemento.class::cast);
     }
 
+    @Override
     public void clearUserMemento() {
-        this.httpSession.removeAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER);
+        httpSession.ifPresent(session->
+            session.removeAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER));
     }
+
+
 }
