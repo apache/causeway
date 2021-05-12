@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -127,7 +127,7 @@ implements MetaModelRefiner {
         }
         
         //TODO[2253] remove this hotfix once ISIS-2253 is fixed
-        if(paramNum==0 && objectAction.containsNonFallbackFacet(AssociatedWithFacet.class)) {
+        if(paramNum==0 && objectAction.containsNonFallbackFacet(ChoicesFromFacet.class)) {
             return; 
         }
         

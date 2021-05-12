@@ -17,14 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-/**
- * Associates an action with a collection, for the purpose of defaulting
- * choices and defaults of parameters of the same type.
- */
-public interface AssociatedWithFacet extends SingleStringValueFacet {
+public abstract class AssociateWithFacetAbstract
+extends SingleStringValueFacetAbstract
+implements AssociateWithFacet {
+
+    public static Class<? extends Facet> type() {
+        return AssociateWithFacet.class;
+    }
+
+    protected AssociateWithFacetAbstract(
+            final String value,
+            final FacetHolder holder) {
+        super(type(), holder, value);
+    }
 
 }

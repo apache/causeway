@@ -50,6 +50,24 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 public @interface ActionLayout {
 
     /**
+     * Associates this action with a property or collection, specifying its id.
+     *
+     * <p>
+     *     To specify the layout order use {@link ActionLayout#sequence()}.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")</code>
+     * </p>
+     *
+     * @see ActionLayout#sequence()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     */
+    String associateWith()
+            default "";
+
+    /**
      * Whether (and how) this action can be bookmarked in the UI.
      *
      * <p>
@@ -111,22 +129,24 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * Specifies the <b>id</b> of associated <i>FieldSet</i>.  
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.
      * <p>
      * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}.
      * </p>
-     * 
-     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     *
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()}
      * instead.
-     * 
-     * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i> 
-     * its so called <i>peer</i>. 
+     *
+     * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i>
+     * its so called <i>peer</i>.
      * It will then be positioned close to its <i>peer</i>, either under it or on the header panel
-     * depending on other layout facets. Such an association is made available via 
-     * {@link Action#associateWith()}. However, in the presence of a {@link ActionLayout#fieldSet()} 
+     * depending on other layout facets. Such an association is made available via
+     * {@link ActionLayout#associateWith()}. However, with the presence of a {@link ActionLayout#fieldSetId()}
+     * or a {@link ActionLayout#fieldSetName()}
      * this default placement is overruled.
-     * 
-     * @see Action#associateWith()
+     *
+     * @see Action#choicesFrom()
+     * @see ActionLayout#associateWith()
      * @see ActionLayout#fieldSetName()
      * @see PropertyLayout#fieldSetId()
      * @see PropertyLayout#fieldSetName()
@@ -134,17 +154,18 @@ public @interface ActionLayout {
      */
     String fieldSetId()
             default "__infer";
-    
+
     /**
      * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i> or <i>Collection</i>.
      * <p>
-     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}; 
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()};
      * </p>
-     * 
-     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     *
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()}
      * instead.
-     * 
-     * @see Action#associateWith()
+     *
+     * @see Action#choicesFrom()
+     * @see ActionLayout#associateWith()
      * @see ActionLayout#fieldSetId()
      * @see PropertyLayout#fieldSetId()
      * @see PropertyLayout#fieldSetName()
@@ -152,7 +173,7 @@ public @interface ActionLayout {
      */
     String fieldSetName()
             default "__infer";
-    
+
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
@@ -219,9 +240,9 @@ public @interface ActionLayout {
      */
     Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
-    
+
     /**
-     * The order of this member relative to other members in the same (layout) group, 
+     * The order of this member relative to other members in the same (layout) group,
      * given in <i>Dewey-decimal</i> notation.
      * <p>
      *     An alternative is to use the <code>Xxx.layout.xml</code> file,

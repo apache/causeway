@@ -108,12 +108,12 @@ implements
     }
 
     @Override
-    public Can<ObjectAction> getAssociatedActionsWithBulkSupport() {
+    public Can<ObjectAction> getActionsWithChoicesFrom() {
         val managedCollection = getManagedCollection();
         final OneToManyAssociation collection = managedCollection.getCollection();
         return managedCollection.getOwner().getSpecification()
                 .streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.associatedWithAndHavingCollectionParameterFor(collection))
+                .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(collection))
                 .collect(Can.toCan());
     }
 

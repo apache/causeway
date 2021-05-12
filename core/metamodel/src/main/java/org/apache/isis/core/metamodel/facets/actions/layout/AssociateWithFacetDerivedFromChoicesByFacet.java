@@ -17,13 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 
-public class AssociatedWithFacetForActionAnnotation extends AssociatedWithFacetAbstract {
+public class AssociateWithFacetDerivedFromChoicesByFacet extends AssociateWithFacetAbstract {
 
-    public AssociatedWithFacetForActionAnnotation(
+    public static AssociateWithFacetDerivedFromChoicesByFacet create(
+            final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
+            final FacetHolder holder) {
+
+        return choicesFromFacetIfAny
+                .map(ChoicesFromFacet::value)
+                .filter(_Strings::isNotEmpty)
+                .map(associateWith -> new AssociateWithFacetDerivedFromChoicesByFacet(associateWith, holder))
+                .orElse(null);
+    }
+
+    private AssociateWithFacetDerivedFromChoicesByFacet(
             final String value,
             final FacetHolder holder) {
         super(value, holder);

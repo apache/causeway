@@ -380,7 +380,7 @@ implements ObjectSpecification {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 objectActions.stream()
-                .filter(ObjectAction.Predicates.ofType(actionType))
+                .filter(ObjectAction.Predicates.ofActionType(actionType))
                 .forEach(objectActionForType::add);
             }
         }

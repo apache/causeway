@@ -128,7 +128,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
         if(toggleboxColumn == null) {
             val entityCollectionModel = getModel();
 
-            val associatedActions = entityCollectionModel.getAssociatedActionsWithBulkSupport();
+            val associatedActions = entityCollectionModel.getActionsWithChoicesFrom();
             if(associatedActions.isEmpty()) {
                 return null;
             }

@@ -19,27 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-/**
- * Associates an action with a collection, for the purpose of defaulting
- * choices and defaults of parameters of the same type.
- */
-public abstract class AssociatedWithFacetAbstract
-extends SingleStringValueFacetAbstract
-implements AssociatedWithFacet {
+public class ChoicesFromFacetForActionAnnotation extends ChoicesFromFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return AssociatedWithFacet.class;
-    }
-
-
-    public AssociatedWithFacetAbstract(
+    public ChoicesFromFacetForActionAnnotation(
             final String value,
             final FacetHolder holder) {
-        super(type(), holder, value);
+        super(value, holder);
     }
 
 }

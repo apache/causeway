@@ -40,9 +40,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 import lombok.val;
 
-public class ActionLayoutFacetFactory 
+public class ActionLayoutFacetFactory
 extends FacetFactoryAbstract {
-    
+
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -56,7 +56,12 @@ extends FacetFactoryAbstract {
                         ActionLayout.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
-        
+
+        // associatedWith
+        AssociateWithFacetForActionLayoutAnnotation associatedWithFacet = AssociateWithFacetForActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder);
+        super.addFacet(associatedWithFacet);
+
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
@@ -77,7 +82,7 @@ extends FacetFactoryAbstract {
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-        
+
         // layoutGroup
         LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(layoutGroupFacet);
@@ -106,9 +111,9 @@ extends FacetFactoryAbstract {
             redirectFacet = new RedirectFacetFallback(facetHolder);
         }
         super.addFacet(redirectFacet);
-        
+
         // sequence (layout)
-        LayoutOrderFacet layoutOrderFacet = LayoutOrderFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder); 
+        LayoutOrderFacet layoutOrderFacet = LayoutOrderFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(layoutOrderFacet);
 
     }

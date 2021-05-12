@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import javax.annotation.Nullable;
 
@@ -26,16 +26,16 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName
 
 import lombok.NonNull;
 
-public class AssociatedWithFacetFromLayoutXml extends AssociatedWithFacetAbstract {
+public class AssociateWithFacetForLayoutXml extends AssociateWithFacetAbstract {
 
     // -- FACTORIES
 
-    public static @Nullable AssociatedWithFacetFromLayoutXml create(
+    public static @Nullable AssociateWithFacetForLayoutXml create(
             final @Nullable GroupIdAndName groupIdAndName,
             final @NonNull  FacetHolder holder) {
 
         return groupIdAndName!=null
-                ? new AssociatedWithFacetFromLayoutXml(groupIdAndName.getId(), holder)
+                ? new AssociateWithFacetForLayoutXml(groupIdAndName.getId(), holder)
                 : null;
     }
 
@@ -50,7 +50,7 @@ public class AssociatedWithFacetFromLayoutXml extends AssociatedWithFacetAbstrac
 
     // -- IMPLEMENTATION
 
-    private AssociatedWithFacetFromLayoutXml(
+    private AssociateWithFacetForLayoutXml(
             final String value,
             final FacetHolder holder) {
         super(value, holder);

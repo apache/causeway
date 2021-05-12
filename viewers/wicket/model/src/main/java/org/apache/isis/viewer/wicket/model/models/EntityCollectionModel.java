@@ -118,12 +118,11 @@ extends
     }
 
     /**
-     * A subset of {@link #getAssociatedActions()}, with the additional
-     * constraint of these actions being targets for the multi-select UI feature.
+     * Returns all actions that are targets for the multi-select UI feature.
      * That typically means, their first parameter is a non-scalar type with an
      * element type that corresponds to the element type of this collection.
      */
-    default Can<ObjectAction> getAssociatedActionsWithBulkSupport() {
+    default Can<ObjectAction> getActionsWithChoicesFrom() {
         return Can.empty();
     }
 
