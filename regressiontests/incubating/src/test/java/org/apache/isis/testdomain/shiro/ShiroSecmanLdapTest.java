@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.shiro;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -42,12 +41,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
@@ -59,9 +56,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
-                Configuration_usingJdoAndShiro.class, 
-        }, 
+        classes = {
+                Configuration_usingJdoAndShiro.class,
+        },
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
@@ -86,20 +83,20 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject LdapServerService ldapServerService;
-    @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
     void beforeEach() {
-        
+
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
-        
+
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
-    
+
     @AfterEach
     void afterEach() {
         tearDownShiro();
@@ -111,11 +108,11 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 LdapConstants.SVEN_PRINCIPAL,
                 "pass");
 
@@ -133,16 +130,16 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         val secMan = getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
         val username = LdapConstants.OLAF_PRINCIPAL;
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 username,
                 "pass");
 
-        // default behavior is to create the account within the DB but leave it disabled 
+        // default behavior is to create the account within the DB but leave it disabled
         assertThrows(DisabledAccountException.class, ()->{
             subject.login(token);
         });
@@ -158,12 +155,12 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
-        
-        val subject = SecurityUtils.getSubject(); 
+
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 LdapConstants.SVEN_PRINCIPAL,
                 "invalid-pass");
 
@@ -181,12 +178,12 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
         val username = "non-existent-user";
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 username,
                 "invalid-pass");
 
