@@ -35,11 +35,13 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "username",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(
-        sequence = "1"
+        position = ActionLayout.Position.PANEL,
+        sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationUser_delete {

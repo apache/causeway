@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api.user.dom.mixins;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -36,9 +37,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "username",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
-        )
+)
+@ActionLayout(
+        position = ActionLayout.Position.PANEL,
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_duplicate {
 

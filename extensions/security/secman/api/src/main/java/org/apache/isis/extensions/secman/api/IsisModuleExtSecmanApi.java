@@ -53,7 +53,6 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenan
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_removeChild;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_removeUser;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_updateName;
-import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_updateParent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_users;
 import org.apache.isis.extensions.secman.api.tenancy.menu.ApplicationTenancyMenu;
 import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
@@ -143,7 +142,6 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
         ApplicationTenancy_removeChild.class,
         ApplicationTenancy_removeUser.class,
         ApplicationTenancy_updateName.class,
-        ApplicationTenancy_updateParent.class,
         ApplicationTenancy_users.class,
 
         //ApplicationUser

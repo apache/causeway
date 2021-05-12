@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -32,8 +33,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
+        associateWith = "role",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
+@ActionLayout(
+        position = ActionLayout.Position.PANEL,
+        sequence = "1"
 )
 @RequiredArgsConstructor
 public class ApplicationPermission_delete {

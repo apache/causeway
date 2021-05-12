@@ -34,10 +34,14 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        associateWith = "name",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+        position = ActionLayout.Position.PANEL,
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
 
@@ -49,7 +53,7 @@ public class ApplicationRole_delete {
     private final ApplicationRole holder;
 
     @MemberSupport
-    public Collection<? extends ApplicationRole> act() {
+    public Collection<ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();
     }

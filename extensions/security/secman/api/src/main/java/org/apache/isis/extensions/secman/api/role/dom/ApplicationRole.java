@@ -29,6 +29,9 @@ import java.util.SortedSet;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -64,11 +67,20 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     @Property(
             domainEvent = Name.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Name.MAX_LENGTH
     )
     @PropertyLayout(
+            fieldSetId = "identity",
             sequence = "1",
             typicalLength= Name.TYPICAL_LENGTH
+    )
+    @Parameter(
+            maxLength = Name.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Name",
+            typicalLength = Name.TYPICAL_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -89,10 +101,21 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
     @Property(
             domainEvent = Description.DomainEvent.class,
             editing = Editing.DISABLED,
-            maxLength = Description.MAX_LENGTH
+            maxLength = Description.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
-            sequence = "2",
+            fieldSetId = "details",
+            sequence = "1",
+            typicalLength = Description.TYPICAL_LENGTH
+    )
+    @Parameter(
+            maxLength = Description.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            multiLine = 5,
+            named = "Description",
             typicalLength = Description.TYPICAL_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

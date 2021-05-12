@@ -46,9 +46,9 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-		named="Remove",
-		sequence = "10",
-		promptStyle = PromptStyle.DIALOG_MODAL
+		named = "Remove",
+		promptStyle = PromptStyle.DIALOG_MODAL,
+		sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {

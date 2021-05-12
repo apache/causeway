@@ -25,41 +25,107 @@ under the License.
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-            <cpt:action id="recentAuditEntries"/>
-            <cpt:action id="clearHints"/>
-            <cpt:action id="downloadLayoutXml"/>
-            <cpt:action id="openRestApi"/>
-            <cpt:action id="rebuildMetamodel"/>
-            <cpt:action id="recentCommands"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
-        <bs3:col span="6">
-            <cpt:fieldSet name="Id" id="id" unreferencedProperties="true">
-                <cpt:property id="namespaceName"/>
-                <cpt:property id="typeSimpleName"/>
-                <cpt:property id="memberName"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Data Type" id="dataType">
-                <cpt:property id="returnType"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Metadata" id="metadata"/>
+        <bs3:col span="4">
+            <bs3:tabGroup>
+                <bs3:tab name="Identity">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Other">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
         </bs3:col>
-        <bs3:col span="6">
-            <cpt:fieldSet name="Parent" id="parent">
-                <cpt:property id="parent"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Contributed" id="contributed">
-                <cpt:property id="contributed"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Detail" id="detail">
-                <cpt:property id="derived"/>
-                <cpt:property id="maxLength"/>
-                <cpt:property id="typicalLength"/>
-            </cpt:fieldSet>
+        <bs3:col span="4">
+            <bs3:tabGroup collapseIfOne="false">
+                <bs3:tab name="Hierarchy">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Parent" id="parent"/>
+                        </bs3:col>
+                    </bs3:row>
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="contents"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
         </bs3:col>
-        <bs3:col span="12" unreferencedCollections="true">
-            <cpt:collection id="permissions"/>
+        <bs3:col span="4">
+            <bs3:tabGroup>
+                <bs3:tab name="Detail">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Detail" id="detail"/>
+                            <cpt:fieldSet name="Data Type" id="dataType"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Contributed">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Contributed" id="contributed"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Permissions">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="permissions"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:tabGroup>
+                <bs3:tab name="Actions">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="actions"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Properties">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="properties"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Collections">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="collections"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:tabGroup unreferencedCollections="true"/>
         </bs3:col>
     </bs3:row>
 </bs3:grid>

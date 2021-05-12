@@ -47,6 +47,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     }
 
 
+
     // -- returnType
 
     @ApplicationFeatureViewModel.TypeSimpleName
@@ -54,7 +55,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             domainEvent = ReturnType.DomainEvent.class
     )
     @PropertyLayout(
-            fieldSetName = "Data Type",
+            fieldSetId = "dataType",
             sequence = "2.6"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -63,12 +64,17 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
+    @PropertyLayout(
+            fieldSetId = "dataType", // TODO: shouldn't be necessary??
+            sequence = "2.6"
+    )
     @ReturnType
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
                 .orElse("<none>");
     }
+
 
 
     // -- derived

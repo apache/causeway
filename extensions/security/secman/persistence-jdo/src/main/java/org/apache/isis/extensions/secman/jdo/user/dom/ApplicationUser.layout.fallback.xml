@@ -21,51 +21,47 @@ under the License.
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-            <cpt:action id="delete"/>
-            <cpt:action id="open"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
         <bs3:col span="4">
-            <cpt:fieldSet name="Id" id="id" unreferencedProperties="true">
-                <cpt:property id="name"/>
-                <cpt:property id="username"/>
-                <cpt:property id="encryptedPassword"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Status" id="status">
-                <cpt:property id="accountType"/>
-                <cpt:property id="hasPassword"/>
-                <cpt:property id="status"/>
-                <cpt:property id="atPath"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Metadata" id="metadata">
-                <cpt:property id="datanucleusIdLong"/>
-                <cpt:property id="datanucleusVersionLong"/>
-                <cpt:property id="datanucleusVersionTimestamp"/>
-            </cpt:fieldSet>
+			<bs3:tabGroup>
+				<bs3:tab name="Identity">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Identity" id="identity"/>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				<bs3:tab name="Other">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				<bs3:tab name="Metadata">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Metadata" id="metadata"/>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+			</bs3:tabGroup>
+            <cpt:fieldSet name="Access" id="access"/>
         </bs3:col>
         <bs3:col span="8">
+			<bs3:row>
+				<bs3:col span="6">
+					<cpt:fieldSet name="Contact Details" id="contactDetails"/>
+				</bs3:col>
+				<bs3:col span="6">
+					<cpt:fieldSet name="Name" id="name"/>
+				</bs3:col>
+			</bs3:row>
         	<bs3:row>
         		<bs3:col span="12">
         			<bs3:tabGroup>
-        				<bs3:tab name="Name and Contact Details">
-        					<bs3:row>
-        						<bs3:col span="6">
-						            <cpt:fieldSet name="Contact Details" id="contactDetails">
-						                <cpt:property id="emailAddress"/>
-						                <cpt:property id="phoneNumber"/>
-						                <cpt:property id="faxNumber"/>
-						            </cpt:fieldSet>
-        						</bs3:col>
-        						<bs3:col span="6">
-						            <cpt:fieldSet name="Name" id="name">
-						                <cpt:property id="familyName"/>
-						                <cpt:property id="givenName"/>
-						                <cpt:property id="knownAs"/>
-						            </cpt:fieldSet>						            
-        						</bs3:col>
-        					</bs3:row>
-        				</bs3:tab>
 		        		<bs3:tab name="Roles">
 		        			<bs3:row>
 		        				<bs3:col span="12">
@@ -80,14 +76,14 @@ under the License.
 		        				</bs3:col>
 		        			</bs3:row>
 		        		</bs3:tab>
-		        		<bs3:tab name="Other">
-		        			<bs3:row>
-		        				<bs3:col span="12" unreferencedCollections="true" />
-		        			</bs3:row>
-		        		</bs3:tab>
         			</bs3:tabGroup>
         		</bs3:col>
         	</bs3:row>
         </bs3:col>
     </bs3:row>
+	<bs3:row>
+		<bs3:col span="12">
+			<bs3:tabGroup unreferencedCollections="true"/>
+		</bs3:col>
+	</bs3:row>
 </bs3:grid>

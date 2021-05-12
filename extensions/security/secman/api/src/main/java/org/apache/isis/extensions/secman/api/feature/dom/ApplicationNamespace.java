@@ -48,7 +48,8 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
     }
 
 
-    // -- contents (collection, for packages only)
+
+    // -- contents (collection, for namespaces only)
 
     @Collection(
             domainEvent = Contents.DomainEvent.class

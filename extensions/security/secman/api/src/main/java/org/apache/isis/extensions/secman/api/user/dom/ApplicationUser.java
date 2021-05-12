@@ -29,6 +29,9 @@ import java.util.SortedSet;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -117,12 +120,19 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = Username.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Username.MAX_LENGTH
     )
     @PropertyLayout(
             fieldSetId="identity",
             hidden = Where.PARENTED_TABLES,
             sequence = "1"
+    )
+    @Parameter(
+            maxLength = Username.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Username"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -141,12 +151,21 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = FamilyName.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = FamilyName.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetId = "name",
             hidden = Where.ALL_TABLES,
             sequence = "2.1"
+    )
+    @Parameter(
+            maxLength = FamilyName.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named="Family Name"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -165,12 +184,21 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = GivenName.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = GivenName.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetId = "name",
             hidden = Where.ALL_TABLES,
             sequence = "2.2"
+    )
+    @Parameter(
+            maxLength = GivenName.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named="Given Name"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -189,12 +217,21 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = KnownAs.KnownAsDomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = KnownAs.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetId = "name",
             hidden = Where.ALL_TABLES,
             sequence = "2.3"
+    )
+    @Parameter(
+            maxLength = KnownAs.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named="Known As"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -212,19 +249,26 @@ public interface ApplicationUser
     // -- EMAIL ADDRESS
 
     @Property(
-            domainEvent = EmailAddress.EmailAddressDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = EmailAddress.DomainEvent.class,
+            editing = Editing.DISABLED,
+            maxLength = EmailAddress.MAX_LENGTH
     )
     @PropertyLayout(
             fieldSetName = "Contact Details",
             sequence = "3.1"
+    )
+    @Parameter(
+            maxLength = EmailAddress.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Email"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface EmailAddress {
         int MAX_LENGTH = 120;
 
-        class EmailAddressDomainEvent extends PropertyDomainEvent<String> {}
+        class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @EmailAddress
@@ -236,11 +280,19 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = PhoneNumber.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = PhoneNumber.MAX_LENGTH
     )
     @PropertyLayout(
             fieldSetName = "Contact Details",
             sequence = "3.2"
+    )
+    @Parameter(
+            maxLength = PhoneNumber.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named = "Phone"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -259,12 +311,21 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = FaxNumber.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = FaxNumber.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetName = "Contact Details",
             hidden = Where.PARENTED_TABLES,
             sequence = "3.3"
+    )
+    @Parameter(
+            maxLength = FaxNumber.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named = "Fax"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -283,11 +344,18 @@ public interface ApplicationUser
 
     @Property(
             domainEvent = AtPath.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
-            fieldSetId="atPath",
-            sequence = "3.4"
+            fieldSetId = "access",
+            sequence = "4"
+    )
+    @Parameter(
+            optionality = Optionality.OPTIONAL
+    )
+    @ParameterLayout(
+            named = "AtPath"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -307,8 +375,8 @@ public interface ApplicationUser
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "status",
-            sequence = "3"
+            fieldSetId = "access",
+            sequence = "2"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -328,8 +396,8 @@ public interface ApplicationUser
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "status",
-            sequence = "4"
+            fieldSetId = "access",
+            sequence = "1"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -364,8 +432,9 @@ public interface ApplicationUser
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "status",
-            sequence = "4"
+            fieldSetId = "access",
+            named = "Has password?",
+            sequence = "3"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -388,7 +457,7 @@ public interface ApplicationUser
     )
     @CollectionLayout(
             defaultView="table",
-            sequence = "20"
+            sequence = "1"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)

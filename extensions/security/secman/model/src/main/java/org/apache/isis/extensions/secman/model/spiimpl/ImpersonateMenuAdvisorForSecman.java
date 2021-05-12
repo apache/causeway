@@ -1,5 +1,6 @@
 package org.apache.isis.extensions.secman.model.spiimpl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ import lombok.val;
 @Service
 @Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman")
 @Order(OrderPrecedence.MIDPOINT)
-@Qualifier("Default")
+@Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
 
@@ -56,6 +57,9 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     @Override
     public List<String> roleNamesFor(
             final String username) {
+        if(username == null) {
+            return Collections.emptyList();
+        }
         val applicationUser =
                 applicationUserRepository.findByUsername(username)
                         .orElseThrow(RuntimeException::new);

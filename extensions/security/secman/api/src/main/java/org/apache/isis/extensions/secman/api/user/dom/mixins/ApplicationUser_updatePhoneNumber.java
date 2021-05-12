@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -35,7 +36,10 @@ import lombok.RequiredArgsConstructor;
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_updatePhoneNumber {
 
@@ -46,10 +50,7 @@ public class ApplicationUser_updatePhoneNumber {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(
-                    maxLength = ApplicationUser.PhoneNumber.MAX_LENGTH,
-                    optionality = Optionality.OPTIONAL
-            )
+            @ApplicationUser.PhoneNumber
             final String phoneNumber) {
         target.setPhoneNumber(phoneNumber);
         return target;

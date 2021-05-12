@@ -52,13 +52,12 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
 
     // -- memberName (properties)
 
-
     @ApplicationFeatureViewModel.MemberName
     @Property(
             domainEvent = MemberName.DomainEvent.class
     )
     @PropertyLayout(
-            fieldSetId="Id",
+            fieldSetId = "identity",
             sequence = "2.4"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

@@ -42,7 +42,10 @@ import lombok.RequiredArgsConstructor;
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(named="Add", sequence = "1")
+@ActionLayout(
+        named = "Add",
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationRole_addUser {
 

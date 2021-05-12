@@ -37,6 +37,7 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        named = "Add",
         sequence = "1"
 )
 @RequiredArgsConstructor

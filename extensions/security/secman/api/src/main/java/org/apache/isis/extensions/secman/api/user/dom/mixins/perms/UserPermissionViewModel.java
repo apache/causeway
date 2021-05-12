@@ -18,6 +18,10 @@
  */
 package org.apache.isis.extensions.secman.api.user.dom.mixins.perms;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
@@ -56,6 +60,8 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModel;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -75,7 +81,6 @@ public class UserPermissionViewModel implements ViewModel {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<UserPermissionViewModel, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<UserPermissionViewModel> {}
 
-    private static final int TYPICAL_LENGTH_VERB = 12;
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private FactoryService factory;
@@ -180,7 +185,7 @@ public class UserPermissionViewModel implements ViewModel {
 
         this.username = iterator.next();
 
-        this.viewingGranted = Boolean.valueOf(iterator.next());
+        this.viewingGranted = Boolean.parseBoolean(iterator.next());
         final String viewingEvaluationCauseFeatureIdType = iterator.next();
         final ApplicationFeatureSort viewingEvaluationFeatureIdType =  !viewingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(viewingEvaluationCauseFeatureIdType) : null;
         final String viewingEvaluationFeatureFqn = iterator.next();
@@ -194,7 +199,7 @@ public class UserPermissionViewModel implements ViewModel {
         this.viewingMode = !viewingEvaluationCauseMode.isEmpty()? ApplicationPermissionMode.valueOf(viewingEvaluationCauseMode): null;
 
 
-        this.changingGranted = Boolean.valueOf(iterator.next());
+        this.changingGranted = Boolean.parseBoolean(iterator.next());
         final String changingEvaluationCauseFeatureIdType = iterator.next();
         final ApplicationFeatureSort changingEvaluationFeatureIdType =  !changingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(changingEvaluationCauseFeatureIdType) : null;
         final String changingEvaluationFeatureFqn = iterator.next();
@@ -241,37 +246,53 @@ public class UserPermissionViewModel implements ViewModel {
 
 
     // -- user (derived property, hidden in parented tables)
-    public static class UserDomainEvent extends PropertyDomainEvent<ApplicationUser> {}
 
     @Property(
-            domainEvent = UserDomainEvent.class
-            )
-    @PropertyLayout(hidden=Where.PARENTED_TABLES, fieldSetId = "Permission", sequence = "1")
+            domainEvent = User.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "identity",
+            hidden=Where.PARENTED_TABLES,
+            sequence = "1"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface User {
+        class DomainEvent extends PropertyDomainEvent<ApplicationUser> {}
+    }
+
+    @User
     public ApplicationUser getUser() {
         return applicationUserRepository.findOrCreateUserByUsername(getUsername());
     }
 
+    @Getter(onMethod_ = {@Programmatic})
     private String username;
-    @Programmatic
-    public String getUsername() {
-        return username;
-    }
 
 
 
 
     // -- verb (derived property)
 
-    public static class VerbDomainEvent extends PropertyDomainEvent<String> {}
-
     private boolean viewingGranted;
     private boolean changingGranted;
 
-    @Property(
-            domainEvent = VerbDomainEvent.class
-            )
-    @PropertyLayout(typicalLength=UserPermissionViewModel.TYPICAL_LENGTH_VERB,
-        fieldSetId="Permission", sequence = "2")
+    @Property (
+            domainEvent = Verb.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "identity",
+            sequence = "2",
+            typicalLength= Verb.TYPICAL_LENGTH
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Verb {
+        int TYPICAL_LENGTH = 12;
+        class DomainEvent extends PropertyDomainEvent<String> {}
+    }
+
+    @Verb
     public String getVerb() {
         return changingGranted
                 ? "Can change"
@@ -283,13 +304,22 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- feature (derived property)
 
-    public static class FeatureDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel> {}
-
     @Property(
-            domainEvent = FeatureDomainEvent.class,
+            domainEvent = Feature.DomainEvent.class,
             editing = Editing.DISABLED
-            )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT, fieldSetId = "Permission",sequence = "4")
+    )
+    @PropertyLayout(
+            fieldSetId = "identity",
+            hidden=Where.REFERENCES_PARENT,
+            sequence = "4"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Feature {
+        class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel> {}
+    }
+
+    @Feature
     public ApplicationFeatureViewModel getFeature() {
         if(getFeatureId() == null) {
             return null;
@@ -298,50 +328,52 @@ public class UserPermissionViewModel implements ViewModel {
     }
 
 
+
+
+    @Getter(onMethod_ = {@Programmatic})
+    @Setter
     private ApplicationFeatureId featureId;
 
-    @Programmatic
-    public ApplicationFeatureId getFeatureId() {
-        return featureId;
-    }
-
-    public void setFeatureId(final ApplicationFeatureId applicationFeatureId) {
-        this.featureId = applicationFeatureId;
-    }
 
 
     // -- viewingPermission (derived property)
-
-    public static class ViewingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
 
     private ApplicationFeatureId viewingFeatureId;
     private ApplicationPermissionMode viewingMode;
     private ApplicationPermissionRule viewingRule;
 
     @Property(
-            domainEvent = ViewingPermissionDomainEvent.class,
+            domainEvent = ViewingPermission.DomainEvent.class,
             editing = Editing.DISABLED
-            )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT, fieldSetId="Cause", sequence = "2.1")
+    )
+    @PropertyLayout(
+            fieldSetId = "cause",
+            hidden = Where.REFERENCES_PARENT,
+            sequence = "1"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface ViewingPermission {
+        class DomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
+    }
+
+    @ViewingPermission
     public ApplicationPermission getViewingPermission() {
-        if(getViewingPermissionValue() == null) {
-            return null;
-        }
-        return applicationPermissionRepository.findByUserAndPermissionValue(username, getViewingPermissionValue())
-                .orElse(null);
+        return getViewingPermissionValue() == null
+                ? null
+                : applicationPermissionRepository.findByUserAndPermissionValue(username, getViewingPermissionValue())
+                  .orElse(null);
     }
 
     private ApplicationPermissionValue getViewingPermissionValue() {
-        if(viewingFeatureId == null) {
-            return null;
-        }
-        return new ApplicationPermissionValue(viewingFeatureId, viewingRule, viewingMode);
+        return viewingFeatureId == null
+                ? null
+                : new ApplicationPermissionValue(viewingFeatureId, viewingRule, viewingMode);
     }
 
 
-    // -- changingPermission (derived property)
 
-    public static class ChangingPermissionDomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
+    // -- changingPermission (derived property)
 
     private ApplicationFeatureId changingFeatureId;
     private ApplicationPermissionMode changingMode;
@@ -349,24 +381,34 @@ public class UserPermissionViewModel implements ViewModel {
 
 
     @Property(
-            domainEvent = ChangingPermissionDomainEvent.class,
+            domainEvent = ChangingPermission.DomainEvent.class,
             editing = Editing.DISABLED
-            )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT, fieldSetId="Cause", sequence = "2.2")
+    )
+    @PropertyLayout(
+            fieldSetId = "cause",
+            hidden = Where.REFERENCES_PARENT,
+            sequence = "2"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface ChangingPermission {
+        class DomainEvent extends PropertyDomainEvent<ApplicationPermission> {}
+    }
+
+    @ChangingPermission
     public ApplicationPermission getChangingPermission() {
-        if(getChangingPermissionValue() == null) {
-            return null;
-        }
-        return applicationPermissionRepository.findByUserAndPermissionValue(username, getChangingPermissionValue())
-                .orElse(null);
+        return getChangingPermissionValue() == null
+                ? null
+                : applicationPermissionRepository.findByUserAndPermissionValue(username, getChangingPermissionValue())
+                    .orElse(null);
     }
 
     private ApplicationPermissionValue getChangingPermissionValue() {
-        if(changingFeatureId == null) {
-            return null;
-        }
-        return new ApplicationPermissionValue(changingFeatureId, changingRule, changingMode);
+        return changingFeatureId == null
+                ? null
+                : new ApplicationPermissionValue(changingFeatureId, changingRule, changingMode);
     }
+
 
 
     // -- toString
@@ -380,6 +422,8 @@ public class UserPermissionViewModel implements ViewModel {
     public String toString() {
         return toString.toString(this);
     }
+
+
 
     // -- Factory
 
@@ -400,6 +444,5 @@ public class UserPermissionViewModel implements ViewModel {
                             factoryService);
         };
     }
-
 
 }

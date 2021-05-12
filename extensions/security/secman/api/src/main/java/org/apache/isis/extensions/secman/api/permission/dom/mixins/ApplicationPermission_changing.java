@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
@@ -31,6 +32,9 @@ import lombok.RequiredArgsConstructor;
         associateWith = "mode",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationPermission_changing {

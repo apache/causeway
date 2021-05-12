@@ -26,6 +26,8 @@ import java.util.Collection;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -59,11 +61,20 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     @Property(
             domainEvent = Name.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Name.MAX_LENGTH
     )
     @PropertyLayout(
-            typicalLength = Name.TYPICAL_LENGTH,
-            sequence = "1"
+            fieldSetId = "details",
+            sequence = "1",
+            typicalLength = Name.TYPICAL_LENGTH
+    )
+    @Parameter(
+            maxLength = Name.MAX_LENGTH
+    )
+    @ParameterLayout(
+            named = "Name",
+            typicalLength= Name.TYPICAL_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -86,6 +97,7 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
             editing = Editing.DISABLED
     )
     @PropertyLayout(
+            fieldSetId = "identity",
             hidden = Where.PARENTED_TABLES
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -109,7 +121,9 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.PARENTED_TABLES
+            fieldSetId = "details",
+            hidden = Where.PARENTED_TABLES,
+            sequence = "2"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -120,6 +134,7 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     @Parent
     ApplicationTenancy getParent();
     void setParent(ApplicationTenancy parent);
+
 
 
     // -- CHILDREN

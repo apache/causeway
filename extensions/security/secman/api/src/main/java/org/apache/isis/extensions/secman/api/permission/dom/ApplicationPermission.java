@@ -139,8 +139,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT,
-            fieldSetId="Role",
+            fieldSetId = "identity",
+            hidden = Where.REFERENCES_PARENT,
             sequence = "1"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -161,8 +161,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "permissions",
-            sequence = "2"
+            fieldSetId = "rule",
+            sequence = "1"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -182,8 +182,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "permissions",
-            sequence = "3"
+            fieldSetId = "mode",
+            sequence = "1"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -208,8 +208,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "feature",
-            sequence = "5",
+            fieldSetId = "identity",
+            sequence = "3",
             typicalLength= Sort.TYPICAL_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -265,8 +265,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "feature",
-            sequence = "5.1"
+            fieldSetId = "identity",
+            sequence = "2"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)

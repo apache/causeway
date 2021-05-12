@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
 @RequiredArgsConstructor
@@ -48,8 +50,7 @@ public class ApplicationUser_updateEmailAddress {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.EmailAddress.MAX_LENGTH)
-            @ParameterLayout(named="Email")
+            @ApplicationUser.EmailAddress
             final String emailAddress) {
         target.setEmailAddress(emailAddress);
         return target;

@@ -22,6 +22,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
 @RequiredArgsConstructor
@@ -46,8 +48,7 @@ public class ApplicationRole_updateName {
     private final ApplicationRole target;
 
     public ApplicationRole act(
-            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
-            @ParameterLayout(named="Name", typicalLength = ApplicationRole.Name.TYPICAL_LENGTH)
+            @ApplicationRole.Name
             final String name) {
 
         target.setName(name);

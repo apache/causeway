@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
 @RequiredArgsConstructor
@@ -49,13 +51,7 @@ public class ApplicationRole_updateDescription {
 
     @MemberSupport
     public ApplicationRole act(
-            @Parameter(
-                    maxLength = ApplicationRole.Description.MAX_LENGTH,
-                    optionality = Optionality.OPTIONAL
-                    )
-            @ParameterLayout(
-                    named="Description",
-                    typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
+            @ApplicationRole.Description
             final String description) {
 
         target.setDescription(description);

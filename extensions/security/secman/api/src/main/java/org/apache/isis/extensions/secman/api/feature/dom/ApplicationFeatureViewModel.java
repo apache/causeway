@@ -54,7 +54,9 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -73,7 +75,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
+
     // -- constructors
+
     public static ApplicationFeatureViewModel newViewModel(
             final ApplicationFeatureId featureId,
             final ApplicationFeatureRepository applicationFeatureRepository,
@@ -147,19 +151,15 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 
     // -- featureId (property, programmatic)
+
+    @Getter(onMethod_ = {@Programmatic})
+    @Setter
     private ApplicationFeatureId featureId;
 
-    @Programmatic
-    public ApplicationFeatureId getFeatureId() {
-        return featureId;
-    }
-
-    public void setFeatureId(final ApplicationFeatureId applicationFeatureId) {
-        this.featureId = applicationFeatureId;
-    }
 
 
     // -- feature (property, programmatic)
+
     @Programmatic
     ApplicationFeature getFeature() {
         return featureRepository.findFeature(getFeatureId());
@@ -184,7 +184,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             maxLength = NamespaceName.MAX_LENGTH
     )
     @PropertyLayout(
-            fieldSetId ="identity",
+            fieldSetId = "identity",
             sequence = "2.2",
             typicalLength = NamespaceName.TYPICAL_LENGTH
     )
@@ -222,7 +222,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     )
     @PropertyLayout(
             typicalLength = TypeSimpleName.TYPICAL_LENGTH,
-            fieldSetId="identity",
+            fieldSetId = "identity",
             sequence = "2.3"
     )
     @Parameter(
@@ -258,9 +258,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             maxLength = MemberName.MAX_LENGTH
     )
     @PropertyLayout(
-            typicalLength= MemberName.TYPICAL_LENGTH,
-            fieldSetId="identity",
-            sequence = "2.4"
+            fieldSetId = "identity",
+            sequence = "2.4",
+            typicalLength = MemberName.TYPICAL_LENGTH
     )
     @Parameter(
             maxLength = MemberName.MAX_LENGTH

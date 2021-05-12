@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        named = "Remove",
         sequence = "2"
 )
 @RequiredArgsConstructor

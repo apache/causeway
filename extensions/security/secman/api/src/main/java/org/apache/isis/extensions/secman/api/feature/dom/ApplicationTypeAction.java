@@ -52,7 +52,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
             domainEvent = ReturnType.DomainEvent.class
     )
     @PropertyLayout(
-            fieldSetName = "Data Type",
+            fieldSetId = "dataType",
             sequence = "2.6"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -61,6 +61,10 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
+    @PropertyLayout(
+            fieldSetId = "dataType", // TODO: shouldn't be necessary??
+            sequence = "2.6"
+    )
     @ReturnType
     public String getReturnType() {
         return getFeature().getActionReturnType()

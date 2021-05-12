@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
@@ -32,11 +33,12 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "knownAs",
+        associateWith = "familyName",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
 @RequiredArgsConstructor
@@ -49,14 +51,11 @@ public class ApplicationUser_updateName {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(maxLength = ApplicationUser.FamilyName.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Family Name")
+            @ApplicationUser.FamilyName
             final String familyName,
-            @Parameter(maxLength = ApplicationUser.GivenName.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Given Name")
+            @ApplicationUser.GivenName
             final String givenName,
-            @Parameter(maxLength = ApplicationUser.KnownAs.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Known As")
+            @ApplicationUser.KnownAs
             final String knownAs
             ) {
         target.setFamilyName(familyName);

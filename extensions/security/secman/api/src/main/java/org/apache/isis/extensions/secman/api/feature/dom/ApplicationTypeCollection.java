@@ -49,13 +49,20 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     @Property(
             domainEvent = ElementType.DomainEvent.class
     )
-    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
+    @PropertyLayout(
+            fieldSetId = "dataType",
+            sequence = "2.6"
+    )
     @Target({ java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ElementType {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
+    @PropertyLayout(
+            fieldSetId = "dataType", // TODO: shouldn't be necessary??
+            sequence = "2.6"
+    )
     @ElementType
     public String getElementType() {
         return getFeature().getActionReturnType()
@@ -70,7 +77,7 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
             domainEvent = Derived.DomainEvent.class
     )
     @PropertyLayout(
-            fieldSetId="detail",
+            fieldSetId = "detail",
             sequence = "2.7"
     )
     @Target({ java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.ANNOTATION_TYPE })

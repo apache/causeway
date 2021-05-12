@@ -49,9 +49,9 @@ import lombok.experimental.Accessors;
         semantics = SemanticsOf.NON_IDEMPOTENT
 )
 @ActionLayout(
-		named="Add",
+		named = "Add",
 		promptStyle = PromptStyle.DIALOG_MODAL,
-		sequence = "0"
+		sequence = "1"
 )
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
