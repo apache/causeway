@@ -139,7 +139,7 @@ extends
     String getName();
     int getPageSize();
 
-    // -- PARENTED STUFF
+    // -- PARENTED SPECIFICS
 
     default Optional<EntityCollectionModelParented> parented() {
         return this instanceof EntityCollectionModelParented
@@ -158,7 +158,7 @@ extends
     }
 
     /**
-     * Returns optionally the a {@link ManagedCollection}, based on whether
+     * Optionally returns a {@link ManagedCollection}, based on whether
      * this is a parented collection.
      */
     default Optional<ManagedCollection> parentedManagedCollection() {

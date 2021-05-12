@@ -22,26 +22,29 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FacetUtil {
 
-    public static void addIfNotAlreadyPresent(final Facet facet) {
+    public static void addIfNotAlreadyPresent(final @Nullable Facet facet) {
         if (facet == null) {
             return;
         }
         val facetHolder = facet.getFacetHolder();
         if(!facetHolder.containsFacet(facet.facetType())) {
-            facetHolder.addFacet(facet);    
+            facetHolder.addFacet(facet);
         }
     }
-    
-    public static void replaceIfAlreadyPresent(final Facet facet) {
+
+    public static void replaceIfAlreadyPresent(final @Nullable Facet facet) {
         if (facet == null) {
             return;
         }
@@ -49,16 +52,15 @@ public final class FacetUtil {
         facetHolder.addOrReplaceFacet(facet);
         // second call sets the underlying facet as well to this type
         // hacky, to pass validation
-        facetHolder.addOrReplaceFacet(facet); 
+        facetHolder.addOrReplaceFacet(facet);
     }
-    
 
-    public static void addOrReplaceFacet(final Facet facet) {
+
+    public static void addOrReplaceFacet(final @Nullable Facet facet) {
         if (facet == null) {
             return;
         }
-        val facetHolder = facet.getFacetHolder();
-        facetHolder.addOrReplaceFacet(facet);
+        facet.getFacetHolder().addOrReplaceFacet(facet);
     }
 
     /**
@@ -68,7 +70,7 @@ public final class FacetUtil {
      * @return <tt>true</tt> if a non-<tt>null</tt> facet was added,
      *         <tt>false</tt> otherwise.
      */
-    public static boolean addFacet(final Facet facet) {
+    public static boolean addFacet(final @Nullable Facet facet) {
         if (facet == null) {
             return false;
         }
@@ -82,7 +84,7 @@ public final class FacetUtil {
      *
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public static boolean addFacets(final List<Facet> facetList) {
+    public static boolean addFacets(final @NonNull List<Facet> facetList) {
         boolean addedFacets = false;
         for (val facet : facetList) {
             addedFacets = addFacet(facet) | addedFacets;

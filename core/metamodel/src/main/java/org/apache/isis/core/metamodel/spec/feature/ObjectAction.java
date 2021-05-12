@@ -341,18 +341,19 @@ public interface ObjectAction extends ObjectMember {
         }
 
         /**
-         * Those to be rendered with the entity header panel.
+         * Returns a Stream of those to be rendered with the entity header panel.
          */
-        public static Stream<ObjectAction> streamTopLevelActions(
+        public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
 
             val spec = adapter.getSpecification();
 
-            return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec))
-            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
-                    InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(ObjectAction.Predicates.excludeWizardActions(spec));
+            val all =  spec.streamRuntimeActions(MixedIn.INCLUDED).collect(Can.toCan());
+            val a =  all.filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec));
+            val b = a.filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
+                    InteractionInitiatedBy.USER, Where.ANYWHERE));
+            val c = b.filter(ObjectAction.Predicates.excludeWizardActions(spec));
+            return c.stream();
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -418,12 +419,12 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static class AssociatedWith implements Predicate<ObjectAction> {
-            private final String memberId;
-            private final String memberName;
+            private final @NonNull String memberId;
+            private final @NonNull String memberName;
 
-            public AssociatedWith(final ObjectAssociation objectAssociation) {
-                this.memberId = objectAssociation.getId();
-                this.memberName = objectAssociation.getName();
+            public AssociatedWith(final @NonNull ObjectAssociation objectAssociation) {
+                this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
+                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
             }
 
             @Override
@@ -436,13 +437,9 @@ public interface ObjectAction extends ObjectMember {
                 if (associatedMemberName == null) {
                     return false;
                 }
-                val memberOrderNameLowerCase = associatedMemberName.toLowerCase();
-                return equalWhenLowerCase(memberName, memberOrderNameLowerCase)
-                        || equalWhenLowerCase(memberId, memberOrderNameLowerCase);
-            }
-
-            private boolean equalWhenLowerCase(@Nullable String string, String lowerCaseString) {
-                return string != null && Objects.equals(string.toLowerCase(), lowerCaseString);
+                val memberNameLowerCase = associatedMemberName.toLowerCase();
+                return Objects.equals(memberName, memberNameLowerCase)
+                        || Objects.equals(memberId, memberNameLowerCase);
             }
 
         }
