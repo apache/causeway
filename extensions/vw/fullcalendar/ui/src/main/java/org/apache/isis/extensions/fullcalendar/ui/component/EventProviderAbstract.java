@@ -79,9 +79,9 @@ public abstract class EventProviderAbstract implements EventProvider {
     protected abstract CalendarEvent calendarEventFor(final Object domainObject, final String calendarName);
 
     private Function<ManagedObject, Event> newEvent(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final String calendarName) {
-        
+
         return input -> {
 
             final Object domainObject = input.getPojo();
@@ -100,7 +100,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
             final Object dereferencedObject = dereference(commonContext, domainObject);
 
-            val dereferencedManagedObject = 
+            val dereferencedManagedObject =
                     ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
 
             val oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
@@ -125,7 +125,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             } else {
                 return null;
             }
-            
+
         };
     }
 
@@ -133,6 +133,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     // //////////////////////////////////////
 
+    @Override
     public Collection<Event> getEvents(final DateTime start, final DateTime end) {
         final Interval interval = new Interval(start, end);
         final Predicate<Event> withinInterval = input -> interval.contains(input.getStart());
@@ -141,6 +142,7 @@ public abstract class EventProviderAbstract implements EventProvider {
         .collect(Collectors.toList());
     }
 
+    @Override
     public Event getEventForId(String id) throws EventNotFoundException {
         return eventById.get(id);
     }

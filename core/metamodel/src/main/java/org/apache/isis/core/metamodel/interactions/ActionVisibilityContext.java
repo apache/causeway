@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionVisibilityEvent}.
  */
-public class ActionVisibilityContext 
-extends VisibilityContext 
+public class ActionVisibilityContext
+extends VisibilityContext
 implements ActionInteractionContext  {
 
     private final ObjectAction objectAction;

@@ -41,30 +41,30 @@ public class DnEntityDiscoveryListener implements JdoEntityDiscoveryListener {
 
     @Override
     public void onEntitiesDiscovered(
-            final @NonNull PersistenceManagerFactory persistenceManagerFactory, 
+            final @NonNull PersistenceManagerFactory persistenceManagerFactory,
             final @NonNull Set<Class<?>> entityTypes,
             final @NonNull Map<String, String> dnSettings) {
 
         if(_NullSafe.isEmpty(entityTypes)) {
             return; // skip
         }
-        
+
         val pmf = (JDOPersistenceManagerFactory) persistenceManagerFactory;
         val nucleusContext = pmf.getNucleusContext();
         val schemaAwareStoreManager = (SchemaAwareStoreManager)nucleusContext.getStoreManager();
-        
+
         val classNames = entityTypes
                 .stream()
                 .map(Class::getName)
                 .collect(Collectors.toSet());
-        
+
         val properties = new Properties();
         properties.putAll(dnSettings);
         schemaAwareStoreManager.createSchemaForClasses(classNames, properties);
 
         val clr = nucleusContext.getClassLoaderResolver(_Context.getDefaultClassLoader());
         val metaDataManager = nucleusContext.getMetaDataManager();
-        
+
         metaDataManager
         .getClassesWithMetaData()
         .forEach(className->{
@@ -72,7 +72,7 @@ public class DnEntityDiscoveryListener implements JdoEntityDiscoveryListener {
             _NullSafe.stream(meta.getQueries())
             .forEach(metaDataManager::registerNamedQuery);
         });
-        
+
     }
 
 }

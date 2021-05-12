@@ -35,7 +35,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
-    MyService.class, // testing injection into entities 
+    MyService.class, // testing injection into entities
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
     IsisModuleJdoDatanucleus.class,
@@ -43,7 +43,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 JdoTestDomainModule.class
         })
 @PropertySources({
@@ -52,6 +52,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJdo {
-   
-    
+
+
 }

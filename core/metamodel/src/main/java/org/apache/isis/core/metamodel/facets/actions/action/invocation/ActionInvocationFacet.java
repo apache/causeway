@@ -42,7 +42,7 @@ public interface ActionInvocationFacet extends Facet {
             InteractionHead head,
             Can<ManagedObject> argumentAdapters,
             InteractionInitiatedBy interactionInitiatedBy);
-    
+
     ObjectSpecification getReturnType();
 
     ObjectSpecification getOnType();

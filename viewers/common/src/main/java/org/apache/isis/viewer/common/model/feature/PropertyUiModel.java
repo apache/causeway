@@ -28,14 +28,14 @@ public interface PropertyUiModel extends ScalarUiModel {
     /** prop meta model */
     @Override
     OneToOneAssociation getMetaModel();
-    
+
     // -- SHORTCUTS
-    
+
     @Override
     default int getAutoCompleteMinLength() {
         return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
     }
-    
+
     @Override
     default boolean hasChoices() {
         return getMetaModel().hasChoices();
@@ -45,14 +45,14 @@ public interface PropertyUiModel extends ScalarUiModel {
     default boolean hasAutoComplete() {
         return getMetaModel().hasAutoComplete();
     }
-    
+
     @Override
     default ManagedObject getDefault() {
         return getMetaModel().getDefault(getOwner());
     }
 
     @Override
-    default Can<ManagedObject> getChoices() { 
+    default Can<ManagedObject> getChoices() {
         return getMetaModel().getChoices(getOwner(), InteractionInitiatedBy.USER);
     }
 
@@ -60,5 +60,5 @@ public interface PropertyUiModel extends ScalarUiModel {
     default Can<ManagedObject> getAutoComplete(final String searchArg) {
         return getMetaModel().getAutoComplete(getOwner(), searchArg, InteractionInitiatedBy.USER);
     }
-    
+
 }

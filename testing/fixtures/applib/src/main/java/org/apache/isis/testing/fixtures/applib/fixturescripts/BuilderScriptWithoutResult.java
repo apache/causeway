@@ -19,7 +19,7 @@
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 /**
- * 
+ *
  * @since 2.0
  */
 public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
@@ -28,5 +28,5 @@ public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<O
     public Object getObject() {
         return null;
     }
-    
+
 }

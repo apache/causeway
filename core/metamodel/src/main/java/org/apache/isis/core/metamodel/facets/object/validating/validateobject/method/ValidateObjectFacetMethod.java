@@ -39,7 +39,7 @@ public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract imple
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
-    public ValidateObjectFacetMethod(final Method method, final TranslationService translationService, 
+    public ValidateObjectFacetMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
         this.method = method;

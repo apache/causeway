@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import lombok.Getter;
 
 /**
- * 
+ *
  * @since 2.0
  *
  * @param <T>
@@ -32,7 +32,7 @@ public abstract class BuilderScriptWithResult<T> extends BuilderScriptAbstract<T
 
     @Getter(onMethod=@__({@Override}))
     public T object;
-    
+
     @Programmatic
     protected abstract T buildResult(final ExecutionContext ec);
 
@@ -40,5 +40,5 @@ public abstract class BuilderScriptWithResult<T> extends BuilderScriptAbstract<T
     protected final void execute(final ExecutionContext executionContext) {
         object = buildResult(executionContext);
     }
-    
+
 }

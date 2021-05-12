@@ -39,12 +39,12 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     public LocalDateValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class, 
-                TemporalCharacteristic.DATE_ONLY, OffsetCharacteristic.LOCAL,  
+        super(TemporalValueFacet.class,
+                TemporalCharacteristic.DATE_ONLY, OffsetCharacteristic.LOCAL,
                 holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDate::from,
                 TemporalAdjust::adjustLocalDate);
-        
+
         super.addNamedFormat("iso", "yyyy-MM-dd");
         super.addNamedFormat("iso_encoding", "yyyy-MM-dd");
         super.updateParsers();
@@ -60,9 +60,9 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));  // fallback
-        
+
         setTitleFormatter(formatter);
-        
+
     }
 
 }

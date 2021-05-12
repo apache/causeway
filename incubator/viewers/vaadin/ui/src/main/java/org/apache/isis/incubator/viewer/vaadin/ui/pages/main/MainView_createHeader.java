@@ -40,14 +40,14 @@ import lombok.val;
 final class MainView_createHeader {
 
     static Component createHeader(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final HeaderUiModel headerUiModel,
             final Consumer<ManagedAction> menuActionEventHandler,
             final Runnable onHomepageLinkClick) {
 
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
         _vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
-        
+
         val leftMenuBar = new MenuBar();
         val horizontalSpacer = new Div();
         //        horizontalSpacer.setWidthFull();
@@ -83,7 +83,7 @@ final class MainView_createHeader {
 
 
     private static Component createTitleOrLogo(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final BrandingUiModel brandingUiModel) {
 
 
@@ -93,12 +93,12 @@ final class MainView_createHeader {
         if(brandingLogo.isPresent()) {
             val webAppContextPath = commonContext.getWebAppContextPath();
             val logo = new Image(
-                    webAppContextPath.prependContextPathIfLocal(brandingLogo.get()), 
+                    webAppContextPath.prependContextPathIfLocal(brandingLogo.get()),
                     "brandingLogo");
             logo.setWidth("48px"); //TODO make this part of the UI model
             logo.setHeight("48px"); //TODO make this part of the UI model
             return logo;
-        } 
+        }
         return new Text(brandingName.orElse("App"));
 
     }

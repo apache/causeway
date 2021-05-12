@@ -59,7 +59,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
     // Persistence/Converters (JPA)
     IsisModuleValAsciidocPersistenceJpa.class,
     IsisModuleValMarkdownPersistenceJpa.class,
-    
+
     //XrayEnable.class // for debugging only
 })
 //@Log4j2
@@ -73,11 +73,11 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
     	//IsisPresets.prototyping();
-        
+
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
-        
+
         System.setProperty("spring.profiles.active", "demo-jpa");
-        
+
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 
     }

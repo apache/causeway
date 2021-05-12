@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
 
     public static DisabledFacet create(
-            final Optional<Property> propertyIfAny, 
+            final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny

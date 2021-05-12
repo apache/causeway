@@ -64,11 +64,11 @@ public class ObjectAdapterUpdateHelper {
             final Intent intent) {
 
         val allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
-        
+
         objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
         .forEach(association->{
-            
+
             allOk.update(ok->ok &= copyOverProperty(association, propertiesMap, intent));
         });
 
@@ -76,7 +76,7 @@ public class ObjectAdapterUpdateHelper {
     }
 
     private boolean copyOverProperty(
-            final ObjectAssociation association, 
+            final ObjectAssociation association,
             final JsonRepresentation propertiesMap,
             final Intent intent) {
 

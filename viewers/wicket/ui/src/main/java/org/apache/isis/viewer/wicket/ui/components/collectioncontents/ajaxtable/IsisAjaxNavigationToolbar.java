@@ -41,9 +41,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
     public IsisAjaxNavigationToolbar(
-            final DataTable<?, ?> table, 
+            final DataTable<?, ?> table,
             final ObjectAdapterToggleboxColumn toggleboxColumn) {
-        
+
         super(table);
         this.toggleboxColumn = toggleboxColumn;
         addShowAllButton(table);
@@ -86,7 +86,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             }
         });
 
-        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));    
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));
 
     }
 

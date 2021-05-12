@@ -36,7 +36,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -44,7 +44,7 @@ final class ObjectSerializer_builtinHandlers {
 
     @Data
     public static class SerializeSerializable implements ObjectSerializer.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
@@ -60,16 +60,16 @@ final class ObjectSerializer_builtinHandlers {
                 oos.writeObject(object.getPojo());
                 oos.flush();
                 return _Bytes.compress(bos.toByteArray());
-            } 
+            }
         }
-        
+
         @SneakyThrows
         @Override
         public Object deserialize(ObjectSpecification spec, byte[] serializedObjectBytes) {
             val pojoType = spec.getCorrespondingClass();
             return unmarshall(pojoType, serializedObjectBytes);
         }
-        
+
         private <T> T unmarshall(Class<T> type, byte[] input) throws IOException, ClassNotFoundException {
             try(val bis = new ByteArrayInputStream(_Bytes.decompress(input))){
                 try(val ois = new ObjectInputStream(bis)) {
@@ -77,24 +77,24 @@ final class ObjectSerializer_builtinHandlers {
                 }
             }
         }
-        
+
     }
-    
+
     @Data
     public static class SerializeOther implements ObjectSerializer.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(ObjectSpecification spec) {
             return true; // the last handler in the chain
         }
-        
+
         @Override
         public byte[] serialize(ManagedObject object) {
             throw _Exceptions.illegalArgument(
                     "None of the registered ObjectSerializers knows how to serialize this object. "
-                    + "(when serializing pojo as held by ManagedObject %s)", 
+                    + "(when serializing pojo as held by ManagedObject %s)",
                         object);
         }
 
@@ -102,7 +102,7 @@ final class ObjectSerializer_builtinHandlers {
         public Object deserialize(ObjectSpecification spec, byte[] serializedObjectBytes) {
             throw _Exceptions.illegalArgument(
                     "None of the registered ObjectSerializers knows how to de-serialize "
-                    + "an object having ObjectSpecification %s", 
+                    + "an object having ObjectSpecification %s",
                         spec);
         }
 

@@ -28,13 +28,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
-
 /**
  * A JavaScript reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.js</a>
  * <p>Depends on JQuery.</p>
  */
-public class Select2JsReference 
+public class Select2JsReference
 	// extends WebjarsJavaScriptResourceReference
 	extends JavaScriptResourceReference
 {

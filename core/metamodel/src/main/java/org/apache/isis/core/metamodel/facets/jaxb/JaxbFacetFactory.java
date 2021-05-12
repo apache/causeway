@@ -124,13 +124,13 @@ implements MetaModelRefiner {
 
     private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
         //val method = processMethodContext.getMethod();
-        
+
         final XmlJavaTypeAdapter annotation = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class)
                 .orElse(null);
-                
+
 //        _Assert.assertEquals("expected same", annotation,
 //                Annotations.getAnnotation(method, XmlJavaTypeAdapter.class));
-        
+
         if(annotation == null) {
             return;
         }
@@ -147,10 +147,10 @@ implements MetaModelRefiner {
 
         final XmlTransient annotation = processMethodContext.synthesizeOnMethod(XmlTransient.class)
                 .orElse(null);
-                
+
 //        _Assert.assertEquals("expected same", annotation,
 //                Annotations.getAnnotation(method, XmlTransient.class));
-        
+
         if(annotation == null) {
             return;
         }
@@ -198,7 +198,7 @@ implements MetaModelRefiner {
             });
 
         });
-        
+
     }
 
     private List<TypeValidator> getTypeValidators(IsisConfiguration configuration) {
@@ -339,17 +339,17 @@ implements MetaModelRefiner {
             if(correspondingClass.isAnonymousClass()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "JAXB view model '%s' is an anonymous class", 
+                        "JAXB view model '%s' is an anonymous class",
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "JAXB view model '%s' is a local class", 
+                        "JAXB view model '%s' is a local class",
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "JAXB view model '%s' is an non-static inner class", 
+                        "JAXB view model '%s' is an non-static inner class",
                         objectSpec.getFullIdentifier());
             }
         }
@@ -360,19 +360,19 @@ implements MetaModelRefiner {
         void validate(final ObjectSpecification objectSpec) {
 
             val correspondingClass = objectSpec.getCorrespondingClass();
-            
+
             val publicNoArgConstructors = _Reflect
                     .getPublicConstructors(correspondingClass)
                     .filter(paramCount(0));
-            
+
             if(publicNoArgConstructors.getCardinality().isOne()) {
                 return; // happy case
             }
-            
+
             val privateNoArgConstructors = _Reflect
                     .getDeclaredConstructors(correspondingClass)
                     .filter(paramCount(0).and(isPublic().negate()));
-            
+
             if(privateNoArgConstructors.isNotEmpty()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
@@ -381,7 +381,7 @@ implements MetaModelRefiner {
             } else {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "JAXB view model '%s' does not have a public no-arg constructor", 
+                        "JAXB view model '%s' does not have a public no-arg constructor",
                         objectSpec.getFullIdentifier());
             }
         }

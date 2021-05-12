@@ -24,19 +24,19 @@ import lombok.NonNull;
 
 @FunctionalInterface
 public interface ThrowingRunnable {
-    
+
     // -- INTERFACE
-    
+
     void run() throws Exception;
-    
+
     // -- UTILITY
-    
+
     static Callable<Void> toCallable(final @NonNull ThrowingRunnable runnable) {
         final Callable<Void> callable = ()->{
-            runnable.run(); 
+            runnable.run();
             return null;
         };
         return callable;
     }
-    
+
 }

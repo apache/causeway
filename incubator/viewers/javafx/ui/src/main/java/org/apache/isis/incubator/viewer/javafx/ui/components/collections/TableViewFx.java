@@ -61,13 +61,13 @@ public class TableViewFx extends VBox {
     }
 
     /**
-     * Constructs a (page-able) {@link Grid} from given {@code collection}  
+     * Constructs a (page-able) {@link Grid} from given {@code collection}
      * @param collection - of (wrapped) domain objects
-     * @param where 
+     * @param where
      */
     public static TableViewFx fromCollection(
-            final @NonNull UiContextFx uiContext, 
-            final @NonNull ManagedObject collection, 
+            final @NonNull UiContextFx uiContext,
+            final @NonNull ManagedObject collection,
             final @NonNull Where where) {
 
         val collectionFacet = collection.getSpecification()
@@ -82,18 +82,18 @@ public class TableViewFx extends VBox {
     }
 
     /**
-     * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
+     * Constructs a (page-able) {@link Grid} from given {@code managedCollection}
      * @param uiContext
      * @param managedCollection
-     * @param where 
+     * @param where
      */
     public static TableViewFx forManagedCollection(
-            final @NonNull UiContextFx uiContext, 
-            final @NonNull ManagedCollection managedCollection, 
+            final @NonNull UiContextFx uiContext,
+            final @NonNull ManagedCollection managedCollection,
             final @NonNull Where where) {
 
-        
-        val elementSpec = managedCollection.getElementSpecification(); 
+
+        val elementSpec = managedCollection.getElementSpecification();
         val elements = managedCollection.streamElements()
                 .collect(Can.toCan());
         return elements.isEmpty()
@@ -110,14 +110,14 @@ public class TableViewFx extends VBox {
     }
 
     /**
-     * 
-     * @param elementSpec - as is common to all given {@code objects} aka elements 
+     *
+     * @param elementSpec - as is common to all given {@code objects} aka elements
      * @param objects - (wrapped) domain objects to be rendered by this table
      * @param where
      */
     private TableViewFx(
             @NonNull final UiContextFx uiContext,
-            @NonNull final ObjectSpecification elementSpec, 
+            @NonNull final ObjectSpecification elementSpec,
             @Nullable final Can<ManagedObject> objects,
             @NonNull final Where where) {
 
@@ -131,8 +131,8 @@ public class TableViewFx extends VBox {
 
         val columnProperties = columnProperties(elementSpec, where);
 
-        // rather prepare all table cells into a multi-map eagerly, 
-        // than having to spawn new transactions/interactions for each table cell when rendered lazily 
+        // rather prepare all table cells into a multi-map eagerly,
+        // than having to spawn new transactions/interactions for each table cell when rendered lazily
         val table = _Multimaps.<Oid, String, String>newMapMultimap();
 
         _NullSafe.stream(objects)
@@ -151,7 +151,7 @@ public class TableViewFx extends VBox {
 
         // object link as first column
         val firstColumn = _fx.newColumn(objectGrid, "", Button.class);
-        
+
         firstColumn.setCellValueFactory(cellDataFeatures -> {
             val objectIcon = uiContext.getJavaFxViewerConfig().getObjectFallbackIcon();
             val uiObjectRefLink = _fx.bottonForImage(objectIcon, 24, 24);
@@ -160,26 +160,26 @@ public class TableViewFx extends VBox {
             });
             return _fx.newObjectReadonly(uiObjectRefLink);
         });
-        
+
         // property columns
         columnProperties.forEach(property->{
             val column = _fx.newColumn(objectGrid, property.getName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
-                log.debug("about to get property value for property {}", property.getId());                
+                log.debug("about to get property value for property {}", property.getId());
                 val targetObject = cellDataFeatures.getValue();
 
                 val cellValue = targetObject.getBookmark()
                         .map(id->table.getElement(id, property.getId()))
                         .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
-                                ""+targetObject, 
-                                property.getId())); 
+                                ""+targetObject,
+                                property.getId()));
 
                 return _fx.newStringReadonly(cellValue);
             });
         });
 
-        // populate the model        
-        
+        // populate the model
+
         objects.forEach(objectGrid.getItems()::add);
 
         //objectGrid.recalculateColumnWidths();
@@ -188,12 +188,12 @@ public class TableViewFx extends VBox {
     }
 
     private String stringifyPropertyValue(
-            ObjectAssociation property, 
+            ObjectAssociation property,
             ManagedObject targetObject) {
 
         try {
             val propertyValue = property.get(targetObject);
-            return propertyValue == null 
+            return propertyValue == null
                     ? NULL_LITERAL
                     : propertyValue.titleString();
         } catch (Exception e) {

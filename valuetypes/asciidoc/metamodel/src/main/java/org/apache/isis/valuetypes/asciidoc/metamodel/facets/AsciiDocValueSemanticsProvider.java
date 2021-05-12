@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 public class AsciiDocValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<AsciiDoc> 
+extends ValueSemanticsProviderAndFacetAbstract<AsciiDoc>
 implements AsciiDocValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
@@ -82,9 +82,9 @@ implements AsciiDocValueFacet {
     public String toString() {
         return "AsciiDocValueSemanticsProvider";
     }
-    
+
     // -- AsciiDocValueFacet
-    
+
     @Override
     public String asciiDocValue(final ManagedObject object) {
         if (object == null) {

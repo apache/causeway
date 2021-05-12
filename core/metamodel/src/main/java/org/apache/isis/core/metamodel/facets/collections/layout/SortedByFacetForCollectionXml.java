@@ -44,8 +44,8 @@ public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
             return null;
         }
 
-        return sortedByClass != null 
-                ? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder) 
+        return sortedByClass != null
+                ? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder)
                         : null;
     }
 

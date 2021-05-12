@@ -35,11 +35,11 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static EmailAvailableValidator exists(IsisAppCommonContext commonContext) { 
+    public static EmailAvailableValidator exists(IsisAppCommonContext commonContext) {
         return new EmailAvailableValidator(commonContext, true, "noSuchUserByEmail");
     }
-    
-    public static EmailAvailableValidator doesntExist(IsisAppCommonContext commonContext) { 
+
+    public static EmailAvailableValidator doesntExist(IsisAppCommonContext commonContext) {
         return new EmailAvailableValidator(commonContext, false, "emailIsNotAvailable");
     }
 
@@ -47,10 +47,10 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
     private final String resourceKey;
 
     private EmailAvailableValidator(
-            IsisAppCommonContext commonContext, 
-            boolean emailExists, 
+            IsisAppCommonContext commonContext,
+            boolean emailExists,
             String resourceKey) {
-        
+
         super(commonContext);
         this.emailExists = emailExists;
         this.resourceKey = resourceKey;
@@ -64,7 +64,7 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
 
         val isisInteractionFactory = super.getCommonContext()
                 .lookupServiceElseFail(InteractionFactory.class);
-        
+
         isisInteractionFactory.runAnonymous(() -> {
             String email = validatable.getValue();
             boolean emailExists1 = userRegistrationService.emailExists(email);

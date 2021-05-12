@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
-    
+
     @Inject private InteractionTracker isisInteractionTracker;
 
     @Data(staticConstructor = "of")
@@ -55,35 +55,35 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
             }
         }
     }
-    
+
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
 
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
-        
+
         if(isisInteractionTracker==null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
-        
+
         if(!isisInteractionTracker.isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
                     + "... @Inject Provider<MyScopedBean> provider ...", name, _Probe.currentThreadId());
         }
-        
+
         val existingScopedObject = scopedObjects.get().get(name);
         if(existingScopedObject!=null) {
             return existingScopedObject.getInstance();
         }
-        
-        val newScopedObject = ScopedObject.of(name); 
+
+        val newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
-        
+
         log.debug("create new isis-session scoped {}", name);
         newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
-        
+
         return newScopedObject.getInstance();
     }
 
@@ -114,7 +114,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
                 .map(UUID::toString)
                 .orElse(null);
     }
-    
+
     @Override
     public void onTopLevelInteractionOpened() {
         // nothing to do
@@ -125,8 +125,8 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
         try {
             scopedObjects.get().values().forEach(ScopedObject::preDestroy);
         } finally {
-            scopedObjects.remove();    
+            scopedObjects.remove();
         }
     }
-    
+
 }

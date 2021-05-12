@@ -24,5 +24,5 @@ public interface HasEnabling {
         // enabled by default
         return true;
     }
-    
+
 }

@@ -42,20 +42,20 @@ public class PropertyNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s: %s", property.getId(), typeToString(property.getType()));  
+        return String.format("%s: %s", property.getId(), typeToString(property.getType()));
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private TypeNode parentNode;
 
     @Override
@@ -63,7 +63,7 @@ public class PropertyNode extends MMNode {
         return Stream.of(
                 MMNodeFactory.facetGroup(property.getFacets(), this));
     }
-   
-    
+
+
 }
 

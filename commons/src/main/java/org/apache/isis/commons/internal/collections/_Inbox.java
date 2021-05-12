@@ -27,7 +27,7 @@ import org.apache.isis.commons.collections.Can;
 import lombok.val;
 
 /**
- * Allows for thread-safe producer consumer pattern backed by {@link ArrayList}. 
+ * Allows for thread-safe producer consumer pattern backed by {@link ArrayList}.
  *
  * @param <T>
  */
@@ -68,19 +68,19 @@ public class _Inbox<T> implements Serializable {
     public boolean isEmpty() {
         synchronized($lock) {
             return list.isEmpty();
-        } 
+        }
     }
 
     public void clear() {
         synchronized($lock) {
             list.clear();
-        } 
+        }
     }
 
     public int size() {
         synchronized($lock) {
             return list.size();
-        } 
+        }
     }
 
 }

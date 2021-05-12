@@ -42,9 +42,9 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
 
     @Override
     public Object populatePojo(
-            Supplier<Object> emptyCollectionPojoFactory, 
+            Supplier<Object> emptyCollectionPojoFactory,
             ObjectSpecification collectionSpec,
-            Stream<ManagedObject> initData, 
+            Stream<ManagedObject> initData,
             int elementCount) {
 
         final Object[] array = initData
@@ -54,7 +54,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
     /**
-     * @param arrayAdapter - {@link ManagedObject} wrapping an array. 
+     * @param arrayAdapter - {@link ManagedObject} wrapping an array.
      */
     @Override
     public Stream<ManagedObject> stream(final @Nullable ManagedObject arrayAdapter) {
@@ -70,7 +70,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
     /**
-     * @param arrayAdapter - {@link ManagedObject} wrapping an array. 
+     * @param arrayAdapter - {@link ManagedObject} wrapping an array.
      */
     @Override
     public int size(final @Nullable ManagedObject arrayAdapter) {

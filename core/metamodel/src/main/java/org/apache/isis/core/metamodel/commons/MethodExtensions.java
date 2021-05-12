@@ -34,7 +34,7 @@ public class MethodExtensions {
     }
 
     // //////////////////////////////////////
-    
+
     public static <T> T construct(final Constructor<T> con) {
         final Object[] parameters = MethodExtensions.getNullOrDefaultArgs(con);
         return MethodExtensions.construct(con, parameters);

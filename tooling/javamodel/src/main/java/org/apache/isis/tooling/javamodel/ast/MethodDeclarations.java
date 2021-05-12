@@ -21,7 +21,6 @@ package org.apache.isis.tooling.javamodel.ast;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.TypeParameter;
 
 import org.apache.isis.commons.collections.Can;

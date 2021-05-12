@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class TabPanel 
+public class TabPanel
 extends PanelAbstract<ManagedObject, EntityModel>
 implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 

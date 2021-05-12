@@ -73,12 +73,12 @@ implements ObjectSpecIdFacetFactory {
             if(substitute.isNeverIntrospect()) {
                 return;
             }
-                   
+
             val substituted = substitute.apply(cls);
             facet = new ObjectSpecIdFacetDerivedFromClassName(
-                            substituted.getCanonicalName(), 
+                            substituted.getCanonicalName(),
                             facetHolder);
-                        
+
         }
         FacetUtil.addFacet(facet);
     }

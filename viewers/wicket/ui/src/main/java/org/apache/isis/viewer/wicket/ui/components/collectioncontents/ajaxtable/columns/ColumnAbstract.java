@@ -45,11 +45,11 @@ import lombok.val;
 public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private transient IsisAppCommonContext commonContext;
     private transient ComponentFactoryRegistry componentRegistry;
-    
-    
+
+
     public ColumnAbstract(IsisAppCommonContext commonContext, String columnName) {
         this(commonContext, Model.of(columnName), null);
     }
@@ -62,7 +62,7 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     protected ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model) {
         return getComponentRegistry().findComponentFactory(componentType, model);
     }
@@ -74,5 +74,5 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
         }
         return componentRegistry;
     }
-    
+
 }

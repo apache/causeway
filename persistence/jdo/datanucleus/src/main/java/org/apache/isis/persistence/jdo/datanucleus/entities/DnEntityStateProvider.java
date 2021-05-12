@@ -40,7 +40,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
     public EntityState getEntityState(Object pojo) {
         return entityState(pojo);
     }
-    
+
     @Override
     public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
         if(cls==null) {
@@ -55,16 +55,16 @@ public class DnEntityStateProvider implements JdoFacetContext {
             return false;
         }
         ensureInit();
-        return /*methodStartsWith(method, "jdo") || */ 
+        return /*methodStartsWith(method, "jdo") || */
                 jdoMethodsProvidedByEnhancement.contains(method.toString());
     }
-    
+
     public static EntityState entityState(Object pojo) {
 
         if(pojo==null) {
             return EntityState.NOT_PERSISTABLE;
         }
-        
+
         if (pojo!=null && pojo instanceof Persistable) {
             val persistable = (Persistable) pojo;
             val isDeleted = persistable.dnIsDeleted();
@@ -79,11 +79,11 @@ public class DnEntityStateProvider implements JdoFacetContext {
         }
         return EntityState.NOT_PERSISTABLE;
     }
-    
+
     // -- HELPER
 
     private static final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
-    
+
     private static Method[] getMethodsProvidedByEnhancement() {
         return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
     }
@@ -95,5 +95,5 @@ public class DnEntityStateProvider implements JdoFacetContext {
             .forEach(jdoMethodsProvidedByEnhancement::add);
         }
     }
-    
+
 }

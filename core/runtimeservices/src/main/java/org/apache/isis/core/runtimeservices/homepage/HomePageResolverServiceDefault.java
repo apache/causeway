@@ -49,7 +49,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
     public HomePageResolverServiceDefault(
             final FactoryService factoryService,
             final IsisBeanTypeRegistry isisBeanTypeRegistry) {
-        
+
         this.factoryService = factoryService;
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;
     }
@@ -58,13 +58,13 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
     public void init() {
         val viewModelTypes = isisBeanTypeRegistry.getViewModelTypes();
         viewModelTypeForHomepage = viewModelTypes.stream()
-                .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class)) 
+                .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
                 .findFirst();
     }
 
     @Override
     public Object getHomePage() {
-        
+
         return viewModelTypeForHomepage
                 .map(ClassExtensions::newInstance)
                 .map(factoryService::viewModel)

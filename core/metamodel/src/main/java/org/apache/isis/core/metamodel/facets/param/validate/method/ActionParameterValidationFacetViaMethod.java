@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValid
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionParameterValidationFacetViaMethod 
-extends ActionParameterValidationFacetAbstract 
+public class ActionParameterValidationFacetViaMethod
+extends ActionParameterValidationFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -46,12 +46,12 @@ implements ImperativeFacet {
     private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterValidationFacetViaMethod(
-            final Method method, 
-            final TranslationService translationService, 
-            final TranslationContext translationContext, 
-            final Optional<Constructor<?>> ppmFactory, 
+            final Method method,
+            final TranslationService translationService,
+            final TranslationContext translationContext,
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.translationService = translationService;
@@ -75,14 +75,14 @@ implements ImperativeFacet {
 
     @Override
     public String invalidReason(
-            final ManagedObject owningAdapter, 
-            final Can<ManagedObject> pendingArgs, 
+            final ManagedObject owningAdapter,
+            final Can<ManagedObject> pendingArgs,
             final ManagedObject proposedArgument) {
-        
+
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
                 : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgument);
-        
+
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

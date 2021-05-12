@@ -38,10 +38,10 @@ import lombok.RequiredArgsConstructor;
 public class PrincipalCollectionForApplicationUserOnSingleRealm implements PrincipalCollection {
 
     private static final long serialVersionUID = -8778415093248238553L;
-    
+
     @NonNull private final PrincipalForApplicationUser principal;
     @NonNull private final String realmName;
-    
+
     @Override
     public Iterator<?> iterator() {
         return asList().iterator();
@@ -95,5 +95,5 @@ public class PrincipalCollectionForApplicationUserOnSingleRealm implements Princ
     public boolean isEmpty() {
         return false;
     }
-    
+
 }

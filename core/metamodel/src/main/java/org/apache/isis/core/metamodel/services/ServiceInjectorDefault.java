@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -50,15 +50,15 @@ public class ServiceInjectorDefault implements ServiceInjector {
 
     @Override
     public <T> @Nullable T injectServicesInto(final @Nullable T domainObject) {
-        
+
         if(domainObject!=null) {
-            
+
             autowireCapableBeanFactory.autowireBeanProperties(
                     domainObject,
-                    AutowireCapableBeanFactory.AUTOWIRE_NO, 
-                    /*dependencyCheck*/ false);    
+                    AutowireCapableBeanFactory.AUTOWIRE_NO,
+                    /*dependencyCheck*/ false);
         }
-        
+
         return domainObject;
     }
 

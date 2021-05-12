@@ -49,7 +49,7 @@ import lombok.val;
 public class LogoutMenu {
 
     public static final String OBJECT_TYPE = "isis.security.LogoutMenu"; // referenced by secman seeding
-    
+
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
     private final IsisConfiguration configuration;
@@ -68,7 +68,7 @@ public class LogoutMenu {
         _NullSafe.stream(logoutHandler)
             .filter(LogoutHandler::isHandlingCurrentThread)
             .forEach(LogoutHandler::logout);
-        
+
         return getRedirect();
     }
 
@@ -86,24 +86,24 @@ public class LogoutMenu {
         default: return null; // redirects to the homepage
         }
     }
-    
+
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
-            nature = Nature.VIEW_MODEL, 
-            objectType = LoginRedirect.OBJECT_TYPE)  
+            nature = Nature.VIEW_MODEL,
+            objectType = LoginRedirect.OBJECT_TYPE)
     public static class LoginRedirect {
         public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
-    
+
     private LocalResourcePath createLogoutRedirect() {
-        val logoutRedirect = "/logout"; 
-        
+        val logoutRedirect = "/logout";
+
         //TODO make this a config option (or use the spring option, if there is any)
-        //configuration.getSecurity().getSpring().getLogoutRedirect(); 
-        
+        //configuration.getSecurity().getSpring().getLogoutRedirect();
+
         return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
     }
-    
-    
+
+
 }
 

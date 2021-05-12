@@ -41,7 +41,7 @@ import net.ftlines.wicket.fullcalendar.selector.EventSourceSelector;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public abstract class CalendaredCollectionAbstract 
+public abstract class CalendaredCollectionAbstract
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +53,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     private static final String[] COLORS = {
         "#63BA68", "#B1ADAC", "#E6CC7F"
     };
-    
+
     public CalendaredCollectionAbstract(final String id, final EntityCollectionModel model) {
         super(id, model);
 
@@ -63,7 +63,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     private void buildGui() {
 
         final EntityCollectionModel model = getModel();
-        
+
         final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
@@ -71,7 +71,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         final Config config = new Config();
         config.setSelectable(true);
         config.setSelectHelper(false);
-        
+
         final Collection<ManagedObject> entityList = model.getObject();
         final Iterable<String> calendarNames = getCalendarNames(entityList);
 
@@ -88,7 +88,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         }
 
         config.setAspectRatio(2.5f);
-        
+
         config.getHeader().setLeft("prevYear,prev,next,nextYear, today");
         config.getHeader().setCenter("title");
         config.getHeader().setRight("");
@@ -96,7 +96,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         config.setLoading("function(bool) { if (bool) $(\"#loading\").show(); else $(\"#loading\").hide(); }");
 
         config.setAllDaySlot(true);
-        
+
         final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedback);
         addOrReplace(calendar);
 
@@ -107,7 +107,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
             final EntityCollectionModel model, final String calendarName);
 
     protected abstract Set<String> getCalendarNames(final Collection<ManagedObject> entityList);
-    
+
     @Override
     protected void onModelChanged() {
         buildGui();

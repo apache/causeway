@@ -40,19 +40,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor(staticName = "named") 
+@RequiredArgsConstructor(staticName = "named")
 @Log4j2
 public class _ConcurrentTaskList {
 
     @Getter private final String name;
-    
+
     private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
     private final CountDownLatch allFinishedLatch = new CountDownLatch(1);
     private final AwaitableLatch awaitableLatch = AwaitableLatch.of(allFinishedLatch);
     private final LongAdder tasksExecuted = new LongAdder();
     private long executionTimeNanos;
-    
+
     public List<_ConcurrentTask<?>> getTasks() {
         return Collections.unmodifiableList(tasks);
     }
@@ -62,42 +62,42 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addTask(_ConcurrentTask<?> task) {
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!"; 
+                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             tasks.add(task);
-        }   
+        }
         return this;
     }
 
     public _ConcurrentTaskList addTasks(Collection<? extends _ConcurrentTask<?>> tasks) {
         synchronized (this.tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!"; 
+                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             this.tasks.addAll(tasks);
         }
         return this;
     }
-    
+
     // -- EXECUTION
-    
+
     public _ConcurrentTaskList submit(_ConcurrentContext context) {
-        
+
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can not start again!"; 
+                val msg = "Tasks already started execution, can not start again!";
                 throw new IllegalStateException(msg);
             }
             wasStarted.set(true);
         }
-        
+
         val t0 = System.nanoTime();
-        
+
         if(context.shouldRunSequential()) {
             for(_ConcurrentTask<?> task : tasks) {
-                task.run(); // exceptions are swallowed, to be found in the _ConcurrentTask object 
+                task.run(); // exceptions are swallowed, to be found in the _ConcurrentTask object
                 tasksExecuted.increment();
             }
             executionTimeNanos = System.nanoTime() - t0;
@@ -105,19 +105,19 @@ public class _ConcurrentTaskList {
             allFinishedLatch.countDown();
             return this;
         }
-        
+
         // else run with executor ...
-        
+
         val futures = new ArrayList<Future<?>>(tasks.size());
-        
+
         for(_ConcurrentTask<?> task : tasks) {
             futures.add(context.executorService.submit(task));
         }
 
         // now wait for all futures to complete on a separate thread
-        
+
         val thread = new Thread() {
-            
+
             @Override
             public void run() {
                 for(Future<?> future : futures) {
@@ -130,42 +130,42 @@ public class _ConcurrentTaskList {
                         // Restore interrupted state...
                         Thread.currentThread().interrupt();
                     }
-                    
+
                 }
                 executionTimeNanos = System.nanoTime() - t0;
-                
+
                 onFinished(context);
                 allFinishedLatch.countDown();
             }
-            
+
         };
-        
+
         thread.start();
-        
+
         return this;
-        
+
     }
-    
+
     // -- SYNCHRONICATION
 
     public AwaitableLatch latch() {
         return awaitableLatch;
     }
-    
+
     public void await() {
         latch().await();
     }
-    
+
     // -- FIELDS/GETTERS
-    
+
     public Duration getExecutionTime() {
         return Duration.of(executionTimeNanos, ChronoUnit.NANOS);
     }
-    
+
     // -- EXECUTION LOGGING
-    
+
     private void onFinished(_ConcurrentContext context) {
-        
+
         for(val task: tasks) {
             if(task.getFailedWith()!=null) {
                 log.error("----------------------------------------");
@@ -174,19 +174,19 @@ public class _ConcurrentTaskList {
                 log.error("----------------------------------------", task.getFailedWith());
             }
         }
-        
+
         if(!context.enableExecutionLogging) {
             return;
         }
-        
-        log.printf(Level.INFO, 
+
+        log.printf(Level.INFO,
                 "TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds ",
                 getName(),
                 tasksExecuted.longValue(),
                 tasks.size(),
                 context.shouldRunSequential() ? "sequential" : "concurrent",
-                        0.000_001 * executionTimeNanos);   
-        
+                        0.000_001 * executionTimeNanos);
+
     }
 
     // -- SHORTCUTS
@@ -194,10 +194,10 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addRunnable(String name, Runnable runnable) {
         return addTask(_ConcurrentTask.of(runnable).withName(name));
     }
-    
+
     public _ConcurrentTaskList submit(_ConcurrentContext._ConcurrentContextBuilder contextBuilder) {
         return submit(contextBuilder.build());
     }
-   
+
 
 }

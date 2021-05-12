@@ -41,7 +41,7 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class TypeNode extends MMNode {
-    
+
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private DomainClassDto domainClassDto;
 
@@ -54,31 +54,31 @@ public class TypeNode extends MMNode {
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
         return _Streams.<MMNode>concat(
-                
+
                 Stream.of(
                         MMNodeFactory.facetGroup(domainClassDto.getFacets(), this)),
-                
+
                 domainClassDto.getActions().getAct()
                 .stream()
                 .map(action->MMNodeFactory.action(action, this)),
-                
+
                 domainClassDto.getProperties().getProp()
                 .stream()
                 .map(prop->MMNodeFactory.property(prop, this)),
-                
+
                 domainClassDto.getCollections().getColl()
                 .stream()
                 .map(coll->MMNodeFactory.collection(coll, this)));
-                
+
     }
-    
+
 }

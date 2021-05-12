@@ -62,14 +62,14 @@ import lombok.extern.log4j.Log4j2;
     IsisModuleExtSecmanModel.class,
     IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
-    
+
     // REST
     IsisModuleViewerRestfulObjectsViewer.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
     IsisModuleExtCors.class,
-    
+
     IsisModuleTestingH2ConsoleUi.class, // enables the H2 console menu item
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
@@ -87,7 +87,7 @@ public class DemoAppManifestCommon {
     /**
      * If available from {@code System.getProperty("ContextPath")}
      * or {@code System.getenv("ContextPath")},
-     * sets the context path for the web server. The context should start with a "/" character 
+     * sets the context path for the web server. The context should start with a "/" character
      * but not end with a "/" character. The default context path can be
      * specified using an empty string.
      */

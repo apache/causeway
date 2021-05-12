@@ -62,7 +62,7 @@ import lombok.val;
 public final class _Maps {
 
     private _Maps(){}
-    
+
     /**
      * A Map that supports value lookup by key and <em>alias</em> keys.
      * <p>
@@ -73,7 +73,7 @@ public final class _Maps {
     public static interface AliasMap<K, V> extends Map<K, V> {
 
         /**
-         * 
+         *
          * @param key
          * @param aliases
          * @param value
@@ -88,7 +88,7 @@ public final class _Maps {
          * @param value
          */
         public V remap(K key, Can<K> aliases, V value);
-        
+
     }
 
     // -- UNMODIFIABLE MAP
@@ -143,11 +143,11 @@ public final class _Maps {
     }
 
     // -- TO STRING
-    
+
     public static String toString(
-            final @Nullable Map<?, ?> map, 
+            final @Nullable Map<?, ?> map,
             final @NonNull  CharSequence delimiter) {
-        
+
         return map==null
             ? ""
             : map.entrySet()
@@ -155,13 +155,13 @@ public final class _Maps {
                 .map(Object::toString)
                 .collect(Collectors.joining(delimiter));
         }
-    
+
     // -- MODIFICATIONS
 
     /**
-     * For a given {@code map} either adds or removes the specified {@code key} based on whether 
+     * For a given {@code map} either adds or removes the specified {@code key} based on whether
      * the map contains the {@code key}.
-     * If this is an add operation, then given {@code value} is associated with the {@code key}. 
+     * If this is an add operation, then given {@code value} is associated with the {@code key}.
      * @param <K>
      * @param <V>
      * @param map
@@ -170,36 +170,36 @@ public final class _Maps {
      * @return whether given map contains the {@code key} after the operation
      */
     public static <K, V> boolean toggleElement(
-            @NonNull Map<K, V> map, 
-            @NonNull K key, 
+            @NonNull Map<K, V> map,
+            @NonNull K key,
             @NonNull V value) {
-        
+
         val newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
         return newValue!=null;
     }
-    
+
     // -- TRANSFORMATIONS
-    
+
     public static <K, V0, V1> Map<K, V1> mapValues(
             @Nullable Map<K, V0> input,
             @NonNull Supplier<Map<K, V1>> mapFactory,
             @NonNull Function<V0, V1> valueMapper) {
-        
+
         val resultMap = mapFactory.get();
-        
+
         if(input==null
                 || input.isEmpty()) {
             return resultMap;
         }
-        
+
         input.forEach((k, v)->resultMap.put(k, valueMapper.apply(v)));
         return resultMap;
     }
-            
-    
+
+
     public static <K, V> Map<K, V> filterKeys(
             @Nullable Map<K, V> input,
-            Predicate<K> keyFilter, 
+            Predicate<K> keyFilter,
             Supplier<Map<K, V>> factory) {
 
         _With.requires(factory, "factory");
@@ -221,16 +221,16 @@ public final class _Maps {
     }
 
     public static <K, V> ListMultimap<V, K> invertToListMultimap(Map<K, V> input) {
-        final ListMultimap<V, K> result = _Multimaps.newListMultimap();        
+        final ListMultimap<V, K> result = _Multimaps.newListMultimap();
         if(input==null) {
             return result;
         }
-        input.forEach((k, v)->result.putElement(v, k));        
+        input.forEach((k, v)->result.putElement(v, k));
         return result;
     }
 
     // -- FACTORIES ...
-    
+
     // -- HASH MAP
 
     public static <K, V> HashMap<K, V> newHashMap() {
@@ -258,18 +258,18 @@ public final class _Maps {
     public static <K, V> TreeMap<K, V> newTreeMap(Comparator<? super K> comparator) {
         return new TreeMap<K, V>(comparator);
     }
-    
+
     // -- ALIAS MAP
-    
-    @Value(staticConstructor = "of") 
+
+    @Value(staticConstructor = "of")
     private static final class KeyPair<K> {
         K key;
         Can<K> aliasKeys;
     }
-    
+
     public static <K, V> AliasMap<K, V> newAliasMap(
             final Supplier<Map<K, V>> mapFactory){
-        
+
         _With.requires(mapFactory, "mapFactory");
 
         return new AliasMap<K, V>() {
@@ -282,37 +282,37 @@ public final class _Maps {
             @Override public Set<K> keySet() { return delegate.keySet(); }
             @Override public Collection<V> values() { return delegate.values();   }
             @Override public Set<Entry<K, V>> entrySet() { return delegate.entrySet(); }
-            
-            @Override 
-            public V put(K key, V value) { 
-                return this.put(key, Can.empty(), value); 
+
+            @Override
+            public V put(K key, V value) {
+                return this.put(key, Can.empty(), value);
             }
-            
-            @Override 
-            public void putAll(Map<? extends K, ? extends V> other) { 
+
+            @Override
+            public void putAll(Map<? extends K, ? extends V> other) {
                 if(!_NullSafe.isEmpty(other)) {
-                    other.forEach((k, v)->this.put(k, v)); 
+                    other.forEach((k, v)->this.put(k, v));
                 }
             }
-            
+
             @Override
             public V put(K key, Can<K> aliases, V value) {
                 putAliasKeys(key, aliases, /*re-map*/ false);
                 return delegate.put(key, value);
             }
-            
+
             @Override
             public V remap(K key, Can<K> aliases, V value) {
                 putAliasKeys(key, aliases, /*re-map*/ true);
                 return delegate.put(key, value);
             }
-            
+
             @Override
             public boolean containsKey(Object keyOrAliasKey) {
                 return delegate.containsKey(keyOrAliasKey) ||
                     containsAliasKey(keyOrAliasKey);
             }
-            
+
 
             @Override
             public V get(Object keyOrAliasKey) {
@@ -322,43 +322,43 @@ public final class _Maps {
                 }
                 return getByAliasKey(keyOrAliasKey);
             }
-            
-            @Override 
-            public V remove(Object key) { 
+
+            @Override
+            public V remove(Object key) {
                 removeAliasKeysOf(key);
-                return delegate.remove(key); 
+                return delegate.remove(key);
             }
-            
-            @Override 
+
+            @Override
             public void clear() {
-                delegate.clear(); 
+                delegate.clear();
                 clearAliasKeys();
             }
-            
+
             // -- HELPER
-            
+
             private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
-            
+
             private void putAliasKeys(K key, Can<K> aliasKeys, boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
                     val keyPair = KeyPair.of(key, aliasKeys);
                     for(val aliasKey : aliasKeys) {
-                        
+
                         val existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
                         if(existingKeyPair!=null && !remap) {
-                            
+
                             throw _Exceptions.illegalArgument(
-                                    "alias key collision on alias %s: existing-key=%s, new-key=%s", 
+                                    "alias key collision on alias %s: existing-key=%s, new-key=%s",
                                     aliasKey, existingKeyPair.key, keyPair.key);
                         }
                     }
                 }
             }
-            
+
             private V getByAliasKey(Object aliasKey) {
                 val keyPair = pairByAliasKey.get(aliasKey);
                 if(keyPair!=null) {
-                    return delegate.get(keyPair.getKey()); 
+                    return delegate.get(keyPair.getKey());
                 }
                 return null;
             }
@@ -366,7 +366,7 @@ public final class _Maps {
             private boolean containsAliasKey(Object aliasKey) {
                 return pairByAliasKey.containsKey(aliasKey);
             }
-            
+
             private void removeAliasKeysOf(final Object key) {
                 //XXX this implementation is slow for large alias maps, since we traverse the entire map
                 pairByAliasKey.entrySet()
@@ -374,13 +374,13 @@ public final class _Maps {
                     val keyPair = entry.getValue();
                     return keyPair.getKey().equals(key);
                 });
-                
+
             }
-            
+
             private void clearAliasKeys() {
                 pairByAliasKey.clear();
             }
-            
+
 
         };
     }

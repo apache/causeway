@@ -28,26 +28,26 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassF
 public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacetAbstract {
 
     public static CssClassFaFacet create(
-            final DomainObjectLayout domainObjectLayout, 
+            final DomainObjectLayout domainObjectLayout,
             final FacetHolder holder) {
-        
+
         if (domainObjectLayout == null) {
             return null;
         }
-        
+
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.cssClassFa());
         final CssClassFaPosition position = domainObjectLayout.cssClassFaPosition();
-        
-        return cssClassFa != null 
-                ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) 
+
+        return cssClassFa != null
+                ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder)
                 : null;
     }
 
     private CssClassFaFacetForDomainObjectLayoutFactory(
-            final String value, 
+            final String value,
             final CssClassFaPosition position, //NOSONAR false positive: method is used in create()
             final FacetHolder holder) {
-        
+
         super(value, position, holder);
     }
 }

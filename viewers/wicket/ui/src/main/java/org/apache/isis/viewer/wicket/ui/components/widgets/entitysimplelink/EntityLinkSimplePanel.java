@@ -36,8 +36,8 @@ import lombok.val;
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * (optionally) an autocomplete field.
  */
-public class EntityLinkSimplePanel 
-extends FormComponentPanelAbstract<ManagedObject> 
+public class EntityLinkSimplePanel
+extends FormComponentPanelAbstract<ManagedObject>
 implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;

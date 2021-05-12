@@ -31,15 +31,15 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * {@link ObjectValidityEvent}.
  */
 public class ObjectValidityContext
-extends ValidityContext 
+extends ValidityContext
 implements ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        super(InteractionContextType.OBJECT_VALIDATE, 
+
+        super(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy);
     }
 

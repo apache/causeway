@@ -43,20 +43,20 @@ public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     private static final IKey<Boolean> Readonly = newKey("readonly", false);
 
     /**
-     * 
+     *
      */
     private static final IKey<Boolean> IgnoreReadonly = newKey("ignoreReadonly", false);
-    
+
     /**
-     * 
+     *
      */
-    private static final IKey<Boolean> KeepOpen = newKey("keepOpen", false);    
-    
+    private static final IKey<Boolean> KeepOpen = newKey("keepOpen", false);
+
     /**
      * The earliest date that may be selected; all earlier dates will be disabled.
      */
@@ -196,10 +196,10 @@ public class DateTimeConfig extends AbstractConfig {
     public boolean isDefaultLanguageSet() {
         return Language.isDefaultValue(getLanguage());
     }
-    
+
     /**
      * Will cause the date picker to stay open after selecting a date.
-     * 
+     *
      * @param keepOpen whether to keep open
      * @return this instance for chaining
      */
@@ -207,7 +207,7 @@ public class DateTimeConfig extends AbstractConfig {
         put(KeepOpen, keepOpen);
         return this;
     }
-    
+
     public DateTimeConfig ignoreReadonly(final boolean ignoreReadonly) {
     	put(IgnoreReadonly, ignoreReadonly);
     	return this;

@@ -36,15 +36,15 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
     public void process(final ProcessMethodContext processMethodContext) {
         val declaringClass = processMethodContext.getMethod().getDeclaringClass();
         val spec = getSpecificationLoader().loadSpecification(declaringClass);
-        
+
         spec.lookupNonFallbackFacet(ImmutableFacet.class)
         .ifPresent(immutableFacet->{
             val facetHolder = processMethodContext.getFacetHolder();
-            
+
             val isInvertedSemantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
             .map(DisabledFacet::isInvertedSemantics)
             .orElse(false);
-            
+
             if(isInvertedSemantics) {
                 // @Property(editing=ENABLED)
                 return;

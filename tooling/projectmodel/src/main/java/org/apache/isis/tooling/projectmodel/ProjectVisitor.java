@@ -21,7 +21,7 @@ package org.apache.isis.tooling.projectmodel;
 import java.util.function.Consumer;
 
 public interface ProjectVisitor extends Consumer<ProjectNode> {
-    
-    
+
+
 
 }

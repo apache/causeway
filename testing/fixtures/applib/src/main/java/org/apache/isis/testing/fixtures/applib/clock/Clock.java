@@ -44,10 +44,10 @@ import lombok.val;
  * call to {@link #getInstance()} will instantiate an implementation that just
  * uses the system's own clock. Alternate implementations can be created via
  * suitable subclasses, but this must be done <b><i>before</i></b> the first
- * call to {@link #getInstance()}. 
+ * call to {@link #getInstance()}.
  */
 public abstract class Clock {
-    
+
     protected static Clock instance;
 
     /**
@@ -142,7 +142,7 @@ public abstract class Clock {
 final class SystemClock extends Clock {
 
     SystemClock() {}
-    
+
     @Override
     protected Instant now() {
         return Instant.now();

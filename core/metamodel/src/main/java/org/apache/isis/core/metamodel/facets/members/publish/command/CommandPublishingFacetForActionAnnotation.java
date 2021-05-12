@@ -39,7 +39,7 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration); 
+        val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration);
 
         return actionsIfAny
                 .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)

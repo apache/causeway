@@ -59,7 +59,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
                     buf.append(", ");
                 }
                 buf.append(property.getName());
-            }    
+            }
         });
         if (buf.length() > 0) {
             return "Invalid properties: " + buf.toString();

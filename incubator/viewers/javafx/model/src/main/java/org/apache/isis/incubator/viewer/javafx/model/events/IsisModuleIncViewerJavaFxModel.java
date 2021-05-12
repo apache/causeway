@@ -22,15 +22,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * 
+ *
  * @since 2.0
  */
 @Configuration
 @Import({
         // modules
-    
+
         // @Components's
-        
+
         // @Service's
 
         // @Mixin's

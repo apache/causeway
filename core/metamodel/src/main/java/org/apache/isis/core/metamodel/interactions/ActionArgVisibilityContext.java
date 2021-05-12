@@ -36,14 +36,14 @@ import lombok.Getter;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
-public class ActionArgVisibilityContext 
-extends VisibilityContext 
+public class ActionArgVisibilityContext
+extends VisibilityContext
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
     @Getter private final Can<ManagedObject> args;
     @Getter private final int position;
-    
+
     public ActionArgVisibilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
@@ -51,13 +51,13 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        super(InteractionContextType.ACTION_PARAMETER_VISIBLE, 
-                head, 
-                id, 
-                interactionInitiatedBy, 
+
+        super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
+                head,
+                id,
+                interactionInitiatedBy,
                 Where.OBJECT_FORMS);
-        
+
         this.objectAction = objectAction;
         this.args = args;
         this.position = position;
@@ -66,9 +66,9 @@ implements ActionInteractionContext {
     @Override
     public ActionArgumentVisibilityEvent createInteractionEvent() {
         return new ActionArgumentVisibilityEvent(
-                UnwrapUtil.single(getTarget()), 
-                getIdentifier(), 
-                UnwrapUtil.multipleAsArray(getArgs().toList()), 
+                UnwrapUtil.single(getTarget()),
+                getIdentifier(),
+                UnwrapUtil.multipleAsArray(getArgs().toList()),
                 getPosition());
     }
 

@@ -29,7 +29,7 @@ import org.apache.isis.applib.value.Markup;
 public class MarkupField extends CustomField<Markup> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Div div = new Div();
     private Markup markup;
 
@@ -38,7 +38,7 @@ public class MarkupField extends CustomField<Markup> {
         setLabel(label);
         add(div);
     }
-    
+
     @Override
     protected Markup generateModelValue() {
         return markup;
@@ -47,9 +47,9 @@ public class MarkupField extends CustomField<Markup> {
     @Override
     protected void setPresentationValue(@Nullable Markup markup) {
         this.markup = markup;
-        
+
         div.removeAll();
-        
+
         if(markup==null) {
             return;
         }

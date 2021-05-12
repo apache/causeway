@@ -22,10 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryAbstract;
-
-import lombok.val;
 
 @Repository
 @Named("isis.ext.secman.ApplicationUserRepository")

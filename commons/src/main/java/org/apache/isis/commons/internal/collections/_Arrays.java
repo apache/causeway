@@ -56,19 +56,19 @@ public final class _Arrays {
     // -- PREDICATES
 
     /**
-     * Whether given {@code test} predicate evaluates 'true' for any given pair of elements 
-     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n} 
-     * the number of elements of {@code array1/2}.  
+     * Whether given {@code test} predicate evaluates 'true' for any given pair of elements
+     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n}
+     * the number of elements of {@code array1/2}.
      * @param array1 - nullable
      * @param array2 - nullable
      * @param test - a predicate
-     * @return whether there is any matching pair; false - if array1 and array2 are both empty 
-     * @throws IllegalArgumentException - if array lengths do not match 
+     * @return whether there is any matching pair; false - if array1 and array2 are both empty
+     * @throws IllegalArgumentException - if array lengths do not match
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAnyMatch(
-            @Nullable final T[] array1, 
-            @Nullable final T[] array2, 
+            @Nullable final T[] array1,
+            @Nullable final T[] array2,
             final BiPredicate<T, T> test) {
 
         final int s1 = _NullSafe.size(array1);
@@ -91,19 +91,19 @@ public final class _Arrays {
 
 
     /**
-     * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements 
-     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n} 
-     * the number of elements of {@code array1/2}.  
+     * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements
+     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n}
+     * the number of elements of {@code array1/2}.
      * @param array1 - nullable
      * @param array2 - nullable
      * @param test - a predicate
-     * @return whether all pairs match; true - if array1 and array2 are both empty 
-     * @throws IllegalArgumentException - if array lengths do not match 
+     * @return whether all pairs match; true - if array1 and array2 are both empty
+     * @throws IllegalArgumentException - if array lengths do not match
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAllMatch(
-            @Nullable final T[] array1, 
-            @Nullable final T[] array2, 
+            @Nullable final T[] array1,
+            @Nullable final T[] array2,
             final BiPredicate<T, T> test) {
         _With.requires(test, "test");
         return !testAnyMatch(array1, array2, test.negate());
@@ -171,7 +171,7 @@ public final class _Arrays {
         }
         return all;
     }
-    
+
     /**
      * Returns a new array containing all components {first, *rest}
      * @param type (non-null) explicit array element type
@@ -223,7 +223,7 @@ public final class _Arrays {
      *     have been copied (non-null)
      */
     public static <T> T[] toArray(
-            final @Nullable Collection<? extends T> collection, 
+            final @Nullable Collection<? extends T> collection,
             final @NonNull  Class<T> componentType) {
         return _NullSafe.stream(collection)
                 .collect(toArray(componentType, collection!=null ? collection.size() : 0));
@@ -238,21 +238,21 @@ public final class _Arrays {
      *     have been copied (non-null)
      */
     public static <T> T[] toArray(
-            final @Nullable Iterable<? extends T> iterable, 
+            final @Nullable Iterable<? extends T> iterable,
             final @NonNull  Class<T> componentType) {
-// unnecessary optimization        
+// unnecessary optimization
 //        if(iterable!=null && (iterable instanceof Collection)) {
 //            return toArray((Collection<? extends T>) iterable, componentType);
 //        }
         return _NullSafe.stream(iterable)
                 .collect(toArray(componentType));
     }
-    
+
     // -- MODIFICATION
-    
+
     /**
-     * Returns a new array of size {@code array.length - 1} with the element at {@code array[index]} removed. 
-     * 
+     * Returns a new array of size {@code array.length - 1} with the element at {@code array[index]} removed.
+     *
      * @param <T>
      * @param array
      * @param index
@@ -266,17 +266,17 @@ public final class _Arrays {
             throw new IllegalArgumentException(msg);
         }
         final T[] result = Arrays.copyOf(array, array.length - 1);
-        // copy the elements from index + 1 till end 
-        // from original array to the new array 
+        // copy the elements from index + 1 till end
+        // from original array to the new array
         val remaining = result.length - index;
         System.arraycopy(array, index+1, result, index, remaining);
         return result;
     }
-    
+
     /**
-     * Returns {@code null} if given {@code array} is {@code null} or of length zero, 
+     * Returns {@code null} if given {@code array} is {@code null} or of length zero,
      * returns given {@code array} otherwise.
-     *  
+     *
      * @param <T>
      * @param array
      * @return null for empty arrays
@@ -287,7 +287,7 @@ public final class _Arrays {
         }
         return array;
     }
-    
+
     /**
      * Returns a sub-array of given array. The
      * sub-array begins at the specified {@code beginIndex} and
@@ -297,7 +297,7 @@ public final class _Arrays {
      * @param      array
      * @param      beginIndex   the beginning index, inclusive.
      * @param      endIndex     the ending index, exclusive.
-     * @return     the specified sub-array, which always is a copy 
+     * @return     the specified sub-array, which always is a copy
      * @exception  IndexOutOfBoundsException  if the
      *             {@code beginIndex} is negative, or
      *             {@code endIndex} is larger than the length of
@@ -318,9 +318,9 @@ public final class _Arrays {
         }
         return Arrays.copyOfRange(array, beginIndex, endIndex);
     }
-    
-    
-    
+
+
+
     // -- COMPONENT TYPE INFERENCE
 
     /**
@@ -335,7 +335,7 @@ public final class _Arrays {
         }
         return Optional.ofNullable(arrayType.getComponentType());
     }
-    
+
     // -- ACCESSOR
 
     /**
@@ -358,12 +358,12 @@ public final class _Arrays {
     }
 
     // -- TRANSFORMATION
-    
+
     /**
-     * Transforms given {@code array} into a new array of {@code resultElementType} and same size, 
-     * applying the {@code mapper} function 
-     * to each element of {@code array}. 
-     * Returns {@code null} if {@code array} is {@code null};  
+     * Transforms given {@code array} into a new array of {@code resultElementType} and same size,
+     * applying the {@code mapper} function
+     * to each element of {@code array}.
+     * Returns {@code null} if {@code array} is {@code null};
      * @param <T>
      * @param <R>
      * @param array
@@ -373,10 +373,10 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] map(
-            @Nullable T[] array, 
-            @NonNull Class<R> resultElementType, 
+            @Nullable T[] array,
+            @NonNull Class<R> resultElementType,
             @NonNull Function<T, R> mapper) {
-        
+
         if (array == null) {
             return null;
         }
@@ -388,12 +388,12 @@ public final class _Arrays {
         }
         return mappedArray;
     }
-    
+
     /**
-     * Transforms given {@code array} into a new object array of same size, 
-     * applying the {@code mapper} function 
-     * to each element of {@code array}. 
-     * Returns {@code null} if {@code array} is {@code null};  
+     * Transforms given {@code array} into a new object array of same size,
+     * applying the {@code mapper} function
+     * to each element of {@code array}.
+     * Returns {@code null} if {@code array} is {@code null};
      * @param <T>
      * @param array
      * @param mapper
@@ -401,9 +401,9 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] map(
-            @Nullable T[] array, 
+            @Nullable T[] array,
             @NonNull Function<T, ?> mapper) {
-        
+
         if (array == null) {
             return null;
         }
@@ -414,12 +414,12 @@ public final class _Arrays {
         }
         return mappedArray;
     }
-    
+
     /**
-     * Transforms given {@code collection} into an array of {@code resultElementType} and same size, 
-     * applying the {@code mapper} function 
-     * to each element of {@code collection}. 
-     * Returns {@code null} if {@code collection} is {@code null};  
+     * Transforms given {@code collection} into an array of {@code resultElementType} and same size,
+     * applying the {@code mapper} function
+     * to each element of {@code collection}.
+     * Returns {@code null} if {@code collection} is {@code null};
      * @param <T>
      * @param <R>
      * @param collection
@@ -429,10 +429,10 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] mapCollection(
-            @Nullable Collection<T> collection, 
-            @NonNull Class<R> resultElementType, 
+            @Nullable Collection<T> collection,
+            @NonNull Class<R> resultElementType,
             @NonNull Function<T, R> mapper) {
-        
+
         if (collection == null) {
             return null;
         }
@@ -444,12 +444,12 @@ public final class _Arrays {
         }
         return mappedArray;
     }
-    
+
     /**
-     * Transforms given {@code collection} into an object array of same size, 
-     * applying the {@code mapper} function 
-     * to each element of {@code collection}. 
-     * Returns {@code null} if {@code collection} is {@code null};  
+     * Transforms given {@code collection} into an object array of same size,
+     * applying the {@code mapper} function
+     * to each element of {@code collection}.
+     * Returns {@code null} if {@code collection} is {@code null};
      * @param <T>
      * @param collection
      * @param mapper
@@ -457,9 +457,9 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] mapCollection(
-            @Nullable Collection<T> collection, 
+            @Nullable Collection<T> collection,
             @NonNull Function<T, ?> mapper) {
-        
+
         if (collection == null) {
             return null;
         }
@@ -470,7 +470,7 @@ public final class _Arrays {
         }
         return mappedArray;
     }
-    
+
 
     // --
 

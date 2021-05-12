@@ -142,6 +142,7 @@ public class ApplicationRole
 
     // -- PERMISSIONS
 
+    @Override
     @Permissions
     public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);

@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
         named = "Version",
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, 
+        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.2"
         )
 @RequiredArgsConstructor

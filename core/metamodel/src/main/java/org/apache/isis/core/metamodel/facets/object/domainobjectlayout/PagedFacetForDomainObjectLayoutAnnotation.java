@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
     public static PagedFacet create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::paged)
                 .filter(paged -> paged > 1)

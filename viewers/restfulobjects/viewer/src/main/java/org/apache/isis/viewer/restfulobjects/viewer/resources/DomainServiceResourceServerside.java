@@ -79,12 +79,12 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
         val metaModelContext = resourceContext.getMetaModelContext();
-        
+
         final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_REST);
 
@@ -123,7 +123,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response service(@PathParam("serviceId") final String serviceId) {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
@@ -171,7 +171,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
@@ -245,7 +245,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
             final InputStream body) {
-        
+
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
@@ -267,7 +267,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
-        
+
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);

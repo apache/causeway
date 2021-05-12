@@ -53,7 +53,7 @@ import javafx.scene.layout.VBox;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class MainViewFx {
-    
+
     private final JavaFxViewerConfig viewerConfig;
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
@@ -68,14 +68,14 @@ public class MainViewFx {
     @FXML private HBox topPane;
     @FXML private VBox contentPane;
     @FXML private TextArea sampleTextArea;
-    
+
     @FXML
     public void initialize() {
         log.info("about to initialize");
 
         uiContext.setNewPageHandler(this::replaceContent);
         uiContext.setPageFactory(this::uiComponentForActionResult);
-        
+
         contentView.setFitToWidth(true);
         contentView.setFitToHeight(true);
         contentView.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -83,56 +83,56 @@ public class MainViewFx {
         contentPane.setFillWidth(true);
         //_fx.borderDashed(contentPane, Color.CRIMSON); //debug
         isisInteractionFactory.runAnonymous(this::buildMenu);
-        
+
         renderHomepage();
     }
-    
+
     private void buildMenu() {
         val header = headerUiModelProvider.getHeader();
-        
+
         val commonContext = IsisAppCommonContext.of(metaModelContext);
-        
+
         // adding a top level menu 'Home' decorated with a branding-icon ...
-        
+
         val brandingIcon = new ImageView(viewerConfig.getBrandingIcon());
         brandingIcon.setPreserveRatio(true);
-        
+
         val menu = _fx.newMenu(menuBarLeft, "Home");
         menu.setGraphic(brandingIcon);
         brandingIcon.fitHeightProperty().set(16);
         _fx.setMenuOnAction(menu, e->renderHomepage());
-        
-        // let the MenuBuilderFx populate the menu-bars ... 
-        
+
+        // let the MenuBuilderFx populate the menu-bars ...
+
         val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, uiActionHandler::handleActionLinkClicked);
         val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, uiActionHandler::handleActionLinkClicked);
-        
+
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
         header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
     }
-    
+
     private void replaceContent(Node node) {
         contentPane.getChildren().clear();
         contentPane.getChildren().add(node);
     }
-    
+
     private void renderHomepage() {
         log.info("about to render homepage");
         uiContext.route(metaModelContext::getHomePageAdapter);
     }
-    
+
     private Node uiComponentForActionResult(ManagedObject actionResult) {
         if (actionResult.getSpecification().isParentedOrFreeCollection()) {
             return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewFx.fromObject(
                     uiContext,
-                    uiComponentFactory, 
-                    uiActionHandler::handleActionLinkClicked, 
+                    uiComponentFactory,
+                    uiActionHandler::handleActionLinkClicked,
                     actionResult);
         }
     }
 
-    
+
 }

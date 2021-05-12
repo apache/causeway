@@ -99,7 +99,7 @@ extends ScalarPanelTextFieldAbstract<T>  {
 
                 return label;
     }
-    
+
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         return super.toStringConvertingModelOf(converter);

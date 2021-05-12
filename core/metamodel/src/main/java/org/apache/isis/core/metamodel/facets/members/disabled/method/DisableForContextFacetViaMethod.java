@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class DisableForContextFacetViaMethod 
-extends DisableForContextFacetAbstract 
+public class DisableForContextFacetViaMethod
+extends DisableForContextFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -43,7 +43,7 @@ implements ImperativeFacet {
 
     public DisableForContextFacetViaMethod(
             final Method method,
-            final TranslationService translationService, 
+            final TranslationService translationService,
             final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);

@@ -75,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("BS3")
 @Log4j2
 public class MenuBarsServiceBS3 implements MenuBarsService {
-    
+
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
     public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
 
@@ -84,7 +84,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
-    
+
     @Inject private MenuBarsLoaderService menuBarsLoaderService;
     @Inject private MessageService messageService;
     @Inject private JaxbService jaxbService;
@@ -111,9 +111,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
     // -- HELPER
-    
+
     private BS3MenuBars loadOrElse(BS3MenuBars fallbackMenuBars) {
-        
+
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(fallbackMenuBars);
@@ -123,7 +123,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             // just use fallback
             return fallbackMenuBars;
         }
-        
+
         // add in any missing actions from the fallback
         val referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
 
@@ -132,7 +132,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             // created only if required to collect unreferenced actions
             // for this menuSection into a new section within the designated
             // unreferencedActionsMenu
-            BS3MenuSection section = null;   
+            BS3MenuSection section = null;
 
             for (val serviceActionLayout : menuSection.getServiceActions()) {
                 val objectTypeAndId = serviceActionLayout.getObjectTypeAndId();
@@ -150,7 +150,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             }
 
         }));
-        
+
         return menuBars;
     }
 
@@ -158,7 +158,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
         return menuBars;
     }
-    
+
     private static BS3MenuSection addSectionToMenu(BS3Menu menu) {
         val section = new BS3MenuSection();
         menu.getSections().add(section);
@@ -166,7 +166,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
     private static void bindActionToSection(
-            ServiceActionLayoutData serviceAction, 
+            ServiceActionLayoutData serviceAction,
             BS3MenuSection section) {
 
         // detach from fallback, attach to this section
@@ -222,7 +222,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         return menuBars;
     }
-    
+
     private boolean isVisibleAdapterForMenu(ManagedObject objectAdapter) {
         val spec = objectAdapter.getSpecification();
         if (spec.isHidden()) {
@@ -334,7 +334,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         ManagedObject lastServiceAdapter = null;
 
         for (ServiceAndAction serviceAction : serviceActions) {
-            List<ServiceAndAction> serviceActionsForName = 
+            List<ServiceAndAction> serviceActionsForName =
                     serviceActionsByName.get(serviceAction.getServiceName());
 
             val serviceAdapter = serviceAction.getServiceAdapter();
@@ -396,10 +396,10 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     private String tnsAndSchemaLocation() {
 
         return Stream.of(
-                MB3_TNS, 
+                MB3_TNS,
                 MB3_SCHEMA_LOCATION,
 
-                COMPONENT_TNS, 
+                COMPONENT_TNS,
                 COMPONENT_SCHEMA_LOCATION,
 
                 LINKS_TNS,

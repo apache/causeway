@@ -93,13 +93,13 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getClassType() {
-        
+
         val isService = Stream.concat(
-                    Stream.of(spec), 
+                    Stream.of(spec),
                     spec.subclasses(Hierarchical.Depth.DIRECT).stream())
                 .anyMatch(ObjectSpecification::isManagedBean);
-        
-        return isService 
+
+        return isService
                     ? "2 Service"
                     : spec.isValue()
                             ? "3 Value"

@@ -49,13 +49,13 @@ public class ForwardingServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         val requestDispatcher = request.getRequestDispatcher(forwardTo);
-        
+
         try {
             requestDispatcher.forward(request, response);
         } catch (Exception e) {
             log.error("failed to forward request to {}", forwardTo, e);
         }
-        
+
     }
 
 }

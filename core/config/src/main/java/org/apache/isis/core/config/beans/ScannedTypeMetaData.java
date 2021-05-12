@@ -34,37 +34,37 @@ final class ScannedTypeMetaData {
      * Fully qualified name of the underlying class.
      */
     @Getter private final String className;
-    
+
     /**
      * As proposed by IoC, before any overrides.
      */
     @Getter private final String proposedBeanName;
-    
+
     /**
-     * Name override, applied only if not empty. 
+     * Name override, applied only if not empty.
      */
     @Getter @Setter private String beanNameOverride;
-    
+
     /**
-     * Whether this type should be made available to resolve injection points.  
+     * Whether this type should be made available to resolve injection points.
      */
     @Getter @Setter private boolean injectable = true;
-    
+
     @Getter(lazy=true)
     private final ClassOrFailure underlyingClassOrFailure = resolveClass();
-    
+
     // -- UTILITY
-    
+
     public String getEffectiveBeanName() {
         return _Strings.isNullOrEmpty(beanNameOverride)
-                ? proposedBeanName 
+                ? proposedBeanName
                 : beanNameOverride;
     }
-    
+
     // -- HELPER
-    
+
     /**
-     * Holds either the class or the failure string when attempting to load by name. 
+     * Holds either the class or the failure string when attempting to load by name.
      */
     @Value(staticConstructor = "of")
     static final class ClassOrFailure {
@@ -74,7 +74,7 @@ final class ScannedTypeMetaData {
             return underlyingClass==null;
         }
     }
-    
+
     /**
      * @return the underlying class of this TypeMetaData
      */

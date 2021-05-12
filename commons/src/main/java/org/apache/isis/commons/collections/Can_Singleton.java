@@ -65,7 +65,7 @@ final class Can_Singleton<T> implements Can<T> {
     public Stream<T> stream() {
         return Stream.of(element);
     }
-    
+
     @Override
     public Stream<T> parallelStream() {
         return Stream.of(element);
@@ -75,12 +75,12 @@ final class Can_Singleton<T> implements Can<T> {
     public Optional<T> getFirst() {
         return getSingleton();
     }
-    
+
     @Override
     public Optional<T> getLast() {
         return getSingleton();
     }
-    
+
     @Override
     public Optional<T> get(int elementIndex) {
         return getSingleton();
@@ -90,7 +90,7 @@ final class Can_Singleton<T> implements Can<T> {
     public int size() {
         return 1;
     }
-    
+
     @Override
     public boolean contains(T element) {
         return Objects.equals(this.element, element);
@@ -105,17 +105,17 @@ final class Can_Singleton<T> implements Can<T> {
     public Can<T> reverse() {
         return this;
     }
-    
+
     @Override
     public Iterator<T> reverseIterator() {
         return iterator();
     }
-    
+
     @Override
     public void forEach(@NonNull Consumer<? super T> action) {
         action.accept(this.element);
     }
-    
+
     @Override
     public Can<T> filter(@Nullable Predicate<? super T> predicate) {
         if(predicate==null) {
@@ -125,22 +125,22 @@ final class Can_Singleton<T> implements Can<T> {
                 ? this // identity
                 : Can.empty();
     }
-    
+
     @Override
     public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
         action.accept(element, zippedIn.iterator().next());
     }
-    
+
     @Override
     public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
         return Can_Singleton.of(mapper.apply(element, zippedIn.iterator().next()));
     }
-    
+
     @Override
     public Can<T> add(@NonNull T element) {
         return Can.ofStream(Stream.of(this.element, element)); // append
     }
-    
+
     @Override
     public Can<T> addAll(@NonNull Can<T> other) {
         if(other.isEmpty()) {
@@ -154,23 +154,23 @@ final class Can_Singleton<T> implements Can<T> {
         other.forEach(newElements::add);
         return Can_Multiple.of(newElements);
     }
-    
+
     @Override
     public Can<T> add(int index, @NonNull T element) {
         if(index==0) {
             return Can.ofStream(Stream.of(element, this.element)); // insert before
         }
         if(index==1) {
-            return Can.ofStream(Stream.of(this.element, element)); // append   
+            return Can.ofStream(Stream.of(this.element, element)); // append
         }
         throw new IndexOutOfBoundsException(
                 "cannot add to singleton with index other than 0 or 1; got " + index);
     }
-    
+
     @Override
     public Can<T> replace(int index, T element) {
         if(index==0) {
-            return Can.ofSingleton(element);    
+            return Can.ofSingleton(element);
         }
         throw new IndexOutOfBoundsException(
                 "cannot replace on singleton with index other than 0; got " + index);
@@ -179,34 +179,34 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<T> remove(int index) {
         if(index==0) {
-            return Can.empty();    
+            return Can.empty();
         }
         throw new IndexOutOfBoundsException(
                 "cannot remove from singleton with index other than 0; got " + index);
     }
-    
+
     @Override
     public Can<T> remove(T element) {
         if(this.element.equals(element)) {
-            return Can.empty();    
+            return Can.empty();
         }
         return this;
     }
-    
+
     @Override
     public int indexOf(@NonNull T element) {
         return this.element.equals(element) ? 0 : -1;
     }
-    
+
     @Override
     public String toString() {
         return "Can["+element+"]";
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Can) {
-            return ((Can<?>) obj).isEqualTo(this); 
+            return ((Can<?>) obj).isEqualTo(this);
         }
         return false;
     }
@@ -215,49 +215,49 @@ final class Can_Singleton<T> implements Can<T> {
     public int hashCode() {
         return element.hashCode();
     }
-    
+
     @Override
     public int compareTo(final @Nullable Can<T> other) {
         // when returning
-        // -1 ... this (singleton) is before other 
+        // -1 ... this (singleton) is before other
         // +1 ... this (singleton) is after other
         if(other==null
                 || other.isEmpty()) {
             return 1; // all empty Cans are same and come first
         }
         final int firstElementComparison = _Objects.compareNonNull(
-                this.element, 
+                this.element,
                 other.getFirstOrFail());
         if(firstElementComparison!=0
                 || other.isCardinalityOne()) {
             return firstElementComparison; // when both Cans are singletons, just compare by their contained values
         }
         // at this point firstElementComparison is 0 and other is of cardinality MULTIPLE
-        return -1; // singletons come before multi-cans 
+        return -1; // singletons come before multi-cans
     }
-    
+
     @Override
     public List<T> toList() {
         return Collections.singletonList(element); // serializable and immutable
     }
-    
+
     @Override
     public Set<T> toSet() {
         return Collections.singleton(element); // serializable and immutable
     }
-    
+
     @Override
     public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
         return Collections.singleton(element); // serializable and immutable
     }
-    
+
     @Override
     public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
         val collection = collectionFactory.get();
         collection.add(element);
         return collection;
     }
-    
+
     @Override
     public T[] toArray(@NonNull Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
@@ -266,6 +266,6 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
 
-    
-    
+
+
 }

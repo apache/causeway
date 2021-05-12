@@ -99,7 +99,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     public static FacetedMethod createForAction(
             final Class<?> declaringType,
             final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), 
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(),
                 getParameters(declaringType, method));
     }
 
@@ -108,18 +108,18 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Method actionMethod) {
 
         final List<FacetedMethodParameter> actionParams = _Lists.newArrayList(actionMethod.getParameterCount());
-        
+
         for(val param : actionMethod.getParameters()) {
-            
+
             final Class<?> parameterType = param.getType();
-            
+
             final FeatureType featureType =
                     _Collections.inferElementType(param).isPresent()
                         || _Arrays.inferComponentType(parameterType).isPresent()
                     ? FeatureType.ACTION_PARAMETER_COLLECTION
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
-            val facetedMethodParam = 
+            val facetedMethodParam =
                     new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
             actionParams.add(facetedMethodParam);
 
@@ -134,7 +134,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                 .ifPresent(typeOfFacet->{
                     // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                     FacetUtil.addFacet(typeOfFacet);
-                    facetedMethodParam.setType(typeOfFacet.value());                    
+                    facetedMethodParam.setType(typeOfFacet.value());
                 });
             }
 
@@ -164,11 +164,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         super(featureType, type);
         this.owningType = declaringType;
         this.method = method;
-        
+
         val logicalType = LogicalType.lazy(
                 declaringType,
                 ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
-        
+
         this.identifier = featureType.identifierFor(logicalType, method);
         this.parameters = parameters;
     }

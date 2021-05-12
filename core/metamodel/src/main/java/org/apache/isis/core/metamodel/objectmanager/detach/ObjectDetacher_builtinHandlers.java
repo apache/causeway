@@ -27,26 +27,26 @@ import lombok.Data;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 final class ObjectDetacher_builtinHandlers {
 
     // -- NULL GUARD
-    
+
     @Data
     public static class GuardAgainstNull implements ObjectDetacher.Handler {
-        
+
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ManagedObject managedObject) {
-            
+
             if(managedObject==null || managedObject.getPojo()==null) {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -56,7 +56,7 @@ final class ObjectDetacher_builtinHandlers {
         }
 
     }
-    
+
     @Data
     public static class DetachEntity implements ObjectDetacher.Handler {
 
@@ -70,7 +70,7 @@ final class ObjectDetacher_builtinHandlers {
 
         @Override
         public ManagedObject handle(ManagedObject request) {
-            
+
             val spec = request.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             if(entityFacet==null) {
@@ -80,17 +80,17 @@ final class ObjectDetacher_builtinHandlers {
 
             Object detachedPojo = entityFacet.detach(request.getPojo());
 
-            // we assume that we don't need to inject services again, because this should 
+            // we assume that we don't need to inject services again, because this should
             // already have been done, when the entity object got fetched with the ObjectLoader
-            
+
             return metaModelContext.getObjectManager().adapt(detachedPojo);
         }
-        
+
     }
-    
+
     @Data
     public static class DetachOther implements ObjectDetacher.Handler {
-        
+
         @Override
         public boolean isHandling(ManagedObject request) {
             // if no one else feels responsible, we do
@@ -101,9 +101,9 @@ final class ObjectDetacher_builtinHandlers {
         public ManagedObject handle(ManagedObject request) {
             return request;
         }
-        
+
     }
-    
-    
-    
+
+
+
 }

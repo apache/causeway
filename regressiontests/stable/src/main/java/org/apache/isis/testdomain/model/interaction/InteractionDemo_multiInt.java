@@ -29,43 +29,43 @@ public class InteractionDemo_multiInt {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public int act(int a, int b, int c) {
         return a * (b + c);
     }
-    
+
     // -- PARAM A
-    
-    @MemberSupport 
+
+    @MemberSupport
     public int defaultA(Parameters.TriInt p) {
         return 2;
     }
-    
+
     @MemberSupport
     public int[] choicesA(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
-    
+
     // -- PARAM B
-    
-    @MemberSupport 
+
+    @MemberSupport
     public int defaultB(Parameters.TriInt p) {
         return 3;
     }
-    
+
     @MemberSupport
     public int[] choicesB(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
-    
+
     // -- PARAM C
-    
-    @MemberSupport 
+
+    @MemberSupport
     public int defaultC(Parameters.TriInt p) {
         return 4;
     }
-    
+
     @MemberSupport
     public int[] choicesC(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};

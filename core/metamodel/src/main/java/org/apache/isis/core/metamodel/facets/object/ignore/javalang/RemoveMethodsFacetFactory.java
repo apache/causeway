@@ -79,7 +79,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         val config = processClassContext.getFacetHolder().getMetaModelContext().getConfiguration();
         val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
-        
+
         for (Method method : methods) {
             // removeSyntheticOrAbstractMethods(processClassContext);
             if (method.isSynthetic() || Modifier.isAbstract(method.getModifiers())) {
@@ -90,16 +90,16 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             if(method.getName().equals("compareTo")) {
                 processClassContext.removeMethod(method);
             }
-            
+
             // remove property setter, if has not explicitly an @Action annotation
             // this code block is not required, if @Action annotations are explicit per config
-            if(!isExplicitAction       
+            if(!isExplicitAction
                     && method.getParameterCount() == 1
                     && method.getName().startsWith("set")
                     && method.getName().length() > 3) {
-                
+
                 if(!_Annotations.synthesize(method, Action.class).isPresent()) {
-                    processClassContext.removeMethod(method);    
+                    processClassContext.removeMethod(method);
                 }
             }
 

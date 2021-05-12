@@ -35,7 +35,7 @@ import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
-implements 
+implements
     ChoiceExt {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ implements
             final String id,
             final IModel<ArrayList<ObjectMemento>> modelObject,
             final ScalarModel scalarModel) {
-        
+
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel);
     }
 
@@ -54,7 +54,7 @@ implements
             final String id,
             final IModel<Collection<ObjectMemento>> model,
             final ScalarModel scalarModel) {
-        
+
         super(id, model, EmptyChoiceProvider.INSTANCE);
         logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
 
@@ -65,29 +65,29 @@ implements
         setOutputMarkupPlaceholderTag(true);
     }
 
-    
+
     // -- bug in wicket 8.8.0 -------------------------------------------
-    
+
     private boolean workaround;
-    
+
     @Override
     public void updateModel() {
         workaround = true;
         super.updateModel();
         workaround = false;
     }
-    
+
     @Override
     public Collection<ObjectMemento> getModelObject() {
         val modelObj = super.getModelObject();
         if(workaround) {
             return modelObj==null
-                    ? null 
-                    : new ArrayList<>(modelObj);    
+                    ? null
+                    : new ArrayList<>(modelObj);
         }
         return modelObj;
     }
-    
+
     // ------------------------------------------------------------------
-    
+
 }

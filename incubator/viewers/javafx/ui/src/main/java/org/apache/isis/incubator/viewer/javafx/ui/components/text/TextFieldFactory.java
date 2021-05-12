@@ -86,13 +86,13 @@ public class TextFieldFactory implements UiComponentHandlerFx {
     }
 
     // -- HELPER
-    
+
     @RequiredArgsConstructor(staticName = "of")
     private static final class StringConverter implements BindingConverter<String> {
 
         @Getter(onMethod_ = {@Override})
         private final ObjectSpecification valueSpecification;
-        
+
         @Override
         public String toString(String value) {
             return value; // identity
@@ -105,9 +105,9 @@ public class TextFieldFactory implements UiComponentHandlerFx {
 
         @Override
         public Optional<String> tryParse(String stringifiedValue) {
-            return Optional.empty(); // always ok 
+            return Optional.empty(); // always ok
         }
-        
+
     }
 
 

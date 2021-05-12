@@ -54,48 +54,49 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class EntityChangesPublisherDefault implements EntityChangesPublisher {
-    
+
     private final List<EntityChangesSubscriber> subscribers;
     private final ClockService clockService;
     private final UserService userService;
     private final InteractionTracker iaTracker;
-    
+
     private Can<EntityChangesSubscriber> enabledSubscribers = Can.empty();
-    
+
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
                 .filter(HasEnabling::isEnabled);
     }
 
+    @Override
     public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
         val payload = getPayload(hasEnlistedEntityChanges);
         val handle = _Xray.enterEntityChangesPublishing(
-                iaTracker, 
-                payload, 
+                iaTracker,
+                payload,
                 enabledSubscribers,
                 ()->getCannotPublishReason(payload));
-        
+
         payload.ifPresent(entityChanges->{
             for (val subscriber : enabledSubscribers) {
                 subscriber.onChanging(entityChanges);
             }
         });
-        
+
         _Xray.exitPublishing(handle);
     }
-    
+
     // -- HELPER
-    
+
     private Optional<EntityChanges> getPayload(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
         return enabledSubscribers.isEmpty()
                 ? Optional.empty()
                 : hasEnlistedEntityChanges.getEntityChanges(
-                        clockService.getClock().javaSqlTimestamp(), // current time 
+                        clockService.getClock().javaSqlTimestamp(), // current time
                         userService.currentUserNameElseNobody()); // current user
     }
-    
+
     // x-ray support
     private @Nullable String getCannotPublishReason(final @NonNull Optional<EntityChanges> payload) {
         return enabledSubscribers.isEmpty()

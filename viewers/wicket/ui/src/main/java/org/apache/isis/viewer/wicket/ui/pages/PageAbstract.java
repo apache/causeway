@@ -91,12 +91,12 @@ import de.agilecoders.wicket.core.settings.ITheme;
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 @Log4j2
-public abstract class PageAbstract 
-extends WebPageBase 
+public abstract class PageAbstract
+extends WebPageBase
 implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
@@ -134,16 +134,16 @@ implements ActionPromptProvider {
             final PageParameters pageParameters,
             final String title,
             final ComponentType... childComponentIds) {
-        
+
         super(pageParameters);
 
         try {
-            
+
             // for breadcrumbs support
             getSession().bind();
 
             setTitle(title);
-            
+
             // must be a direct child of <body> for the 'sticky-top' CSS class to work
             MarkupContainer header = createPageHeader("header");
             add(header);
@@ -175,12 +175,12 @@ implements ActionPromptProvider {
         } catch(final RuntimeException ex) {
 
             log.error("Failed to construct page, going back to sign in page", ex);
-            
+
             val exceptionRecognizerService = getCommonContext().getServiceRegistry()
                     .lookupServiceElseFail(ExceptionRecognizerService.class);
 
             val recognition = exceptionRecognizerService.recognize(ex);
-            
+
             val exceptionModel = ExceptionModel.create(getCommonContext(), recognition, ex);
 
             getSession().invalidate();
@@ -265,16 +265,16 @@ implements ActionPromptProvider {
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
-        
+
         getConfiguration().getViewer().getWicket().getApplication().getJs()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         } );
-        
+
         getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
-        
+
         if(getSystemEnvironment().isPrototyping()) {
             addBootLint(response);
         }
@@ -308,8 +308,8 @@ implements ActionPromptProvider {
      */
     private void addBootLint(final IHeaderResponse response) {
         // rather than using the default BootlintHeaderItem.INSTANCE;
-        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)    	
-    	
+        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
+
     	// Bootlint not available for BS4 (as for now)
     	/*
         response.render(new BootlintHeaderItem(

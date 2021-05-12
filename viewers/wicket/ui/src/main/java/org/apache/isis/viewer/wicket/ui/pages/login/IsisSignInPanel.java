@@ -137,10 +137,10 @@ public class IsisSignInPanel extends SignInPanel {
         val hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
                 .anyMatch(EmailNotificationService::isConfigured);
 
-        val visibilityAllowed = 
+        val visibilityAllowed =
                 hasUserRegistrationService
                 && hasConfiguredEmailNotificationService;
-        
+
         for (val component: components) {
             if(component.isVisibilityAllowed()) {
                 component.setVisibilityAllowed(visibilityAllowed);

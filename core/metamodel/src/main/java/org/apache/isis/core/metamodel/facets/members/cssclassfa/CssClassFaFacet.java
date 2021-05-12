@@ -40,7 +40,7 @@ public interface CssClassFaFacet extends Facet {
      * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
      */
     CssClassFaPosition getPosition();
-    
+
     Stream<String> streamCssClasses();
 
     /**
@@ -50,24 +50,24 @@ public interface CssClassFaFacet extends Facet {
         return streamCssClasses()
                 .collect(Collectors.joining(" "));
     }
-    
+
     /**
-     * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string 
+     * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string
      * @return space separated (distinct) CSS-class strings
      */
     default String asSpaceSeparatedWithAdditional(String ... additionalClasses) {
-        
+
         if(_NullSafe.size(additionalClasses)==0) {
-            return asSpaceSeparated(); 
+            return asSpaceSeparated();
         }
-        
+
         return Stream.concat(
-                streamCssClasses(), 
+                streamCssClasses(),
                 _NullSafe.stream(additionalClasses)
                     .map(String::trim)
                     .filter(_Strings::isNotEmpty))
         .distinct()
         .collect(Collectors.joining(" "));
-        
+
     }
 }

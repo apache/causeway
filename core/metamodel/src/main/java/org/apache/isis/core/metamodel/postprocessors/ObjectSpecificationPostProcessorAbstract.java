@@ -80,13 +80,13 @@ public abstract class ObjectSpecificationPostProcessorAbstract
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;
     }
-    
+
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
         val objectMemberImpl = (ObjectMemberAbstract) objectMember;
         return objectMemberImpl.getFacetedMethod();
     }
-    
+
     protected static TypedHolder peerFor(final ObjectActionParameter param) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
         val paramImpl = (ObjectActionParameterAbstract) param;

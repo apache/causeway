@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 public interface SseObserveFacet extends SingleClassValueFacet {
 
     Class<? extends SseSource> getEventStreamType();
-    
+
     default LocalResourcePath getEventStreamResource() {
         final String eventStreamId = getEventStreamType().getName();
         final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);

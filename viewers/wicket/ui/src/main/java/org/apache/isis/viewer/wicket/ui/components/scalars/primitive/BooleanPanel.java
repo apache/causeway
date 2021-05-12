@@ -236,7 +236,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
                 Model.of(disableReason != null ? disableReason : ""));
         checkBox.add(title);
         target.ifPresent(ajax->{
-            ajax.add(checkBox);   
+            ajax.add(checkBox);
         });
     }
 

@@ -39,36 +39,36 @@ public final class DefaultsProviderUtil {
             final IsisConfiguration configuration,
             final Class<?> type) {
 
-        val key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + 
-                type.getCanonicalName() + 
+        val key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX +
+                type.getCanonicalName() +
                 DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
-        
+
         val defaultsProviderName = configuration
                 .getEnvironment()
                 .getProperty(key);
-        
-        return !_Strings.isNullOrEmpty(defaultsProviderName) 
-                ? defaultsProviderName 
+
+        return !_Strings.isNullOrEmpty(defaultsProviderName)
+                ? defaultsProviderName
                         : null;
     }
 
     public static Class<?> defaultsProviderOrNull(
-            final Class<?> candidateClass, 
+            final Class<?> candidateClass,
             final String classCandidateName) {
-        
-        val type = candidateClass != null 
+
+        val type = candidateClass != null
                 ? ClassUtil.implementingClassOrNull(
-                        candidateClass.getName(), 
-                        DefaultsProvider.class, 
+                        candidateClass.getName(),
+                        DefaultsProvider.class,
                         FacetHolder.class)
-                        
+
                         : null;
-                        
-        return type != null 
-                ? type 
+
+        return type != null
+                ? type
                         : ClassUtil.implementingClassOrNull(
-                                classCandidateName, 
-                                DefaultsProvider.class, 
+                                classCandidateName,
+                                DefaultsProvider.class,
                                 FacetHolder.class);
     }
 

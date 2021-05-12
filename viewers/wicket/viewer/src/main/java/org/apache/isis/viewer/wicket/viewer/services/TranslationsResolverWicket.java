@@ -65,14 +65,14 @@ public class TranslationsResolverWicket implements TranslationsResolver {
 
     @Override
     public List<String> readLines(final String fileName) {
-        
-        final String configLocation = 
+
+        final String configLocation =
                 isisConfiguration.getCore().getRuntimeServices().getTranslation().getResourceLocation();
-        
+
         try {
             if(configLocation != null) {
                 log.info( "Reading translations relative to config override location: {}", configLocation );
-                
+
                 return Files.readAllLines(newFile(configLocation, fileName), StandardCharsets.UTF_8);
             } else {
                 final URL url = servletContext.getResource("/WEB-INF/" + fileName);
@@ -90,17 +90,17 @@ public class TranslationsResolverWicket implements TranslationsResolver {
     }
 
     private static final Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
-    
+
     private static List<String> readLines(final URL url) throws IOException {
         if(url == null) {
             return Collections.emptyList();
         }
-        
+
         val acceptedLines = _Text.readLinesFromUrl(url, StandardCharsets.UTF_8)
         .stream()
         .filter(input->input != null && nonEmpty.matcher(input).matches())
         .collect(Collectors.toList());
-        
+
         return Collections.unmodifiableList(acceptedLines);
     }
 

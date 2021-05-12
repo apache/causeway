@@ -67,9 +67,9 @@ public class PageParametersUtils {
                 if (!noFooter.isNull()) {
                     newPageParameters.set(ISIS_NO_FOOTER_PARAMETER_NAME, noFooter.toString());
                 }
-                
+
             });
-            
+
         }
         return newPageParameters;
     }

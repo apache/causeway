@@ -20,7 +20,7 @@ package org.apache.isis.extensions.commandlog.model;
 
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
-public interface IsisModuleExtCommandLogApplib 
+public interface IsisModuleExtCommandLogApplib
 extends ModuleWithFixtures {
 
     public abstract static class TitleUiEvent<S>
@@ -28,20 +28,20 @@ extends ModuleWithFixtures {
 
     public abstract static class IconUiEvent<S>
         extends org.apache.isis.applib.events.ui.IconUiEvent<S> { }
-    
+
     public abstract static class CssClassUiEvent<S>
         extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> { }
-    
+
     public abstract static class LayoutUiEvent<S>
         extends org.apache.isis.applib.events.ui.LayoutUiEvent<S> { }
-    
+
     public abstract static class ActionDomainEvent<S>
         extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }
-    
+
     public abstract static class CollectionDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> { }
-    
+
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
-    
+
 }

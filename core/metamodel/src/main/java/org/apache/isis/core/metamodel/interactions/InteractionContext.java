@@ -53,8 +53,8 @@ import lombok.Getter;
  * public API.
  *
  * <p>
- * The class is generic so that the 
- * {@link InteractionEventSupplier#createInteractionEvent() factory method} 
+ * The class is generic so that the
+ * {@link InteractionEventSupplier#createInteractionEvent() factory method}
  * can return the correct subclass without having to downcast.
  */
 public abstract class InteractionContext {
@@ -72,14 +72,14 @@ public abstract class InteractionContext {
      * Alternatively, {@link Facet}s can use <tt>instanceof</tt>.
      */
     @Getter private final InteractionContextType interactionType;
-    
+
     /**
      * How the interaction was initiated.
      */
     @Getter private final InteractionInitiatedBy initiatedBy;
-    
+
     /**
-     * The identifier of the object or member that this interaction is being 
+     * The identifier of the object or member that this interaction is being
      * identified with.
      *
      * <p>
@@ -89,17 +89,17 @@ public abstract class InteractionContext {
      * the identifier of the member.
      */
     @Getter private final Identifier identifier;
-    
+
     /**
      * Model that holds the object involved with the interaction.
      */
     @Getter private final InteractionHead head;
-    
+
     /**
      * Where the element is to be rendered.
      */
     @Getter private final Where where;
-    
+
     protected InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
@@ -120,7 +120,7 @@ public abstract class InteractionContext {
         return head.getTarget();
     }
 
-    
+
     /**
      * Convenience method that indicates whether the
      * {@link #getInitiatedBy() interaction was invoked} by the framework.
@@ -128,6 +128,6 @@ public abstract class InteractionContext {
     public boolean isFrameworkInitiated() {
         return initiatedBy == InteractionInitiatedBy.FRAMEWORK;
     }
-    
+
 
 }

@@ -150,7 +150,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             // find child commands, and run them
             //
             val parent = commandModel;
-            
+
             val childCommands =
                     transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandModelRepository.findByParent(parent))

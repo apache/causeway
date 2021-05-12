@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
 public class ProperMemberSupport_property {
-    
+
     private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
@@ -39,19 +39,19 @@ public class ProperMemberSupport_property {
     public String prop() {
         return holder.toString();
     }
-    
-    // -- PROPERLY DECLARED SUPPORTING METHODS 
-    
+
+    // -- PROPERLY DECLARED SUPPORTING METHODS
+
     @MemberSupport
     public Set<String> autoCompleteProp(@MinLength(3) String search) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> choicesProp() {
         return null;
     }
-    
+
     @MemberSupport
     public String defaultProp() {
         return "";
@@ -61,11 +61,11 @@ public class ProperMemberSupport_property {
     public String disableProp() {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideProp() {
         return false;
     }
-    
-    
+
+
 }

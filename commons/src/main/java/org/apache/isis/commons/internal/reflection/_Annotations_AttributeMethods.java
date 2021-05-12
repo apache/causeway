@@ -65,9 +65,9 @@ final class _Annotations_AttributeMethods {
 
 
     private _Annotations_AttributeMethods(
-            @Nullable final Class<? extends Annotation> annotationType, 
+            @Nullable final Class<? extends Annotation> annotationType,
             final Method[] attributeMethods) {
-        
+
         this.annotationType = annotationType;
         this.attributeMethods = attributeMethods;
         this.canThrowTypeNotPresentException = new boolean[attributeMethods.length];

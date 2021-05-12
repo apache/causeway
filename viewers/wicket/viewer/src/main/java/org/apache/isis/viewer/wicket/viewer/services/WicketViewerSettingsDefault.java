@@ -100,7 +100,7 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     }
 
     // -- HELPER
-    
+
     private IsisConfiguration getConfiguration() {
         if(configuration==null) {
             configuration = CommonContextUtils.getCommonContext().getConfiguration();

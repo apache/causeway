@@ -37,9 +37,9 @@ import lombok.val;
 /**
  * Sets up {@link ActionValidationFacet} and {@link ActionParameterValidationFacetViaMethod}.
  */
-public class ActionValidationFacetViaMethodFactory 
+public class ActionValidationFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
-    
+
     private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
     public ActionValidationFacetViaMethodFactory() {
@@ -56,19 +56,19 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val facetHolder = processMethodContext.getFacetHolder();
 
         val namingConvention = getNamingConventionForActionSupport(processMethodContext, PREFIX);
-        
+
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ActionSupport.ActionSupportingMethodSearchRequest.ReturnType.TEXT)
                 .methodNames(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
-        
+
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
             val validateMethod = searchResult.getSupportingMethod();
-            
+
             processMethodContext.removeMethod(validateMethod);
-            
+
             if (facetHolder.containsNonFallbackFacet(ActionValidationFacetViaMethod.class)) {
                 throw new MetaModelException( processMethodContext.getCls() + " uses both old and new 'validate' syntax - "
                         + "must use one or other");

@@ -24,5 +24,5 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 public interface TransactionInterceptorFactory {
 
     TransactionInterceptor createTransactionInterceptor();
-    
+
 }

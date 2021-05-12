@@ -57,10 +57,10 @@ implements MetaModelRefiner {
     public void process(ProcessMethodContext processMethodContext) {
         final HomePage homepageAnnot = processMethodContext.synthesizeOnMethod(HomePage.class)
                 .orElse(null);
-        
+
 //        _Assert.assertEquals("expected same", homepageAnnot,
 //                Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class));
-        
+
         if (homepageAnnot == null) {
             return;
         }
@@ -75,7 +75,7 @@ implements MetaModelRefiner {
 
     private MetaModelValidator newValidatorVisitor() {
         return new MetaModelVisitingValidatorAbstract() {
-            
+
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
@@ -83,46 +83,46 @@ implements MetaModelRefiner {
                 if(spec.isManagedBean()) {
                     return;
                 }
-                             
-                // as an optimization only checking declared members (skipping inherited ones)                 
+
+                // as an optimization only checking declared members (skipping inherited ones)
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
-                    
+
                     actionsHavingHomePageFacet.put(objectAction.getId(), objectAction);
 
                     // TODO: it would be good to flag if the facet is found on any non-services, however
-                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession 
+                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession
                     // exists.
                     // this ought to be improved upon at some point...
 
-                    // TODO might collide with type level annotations as well 
-                    
+                    // TODO might collide with type level annotations as well
+
                 });
             }
 
             @Override
             public void summarize() {
                 if(actionsHavingHomePageFacet.size()>1) {
-                    
+
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
                             .map(ObjectAction::getIdentifier)
                             .map(Identifier::getFullIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
-                    
+
                     for (val objectAction : actionsHavingHomePageFacet.values()) {
-                        val actionId = objectAction.getIdentifier().getFullIdentityString(); 
+                        val actionId = objectAction.getIdentifier().getFullIdentityString();
                         val colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
                         ValidationFailure.raise(
-                                objectAction, 
+                                objectAction,
                                 String.format(
                                         "%s: other actions also specified as home page: %s ",
-                                        actionId, 
+                                        actionId,
                                         colission));
-                        
+
                     }
                 }
             }

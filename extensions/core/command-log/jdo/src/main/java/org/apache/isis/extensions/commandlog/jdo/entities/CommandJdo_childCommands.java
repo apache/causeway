@@ -49,5 +49,5 @@ public class CommandJdo_childCommands {
 
     @javax.inject.Inject
     private CommandJdoRepository commandJdoRepository;
-    
+
 }

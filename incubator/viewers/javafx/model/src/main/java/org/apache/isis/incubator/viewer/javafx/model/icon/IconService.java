@@ -27,5 +27,5 @@ import javafx.scene.image.Image;
 public interface IconService {
 
     Optional<Image> fontAwesome(FontAwesomeUiModel fontAwesomeUiModel);
-    
+
 }

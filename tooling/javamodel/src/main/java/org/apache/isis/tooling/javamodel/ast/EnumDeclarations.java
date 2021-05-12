@@ -31,57 +31,57 @@ import lombok.NonNull;
 public final class EnumDeclarations {
 
     // -- ENUM CONSTANTS
-    
+
     public static <T> Stream<EnumConstantDeclaration> streamEnumConstantDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getEntries().stream();
     }
-    
+
     // -- FIELDS
-    
+
     public static <T> Stream<FieldDeclaration> streamFieldDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getFields().stream();
     }
-    
+
     public static <T> Stream<FieldDeclaration> streamPublicFieldDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return streamFieldDeclarations(typeDeclaration)
                 .filter(fd->FieldDeclarations.isEffectivePublic(fd, typeDeclaration));
     }
-    
+
     // -- CONSTRUCTORS
-    
+
     public static <T> Stream<ConstructorDeclaration> streamConstructorDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getConstructors().stream();
     }
-    
+
     public static <T> Stream<ConstructorDeclaration> streamPublicConstructorDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return streamConstructorDeclarations(typeDeclaration)
                 .filter(cd->ConstructorDeclarations.isEffectivePublic(cd, typeDeclaration));
     }
-    
+
     // -- METHODS
-    
+
     public static <T> Stream<MethodDeclaration> streamMethodDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return typeDeclaration.getMethods().stream();
     }
-    
+
     public static <T> Stream<MethodDeclaration> streamPublicMethodDeclarations(
             final @NonNull EnumDeclaration typeDeclaration) {
         return streamMethodDeclarations(typeDeclaration)
                 .filter(md->MethodDeclarations.isEffectivePublic(md, typeDeclaration));
     }
-    
+
     // -- CONTEXT
-    
+
     public static boolean isEffectivePublic(final @NonNull EnumDeclaration td) {
-        return !td.isPrivate() 
+        return !td.isPrivate()
                 && !td.isProtected()
                 ;
     }
-    
+
 }

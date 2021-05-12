@@ -73,7 +73,7 @@ public final class _fx {
     public static ObservableValue<String> newStringReadonly(String value) {
         return new ReadOnlyStringWrapper(value);
     }
-    
+
     public static <T> ObservableValue<T> newObjectReadonly(T value) {
         return new ReadOnlyObjectWrapper<T>(value);
     }
@@ -90,7 +90,7 @@ public final class _fx {
         container.getChildren().add(component);
         return component;
     }
-    
+
     public static Label newValidationFeedback(Pane container) {
         val component = new Label();
         container.getChildren().add(component);
@@ -214,7 +214,7 @@ public final class _fx {
         tableView.getColumns().add(column);
         return column;
     }
-    
+
     // -- VISIBILITY
 
     /**
@@ -225,7 +225,7 @@ public final class _fx {
         node.managedProperty().bind(node.visibleProperty());
         return node;
     }
-    
+
     // -- ICONS
 
     public static Image imageFromClassPath(@NonNull Class<?> cls, String resourceName) {
@@ -238,19 +238,19 @@ public final class _fx {
         icon.setFitHeight(height);
         return icon;
     }
-    
+
     public static Button bottonForImage(Image image, int width, int height) {
         val icon = new ImageView(image);
         icon.setPreserveRatio(true);
         icon.setFitWidth(width-2);
         icon.setFitHeight(height-2);
-        
+
         val btn = new Button();
         btn.setGraphic(icon);
         btn.setMaxSize(width, height);
         btn.setMinSize(width, height);
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        
+
         return btn;
     }
 
@@ -265,7 +265,7 @@ public final class _fx {
         component.setHgap(10);
         component.setVgap(10);
     }
-    
+
     public static void toolbarLayout(FlowPane component) {
         component.setPadding(new Insets(15, 12, 15, 12));
         component.setHgap(10);
@@ -283,18 +283,18 @@ public final class _fx {
         }
     }
 
-//XXX Superseded by visibilityLayoutFix(Node node)    
+//XXX Superseded by visibilityLayoutFix(Node node)
 //    private static boolean isEmptyOrHidden(Node component) {
 //        if(component instanceof Pane) {
 //            val children = ((Pane) component).getChildrenUnmodifiable();
 //            if(children.isEmpty()) {
 //                return true; // empty
 //            }
-//            //return true only if all children are empty or hidden    
+//            //return true only if all children are empty or hidden
 //            val atLeastOneIsNonEmptyOrVisible = children.stream()
 //                    .anyMatch(child->!isEmptyOrHidden(child));
 //            return !atLeastOneIsNonEmptyOrVisible;
-//        } 
+//        }
 //        return !component.isVisible();
 //    }
 
@@ -319,7 +319,7 @@ public final class _fx {
 //        component.setOnMouseClicked(e->{
 //
 //            _Probe.errOut("event %s", ""+e);
-//            
+//
 //            visistDepthFirst(component, node->{
 //                _Probe.errOut("node %s", ""+node);
 //                return true;
@@ -354,9 +354,9 @@ public final class _fx {
 
     public static <T extends Region> T borderDashed(T region, Color color) {
         region.setBorder(new Border(new BorderStroke(
-                color, 
-                BorderStrokeStyle.DASHED, 
-                new CornerRadii(3), 
+                color,
+                BorderStrokeStyle.DASHED,
+                new CornerRadii(3),
                 new BorderWidths(1))));
         return region;
     }

@@ -36,35 +36,35 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
             return this == MUTATE;
         }
     }
-    
+
     @NonNull protected _Either<T, InteractionVeto> chain;
 
     protected MemberInteraction(@NonNull _Either<T, InteractionVeto> chain) {
         this.chain = chain;
     }
-    
+
     public H checkVisibility() {
         chain = chain.mapIfLeft(property->{
             val visibilityVeto = property.checkVisibility();
             return visibilityVeto.isPresent()
-                ? _Either.right(visibilityVeto.get()) 
-                : _Either.left(property); 
+                ? _Either.right(visibilityVeto.get())
+                : _Either.left(property);
         });
         return _Casts.uncheckedCast(this);
     }
-    
+
     public H checkUsability() {
         chain = chain.mapIfLeft(property->{
             val usablitiyVeto = property.checkUsability();
             return usablitiyVeto.isPresent()
-                ? _Either.right(usablitiyVeto.get()) 
-                : _Either.left(property); 
+                ? _Either.right(usablitiyVeto.get())
+                : _Either.left(property);
         });
         return _Casts.uncheckedCast(this);
     }
-    
+
     /**
-     * Only check usability if intent is {@code MUTATE}. 
+     * Only check usability if intent is {@code MUTATE}.
      * @param intent
      * @return self
      */
@@ -75,7 +75,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         return _Casts.uncheckedCast(this);
     }
 
-    public <X extends Throwable> 
+    public <X extends Throwable>
     H validateElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         val veto = chain.rightIfAny();
         if (veto == null) {
@@ -86,26 +86,26 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
 
     /**
-     * @return optionally the ManagedMember based on whether there 
-     * was no interaction veto within the originating chain 
+     * @return optionally the ManagedMember based on whether there
+     * was no interaction veto within the originating chain
      */
     protected Optional<T> getManagedMember() {
         return chain.left();
     }
-    
+
     /**
-     * @return optionally the InteractionVeto based on whether there 
-     * was any interaction veto within the originating chain 
+     * @return optionally the InteractionVeto based on whether there
+     * was any interaction veto within the originating chain
      */
     public Optional<InteractionVeto> getInteractionVeto() {
         return chain.right();
     }
-    
+
     /**
      * @return this Interaction's ManagedMember
      * @throws X if there was any interaction veto within the originating chain
      */
-    protected <X extends Throwable> 
+    protected <X extends Throwable>
     T getManagedMemberElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         val value = chain.leftIfAny();
         if (value != null) {
@@ -114,8 +114,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
             throw onFailure.apply(chain.rightIfAny());
         }
     }
-    
 
-    
-    
+
+
+
 }

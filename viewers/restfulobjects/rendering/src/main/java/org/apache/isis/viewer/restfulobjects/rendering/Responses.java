@@ -45,7 +45,7 @@ public final class Responses {
     public static Response.ResponseBuilder ofNotFound() {
         return of(RestfulResponse.HttpStatusCode.NOT_FOUND);
     }
-    
+
     public static Response.ResponseBuilder ofNotImplemented() {
         return of(RestfulResponse.HttpStatusCode.NOT_IMPLEMENTED);
     }
@@ -82,7 +82,7 @@ public final class Responses {
                 .type(mediaType)
                 .cacheControl(caching.getCacheControl())
                 .entity(JsonWriterUtil.jsonFor(entityRepresentation, inferPrettyPrinting(renderer)));
-        
+
         return response;
     }
 
@@ -111,12 +111,12 @@ public final class Responses {
             val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getResourceContext()
                     .getMetaModelContext().getSystemEnvironment();
             return systemEnvironment.isPrototyping()
-                    ? JsonMapper.PrettyPrinting.ENABLE 
+                    ? JsonMapper.PrettyPrinting.ENABLE
                             : JsonMapper.PrettyPrinting.DISABLE;
         }
-        
+
         return JsonMapper.PrettyPrinting.DISABLE;
-        
+
     }
 
 }

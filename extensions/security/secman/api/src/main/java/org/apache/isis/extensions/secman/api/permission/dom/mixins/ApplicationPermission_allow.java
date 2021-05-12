@@ -23,8 +23,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow.DomainEvent;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 

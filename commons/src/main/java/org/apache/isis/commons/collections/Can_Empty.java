@@ -47,8 +47,8 @@ import lombok.val;
 final class Can_Empty<T> implements Can<T> {
 
     private static final long serialVersionUID = 1L;
-    
-    static final Can_Empty<?> INSTANCE = new Can_Empty<>(); 
+
+    static final Can_Empty<?> INSTANCE = new Can_Empty<>();
 
     @Override
     public Cardinality getCardinality() {
@@ -59,7 +59,7 @@ final class Can_Empty<T> implements Can<T> {
     public Stream<T> stream() {
         return Stream.empty();
     }
-    
+
     @Override
     public Stream<T> parallelStream() {
         return Stream.empty();
@@ -74,17 +74,17 @@ final class Can_Empty<T> implements Can<T> {
     public Optional<T> getFirst() {
         return Optional.empty();
     }
-    
+
     @Override
     public Optional<T> getLast() {
         return Optional.empty();
     }
-    
+
     @Override
     public Optional<T> get(int elementIndex) {
         return Optional.empty();
     }
-    
+
     @Override
     public boolean contains(T element) {
         return false;
@@ -99,31 +99,31 @@ final class Can_Empty<T> implements Can<T> {
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
     }
-    
+
     @Override
     public Can<T> reverse() {
         return this;
     }
-    
+
     @Override
     public Iterator<T> reverseIterator() {
         return iterator();
     }
-    
+
     @Override
     public void forEach(Consumer<? super T> action) {
     }
-    
+
     @Override
     public Can<T> filter(@Nullable Predicate<? super T> predicate) {
         return this; // identity
     }
-    
+
     @Override
     public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
         // no-op
     }
-    
+
     @Override
     public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
         return Can.empty();
@@ -133,17 +133,17 @@ final class Can_Empty<T> implements Can<T> {
     public Can<T> add(@NonNull T element) {
         return Can.ofSingleton(element);
     }
-    
+
     @Override
     public Can<T> addUnique(@NonNull T element) {
         return Can.ofSingleton(element);
     }
-    
+
     @Override
     public Can<T> addAll(@NonNull Can<T> other) {
         return other;
     }
-    
+
     @Override
     public Can<T> add(int index, @NonNull T element) {
         if(index!=0) {
@@ -152,7 +152,7 @@ final class Can_Empty<T> implements Can<T> {
         }
         return Can.ofSingleton(element);
     }
-    
+
     @Override
     public Can<T> replace(int index, T element) {
         throw _Exceptions.unsupportedOperation("cannot replace an element in an empty Can");
@@ -162,22 +162,22 @@ final class Can_Empty<T> implements Can<T> {
     public Can<T> remove(int index) {
         throw new IndexOutOfBoundsException("cannot remove anything from an empty Can");
     }
-    
+
     @Override
     public Can<T> remove(T element) {
         return this; // on an empty can this is a no-op
     }
-    
+
     @Override
     public int indexOf(T element) {
         return -1;
     }
-    
+
     @Override
     public String toString() {
         return "Can[]";
     }
-    
+
     @Override
     public boolean equals(final @Nullable Object obj) {
         if(INSTANCE == obj) {
@@ -187,7 +187,7 @@ final class Can_Empty<T> implements Can<T> {
                 ? ((Can<?>)obj).isEmpty()
                 : false;
     }
-    
+
     @Override
     public int hashCode() {
         return 0;
@@ -196,37 +196,37 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public int compareTo(final @Nullable Can<T> other) {
         if(other==null) {
-            return 0; 
+            return 0;
         }
         // when returning
-        // -1 ... this is before other 
+        // -1 ... this is before other
         // +1 ... this is after other
         return Integer.compare(0, other.size()); // all empty Cans are same and come first
     }
-    
+
     @Override
     public List<T> toList() {
         return Collections.emptyList(); // serializable and immutable
     }
-    
+
     @Override
     public Set<T> toSet() {
         return Collections.emptySet(); // serializable and immutable
     }
-    
+
     @Override
     public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
         return Collections.emptySet(); // serializable and immutable
     }
-    
+
     @Override
     public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
         return collectionFactory.get();
     }
-    
+
     @Override
     public T[] toArray(@NonNull Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));        
+        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
 

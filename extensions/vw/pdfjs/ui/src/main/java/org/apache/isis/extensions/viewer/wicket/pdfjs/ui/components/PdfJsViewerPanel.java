@@ -62,8 +62,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  *
  */
-class PdfJsViewerPanel 
-extends ScalarPanelAbstractLegacy 
+class PdfJsViewerPanel
+extends ScalarPanelAbstractLegacy
 implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
@@ -82,7 +82,7 @@ implements IRequestListener {
         super(id, scalarModel);
 
         pdfJsViewerPanelCallbacksTemplateJs = _Strings.readFromResource(
-                PdfJsViewerPanel.class, "PdfJsViewerPanelCallbacks.template.js", StandardCharsets.UTF_8); 
+                PdfJsViewerPanel.class, "PdfJsViewerPanelCallbacks.template.js", StandardCharsets.UTF_8);
 
     }
 
@@ -108,7 +108,7 @@ implements IRequestListener {
 
         updatePageNum = new AbstractDefaultAjaxBehavior() {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             protected void respond(AjaxRequestTarget _target)
             {
@@ -217,7 +217,7 @@ implements IRequestListener {
 
         final ManagedObject adapter = scalarModel.getObject();
         val blob = getBlob();
-        
+
         if (adapter != null && blob != null) {
             val pdfJsViewerFacet = scalarModel.getFacet(PdfJsViewerFacet.class);
             val instanceKey = buildKey();
@@ -242,7 +242,7 @@ implements IRequestListener {
             val printButton = createComponent("print", pdfJsConfig);
 
             //MarkupContainer downloadButton = createComponent("download", config);
-            
+
             val byteArrayResource = new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
             val downloadResourceLink = new ResourceLink<>("download", byteArrayResource);
 

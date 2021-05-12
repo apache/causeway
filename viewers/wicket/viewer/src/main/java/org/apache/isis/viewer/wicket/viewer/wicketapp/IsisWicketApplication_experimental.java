@@ -62,32 +62,32 @@ final class IsisWicketApplication_experimental {
 
             @Override
             public void updateAjaxAttributes(
-                    AbstractDefaultAjaxBehavior behavior, 
+                    AbstractDefaultAjaxBehavior behavior,
                     AjaxRequestAttributes attributes) {
-                
+
                 attributes.getAjaxCallListeners().add(new IAjaxCallListener() {
                     @Override
                     public CharSequence getBeforeSendHandler(Component component) {
-                        
+
                         val csrfToken = csrfToken().orElse(null);
-                        
+
                         //debug
                         //System.err.printf("csrfToken %s%n", csrfToken);
-                        
+
                         return _Strings.isNotEmpty(csrfToken)
                                 ? "function(attrs, xhr, settings){"
                                     + "xhr.setRequestHeader(\"X-CSRF-TOKEN\", \"" + csrfToken + "\");"
                                     + "}"
                                 : null;
-                        
+
                     }
                 });
-             
+
             }
-            
+
         });
     }
-    
+
     private static Optional<String> csrfToken() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return Optional.ofNullable(attr.getRequest().getSession(false)) // don't allow create
@@ -100,7 +100,7 @@ final class IsisWicketApplication_experimental {
                     }
                 });
     }
-    
+
 
     /*
      idea here is to avoid XmlPartialPageUpdate spitting out warnings, eg:

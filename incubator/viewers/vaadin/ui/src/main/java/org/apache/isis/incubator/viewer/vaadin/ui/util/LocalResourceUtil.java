@@ -35,27 +35,27 @@ public final class LocalResourceUtil {
     @Value(staticConstructor = "of")
     public static class ResourceDescriptor {
         private final String url;
-        
+
         public static ResourceDescriptor webjars(String resourcePath) {
             return of("context://webjars/" + resourcePath);
         }
-        
+
         public static ResourceDescriptor staticRoot(String resourcePath) {
             return of("context://" + resourcePath);
         }
 
     }
-    
+
     public static void addStyleSheet(ResourceDescriptor resourceDescriptor) {
         UI.getCurrent().getPage().addStyleSheet(resourceDescriptor.getUrl());
     }
-    
+
     public static void addJavaScript(ResourceDescriptor resourceDescriptor) {
         UI.getCurrent().getPage().addJavaScript(resourceDescriptor.getUrl());
     }
-    
+
     public static void executeJavaScript(Supplier<InputStream> scriptResourceProvider) {
         UI.getCurrent().getPage().executeJs(_Strings.read(scriptResourceProvider.get(), StandardCharsets.UTF_8));
     }
-    
+
 }

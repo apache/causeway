@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 
-public class CssClassFacetOnActionFromConfiguredRegexFactory 
+public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
 
     public CssClassFacetOnActionFromConfiguredRegexFactory() {
@@ -47,11 +47,11 @@ extends FacetFactoryAbstract {
         final Method method = processMethodContext.getMethod();
         final String name = method.getName();
 
-        // bit of a bodge... we want to ignore any service actions; any contributed actions 
+        // bit of a bodge... we want to ignore any service actions; any contributed actions
         // will be picked up below
         // in process(final ProcessContributeeMemberContext processMemberContext)
         //
-        // if we don't do this, then any contributed properties or collections end up picking 
+        // if we don't do this, then any contributed properties or collections end up picking
         // up the CssClass; almost certainly not what is expected/required.
         final Class<?> owningType = facetHolder.getOwningType();
         if(getServiceRegistry().select(owningType).isNotEmpty()) {

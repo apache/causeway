@@ -29,14 +29,14 @@ public abstract class ElementTypeAbstract {
     public String title() {
         return "AbstractTitle";
     }
-    
+
     @Action
     public void abstractAction(String p0, String p1) {
         // no-op, just testing meta-data
     }
-    
+
     @Property
     @Getter @Setter
     private String abstractProp = "abstractProp";
-    
+
 }

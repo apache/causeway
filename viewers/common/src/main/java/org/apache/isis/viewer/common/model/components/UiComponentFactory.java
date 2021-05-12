@@ -44,67 +44,67 @@ import lombok.Value;
 import lombok.val;
 
 public interface UiComponentFactory<B, C> {
-    
+
     B buttonFor(UiComponentFactory.ButtonRequest request);
     C componentFor(UiComponentFactory.ComponentRequest request);
     C parameterFor(UiComponentFactory.ComponentRequest request);
     LabelAndPosition<C> labelFor(UiComponentFactory.ComponentRequest request);
-    
+
     @Value(staticConstructor = "of")
     public static class LabelAndPosition<T> {
         @NonNull private final LabelPosition labelPosition;
         @NonNull private final T uiLabel;
     }
-    
+
     @Value(staticConstructor = "of")
     public static class ButtonRequest {
         @NonNull private final ManagedAction managedAction;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
         @NonNull private final Consumer<ManagedAction> actionEventHandler;
     }
-    
+
     @Value(staticConstructor = "of")
     public static class ComponentRequest {
         @NonNull private final ManagedFeature managedFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
-        
+
         public static ComponentRequest of(ManagedParameter managedParameter) {
             return of(managedParameter, Optional.empty());
         }
-        
+
         // -- SHORTCUTS
-        
+
         public String getDisplayLabel() {
-            return managedFeature.getDisplayLabel();   
+            return managedFeature.getDisplayLabel();
         }
-        
+
         public ObjectSpecification getFeatureTypeSpec() {
-            return managedFeature.getSpecification();    
+            return managedFeature.getSpecification();
         }
-        
+
         public Class<?> getFeatureType() {
-            return managedFeature.getCorrespondingClass();    
+            return managedFeature.getCorrespondingClass();
         }
-        
+
         public boolean isFeatureTypeEqualTo(@Nullable Class<?> type) {
             return getFeatureType() == type;
         }
-        
+
         public boolean isFeatureTypeAssignableFrom(@Nullable Class<?> type) {
             return type!=null
                     ? getFeatureType().isAssignableFrom(type)
                     : false;
         }
-        
+
         public boolean isFeatureTypeInstanceOf(@Nullable Class<?> type) {
             return type!=null
                     ? type.isAssignableFrom(getFeatureType())
                     : false;
         }
-        
+
         /**
          * @param facetType
-         * @return Whether there exists a facet for this feature, that is of the 
+         * @return Whether there exists a facet for this feature, that is of the
          * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
          */
         public <T extends Facet> boolean hasFeatureTypeFacet(@Nullable Class<T> facetType) {
@@ -112,24 +112,24 @@ public interface UiComponentFactory<B, C> {
                     ? getFeatureTypeSpec().getFacet(facetType)!=null
                     : false;
         }
-        
+
         public <T extends Facet> boolean hasFeatureTypeFacetAnyOf(
                 @NonNull Can<Class<? extends Facet>> facetTypes) {
             return facetTypes.stream()
                     .map(getFeatureTypeSpec()::getFacet)
                     .anyMatch(_NullSafe::isPresent);
         }
-        
+
         //TODO are there ever parameters that might render readonly?
         public boolean isReadOnly() {
             return ((ManagedProperty)managedFeature).checkUsability().isPresent();
         }
-        
+
         @Deprecated
         public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
-            // that is, given type must be assignable from the actual pojo type 
+            // that is, given type must be assignable from the actual pojo type
             return Optional.ofNullable(managedProperty.getPropertyValue())
                     .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
@@ -143,20 +143,20 @@ public interface UiComponentFactory<B, C> {
             return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);
         }
 
-        
+
     }
-    
-    
+
+
     // -- HANDLER
-    
+
     /**
      * @param <T> - the Handler's Response type
      */
-    static interface Handler<T> 
+    static interface Handler<T>
     extends ChainOfResponsibility.Handler<UiComponentFactory.ComponentRequest, T> {
     }
 
 
-    
-    
+
+
 }

@@ -22,5 +22,5 @@ package org.apache.isis.core.metamodel.specloader.validator;
 public interface MetaModelValidator {
 
     void validate();
-    
+
 }

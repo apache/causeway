@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 public enum MixedIn {
-    INCLUDED, 
+    INCLUDED,
     EXCLUDED;
 
     public boolean isIncluded() {
@@ -31,9 +31,9 @@ public enum MixedIn {
     public boolean isExcluded() {
         return this == EXCLUDED;
     }
-    
+
     public static boolean isNotMixedIn(final ObjectMember member) {
         return !(member instanceof MixedInMember);
     }
-    
+
 }

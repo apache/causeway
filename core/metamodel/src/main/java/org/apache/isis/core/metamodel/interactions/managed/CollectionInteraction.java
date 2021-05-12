@@ -35,33 +35,33 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
             @NonNull final ManagedObject owner,
             @NonNull final String memberId,
             @NonNull final Where where) {
-    
+
         val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
-        
+
         final _Either<ManagedCollection, InteractionVeto> chain = managedCollection.isPresent()
                 ? _Either.left(managedCollection.get())
                 : _Either.right(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
-                
+
         return new CollectionInteraction(chain);
     }
-    
+
     CollectionInteraction(@NonNull _Either<ManagedCollection, InteractionVeto> chain) {
         super(chain);
     }
-    
+
     /**
-     * @return optionally the ManagedCollection based on whether there 
-     * was no interaction veto within the originating chain 
+     * @return optionally the ManagedCollection based on whether there
+     * was no interaction veto within the originating chain
      */
     public Optional<ManagedCollection> getManagedCollection() {
         return super.getManagedMember();
     }
-    
+
     /**
      * @return this Interaction's ManagedCollection
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable> 
+    public <X extends Throwable>
     ManagedCollection getManagedCollectionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
@@ -72,12 +72,12 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
 //        chain = chain.leftRemap(property->{
 //            val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
 //            return validityVeto.isPresent()
-//                ? _Either.right(validityVeto.get()) 
-//                : _Either.left(property); 
+//                ? _Either.right(validityVeto.get())
+//                : _Either.left(property);
 //        });
 //        return this;
 //    }
 
-    
+
 }
 

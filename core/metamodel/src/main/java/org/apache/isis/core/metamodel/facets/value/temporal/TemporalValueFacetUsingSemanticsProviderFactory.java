@@ -30,7 +30,7 @@ import lombok.val;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} types.
- * 
+ *
  * @since 2.0
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<T> {
 
     @NonNull protected final Class<T> valueType;
     @NonNull protected final Function<FacetHolder, ValueSemanticsProviderAndFacetAbstract<T>> facetFactory;
-    
+
     public TemporalValueFacetUsingSemanticsProviderFactory(Class<T> valueType,
             Function<FacetHolder, ValueSemanticsProviderAndFacetAbstract<T>> facetFactory) {
         super();
@@ -57,8 +57,8 @@ extends ValueFacetUsingSemanticsProviderFactory<T> {
         val facetHolder = processClassContext.getFacetHolder();
         addFacets(facetFactory.apply(facetHolder));
     }
-    
-     
-    
+
+
+
 
 }

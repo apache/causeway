@@ -43,17 +43,17 @@ import javafx.scene.image.Image;
 public class IconServiceDefault implements IconService {
 
     private final Map<String, Image> faIconCache = _Maps.newHashMap();
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
-       // TODO preload fa icon cache 
-       // fontawesome SVGs can be downloaded 
-       // for SVG to Image conversion see 
+       // TODO preload fa icon cache
+       // fontawesome SVGs can be downloaded
+       // for SVG to Image conversion see
        // see https://stackoverflow.com/questions/26948700/convert-svg-to-javafx-image
        // see also https://www.jensd.de/wordpress/?p=132
     }
-            
+
     public Optional<Image> fontAwesome(String faCssClassName) {
         return Optional.ofNullable(faIconCache.get(faCssClassName));
     }
@@ -62,5 +62,5 @@ public class IconServiceDefault implements IconService {
     public Optional<Image> fontAwesome(FontAwesomeUiModel fontAwesomeUiModel) {
         return Optional.ofNullable(faIconCache.get(fontAwesomeUiModel.getCssClassesSpaceSeparated()));
     }
-    
+
 }

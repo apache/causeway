@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 
 import lombok.val;
 
-public class ExecutionPublishingActionFacetForActionAnnotation 
+public class ExecutionPublishingActionFacetForActionAnnotation
 extends ExecutionPublishingFacetAbstract {
 
     public static ExecutionPublishingFacet create(

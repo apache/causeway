@@ -65,7 +65,7 @@ implements ObjectSpecIdFacetFactory {
 
         val jdoPersistenceCapableFacet = new JpaTableFacetAnnotationImpl(
                 annotationSchemaAttribute,
-                annotationTableAttribute, 
+                annotationTableAttribute,
                 facetHolder);
         FacetUtil.addFacet(jdoPersistenceCapableFacet);
         FacetUtil.addFacet(ObjectSpecIdFacetForTableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));

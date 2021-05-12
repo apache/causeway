@@ -36,30 +36,30 @@ import lombok.val;
 public interface ObjectCreator {
 
     ManagedObject createObject(Request objectLoadRequest);
-    
+
     // -- REQUEST (VALUE) TYPE
-    
+
     @Value(staticConstructor = "of")
     public static class Request {
         ObjectSpecification objectSpecification;
     }
-    
+
     // -- HANDLER
-    
-    static interface Handler 
-    extends 
-        MetaModelContextAware, 
+
+    static interface Handler
+    extends
+        MetaModelContextAware,
         ChainOfResponsibility.Handler<ObjectCreator.Request, ManagedObject> {
-        
+
     }
 
     // -- FACTORY
-    
+
     public static ObjectCreator createDefault(MetaModelContext metaModelContext) {
-        
+
         val chainOfHandlers = _Lists.of(
                 new ObjectCreator_builtinHandlers.LegacyCreationHandler()
-                
+
 //                new ObjectCreator_builtinHandlers.GuardAgainstNull(),
 //                new ObjectCreator_builtinHandlers.LoadService(),
 //                new ObjectCreator_builtinHandlers.CreateValueDefault(),
@@ -67,16 +67,16 @@ public interface ObjectCreator {
 //                new ObjectCreator_builtinHandlers.CreateEntity(),
 //                new ObjectCreator_builtinHandlers.CreateOther()
                 );
-        
+
         chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
-        
+
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
+
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "ObjectCreator failed to hanlde request %s", request));
-        
+
     }
-    
+
 }

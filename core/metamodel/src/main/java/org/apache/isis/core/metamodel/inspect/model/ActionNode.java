@@ -43,37 +43,37 @@ public class ActionNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s(...): %s", action.getId(), typeToString(action.getReturnType())); 
+        return String.format("%s(...): %s", action.getId(), typeToString(action.getReturnType()));
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private TypeNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        
+
         return Stream.<MMNode>concat(
-                
+
                 Stream.of(
                         MMNodeFactory.facetGroup(action.getFacets(), this)),
-                
+
                 action.getParams().getParam()
                 .stream()
                 .map(param->MMNodeFactory.param(param, this))
-                
+
                 );
-        
+
     }
-    
+
 }
 

@@ -21,5 +21,5 @@ package org.apache.isis.viewer.common.model.decorator.confirm;
 public interface ConfirmDecorator<T> {
 
     void decorate(T uiComponent, ConfirmUiModel confirmUiModel);
-    
+
 }

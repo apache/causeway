@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
             name = "JdoBook_isbn_UNQ", members = { "isbn" })
 })
 //@NamedQuery(
-//name = "JdoInventory.findAffordableProducts", 
+//name = "JdoInventory.findAffordableProducts",
 //query = "SELECT p FROM JdoInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
 @Query(
       name = "findAffordableBooks",
@@ -65,10 +65,10 @@ import lombok.extern.log4j.Log4j2;
 public class JdoBook extends JdoProduct {
 
     @Inject private KVStoreForTesting kvStore;
-    
+
     // -- ENTITY SERVICE INJECTION TEST
     private MyService myService;
-    @Inject 
+    @Inject
     public void setMyService(MyService myService) {
         val count = kvStore.incrementCounter(JdoBook.class, "injection-count");
         log.debug("INJECTION " + count);
@@ -79,18 +79,18 @@ public class JdoBook extends JdoProduct {
         return myService != null;
     }
     // --
-    
+
     @Override
     public String title() {
         return toString();
     }
 
     public static JdoBook of(
-            String name, 
-            String description, 
-            double price, 
-            String author, 
-            String isbn, 
+            String name,
+            String description,
+            double price,
+            String author,
+            String isbn,
             String publisher) {
 
         return new JdoBook(name, description, price, author, isbn, publisher);
@@ -111,11 +111,11 @@ public class JdoBook extends JdoProduct {
     // -- CONSTRUCTOR
 
     private JdoBook(
-            String name, 
-            String description, 
-            double price, 
-            String author, 
-            String isbn, 
+            String name,
+            String description,
+            double price,
+            String author,
+            String isbn,
             String publisher) {
 
         super(name, description, price, /*comments*/null);

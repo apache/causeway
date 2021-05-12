@@ -23,9 +23,9 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * Suspends the current thread for given time duration.
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -42,7 +42,7 @@ public class _ThreadSleep {
      * @param millis
      */
     public static void millis(long millis) {
-        
+
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -50,7 +50,7 @@ public class _ThreadSleep {
             // Restore interrupted state...
             Thread.currentThread().interrupt();
         }
-        
+
     }
 
 }

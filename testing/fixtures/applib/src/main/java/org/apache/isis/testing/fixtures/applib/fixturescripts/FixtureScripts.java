@@ -241,7 +241,7 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-chevron-right", 
+            cssClassFa="fa fa-chevron-right",
             sequence="10")
     public List<FixtureResult> runFixtureScript(
             @ParameterLayout(named = "Fixture script")
@@ -317,7 +317,7 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh", 
+            cssClassFa="fa fa-refresh",
             sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
@@ -343,26 +343,26 @@ public class FixtureScripts {
 
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
-    	
+
     	val singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
-    	
+
     	isisInteractionFactory.runAnonymous(()->{
     	    transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 runScript(singleScript, parameters);
-            });    
+            });
     	});
-    	
+
     }
 
     @SafeVarargs
     @Programmatic
     public final void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
         for (val personaWithBuilderScript : personaScripts) {
-            
+
             val script = _Casts.<PersonaWithBuilderScript<BuilderScriptAbstract<Object>>>
                 uncheckedCast(personaWithBuilderScript);
-            
+
             runPersona(script);
         }
     }
@@ -380,7 +380,7 @@ public class FixtureScripts {
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
-        
+
         return isisInteractionFactory.callAnonymous(()->
             transactionService.callWithinCurrentTransactionElseCreateNew(()->
                 runBuilderScriptNonTransactional(builderScript)
@@ -502,7 +502,7 @@ public class FixtureScripts {
     }
 
     // -- DEPRECATIONS
- 
+
     /**
      * @deprecated renamed to {@link #runPersona(PersonaWithBuilderScript)}
      */
@@ -510,7 +510,7 @@ public class FixtureScripts {
     public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
         return runPersona(persona);
     }
-    
+
     /**
      * @deprecated renamed to {@link #run(FixtureScript...)}
      */

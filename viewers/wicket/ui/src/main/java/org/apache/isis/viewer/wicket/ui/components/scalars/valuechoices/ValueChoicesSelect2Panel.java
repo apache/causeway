@@ -73,9 +73,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
 
 
     private Can<ObjectMemento> getChoiceMementos() {
-        
+
         val commonContext = super.getCommonContext();
-        
+
         val choices = scalarModel.getChoices();
 
         return choices.map(commonContext::mementoFor);
@@ -134,7 +134,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
             return;
         }
         val target = getComponentForRegular();
-        Tooltips.addTooltip(target, titleAttribute);    
+        Tooltips.addTooltip(target, titleAttribute);
     }
 
     @Override

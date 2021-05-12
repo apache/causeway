@@ -32,63 +32,63 @@ import lombok.experimental.UtilityClass;
 public final class InteractionUtils {
 
     public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext context) {
-        
+
         val iaResult = new InteractionResult(context.createInteractionEvent());
-        
+
         facetHolder.streamFacets(HidingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             val hidingReason = advisor.hides(context);
             iaResult.advise(hidingReason, advisor);
         });
-        
+
         return iaResult;
     }
 
 
     public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext context) {
-        
+
         val isResult = new InteractionResult(context.createInteractionEvent());
-        
+
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             val disablingReason = advisor.disables(context);
             isResult.advise(disablingReason, advisor);
         });
-        
+
         return isResult;
     }
 
     public static InteractionResult isValidResult(FacetHolder facetHolder, ValidityContext context) {
-        
+
         val iaResult = new InteractionResult(context.createInteractionEvent());
-        
+
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReason = advisor.invalidates(context); 
+            val invalidatingReason = advisor.invalidates(context);
             iaResult.advise(invalidatingReason, advisor);
         });
-        
+
         return iaResult;
     }
 
     public static InteractionResultSet isValidResultSet(
-            FacetHolder facetHolder, 
-            ValidityContext context, 
+            FacetHolder facetHolder,
+            ValidityContext context,
             InteractionResultSet resultSet) {
-        
+
         return resultSet.add(isValidResult(facetHolder, context));
     }
-    
+
     private static boolean compatible(InteractionAdvisor advisor, InteractionContext ic) {
-        
+
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;
         }
-        
+
         return true;
     }
-  
+
 }

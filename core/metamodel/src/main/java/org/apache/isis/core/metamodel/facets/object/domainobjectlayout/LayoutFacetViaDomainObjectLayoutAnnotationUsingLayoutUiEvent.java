@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent 
-extends LayoutFacetAbstract 
+public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
+extends LayoutFacetAbstract
 implements LayoutFacet {
 
     public static Facet create(
@@ -104,7 +104,7 @@ implements LayoutFacet {
 
     private LayoutUiEvent<Object> newLayoutUiEvent(final Object domainObject) {
         try {
-            final LayoutUiEvent<Object> layoutUiEvent = 
+            final LayoutUiEvent<Object> layoutUiEvent =
                     _Casts.uncheckedCast(layoutUiEventClass.newInstance());
             layoutUiEvent.initSource(domainObject);
             return layoutUiEvent;

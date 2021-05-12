@@ -47,12 +47,12 @@ public final class ActionSupport {
 
         public static enum ReturnType {
             TEXT,
-            BOOLEAN, 
+            BOOLEAN,
         }
 
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @NonNull Can<String> methodNames;
-        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms; 
+        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnType returnType;
 
         Class<?> additionalParamType;
@@ -79,6 +79,7 @@ public final class ActionSupport {
         ALL_PARAM_TYPES(ActionSupport::findActionSupportingMethodWithAllParamTypes),
         ;
         private final SearchFunction searchFunction;
+        @Override
         public void search(
                 final ActionSupportingMethodSearchRequest searchRequest,
                 Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
@@ -96,11 +97,11 @@ public final class ActionSupport {
     public static void findActionSupportingMethods(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
-        
-        for (val searchAlgorithm : searchRequest.searchAlgorithms) { 
-            searchAlgorithm.search(searchRequest, onMethodFound); 
+
+        for (val searchAlgorithm : searchRequest.searchAlgorithms) {
+            searchAlgorithm.search(searchRequest, onMethodFound);
         }
-        
+
     }
 
     // -- SEARCH ALGORITHMS
@@ -108,14 +109,14 @@ public final class ActionSupport {
     private final static void findActionSupportingMethodWithPPMArg(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
-        
+
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
         val methodNames = searchRequest.getMethodNames();
-                
+
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
-        
+
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
@@ -132,14 +133,14 @@ public final class ActionSupport {
         default:
 
         }
-        
+
     }
-    
+
     private static ActionSupportingMethodSearchResult toSearchResult(
             final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
         return ActionSupportingMethodSearchResult
-                .of( 
-                        supportingMethodAndPpmConstructor.getSupportingMethod(), 
+                .of(
+                        supportingMethodAndPpmConstructor.getSupportingMethod(),
                         supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
                         Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
     }
@@ -147,20 +148,20 @@ public final class ActionSupport {
     private final static void findActionSupportingMethodWithAllParamTypes(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
-        
+
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
         val methodNames = searchRequest.getMethodNames();
-        
+
         val additionalParamType = searchRequest.getAdditionalParamType();
         val additionalParamCount = additionalParamType!=null ? 1 : 0;
-        
-        final int paramsConsideredCount = paramTypes.length + additionalParamCount; 
+
+        final int paramsConsideredCount = paramTypes.length + additionalParamCount;
         if(paramsConsideredCount>=0) {
-        
+
             val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
-            
+
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 MethodFinder
@@ -176,37 +177,37 @@ public final class ActionSupport {
                 break;
             default:
             }
-            
+
         }
     }
-    
+
     private static ActionSupportingMethodSearchResult toSearchResult(
             final Method supportingMethod) {
         return ActionSupportingMethodSearchResult
                 .of(supportingMethod, supportingMethod.getReturnType(), Optional.empty());
     }
-    
+
     // -- PARAM UTIL
-    
+
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
             @Nullable final Class<?> additionalParamType) {
 
         if(paramsConsidered>paramTypes.length) {
-            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d", 
+            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
                     paramsConsidered, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
-        
+
         val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
                         : paramTypes;
-                
+
         val withAdditional = additionalParamType!=null
                 ? _Arrays.combine(paramTypesConsidered, additionalParamType)
                         : paramTypesConsidered;
-                
+
         return withAdditional;
     }
 

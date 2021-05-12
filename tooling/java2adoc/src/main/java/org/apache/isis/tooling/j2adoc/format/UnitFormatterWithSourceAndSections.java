@@ -36,9 +36,7 @@ import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.CallableDeclarations;
-import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
-import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.NonNull;
@@ -51,6 +49,7 @@ extends UnitFormatterAbstract {
         super(j2aContext);
     }
 
+    @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
 
         final String javaSource = Snippets.javaSourceFor(unit);

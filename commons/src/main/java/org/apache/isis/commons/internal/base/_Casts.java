@@ -48,8 +48,8 @@ public final class _Casts {
     }
 
     /**
-     * Casts an object to the class or interface represented by given {@code cls} Class object, 
-     * then wraps the result in an {@link Optional}. The {@link Optional} is empty if the cast 
+     * Casts an object to the class or interface represented by given {@code cls} Class object,
+     * then wraps the result in an {@link Optional}. The {@link Optional} is empty if the cast
      * fails or provided {@code value} is {@code null}.
      * @param <T>
      * @param value
@@ -62,13 +62,13 @@ public final class _Casts {
         }
         requires(cls, "cls");
         if(cls.isAssignableFrom(value.getClass())) {
-            return Optional.of(cls.cast(value)); 
+            return Optional.of(cls.cast(value));
         }
         return Optional.empty();
     }
-    
+
     /**
-     * Casts an object to the class or interface represented by given {@code cls} Class object. 
+     * Casts an object to the class or interface represented by given {@code cls} Class object.
      * Returns {@code null}, if the cast fails or provided {@code value} is {@code null}.
      * @param <T>
      * @param value
@@ -81,13 +81,13 @@ public final class _Casts {
         }
         requires(cls, "cls");
         if(cls.isAssignableFrom(value.getClass())) {
-            return cls.cast(value); 
+            return cls.cast(value);
         }
         return null;
     }
-    
+
     /**
-     * Dependent on whether left or right can be cast to {@code cls}, the appropriate functional 
+     * Dependent on whether left or right can be cast to {@code cls}, the appropriate functional
      * interface is chosen to produce the result.
      * @param left
      * @param right
@@ -98,9 +98,9 @@ public final class _Casts {
      * @param onNonCast
      */
     public static <T, R, U, V> R castThenApply(
-            @Nullable U left, 
+            @Nullable U left,
             @Nullable V right,
-            Class<T> cls, 
+            Class<T> cls,
             BiFunction<T, T, R> onBothCast,
             BiFunction<T, V, R> onLeftCast,
             BiFunction<U, T, R> onRightCast,

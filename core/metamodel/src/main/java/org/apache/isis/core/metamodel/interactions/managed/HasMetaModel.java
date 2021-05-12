@@ -23,5 +23,5 @@ import org.apache.isis.core.metamodel.spec.Specification;
 public interface HasMetaModel<T extends Specification> {
 
     T getMetaModel();
-    
+
 }

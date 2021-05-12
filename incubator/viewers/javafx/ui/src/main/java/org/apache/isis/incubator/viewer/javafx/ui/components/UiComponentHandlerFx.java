@@ -25,11 +25,11 @@ import javafx.scene.Node;
 import javafx.util.StringConverter;
 import lombok.NonNull;
 
-public interface UiComponentHandlerFx 
+public interface UiComponentHandlerFx
 extends UiComponentFactory.Handler<Node> {
 
     /**
-     * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe 
+     * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe
      * @param <T>
      * @param bindingConverter
      */
@@ -47,8 +47,8 @@ extends UiComponentFactory.Handler<Node> {
             public T fromString(String stringifiedValue) {
                 return bindingConverter.fromString(stringifiedValue);
             }
-            
+
         };
     }
-    
+
 }

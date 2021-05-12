@@ -25,19 +25,19 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
 
-public abstract class LayoutOrderFacetAbstract 
-extends FacetAbstract 
+public abstract class LayoutOrderFacetAbstract
+extends FacetAbstract
 implements LayoutOrderFacet {
 
     @Getter(onMethod_ = {@Override})
     private final String sequence;
-    
+
     protected LayoutOrderFacetAbstract(String sequence, FacetHolder holder) {
         super(LayoutOrderFacet.class, holder);
         this.sequence = sequence;
     }
-    
-    @Override 
+
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("sequence", sequence);

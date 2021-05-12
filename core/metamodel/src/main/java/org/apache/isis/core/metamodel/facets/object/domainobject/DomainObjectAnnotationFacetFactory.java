@@ -83,11 +83,11 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import lombok.NonNull;
 import lombok.val;
 
-public class DomainObjectAnnotationFacetFactory 
+public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements 
-    MetaModelRefiner, 
-    PostConstructMethodCache, 
+implements
+    MetaModelRefiner,
+    PostConstructMethodCache,
     ObjectSpecIdFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
@@ -220,9 +220,9 @@ implements
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 String.format(
                         "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
-                        annotationName, 
-                        cls.getName(), 
-                        methodName, 
+                        annotationName,
+                        cls.getName(),
+                        methodName,
                         repositoryClass.getName())
                 );
         return null;

@@ -23,7 +23,7 @@ import java.time.OffsetTime;
 
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
-public class OffsetTimeValueFacetUsingSemanticsProviderFactory 
+public class OffsetTimeValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<OffsetTime> {
 
     public OffsetTimeValueFacetUsingSemanticsProviderFactory() {

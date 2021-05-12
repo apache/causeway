@@ -65,20 +65,20 @@ public class MarkupPanelFactories {
             }
 
             val scalarModel = (ScalarModel) model;
-            
+
             val scalarType = scalarModel.getTypeOfSpecification().getCorrespondingClass();
-            
+
             if(scalarType.equals(valueType)) {
                 return ApplicationAdvice.APPLIES_EXCLUSIVELY;
             }
-            
+
             return appliesIf( valueType.isAssignableFrom(scalarType) );
-            
+
         }
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new ParentedMarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());        
+            return new ParentedMarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());
         }
 
         protected abstract MarkupComponentFactory getMarkupComponentFactory();
@@ -132,7 +132,7 @@ public class MarkupPanelFactories {
             return (id, model) -> {
                 val markupComponent = new MarkupComponent(id, model);
                 markupComponent.setEnabled(false);
-                return markupComponent;    
+                return markupComponent;
             };
         }
 

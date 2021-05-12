@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jdo.user.dom;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -47,7 +45,6 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -150,6 +147,7 @@ public class ApplicationUser
     public String getUsername() {
         return username;
     }
+    @Override
     public void setUsername(String username) { this.username = username; }
 
 

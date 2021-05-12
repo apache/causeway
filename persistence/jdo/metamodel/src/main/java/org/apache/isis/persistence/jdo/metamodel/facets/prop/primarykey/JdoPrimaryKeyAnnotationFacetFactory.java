@@ -28,11 +28,11 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
 
-public class JdoPrimaryKeyAnnotationFacetFactory 
+public class JdoPrimaryKeyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public JdoPrimaryKeyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
@@ -45,12 +45,12 @@ extends FacetFactoryAbstract {
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
-        
+
         //val method = processMethodContext.getMethod();
 
         final PrimaryKey annotation = processMethodContext.synthesizeOnMethod(PrimaryKey.class)
                 .orElse(null);
-                
+
 //        _Assert.assertEquals("expected same on method=" + method , annotation,
 //                Annotations.getAnnotation(method, PrimaryKey.class));
 

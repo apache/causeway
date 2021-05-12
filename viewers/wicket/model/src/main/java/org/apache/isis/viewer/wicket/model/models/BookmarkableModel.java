@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.common.model.HasTitle;
 
-public interface BookmarkableModel 
+public interface BookmarkableModel
 extends HasTitle {
 
     /**

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class ObjectSpecIdFacetAbstract
-extends FacetAbstract 
+extends FacetAbstract
 implements ObjectSpecIdFacet {
 
     public static Class<? extends Facet> type() {
@@ -52,7 +52,7 @@ implements ObjectSpecIdFacet {
         return value;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);

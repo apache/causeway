@@ -22,13 +22,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
-
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
@@ -61,6 +59,7 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
         return new PdfJsViewerFacetFromAnnotation(config, holder);
     }
 
+    @Override
     public PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey) {
         final PdfJsConfig config = super.configFor(instanceKey);
 

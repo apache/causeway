@@ -43,20 +43,20 @@ public class CollectionNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Collection collection;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s: %s", collection.getId(), typeToString(collection.getType()));  
+        return String.format("%s: %s", collection.getId(), typeToString(collection.getType()));
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private TypeNode parentNode;
 
     @Override
@@ -64,7 +64,7 @@ public class CollectionNode extends MMNode {
         return Stream.of(
                 MMNodeFactory.facetGroup(collection.getFacets(), this));
     }
-   
-    
+
+
 }
 

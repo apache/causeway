@@ -47,22 +47,22 @@ public class TitleServiceDefault implements TitleService {
 
     private final WrapperFactory wrapperFactory;
     private final ObjectManager objectManager;
-    
+
 
     @Override
     public String titleOf(final Object domainObject) {
-        
+
         if(objectManager == null) { // simplified JUnit test support
             return "" + domainObject;
         }
-        
+
         val pojo = unwrapped(domainObject);
         val objectAdapter = objectManager.adapt(pojo);
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "[UNSPECIFIED]";
         }
-        
+
         if(EntityUtil.isDestroyed(objectAdapter)) {
             return "[DELETED]";
         } else {
@@ -72,18 +72,18 @@ public class TitleServiceDefault implements TitleService {
 
     @Override
     public String iconNameOf(final Object domainObject) {
-        
-        if(objectManager == null) { // simplified JUnit test support 
+
+        if(objectManager == null) { // simplified JUnit test support
             return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
         }
-        
+
         val pojo = unwrapped(domainObject);
         val objectAdapter = objectManager.adapt(pojo);
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "unspecified";
-        }        
-        
+        }
+
         return objectAdapter.getSpecification().getIconName(objectAdapter);
     }
 
@@ -92,5 +92,5 @@ public class TitleServiceDefault implements TitleService {
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-    
+
 }

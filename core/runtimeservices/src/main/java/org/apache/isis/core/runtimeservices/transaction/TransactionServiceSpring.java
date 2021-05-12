@@ -56,10 +56,10 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @implNote This implementation yet does not support more than one {@link PlatformTransactionManager} 
- * on the same Spring context. If more than one are discovered, some methods will fail 
+ * @implNote This implementation yet does not support more than one {@link PlatformTransactionManager}
+ * on the same Spring context. If more than one are discovered, some methods will fail
  * with {@link IllegalStateException}s.
- * 
+ *
  * @since 2.0 {@index}
  *
  */
@@ -69,77 +69,77 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Spring")
 @Log4j2
-public class TransactionServiceSpring 
-implements 
-    TransactionService, 
+public class TransactionServiceSpring
+implements
+    TransactionService,
     InteractionScopeAware {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionTracker interactionTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
-    
+
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final InteractionTracker interactionTracker) {
-        
+
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
-        
+
         this.persistenceExceptionTranslators = Can.ofCollection(persistenceExceptionTranslators);
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
-        
+
         this.interactionTracker = interactionTracker;
     }
 
     // -- SPRING INTEGRATION
-    
+
     @Override
     public <T> Result<T> callTransactional(TransactionDefinition def, Callable<T> callable) {
 
         val txManager = transactionManagerForElseFail(def);
-        
+
         val tx = txManager.getTransaction(def);
 
         val result = Result.of(callable)
                 .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
-        
+
         try {
-        
+
             if(result.isFailure()) {
                 txManager.rollback(tx);
             } else {
                 txManager.commit(tx);
             }
-            
+
         } catch (Exception ex) {
-            
+
             return result.isFailure()
-                    
+
                     // return the original failure cause (originating from calling the callable)
-                    // (so we don't shadow the original failure) 
+                    // (so we don't shadow the original failure)
                     ? result
-                            
+
                     // return the failure we just catched
                     : Result.failure(translateExceptionIfPossible(ex, txManager));
-            
-        }  
+
+        }
 
         return result;
     }
-    
+
     @Override
     public void nextTransaction() {
-        
-        val txManager = singletonTransactionManagerElseFail(); 
+
+        val txManager = singletonTransactionManagerElseFail();
 
         try {
-        
+
             val txTemplate = new TransactionTemplate(txManager);
             txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-    
+
             // either reuse existing or create new
             val txStatus = txManager.getTransaction(txTemplate);
             if(txStatus.isNewTransaction()) {
@@ -152,37 +152,37 @@ implements
             } else {
                 txManager.commit(txStatus);
             }
-            
+
             // begin a new transaction
             txManager.getTransaction(txTemplate);
 
         } catch (RuntimeException ex) {
-            
+
             val translatedEx = translateExceptionIfPossible(ex, txManager);
-            
+
             if(translatedEx instanceof RuntimeException) {
                 throw ex;
             }
-            
+
             throw new RuntimeException(ex);
-            
+
         }
-            
+
     }
-    
+
     @Override
     public void flushTransaction() {
-        
+
         try {
-        
+
             log.debug("about to flush tx");
-            
+
             currentTransactionStatus()
                 .ifPresent(TransactionStatus::flush);
 
         } catch (RuntimeException ex) {
-            
-            val txManager = singletonTransactionManagerElseFail();            
+
+            val txManager = singletonTransactionManagerElseFail();
 
             val translatedEx = translateExceptionIfPossible(ex, txManager);
 
@@ -195,7 +195,7 @@ implements
         }
     }
 
-    
+
     @Override
     public Optional<TransactionId> currentTransactionId() {
         return interactionTracker.getInteractionId()
@@ -203,7 +203,7 @@ implements
                     //XXX get current transaction's persistence context (once we support multiple contexts)
                     val persistenceContext = "";
                     return TransactionId.of(uuid, txCounter.get().intValue(), persistenceContext);
-                });  
+                });
     }
 
     @Override
@@ -211,45 +211,45 @@ implements
 
         return currentTransactionStatus()
         .map(txStatus->{
-        
+
             if(txStatus.isCompleted()) {
                 return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
             }
-            
+
             return txStatus.isRollbackOnly()
                     ? TransactionState.MUST_ABORT
                     : TransactionState.IN_PROGRESS;
-            
+
         })
         .orElse(TransactionState.NONE);
     }
-    
+
     // -- TRANSACTION SEQUENCE TRACKING
-    
+
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
-    
+
     /** INTERACTION BEGIN BOUNDARY */
     @Override
     public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         txCounter.get().reset();
     }
-    
+
     /** TRANSACTION END BOUNDARY */
     @EventListener(TransactionAfterCompletionEvent.class)
     public void onTransactionEnded(TransactionAfterCompletionEvent event) {
         txCounter.get().increment();
     }
-    
+
     /** INTERACTION END BOUNDARY */
     @Override
     public void afterLeavingTransactionalBoundary(Interaction interaction) {
-        txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards? 
+        txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
-    
+
     // -- HELPER
-    
+
     private PlatformTransactionManager transactionManagerForElseFail(TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
             val txManager = ((TransactionTemplate)def).getTransactionManager();
@@ -264,7 +264,7 @@ implements
                                 + "make sure a PlatformTransactionManager is provided via the TransactionTemplate argument.")
                         : _Exceptions.illegalState("Needs a PlatformTransactionManager."));
     }
-    
+
     private PlatformTransactionManager singletonTransactionManagerElseFail() {
         return platformTransactionManagers.getSingleton()
                 .orElseThrow(()->
@@ -275,7 +275,7 @@ implements
     }
 
     private Optional<TransactionStatus> currentTransactionStatus() {
-        
+
         val txManager = singletonTransactionManagerElseFail();
         val txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
@@ -284,36 +284,36 @@ implements
         if(!TransactionSynchronizationManager.isActualTransactionActive()) {
             return Optional.empty();
         }
-        
+
         // get current transaction else throw an exception
         return Result.of(()->
                 //XXX creating stack-traces is expensive
                 txManager.getTransaction(txTemplate))
                 .getValue();
-        
+
     }
 
     private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
-        
+
         if(ex instanceof DataAccessException) {
-            return ex; // nothing to do, already translated 
+            return ex; // nothing to do, already translated
         }
-        
+
         if(ex instanceof RuntimeException) {
-            
+
             val translatedEx = persistenceExceptionTranslators.stream()
             //.peek(translator->System.out.printf("%s", translator.getClass().getName()))
             .map(translator->translator.translateExceptionIfPossible((RuntimeException)ex))
             .filter(_NullSafe::isPresent)
             .findFirst()
             .orElse(null);
-            
+
             if(translatedEx!=null) {
-                return translatedEx;    
+                return translatedEx;
             }
-            
+
         }
-        
+
         return ex;
     }
 

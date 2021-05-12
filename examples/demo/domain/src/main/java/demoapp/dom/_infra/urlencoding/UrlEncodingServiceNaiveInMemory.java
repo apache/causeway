@@ -57,27 +57,27 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     private final Map<String, String> map = new HashMap<>();
 
     // this is set with respect to the Spring's server.max-http-header-size option in the application.properties
-    // note: we reserve 4K of the total header size for other header attributes 
+    // note: we reserve 4K of the total header size for other header attributes
     private final int maxIdentifierSize = 12*1024; // 12K
-    
+
     @Override
     public String encode(byte[] bytes) {
 
-        // web servers might have restrictions to header sizes of eg. max 4k or 8k  
+        // web servers might have restrictions to header sizes of eg. max 4k or 8k
         // if the encodedString is reasonable small, we pass it through
         val encodedString = urlEncodingService.encode(bytes); // from the default urlEncodingService
         if(encodedString.length()<maxIdentifierSize) {
             return EncodingType.PASS_THROUGH.encode(encodedString);
         }
-                
+
         // if the encodedString is not reasonable small, we calculate a hash,
         // then store the encodedString in a map using this hash as the key
         val hashBytes = _Hashes.digest(Algorithm.SHA512, bytes)
                 .orElseThrow(()->_Exceptions.unrecoverable("failed to generate SHA-512 hash"));
-        
-        // the key is exposed for web use with URLs, which requires us to encode them base64 URL safe 
+
+        // the key is exposed for web use with URLs, which requires us to encode them base64 URL safe
         val base64Key = _Strings.ofBytes(_Bytes.asUrlBase64.apply(hashBytes), StandardCharsets.UTF_8);
-        
+
         map.put(base64Key, encodedString);
         return EncodingType.HASH_KEYED_CACHE.encode(base64Key);
     }
@@ -86,7 +86,7 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     public byte[] decode(String prefixed) {
         val encodingType = EncodingType.parse(prefixed);
         val encodedStringOrBase64Key = encodingType.decode(prefixed);
-        
+
         switch (encodingType) {
         case PASS_THROUGH: {
             val encodedString = encodedStringOrBase64Key;
@@ -97,7 +97,7 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
             val encodedString = map.get(base64Key);
             return urlEncodingService.decode(encodedString);
         }
-        default: 
+        default:
             throw _Exceptions.unmatchedCase(encodingType);
         }
     }
@@ -105,10 +105,10 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     @Inject
     @Qualifier("Compression")
     private UrlEncodingService urlEncodingService;
-    
+
     // -- HELPER
-    
-    /** 
+
+    /**
      * Puts one character in front of the input,
      * or removes one character from the front of the input,
      * such that we can differentiate, which EncodingType is to be applied.

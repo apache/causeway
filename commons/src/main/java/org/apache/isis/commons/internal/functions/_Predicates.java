@@ -54,7 +54,7 @@ public final class _Predicates {
     }
 
     /**
-     * 
+     *
      * @return a Predicate that always tests true
      */
     public static <T> Predicate<T> alwaysTrue() {
@@ -69,7 +69,7 @@ public final class _Predicates {
     }
 
     /**
-     * Negates the specified {@code predicate}. (Obsolete with Java-11) 
+     * Negates the specified {@code predicate}. (Obsolete with Java-11)
      * @param predicate
      */
     public static <T> Predicate<T> not(Predicate<T> predicate) {

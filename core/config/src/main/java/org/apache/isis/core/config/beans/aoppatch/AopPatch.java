@@ -39,10 +39,10 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * This component listens for Spring's {@link ApplicationContext} to become available,
- * then allows for replacement of the built-in {@link TransactionInterceptor} via the 
- * {@link TransactionInterceptorFactory}. If no such factory is registered with the 
+ * then allows for replacement of the built-in {@link TransactionInterceptor} via the
+ * {@link TransactionInterceptorFactory}. If no such factory is registered with the
  * context, the default behavior is maintained.
- * 
+ *
  * @since 2.0
  */
 @Configuration(proxyBeanMethods = false)
@@ -50,48 +50,48 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.config.AopPatch")
 @Log4j2
 public class AopPatch implements ApplicationContextAware {
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        
+
         if(!applicationContext.containsBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME)) {
             return;
         }
-        
-        val advisor = (BeanFactoryTransactionAttributeSourceAdvisor) 
+
+        val advisor = (BeanFactoryTransactionAttributeSourceAdvisor)
                 applicationContext.getBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME);
-        
+
         val attrSource = applicationContext
                 .getBeanProvider(TransactionAttributeSource.class, false)
                 .getIfAvailable();
-        
+
         val transactionInterceptorFactory = applicationContext
                 .getBeanProvider(TransactionInterceptorFactory.class, false)
                 .getIfAvailable();
-        
+
         val transactionManager = applicationContext
                 .getBeanProvider(TransactionManager.class, false)
                 .getIfAvailable();
-        
+
         log.info("installing patched tx interceptor");
-        
+
         advisor.setAdvice(patchedTransactionInterceptor(
-                attrSource, 
+                attrSource,
                 transactionInterceptorFactory,
                 transactionManager));
     }
-    
+
     // -- HELPER
 
     private TransactionInterceptor patchedTransactionInterceptor(
             final @Nullable TransactionAttributeSource transactionAttributeSource,
             final @Nullable TransactionInterceptorFactory transactionInterceptorFactory,
             final @NonNull  TransactionManager txManager) {
-        
+
         final TransactionInterceptor interceptor = transactionInterceptorFactory==null
                 ? new TransactionInterceptor()
-                : transactionInterceptorFactory.createTransactionInterceptor(); 
-        
+                : transactionInterceptorFactory.createTransactionInterceptor();
+
         interceptor.setTransactionAttributeSource(transactionAttributeSource);
         if (txManager != null) {
             interceptor.setTransactionManager(txManager);
@@ -99,5 +99,5 @@ public class AopPatch implements ApplicationContextAware {
         return interceptor;
     }
 
-    
+
 }

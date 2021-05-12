@@ -29,29 +29,29 @@ public class InteractionDemo_multiEnum {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public int act(DemoEnum a, DemoEnum b, DemoEnum c) {
         return a.ordinal() * (b.ordinal() + c.ordinal());
     }
-    
+
     // -- PARAM A
-    
-    @MemberSupport 
+
+    @MemberSupport
     public DemoEnum defaultA(Parameters.TriEnum p) {
         return DemoEnum.values()[1];
     }
-    
+
     // -- PARAM B
-    
-    @MemberSupport 
+
+    @MemberSupport
     public DemoEnum defaultB(Parameters.TriEnum p) {
         return DemoEnum.values()[2];
     }
-    
+
     // -- PARAM C
-    
-    @MemberSupport 
+
+    @MemberSupport
     public DemoEnum defaultC(Parameters.TriEnum p) {
         return DemoEnum.values()[3];
     }

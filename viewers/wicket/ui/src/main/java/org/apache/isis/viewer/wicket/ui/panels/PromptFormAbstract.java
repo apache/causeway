@@ -57,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public abstract class PromptFormAbstract<T extends
-    FormExecutorContext 
+    FormExecutorContext
     & IModel<ManagedObject>>
 extends FormAbstract<ManagedObject>
 implements ScalarModelSubscriber {
@@ -83,7 +83,7 @@ implements ScalarModelSubscriber {
             final Component parentPanel,
             final WicketViewerSettings settings,
             final T model) {
-        
+
         super(id, model);
         this.parentPanel = parentPanel;
         this.settings = settings;
@@ -120,11 +120,11 @@ implements ScalarModelSubscriber {
 
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                
+
                 _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                         + "originating from User clicking OK on an inline editing form or "
                         + "action prompt.");
-                
+
                 onOkSubmittedOf(target, getForm(), this);
             }
 
@@ -293,7 +293,7 @@ implements ScalarModelSubscriber {
     private void completePrompt(final AjaxRequestTarget target) {
 
         if (isWithinPrompt()) {
-            if(formExecutorContext instanceof ScalarPropertyModel) {            
+            if(formExecutorContext instanceof ScalarPropertyModel) {
                 ((ScalarPropertyModel)formExecutorContext).reset();
             }
             rebuildGuiAfterInlinePromptDone(target);

@@ -52,23 +52,23 @@ import lombok.extern.log4j.Log4j2;
 //@Theme(themeClass = Material.class, variant = Material.DARK)
 @Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 @Log4j2
-public class VaadinAuthenticationHandler 
+public class VaadinAuthenticationHandler
 implements
     AppShellConfigurator,
     VaadinServiceInitListener {
 
     private static final long serialVersionUID = 1L;
-    
-    @Inject private transient InteractionFactory isisInteractionFactory; 
+
+    @Inject private transient InteractionFactory isisInteractionFactory;
     @Inject private transient MetaModelContext metaModelContext;
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
-        
+
         log.debug("service init event {}", event.getSource());
-        
+
         event.getSource().addUIInitListener(uiEvent -> {
-            uiEvent.getUI().addBeforeEnterListener(this::beforeEnter); 
+            uiEvent.getUI().addBeforeEnterListener(this::beforeEnter);
             uiEvent.getUI().addBeforeLeaveListener(this::beforeLeave);
         });
     }
@@ -80,7 +80,7 @@ implements
     public boolean loginToSession(AuthenticationRequest authenticationRequest) {
         val authentication = metaModelContext.getAuthenticationManager()
                 .authenticate(authenticationRequest);
-        
+
         if(authentication!=null) {
             log.debug("logging in {}", authentication.getUserName());
             AuthSessionStoreUtil.put(authentication);
@@ -88,21 +88,21 @@ implements
         }
         return false;
     }
-    
+
     /**
-     * Executes a piece of code in a new (possibly nested) IsisInteraction, using the 
-     * current Authentication, as, at this point, should be stored in the 
+     * Executes a piece of code in a new (possibly nested) IsisInteraction, using the
+     * current Authentication, as, at this point, should be stored in the
      * current VaadinSession.
-     * 
+     *
      * @param callable - the piece of code to run
-     * 
+     *
      */
     public <R> R callAuthenticated(Callable<R> callable) {
         return AuthSessionStoreUtil.get()
                 .map(authentication->isisInteractionFactory.callAuthenticated(authentication, callable))
                 .orElse(null); // TODO redirect to login
     }
-    
+
     /**
      * Variant of {@link #callAuthenticated(Callable)} that takes a runnable.
      * @param runnable
@@ -111,14 +111,14 @@ implements
         final Callable<Void> callable = ()->{runnable.run(); return null;};
         callAuthenticated(callable);
     }
-    
+
 
     // -- HELPER
 
     private void beforeEnter(BeforeEnterEvent event) {
         val targetView = event.getNavigationTarget();
         log.debug("detected a routing event to {}", targetView);
-        
+
         val authentication = AuthSessionStoreUtil.get().orElse(null);
         if(authentication!=null) {
             isisInteractionFactory.openInteraction(authentication);
@@ -129,13 +129,13 @@ implements
             event.rerouteTo(VaadinLoginView.class);
         }
     }
-    
+
     private void beforeLeave(BeforeLeaveEvent event) {
         //isisInteractionFactory.closeSessionStack();
     }
 
 
-    
+
 
 
 }

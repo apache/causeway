@@ -55,7 +55,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                 .getDomainObjectLayout()
                 .getTitleUiEvent()
                 .isPostForDefault();
-        
+
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)
                 .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
@@ -65,9 +65,9 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                         isPostForDefault))
                 .map(titleUiEventClass -> {
                     return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
-                            titleUiEventClass, 
-                            translationContextFor(facetHolder), 
-                            metamodelEventService, 
+                            titleUiEventClass,
+                            translationContextFor(facetHolder),
+                            metamodelEventService,
                             facetHolder);
                 })
                 .orElse(null);
@@ -96,13 +96,13 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         if(owningAdapter == null) {
             return null;
         }
-        
+
         val underlyingTitleFacet = underlyingTitleFacet();
         if(underlyingTitleFacet != null) {
             // underlyingTitleFacet always takes precedence
             return underlyingTitleFacet.title(owningAdapter);
         }
-        
+
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
@@ -114,15 +114,15 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         }
         return titleUiEvent.getTitle();
     }
-    
-    @Override 
+
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("titleUiEventClass", titleUiEventClass);
     }
-    
+
     // -- HELPER
-    
+
     private TitleFacet underlyingTitleFacet() {
         val underlyingFacet = getUnderlyingFacet();
         if(underlyingFacet instanceof TitleFacet) {
@@ -132,13 +132,13 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
-        if(facetHolder instanceof ObjectSpecification) {        	
+        if(facetHolder instanceof ObjectSpecification) {
             val facetHolderAsSpec = (ObjectSpecification) facetHolder;
             return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getIdentifier());
-        } 
+        }
         return null;
     }
-    
+
     private TitleUiEvent<Object> newTitleUiEvent(final ManagedObject owningAdapter) {
         final Object domainObject = owningAdapter.getPojo();
         return newTitleUiEvent(domainObject);

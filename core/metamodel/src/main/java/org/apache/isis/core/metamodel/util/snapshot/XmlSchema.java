@@ -103,8 +103,8 @@ public final class XmlSchema {
      * The namespace string will be the concatenation of the plus the package
      * name of the class of the object being referenced.
      *
-     * If not specified in the constructor, then 
-     * {@link IsisSchema#DEFAULT_URI_BASE} 
+     * If not specified in the constructor, then
+     * {@link IsisSchema#DEFAULT_URI_BASE}
      * is used.
      */
     public String getUriBase() {
@@ -185,9 +185,9 @@ public final class XmlSchema {
      * element representing a class
      */
     <T> Element createXsElementForNofClass(
-            final Document xsdDoc, 
-            final Element element, 
-            final boolean addCardinality, 
+            final Document xsdDoc,
+            final Element element,
+            final boolean addCardinality,
             final ExtensionData<T> extensions) {
 
         // gather details from XML element
@@ -308,8 +308,8 @@ public final class XmlSchema {
      * element of the xs:element representing the type of the owning object.
      */
     <T> Element createXsElementForNofValue(
-            final Element parentXsElementElement, 
-            final Element xmlValueElement, 
+            final Element parentXsElementElement,
+            final Element xmlValueElement,
             final ExtensionData<T> extensions) {
 
         // gather details from XML element
@@ -404,9 +404,9 @@ public final class XmlSchema {
      * element
      */
     <T> Element createXsElementForNofReference(
-            final Element parentXsElementElement, 
-            final Element xmlReferenceElement, 
-            final String referencedClassName, 
+            final Element parentXsElementElement,
+            final Element xmlReferenceElement,
+            final String referencedClassName,
             final ExtensionData<T> extensions) {
 
         // gather details from XML element
@@ -488,9 +488,9 @@ public final class XmlSchema {
      * element
      */
     <T> Element createXsElementForNofCollection(
-            final Element parentXsElementElement, 
-            final Element xmlCollectionElement, 
-            final String referencedClassName, 
+            final Element parentXsElementElement,
+            final Element xmlCollectionElement,
+            final String referencedClassName,
             final ExtensionData<T> extensions) {
 
         // gather details from XML element

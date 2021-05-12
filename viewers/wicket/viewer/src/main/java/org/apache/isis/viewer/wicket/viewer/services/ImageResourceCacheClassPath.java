@@ -80,7 +80,7 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
             final ObjectSpecification objSpec = (ObjectSpecification) spec;
             return resourceReferenceFor(objSpec, objSpec.getIconName(adapter));
         } else {
-            return fallbackResource;    
+            return fallbackResource;
         }
 
     }

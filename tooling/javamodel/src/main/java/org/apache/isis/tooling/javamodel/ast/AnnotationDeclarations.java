@@ -20,7 +20,6 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Stream;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;

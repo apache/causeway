@@ -44,13 +44,13 @@ public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstra
     }
 
     public static ProjectingFacet create(
-            final Optional<Property> propertyIfAny, 
+            final Optional<Property> propertyIfAny,
             final FacetedMethod facetHolder) {
-        
+
         if(!propertyIfAny.isPresent()) {
             return null;
         }
-        
+
         val projecting = propertyIfAny.get().projecting();
         switch (projecting) {
         case PROJECTED:

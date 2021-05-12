@@ -24,10 +24,10 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    
+
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 Configuration_usingValidDomain.class
         })
 public class Configuration_usingValidDomain {

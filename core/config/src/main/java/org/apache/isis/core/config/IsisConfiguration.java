@@ -1865,10 +1865,10 @@ public class IsisConfiguration {
              * Whether the Ajax debug should be shown, by default this is disabled.
              */
             private boolean ajaxDebugMode = false;
-            
+
             /**
              * Which major JQuery version the <i>Wicket Viewer</i> should use, default is 3.
-             * @see org.apache.wicket.resource.JQueryResourceReference 
+             * @see org.apache.wicket.resource.JQueryResourceReference
              */
             private int jQueryVersion = 3;
 

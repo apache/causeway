@@ -73,7 +73,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @NonNull final ManagedObject managedObject) {
         return new ObjectViewVaa(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
-    
+
     /**
      * Constructs given domain object's view, with all its visible members and actions.
      * @param managedObject - domain object
@@ -86,7 +86,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
         _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
-        
+
         val objectTitle = ManagedObjects.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
@@ -107,11 +107,11 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
                 val uiRow = _vaa.add(container, new FlexLayout());
-                
+
                 uiRow.setWidthFull();
                 uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
 
-                // instead of a FlexLayout we need to convert to a layout where we can control 
+                // instead of a FlexLayout we need to convert to a layout where we can control
                 // the responsive steps
                 //                val steps = _Lists.of(
                 //                        new ResponsiveStep("0", 1),
@@ -162,7 +162,7 @@ public class ObjectViewVaa extends VerticalLayout {
             protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
 
                 _vaa.add(container, new H2(fieldSetData.getName()));
-                
+
                 // handle associated actions
                 val actionBar = newActionPanel(container);
                 for(val actionData : fieldSetData.getActions()) {
@@ -186,78 +186,78 @@ public class ObjectViewVaa extends VerticalLayout {
             @SuppressWarnings("unused")
             @Override
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
-                
+
                 val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedAction()
                 .ifPresent(managedAction -> {
-                    
+
                     interaction.checkUsability();
-                    
-                    val uiButton = _vaa.add(container, 
+
+                    val uiButton = _vaa.add(container,
                             uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of(
-                                            managedAction, 
-                                            DisablingUiModel.of(interaction), 
+                                            managedAction,
+                                            DisablingUiModel.of(interaction),
                                             actionEventHandler)));
                 });
-                
+
             }
 
             @SuppressWarnings("unused")
             @Override
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
-                
+
                 val owner = managedObject;
-                
+
                 val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
-                    
+
                     interaction.checkUsability();
-                    
-                    val uiProperty = _vaa.add(container, 
+
+                    val uiProperty = _vaa.add(container,
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.ComponentRequest.of(
                                             managedProperty,
                                             DisablingUiModel.of(interaction))));
-                    
+
                     // handle associated actions
                     val actionBar = newActionPanel(container);
                     for(val actionData : propertyData.getActions()) {
                         onAction(actionBar, actionData);
                     }
-                    
+
                 });
             }
 
             @Override
             protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
-                
+
                 val owner = managedObject;
-                
+
                 CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
                 .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     _vaa.add(container, new H3(managedCollection.getName()));
-                    
+
                     // handle associated actions
                     val actionBar = newActionPanel(container);
                     for(val actionData : collectionData.getActions()) {
                         onAction(actionBar, actionData);
                     }
-                    
-                    val uiCollection = _vaa.add(container, 
+
+                    val uiCollection = _vaa.add(container,
                             TableViewVaa.forManagedCollection(
                                     uiContext,
                                     managedCollection,
                                     Where.PARENTED_TABLES));
-                    
+
                 });
-                
+
             }
 
         };

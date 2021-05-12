@@ -45,7 +45,7 @@ class MixinInterceptor {
     static String intendedNameOf(Method method) {
 
         val declaringClass = method.getDeclaringClass();
-        
+
         //XXX the framework does this kind of reasoning at multiple places, maybe we can
         // consolidate and use caching
         val mixinAnnotMethodName = _Annotations.findNearestAnnotation(declaringClass, DomainObject.class)
@@ -55,7 +55,7 @@ class MixinInterceptor {
 
         if(mixinAnnotMethodName!=null) {
             if(mixinAnnotMethodName.equals(method.getName())) {
-                val mixinMethodName = 
+                val mixinMethodName =
                         ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
                 if(mixinMethodName!=null) {
                     return mixinMethodName;

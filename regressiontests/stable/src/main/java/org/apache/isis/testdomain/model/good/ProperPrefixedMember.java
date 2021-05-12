@@ -29,24 +29,24 @@ import lombok.Setter;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperPrefixedMember {
-    
+
     // should be allowed since 2.0
-    @Action 
+    @Action
     public String disableSomething() {
         return null;
     }
-    
+
     // should be identified as support
     @MemberSupport
     public String disableDisableSomething() {
         return null;
     }
-    
-    
+
+
     // should be allowed
     @Property
     @Getter @Setter
     private String disableProperty;
-    
-    
+
+
 }

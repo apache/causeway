@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import lombok.Value;
 
 /**
- * 
+ *
  * @since 2.0
  * @see TemporalAdjuster
  */
@@ -44,7 +44,7 @@ public class TemporalAdjust {
     private int days;
     private int hours;
     private int minutes;
-    
+
     public static TemporalAdjust parse(String str) {
         int hours = 0;
         int minutes = 0;
@@ -73,10 +73,10 @@ public class TemporalAdjust {
         } else {
             days = Integer.valueOf(str).intValue();
         }
-        
+
         return TemporalAdjust.of(years, months, days, hours, minutes);
     }
-    
+
     public TemporalAdjust sign(int sign) {
         if(sign==1) {
             return this;
@@ -86,8 +86,8 @@ public class TemporalAdjust {
         }
         throw _Exceptions.unsupportedOperation();
     }
-    
-    
+
+
     public LocalDate adjustLocalDate(final LocalDate temporal) {
         if(hours != 0 || minutes != 0) {
             throw noTime(temporal);
@@ -101,7 +101,7 @@ public class TemporalAdjust {
         }
         return temporal.plusHours(hours).plusMinutes(minutes);
     }
-    
+
     public OffsetTime adjustOffsetTime(final OffsetTime temporal) {
         if(years != 0 || months != 0 || days != 0) {
             throw noDate(temporal);
@@ -118,23 +118,23 @@ public class TemporalAdjust {
         return temporal.plusYears(years).plusMonths(months).plusDays(days)
                 .plusHours(hours).plusMinutes(minutes);
     }
-    
+
     public ZonedDateTime adjustZonedDateTime(final ZonedDateTime temporal) {
         return temporal.plusYears(years).plusMonths(months).plusDays(days)
                 .plusHours(hours).plusMinutes(minutes);
     }
-    
+
     // -- HELPER
-    
+
     private IllegalArgumentException noTime(Temporal temporal) {
-        return _Exceptions.illegalArgument("cannot add non-zero hours or minutes to a %s", 
+        return _Exceptions.illegalArgument("cannot add non-zero hours or minutes to a %s",
                 temporal.getClass().getName());
     }
-    
+
     private IllegalArgumentException noDate(Temporal temporal) {
-        throw _Exceptions.illegalArgument("cannot add non-zero years, months or days to a %s", 
+        throw _Exceptions.illegalArgument("cannot add non-zero years, months or days to a %s",
                 temporal.getClass().getName());
     }
-    
+
 
 }

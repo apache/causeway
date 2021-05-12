@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-class CssMenuItem 
+class CssMenuItem
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,20 +51,20 @@ implements Serializable {
     }
 
     @Getter private final String name;
-    
+
     @Getter @Setter private LinkAndLabel linkAndLabel;
-    
+
     private CssMenuItem(final String name, final MenuItemType itemType) {
         this.name = name;
         this.itemType = itemType;
     }
-    
+
 //    protected CssMenuItem newSubMenuItem(final String name, final MenuItemType itemType) {
 //        val subMenuItem = newMenuItem(name);
 //        subMenuItem.setParent(this);
 //        return subMenuItem;
 //    }
-    
+
     private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
@@ -82,7 +82,7 @@ implements Serializable {
     public boolean hasSubMenuItems() {
         return subMenuItems.size() > 0;
     }
-    
+
     // //////////////////////////////////////////////////////////////
     // Build wicket components from the menu item.
     // //////////////////////////////////////////////////////////////
@@ -96,10 +96,10 @@ implements Serializable {
     }
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
-        
+
         val actionMeta = getLinkAndLabel().getActionUiMetaModel();
         val actionLink = getLinkAndLabel().getUiComponent();
-        
+
         val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
 
         if (actionLink != null) {
@@ -107,7 +107,7 @@ implements Serializable {
             // show link...
             markupContainer.add(actionLink);
             actionLink.add(label);
-            
+
             if (actionMeta.getDescription() != null) {
                 Tooltips.addTooltip(actionLink, actionMeta.getDescription());
             }
@@ -127,10 +127,10 @@ implements Serializable {
             Decorators.getIcon().decorate(label, fontAwesome);
 
             actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
-                Decorators.getDisable().decorate(actionLink, disableUiModel);    
+                Decorators.getDisable().decorate(actionLink, disableUiModel);
             });
-            
-            
+
+
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return actionLink;
@@ -138,11 +138,11 @@ implements Serializable {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
-            
+
             actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
-                Tooltips.addTooltip(label, disableUiModel.getReason());    
+                Tooltips.addTooltip(label, disableUiModel.getReason());
             });
-            
+
             label.add(new AttributeModifier("class", Model.of("disabled")));
 
             markupContainer.add(label);
@@ -172,18 +172,18 @@ implements Serializable {
             linkComponent.add(new CssClassAppender("top-parent"));
         }
     }
-    
+
     @Getter private CssMenuItem parent;
     protected void setParent(CssMenuItem parent) {
         this.parent = parent;
-        parent.addSubMenuItem(_Casts.uncheckedCast(this));        
+        parent.addSubMenuItem(_Casts.uncheckedCast(this));
     }
     public boolean hasParent() {
         return parent != null;
     }
 
     // -- SUPPORT FOR SPECIAL MENU ITEMS
-    
+
     public enum MenuItemType {
         SPACER,
         SECTION_LABEL,
@@ -193,10 +193,10 @@ implements Serializable {
             return this == ACTION_OR_SUBMENU_CONTAINER;
         }
     }
-    
+
     @Getter
     private final MenuItemType itemType;
-    
+
     public static CssMenuItem newSpacer() {
         return new CssMenuItem("---", MenuItemType.SPACER);
     }

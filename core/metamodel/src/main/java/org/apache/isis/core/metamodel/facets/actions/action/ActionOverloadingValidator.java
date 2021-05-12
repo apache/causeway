@@ -30,35 +30,35 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Rationale: 
+ * Rationale:
  * having two actions in the UI with the exact same name wouldn't make sense to the end user,
  * hence fail validation on 'overloading'
- * 
+ *
  * @since 2.0
  * @see <a href="https://issues.apache.org/jira/browse/ISIS-2493">ISIS-2493</a>
  */
-public class ActionOverloadingValidator 
+public class ActionOverloadingValidator
 extends MetaModelVisitingValidatorAbstract {
 
     @Override
     public void validate(@NonNull ObjectSpecification spec) {
-        
-        if(spec.getBeanSort()!=BeanSort.UNKNOWN 
+
+        if(spec.getBeanSort()!=BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
-        
+
             val overloadedNames = _Sets.<String>newHashSet();
-            
+
             spec.streamActions(ActionType.ANY, MixedIn.EXCLUDED, oa->{
                 overloadedNames.add(oa.getIdentifier().getMemberName());
             })
             .count(); // consumer the stream
-            
+
             if(!overloadedNames.isEmpty()) {
-            
-                //XXX there is a small chance of a false positive with method overriding, 
+
+                //XXX there is a small chance of a false positive with method overriding,
                 // when the method signatures are not exactly the same;
                 // meaning, when the parameter classes differ
-                
+
                 ValidationFailure.raiseFormatted(
                         spec,
                         "Action method overloading is not allowed, "
@@ -66,7 +66,7 @@ extends MetaModelVisitingValidatorAbstract {
                         spec.getCorrespondingClass().getName(),
                         overloadedNames);
             }
-            
+
         }
     }
 

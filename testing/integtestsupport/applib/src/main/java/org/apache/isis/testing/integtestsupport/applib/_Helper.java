@@ -36,16 +36,16 @@ class _Helper {
     }
 
     // -- SHORTCUTS
-    
+
     static Optional<InteractionFactory> getInteractionFactory(final ExtensionContext extensionContext) {
         return getServiceRegistry(extensionContext)
         .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
     }
-    
+
     static Optional<ExceptionRecognizerService> getExceptionRecognizerService(
             final ExtensionContext extensionContext) {
         return getServiceRegistry(extensionContext)
         .flatMap(serviceRegistry->serviceRegistry.lookupService(ExceptionRecognizerService.class));
     }
-    
+
 }

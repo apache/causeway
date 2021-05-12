@@ -57,8 +57,8 @@ implements ProposedHolder {
     @Override
     public PropertyModifyEvent createInteractionEvent() {
         return new PropertyModifyEvent(
-                UnwrapUtil.single(getTarget()), 
-                getIdentifier(), 
+                UnwrapUtil.single(getTarget()),
+                getIdentifier(),
                 UnwrapUtil.single(getProposed()));
     }
 

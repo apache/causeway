@@ -32,7 +32,7 @@ import demoapp.dom.DemoModuleJpa;
 @Import({
     DemoModuleJpa.class,
     DemoAppManifestCommon.class,
-    
+
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJpa.class,
 })

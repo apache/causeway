@@ -47,7 +47,7 @@ import lombok.val;
  * </p>
  */
 public class ServiceActionsPanel extends MenuActionPanel {
-    
+
     private static final long serialVersionUID = 1L;
 
     public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
@@ -62,13 +62,13 @@ public class ServiceActionsPanel extends MenuActionPanel {
                 val topMenu = new WebMarkupContainer("topMenu");
                 topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
                 topMenu.add(new CssClassAppender(cssForTopMenu(menuItem)));
-                
+
                 listItem.add(new Label("name", menuItem.getName()));
                 listItem.add(topMenu);
                 if(menuItem.getItemType().isActionOrSubMenuContainer()) {
-                    listItem.add(new CssClassAppender(cssForServices(menuItem)));    
+                    listItem.add(new CssClassAppender(cssForServices(menuItem)));
                 }
-                
+
             }
         };
         add(menuItemsView);
@@ -83,13 +83,13 @@ public class ServiceActionsPanel extends MenuActionPanel {
         SSESupport.renderHead(response);
 
     }
-    
+
     // -- HELPER
-    
+
     private static String cssForTopMenu(CssMenuItem menuItem) {
-        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());        
+        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());
     }
-    
+
     private static String cssForServices(CssMenuItem menuItem) {
         return _NullSafe.stream(menuItem.getSubMenuItems())
         .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())

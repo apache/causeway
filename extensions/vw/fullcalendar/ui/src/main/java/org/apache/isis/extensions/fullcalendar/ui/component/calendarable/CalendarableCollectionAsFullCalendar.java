@@ -33,7 +33,7 @@ import net.ftlines.wicket.fullcalendar.EventProvider;
 public class CalendarableCollectionAsFullCalendar extends CalendaredCollectionAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     public CalendarableCollectionAsFullCalendar(final String id, final EntityCollectionModel model) {
         super(id, model);
     }

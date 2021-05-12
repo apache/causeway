@@ -46,7 +46,7 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         val defaultedAnnot = Annotations.getAnnotation(cls, Defaulted.class);
         val config = super.getConfiguration();
-        
+
         // create from annotation, if present
         if (defaultedAnnot != null) {
             val defaultedFacet = new DefaultedFacetAnnotation(config, cls, holder);

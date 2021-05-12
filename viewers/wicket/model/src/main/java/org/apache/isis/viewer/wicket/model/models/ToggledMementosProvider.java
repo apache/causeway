@@ -26,7 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 public interface ToggledMementosProvider extends Serializable {
-    
+
     Can<ObjectMemento> getToggles();
     void clearToggles(final AjaxRequestTarget target);
 }

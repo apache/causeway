@@ -60,34 +60,34 @@ import lombok.RequiredArgsConstructor;
  * injection point resolving on javax.persistence.EntityListeners.
  * <p>
  * Classes listed with the {@link javax.persistence.EntityListeners} annotation are not managed
- * by Spring, hence injection point resolving for these is not supported out of the box. However, 
- * EclipseLink allows to configure a {@link BeanManager}, that is used for injection point 
+ * by Spring, hence injection point resolving for these is not supported out of the box. However,
+ * EclipseLink allows to configure a {@link BeanManager}, that is used for injection point
  * resolving. This implementation is limited to support only no-arg constructors.
- *  
- * @since 2.0 
+ *
+ * @since 2.0
  */
 @RequiredArgsConstructor
 public class BeanManagerForEntityListeners implements BeanManager {
 
     private final Provider<ServiceInjector> serviceInjectorProvider;
-    
+
     @Override
     public <T> CreationalContext<T> createCreationalContext(Contextual<T> contextual) {
         return _Util.createCreationalContext(contextual);
     }
-    
+
     @Override
     public <T> AnnotatedType<T> createAnnotatedType(Class<T> type) {
         return _Util.createAnnotatedType(type);
     }
-    
+
     @Override
     public <T> InjectionTarget<T> createInjectionTarget(AnnotatedType<T> type) {
         return _Util.createInjectionTarget(type, serviceInjectorProvider);
     }
-    
+
     // -- IGNORED
-    
+
     @Override
     public Object getReference(Bean<?> bean, Type beanType, CreationalContext<?> ctx) {
         _Exceptions.throwNotImplemented();
@@ -323,5 +323,5 @@ public class BeanManagerForEntityListeners implements BeanManager {
         return null;
     }
 
-    
+
 }

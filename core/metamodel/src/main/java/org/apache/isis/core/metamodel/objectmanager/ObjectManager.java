@@ -43,13 +43,13 @@ import lombok.val;
  * - object loading ... given a specific object identifier (id) <br>
  * - object identification ... given a domain object (pojo) <br>
  * - object refreshing ... given a domain object (pojo) <br>
- *  
+ *
  * @since 2.0
  */
 public interface ObjectManager {
 
     MetaModelContext getMetaModelContext();
-    
+
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
@@ -67,7 +67,7 @@ public interface ObjectManager {
     public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
     }
-    
+
     /**
      * Loads an instance identified with given request parameters.
      * @param objectLoadRequest
@@ -75,11 +75,11 @@ public interface ObjectManager {
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
-    
+
     public default Can<ManagedObject> queryObjects(ObjectBulkLoader.Request objectQuery) {
         return getObjectBulkLoader().loadObject(objectQuery);
     }
-    
+
     /**
      * Returns an object identifier for the instance.
      * @param managedObject
@@ -87,7 +87,7 @@ public interface ObjectManager {
     public default Bookmark bookmarkObject(ManagedObject managedObject) {
         return getObjectBookmarker().bookmarkObject(managedObject);
     }
-    
+
     /**
      * Reloads the state of the (entity) instance from the data store.
      * @param managedObject
@@ -95,22 +95,22 @@ public interface ObjectManager {
     public default void refreshObject(ManagedObject managedObject) {
         getObjectRefresher().refreshObject(managedObject);
     }
-    
+
     @Nullable
     public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
         if(pojo==null) {
-            return Optional.empty(); 
+            return Optional.empty();
         }
         return specForType(pojo.getClass());
     }
-    
+
     default Optional<ObjectSpecification> specForType(final @Nullable Class<?> domainType) {
         return getMetaModelContext().getSpecificationLoader().specForType(domainType);
     }
-    
+
     public default ManagedObject adapt(final @Nullable Object pojo) {
         if(pojo==null) {
-            return ManagedObject.unspecified(); 
+            return ManagedObject.unspecified();
         }
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
         val spec = specForType(pojo.getClass()).orElse(null);
@@ -119,6 +119,6 @@ public interface ObjectManager {
         }
         return ManagedObject.of(spec, pojo);
     }
-    
-    
+
+
 }

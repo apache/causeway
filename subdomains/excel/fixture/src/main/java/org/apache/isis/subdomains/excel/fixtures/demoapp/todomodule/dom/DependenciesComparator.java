@@ -21,11 +21,11 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom;
 import java.util.Comparator;
 
 public class DependenciesComparator implements Comparator<ExcelDemoToDoItem> {
-    
-    private static final Comparator<ExcelDemoToDoItem> comparator = 
+
+    private static final Comparator<ExcelDemoToDoItem> comparator =
             Comparator.nullsFirst(
                     Comparator.comparing(ExcelDemoToDoItem::getDescription));
-    
+
     @Override
     public int compare(final ExcelDemoToDoItem p, final ExcelDemoToDoItem q) {
         return comparator.compare(p, q);

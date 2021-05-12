@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class WelcomePanel 
+public class WelcomePanel
 extends PanelAbstract<String, WelcomeModel> {
 
     private static final long serialVersionUID = 1L;

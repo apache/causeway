@@ -41,7 +41,7 @@ public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
     @Override
     public Collection<ValueTypeDefinition> definitions() {
         return _Lists.of(
-                    
+
                     ValueTypeDefinition.of(Bookmark.class, ValueType.STRING),
 
                     // these are not yet part of the schema (do not map onto any value-types there)

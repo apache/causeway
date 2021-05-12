@@ -38,7 +38,7 @@ import lombok.val;
 public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     public ServiceActionsPanelFactory() {
         super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
@@ -54,7 +54,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         val menuUiModel = ((ServiceActionsModel) model).getObject();
         val menuBarSelect = menuUiModel.getMenuBarSelect();
         return appliesIf(
-                menuBarSelect != DomainServiceLayout.MenuBar.TERTIARY 
+                menuBarSelect != DomainServiceLayout.MenuBar.TERTIARY
                 && menuBarSelect != null);
     }
 

@@ -30,11 +30,11 @@ public class InvalidActionOverloading {
     public boolean anAction() {
         return false;
     }
-    
+
     // overloading not allowed: should fail
     @Action
     public String anAction(String param) {
         return param;
     }
-    
+
 }

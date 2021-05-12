@@ -108,7 +108,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
-    
+
     private final List<ComponentFactory> componentFactoriesPluggedIn;
     public ComponentFactoryRegistrarDefault(final List<ComponentFactory> componentFactoriesPluggedIn) {
         this.componentFactoriesPluggedIn = componentFactoriesPluggedIn;
@@ -139,11 +139,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesFromPlugins(final ComponentFactoryList componentFactories) {
-        
-        log.info("adding {} ComponentFactories from plugins: {}", 
+
+        log.info("adding {} ComponentFactories from plugins: {}",
                 _NullSafe.size(componentFactoriesPluggedIn),
                 componentFactoriesPluggedIn);
-        
+
         _NullSafe.stream(componentFactoriesPluggedIn)
             .forEach(componentFactories::add);
     }

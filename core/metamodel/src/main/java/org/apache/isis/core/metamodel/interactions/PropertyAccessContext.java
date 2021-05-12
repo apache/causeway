@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * See {@link InteractionContext} for overview; analogous to
  * {@link PropertyAccessEvent}.
  */
-public class PropertyAccessContext 
+public class PropertyAccessContext
 extends AccessContext {
 
     private final ManagedObject value;
@@ -55,8 +55,8 @@ extends AccessContext {
     @Override
     public PropertyAccessEvent createInteractionEvent() {
         return new PropertyAccessEvent(
-                UnwrapUtil.single(getTarget()), 
-                getIdentifier(), 
+                UnwrapUtil.single(getTarget()),
+                getIdentifier(),
                 UnwrapUtil.single(getValue()));
     }
 

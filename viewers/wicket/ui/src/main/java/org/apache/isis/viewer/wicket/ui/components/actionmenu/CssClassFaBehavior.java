@@ -36,7 +36,7 @@ import lombok.val;
 public class CssClassFaBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
-    
+
     @NonNull private final FontAwesomeUiModel fontAwesomeUiModel;
 
     @Override

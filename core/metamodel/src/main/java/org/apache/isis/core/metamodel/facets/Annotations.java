@@ -121,7 +121,7 @@ public final class Annotations  {
         if (cls == null) {
             return Collections.emptyList();
         }
-        
+
         final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
         for (final Annotation annotation : cls.getAnnotations()) {
             append(annotation, annotationClass, annotationAndDepths);
@@ -158,7 +158,7 @@ public final class Annotations  {
             final Annotation annotation,
             final Class<T> annotationClass,
             final List<AnnotationAndDepth<T>> annotationAndDepths) {
-        
+
         appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, _Lists.newArrayList());
     }
 
@@ -190,7 +190,7 @@ public final class Annotations  {
         //}
     }
 
-// no longer used    
+// no longer used
 //    /**
 //     * Searches for annotation on provided method, and if not found for any
 //     * inherited methods up from the superclass.
@@ -215,7 +215,7 @@ public final class Annotations  {
 //        // search for field
 //        if ( shouldSearchForField(annotationClass) ) {
 //            final Field field = firstDeclaredField_matching(
-//                    methodDeclaringClass, isFieldForGetter(method)); 
+//                    methodDeclaringClass, isFieldForGetter(method));
 //            if(field!=null) {
 //                final T fieldAnnotation = field.getAnnotation(annotationClass);
 //                if(fieldAnnotation != null) {
@@ -228,8 +228,8 @@ public final class Annotations  {
 //        // search superclasses
 //        final Class<?> superclass = methodDeclaringClass.getSuperclass();
 //        if (superclass != null) {
-//            final Method parentClassMethod = 
-//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
+//            final Method parentClassMethod =
+//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method));
 //
 //            if(parentClassMethod!=null) {
 //                final T methodAnnotation = getAnnotation(parentClassMethod, annotationClass);
@@ -242,7 +242,7 @@ public final class Annotations  {
 //        // search implemented interfaces
 //        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
 //        for (final Class<?> iface : interfaces) {
-//            final Method ifaceMethod = 
+//            final Method ifaceMethod =
 //                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
 //
 //            if(ifaceMethod!=null) {
@@ -283,7 +283,7 @@ public final class Annotations  {
 //                for(final Annotation annotation: field.getAnnotations()) {
 //                    append(annotation, annotationClass, annotationAndDepths);
 //                }
-//            }); 
+//            });
 //        }
 //        if(!annotationAndDepths.isEmpty()) {
 //            return AnnotationAndDepth.sorted(annotationAndDepths);
@@ -292,11 +292,11 @@ public final class Annotations  {
 //        // search superclasses
 //        final Class<?> superclass = method.getDeclaringClass().getSuperclass();
 //        if (superclass != null) {
-//            final Method parentClassMethod = 
-//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
+//            final Method parentClassMethod =
+//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method));
 //
 //            if(parentClassMethod!=null) {
-//                final List<T> annotationsFromSuperclass = 
+//                final List<T> annotationsFromSuperclass =
 //                        getAnnotations(parentClassMethod, annotationClass);
 //                if(!annotationsFromSuperclass.isEmpty()) {
 //                    return annotationsFromSuperclass;
@@ -307,7 +307,7 @@ public final class Annotations  {
 //        // search implemented interfaces
 //        final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
 //        for (final Class<?> iface : interfaces) {
-//            final Method ifaceMethod = 
+//            final Method ifaceMethod =
 //                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
 //
 //            if(ifaceMethod!=null) {
@@ -511,7 +511,7 @@ public final class Annotations  {
                 return Optional.ofNullable(
                         _Reflect.getGetter(originatingClass, field.getName())    );
             } catch (IntrospectionException e) {
-                log.warn("failed reflective introspection on {} field {}", 
+                log.warn("failed reflective introspection on {} field {}",
                         originatingClass, field.getName(), e);
             }
             return Optional.empty();
@@ -519,8 +519,8 @@ public final class Annotations  {
 
     }
 
-// no longer used    
-//    private static Set<Class<? extends Annotation>> fieldAnnotationClasses = 
+// no longer used
+//    private static Set<Class<? extends Annotation>> fieldAnnotationClasses =
 //            _Sets.of(
 //                    Property.class,
 //                    PropertyLayout.class,
@@ -576,13 +576,13 @@ public final class Annotations  {
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
     public static boolean isAnnotationPresent(
-            final Method method, 
+            final Method method,
             final Class<? extends Annotation> annotationClass) {
 
         if (method == null) {
             return false;
         }
-        
+
         return _Reflect.getAnnotation(method, annotationClass, true, true)!=null;
     }
 
@@ -615,12 +615,12 @@ public final class Annotations  {
         return Collections.emptyList();
     }
 
-// no longer used    
+// no longer used
 //    // -- HELPER
 //
 //    private static Method firstDeclaredMethod_matching(
 //            Method method,
-//            Class<?> type, 
+//            Class<?> type,
 //            Predicate<Method> filter) {
 //
 //        return stream(type.getDeclaredMethods())
@@ -630,7 +630,7 @@ public final class Annotations  {
 //    }
 //
 //    private static Field firstDeclaredField_matching(
-//            Class<?> type, 
+//            Class<?> type,
 //            Predicate<Field> filter) {
 //
 //        return stream(type.getDeclaredFields())
@@ -640,8 +640,8 @@ public final class Annotations  {
 //    }
 //
 //    private static void declaredFields_matching(
-//            Class<?> type, 
-//            Predicate<Field> filter, 
+//            Class<?> type,
+//            Predicate<Field> filter,
 //            Consumer<Field> onField) {
 //
 //        stream(type.getDeclaredFields())

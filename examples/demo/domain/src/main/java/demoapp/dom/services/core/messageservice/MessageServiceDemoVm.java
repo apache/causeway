@@ -48,7 +48,7 @@ public class MessageServiceDemoVm implements HasAsciiDocDescription {
         messageService.informUser("Demo Info Message.");
         return this;
     }
-    
+
     @ActionLayout(
             describedAs = "Presents an warning style message.",
             cssClassFa="fa-sticky-note",
@@ -58,7 +58,7 @@ public class MessageServiceDemoVm implements HasAsciiDocDescription {
         messageService.warnUser("Demo Warning Message.");
         return this;
     }
-    
+
     @ActionLayout(
             describedAs = "Presents an error style message.",
             cssClassFa="fa-sticky-note",

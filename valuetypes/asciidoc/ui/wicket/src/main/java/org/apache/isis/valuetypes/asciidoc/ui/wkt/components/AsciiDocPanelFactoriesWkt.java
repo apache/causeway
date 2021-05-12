@@ -28,8 +28,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFac
 import lombok.val;
 
 /**
- * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
- * {@link MarkupPanelFactories}, but specific to 
+ * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
+ * {@link MarkupPanelFactories}, but specific to
  * the {@link AsciiDoc} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -50,7 +50,7 @@ public class AsciiDocPanelFactoriesWkt {
             return (id, model) -> {
                 val markupComponent = new AsciiDocComponentWkt(id, model);
                 markupComponent.setEnabled(false);
-                return markupComponent;    
+                return markupComponent;
             };
 
         }

@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFace
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
     public static CssClassFacet create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
-        
+
         CssClassFacet facet = holder.getFacet(CssClassFacet.class);
         // this is a bit hacky, explicitly checking whether a different implementation is already added.
         // normally we would just re-order the list of facet factories in ProgrammingModelsFacetJava5, however in

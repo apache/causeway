@@ -26,7 +26,7 @@ public final class SingleUserAuthentication extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext DEFAULT_SINGLE_USER_ENVIRONMENT = 
+    private static final ExecutionContext DEFAULT_SINGLE_USER_ENVIRONMENT =
             ExecutionContext.ofUserWithSystemDefaults(
                     UserMemento.ofName("prototyping"));
 
@@ -40,5 +40,5 @@ public final class SingleUserAuthentication extends AuthenticationAbstract {
     public SingleUserAuthentication(final String authValidationCode) {
         super(DEFAULT_SINGLE_USER_ENVIRONMENT, authValidationCode);
     }
-    
+
 }

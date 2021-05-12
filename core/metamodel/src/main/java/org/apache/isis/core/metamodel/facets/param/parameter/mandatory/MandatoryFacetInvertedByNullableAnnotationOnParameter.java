@@ -38,10 +38,10 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 public class MandatoryFacetInvertedByNullableAnnotationOnParameter extends MandatoryFacetAbstract {
 
     public static MandatoryFacet create(
-            final Optional<Nullable> nullableIfAny, 
-            final Class<?> parameterType, 
+            final Optional<Nullable> nullableIfAny,
+            final Class<?> parameterType,
             final FacetedMethodParameter holder) {
-        
+
         if(!nullableIfAny.isPresent()) {
             return null;
         }

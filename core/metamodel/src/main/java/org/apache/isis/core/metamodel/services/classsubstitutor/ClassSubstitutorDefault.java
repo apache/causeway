@@ -40,7 +40,7 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignoreSpringFramework();
         ignoreJacksonAndGson();
         skipDataNucleusProxy();
-        
+
         ignoreClass(TreeAdapter.class.getName());
     }
 

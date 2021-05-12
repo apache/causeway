@@ -31,21 +31,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.NonNull;
 
 public interface BindingConverter<T> {
-    
+
     ObjectSpecification getValueSpecification();
-    
+
     default T unwrap(ManagedObject object) {
         return _Casts.uncheckedCast(ManagedObjects.UnwrapUtil.single(object));
     }
-    
+
     default ManagedObject wrap(T pojo) {
         return ManagedObject.of(getValueSpecification(), pojo);
     }
-    
+
     default Optional<? extends Facet> lookupFacet(@NonNull final Class<? extends Facet> facetType) {
         return Optional.ofNullable(getValueSpecification().getFacet(facetType));
     }
-    
+
     default Optional<? extends Facet> lookupFacetOneOf(
             @NonNull Can<Class<? extends Facet>> facetTypes) {
         return facetTypes.stream()
@@ -55,19 +55,19 @@ public interface BindingConverter<T> {
     }
 
     // -- STRING CONVERSION
-    
+
     String toString(T value);
 
     T fromString(String stringifiedValue);
-    
+
     /**
      * @param stringifiedValue
-     * @return optionally an error message, based on whether fails to parse {@code stringifiedValue} 
+     * @return optionally an error message, based on whether fails to parse {@code stringifiedValue}
      */
     Optional<String> tryParse(String stringifiedValue);
-    
+
 }
 
 
-    
+
 

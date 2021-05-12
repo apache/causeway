@@ -45,7 +45,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final boolean editingDisabledByDefault = 
+        final boolean editingDisabledByDefault =
                 configuration.getApplib().getAnnotation().getDomainObject().getEditing()
                 == EditingObjectsConfiguration.FALSE;
 
@@ -73,14 +73,14 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                 throw _Exceptions.unmatchedCase(domainObject.editing());
             }
         }
-        
+
         return editingDisabledByDefault
                     ? new ImmutableFacetFromConfiguration("Disabled (by configuration defaults)", holder)
                     : null;
     }
-    
+
     protected ImmutableFacetForDomainObjectAnnotation(
-            final String reason, 
+            final String reason,
             final FacetHolder holder) {
         super(holder);
         this.reason = reason;
@@ -104,6 +104,6 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
         super.appendAttributesTo(attributeMap);
         attributeMap.put("reason", reason);
     }
-    
+
 
 }

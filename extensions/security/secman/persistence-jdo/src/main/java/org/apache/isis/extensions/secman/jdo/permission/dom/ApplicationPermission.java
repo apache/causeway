@@ -131,10 +131,12 @@ public class ApplicationPermission
     @Column(allowsNull = "false")
     private ApplicationPermissionRule rule;
 
+    @Override
     @Rule
     public ApplicationPermissionRule getRule() {
         return rule;
     }
+    @Override
     public void setRule(ApplicationPermissionRule rule) {
         this.rule = rule;
     }
@@ -192,6 +194,7 @@ public class ApplicationPermission
 
     // FIND FEATURE
 
+    @Override
     @Programmatic
     public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
         return featureRepository.findFeature(featureId);

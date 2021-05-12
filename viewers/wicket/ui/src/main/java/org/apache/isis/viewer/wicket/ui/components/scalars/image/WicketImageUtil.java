@@ -41,9 +41,9 @@ import lombok.experimental.UtilityClass;
 public class WicketImageUtil {
 
     public Optional<Image> asWicketImage(
-            final @NonNull String id, 
+            final @NonNull String id,
             final @Nullable BufferedImage buffImg) {
-        
+
         if(buffImg == null) {
             return Optional.empty();
         }
@@ -55,36 +55,36 @@ public class WicketImageUtil {
 
         val wicketImage = new NonCachingImage(id, thumbnailImageResource);
         wicketImage.setOutputMarkupId(true);
-        
+
         return Optional.of(wicketImage);
     }
-    
+
     // -- SHORTCUTS
-    
+
     public Optional<Image> asWicketImage(
-            final @NonNull String id, 
+            final @NonNull String id,
             final @Nullable Blob blob) {
 
         val buffImg = Optional.ofNullable(blob)
         .flatMap(Blob::asImage)
         .orElse(null);
-        
+
         return asWicketImage(id, buffImg);
     }
-    
+
     public static Optional<Image> asWicketImage(
-            final @NonNull String id, 
+            final @NonNull String id,
             final @NonNull ScalarModel model) {
-        
+
       val imageValueFacet = model.getTypeOfSpecification().getFacet(ImageValueFacet.class);
       val adapter = model.getObject();
       if(imageValueFacet==null
               || ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
           return Optional.empty();
       }
-      
-      val buffImg = imageValueFacet.getImage(adapter).orElse(null); 
+
+      val buffImg = imageValueFacet.getImage(adapter).orElse(null);
       return asWicketImage(id, buffImg);
     }
-    
+
 }

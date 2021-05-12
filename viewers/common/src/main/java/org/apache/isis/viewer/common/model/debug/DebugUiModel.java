@@ -29,10 +29,10 @@ public class DebugUiModel {
 
     private final String summaryText;
     private final Map<String, String> keyValuePairs = _Maps.newLinkedHashMap();
-    
+
     public DebugUiModel withProperty(String key, String value) {
         keyValuePairs.put(key, value);
         return this;
     }
-    
+
 }

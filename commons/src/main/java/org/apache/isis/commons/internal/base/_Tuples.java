@@ -46,7 +46,7 @@ import lombok.val;
 public final class _Tuples {
 
     private _Tuples(){}
-    
+
     // -- TUPLE 2
 
     public static class Tuple2<T1, T2>{
@@ -71,26 +71,26 @@ public final class _Tuples {
     public static <T1, T2> Tuple2<T1, T2> pair(T1 _1, T2 _2) {
         return new Tuple2<T1, T2>(_1, _2);
     }
-    
-    // -- INDEXED 
-    
+
+    // -- INDEXED
+
     @Value(staticConstructor = "of")
     public static class Indexed<T>{
         int index;
         T value;
     }
-    
+
     public static <T> Indexed<T> indexed(int index, T value) {
         return Indexed.of(index, value);
     }
 
     // -- JAVAX - PERSISTENCE
-    
+
     //TODO just a sketch yet
     @Value(staticConstructor = "of")
     private static final class TypedTuple implements Tuple {
-        
-        final Can<Class<? extends Serializable>> types; 
+
+        final Can<Class<? extends Serializable>> types;
         final List<Serializable> values;
 
         @Override
@@ -128,12 +128,12 @@ public final class _Tuples {
         public List<TupleElement<?>> getElements() {
             throw _Exceptions.notImplemented();
         }
-        
+
     }
-    
+
     public static Tuple of(Can<Class<? extends Serializable>> types, List<Serializable> values) {
         return of(types, values);
     }
-    
+
 
 }

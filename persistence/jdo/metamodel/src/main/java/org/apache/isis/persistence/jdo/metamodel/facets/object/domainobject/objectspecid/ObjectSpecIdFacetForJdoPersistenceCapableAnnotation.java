@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation 
+public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation
 extends ObjectSpecIdFacetAbstract {
 
     public static ObjectSpecIdFacet create(

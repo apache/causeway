@@ -33,7 +33,7 @@ import lombok.val;
 public class ListeningMarkupComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final LocalResourcePath observing;
     @Inject
     private WebAppContextPath webAppContextPath;
@@ -42,20 +42,20 @@ public class ListeningMarkupComponent extends MarkupComponent {
         super(id, model);
         this.observing = observing;
     }
-    
+
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(
-                markupStream, 
-                openTag, 
+                markupStream,
+                openTag,
 
-                observing!=null 
+                observing!=null
                 ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, webAppContextPath)
                         : htmlContent
 
                 );
     }
 
-    
+
 }

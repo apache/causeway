@@ -37,10 +37,10 @@ public class ActionPromptPage extends PageAbstract {
 
     public ActionPromptPage(final ActionModel model) {
         super(
-                new PageParameters(), 
-                model.getMetaModel().getName(), 
+                new PageParameters(),
+                model.getMetaModel().getName(),
                 ComponentType.ACTION_PROMPT);
-        
+
         addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
@@ -71,7 +71,7 @@ public class ActionPromptPage extends PageAbstract {
     private static ActionModel buildModel(
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
-        
+
         return ActionModel.ofPageParameters(commonContext, pageParameters);
     }
 }

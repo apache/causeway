@@ -64,5 +64,5 @@ public class BlobDemo {
     @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)
     @Getter @Setter private Blob logo;
-    
+
 }

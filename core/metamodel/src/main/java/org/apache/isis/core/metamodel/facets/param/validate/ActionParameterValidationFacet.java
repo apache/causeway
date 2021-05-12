@@ -28,14 +28,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 /**
  * The mechanism by which a single parameter of the action can be validated
  * before the action itself is invoked.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>validateNXxx</tt> support method for an action.
- * 
+ *
  * <p>
  * Note that the parameter may be validated independently first (eg a range check on a numeric parameter).
- * 
+ *
  * @see ActionInvocationFacet
  */
 public interface ActionParameterValidationFacet
@@ -45,7 +45,7 @@ extends Facet, ValidatingInteractionAdvisor {
      * Reason why the validation has failed, or <tt>null</tt> if okay.
      */
     public String invalidReason(
-            ManagedObject target, 
-            Can<ManagedObject> pendingArgs, 
+            ManagedObject target,
+            Can<ManagedObject> pendingArgs,
             ManagedObject proposedArgument);
 }

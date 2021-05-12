@@ -38,13 +38,13 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 import lombok.val;
 
-public class ParameterAnnotationFacetFactory 
+public class ParameterAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
-    
+
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);

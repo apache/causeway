@@ -41,7 +41,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         IDEMPOTENT,
         SAFE
     }
-    
+
     @Value(staticConstructor = "of")
     public static class Result {
         private final ManagedAction managedAction;
@@ -66,18 +66,18 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     }
 
     ActionInteraction(
-            @NonNull final Optional<ObjectAction> metamodel, 
+            @NonNull final Optional<ObjectAction> metamodel,
             @NonNull final _Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
         this.metamodel = metamodel;
     }
-    
+
     /**
-     * optionally the action's metamodel, based on whether even exists (eg. was found by memberId) 
+     * optionally the action's metamodel, based on whether even exists (eg. was found by memberId)
      */
     @Getter
     private final Optional<ObjectAction> metamodel;
-    
+
     public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
 
         chain = chain.mapIfLeft(action->{
@@ -89,11 +89,11 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
                 return _Either.left(action);
 
             case IDEMPOTENT:
-                return actionSemantics.isIdempotentInNature() 
+                return actionSemantics.isIdempotentInNature()
                         ? _Either.left(action)
                         : _Either.right(InteractionVeto.actionNotIdempotent(action)) ;
             case SAFE:
-                return actionSemantics.isSafeInNature() 
+                return actionSemantics.isSafeInNature()
                         ? _Either.left(action)
                         : _Either.right(InteractionVeto.actionNotSafe(action));
             default:
@@ -109,11 +109,11 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return getManagedAction()
             .map(ManagedAction::startParameterNegotiation);
     }
-    
+
     public static interface ParameterInvalidCallback {
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
-    
+
     public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
         val veto = validate(pendingArgs);
@@ -127,7 +127,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     public Optional<InteractionVeto> validate(
             final @NonNull ParameterNegotiationModel pendingArgs) {
-        
+
         if(chain.isRight()) {
             return chain.right();
         }
@@ -135,26 +135,26 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         if(validityConsent!=null && validityConsent.isVetoed()) {
             return Optional.of(InteractionVeto.actionParamInvalid(validityConsent));
         }
-        return Optional.empty();        
+        return Optional.empty();
     }
-    
+
     /**
-     * @return optionally the ManagedAction based on whether there 
-     * was no interaction veto within the originating chain 
+     * @return optionally the ManagedAction based on whether there
+     * was no interaction veto within the originating chain
      */
     public Optional<ManagedAction> getManagedAction() {
         return super.getManagedMember();
     }
-    
+
     /**
      * @return this Interaction's ManagedAction
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable> 
+    public <X extends Throwable>
     ManagedAction getManagedActionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
-    
-    
+
+
 
 }

@@ -45,9 +45,9 @@ import lombok.val;
 public final class JsonValueEncoder_Converters {
 
     public List<JsonValueConverter> asList(Function<Object, ManagedObject> pojoToAdapter) {
-        
+
         val converters = _Lists.<JsonValueConverter>newArrayList();
-        
+
         converters.add(new JsonValueConverter(null, "string", String.class){
             @Override
             public ManagedObject asAdapter(JsonRepresentation repr, String format) {
@@ -665,15 +665,15 @@ public final class JsonValueEncoder_Converters {
                 return obj;
             }
         });
-        
+
         return converters;
     }
 
-    
+
     static void appendFormats(JsonRepresentation repr, String format, String xIsisFormat, boolean suppressExtensions) {
         JsonValueEncoder.appendFormats(repr, format, xIsisFormat, suppressExtensions);
     }
-    
+
     static Object unwrapAsObjectElseNullNode(ManagedObject adapter) {
         return JsonValueEncoder.unwrapAsObjectElseNullNode(adapter);
     }

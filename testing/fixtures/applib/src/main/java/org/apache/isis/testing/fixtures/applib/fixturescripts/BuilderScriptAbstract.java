@@ -36,7 +36,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     private final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy;
 
     // -- FACTORIES
-    
+
     /**
      * Typically we expect builders to have value semantics, so this is provided as a convenience.
      */
@@ -49,11 +49,11 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     }
 
     // -- RESULTING OBJECT
-    
+
     public abstract T getObject();
-    
+
     // -- RUN ANOTHER SCRIPT
-    
+
     @Programmatic
     public BuilderScriptAbstract<T> build(
             final FixtureScript parentFixtureScript,
@@ -69,7 +69,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     }
 
     // -- RUN PERSONAS
-    
+
     public T objectFor(
             final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona,
             final ExecutionContext executionContext) {
@@ -82,14 +82,14 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     }
 
     // -- RUN FINDERS
-    
+
     public T findUsing(final PersonaWithFinder<T> persona) {
         if(persona == null) {
             return null;
         }
         return persona.findUsing(serviceRegistry);
     }
-    
+
     // -- PREREQUISITES
 
     private final List<WithPrereqs.Block<T>> prereqs = _Lists.newArrayList();
@@ -99,7 +99,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
         prereqs.add(prereq);
         return this;
     }
-    
+
     @Override
     public void execPrereqs(final ExecutionContext executionContext) {
         for (final WithPrereqs.Block<T> prereq : prereqs) {

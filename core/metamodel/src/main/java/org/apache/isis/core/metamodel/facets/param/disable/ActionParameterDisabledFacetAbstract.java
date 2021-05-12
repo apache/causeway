@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public abstract class ActionParameterDisabledFacetAbstract 
-extends FacetAbstract 
+public abstract class ActionParameterDisabledFacetAbstract
+extends FacetAbstract
 implements ActionParameterDisabledFacet {
 
     public static Class<? extends Facet> type() {

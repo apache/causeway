@@ -22,7 +22,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class SimpleClipboardModalWindowPanel 
+public class SimpleClipboardModalWindowPanel
 extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;

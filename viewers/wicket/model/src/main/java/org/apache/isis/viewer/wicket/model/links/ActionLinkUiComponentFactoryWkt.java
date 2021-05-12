@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
-public interface ActionLinkUiComponentFactoryWkt 
+public interface ActionLinkUiComponentFactoryWkt
 extends Serializable {
     AbstractLink newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
 }

@@ -40,7 +40,7 @@ import lombok.Setter;
  * <p>
  * Corresponding component to edit properties is {@link PropertyEditPanel}.
  */
-public class ActionParametersPanel 
+public class ActionParametersPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -107,6 +107,6 @@ extends PanelAbstract<ManagedObject, ActionModel> {
      */
     @Setter private boolean showHeader = true;
 
-    
+
 
 }

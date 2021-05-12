@@ -42,11 +42,11 @@ final class _PropertyChangeRecord {
     @Getter private final Bookmark bookmark;
     @Getter private final String propertyId;
     @Getter private _PreAndPostValue preAndPostValue;
-    
+
     private final String bookmarkStr;
 
     public static _PropertyChangeRecord of(
-            final @NonNull ManagedObject entity, 
+            final @NonNull ManagedObject entity,
             final @NonNull ObjectAssociation property) {
         return new _PropertyChangeRecord(entity, property);
     }
@@ -63,15 +63,15 @@ final class _PropertyChangeRecord {
     public String getMemberId() {
         return property.getIdentifier().getFullIdentityString();
     }
-    
+
     void setPreValue(Object pre) {
         preAndPostValue = _PreAndPostValue.pre(pre);
     }
-    
+
     void updatePreValue() {
         setPreValue(getPropertyValue());
     }
-    
+
     void updatePostValue() {
         preAndPostValue = EntityUtil.isDestroyed(entity)
                 // don't touch the object!!!
@@ -79,15 +79,15 @@ final class _PropertyChangeRecord {
                 ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)
                 : preAndPostValue.withPost(getPropertyValue());
     }
-    
+
     // -- HELPER
-    
+
     private Object getPropertyValue() {
         val referencedAdapter = property.get(entity, InteractionInitiatedBy.FRAMEWORK);
         return ManagedObjects.UnwrapUtil.single(referencedAdapter);
     }
 
 
-    
+
 }
 

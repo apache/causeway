@@ -25,12 +25,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UiComponentHolder<T> implements HasUiComponent<T> {
-    
+
     protected final Supplier<T> componentFactory;
 
     // implements HasUiComponent<T>
-    @Getter(onMethod = @__(@Override), lazy = true) 
+    @Getter(onMethod = @__(@Override), lazy = true)
     private final T uiComponent = componentFactory.get();
-    
+
 
 }

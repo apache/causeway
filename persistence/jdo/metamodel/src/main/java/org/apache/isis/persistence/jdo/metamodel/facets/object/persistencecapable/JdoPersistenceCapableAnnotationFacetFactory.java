@@ -45,7 +45,7 @@ extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
 
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -71,19 +71,19 @@ implements ObjectSpecIdFacetFactory {
         if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
-        
+
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         val embeddedOnlyAttribute = annotation.embeddedOnly();
-        // Whether objects of this type can only be embedded, 
+        // Whether objects of this type can only be embedded,
         // hence have no ID that binds them to the persistence layer
         final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null; 
-        
+                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null;
+
         if(embeddedOnly) {
             // suppress
         } else {
-            
+
             final IdentityType annotationIdentityType = annotation.identityType();
             val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
@@ -94,6 +94,6 @@ implements ObjectSpecIdFacetFactory {
 
         return;
     }
-    
-    
+
+
 }

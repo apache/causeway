@@ -43,7 +43,7 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
                 .map(Parameter::mustSatisfy)
                 .map(classes -> toSpecifications(factoryService, classes))
                 .orElse(Collections.emptyList());
-        
+
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder)
                         : null;
@@ -54,6 +54,6 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
             final FacetHolder holder) {
         super(specifications, holder);
     }
-    
+
 
 }

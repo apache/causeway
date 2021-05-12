@@ -31,7 +31,7 @@ import guru.nidi.codeassert.model.CodeClass;
 public final class CodeClasses {
 
     // -- PREDICATES
-    
+
     public static boolean isSpringStereoType(final @NonNull CodeClass codeClass) {
         return codeClass
         .getAnnotations()
@@ -39,37 +39,37 @@ public final class CodeClasses {
         .map(CodeClass::getName)
         .anyMatch(name->name.startsWith("org.springframework.stereotype."));
     }
-    
+
     public static Predicate<CodeClass> packageNameStartsWith(final @NonNull String packagePrefix) {
         return codeClass->codeClass.getName().startsWith(packagePrefix);
     }
-    
+
     public static Predicate<CodeClass> isApacheIsisPackage() {
         return packageNameStartsWith("org.apache.isis.");
     }
-    
+
     public static boolean hasSourceFile(final @NonNull CodeClass codeClass) {
         return _Strings.isNotEmpty(codeClass.getSourceFile())
                 && !"Unknown".equals(codeClass.getSourceFile());
     }
-    
+
     public static boolean hasNoSourceFile(final @NonNull CodeClass codeClass) {
         return !hasSourceFile(codeClass);
     }
-    
-    
+
+
     // -- LOGGER
-    
+
     public static void log(final @NonNull CodeClass codeClass) {
         log.info("codeClass: {}\n"
                 + "  methods:{}\n"
-                + "  source-file: {}", 
+                + "  source-file: {}",
                 codeClass.getName(),
                 MemberInfos.membersToMultilineString(codeClass.getMethods().stream(), "\n    - "),
                 codeClass.getSourceFile());
     }
-    
+
     // -- HELPER
-            
-    
+
+
 }

@@ -31,25 +31,25 @@ public class GradleDependenciesFactory {
         val projTree = ProjectNodeFactory.maven(projRootFolder);
         return generateFromMaven(projTree, rootProjectName);
     }
-    
+
     public static GradleDependencies generateFromMaven(ProjectNode projTree, String rootProjectName) {
-        
+
         val gradleDependencies = new GradleDependencies();
         val dependenciesByShortName = gradleDependencies.getDependenciesByShortName();
-        
+
         projTree.depthFirst(projModel -> {
-            
+
             projModel.getDependencies().stream()
             .filter(dependency->dependency.getLocation().isExternal())
             .forEach(extDependency->{
-                dependenciesByShortName.put(extDependency.getShortName(), extDependency);    
+                dependenciesByShortName.put(extDependency.getShortName(), extDependency);
             });
-            
+
         });
-        
+
         return gradleDependencies;
     }
-    
 
-    
+
+
 }

@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class MarkupValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<Markup> 
+public class MarkupValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<Markup>
 implements MarkupValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;

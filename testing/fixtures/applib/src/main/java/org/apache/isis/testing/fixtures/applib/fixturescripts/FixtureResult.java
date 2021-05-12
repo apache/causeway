@@ -55,7 +55,7 @@ import lombok.Setter;
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
-    
+
     public static final String OBJECT_TYPE = "isis.ext.fixtures.FixtureResult"; // secman seeding
 
     @PropertyLayout(named="Fixture script")

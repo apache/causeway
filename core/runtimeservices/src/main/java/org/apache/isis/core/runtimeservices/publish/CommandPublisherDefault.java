@@ -51,12 +51,12 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandPublisherDefault implements CommandPublisher {
-    
+
     private final List<CommandSubscriber> subscribers;
     private final InteractionTracker iaTracker;
-    
+
     private Can<CommandSubscriber> enabledSubscribers = Can.empty();
-    
+
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
@@ -65,29 +65,29 @@ public class CommandPublisherDefault implements CommandPublisher {
 
     @Override
     public void complete(final @NonNull Command command) {
-        
+
         val handle = _Xray.enterCommandPublishing(
-                iaTracker, 
-                command, 
-                enabledSubscribers, 
+                iaTracker,
+                command,
+                enabledSubscribers,
                 ()->getCannotPublishReason(command));
-        
+
         if(canPublish(command)) {
             log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
-            enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));    
+            enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
         }
-        
-        _Xray.exitPublishing(handle);    
+
+        _Xray.exitPublishing(handle);
     }
-    
+
     // -- HELPER
-    
+
     private boolean canPublish(final Command command) {
         return enabledSubscribers.isNotEmpty()
                 && command.isPublishingEnabled()
                 && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
-    
+
     // x-ray support
     private @Nullable String getCannotPublishReason(final @NonNull Command command) {
         return enabledSubscribers.isEmpty()
@@ -102,6 +102,6 @@ public class CommandPublisherDefault implements CommandPublisher {
                                         _Xray.toText(command))
                                 : null;
     }
-    
+
 }
 

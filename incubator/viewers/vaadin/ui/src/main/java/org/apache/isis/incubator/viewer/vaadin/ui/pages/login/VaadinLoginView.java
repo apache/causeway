@@ -41,7 +41,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.MainViewVaa;
 import lombok.val;
 
 /**
- * Yet a minimal working version of a login page. 
+ * Yet a minimal working version of a login page.
  *
  */
 @Route("login")
@@ -50,32 +50,32 @@ public class VaadinLoginView extends VerticalLayout {
     private static final long serialVersionUID = 1L;
 
     private final transient VaadinAuthenticationHandler vaadinAuthenticationHandler;
-    
+
     @Inject
     public VaadinLoginView(
             final IsisConfiguration isisConfiguration,
             final WebAppContextPath webAppContextPath,
             final VaadinAuthenticationHandler vaadinAuthenticationHandler) {
-        
+
         this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
-        
+
         addTitleAndLogo(isisConfiguration, webAppContextPath);
-        
+
         val usernameField = new TextField("Username");
         val passwordField = new PasswordField("Password");
-        
+
         val loginButton = new Button("Login");
         loginButton.getElement().setAttribute("theme", "primary");
         loginButton.addClickListener((ComponentEventListener<ClickEvent<Button>>)
                 buttonClickEvent -> doLogin(
-                        usernameField.getValue(), 
+                        usernameField.getValue(),
                         passwordField.getValue()));
-        
+
         val loginAsSvenButton = new Button("Login (as Sven)");
         loginAsSvenButton.getElement().setAttribute("theme", "primary");
         loginAsSvenButton.addClickListener((ComponentEventListener<ClickEvent<Button>>)
                 buttonClickEvent -> doLoginAsSven());
-        
+
         val buttonsLayout = new HorizontalLayout(loginButton, loginAsSvenButton);
         val divLayout = new VerticalLayout(usernameField, passwordField, buttonsLayout);
         divLayout.setAlignSelf(Alignment.START, buttonsLayout);
@@ -85,13 +85,13 @@ public class VaadinLoginView extends VerticalLayout {
         add(loginDiv);
 
     }
-    
+
     // -- HELPER
-    
+
     private void doLogin(String userName, String secret) {
         val authenticationRequest = new AuthenticationRequestPassword(userName, secret);
         if(vaadinAuthenticationHandler.loginToSession(authenticationRequest)) {
-            getUI().ifPresent(ui->ui.navigate(MainViewVaa.class));    
+            getUI().ifPresent(ui->ui.navigate(MainViewVaa.class));
         } else {
             // TODO indicate to the user: login failed
         }
@@ -101,18 +101,18 @@ public class VaadinLoginView extends VerticalLayout {
     private void doLoginAsSven() {
         doLogin("sven", "pass");
     }
-    
+
     private void addTitleAndLogo(IsisConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
         //TODO application name/logo borrowed from Wicket's configuration
         val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
         val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin();
-        
+
         applicationLogo.ifPresent(logoUrl->{
-            add(new Image(webAppContextPath.prependContextPathIfLocal(logoUrl), "logo"));    
+            add(new Image(webAppContextPath.prependContextPathIfLocal(logoUrl), "logo"));
         });
-        
+
         add(new H1(applicationName));
-        
+
     }
-    
+
 }

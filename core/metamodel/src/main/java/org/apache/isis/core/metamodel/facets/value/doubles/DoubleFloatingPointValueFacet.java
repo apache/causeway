@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface DoubleFloatingPointValueFacet extends Facet {
-    
+
     Double doubleValue(ManagedObject object);
 
     ManagedObject createValue(Double value);

@@ -37,7 +37,7 @@ final class XrayModelSimple implements XrayModel {
 
     @Getter(onMethod_ = {@Override})
     private final MutableTreeNode rootNode;
-    
+
     @Override
     public MutableTreeNode addContainerNode(
             final @NonNull MutableTreeNode parent,
@@ -65,7 +65,7 @@ final class XrayModelSimple implements XrayModel {
     }
 
     private final Map<String, MutableTreeNode> nodesById = _Maps.newConcurrentHashMap();
-    
+
     @Override
     public Optional<MutableTreeNode> lookupNode(String id) {
         return Optional.ofNullable(nodesById.get(id)) ;
@@ -78,7 +78,7 @@ final class XrayModelSimple implements XrayModel {
     }
 
     private final Map<String, Stack<MutableTreeNode>> nodeStacksById = _Maps.newConcurrentHashMap();
-    
+
     @Override
     public Stack<MutableTreeNode> getNodeStack(String id) {
         return nodeStacksById.computeIfAbsent(id, __->new Stack<MutableTreeNode>());

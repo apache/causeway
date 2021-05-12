@@ -42,50 +42,50 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class IsisServletForVaadin 
+public class IsisServletForVaadin
 extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final InteractionFactory isisInteractionFactory;
 
     public IsisServletForVaadin(
-            @NonNull final InteractionFactory isisInteractionFactory, 
-            @NonNull final ApplicationContext context, 
+            @NonNull final InteractionFactory isisInteractionFactory,
+            @NonNull final ApplicationContext context,
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);
         this.isisInteractionFactory = isisInteractionFactory;
     }
-   
-    
+
+
     @Override
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        
+
         val authentication = AuthSessionStoreUtil.get(request.getSession(true))
                 .orElse(null);
-        
+
         log.debug("new request incoming (authentication={})", authentication);
-        
+
         if(authentication!=null) {
             isisInteractionFactory.runAuthenticated(authentication, ()->{
-                super.service(request, response);                
+                super.service(request, response);
             });
         } else {
             // do not open an IsisInteraction, instead redirect to login page
             // this should happen afterwards by means of the VaadinAuthenticationHandler
-            super.service(request, response);    
+            super.service(request, response);
         }
-        
+
         log.debug("request was successfully serviced (authentication={})", authentication);
-        
+
         if(isisInteractionFactory.isInInteraction()) {
             isisInteractionFactory.closeSessionStack();
             log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }
-        
-    }
-  
 
-    
+    }
+
+
+
 }

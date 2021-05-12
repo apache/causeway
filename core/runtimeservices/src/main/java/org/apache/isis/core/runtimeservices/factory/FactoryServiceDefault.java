@@ -55,11 +55,11 @@ import lombok.val;
 @Primary
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {
-    
+
     @Inject InteractionFactory isisInteractionFactory; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment; 
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
@@ -69,7 +69,7 @@ public class FactoryServiceDefault implements FactoryService {
         }
         return create(requiredType);
     }
-    
+
     @Override
     public <T> T get(final @NonNull Class<T> requiredType) {
         return isisSystemEnvironment.getIocContainer()
@@ -85,7 +85,7 @@ public class FactoryServiceDefault implements FactoryService {
         }
         return _Casts.uncheckedCast(createObject(entitySpec));
     }
-    
+
     @Override
     public <T> T detachedEntity(final @NonNull T entity) {
         val entityClass = entity.getClass();
@@ -98,7 +98,7 @@ public class FactoryServiceDefault implements FactoryService {
         serviceInjector.injectServicesInto(entity);
         return entity;
     }
-    
+
     @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixedIn) {
         val mixinSpec = loadSpec(mixinClass);
@@ -114,19 +114,19 @@ public class FactoryServiceDefault implements FactoryService {
                     mixinClass.getName(), mixedIn);
         }
         val mixinConstructor = _Reflect
-                .getPublicConstructors(mixinClass) 
+                .getPublicConstructors(mixinClass)
                         .filter(paramCount(1).and(paramAssignableFrom(0, mixedIn.getClass())))
                 .getSingleton()
                 .orElseThrow(()->_Exceptions.illegalArgument(
-                        "Failed to locate constructor in '%s' to instantiate using '%s'", 
+                        "Failed to locate constructor in '%s' to instantiate using '%s'",
                         mixinClass.getName(), mixedIn));
-        
+
         try {
             val mixin = mixinConstructor.newInstance(mixedIn);
             return _Casts.uncheckedCast(serviceInjector.injectServicesInto(mixin));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw _Exceptions.illegalArgument(
-                    "Failed to invoke constructor of '%s' using single argument '%s'", 
+                    "Failed to invoke constructor of '%s' using single argument '%s'",
                     mixinClass.getName(), mixedIn);
         }
     }
@@ -143,7 +143,7 @@ public class FactoryServiceDefault implements FactoryService {
         serviceInjector.injectServicesInto(viewModel);
         return viewModel;
     }
-    
+
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable String mementoStr) {
 
@@ -152,24 +152,24 @@ public class FactoryServiceDefault implements FactoryService {
         val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->createObject(spec));
         return _Casts.uncheckedCast(viewModel);
     }
-    
+
     @Override
     public <T> T create(final @NonNull Class<T> domainClass) {
         val spec = loadSpec(domainClass);
-        
+
         if(spec.isManagedBean()) {
             throw _Exceptions.illegalArgument(
                     "Class '%s' is managed by IoC container, use get() instead", domainClass.getName());
         }
         return _Casts.uncheckedCast(createObject(spec));
     }
-    
-    // -- HELPER    
-    
+
+    // -- HELPER
+
     private ObjectSpecification loadSpec(final @NonNull Class<?> type) {
         return specificationLoader.specForTypeElseFail(type);
     }
-    
+
     private ViewModelFacet getViewModelFacet(final @NonNull ObjectSpecification spec) {
         val viewModelFacet = spec.getFacet(ViewModelFacet.class);
         if(viewModelFacet==null) {
@@ -179,7 +179,7 @@ public class FactoryServiceDefault implements FactoryService {
         }
         return viewModelFacet;
     }
-    
+
     private Object createObject(ObjectSpecification spec) {
         return spec.createObject().getPojo();
     }

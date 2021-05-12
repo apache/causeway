@@ -239,6 +239,7 @@ implements ApplicationPermissionRepository {
         return newPermissionNoCheck(role, rule, mode, featureSort, featureFqn);
     }
 
+    @Override
     public ApplicationPermission newPermissionNoCheck(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,

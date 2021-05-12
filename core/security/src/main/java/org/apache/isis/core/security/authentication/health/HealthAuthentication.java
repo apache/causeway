@@ -26,11 +26,11 @@ public class HealthAuthentication extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext HEALTH_EXEC_CTX = 
+    private static final ExecutionContext HEALTH_EXEC_CTX =
             ExecutionContext.ofUserWithSystemDefaults(
                     UserMemento.ofNameAndRoleNames(
                             "__health", // user name
-                            "__health-role") // role(s) 
+                            "__health-role") // role(s)
                     );
 
     public HealthAuthentication() {

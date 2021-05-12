@@ -71,7 +71,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
                 facet.addMethod(method);
             }
         }
-        
+
         FacetUtil.addFacets(facets);
     }
 

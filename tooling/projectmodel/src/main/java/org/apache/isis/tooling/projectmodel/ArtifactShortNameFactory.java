@@ -21,7 +21,7 @@ package org.apache.isis.tooling.projectmodel;
 import lombok.NonNull;
 
 public class ArtifactShortNameFactory {
-    
+
     public static String toShortName(final @NonNull ArtifactCoordinates coors) {
         return String.format("%s:%s", coors.getGroupId(), coors.getArtifactId());
     }

@@ -60,7 +60,7 @@ public class PropertyClearFacetViaSetterMethod extends PropertyClearFacetAbstrac
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter);
         return cloneIfViewModelCloneable(targetAdapter);
     }

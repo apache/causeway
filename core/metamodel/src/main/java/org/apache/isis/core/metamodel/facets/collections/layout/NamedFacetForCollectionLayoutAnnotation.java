@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract {
 
     public static NamedFacet create(
-            final Optional<CollectionLayout> collectionLayoutIfAny, 
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
         return collectionLayoutIfAny

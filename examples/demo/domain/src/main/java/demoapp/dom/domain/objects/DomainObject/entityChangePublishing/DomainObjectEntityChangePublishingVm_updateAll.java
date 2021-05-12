@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class DomainObjectEntityChangePublishingVm_updateAll {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-    
+
     public DomainObjectEntityChangePublishingVm act(
             boolean publishingEnabled
             , boolean publishingDisabled

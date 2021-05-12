@@ -43,20 +43,20 @@ public class ParameterNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Param parameter;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s: %s", parameter.getId(), typeToString(parameter.getType()));  
+        return String.format("%s: %s", parameter.getId(), typeToString(parameter.getType()));
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private ActionNode parentNode;
 
     @Override

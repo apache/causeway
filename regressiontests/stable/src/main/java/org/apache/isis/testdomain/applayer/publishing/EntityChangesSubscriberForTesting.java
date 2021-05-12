@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class EntityChangesSubscriberForTesting 
+public class EntityChangesSubscriberForTesting
 implements EntityChangesSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
@@ -51,7 +51,7 @@ implements EntityChangesSubscriber {
     public void onChanging(EntityChanges publishedObjects) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries = 
+        val publishedEntries =
         (List<EntityChanges>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
 
         publishedEntries.add(publishedObjects);

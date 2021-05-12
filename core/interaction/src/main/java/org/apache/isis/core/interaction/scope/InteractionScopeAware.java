@@ -23,19 +23,19 @@ import org.apache.isis.applib.services.iactn.Interaction;
 public interface InteractionScopeAware {
 
     default void beforeEnteringTransactionalBoundary(Interaction interaction) {
-        
+
     }
-    
+
     default void afterEnteringTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-        
+
     }
-    
+
     default void beforeLeavingTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-        
+
     }
-    
+
     default void afterLeavingTransactionalBoundary(Interaction interaction) {
-        
+
     }
-    
+
 }

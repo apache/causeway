@@ -49,6 +49,7 @@ public class ReplicateAndReplayJob implements Job {
 
     Authentication authentication;
 
+    @Override
     public void execute(final JobExecutionContext quartzContext) {
 
         // figure out if this instance is configured to run as primary or secondary

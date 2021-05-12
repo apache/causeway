@@ -35,11 +35,11 @@ import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@RequiredArgsConstructor(staticName = "of") 
+@RequiredArgsConstructor(staticName = "of")
 //@Log4j2
 class MenuBuilderVaa implements MenuVisitor {
 
-    private final IsisAppCommonContext commonContext; 
+    private final IsisAppCommonContext commonContext;
     private final Consumer<ManagedAction> menuActionEventHandler;
     private final MenuBar menuBar;
 
@@ -61,7 +61,7 @@ class MenuBuilderVaa implements MenuVisitor {
     @Override
     public void addSubMenu(MenuItemDto menu) {
         val managedAction = menu.getManagedAction();
-                
+
         val actionUiModel = actionUiModelFactory.newActionUiModel(managedAction);
         currentTopLevelMenu.getSubMenu()
         .addItem(actionUiModel.createMenuUiComponent(), e->menuActionEventHandler.accept(managedAction));
@@ -75,7 +75,7 @@ class MenuBuilderVaa implements MenuVisitor {
         val menuItemElement = menuItem.getElement();
         menuItemElement.setAttribute("class", "section-spacer");
     }
-    
+
     @Override
     public void addSectionLabel(String named) {
         val sectionLabel = new Label(named);

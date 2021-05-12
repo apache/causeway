@@ -51,7 +51,7 @@ import lombok.val;
 public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     private static final long serialVersionUID = 1L;
-    
+
     /*sonar-ignore-on*/
     protected static final String ID_REGISTER_FORM = "registerForm";
     private static final String ID_USERNAME = "username";
@@ -67,10 +67,10 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
     private final String uuid;
 
     public RegisterPanel(
-            String id, 
-            UserDetails userDetails, 
+            String id,
+            UserDetails userDetails,
             String uuid) {
-        
+
         super(id);
         this.userDetails = userDetails;
         this.uuid = uuid;
@@ -98,9 +98,9 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
 
     private IFormValidator newEqualPasswordInputValidator(
-            MarkupContainer password, 
+            MarkupContainer password,
             MarkupContainer confirmPassword) {
-        
+
         val passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
         val confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
         return new EqualPasswordInputValidator(passwordField, confirmPasswordField);
@@ -110,9 +110,9 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
      * Register user form.
      */
     private class RegisterForm extends StatelessForm<UserDetails> {
-        
+
         private static final long serialVersionUID = 1L;
-        
+
         @Inject private transient UserRegistrationService userRegistrationService;
         @Inject private transient TransactionService transactionService;
         @Inject private transient InteractionFactory isisInteractionFactory;
@@ -127,7 +127,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
          * @param userDetails
          */
         public RegisterForm(final String id, final String uuid, UserDetails userDetails) {
-        
+
             super(id, new CompoundPropertyModel<>(userDetails));
 
             this.uuid = uuid;

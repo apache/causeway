@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
 import lombok.val;
 
-public class FacetedMethodParameter 
-extends TypedHolderDefault 
+public class FacetedMethodParameter
+extends TypedHolderDefault
 implements IdentifiedHolder {
 
     private final Identifier identifier;
@@ -38,13 +38,13 @@ implements IdentifiedHolder {
             final Class<?> declaringType,
             final Method method,
             final Class<?> type) {
-        
+
         super(featureType, type);
-        
+
         val logicalType = LogicalType.lazy(
                 declaringType,
                 ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
-        
+
         // best we can do...
         this.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
     }

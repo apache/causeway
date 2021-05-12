@@ -38,37 +38,37 @@ public class PrototypingUiModel {
     private final String featureShortLabel;
     private final String featureFullLabel;
     private final Supplier<Stream<Facet>> facetStreamProvider;
-    
+
     public static PrototypingUiModel of(ActionUiMetaModel actionMeta) {
         return null; // used by wicket, not supported yet
     }
-    
+
     public static PrototypingUiModel of(ManagedAction managedAction) {
         Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();
         String featureShortLabel = managedAction.getName();
-        String featureFullLabel = String.format("%s: %s", 
-                managedAction.getMemberType(), 
+        String featureFullLabel = String.format("%s: %s",
+                managedAction.getMemberType(),
                 managedAction.getName());
-        
+
         return new PrototypingUiModel(featureType, featureShortLabel, featureFullLabel,
                 managedAction.getAction()::streamFacets);
     }
-    
+
     public static PrototypingUiModel of(ManagedMember managedMember) {
         Class<?> featureType = managedMember.getSpecification().getCorrespondingClass();
         String featureShortLabel = managedMember.getName();
-        String featureFullLabel = String.format("%s: %s", 
-                managedMember.getMemberType(), 
+        String featureFullLabel = String.format("%s: %s",
+                managedMember.getMemberType(),
                 managedMember.getName());
-        
+
         return new PrototypingUiModel(featureType, featureShortLabel, featureFullLabel,
                 managedMember.getSpecification()::streamFacets);
     }
-    
+
     public Stream<Facet> streamFeatureFacets() {
         return facetStreamProvider.get();
     }
-    
 
-    
+
+
 }

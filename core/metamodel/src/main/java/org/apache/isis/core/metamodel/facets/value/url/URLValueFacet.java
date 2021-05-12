@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface URLValueFacet extends Facet {
-    
+
     java.net.URL urlValue(ManagedObject object);
 
     ManagedObject createValue(java.net.URL value);

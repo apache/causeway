@@ -90,24 +90,24 @@ public class ApplicationLayerTestFactory {
     private final PreCommitListener preCommitListener;
     private final InteractionFactory interactionFactory;
     private final InteractionTracker interactionTracker;
-    
+
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
-    
+
     public static enum VerificationStage {
         PRE_COMMIT,
         POST_COMMIT,
         POST_COMMIT_WHEN_PROGRAMMATIC,
-        FAILURE_CASE, 
-        POST_INTERACTION, 
-        POST_INTERACTION_WHEN_PROGRAMMATIC, 
+        FAILURE_CASE,
+        POST_INTERACTION,
+        POST_INTERACTION_WHEN_PROGRAMMATIC,
     }
-    
+
     @Service
     public static class PreCommitListener {
-        
+
         @Setter private Consumer<VerificationStage> verifier;
-        
+
         /** TRANSACTION END BOUNDARY */
         @EventListener(TransactionBeforeCompletionEvent.class)
         public void onPreCommit(TransactionBeforeCompletionEvent event) {
@@ -122,30 +122,30 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
 
         val dynamicTests = Can.<DynamicTest>of(
-                
-                interactionTest("Programmatic Execution", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC, 
+
+                interactionTest("Programmatic Execution",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC,
                         this::programmaticExecution),
-                interactionTest("Interaction Api Execution", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION, 
+                interactionTest("Interaction Api Execution",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION,
                         this::interactionApiExecution),
-                interactionTest("Wrapper Sync Execution w/o Rules", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION, 
+                interactionTest("Wrapper Sync Execution w/o Rules",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionNoRules),
-                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION, 
+                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionWithFailure),
-                interactionTest("Wrapper Async Execution w/o Rules", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION, 
+                interactionTest("Wrapper Async Execution w/o Rules",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionNoRules),
-                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, 
-                        VerificationStage.POST_INTERACTION, 
+                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)",
+                        given, verifier,
+                        VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionWithFailure)
                 );
 
@@ -155,30 +155,30 @@ public class ApplicationLayerTestFactory {
                         .toList()
                 : dynamicTests
                         .toList();
-        
+
     }
-    
+
     // -- INTERACTION TEST FACTORY
-    
+
     @FunctionalInterface
     private static interface InteractionTestRunner {
         boolean run(Runnable given, Consumer<VerificationStage> verifier) throws Exception;
     }
-    
+
     private DynamicTest interactionTest(
             final String displayName,
             final Runnable given,
             final Consumer<VerificationStage> verifier,
             final VerificationStage onSuccess,
             final InteractionTestRunner interactionTestRunner) {
-        
+
         return dynamicTest(displayName, ()->{
 
             xrayAddTest(displayName);
-            
+
             assertFalse(interactionFactory.isInInteraction());
             assert_no_initial_tx_context();
-            
+
             final boolean isSuccesfulRun = interactionFactory.callAnonymous(()->{
                 val currentInteraction = interactionTracker.currentInteraction();
                 xrayEnterInteraction(currentInteraction);
@@ -186,18 +186,18 @@ public class ApplicationLayerTestFactory {
                 xrayExitInteraction();
                 return result;
             });
-            
+
             interactionFactory.closeSessionStack();
-            
+
             if(isSuccesfulRun) {
                 verifier.accept(onSuccess);
             }
-                        
+
         });
     }
-    
 
-    // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED 
+
+    // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED
 
     void assert_no_initial_tx_context() {
         val txState = transactionService.currentTransactionState();
@@ -209,33 +209,33 @@ public class ApplicationLayerTestFactory {
     private boolean programmaticExecution(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
-        
+
         // given
         setupBookForJdo();
-        
+
         preCommitListener.setVerifier(verifier);
-        
+
         withBookDoTransactional(book->{
-        
+
             given.run();
 
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
             repository.persist(book);
-            
+
         });
-        
+
         preCommitListener.setVerifier(null);
-       
+
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
-        
+
         return true;
     }
-    
+
     // -- TESTS - INTERACTION API
 
     private boolean interactionApiExecution(
@@ -244,14 +244,14 @@ public class ApplicationLayerTestFactory {
 
         // given
         setupBookForJdo();
-        
+
         // when
         withBookDoTransactional(book->{
-            
+
             given.run();
 
             preCommitListener.setVerifier(verifier);
-            
+
             // when
             val bookAdapter = objectManager.adapt(book);
             val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
@@ -259,15 +259,15 @@ public class ApplicationLayerTestFactory {
             val propertyModel = managedProperty.startNegotiation();
             val propertySpec = managedProperty.getSpecification();
             propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-            propertyModel.submit();    
-            
+            propertyModel.submit();
+
         });
-        
+
         preCommitListener.setVerifier(null);
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT);
-        
+
         return true;
     }
 
@@ -279,25 +279,25 @@ public class ApplicationLayerTestFactory {
 
         // given
         setupBookForJdo();
-        
+
         // when
         withBookDoTransactional(book->{
 
             given.run();
-            
+
             preCommitListener.setVerifier(verifier);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
             wrapper.wrap(book, syncControl).setName("Book #2");
-            
+
             preCommitListener.setVerifier(null);
-            
+
         });
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT);
-        
+
         return true;
     }
 
@@ -307,29 +307,29 @@ public class ApplicationLayerTestFactory {
 
         // given
         setupBookForJdo();
-        
+
         // when
         withBookDoTransactional(book->{
-            
+
             given.run();
 
             preCommitListener.setVerifier(verifier);
-            
+
             // when - running synchronous
-            val syncControl = SyncControl.control().withCheckRules(); // enforce rules 
+            val syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
             assertThrows(DisabledException.class, ()->{
                 wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
             });
-            
+
             preCommitListener.setVerifier(null);
-            
+
         });
-        
+
 
         // then
         verifier.accept(VerificationStage.FAILURE_CASE);
-        
+
         return false;
     }
 
@@ -342,138 +342,138 @@ public class ApplicationLayerTestFactory {
         // given
         setupBookForJdo();
         val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
-        
+
         // when
-        
+
         withBookDoTransactional(book->{
 
             given.run();
-            
+
             preCommitListener.setVerifier(verifier);
 
             // when - running asynchronous
             wrapper.asyncWrap(book, asyncControl)
             .setName("Book #2");
-            
+
         });
-        
+
         asyncControl.getFuture().get(10, TimeUnit.SECONDS);
-        
+
         preCommitListener.setVerifier(null);
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT);
-        
+
         return true;
     }
 
     private boolean wrapperAsyncExecutionWithFailure(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
-        
+
         // given
         setupBookForJdo();
-        
+
         // when
         withBookDoTransactional(book->{
 
             given.run();
-            
+
             preCommitListener.setVerifier(verifier);
 
             // when - running synchronous
-            val asyncControl = returningVoid().withCheckRules(); // enforce rules 
+            val asyncControl = returningVoid().withCheckRules(); // enforce rules
 
             assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
-                wrapper.asyncWrap(book, asyncControl).setName("Book #2"); 
+                wrapper.asyncWrap(book, asyncControl).setName("Book #2");
 
                 fail("unexpected code reach");
             });
-            
+
             preCommitListener.setVerifier(null);
-            
+
         });
 
         // then
         verifier.accept(VerificationStage.FAILURE_CASE);
-     
+
         return false;
     }
-    
+
     // -- TEST SETUP
-    
+
     private void setupBookForJdo() {
-        
+
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
             val pm = pmf.getPersistenceManager();
-            
+
             // cleanup
             fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-            
+
             // given Inventory with 1 Book
-            
+
             val products = new HashSet<JdoProduct>();
-            
+
             products.add(JdoBook.of(
                     "Sample Book", "A sample book for testing.", 99.,
                     "Sample Author", "Sample ISBN", "Sample Publisher"));
-    
+
             val inventory = JdoInventory.of("Sample Inventory", products);
             pm.makePersistent(inventory);
-            
+
             inventory.getProducts().forEach(product->{
                 val prod = pm.makePersistent(product);
-                
+
                 _Probe.errOut("PROD ID: %s", JDOHelper.getObjectId(prod));
-                
+
             });
-            
+
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            
+
             pm.flush();
-            
+
         });
     }
-    
+
     private void withBookDoTransactional(CheckedConsumer<JdoBook> transactionalBookConsumer) {
-        
+
         xrayEnterTansaction(Propagation.REQUIRES_NEW);
-        
+
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
             val book = repository.allInstances(JdoBook.class).listIterator().next();
             transactionalBookConsumer.accept(book);
 
         })
         .optionalElseFail();
-        
+
         xrayExitTansaction();
     }
-    
+
     // -- XRAY
-    
+
     private void xrayAddTest(String name) {
-        
+
         val threadId = XrayUtil.currentThreadAsMemento();
-        
+
         XrayUi.updateModel(model->{
             model.addContainerNode(
-                    model.getThreadNode(threadId), 
+                    model.getThreadNode(threadId),
                     String.format("Test: %s", name));
-                
-        });  
-        
+
+        });
+
     }
-    
+
     private void xrayEnterTansaction(Propagation propagation) {
     }
-    
+
     private void xrayExitTansaction() {
     }
-    
+
     private void xrayEnterInteraction(Optional<Interaction> currentInteraction) {
     }
-    
+
     private void xrayExitInteraction() {
     }
 

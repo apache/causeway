@@ -149,7 +149,7 @@ public final class _Context {
             final T existingIfAny2 = _Casts.uncheckedCast(singletonMap.get(type));
             if(existingIfAny2!=null) {
                 return existingIfAny2;
-            }        	
+            }
 
             singletonMap.put(type, t);
             return t;
@@ -266,7 +266,7 @@ public final class _Context {
 
 
     /**
-     * Looks up current thread's values for any instances that match the given type, as previously stored 
+     * Looks up current thread's values for any instances that match the given type, as previously stored
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
      */
@@ -275,7 +275,7 @@ public final class _Context {
     }
 
     /**
-     * Looks up current thread's values for any instances that match the given type, as previously stored 
+     * Looks up current thread's values for any instances that match the given type, as previously stored
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
      * @param requiredType - the required type of the elements in the returned bin
@@ -347,11 +347,11 @@ public final class _Context {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
             if (element.getClassName().startsWith("org.junit.")) {
                 return true;
-            }           
+            }
         }
         return false;
     }
-    
+
     // -- HELPER
 
     private static void tryClose(Object singleton) {

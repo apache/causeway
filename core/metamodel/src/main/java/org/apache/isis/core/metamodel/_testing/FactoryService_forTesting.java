@@ -50,7 +50,7 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T detachedEntity(Class<T> domainClass) {
         return domainClass.newInstance();
     }
-    
+
     @Override
     public <T> T detachedEntity(@NonNull T entity) {
         return entity;
@@ -65,7 +65,7 @@ class FactoryService_forTesting implements FactoryService {
     public <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr) {
         throw new IllegalArgumentException("Not yet supported");
     }
-    
+
     @Override
     public <T> T viewModel(T viewModel) {
         return viewModel;

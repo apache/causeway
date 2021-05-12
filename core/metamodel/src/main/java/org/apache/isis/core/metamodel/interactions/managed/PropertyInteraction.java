@@ -35,16 +35,16 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
             @NonNull final ManagedObject owner,
             @NonNull final String memberId,
             @NonNull final Where where) {
-    
+
         val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
-        
+
         final _Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
                 ? _Either.left(managedProperty.get())
                 : _Either.right(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
-                
+
         return new PropertyInteraction(chain);
     }
-    
+
     PropertyInteraction(@NonNull _Either<ManagedProperty, InteractionVeto> chain) {
         super(chain);
     }
@@ -55,28 +55,28 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
         chain = chain.mapIfLeft(property->{
             val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
             return validityVeto.isPresent()
-                ? _Either.right(validityVeto.get()) 
-                : _Either.left(property); 
+                ? _Either.right(validityVeto.get())
+                : _Either.left(property);
         });
         return this;
     }
-    
+
     /**
-     * @return optionally the ManagedProperty based on whether there 
-     * was no interaction veto within the originating chain 
+     * @return optionally the ManagedProperty based on whether there
+     * was no interaction veto within the originating chain
      */
     public Optional<ManagedProperty> getManagedProperty() {
         return super.getManagedMember();
     }
-    
+
     /**
      * @return this Interaction's ManagedProperty
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable> 
+    public <X extends Throwable>
     ManagedProperty getManagedPropertyElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
 
-    
+
 }

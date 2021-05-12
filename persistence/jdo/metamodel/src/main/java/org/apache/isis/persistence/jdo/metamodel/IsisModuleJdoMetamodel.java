@@ -34,10 +34,10 @@ import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
     // @Component's
     JdoProgrammingModel.class,
     JdoMetamodelMenu.class,
-    
+
     // @Service's
 
 })
 public class IsisModuleJdoMetamodel {
-    
+
 }

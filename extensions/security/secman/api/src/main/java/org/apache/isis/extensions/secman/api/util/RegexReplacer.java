@@ -18,12 +18,6 @@
  */
 package org.apache.isis.extensions.secman.api.util;
 
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
-import lombok.val;
-
 public interface RegexReplacer {
 
     public String asRegex(String str);

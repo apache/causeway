@@ -45,7 +45,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
-        
+
         // guard against member not being a property
         if(holder instanceof FacetedMethod) {
             final FacetedMethod facetedMethod = (FacetedMethod) holder;

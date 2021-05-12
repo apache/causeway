@@ -258,7 +258,7 @@ implements
     CommandModel,
     DomainChangeRecord {
 
-    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo"; 
+    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
 
     /**
      * Intended for use on primary system.
@@ -367,6 +367,7 @@ implements
     @PropertyLayout(named = "Interaction Id")
     @Getter @Setter
     private String interactionIdStr;
+    @Override
     @Programmatic
     public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
 
@@ -574,6 +575,7 @@ implements
     }
 
 
+    @Override
     public void saveAnalysis(String analysis) {
         if (analysis == null) {
             setReplayState(ReplayState.OK);
@@ -589,6 +591,7 @@ implements
         return toFriendlyString();
     }
 
+    @Override
     public CommandOutcomeHandler outcomeHandler() {
         return new CommandOutcomeHandler() {
             @Override

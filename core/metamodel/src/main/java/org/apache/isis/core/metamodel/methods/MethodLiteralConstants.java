@@ -28,7 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public final class MethodLiteralConstants {
-    
+
     // -- PREFIXES
 
     public static final String GET_PREFIX = "get";
@@ -42,7 +42,7 @@ public final class MethodLiteralConstants {
     public static final String HIDE_PREFIX = "hide";
     public static final String DISABLE_PREFIX = "disable";
     public static final String VALIDATE_PREFIX = "validate";
-    
+
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";
     public static final String SAVED_PREFIX = "saved";
@@ -53,33 +53,33 @@ public final class MethodLiteralConstants {
     public static final String REMOVING_PREFIX = "removing";
     public static final String UPDATED_PREFIX = "updated";
     public static final String UPDATING_PREFIX = "updating";
-    
+
     // -- LITERALS
-    
+
     public static final String DISABLED = "disabled"; // for batch disabling all members
     public static final String TITLE = "title";
     public static final String TO_STRING = "toString";
-    
+
     public static final String CSS_CLASS_PREFIX = "cssClass";
     public static final String HIDDEN_PREFIX = "hidden";
     public static final String ICON_NAME_PREFIX = "iconName";
     public static final String LAYOUT_METHOD_NAME = "layout";
-    
+
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForAction {
         @Nullable String getActionSupportingMethodName(Method actionMethod, String prefix, boolean isMixin);
     }
-    
+
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForParameter {
         @Nullable String getParameterSupportingMethodName(Method actionMethod, String prefix, boolean isMixin, int paramNum);
-        
+
         /** paramNum to param-supporting-method name provider */
         default IntFunction<String> providerForParam(Method actionMethod, String prefix, boolean isMixin) {
             return paramNum->getParameterSupportingMethodName(actionMethod, prefix, isMixin, paramNum);
         }
     }
-    
+
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForPropertyAndCollection {
         /** automatically deals with properties getters and actions */
@@ -87,37 +87,37 @@ public final class MethodLiteralConstants {
     }
 
     // -- SUPPORTING METHOD NAMING CONVENTION
-    
+
     public static final Can<SupportingMethodNameProviderForAction> NAMING_ACTIONS = Can.of(
             (Method actionMethod, String prefix, boolean isMixin)->
                 prefix + StringExtensions.asCapitalizedName(actionMethod.getName()),
             (Method actionMethod, String prefix, boolean isMixin)->
-                isMixin 
+                isMixin
                     // prefix only notation is restricted to mixins
-                    ? prefix   
+                    ? prefix
                     : null
             );
     public static final Can<SupportingMethodNameProviderForParameter> NAMING_PARAMETERS = Can.of(
             (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
                 prefix + paramNum + StringExtensions.asCapitalizedName(actionMethod.getName()),
             (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
-                isMixin 
+                isMixin
                     // no action name reference notation is restricted to mixins
-                    ? prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())   
+                    ? prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())
                     : null
             );
     public static final Can<SupportingMethodNameProviderForPropertyAndCollection> NAMING_PROPERTIES_AND_COLLECTIONS = Can.of(
             (Member member, String prefix, boolean isMixin)->
                 prefix + getCapitalizedMemberName(member),
             (Member member, String prefix, boolean isMixin)->
-                isMixin 
+                isMixin
                     // prefix only notation is restricted to mixins
-                    ? prefix   
+                    ? prefix
                     : null
             );
-    
+
     // -- HELPER
-    
+
     private static String getCapitalizedMemberName(Member member) {
         if(member instanceof Method) {
             final Method method = (Method)member;
@@ -125,16 +125,16 @@ public final class MethodLiteralConstants {
                 // definitely an action not a getter
                 return StringExtensions.asCapitalizedName(method.getName());
             }
-            // either a no-arg action or a getter 
-            final String capitalizedName = 
+            // either a no-arg action or a getter
+            final String capitalizedName =
                     StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(member.getName());
             return  capitalizedName;
         }
-        // must be a field then 
-        final String capitalizedName = 
+        // must be a field then
+        final String capitalizedName =
                 StringExtensions.asCapitalizedName(member.getName());
         return capitalizedName;
     }
-    
+
 
 }

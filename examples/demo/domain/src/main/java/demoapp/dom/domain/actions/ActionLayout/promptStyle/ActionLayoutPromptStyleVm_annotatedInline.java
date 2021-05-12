@@ -32,8 +32,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1"
 )
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE, 
-        named = "Inline", 
+        promptStyle = PromptStyle.INLINE,
+        named = "Inline",
         describedAs = "promptStyle = INLINE",
         sequence = "1")
 @RequiredArgsConstructor

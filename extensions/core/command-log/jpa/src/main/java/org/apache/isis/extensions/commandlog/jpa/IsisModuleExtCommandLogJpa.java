@@ -36,7 +36,7 @@ import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
 
         // @Service's
         , CommandJpa.TableColumnOrderDefault.class
-        
+
         // entities
         , CommandJpa.class
 })

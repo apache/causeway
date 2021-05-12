@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * A panel used as a title for the action prompts
  */
-public class ActionPromptHeaderPanel 
+public class ActionPromptHeaderPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

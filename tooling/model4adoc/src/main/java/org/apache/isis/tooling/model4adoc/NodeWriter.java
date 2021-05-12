@@ -80,9 +80,9 @@ final class NodeWriter implements StructuralNodeVisitor {
 //    @Override
 //    public void documentTail(Document doc, int depth) {
 //    }
-    
+
     // -- KNOWN DIAGRAM TYPES
-    
+
     private static Set<String> KNOWN_DIAGRAM_TYPES = _Sets.of(
         "a2s",
         "actdiag",
@@ -198,7 +198,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         } else if(style.isSourceBlock()) {
             val language = (String)block.getAttribute("language");
             if(_Strings.isNotEmpty(language)) {
-                printfln("[source,%s]", language);    
+                printfln("[source,%s]", language);
             } else {
                 printfln("[source]");
             }
@@ -206,14 +206,14 @@ final class NodeWriter implements StructuralNodeVisitor {
                 .ifPresent(this::printBlockTitle);
             println("----");
         } if(style.isDiagramBlock()) {
-            
+
             val diagramTypeAndOptions = IntStream
                     .iterate(1, index->block.getAttribute(""+index)!=null, index->index+1)
                     .mapToObj(index->(String)block.getAttribute(""+index))
                     .collect(Collectors.joining(","));
-                
-            printfln("[%s]", diagramTypeAndOptions);    
-            
+
+            printfln("[%s]", diagramTypeAndOptions);
+
             _Strings.nonEmpty(block.getTitle())
                 .ifPresent(this::printBlockTitle);
             println("----");

@@ -42,7 +42,7 @@ import lombok.val;
 public class ConverterForObjectAdapterMemento implements IConverter<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final transient IsisAppCommonContext commonContext;
 
     /**

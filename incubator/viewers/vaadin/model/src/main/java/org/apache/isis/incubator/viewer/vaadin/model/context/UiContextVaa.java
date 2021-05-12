@@ -30,27 +30,27 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public interface UiContextVaa {
 
     //JavaFxViewerConfig getJavaFxViewerConfig();
-    
+
     InteractionFactory getIsisInteractionFactory();
     //ActionUiModelFactoryFx getActionUiModelFactory();
-    
+
     void setNewPageHandler(Consumer<Component> onNewPage);
     void setPageFactory(Function<ManagedObject, Component> pageFactory);
-    
+
     void route(ManagedObject object);
     void route(Supplier<ManagedObject> objectSupplier);
-    
+
     // -- DECORATORS
-    
+
 //    IconDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
 //    IconDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
-//   
+//
 //    DisablingDecorator<Button> getDisablingDecoratorForButton();
 //    DisablingDecorator<Node> getDisablingDecoratorForFormField();
-//    
+//
 //    PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
 //    PrototypingDecorator<Node, Node> getPrototypingDecoratorForFormField();
-   
-    
-    
+
+
+
 }

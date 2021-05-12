@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class JavaAwtImageValueSemanticsProvider 
+public class JavaAwtImageValueSemanticsProvider
 extends ImageValueSemanticsProviderAbstract<BufferedImage> {
 
     public JavaAwtImageValueSemanticsProvider(final FacetHolder holder) {
@@ -42,17 +42,17 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     public int getWidth(final @Nullable ManagedObject object) {
         return unwrap(object).map(BufferedImage::getWidth).orElse(0);
     }
-    
+
     @Override
     public int getHeight(final @Nullable ManagedObject object) {
         return unwrap(object).map(BufferedImage::getHeight).orElse(0);
     }
-    
+
     @Override
     public Optional<BufferedImage> getImage(final @Nullable ManagedObject object) {
         return unwrap(object);
     }
-    
+
     @Override @Nullable
     protected String doEncode(final @Nullable BufferedImage image) {
         if(image==null) {
@@ -60,8 +60,8 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
         }
         return _Images.toBase64(image);
     }
-    
-    @Override @Nullable    
+
+    @Override @Nullable
     protected BufferedImage doRestore(final @Nullable String base64ImageData) {
         if(_Strings.isNullOrEmpty(base64ImageData)) {
             return null;
@@ -70,7 +70,7 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
         return _Images.fromBase64(base64ImageData);
         /*sonar-ignore-off*/
     }
-    
+
     @Override
     public boolean isFallback() {
         return false;
@@ -80,9 +80,9 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     public String toString() {
         return "JavaAwtImageValueSemanticsProvider: ";
     }
-    
+
     // -- HELPER
-    
+
     private Optional<BufferedImage> unwrap(final @Nullable ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return Optional.empty();

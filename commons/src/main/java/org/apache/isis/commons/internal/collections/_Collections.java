@@ -94,7 +94,7 @@ public final class _Collections {
      * or represents an array or is of type {@link Can}
      */
     public static boolean isCollectionOrArrayOrCanType(final Class<?> cls) {
-        return _Collections.isCollectionType(cls) 
+        return _Collections.isCollectionType(cls)
                 || _Arrays.isArrayType(cls)
                 || Can.class.isAssignableFrom(cls);
     }
@@ -280,47 +280,47 @@ public final class _Collections {
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
         val parameterType = param.getType();
-        
-        if (_Collections.isCollectionType(parameterType) 
+
+        if (_Collections.isCollectionType(parameterType)
                 || _Collections.isCanType(parameterType)) {
-            
+
             return _Generics.streamGenericTypeArgumentsOfParameter(param)
                     .findFirst();
         }
 
         return Optional.empty();
     }
-    
+
     /**
-     * Optionally returns the inferred element type for given {@code method}'s return type, 
+     * Optionally returns the inferred element type for given {@code method}'s return type,
      * based on whether
      * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
-        
+
         val returnType = method.getReturnType();
-        
-        if (_Collections.isCollectionType(returnType) 
+
+        if (_Collections.isCollectionType(returnType)
                 || _Collections.isCanType(returnType)) {
-            
+
             return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                     .findFirst();
         }
 
         return Optional.empty();
     }
-    
+
     /**
      * Optionally returns the inferred element type for given {@code field}, based on whether
      * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
-        
+
         val fieldType = field.getType();
-        
-        if (_Collections.isCollectionType(fieldType) 
+
+        if (_Collections.isCollectionType(fieldType)
                 || _Collections.isCanType(fieldType)) {
-            
+
             return _Generics.streamGenericTypeArgumentsOfField(field)
                     .findFirst();
         }
@@ -331,7 +331,7 @@ public final class _Collections {
     // -- TO STRING
 
     public static String toStringJoining(
-            final @Nullable Collection<?> collection, 
+            final @Nullable Collection<?> collection,
             final @NonNull String delimiter) {
         return _NullSafe.stream(collection)
                 .map(x->""+x)

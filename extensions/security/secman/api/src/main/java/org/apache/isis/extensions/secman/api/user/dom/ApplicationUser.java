@@ -142,6 +142,7 @@ public interface ApplicationUser
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
+    @Override
     @Username
     String getUsername();
     void setUsername(String username);
@@ -363,6 +364,7 @@ public interface ApplicationUser
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
+    @Override
     @AtPath
     String getAtPath();
     void setAtPath(String atPath);

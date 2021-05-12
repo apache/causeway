@@ -20,13 +20,13 @@ package org.apache.isis.persistence.jdo.provider.persistence;
 
 @FunctionalInterface
 public interface HasPersistenceManager {
-    
+
     // -- INTERFACE
-    
+
     javax.jdo.PersistenceManager getPersistenceManager();
-    
+
     // -- QUERY SHURTCUTS
-    
+
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
@@ -52,9 +52,9 @@ public interface HasPersistenceManager {
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls, String filter){
         return getPersistenceManager().newQuery(cls, filter);
     }
-    
+
     // -- TX SHURTCUTS
-    
+
     /**
      * to tell the underlying object store to start a transaction.
      */
@@ -65,7 +65,7 @@ public interface HasPersistenceManager {
         }
         transaction.begin();
     }
-    
+
     /**
      * to tell the underlying object store to commit a transaction.
      */
@@ -85,7 +85,7 @@ public interface HasPersistenceManager {
             transaction.rollback();
         }
     }
-    
+
     /**
      * to tell the underlying object store to flush a transaction.
      */

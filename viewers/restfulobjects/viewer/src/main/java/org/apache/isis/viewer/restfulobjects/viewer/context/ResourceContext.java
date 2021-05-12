@@ -58,8 +58,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-public class ResourceContext 
-extends RuntimeContextBase 
+public class ResourceContext
+extends RuntimeContextBase
 implements IResourceContext {
 
     @Getter private final HttpHeaders httpHeaders;
@@ -110,7 +110,7 @@ implements IResourceContext {
         this.baseUri = baseUri;
 
         this.readQueryStringAsMap = requestArgsAsMap(requestParams);
-        
+
         init(resourceDescriptor.getRepresentationType());
     }
 
@@ -154,7 +154,7 @@ implements IResourceContext {
                 String paramValue = params.get(paramName)[0];
                 // this is rather hacky :-(
                 final String key = paramName.startsWith("x-ro") ? paramName : paramName + ".value";
-                
+
                 // test whether we can parse as an int
                 val parseResult = _Ints.parseInt(paramValue, 10);
                 if(parseResult.isPresent()) {
@@ -162,7 +162,7 @@ implements IResourceContext {
                 } else {
                     map.mapPut(key, stripQuotes(paramValue));
                 }
-                
+
             }
             return map;
         } else {
@@ -211,7 +211,7 @@ implements IResourceContext {
     public RepresentationService.Intent getIntent() {
         return intent;
     }
-    
+
     public SerializationStrategy getSerializationStrategy() {
         return SerializationStrategy.determineFrom(getAcceptableMediaTypes());
     }

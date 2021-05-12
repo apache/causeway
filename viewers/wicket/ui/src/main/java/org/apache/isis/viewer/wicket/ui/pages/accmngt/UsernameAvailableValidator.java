@@ -36,23 +36,23 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static UsernameAvailableValidator instance(IsisAppCommonContext commonContext) { 
+    public static UsernameAvailableValidator instance(IsisAppCommonContext commonContext) {
         return new UsernameAvailableValidator(commonContext);
     }
-    
+
     private UsernameAvailableValidator(IsisAppCommonContext commonContext) {
         super(commonContext);
     }
-    
+
     @Override
     public void validate(final IValidatable<String> validatable) {
 
         val userRegistrationService = super.getCommonContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
-        
+
         val isisInteractionFactory = super.getCommonContext()
                 .lookupServiceElseFail(InteractionFactory.class);
-        
+
         isisInteractionFactory.runAnonymous(() -> {
 
             final String username = validatable.getValue();

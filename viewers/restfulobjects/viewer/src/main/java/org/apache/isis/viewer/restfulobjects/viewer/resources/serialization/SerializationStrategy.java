@@ -30,14 +30,14 @@ import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {
-    
+
     XML {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return jaxbAnnotatedObject;
         }
-       
+
     },
-    
+
     JSON {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
@@ -45,13 +45,13 @@ public enum SerializationStrategy {
                     .registerModule(jaxbAnnotationModule)
                     .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-            
+
             return _Json.toString(objectMapper, jaxbAnnotatedObject)
                     .presentElseFail();
         }
 
     },
-    
+
     JSON_INDENTED {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
@@ -60,13 +60,13 @@ public enum SerializationStrategy {
                     .enable(SerializationFeature.INDENT_OUTPUT)
                     .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-            
+
             return _Json.toString(objectMapper, jaxbAnnotatedObject)
                     .presentElseFail();
         }
 
     },
-    
+
     ;
 
     public abstract Object entity(final Object jaxbAnnotatedObject);

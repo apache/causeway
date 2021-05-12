@@ -47,7 +47,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     private final Class<? extends Facet> facetType;
     @Setter private Class<? extends Facet> facetAliasType;
     private Set<Facet> contributedFacets; // lazy init
-    
+
     private final boolean derived;
     private FacetHolder holder;
 
@@ -64,16 +64,16 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
             Class<? extends Facet> facetType,
             FacetHolder holder,
             Derivation derivation) {
-        
-        this.facetType = requires(facetType, "facetType"); 
+
+        this.facetType = requires(facetType, "facetType");
         setFacetHolder(holder);
         this.derived = (derivation == Derivation.DERIVED);
     }
-    
+
     protected FacetAbstract(
             Class<? extends Facet> facetType,
             FacetHolder holder) {
-        
+
         this(facetType, holder, Derivation.NOT_DERIVED);
     }
 
@@ -81,17 +81,17 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     public final Class<? extends Facet> facetType() {
         return facetType;
     }
-    
+
     @Override
     public Class<? extends Facet> facetAliasType() {
-        return facetAliasType!=facetType ? facetAliasType : null; // avoids facetAliasType equals facetType 
+        return facetAliasType!=facetType ? facetAliasType : null; // avoids facetAliasType equals facetType
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return holder;
     }
-    
+
     @Override
     public MetaModelContext getMetaModelContext() {
         return holder.getMetaModelContext();
@@ -126,16 +126,16 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 //                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
 //                }
 //            } else {
-                
+
                 val underlyingFacetType = underlyingFacet.facetType();
                 if(!Objects.equals(underlyingFacetType, facetType)) {
                     val msg = String.format(
                             "type-missmatch: underlying facet's type '%s' "
-                            + "must match this facet's type '%s'", 
+                            + "must match this facet's type '%s'",
                             underlyingFacetType, facetType);
                     throw _Exceptions.unrecoverable(msg);
                 }
- 
+
  //           }
         }
         this.underlyingFacet = underlyingFacet;
@@ -148,7 +148,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 //        }
 //
 //        val thisAsMultiTyped = (MultiTypedFacet) this;
-//        
+//
 //        return thisAsMultiTyped.facetTypes()
 //                .anyMatch(multiTypedFacet::containsFacetTypeOf);
 //    }
@@ -180,8 +180,8 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
-        this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder) 
-                ? (IdentifiedHolder) holder 
+        this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder)
+                ? (IdentifiedHolder) holder
                         : null;
     }
 
@@ -268,7 +268,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     }
 
     // -- CONTRIBUTED FACET SUPPORT
-    
+
     @Override
     public void addContributedFacet(Facet contributedFacet) {
         if(contributedFacets==null) {
@@ -276,7 +276,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
         }
         contributedFacets.add(contributedFacet);
     }
-    
+
     @Override
     public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
         if(contributedFacets!=null) {

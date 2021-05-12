@@ -38,21 +38,21 @@ extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
-    
+
     public LocalDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(TemporalValueFacet.class,
                 TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.LOCAL,
                 holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDateTime::from,
                 TemporalAdjust::adjustLocalDateTime);
-        
+
         val dateHourMinuteSecondMillis = "yyyy-MM-dd'T'HH:mm:ss.SSS";
         val basicDateTimeNoMillis = "yyyyMMdd'T'HHmmssZ";
         val basicDateTime = "yyyyMMdd'T'HHmmss.SSSZ";
-        
+
         super.addNamedFormat("iso", basicDateTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicDateTime);
-        
+
         super.updateParsers();
 
         setEncodingFormatter(
@@ -61,7 +61,7 @@ extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
         val configuredNameOrPattern =
                 getConfiguration().getValueTypes().getJavaTime().getLocalDateTime().getFormat();
 
-        
+
         // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = formatterFirstOf(Can.of(
                 ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
@@ -69,7 +69,7 @@ extends TemporalValueSemanticsProviderAbstract<LocalDateTime> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
-        
+
         setTitleFormatter(formatter);
     }
 

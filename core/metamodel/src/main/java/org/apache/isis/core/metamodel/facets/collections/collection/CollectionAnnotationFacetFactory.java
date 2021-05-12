@@ -50,7 +50,7 @@ import lombok.val;
 
 public class CollectionAnnotationFacetFactory
 extends FacetFactoryAbstract {
-    
+
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
@@ -60,7 +60,7 @@ extends FacetFactoryAbstract {
 
         val collectionIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
-                        Collection.class, 
+                        Collection.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
 

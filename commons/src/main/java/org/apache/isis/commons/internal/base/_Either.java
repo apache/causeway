@@ -77,19 +77,19 @@ public final class _Either<L, R> {
     // -- ACCESSORS
 
     public Optional<L> left() {
-        return Optional.ofNullable(left); 
+        return Optional.ofNullable(left);
     }
 
     public Optional<R> right() {
-        return Optional.ofNullable(right); 
+        return Optional.ofNullable(right);
     }
 
     public L leftIfAny() {
-        return left; 
+        return left;
     }
 
     public R rightIfAny() {
-        return right; 
+        return right;
     }
 
     // -- PREDICATES
@@ -111,21 +111,21 @@ public final class _Either<L, R> {
     }
 
     // -- MAPPING
-    
+
     public <T> _Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
         return isLeft()
                 ? _Either.left(leftMapper.apply(left))
                 : _Either.right(right);
     }
-    
+
     public <T> _Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
         return isLeft()
                 ? _Either.left(left)
                 : _Either.right(rightMapper.apply(right));
     }
-    
+
     public <X, Y> _Either<X, Y> bimap(
-            final @NonNull Function<L, X> leftMapper, 
+            final @NonNull Function<L, X> leftMapper,
             final @NonNull Function<R, Y> rightMapper){
         return isLeft()
                 ? left(leftMapper.apply(left))
@@ -133,13 +133,13 @@ public final class _Either<L, R> {
     }
 
     public <X, Y> _Either<X, Y> bimapNullable(
-            final @NonNull Function<L, X> leftMapper, 
+            final @NonNull Function<L, X> leftMapper,
             final @NonNull Function<R, Y> rightMapper){
         return isLeft()
                 ? leftNullable(leftMapper.apply(left))
                 : rightNullable(rightMapper.apply(right));
     }
-    
+
     public _Either<L, R> mapIfLeft(Function<L, _Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
@@ -152,13 +152,13 @@ public final class _Either<L, R> {
                 : rightRemapper.apply(right);
     }
 
-    
+
     // -- FOLDING
 
     public <T> T fold(BiFunction<L, R, T> biMapper){
         return biMapper.apply(left, right);
     }
-    
+
     public <T> T fold(
             final @NonNull Function<L, T> leftMapper,
             final @NonNull Function<R, T> rightMapper){

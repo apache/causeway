@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface ByteValueFacet extends Facet {
-    
+
     Byte byteValue(ManagedObject object);
 
     ManagedObject createValue(Byte value);

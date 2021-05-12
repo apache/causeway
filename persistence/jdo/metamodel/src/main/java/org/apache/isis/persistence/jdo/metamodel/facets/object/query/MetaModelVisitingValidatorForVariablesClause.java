@@ -28,7 +28,7 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persiste
 
 import lombok.val;
 
-class MetaModelVisitingValidatorForVariablesClause 
+class MetaModelVisitingValidatorForVariablesClause
 extends MetaModelVisitingValidatorForClauseAbstract {
 
     MetaModelVisitingValidatorForVariablesClause() {
@@ -56,17 +56,17 @@ extends MetaModelVisitingValidatorForClauseAbstract {
                 .orElse(null);
 
         if(persistenceCapableFacet == null) {
-            
+
             val cls = objectSpec.getCorrespondingClass();
-            
+
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                             "%s: error in JDOQL query, class name for '%s' "
                             + "clause is not annotated as @PersistenceCapable (JDOQL : %s)",
-                            cls.getName(), 
-                            clause, 
+                            cls.getName(),
+                            clause,
                             query)
                     );
             return;

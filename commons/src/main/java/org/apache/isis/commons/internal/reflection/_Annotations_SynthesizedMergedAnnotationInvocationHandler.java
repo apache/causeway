@@ -54,7 +54,7 @@ import lombok.val;
  * @see Annotation
  * @see AnnotationUtils#synthesizeAnnotation(Annotation, AnnotatedElement)
  */
-final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends Annotation> 
+final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends Annotation>
 implements InvocationHandler {
 
     private final MergedAnnotations mergedAnnotations;
@@ -66,9 +66,9 @@ implements InvocationHandler {
 
 
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
-            MergedAnnotations mergedAnnotations, 
+            MergedAnnotations mergedAnnotations,
             Class<A> type) {
-        
+
         Assert.notNull(mergedAnnotations, "MergedAnnotations must not be null");
         Assert.notNull(type, "Type must not be null");
         Assert.isTrue(type.isAnnotation(), "Type must be an annotation");
@@ -78,7 +78,7 @@ implements InvocationHandler {
         for (int i = 0; i < this.attributes.size(); i++) {
             getAttributeValue(this.attributes.get(i));
         }
-        
+
     }
 
 
@@ -187,9 +187,9 @@ implements InvocationHandler {
     private Object getAttributeValue(Method method) {
         String name = method.getName();
         Class<?> type = ClassUtils.resolvePrimitiveIfNecessary(method.getReturnType());
-        
+
         val defaultValue = method.getDefaultValue();
-        
+
         // for all discovered annotations of this.type determine the effective (attribute) value
         val attributeValue = this.mergedAnnotations.stream(this.type)
         .map(annotation->(Object)annotation.getValue(name, type).orElse(null))
@@ -197,24 +197,24 @@ implements InvocationHandler {
         .filter(value->!value.equals(defaultValue))
         .findFirst()
         .orElse(defaultValue);
-        
+
         if(attributeValue==null) {
             throw new NoSuchElementException("No value found for attribute named '" + name +
                     "' in merged annotation " + this.type.getName());
         }
-        
+
         return attributeValue;
-        
+
 
     }
 
     @SuppressWarnings("unchecked")
     static <A extends Annotation> A createProxy(
-            MergedAnnotations mergedAnnotations, 
+            MergedAnnotations mergedAnnotations,
             Class<A> type) {
-        
+
         ClassLoader classLoader = type.getClassLoader();
-        InvocationHandler handler = 
+        InvocationHandler handler =
                 new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(mergedAnnotations, type);
         Class<?>[] interfaces = isVisible(classLoader, SynthesizedAnnotation.class) ?
                 new Class<?>[] {type, SynthesizedAnnotation.class} : new Class<?>[] {type};

@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class ChoicesFacetAbstract
-extends FacetAbstract 
+extends FacetAbstract
 implements ChoicesFacet {
 
     public static Class<? extends Facet> type() {

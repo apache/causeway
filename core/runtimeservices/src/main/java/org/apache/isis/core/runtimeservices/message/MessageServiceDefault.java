@@ -44,10 +44,10 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 @Primary
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {
-    
+
     @Inject private TranslationService translationService;
-    
-    @Autowired(required = false) 
+
+    @Autowired(required = false)
     private Provider<MessageBroker> sessionScopedMessageBroker;
 
     @Override
@@ -119,7 +119,7 @@ public class MessageServiceDefault implements MessageService {
     }
 
     // -- HELPER
-    
+
     private static TranslationContext context(final Class<?> contextClass, final String contextMethodName) {
         return TranslationContext.forMethod(contextClass, contextMethodName);
     }

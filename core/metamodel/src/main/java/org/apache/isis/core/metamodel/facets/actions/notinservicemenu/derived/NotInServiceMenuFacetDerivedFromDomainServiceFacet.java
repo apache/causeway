@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacet 
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacet
 extends NotInServiceMenuFacetAbstract {
 
     private final NatureOfService natureOfService;

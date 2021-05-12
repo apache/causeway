@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 

@@ -33,9 +33,9 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 
 /**
- * 
+ *
  * @since 2.0
- * @implNote Listeners to runtime events can only reliably receive these after the 
+ * @implNote Listeners to runtime events can only reliably receive these after the
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
@@ -44,19 +44,19 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
 @Primary
 @Qualifier("Default")
 public class MetamodelEventService {
-    
-    @Inject 
+
+    @Inject
     private EventBusService eventBusService;
-    
-    @Autowired(required = false) 
+
+    @Autowired(required = false)
     private ConfigurationViewService configurationService;
 
     public void fireBeforeMetamodelLoading() {
-        
+
         if(configurationService!=null) {
-            _Xray.addConfiguration(configurationService);    
+            _Xray.addConfiguration(configurationService);
         }
-        
+
         eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
     }
 

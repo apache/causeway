@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface CharValueFacet extends Facet {
-    
+
     Character charValue(ManagedObject object);
 
     ManagedObject createValue(Character value);

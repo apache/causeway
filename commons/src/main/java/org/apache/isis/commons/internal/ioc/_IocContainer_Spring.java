@@ -48,7 +48,7 @@ import lombok.val;
  */
 @RequiredArgsConstructor(staticName = "of")
 final class _IocContainer_Spring implements _IocContainer {
-    
+
     @NonNull private final ApplicationContext springContext;
 
     @Override
@@ -60,7 +60,7 @@ final class _IocContainer_Spring implements _IocContainer {
             throw _Exceptions.unrecoverable("Failed to create an instance of type " + requiredType, cause);
         }
     }
-    
+
     @Override
     public Stream<_ManagedBeanAdapter> streamAllBeans() {
 
@@ -100,17 +100,17 @@ final class _IocContainer_Spring implements _IocContainer {
 
     @Override
     public <T> Can<T> select(
-            final @NonNull Class<T> requiredType, 
+            final @NonNull Class<T> requiredType,
             final @Nullable Annotation[] qualifiers) {
 
         val qualifiersRequired = filterQualifiers(qualifiers);
-        
+
         if(_NullSafe.isEmpty(qualifiersRequired)) {
-            
+
             val allMatchingBeans = springContext.getBeanProvider(requiredType)
                     .orderedStream()
                     .collect(Can.toCan());
-            
+
             return allMatchingBeans;
         }
 
@@ -121,15 +121,15 @@ final class _IocContainer_Spring implements _IocContainer {
                     return qualifiersPresent.containsAll(qualifiersRequired);
                 })
                 .collect(Can.toCan());
-        
+
         return allMatchingBeans;
-        
+
     }
-    
+
     // -- QUALIFIER PROCESSING
 
     /**
-     * Filters the input array into a collection, such that only annotations are retained, 
+     * Filters the input array into a collection, such that only annotations are retained,
      * that are valid qualifiers for CDI.
      * @param annotations
      * @return non-null
@@ -142,7 +142,7 @@ final class _IocContainer_Spring implements _IocContainer {
                 .filter(_IocContainer_Spring::isGenericQualifier)
                 .collect(Collectors.toSet());
     }
-    
+
     /**
      * @param annotation
      * @return whether or not the annotation is a valid qualifier for Spring

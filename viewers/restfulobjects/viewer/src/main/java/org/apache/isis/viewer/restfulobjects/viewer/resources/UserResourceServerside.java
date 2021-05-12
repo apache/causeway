@@ -59,7 +59,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
@@ -92,7 +92,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 

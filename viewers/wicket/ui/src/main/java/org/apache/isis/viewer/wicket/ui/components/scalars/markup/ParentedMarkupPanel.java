@@ -37,8 +37,8 @@ public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
     private final transient MarkupComponentFactory markupComponentFactory;
 
     public ParentedMarkupPanel(
-            String id, 
-            ScalarModel scalarModel, 
+            String id,
+            ScalarModel scalarModel,
             MarkupComponentFactory markupComponentFactory) {
 
         super(id, scalarModel);
@@ -58,7 +58,7 @@ public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
             return super.createScalarIfRegularFormGroup();
         }
 
-        final MarkupComponent markupComponent = 
+        final MarkupComponent markupComponent =
                 createMarkupComponent("scalarValueContainer");
 
         getTextField().setLabel(Model.of(getModel().getName()));
@@ -73,7 +73,7 @@ public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
         return formGroup;
     }
-    
+
     @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);

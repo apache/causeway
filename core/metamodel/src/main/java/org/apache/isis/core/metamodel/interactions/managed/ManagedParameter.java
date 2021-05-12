@@ -32,34 +32,35 @@ import lombok.val;
 public interface ManagedParameter extends ManagedValue, ManagedFeature {
 
     int getParamNr();
+    @Override
     ObjectActionParameter getMetaModel();
     ParameterNegotiationModel getNegotiationModel();
-    
+
     /**
-     * @param params 
+     * @param params
      * @return non-empty if not usable/editable (meaning if read-only)
      */
     default Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
-        
+
         try {
             val head = getNegotiationModel().getHead();
-            
-            val usabilityConsent = 
+
+            val usabilityConsent =
                     getMetaModel()
                     .isUsable(head, params, InteractionInitiatedBy.USER);
-            
+
             return usabilityConsent.isVetoed()
                     ? Optional.of(InteractionVeto.readonly(usabilityConsent))
                     : Optional.empty();
-            
+
         } catch (final Exception ex) {
-            
+
             return Optional.of(InteractionVeto
                     .readonly(
                             new Veto(ex.getLocalizedMessage())));
-            
+
         }
-        
+
     }
-    
+
 }

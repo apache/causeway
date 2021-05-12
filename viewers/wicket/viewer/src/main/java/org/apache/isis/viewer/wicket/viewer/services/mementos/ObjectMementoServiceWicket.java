@@ -51,8 +51,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * 
- * @since 2.0 
+ *
+ * @since 2.0
  *
  */
 @Service
@@ -87,7 +87,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
-    
+
     @Override
     public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
 //        _Probe.errOut("mementoForParameter %s", paramAdapter);
@@ -98,17 +98,17 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
-    
+
 
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
 //        _Probe.errOut("mementoForPojo %s", ""+pojo);
         assertSingleton(pojo);
-        
+
         val managedObject = objectManager.adapt(pojo);
         return mementoForObject(managedObject);
     }
-    
+
     @Override
     public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType) {
 //        _Probe.errOut("mementoForPojos");
@@ -125,7 +125,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         if(memento==null) {
             return null;
         }
-        
+
         if(memento instanceof ObjectMementoForEmpty) {
             val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
             val logicalType = objectMementoForEmpty.getLogicalType();
@@ -134,7 +134,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
                     ? ManagedObject.empty(spec.get())
                     : ManagedObject.unspecified();
         }
-        
+
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 
@@ -156,7 +156,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
     }
 
-//TODO 2x remove if no longer required for debugging ...    
+//TODO 2x remove if no longer required for debugging ...
     private void assertSingleton(ManagedObject adapter) {
 //        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
 //            return;
@@ -165,11 +165,11 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 //        assertSingleton(pojo);
 //        val spec = adapter.getSpecification();
 //        if(!spec.isNotCollection()) {
-//            throw _Exceptions.illegalArgument("unexpected spec type %s for %s (elementSpec=%s)", 
+//            throw _Exceptions.illegalArgument("unexpected spec type %s for %s (elementSpec=%s)",
 //                    spec, spec.getFullIdentifier(), spec.getElementSpecification());
 //        }
     }
-    
+
     private void assertSingleton(Object pojo) {
 //        if(_NullSafe.streamAutodetect(pojo).limit(2).count()>1L) {
 //            throw _Exceptions.illegalArgument("cardinality 0 or 1 expect");
@@ -197,7 +197,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         public Bookmark asHintingBookmarkIfSupported() {
             return delegate.asHintingBookmark();
         }
-        
+
         @Override
         public LogicalType getLogicalType() {
             return delegate.getLogicalType();

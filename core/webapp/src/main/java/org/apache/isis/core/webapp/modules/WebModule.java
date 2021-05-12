@@ -37,15 +37,15 @@ import lombok.val;
 /**
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
- * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup 
+ * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup
  * the ServletContext programmatically.
  * </p>
  * <p>
- * The order in which all enabled/applicable WebModules are registered with the 
- * filter-chain is determined by their specified {@link Order} or {@link Priority} 
- * annotation. 
+ * The order in which all enabled/applicable WebModules are registered with the
+ * filter-chain is determined by their specified {@link Order} or {@link Priority}
+ * annotation.
  * </p>
- * 
+ *
  * @since 2.0
  */
 public interface WebModule {
@@ -58,25 +58,25 @@ public interface WebModule {
     public String getName();
 
     /**
-     * Before initializing any WebModule we call each WebModule's prepare method 
-     * to allow for a WebModule to leave information useful for other modules on 
+     * Before initializing any WebModule we call each WebModule's prepare method
+     * to allow for a WebModule to leave information useful for other modules on
      * the shared WebModuleContext.
-     * 
+     *
      * @param ctx WebModuleContext
      */
     default public void prepare(WebModuleContext ctx) {}
 
     /**
      * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.
-     * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
+     * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s
      * up and registers them with the {@link ServletContext} as provided via {@code ctx}.
      * @param ctx ServletContext
      * @return optionally any listeners to be registered
      * @apiNote don't add {@link ServletContextListener}s to given {@code ctx} directly, because
-     * when on a JEE container, we have no means to veto it to be getting managed by the container;  
+     * when on a JEE container, we have no means to veto it to be getting managed by the container;
      * {@link ServletContextListener}s should only be known to the {@link IsisWebAppContextInitializer}
      * and not any of the containers, since the {@link IsisWebAppContextInitializer} acts as a delegator,
-     * that passes over any events to the registered {@link WebModule}s.    
+     * that passes over any events to the registered {@link WebModule}s.
      */
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException;
 
@@ -87,11 +87,11 @@ public interface WebModule {
      */
     default public boolean isApplicable(WebModuleContext ctx) { return true; }
 
-    // -- DISCOVERY 
+    // -- DISCOVERY
 
     /**
      * @return non-null Can of 'discovered' WebModules, whether applicable or not is not decided here
-     * @apiNote order of filters is relevant/critical 
+     * @apiNote order of filters is relevant/critical
      * and defined by the WebModules' {@link Order} or {@link Priority} annotations
      */
     static Can<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {

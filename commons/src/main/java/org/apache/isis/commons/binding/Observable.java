@@ -24,11 +24,11 @@ package org.apache.isis.commons.binding;
 public interface Observable<T> {
 
     T getValue();
-    
+
     void addListener(ChangeListener<? super T> listener);
     void removeListener(ChangeListener<? super T> listener);
-    
+
     void addListener(InvalidationListener listener);
     void removeListener(InvalidationListener listener);
-    
+
 }

@@ -30,14 +30,14 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
 
     public ValueFacetAnnotation(
             IsisConfiguration config,
-            Class<?> annotatedClass, 
+            Class<?> annotatedClass,
             FacetHolder holder) {
 
         super(ValueSemanticsProviderUtil
                 .valueSemanticsProviderOrNull(
                         semanticsProviderClass(annotatedClass),
-                        semanticsProviderName(config, annotatedClass)), 
-                AddFacetsIfInvalidStrategy.DO_ADD, 
+                        semanticsProviderName(config, annotatedClass)),
+                AddFacetsIfInvalidStrategy.DO_ADD,
                 holder);
     }
 
@@ -49,11 +49,11 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     public boolean isValid() {
         return true;
     }
-    
+
     // -- HELPER
-    
+
     private static String semanticsProviderName(IsisConfiguration config, Class<?> annotatedClass) {
-        
+
         final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {

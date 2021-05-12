@@ -70,7 +70,7 @@ public final class AnyTypeDeclaration {
     private final @NonNull Kind kind;
     private final TypeDeclaration<?> td;
     private final AnnotationDeclaration annotationDeclaration;
-    private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration; 
+    private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration;
     private final EnumDeclaration enumDeclaration;
 
     private final Can<AnnotationMemberDeclaration> annotationMemberDeclarations;
@@ -89,7 +89,7 @@ public final class AnyTypeDeclaration {
 
         return new AnyTypeDeclaration(
                 cu,
-                Kind.ANNOTATION, 
+                Kind.ANNOTATION,
                 annotationDeclaration,
                 annotationDeclaration,
                 null,
@@ -111,7 +111,7 @@ public final class AnyTypeDeclaration {
             final @NonNull CompilationUnit cu) {
         return new AnyTypeDeclaration(
                 cu,
-                classOrInterfaceDeclaration.isInterface() ? Kind.INTERFACE : Kind.CLASS, 
+                classOrInterfaceDeclaration.isInterface() ? Kind.INTERFACE : Kind.CLASS,
                         classOrInterfaceDeclaration,
                         null,
                         classOrInterfaceDeclaration,
@@ -133,9 +133,9 @@ public final class AnyTypeDeclaration {
             final @NonNull CompilationUnit cu) {
         return new AnyTypeDeclaration(
                 cu,
-                Kind.ENUM, 
-                enumDeclaration, 
-                null, 
+                Kind.ENUM,
+                enumDeclaration,
+                null,
                 null,
                 enumDeclaration,
                 //members
@@ -185,11 +185,11 @@ public final class AnyTypeDeclaration {
     public boolean hasIndexDirective() {
         return TypeDeclarations.hasIndexDirective(td);
     }
-    
+
     public Can<TypeParameter> getTypeParameters() {
         return TypeDeclarations.getTypeParameters(td);
     }
-    
+
     public String getTypeParametersAsString() {
         val typeParameters = getTypeParameters();
         return typeParameters.isEmpty()
@@ -200,8 +200,8 @@ public final class AnyTypeDeclaration {
     }
 
     /**
-     * Returns the recursively resolved (nested) type name. 
-     * Same as {@link #getSimpleName()} if type is not nested. 
+     * Returns the recursively resolved (nested) type name.
+     * Same as {@link #getSimpleName()} if type is not nested.
      */
     @Getter(lazy = true)
     private final Can<String> name = createName();
@@ -210,12 +210,12 @@ public final class AnyTypeDeclaration {
         return td.getNameAsString();
     }
 
-    // -- HELPER 
+    // -- HELPER
 
     private Can<String> createName() {
         val nameParts = _Lists.<String>newLinkedList();
         nameParts.push(td.getNameAsString());
-        Node walker = td; 
+        Node walker = td;
         while(walker.getParentNode().isPresent()) {
             walker = walker.getParentNode().get();
             if(walker instanceof NodeWithSimpleName) {

@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-public class BigDecimalValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> 
+public class BigDecimalValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<BigDecimal>
 implements BigDecimalValueFacet {
 
     private static Class<? extends Facet> type() {

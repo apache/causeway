@@ -31,7 +31,7 @@ import lombok.val;
 class ServiceInjector_forTesting implements ServiceInjector {
 
     @NonNull private final MetaModelContext metaModelContext;
-    
+
     private ServiceInjector delegate;
 
     @Override

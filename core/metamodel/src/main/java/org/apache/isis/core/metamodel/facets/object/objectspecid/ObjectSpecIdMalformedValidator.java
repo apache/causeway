@@ -28,9 +28,9 @@ import lombok.val;
 
 /**
  * DomainObjects must have a non-empty namespace,
- * eg. @DomainObject(objectType="Customer") is considered invalid, 
+ * eg. @DomainObject(objectType="Customer") is considered invalid,
  * whereas eg. @DomainObject(objectType="sales.Customer") is valid.
- * 
+ *
  * @since 2.0
  */
 public class ObjectSpecIdMalformedValidator
@@ -38,28 +38,28 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        
+
         programmingModel.addVisitingValidator(spec->{
-                    
+
             if(!spec.isEntityOrViewModel()
                     && !spec.isManagedBean() ) {
-                return;   
+                return;
             }
-            
+
             val objectSpecIdFacet = spec.getFacet(ObjectSpecIdFacet.class);
             if(objectSpecIdFacet == null) {
                 return;
             }
-            
+
             val logicalTypeName = objectSpecIdFacet.value();
-            
+
             val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                     .collect(Can.toCan());
-            
+
             if(!nameParts.getCardinality().isMultiple()
                     || nameParts.stream()
                         .anyMatch(String::isEmpty)) {
-                
+
                 ValidationFailure.raiseFormatted(
                         spec,
                         "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
@@ -68,7 +68,7 @@ implements MetaModelRefiner {
                         spec.getFullIdentifier(),
                         logicalTypeName);
             }
-    
+
         });
 
     }

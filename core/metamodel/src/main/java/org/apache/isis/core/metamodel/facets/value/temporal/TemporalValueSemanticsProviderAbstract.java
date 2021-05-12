@@ -52,72 +52,72 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} types.
- * 
+ *
  * @since 2.0
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
 @Log4j2
-public abstract class TemporalValueSemanticsProviderAbstract<T extends Temporal> 
+public abstract class TemporalValueSemanticsProviderAbstract<T extends Temporal>
 extends ValueSemanticsProviderAndFacetAbstract<T>
 implements TemporalValueFacet<T> {
-    
+
     @Getter(onMethod = @__(@Override)) protected final TemporalCharacteristic temporalCharacteristic;
     @Getter(onMethod = @__(@Override)) protected final OffsetCharacteristic offsetCharacteristic;
-    
+
     @Getter private DateTimeFormatter encodingFormatter;
     @Getter @Setter private DateTimeFormatter titleFormatter;
-    
+
     /**
-     * Keys represent the values which can be configured, 
+     * Keys represent the values which can be configured,
      * and which are used for the rendering of dates.
      */
     protected final Map<String, DateTimeFormatter> namedFormatters;
     protected Can<Function<String, T>> parsers;
-    
+
     protected final TemporalQuery<T> query;
     protected final BiFunction<TemporalAdjust, T, T> adjuster;
-    
+
     public TemporalValueSemanticsProviderAbstract(
             Class<? extends Facet> adapterFacetType,
             TemporalCharacteristic temporalCharacteristic,
             OffsetCharacteristic offsetCharacteristic,
             FacetHolder holder,
-            Class<T> valueType, 
-            int typicalLength, 
+            Class<T> valueType,
+            int typicalLength,
             int maxLength,
             TemporalQuery<T> query,
             BiFunction<TemporalAdjust, T, T> adjuster) {
-        
-        super(adapterFacetType, holder, valueType, typicalLength, maxLength, 
+
+        super(adapterFacetType, holder, valueType, typicalLength, maxLength,
                 Immutability.IMMUTABLE, EqualByContent.HONOURED, /*DEFAULT_VALUE*/ null);
-        
+
         this.temporalCharacteristic = temporalCharacteristic;
         this.offsetCharacteristic = offsetCharacteristic;
-        
+
         this.query = query;
         this.adjuster = adjuster;
-        
+
         namedFormatters = _Maps.newLinkedHashMap();
         namedFormatters.put("internal_encoding", this.getEncodingFormatter());
         updateParsers();
     }
-    
+
     @Override
     public void appendAttributesTo(Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("temporalCharacteristic", getTemporalCharacteristic());
         attributeMap.put("offsetCharacteristic", getOffsetCharacteristic());
     }
-    
+
     protected void setEncodingFormatter(DateTimeFormatter encodingFormatter) {
         this.encodingFormatter = encodingFormatter;
     }
-    
+
     protected void addNamedFormat(String name, String pattern) {
         namedFormatters.put(name, DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
     }
-    
+
     protected Optional<FormatStyle> lookupFormatStyle(String styleName) {
         if(styleName==null) {
             return Optional.empty();
@@ -126,16 +126,16 @@ implements TemporalValueFacet<T> {
         .filter(style->style.name().toLowerCase().equals(styleName))
         .findFirst();
     }
-    
+
     protected Optional<DateTimeFormatter> lookupNamedFormatter(String formatName) {
         return Optional.ofNullable(namedFormatters.get(formatName));
     }
-    
+
     protected DateTimeFormatter lookupNamedFormatterElseFail(String formatName) {
         return lookupNamedFormatter(formatName)
                 .orElseThrow(()->_Exceptions.noSuchElement("unknown format name %s", formatName));
     }
-    
+
     protected Optional<DateTimeFormatter> formatterFromPattern(String pattern) {
         try {
             return Optional.of(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
@@ -144,14 +144,14 @@ implements TemporalValueFacet<T> {
         }
         return Optional.empty();
     }
-    
+
     protected void updateParsers() {
         parsers = Can.ofCollection(namedFormatters.values())
                 .map(formatter->{
                     return $->formatter.parse($, query);
                 });
     }
-    
+
     protected Optional<DateTimeFormatter> formatterFirstOf(
             final @NonNull Can<Supplier<Optional<DateTimeFormatter>>> formatterProviders) {
         return formatterProviders.stream()
@@ -160,7 +160,7 @@ implements TemporalValueFacet<T> {
         .map(Optional::get)
         .findFirst();
     }
-    
+
     // -- TEMPORAL VALUE FACET
 
     @Override
@@ -172,7 +172,7 @@ implements TemporalValueFacet<T> {
     public final ManagedObject createValue(final T temporal) {
         return getObjectManager().adapt(temporal);
     }
-    
+
     // -- ENCODER/DECODER
 
     @Override
@@ -188,7 +188,7 @@ implements TemporalValueFacet<T> {
             throw new EncodingException(e);
         }
     }
-    
+
     // -- PARSING
 
     @Override
@@ -208,7 +208,7 @@ implements TemporalValueFacet<T> {
         }
         return parse(temporalString, parsers);
     }
-    
+
     private T parse(String dateStr, Iterable<Function<String, T>> parsers) {
         for(val parser: parsers) {
             try {
@@ -217,12 +217,12 @@ implements TemporalValueFacet<T> {
                 // continue to next
             }
         }
-        val msg = String.format("Not recognised as a %s: %s", 
-                super.getAdaptedClass().getName(), 
+        val msg = String.format("Not recognised as a %s: %s",
+                super.getAdaptedClass().getName(),
                 dateStr);
         throw new TextEntryParseException(msg);
     }
-    
+
     // -- TITLE
 
     @Override
@@ -240,7 +240,7 @@ implements TemporalValueFacet<T> {
         val formatter = DateTimeFormatter.ofPattern(usingMask, Locale.getDefault());
         return titleString(formatter, temporal);
     }
-    
+
     private String titleString(@NonNull DateTimeFormatter formatter, @Nullable T temporal) {
         return temporal != null ? formatter.format(temporal) : "";
     }
@@ -251,6 +251,6 @@ implements TemporalValueFacet<T> {
     public String toString() {
         return this.getClass().getSimpleName()+ ": " + titleFormatter;
     }
-    
-    
+
+
 }

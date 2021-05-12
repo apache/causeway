@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class UnknownModelPanel 
+public class UnknownModelPanel
 extends PanelAbstract<Object, IModel<Object>> {
 
     private static final long serialVersionUID = 1L;
@@ -60,12 +60,12 @@ extends PanelAbstract<Object, IModel<Object>> {
             EntityModel entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));    
+                buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));
             } else {
                 buf.append("??? objectAdapter is NULL");
             }
         }
-        
+
     }
 
 }

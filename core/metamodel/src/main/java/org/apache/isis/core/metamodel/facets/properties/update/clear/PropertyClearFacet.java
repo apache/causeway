@@ -33,5 +33,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface PropertyClearFacet extends PropertyClearingAccessor, Facet {
 
-    
+
 }

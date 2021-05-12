@@ -49,20 +49,20 @@ public abstract class ManagedMember implements ManagedFeature {
         PROPERTY(OneToOneAssociation.class, (spec, propertyId)->
         spec.getAssociation(propertyId)
         .map(property->property.isOneToOneAssociation()?property:null)),
-        
+
         COLLECTION(OneToManyAssociation.class, (spec, collectionId)->
         spec.getAssociation(collectionId)
         .map(collection->collection.isOneToManyAssociation()?collection:null)),
-        
+
         ACTION(ObjectAction.class, (spec, actionId)->
         spec.getAction(actionId));
-        
+
         @Getter private final Class<? extends ObjectMember> memberType;
         private final BiFunction<
-                ObjectSpecification, String, 
+                ObjectSpecification, String,
                 Optional<? extends ObjectMember>
             > memberProvider;
-    
+
         public <T extends ObjectMember> Optional<T> lookup(
                 @NonNull final ManagedObject owner,
                 @NonNull final String memberId) {
@@ -70,9 +70,9 @@ public abstract class ManagedMember implements ManagedFeature {
             val member = memberProvider.apply(onwerSpec, memberId);
             return _Casts.uncheckedCast(member);
         }
-        
+
     }
-    
+
     /**
      * Some representations may vary according to whether the member is to be represented for read
      * (render the state of the property or collection) or for write (render additional hypermedia controls to allow
@@ -87,12 +87,12 @@ public abstract class ManagedMember implements ManagedFeature {
         public boolean isWrite() {return this == WRITE;}
         public boolean isExplicit() {return !isAuto();}
     }
-    
+
     @NonNull private ManagedObject owner;
     public ManagedObject getOwner() {
         return owner = EntityUtil.reattach(owner);
     }
-    
+
     @Getter @NonNull private final Where where;
 
     /**
@@ -109,84 +109,85 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
 
+    @Override
     public abstract ObjectMember getMetaModel();
-    
+
     public abstract MemberType getMemberType();
-    
+
     @Override
     public ObjectSpecification getSpecification() {
         return getMetaModel().getSpecification();
     }
-    
+
     public String getId() {
         return getMetaModel().getId();
     }
-    
+
     public String getName() {
         return getMetaModel().getName();
     }
-    
+
     @Override
     public Identifier getIdentifier() {
         return getMetaModel().getIdentifier();
     }
-    
+
     @Override
     public String getDisplayLabel() {
         return getMetaModel().getName();
     }
-    
-    @Getter @Setter @NonNull 
+
+    @Getter @Setter @NonNull
     private RepresentationMode representationMode = RepresentationMode.AUTO;
 
-    
+
     /**
      * @return non-empty if hidden
      */
     public Optional<InteractionVeto> checkVisibility() {
 
         try {
-            val visibilityConsent = 
+            val visibilityConsent =
                     getMetaModel()
                     .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
-            
+
             return visibilityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.hidden(visibilityConsent)) 
+                    ? Optional.of(InteractionVeto.hidden(visibilityConsent))
                     : Optional.empty();
-            
+
         } catch (final Exception ex) {
-            
+
             return Optional.of(InteractionVeto.hidden(new Veto("failure during visibility evaluation")));
-            
+
         }
-        
+
     }
 
     /**
      * @return non-empty if not usable/editable (meaning if read-only)
      */
     public Optional<InteractionVeto> checkUsability() {
-        
+
         try {
-            
-            val usabilityConsent = 
+
+            val usabilityConsent =
                     getMetaModel()
                     .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
-            
+
             return usabilityConsent.isVetoed()
                     ? Optional.of(InteractionVeto.readonly(usabilityConsent))
                     : Optional.empty();
-            
+
         } catch (final Exception ex) {
-            
+
             return Optional.of(InteractionVeto
                     .readonly(
                             new Veto(ex.getLocalizedMessage())));
-            
+
         }
-        
+
     }
-    
+
     protected static <T extends ObjectMember> Optional<T> lookup(
             @NonNull final ManagedObject owner,
             @NonNull final MemberType memberType,
@@ -195,5 +196,5 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
 
-    
+
 }

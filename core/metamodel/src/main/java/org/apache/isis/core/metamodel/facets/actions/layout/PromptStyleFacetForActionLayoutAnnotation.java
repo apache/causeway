@@ -69,7 +69,7 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
                     default:
                         throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
                     }
-                    
+
                 })
                 .orElseGet(() -> {
                     // do not replace

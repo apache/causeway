@@ -34,7 +34,7 @@ import lombok.Setter;
 public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public JdoDatastoreIdentityAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }

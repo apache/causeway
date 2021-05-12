@@ -40,7 +40,7 @@ public class SimpleDocument extends SimpleStructuralNode implements Document {
     @Getter @Setter private String doctitle;
     @Getter private final Map<Object, Object> options = new HashMap<>();
     @Getter @Setter private boolean sourcemap;
-    
+
     @Override
     public String doctitle() {
         return getDoctitle();

@@ -29,7 +29,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -52,9 +52,9 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodParameters(final Method ...methods) {
-        
+
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
@@ -63,10 +63,10 @@ public class TypeExtractor {
             _Generics.streamGenericTypeArgumentsOfMethodParameterTypes(method)
                 .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     /**
      * Helper that finds all return types (including generic types) for the provided
      * {@link Method}.
@@ -83,9 +83,9 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodReturn(final Method ...methods) {
-        
+
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
@@ -94,15 +94,15 @@ public class TypeExtractor {
             _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                 .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     // -- VARIANTS
-    
+
     public static Stream<Class<?>> streamMethodReturn(final Iterable<Method> methods) {
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
@@ -111,22 +111,22 @@ public class TypeExtractor {
             _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                 .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     // -- HELPER
-    
+
     private static void acceptNonVoid(
-            final Consumer<Class<?>> onClass, 
+            final Consumer<Class<?>> onClass,
             final Class<?>... classes) {
-        
+
         for (val cls : classes) {
-            if(cls != void.class 
+            if(cls != void.class
                     && cls != Void.class) {
                 onClass.accept(cls);
-            }    
+            }
         }
     }
-    
+
 }

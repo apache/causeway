@@ -44,18 +44,18 @@ extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
                 holder, OffsetTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetTime::from,
                 TemporalAdjust::adjustOffsetTime);
-        
+
         val basicTimeNoMillis = "HHmmssZ";
         val basicTime = "HHmmss.SSSZ";
-        
+
         super.addNamedFormat("iso", basicTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicTime);
         super.updateParsers();
-        
+
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-        
+
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getOffsetTime().getFormat();
-        
+
         // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = formatterFirstOf(Can.of(
                 ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedTime),
@@ -63,7 +63,7 @@ extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));  // fallback
-        
+
         //TODO those FormatStyle based formatters potentially need additional zone information
         setTitleFormatter(formatter);
     }

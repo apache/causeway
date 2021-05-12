@@ -25,7 +25,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import lombok.Value;
 
 /**
- *  
+ *
  * @since 2.0
  */
 @Value(staticConstructor = "of")
@@ -34,7 +34,7 @@ public class ResourceDescriptor {
     RepresentationType representationType;
     Where where;
     RepresentationService.Intent intent;
-    
+
     public static ResourceDescriptor generic(Where where, RepresentationService.Intent intent) {
         return of(RepresentationType.GENERIC, where, intent);
     }
@@ -43,5 +43,5 @@ public class ResourceDescriptor {
         // in support of testing
         return of(null, null, null);
     }
-    
+
 }

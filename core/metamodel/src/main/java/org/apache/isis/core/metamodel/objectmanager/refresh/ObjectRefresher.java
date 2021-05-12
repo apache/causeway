@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -36,28 +36,28 @@ public interface ObjectRefresher {
      * @param objectLoadRequest
      */
     void refreshObject(ManagedObject managedObject);
-    
+
     // -- HANDLER
-    
+
     static interface Handler
     extends
         ChainOfResponsibility.Handler<ManagedObject, Void> {
     }
 
     // -- FACTORY
-    
+
     public static ObjectRefresher createDefault() {
-        
+
         val chainOfHandlers = _Lists.of(
                 new ObjectRefresher_builtinHandlers.GuardAgainstNull(),
                 new ObjectRefresher_builtinHandlers.RefreshEntity(),
                 new ObjectRefresher_builtinHandlers.RefreshOther());
-        
+
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
+
         return chainOfRespo::handle;
 
     }
-    
-    
+
+
 }

@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ParseValueEvent}.
  */
-public class ParseValueContext 
-extends ValidityContext 
+public class ParseValueContext
+extends ValidityContext
 implements ProposedHolder {
 
     private final ManagedObject proposed;
@@ -41,7 +41,7 @@ implements ProposedHolder {
             final Identifier identifier,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         super(InteractionContextType.PARSE_VALUE, head, identifier, interactionInitiatedBy);
         this.proposed = proposed;
     }

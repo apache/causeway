@@ -40,7 +40,7 @@ import lombok.val;
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
     private ObjectManager objectManager;
-    
+
     // getter is API
     @Getter(onMethod = @__(@Override)) private final T delegate;
     @Getter protected final WrapperFactory wrapperFactory;
@@ -75,8 +75,8 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-    
-    
+
+
     protected void resolveIfRequired(final ManagedObject adapter) {
 
         if(!resolveObjectChangedEnabled) {
@@ -88,14 +88,14 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         if(!ManagedObjects.isEntity(adapter)) {
             return;
         }
-        
+
         val oid = objectManager.bookmarkObject(adapter);
-        
+
         val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), oid.getIdentifier());
-        
+
         objectManager.loadObject(loadRequest);
     }
-    
+
     protected void resolveIfRequired(final Object domainObject) {
         resolveIfRequired(objectManager.adapt(domainObject));
     }

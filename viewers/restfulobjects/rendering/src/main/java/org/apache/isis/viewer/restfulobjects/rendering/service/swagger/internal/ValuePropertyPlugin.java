@@ -28,14 +28,14 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault.Factory;
 
 /**
- * Not used by the framework yet, supposed to be reconsidered in the process of 
- * <a href="https://issues.apache.org/jira/browse/ISIS-1695">ISIS-1695</a>   
- * 
+ * Not used by the framework yet, supposed to be reconsidered in the process of
+ * <a href="https://issues.apache.org/jira/browse/ISIS-1695">ISIS-1695</a>
+ *
  * @apiNote for now any implementing class must also be discovered/managed by Spring,
- * that is, it needs a direct- or meta-annotation of type {@link Component}  
- *   
+ * that is, it needs a direct- or meta-annotation of type {@link Component}
+ *
  * @since 2.0
- * 
+ *
  */
 public interface ValuePropertyPlugin {
 

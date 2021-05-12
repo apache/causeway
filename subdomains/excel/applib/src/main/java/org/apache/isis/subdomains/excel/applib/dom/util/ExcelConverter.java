@@ -156,9 +156,9 @@ class ExcelConverter {
         final List<ManagedObject> adapters = domainObjects.stream()
                 .map(objectManager::adapt)
                 .collect(Collectors.toList());
-        
+
         final List<ObjectAssociation> propertyList = _Lists.newArrayList();
-        
+
         specificationLoader.specForType(factory.getCls())
         .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
@@ -208,19 +208,19 @@ class ExcelConverter {
     }
 
     File appendPivotSheet(final List<WorksheetContent> worksheetContents) throws IOException {
-        
-        
+
+
         val worksheetNames = _NullSafe.stream(worksheetContents)
         .map(worksheetContent->worksheetContent==null
                 ? null
                 : worksheetContent.getSpec().getSheetName())
         .filter(_Strings::isNotEmpty)
         .collect(_Sets.toUnmodifiableSorted());
-        
+
         if(worksheetNames.size() < worksheetContents.size()) {
             throw new IllegalArgumentException("Sheet names must have distinct names and cannot be empty");
         }
-        
+
         for (val worksheetName : worksheetNames) {
             if(worksheetName.length() > 30) {
                 throw new IllegalArgumentException(
@@ -233,7 +233,7 @@ class ExcelConverter {
             final File tempFile =
                     File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
             try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
-    
+
                 for (WorksheetContent worksheetContent : worksheetContents) {
                     final WorksheetSpec spec = worksheetContent.getSpec();
                     appendPivotSheet(workbook, worksheetContent.getDomainObjects(), spec.getFactory(), spec.getSheetName());
@@ -251,7 +251,7 @@ class ExcelConverter {
             final String sheetName) throws IOException {
 
         final List<ObjectAssociation> propertyList = _Lists.newArrayList();
-                
+
         specificationLoader.specForType(factory.getCls())
         .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
@@ -504,7 +504,7 @@ class ExcelConverter {
                     if(imported instanceof RowHandler) {
                         val rowHandler = (RowHandler<?>) imported;
                         val rowHandlerPrev = (RowHandler<?>) previousRow;
-                        
+
                         rowHandler.handleRow(_Casts.uncheckedCast(rowHandlerPrev));
                     }
 
@@ -549,13 +549,13 @@ class ExcelConverter {
     }
 
     private static OneToOneAssociation getAssociation(
-            final @Nullable ObjectSpecification objectSpec, 
+            final @Nullable ObjectSpecification objectSpec,
             final String propertyNameOrId) {
-        
+
         if(objectSpec==null) {
             return null;
         }
-        
+
         return objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())
                             || propertyNameOrId.equalsIgnoreCase(association.getId()))

@@ -38,19 +38,19 @@ class HintPageParameterSerializer implements Serializable {
     public static void hintStoreToPageParameters(
             final PageParameters pageParameters,
             final ManagedObjectModel objectModel) {
-        
+
         val bookmark = objectModel.asHintingBookmarkIfSupported();
         val hintStore = objectModel.getCommonContext().lookupServiceElseFail(HintStore.class);
         hintStoreToPageParameters(pageParameters, bookmark, hintStore);
     }
-    
+
     // -- HELPER
-    
+
     private static void hintStoreToPageParameters(
             final PageParameters pageParameters,
             final Bookmark bookmark,
             final HintStore hintStore) {
-        
+
         if(bookmark==null) {
             return;
         }

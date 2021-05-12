@@ -73,7 +73,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
     private List<ExcelDemoToDoItem> load(
             final ExecutionContext executionContext,
             final String resourceName) {
-        
+
         final URL excelResource = _Resources.getResourceUrl(getClass(), resourceName);
         final ExcelFixture excelFixture = new ExcelFixture(excelResource, DemoToDoItemRowHandler.class);
         excelFixture.setExcelResourceName(resourceName);

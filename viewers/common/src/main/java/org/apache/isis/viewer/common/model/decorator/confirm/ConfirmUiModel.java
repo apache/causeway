@@ -35,37 +35,37 @@ import lombok.val;
 public class ConfirmUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     public enum Placement {
         TOP, BOTTOM, RIGHT, LEFT;
     }
-    
+
     @NonNull final String title;
     @NonNull final Optional<String> message;
     @NonNull final String okLabel;
     @NonNull final String cancelLabel;
     @NonNull final Placement placement;
-    
+
     public static ConfirmUiModel ofAreYouSure(TranslationService translationService, Placement placement) {
-        
+
     	val context = TranslationContext.forClassName(MessageRegistry.class);
-    	
-        val areYouSure = translate(translationService, context, MessageRegistry.MSG_ARE_YOU_SURE); 
+
+        val areYouSure = translate(translationService, context, MessageRegistry.MSG_ARE_YOU_SURE);
         val confirm = translate(translationService, context, MessageRegistry.MSG_CONFIRM);
         val cancel = translate(translationService, context, MessageRegistry.MSG_CANCEL);
-        
+
         val message = Optional.<String>empty(); // not used yet
-        
+
         return of(areYouSure, message, confirm, cancel, placement);
     }
-    
+
     // -- HELPER
-    
+
     private static String translate(TranslationService translationService, TranslationContext context, String msg) {
-        if(translationService!=null) {        	
+        if(translationService!=null) {
             return translationService.translate(context, msg);
         }
         return msg;
     }
-    
+
 }

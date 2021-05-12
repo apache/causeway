@@ -73,7 +73,7 @@ implements CommandModelRepository<CommandJpa> {
 
     @Inject final Provider<InteractionContext> interactionContextProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
-    
+
 
     @Override
     public List<CommandJpa> findByFromAndTo(

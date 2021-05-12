@@ -35,8 +35,8 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removePermissions.DomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_removePermissions.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 

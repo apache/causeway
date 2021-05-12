@@ -20,8 +20,6 @@ package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;

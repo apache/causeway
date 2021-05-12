@@ -39,18 +39,18 @@ import javafx.scene.layout.HBox;
 public class PrototypingDecoratorForFormField implements PrototypingDecorator<Node, Node> {
 
     private final PrototypingInfoPopupProvider prototypingInfoService;
-    
+
     @Override
     public Node decorate(final Node formField, final PrototypingUiModel prototypingUiModel) {
-        
+
         val container = new HBox();
         val infoLabel = _fx.add(container, new Label("ⓘ"));
         _fx.add(container, formField);
 
         infoLabel.setTooltip(new Tooltip("Inspect Metamodel"));
         infoLabel.setOnMouseClicked(e->prototypingInfoService.showPrototypingPopup(prototypingUiModel));
-        
+
         return container;
     }
-    
+
 }

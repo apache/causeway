@@ -46,40 +46,40 @@ import lombok.val;
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
  */
 public interface SpecificationLoader {
-   
+
     /**
      * Creates the meta-model, that is the set of {@link ObjectSpecification}s.
      * @see {@link #disposeMetaModel()}
      */
     void createMetaModel();
-    
+
     /**
      * Clears all instance references to {@link ObjectSpecification}s.
      * @see {@link #createMetaModel()}
      */
     void disposeMetaModel();
-    
+
     /**
      * Returns the collected results of the various {@link MetaModelValidator}s configured with
-     * the {@link ProgrammingModel}. As a side-effect, triggers meta-model validation, if that has 
-     * not happened already. Viewers should call the side-effect free 
-     * {@link #getValidationResult() variant} instead. 
-     * 
-     * @apiNote Some of the {@link MetaModelValidator}s run during {@link #createMetaModel()}, 
-     * others are only triggered when calling this method. 
+     * the {@link ProgrammingModel}. As a side-effect, triggers meta-model validation, if that has
+     * not happened already. Viewers should call the side-effect free
+     * {@link #getValidationResult() variant} instead.
+     *
+     * @apiNote Some of the {@link MetaModelValidator}s run during {@link #createMetaModel()},
+     * others are only triggered when calling this method.
      * @see #getValidationResult()
      */
     ValidationFailures getOrAssessValidationResult();
 
     /**
      * Optionally returns the collected results of the various {@link MetaModelValidator}s configured with
-     * the {@link ProgrammingModel}, based on whether the <i>Application<i> is yet fully initialized. 
-     * 
+     * the {@link ProgrammingModel}, based on whether the <i>Application<i> is yet fully initialized.
+     *
      * @apiNote This is the side-effect free variant of {@link #getOrAssessValidationResult()}
-     * @see #getOrAssessValidationResult() 
+     * @see #getOrAssessValidationResult()
      */
     Optional<ValidationFailures> getValidationResult();
-    
+
     void addValidationFailure(ValidationFailure validationFailure);
 
     // -- LOOKUP
@@ -91,15 +91,15 @@ public interface SpecificationLoader {
      *     iterates over all the specifications and performs an activity that might give rise to new
      *     ObjectSpec's being discovered, eg. performing meta-model validation.
      * </p>
-     * 
-     * @return snapshot of all the (currently) loaded specifications, a defensive-copy 
+     *
+     * @return snapshot of all the (currently) loaded specifications, a defensive-copy
      */
     Can<ObjectSpecification> snapshotSpecifications();
-    
+
     /**
-     * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur 
-     * during traversal. 
-     *  
+     * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur
+     * during traversal.
+     *
      * @param action
      */
     void forEach(Consumer<ObjectSpecification> onSpec);
@@ -112,7 +112,7 @@ public interface SpecificationLoader {
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
      * any of the configured {@link ClassSubstitutor}s has filtered out the class.
-     * 
+     *
      * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */
     @Nullable
@@ -136,7 +136,7 @@ public interface SpecificationLoader {
 
     @Nullable
     default ObjectSpecification loadSpecification(
-            final @Nullable String logicalTypeName, 
+            final @Nullable String logicalTypeName,
             final @NonNull  IntrospectionState introspectionState) {
 
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
@@ -148,7 +148,7 @@ public interface SpecificationLoader {
         }
         return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
     }
-    
+
     // -- SHORTCUTS - 1
 
     default Optional<ObjectSpecification> specForLogicalTypeName(
@@ -156,14 +156,14 @@ public interface SpecificationLoader {
         return Optional.ofNullable(
                 loadSpecification(logicalTypeName, FULLY_INTROSPECTED));
     }
-    
+
     default Optional<ObjectSpecification> specForLogicalType(
             final @Nullable LogicalType logicalType) {
         return Optional.ofNullable(logicalType)
                 .map(LogicalType::getCorrespondingClass)
                 .flatMap(this::specForType);
     }
-    
+
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
@@ -176,7 +176,7 @@ public interface SpecificationLoader {
                 .map(Bookmark::getLogicalTypeName)
                 .flatMap(this::specForLogicalTypeName);
     }
-    
+
     // -- SHORTCUTS - 2
 
     default ObjectSpecification specForLogicalTypeNameElseFail(
@@ -186,7 +186,7 @@ public interface SpecificationLoader {
                         "meta-model is not aware of an object-type named '%s'",
                         _Strings.nullToEmpty(logicalTypeName)));
     }
-    
+
     default ObjectSpecification specForLogicalTypeElseFail(
             final @Nullable LogicalType logicalType) {
         return specForLogicalType(logicalType)
@@ -194,7 +194,7 @@ public interface SpecificationLoader {
                         "meta-model is not aware of an object-type '%s'",
                         logicalType));
     }
-    
+
     default ObjectSpecification specForTypeElseFail(
             final @Nullable Class<?> domainType) {
         return specForType(domainType)
@@ -210,12 +210,12 @@ public interface SpecificationLoader {
                         "meta-model is not aware of a bookmark's (%s) object-type",
                         bookmark));
     }
-    
+
     // -- CAUTION! (use only during meta-model initialization)
-    
+
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
         return loadSpecification(domainType, TYPE_INTROSPECTED);
     }
-    
+
 }

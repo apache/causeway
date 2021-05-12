@@ -75,10 +75,10 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
 
     @Override
     public void redirectTo(ManagedObject resultAdapter, AjaxRequestTarget targetIfany) {
-        
+
         ActionResultResponse resultResponse = ActionResultResponseType
                 .determineAndInterpretResult(model, targetIfany, resultAdapter);
-        
+
         resultResponse.getHandlingStrategy().handleResults(model.getCommonContext(), resultResponse);
     }
 

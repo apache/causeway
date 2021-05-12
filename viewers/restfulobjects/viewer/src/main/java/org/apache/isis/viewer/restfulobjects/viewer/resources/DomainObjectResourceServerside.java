@@ -114,8 +114,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         }
 
         val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .orElse(null);        
-        
+                .orElse(null);
+
         if (domainTypeSpec == null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
@@ -343,7 +343,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     private Optional<Grid> layoutAsGrid(
             final String domainType,
             final String instanceId) {
-        
+
         val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
         .map(spec->spec.getFacet(GridFacet.class))
         .orElse(null);

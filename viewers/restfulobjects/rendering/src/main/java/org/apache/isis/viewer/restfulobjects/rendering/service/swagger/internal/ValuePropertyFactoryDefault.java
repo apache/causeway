@@ -59,7 +59,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
 
     @Autowired(required = false) private List<ValuePropertyPlugin> valuePropertyPlugins;
-    
+
     public static interface Factory extends Supplier<Property> {};
 
     public ValuePropertyFactoryDefault() {
@@ -137,7 +137,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
     // -- HELPER
 
     private ValuePropertyCollector discoverValueProperties() {
-        
+
         final ValuePropertyCollector collector = ValuePropertyPlugin.collector();
         _NullSafe.stream(valuePropertyPlugins).forEach(plugin->{
             plugin.plugin(collector);

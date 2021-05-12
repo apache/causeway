@@ -71,7 +71,7 @@ public class MethodRemoverForTesting implements MethodRemover {
         public int paramCount;
     }
 
-    
+
 
     @Override
     public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {

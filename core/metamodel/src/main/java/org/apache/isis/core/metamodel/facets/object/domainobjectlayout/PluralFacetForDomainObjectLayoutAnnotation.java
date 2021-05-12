@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
     public static PluralFacet create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::plural)
                 .filter(Objects::nonNull)

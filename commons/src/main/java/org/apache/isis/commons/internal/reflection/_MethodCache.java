@@ -40,27 +40,27 @@ import lombok.val;
  * These may be changed or removed without notice!
  * </p>
  * <p>
- * Motivation: JDK reflection API has no Class.getMethod(name, ...) variant that does not produce an expensive 
- * stack-trace, when no such method exists. 
- * </p> 
- * @apiNote 
- * thread-save, implements AutoCloseable so we can put it on the _Context, which then automatically 
+ * Motivation: JDK reflection API has no Class.getMethod(name, ...) variant that does not produce an expensive
+ * stack-trace, when no such method exists.
+ * </p>
+ * @apiNote
+ * thread-save, implements AutoCloseable so we can put it on the _Context, which then automatically
  * takes care of the lifecycle
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _MethodCache implements AutoCloseable {
-    
+
     public static _MethodCache getInstance() {
         return _Context.computeIfAbsent(_MethodCache.class, _MethodCache::new);
     }
 
     /**
-     * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up 
-     * public methods and does not throw {@link NoSuchMethodException}s.    
+     * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
+     * public methods and does not throw {@link NoSuchMethodException}s.
      */
     public Method lookupMethod(Class<?> type, String name, Class<?>[] paramTypes) {
-        
+
         synchronized(inspectedTypes) {
             if(!inspectedTypes.contains(type)) {
                 for(val method : type.getMethods()) {
@@ -69,7 +69,7 @@ public final class _MethodCache implements AutoCloseable {
                 inspectedTypes.add(type);
             }
         }
-        
+
         return methodsByKey.get(Key.of(type, name, _Arrays.emptyToNull(paramTypes)));
     }
 
@@ -78,20 +78,20 @@ public final class _MethodCache implements AutoCloseable {
     }
 
     // -- IMPLEMENATION DETAILS
-    
+
     private Map<Key, Method> methodsByKey = new HashMap<>();
     private Set<Class<?>> inspectedTypes = new HashSet<>();
-    
+
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
     private static final class Key {
         private final Class<?> type;
         private final String name;
         private final Class<?>[] paramTypes;
-        
+
         public static Key of(Class<?> type, Method method) {
             return Key.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
         }
-        
+
     }
 
     @Override
@@ -101,6 +101,6 @@ public final class _MethodCache implements AutoCloseable {
             methodsByKey.clear();
         }
     }
-    
-    
+
+
 }

@@ -39,12 +39,12 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeRep
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> 
+public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T>
 implements ReprRenderer<R, T> {
 
     @Getter protected final IResourceContext resourceContext;
     @Getter protected final JsonValueEncoder jsonValueEncoder;
-    
+
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
@@ -62,7 +62,7 @@ implements ReprRenderer<R, T> {
         this.resourceContext = resourceContext;
         this.jsonValueEncoder = resourceContext.getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoder.class);
-                
+
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
@@ -187,7 +187,7 @@ implements ReprRenderer<R, T> {
      */
     protected final void addExtensionsIsisProprietaryChangedObjects() {
 
-        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction 
+        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction
         // enlisted objects (which would also allow newly-created objects to be shown)
         final List<ManagedObject> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
         final List<ManagedObject> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();

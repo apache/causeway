@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * action parameter}s (but not {@link ObjectAction action}s themselves).
  */
 public interface CurrentHolder {
-    
+
     /**
      * Returns the referenced {@link ManagedObject} for the owning
      * {@link ManagedObject}.

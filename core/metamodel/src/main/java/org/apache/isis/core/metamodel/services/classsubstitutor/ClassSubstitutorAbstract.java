@@ -44,7 +44,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         }
         return Substitution.replaceWith(replacement) ;
     }
-    
+
     protected Class<?> getReplacement(final Class<?> cls) {
 
         if(cls == null) {

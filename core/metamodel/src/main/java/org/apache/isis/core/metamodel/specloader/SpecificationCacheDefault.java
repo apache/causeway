@@ -40,7 +40,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
 
     // optimization: specialized list to keep track of any additions to the cache fast
-    private final _VersionedList<T> vList = new _VersionedList<>(); 
+    private final _VersionedList<T> vList = new _VersionedList<>();
 
     @Override
     public Optional<T> lookup(Class<?> cls) {
@@ -51,7 +51,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
 
     @Override
     public T computeIfAbsent(
-            Class<?> cls, 
+            Class<?> cls,
             Function<Class<?>, T> mappingFunction) {
         synchronized(this) {
             T spec = specByClass.get(cls);
@@ -59,11 +59,11 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
                 spec = mappingFunction.apply(cls);
                 internalPut(spec);
 
-//debug                
+//debug
 //                if(cls.getSimpleName().equals("MarkupStream")) {
 //                    System.out.println("!!! MarkupStream");
 //                }
-                
+
             }
             return spec;
         }
@@ -99,10 +99,10 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     @Override
     public void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent) {
         if(shouldRunConcurrent) {
-            vList.forEachParallel(onSpec);    
+            vList.forEachParallel(onSpec);
         } else {
             vList.forEach(onSpec);
-        }        
+        }
     }
 
     // -- HELPER

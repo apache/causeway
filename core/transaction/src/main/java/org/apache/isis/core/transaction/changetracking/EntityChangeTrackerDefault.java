@@ -103,7 +103,7 @@ implements
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
     @Inject private Provider<AuthenticationContext> authenticationContextProvider;
-    
+
 
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
@@ -114,7 +114,7 @@ implements
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
      * triggered by internal call to {@link #snapshotPropertyChangeRecords()}.
      */
-    private final _Lazy<Set<_PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing 
+    private final _Lazy<Set<_PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
     @Getter(AccessLevel.PACKAGE)
@@ -148,7 +148,7 @@ implements
         }
         final boolean enlisted = enlistForChangeKindPublishing(adapter, EntityChangeKind.DELETE);
         if(enlisted) {
-            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);            
+            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
         }
     }
 
@@ -184,13 +184,13 @@ implements
         try {
             doPublish();
         } finally {
-            postPublishing();    
+            postPublishing();
         }
     }
-    
+
     private void doPublish() {
         _Xray.publish(this, interactionContextProvider, authenticationContextProvider);
-        
+
         log.debug("about to publish entity changes");
         entityPropertyChangePublisher.publishChangedProperties(this);
         entityChangesPublisher.publishChangingEntities(this);
@@ -234,7 +234,7 @@ implements
             final @NonNull EntityChangeKind changeKind) {
 
         val bookmark = ManagedObjects.bookmarkElseFail(entity);
-        
+
         val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
         if(previousChangeKind == null) {
             changeKindByEnlistedAdapter.put(bookmark, changeKind);
@@ -362,7 +362,7 @@ implements
 
     @Override
     public void recognizePersisting(ManagedObject entity) {
-        _Xray.recognizePersisting(entity, interactionContextProvider, authenticationContextProvider);        
+        _Xray.recognizePersisting(entity, interactionContextProvider, authenticationContextProvider);
         CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }

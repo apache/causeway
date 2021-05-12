@@ -46,12 +46,12 @@ import lombok.Setter;
 import lombok.val;
 
 
-public class MandatoryFromJdoColumnAnnotationFacetFactory 
+public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
-    
+
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public MandatoryFromJdoColumnAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
@@ -120,7 +120,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
-            
+
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                 return;
@@ -134,10 +134,10 @@ implements MetaModelRefiner {
             // skip checks if annotated with JDO @NotPersistent
             .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
             .forEach(association->validateMandatoryFacet(association));
-            
+
         });
     }
-    
+
     private static void validateMandatoryFacet(ObjectAssociation association) {
         MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
 

@@ -39,14 +39,14 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
 
     protected SimpleDateFormat getDateOnlyFormat() {
         if(dateOnlyPattern==null) {
-            dateOnlyPattern = new SimpleDateFormat(dateFormatSettings.getDatePattern()); 
+            dateOnlyPattern = new SimpleDateFormat(dateFormatSettings.getDatePattern());
         }
         return dateOnlyPattern;
     }
 
     protected SimpleDateFormat getDateTimeFormat() {
         if(dateTimePattern==null) {
-            dateTimePattern = new SimpleDateFormat(dateFormatSettings.getDateTimePattern()); 
+            dateTimePattern = new SimpleDateFormat(dateFormatSettings.getDateTimePattern());
         }
         return dateTimePattern;
     }
@@ -65,7 +65,7 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
             return temporalValueOf(value);
         }
         return temporalValueOf(addDaysTo(value, -days));
-    }    
+    }
 
     protected T parseDateTime(String valueStr) {
         try {

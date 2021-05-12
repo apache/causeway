@@ -53,7 +53,7 @@ public class ErrorPage extends PageAbstract {
 
         val errorReportingService = super.getCommonContext().getServiceRegistry()
                 .lookupService(ErrorReportingService.class).orElse(null);
-        
+
         if(errorReportingService != null) {
 
             final String mainMessage = exceptionModel.getMainMessage();

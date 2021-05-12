@@ -61,11 +61,11 @@ public class C4 {
         c4.applyDefaultStyles();
         return c4;
     }
-    
+
     public String getWorkspaceName() {
         return workspace.getName();
     }
-    
+
     /**
      * @return the software architecture model
      */
@@ -86,17 +86,17 @@ public class C4 {
     public String toPlantUML(View view) {
         return plantUMLWriter.toString(view);
     }
-    
+
     // -- SIMPLE FACTORIES
-    
+
     public Person person(@NonNull String name, @Nullable String description) {
         return getModel().addPerson(name, _Strings.nullToEmpty(description));
     }
-    
+
     public SoftwareSystem softwareSystem(@NonNull String name, @Nullable String description) {
         return getModel().addSoftwareSystem(name, _Strings.nullToEmpty(description));
     }
-    
+
     public SystemContextView systemContextView(@NonNull SoftwareSystem softwareSystem, @NonNull String key, @Nullable String description) {
         return getViewSet().createSystemContextView(softwareSystem, key, _Strings.nullToEmpty(description));
     }
@@ -122,7 +122,7 @@ public class C4 {
 
 
         //        styles.addElementStyle(Tags.SOFTWARE_SYSTEM)
-        //        .color("#ffffff")    
+        //        .color("#ffffff")
         //        .background("#1168bd");
         styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
     }

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbs
 public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
     public static DescribedAsFacet create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         return domainObjectLayoutIfAny

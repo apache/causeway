@@ -60,7 +60,7 @@ public abstract class MenuActionPanel extends PanelBase {
                 default:
                     // fall through
                 }
-                
+
                 if (subMenuItem.hasSubMenuItems()) {
                     addFolderItem(subMenuItem, listItem);
                 } else {
@@ -70,7 +70,7 @@ public abstract class MenuActionPanel extends PanelBase {
             }
         };
     }
-    
+
     protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {
         val subMenuItems = _Lists.<CssMenuItem>newArrayList();
         for (val menuItem : menuItems) {
@@ -98,7 +98,7 @@ public abstract class MenuActionPanel extends PanelBase {
         listItem.add(fragment);
         listItem.add(new CssClassAppender("list-separator"));
     }
-    
+
     private void addSectionLabel(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
         val menuItemUiLabel = new Label("sectionLabel", menuItem.getName());
@@ -107,6 +107,6 @@ public abstract class MenuActionPanel extends PanelBase {
         listItem.add(fragment);
         listItem.add(new CssClassAppender("list-section-label"));
     }
-    
+
 
 }

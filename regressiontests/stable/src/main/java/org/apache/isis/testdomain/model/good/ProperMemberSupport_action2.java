@@ -30,20 +30,20 @@ import lombok.RequiredArgsConstructor;
 @Action(executionPublishing = Publishing.ENABLED)
 @RequiredArgsConstructor
 public class ProperMemberSupport_action2 {
-    
+
     private final ProperMemberSupport holder;
 
     // proper mix-in action
-     
+
     public ProperMemberSupport act(String p0, String p1) {
         return holder;
     }
-    
+
     @MemberSupport
     public String disableAct() {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideAct() {
         return false;
@@ -53,7 +53,7 @@ public class ProperMemberSupport_action2 {
     public String validateAct(String p0, String p1) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> autoComplete0Act(@MinLength(3) String search) {
         return null;
@@ -69,7 +69,7 @@ public class ProperMemberSupport_action2 {
 //    public Set<String> autoComplete1$$(String p0, @MinLength(3) String search) {
 //        return null;
 //    }
-    
+
     @MemberSupport
     public Set<String> choices0Act() {
         return null;
@@ -80,12 +80,12 @@ public class ProperMemberSupport_action2 {
         return null;
     }
 
-// variant with dependent arg    
-//    @MemberSupport 
+// variant with dependent arg
+//    @MemberSupport
 //    public Set<String> choices1$$(String p0) {
 //        return null;
 //    }
-    
+
     @MemberSupport
     public String default0Act() {
         return null;
@@ -106,5 +106,5 @@ public class ProperMemberSupport_action2 {
         return null;
     }
 
-    
+
 }

@@ -37,15 +37,15 @@ import lombok.ToString;
  *
  * @see org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet
  */
-@Getter 
-@AllArgsConstructor(access = AccessLevel.PRIVATE) 
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString @EqualsAndHashCode
 public final class JdoNamedQuery implements MetaModelExportSupport {
 
     private final @NonNull  String name;
     private final @NonNull  String query;
     private final @Nullable String language;
-    
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private final @NonNull  ObjectSpecification objectSpecification;

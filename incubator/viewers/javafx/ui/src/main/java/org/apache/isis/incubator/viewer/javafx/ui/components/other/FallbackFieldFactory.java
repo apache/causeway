@@ -32,7 +32,7 @@ import javafx.scene.control.Label;
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerFx {
-    
+
     @Override
     public boolean isHandling(ComponentRequest request) {
         return true; // the last handler in the chain
@@ -40,7 +40,7 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public Node handle(ComponentRequest request) {
-        
+
         val spec = request.getFeatureTypeSpec();
         return new Label(spec.getCorrespondingClass().getSimpleName() + " type not handled");
     }

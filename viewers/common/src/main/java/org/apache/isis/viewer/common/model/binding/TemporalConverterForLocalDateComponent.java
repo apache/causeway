@@ -38,7 +38,7 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
     private final ObjectSpecification valueSpecification;
 
     @Getter
-    private final ValueSemanticsProviderAndFacetAbstract<LocalDate> valueFacet; 
+    private final ValueSemanticsProviderAndFacetAbstract<LocalDate> valueFacet;
 
     public TemporalConverterForLocalDateComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
@@ -71,7 +71,7 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
             return (LocalDate) value;
         }
         // TODO might require additional cases
-        throw _Exceptions.unmatchedCase(value.getClass());  
+        throw _Exceptions.unmatchedCase(value.getClass());
     }
 
     @Override

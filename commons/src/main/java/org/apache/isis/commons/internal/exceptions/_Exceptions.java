@@ -86,7 +86,7 @@ public final class _Exceptions {
         _With.requires(format, "format");
         return new IllegalStateException(String.format(format, args));
     }
-    
+
     public static IllegalAccessException illegalAccess(
             final String format,
             final @Nullable Object ... args) {
@@ -97,7 +97,7 @@ public final class _Exceptions {
     public static final NoSuchElementException noSuchElement() {
         return new NoSuchElementException();
     }
-    
+
     public static final NoSuchElementException noSuchElement(String msg) {
         return new NoSuchElementException(msg);
     }
@@ -116,7 +116,7 @@ public final class _Exceptions {
     }
 
     // -- UNRECOVERABLE
-    
+
     public static RuntimeException unrecoverable(Throwable cause) {
         return new RuntimeException("unrecoverable error: with cause ...", cause);
     }
@@ -128,34 +128,34 @@ public final class _Exceptions {
     public static RuntimeException unrecoverable(String msg, Throwable cause) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
-    
+
     public static RuntimeException unrecoverableFormatted(String format, Object ...args) {
-        return new RuntimeException(String.format("unrecoverable error: '%s'", 
+        return new RuntimeException(String.format("unrecoverable error: '%s'",
                 String.format(format, args)));
     }
-    
+
     // -- UNSUPPORTED
 
     public static UnsupportedOperationException unsupportedOperation() {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
     }
-    
+
     public static UnsupportedOperationException unsupportedOperation(String msg) {
         return new UnsupportedOperationException(msg);
     }
-    
+
     public static UnsupportedOperationException unsupportedOperation(String format, Object ...args) {
         return new UnsupportedOperationException(String.format(format, args));
     }
-    
+
     // -- ASSERT
-    
+
     public static AssertionError assertionError(String msg) {
         return new AssertionError(msg);
     }
-    
+
     // -- MESSAGE
-    
+
     public static String getMessage(Exception ex) {
         if(ex==null) {
             return "no exception present";
@@ -171,22 +171,22 @@ public final class _Exceptions {
                 .map(Throwable::getMessage)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
-        
+
         if(nestedMsg.isPresent()) {
             sb.append(nestedMsg.get());
         } else {
-            
+
             Can.ofArray(ex.getStackTrace())
             .stream()
             .limit(20)
             .forEach(trace->sb.append("\n").append(trace));
         }
-                
+
         return sb.toString();
     }
-    
+
     // -- THROWING
-    
+
     /**
      * Used to hide from the compiler the fact, that this call always throws.
      *
@@ -299,7 +299,7 @@ public final class _Exceptions {
     }
 
     public static void dumpStackTrace() {
-        dumpStackTrace(System.err, 0, 1000); 
+        dumpStackTrace(System.err, 0, 1000);
     }
 
     // -- CAUSAL CHAIN
@@ -328,30 +328,30 @@ public final class _Exceptions {
     public static Throwable getRootCause(@Nullable Throwable ex) {
         return _Lists.lastElementIfAny(getCausalChain(ex));
     }
-    
+
     // -- SWALLOW
-    
+
     public static void silence(Runnable runnable) {
-        
+
         val currentThread = Thread.currentThread();
         val silencedHandler = currentThread.getUncaughtExceptionHandler();
-        
+
         currentThread.setUncaughtExceptionHandler((Thread t, Throwable e)->{/*noop*/});
-        
+
         try {
             runnable.run();
         } finally {
             currentThread.setUncaughtExceptionHandler(silencedHandler);
         }
-        
+
     }
-    
+
     // -- PREDICATES
-    
+
     public static boolean containsAnyOfTheseMessages(
-            final @Nullable Throwable throwable, 
+            final @Nullable Throwable throwable,
             final @Nullable String ... messages) {
-        
+
         if(throwable==null) {
             return false;
         }

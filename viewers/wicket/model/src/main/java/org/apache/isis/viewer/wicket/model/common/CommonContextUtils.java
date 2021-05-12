@@ -33,11 +33,11 @@ public class CommonContextUtils {
         val application = Session.get().getApplication();
         return ((IsisAppCommonContext.Provider) application).getCommonContext();
     }
-    
+
     public static IsisAppCommonContext computeIfAbsent(IsisAppCommonContext commonContext) {
         return commonContext!=null
                 ? commonContext
                 : getCommonContext();
     }
-    
+
 }

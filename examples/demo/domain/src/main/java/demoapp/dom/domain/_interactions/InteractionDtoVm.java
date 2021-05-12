@@ -56,7 +56,7 @@ public class InteractionDtoVm implements ViewModel {
         val format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         val exec = getInteractionDto().getExecution();
         val instant = exec.getMetrics().getTimings().getStartedAt().toGregorianCalendar().toInstant();
-        
+
         val buf = new TitleBuffer();
         buf.append(format.format(Date.from(instant)));
         buf.append(" ").append(exec.getLogicalMemberIdentifier());

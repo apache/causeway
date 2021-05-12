@@ -24,8 +24,6 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.wicketstuff.select2.ApplicationSettings;
-
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**

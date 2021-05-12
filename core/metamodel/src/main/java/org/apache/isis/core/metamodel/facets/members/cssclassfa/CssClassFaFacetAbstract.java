@@ -40,16 +40,16 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final String FIXED_WIDTH = "fa-fw";
     private static final String DEFAULT_PRIMARY_PREFIX = "fa";
-    
-    
+
+
     @Getter(onMethod = @__(@Override)) private CssClassFaPosition position;
     private List<String> cssClasses; // serializable list implementation
-    
+
     public CssClassFaFacetAbstract(
-            final String value, 
+            final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
-        
+
         super(CssClassFaFacet.class, holder);
         this.position = position;
         this.cssClasses = parse(value);
@@ -59,20 +59,20 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
     public Stream<String> streamCssClasses() {
         return _NullSafe.stream(cssClasses);
     }
-    
-    @Override 
+
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("position", position);
         attributeMap.put("classes", asSpaceSeparated());
     }
-    
+
     // -- HELPER
-    
+
     /**
      * Parses given value for CSS classes (space separated).
      * <ul>
-     * <li> 
+     * <li>
      * Adds the optional <em>fa-fw</em> fixed width FontAwesome class, if not provided.
      * <li>
      * Adds the default <em>fa</em> FontAwesome prefix class, if no other prefix class provided (fab, far or fas).
@@ -85,26 +85,26 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
         _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
         .map(CssClassFaFacetAbstract::faPrefix)
         .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
-        
+
         return sanitize(cssClassesSet);
     }
 
     private static List<String> sanitize(final Set<String> parsedClasses) {
         val cssClasses = _Lists.<String>newArrayList();
-        
+
         val primaryPrefix = parsedClasses.stream()
         .filter(CssClassFaFacetAbstract::isFaPrimaryPrefix)
         .findFirst()
         .orElse(DEFAULT_PRIMARY_PREFIX);
-        
+
         cssClasses.add(primaryPrefix);
         cssClasses.add(FIXED_WIDTH);
-        
+
         parsedClasses.stream()
         .filter(_Predicates.not(CssClassFaFacetAbstract::isFaPrimaryPrefix))
         .filter(_Predicates.not(CssClassFaFacetAbstract::isFixedWidth))
         .forEach(cssClasses::add);
-        
+
         return cssClasses;
     }
 
@@ -113,7 +113,7 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
                 ? cssClass
                         : "fa-" + cssClass;
     }
-    
+
     private static boolean isFixedWidth(final String cssClass) {
         return FIXED_WIDTH.equals(cssClass);
     }
@@ -131,9 +131,9 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
         default:
             return false;
         }
-        
+
     }
 
 
-    
+
 }

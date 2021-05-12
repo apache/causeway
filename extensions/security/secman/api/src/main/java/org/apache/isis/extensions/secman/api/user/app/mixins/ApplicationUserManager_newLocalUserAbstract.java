@@ -18,21 +18,6 @@
  */
 package org.apache.isis.extensions.secman.api.user.app.mixins;
 
-import java.util.Objects;
-
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_updateEmailAddress;
-
 /**
  * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
  * since action's type parameters are inspected for their compile time types

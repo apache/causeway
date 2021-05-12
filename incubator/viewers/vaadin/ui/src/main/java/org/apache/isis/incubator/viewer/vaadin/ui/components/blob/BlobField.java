@@ -34,7 +34,7 @@ import lombok.val;
 public class BlobField extends CustomField<Blob> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Image image = new Image();
     private Blob blob;
 
@@ -43,7 +43,7 @@ public class BlobField extends CustomField<Blob> {
         setLabel(label);
         add(image);
     }
-    
+
     @Override
     protected Blob generateModelValue() {
         return blob;
@@ -52,13 +52,13 @@ public class BlobField extends CustomField<Blob> {
     @Override
     protected void setPresentationValue(@Nullable Blob blob) {
         this.blob = blob;
-        
+
         if(blob==null) {
             image.setSrc(""); // not sure whether this is correct
             image.setAlt("empty");
             return;
         }
-        
+
         val streamResource = new StreamResource("isr",
                 (InputStreamFactory) () -> new ByteArrayInputStream(blob.getBytes()));
         image.setSrc(streamResource);

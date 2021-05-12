@@ -29,7 +29,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 public class IsisBootstrapTreeTheme extends Behavior {
     private static final long serialVersionUID = 1L;
 
-    private static final ResourceReference CSS = 
+    private static final ResourceReference CSS =
             new CssResourceReference(IsisBootstrapTreeTheme.class, "theme.css");
 
     @Override

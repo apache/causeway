@@ -52,10 +52,10 @@ import lombok.extern.log4j.Log4j2;
 public class JpaBook extends JpaProduct {
 
     @Inject @Transient private KVStoreForTesting kvStore;
-    
+
     // -- ENTITY SERVICE INJECTION TEST
     @Transient private MyService myService;
-    @Inject 
+    @Inject
     public void setMyService(MyService myService) {
         val count = kvStore.incrementCounter(JpaBook.class, "injection-count");
         log.debug("INJECTION " + count);
@@ -66,18 +66,18 @@ public class JpaBook extends JpaProduct {
         return myService != null;
     }
     // --
-    
+
     @Override
     public String title() {
         return toString();
     }
 
     public static JpaBook of(
-            String name, 
-            String description, 
-            double price, 
-            String author, 
-            String isbn, 
+            String name,
+            String description,
+            double price,
+            String author,
+            String isbn,
             String publisher) {
 
         return new JpaBook(name, description, price, author, isbn, publisher);
@@ -87,7 +87,7 @@ public class JpaBook extends JpaProduct {
     @Getter @Setter @Column(nullable = true)
     private String author;
 
-    @Property 
+    @Property
     @Getter @Setter @Column(nullable = false, unique = true)
     private String isbn;
 
@@ -98,11 +98,11 @@ public class JpaBook extends JpaProduct {
     // -- CONSTRUCTOR
 
     private JpaBook(
-            String name, 
-            String description, 
-            double price, 
-            String author, 
-            String isbn, 
+            String name,
+            String description,
+            double price,
+            String author,
+            String isbn,
             String publisher) {
 
         super(/*id*/ null, name, description, price, /*comments*/null);

@@ -29,7 +29,7 @@ public class PrimaryStageReadyEvent extends ApplicationEvent {
     public PrimaryStageReadyEvent(Object source) {
         super(source);
     }
-    
+
     public Stage getStage() {
         return (Stage) getSource();
     }

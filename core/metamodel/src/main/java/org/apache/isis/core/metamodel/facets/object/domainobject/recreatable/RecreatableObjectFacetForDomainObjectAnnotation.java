@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
-public class RecreatableObjectFacetForDomainObjectAnnotation 
+public class RecreatableObjectFacetForDomainObjectAnnotation
 extends RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(

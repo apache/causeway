@@ -48,7 +48,7 @@ public class CommandJdo_retry {
     private final CommandJdo commandJdo;
 
     public static class ActionDomainEvent extends IsisModuleExtCommandLogJdo.ActionDomainEvent<CommandJdo_retry> { }
-    
+
     public CommandJdo act() {
 
         commandJdo.setReplayState(ReplayState.PENDING);

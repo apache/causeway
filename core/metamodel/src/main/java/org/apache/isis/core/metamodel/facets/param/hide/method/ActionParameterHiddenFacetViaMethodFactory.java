@@ -55,7 +55,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         }
 
         // attach ActionParameterHiddenFacet if hideNumMethod is found ...
-        
+
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
@@ -63,13 +63,13 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                 .returnType(ReturnType.BOOLEAN)
                 .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .build(); 
-        
+                .build();
+
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            
+
             val hideMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();
-            
+
             processMethodContext.removeMethod(hideMethod);
 
             if (facetedMethod.containsNonFallbackFacet(ActionParameterHiddenFacet.class)) {
@@ -77,15 +77,15 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                 throw new MetaModelException(cls + " uses both old and new 'hide' syntax - "
                         + "must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
-            
+
             super.addFacet(
                     new ActionParameterHiddenFacetViaMethod(hideMethod, ppmFactory, paramAsHolder));
         });
-        
+
     }
 
 

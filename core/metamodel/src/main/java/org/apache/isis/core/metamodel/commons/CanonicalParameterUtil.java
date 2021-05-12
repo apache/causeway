@@ -156,7 +156,7 @@ public final class CanonicalParameterUtil {
         // if method or constructor was invoked with incompatible param types, then the Throwable
         // we receive here is of type IllegalArgumentException; in which case we can provide additional
         // information, but also at the expense of a potentially hiding the original cause, namely when the
-        // IllegalArgumentException has a different origin and the param incompatibility check is a 
+        // IllegalArgumentException has a different origin and the param incompatibility check is a
         // false positive
         if(e instanceof IllegalArgumentException) {
             boolean paramTypeMismatchEncountered = false;
@@ -164,22 +164,22 @@ public final class CanonicalParameterUtil {
             for(int j=0;j<parameterTypes.length;++j) {
                 final Class<?> parameterType = parameterTypes[j];
                 val incompatible = !isValueCompatibleWithType(
-                        _Arrays.get(adaptedExecutionParameters, j), 
+                        _Arrays.get(adaptedExecutionParameters, j),
                         parameterTypes[j]);
-                
-                paramTypeMismatchEncountered = paramTypeMismatchEncountered 
+
+                paramTypeMismatchEncountered = paramTypeMismatchEncountered
                         || incompatible;
-                
+
                 if(incompatible) {
-                    
+
                     final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
                             .map(Object::getClass)
                             .map(Class::getName)
                             .orElse("missing or null");
-                    
+
                     final String expected = parameterType.getName();
                     final String actual = parameterValueTypeLiteral;
-                    
+
                     sb.append(String.format("param-type[%d]: expected '%s', got '%s'\n",
                         j, expected, actual));
                 }
@@ -195,21 +195,21 @@ public final class CanonicalParameterUtil {
     }
 
     private static boolean isValueCompatibleWithType(
-            final @NonNull Optional<Object> value, 
+            final @NonNull Optional<Object> value,
             final @NonNull Class<?> type) {
-        
+
         if(!value.isPresent()) {
             // null is not compatible with an expected primitive type
             // but null is compatible with any other expected type
-            return !type.isPrimitive(); 
+            return !type.isPrimitive();
         }
-        
+
         val runtimeType = value.get().getClass();
-        
+
         if(ClassExtensions.equalsWhenBoxing(runtimeType, type)) {
             return true;
         }
-        
+
         return type.isAssignableFrom(runtimeType);
     }
 

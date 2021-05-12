@@ -53,8 +53,8 @@ public final class JdoPropertyUtils {
     }
 
     private static OneToOneAssociation getPropertyFor(
-            final ObjectSpecification objSpec, 
-            final String annotationName, 
+            final ObjectSpecification objSpec,
+            final String annotationName,
             final Predicate<ObjectAssociation> predicate) {
 
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {

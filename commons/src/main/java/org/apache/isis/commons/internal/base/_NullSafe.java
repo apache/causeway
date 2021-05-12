@@ -63,21 +63,21 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable  T[] array) {
-        return array!=null 
-                ? Stream.of(array) 
+        return array!=null
+                ? Stream.of(array)
                 : Stream.empty();
     }
 
     /**
      * If {@code nullable} is {@code null} returns the empty stream,
      * otherwise returns a Stream containing the single element {@code nullable}.
-     * 
+     *
      * @param nullable
      * @return non-null stream object
      */
     public static <T> Stream<T> streamNullable(final @Nullable T nullable) {
-        return nullable != null 
-                ? Stream.of(nullable) 
+        return nullable != null
+                ? Stream.of(nullable)
                 : Stream.empty();
     }
 
@@ -88,11 +88,11 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Can<T> can){
-        return can!=null 
-                ? can.stream() 
+        return can!=null
+                ? can.stream()
                 : Stream.empty();
     }
-    
+
     /**
      * If {@code collection} is {@code null} returns the empty stream,
      * otherwise returns a stream of the collection's elements.
@@ -100,7 +100,7 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Collection<T> coll){
-        return coll!=null 
+        return coll!=null
                 ? coll.stream()
                 : Stream.empty();
     }
@@ -112,8 +112,8 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Iterable<T> iterable){
-        return iterable!=null 
-                ? stream(iterable.iterator()) 
+        return iterable!=null
+                ? stream(iterable.iterator())
                 : Stream.empty();
     }
 
@@ -126,7 +126,7 @@ public final class _NullSafe {
     public static <T> Stream<T> stream(final @Nullable Iterator<T> iterator){
         return iterator!=null
                 ? StreamSupport.stream(
-                        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), 
+                        Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),
                         false) //not parallel
                 : Stream.empty();
     }
@@ -138,8 +138,8 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Stream<T> stream) {
-        return stream!=null 
-                ? stream 
+        return stream!=null
+                ? stream
                 : Stream.empty();
     }
 
@@ -158,6 +158,7 @@ public final class _NullSafe {
     // not public, used internally for stream(Enumeration) only
     private static <T> Spliterator<T> toSpliterator(final Enumeration<T> e){
         return new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+            @Override
             public boolean tryAdvance(Consumer<? super T> action) {
                 if(e.hasMoreElements()) {
                     action.accept(e.nextElement());
@@ -165,6 +166,7 @@ public final class _NullSafe {
                 }
                 return false;
             }
+            @Override
             public void forEachRemaining(Consumer<? super T> action) {
                 while(e.hasMoreElements()) {
                     action.accept(e.nextElement());
@@ -184,7 +186,7 @@ public final class _NullSafe {
             return ((Can<?>)pojo).stream();
         }
         if(pojo.getClass().isArray()) {
-            if(Array.getLength(pojo)==0) return Stream.empty(); 
+            if(Array.getLength(pojo)==0) return Stream.empty();
             if(pojo instanceof Object[]) return Stream.of((Object[]) pojo);
             if(pojo instanceof boolean[]) return primitiveStream((boolean[]) pojo);
             if(pojo instanceof byte[]) return primitiveStream((byte[]) pojo);
@@ -203,50 +205,50 @@ public final class _NullSafe {
         }
         return Stream.of(pojo);
     }
-    
+
     // not null-safe, but for performance reasons not checked (private anyway) ...
-    
+
     private static Stream<Boolean> primitiveStream(final boolean[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Byte> primitiveStream(final byte[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Character> primitiveStream(final char[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Float> primitiveStream(final float[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Double> primitiveStream(final double[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Short> primitiveStream(final short[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Integer> primitiveStream(final int[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
-    
+
     private static Stream<Long> primitiveStream(final long[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
     // -- ABSENCE/PRESENCE PREDICATES
-    
+
 
     /**
      * Equivalent to {@link java.util.Objects#nonNull(Object)}.
      * @param x
      * @return whether {@code x} is not null (present).
-     * 
-     * @apiNote we keep this, arguably provides better code readability than {@code Objects#nonNull} 
+     *
+     * @apiNote we keep this, arguably provides better code readability than {@code Objects#nonNull}
      */
     public static boolean isPresent(final @Nullable Object x) {
         return x!=null;
@@ -256,7 +258,7 @@ public final class _NullSafe {
      * Equivalent to {@link java.util.Objects#isNull(Object)}.
      * @param x
      * @return whether {@code x} is null (absent).
-     * 
+     *
      * @apiNote we keep this, arguably provides better code readability than {@code Objects#isNull}
      */
     public static boolean isAbsent(final @Nullable Object x) {
@@ -306,10 +308,10 @@ public final class _NullSafe {
      */
     @Nullable
     public static final <K,V> V getOrDefault(
-            final @Nullable Map<K, V> map, 
-            final @Nullable K key, 
+            final @Nullable Map<K, V> map,
+            final @Nullable K key,
             final @Nullable V defaultValue) {
-        
+
         if(map==null || key==null) {
             return defaultValue;
         }

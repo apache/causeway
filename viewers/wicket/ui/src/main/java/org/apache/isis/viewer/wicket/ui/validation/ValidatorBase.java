@@ -32,11 +32,11 @@ import lombok.Getter;
 public abstract class ValidatorBase<T> implements IValidator<T> {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter protected final transient IsisAppCommonContext commonContext;
-    
+
     protected ValidatorBase(IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
     }
-    
+
 }

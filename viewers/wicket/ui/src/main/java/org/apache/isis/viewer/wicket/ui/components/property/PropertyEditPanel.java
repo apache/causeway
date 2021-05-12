@@ -37,7 +37,7 @@ import lombok.val;
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
  */
-public class PropertyEditPanel 
+public class PropertyEditPanel
 extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
@@ -54,9 +54,9 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
     public PropertyEditPanel(
             final String id,
             final ScalarPropertyModel scalarModel) {
-        
+
         super(id, scalarModel.copyHaving(
-                EntityModel.Mode.EDIT, 
+                EntityModel.Mode.EDIT,
                 EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);
@@ -115,6 +115,6 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         addOrReplace(header);
         return header;
     }
- 
+
 
 }

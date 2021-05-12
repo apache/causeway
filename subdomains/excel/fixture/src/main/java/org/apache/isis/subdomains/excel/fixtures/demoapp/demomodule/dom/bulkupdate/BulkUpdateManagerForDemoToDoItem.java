@@ -87,7 +87,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     public String title() {
         return "Import/export manager";
     }
-    
+
     @Getter @Setter @Nullable
     private String fileName;
 
@@ -137,8 +137,8 @@ public class BulkUpdateManagerForDemoToDoItem {
         return Subcategory.listFor(category);
     }
     public String validateSelect(
-            final Category category, 
-            final Subcategory subcategory, 
+            final Category category,
+            final Subcategory subcategory,
             final boolean completed) {
         return Subcategory.validate(category, subcategory);
     }

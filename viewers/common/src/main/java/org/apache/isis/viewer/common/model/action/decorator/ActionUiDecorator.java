@@ -29,14 +29,14 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Decorates a click-able UI component of type {@code <T>} based various UiModels.
- * 
+ *
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
 @Getter
 @RequiredArgsConstructor
 public class ActionUiDecorator<T> {
-    
+
     private final TooltipDecorator<T> tooltipDecorator;
     private final DisablingDecorator<T> disableDecorator;
     private final ConfirmDecorator<T> confirmDecorator;

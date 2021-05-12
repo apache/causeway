@@ -135,10 +135,12 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     @Enumerated(EnumType.STRING)
     private ApplicationPermissionRule rule;
 
+    @Override
     @Rule
     public ApplicationPermissionRule getRule() {
         return rule;
     }
+    @Override
     public void setRule(ApplicationPermissionRule rule) {
         this.rule = rule;
     }
@@ -198,6 +200,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
 
     // FIND FEATURE
 
+    @Override
     @Programmatic
     public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
         return featureRepository.findFeature(featureId);

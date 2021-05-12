@@ -18,12 +18,8 @@
  */
 package demoapp.dom._infra.fixtures;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 

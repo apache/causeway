@@ -33,11 +33,11 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 
 /**
- * Thread-safe pseudo list, that increments its version each time a snapshot is requested. 
+ * Thread-safe pseudo list, that increments its version each time a snapshot is requested.
  * <p>
- * This allows to easily keep track of any additions to the list that occurred in between 
+ * This allows to easily keep track of any additions to the list that occurred in between
  * snapshots.
- *  
+ *
  * @since 2.0
  * @param <T>
  */
@@ -59,12 +59,12 @@ public final class _VersionedList<T> {
         public boolean isEmpty() {
             return versions.isEmpty();
         }
-        
+
         public Stream<T> stream() {
             return versions.stream()
                     .flatMap(List::stream);
         }
-        
+
         public void forEach(Consumer<T> action) {
             for(val ver : versions) {
                 for(val element : ver) {
@@ -72,7 +72,7 @@ public final class _VersionedList<T> {
                 }
             }
         }
-        
+
         public void forEachParallel(Consumer<T> action) {
             for(val ver : versions) {
                 if(ver.size()>8) {
@@ -84,7 +84,7 @@ public final class _VersionedList<T> {
                 }
             }
         }
-        
+
 
     }
 
@@ -152,9 +152,9 @@ public final class _VersionedList<T> {
             currentVersion.clear();
         }
     }
-    
+
     /**
-     * Also handles concurrent additions that occur during traversal. 
+     * Also handles concurrent additions that occur during traversal.
      * @param action
      */
     public void forEach(Consumer<T> action) {
@@ -168,7 +168,7 @@ public final class _VersionedList<T> {
     }
 
     /**
-     * Also handles concurrent additions that occur during traversal. 
+     * Also handles concurrent additions that occur during traversal.
      * @param action
      */
     public void forEachParallel(Consumer<T> action) {
@@ -180,13 +180,13 @@ public final class _VersionedList<T> {
             delta = deltaSince(delta);
         }
     }
-    
+
 
     // -- HELPER
 
 
-    /** 
-     * @implNote only call within synchronized block! 
+    /**
+     * @implNote only call within synchronized block!
      * @param fromIndex low endpoint (inclusive) of the copy
      * @param toIndex high endpoint (exclusive) of the copy
      */
@@ -209,7 +209,7 @@ public final class _VersionedList<T> {
     private void commit() {
         if(!currentVersion.isEmpty()) {
             versions.add(currentVersion);
-            currentVersion = new ArrayList<>(); // create a new array for others to write to next    
+            currentVersion = new ArrayList<>(); // create a new array for others to write to next
         }
     }
 

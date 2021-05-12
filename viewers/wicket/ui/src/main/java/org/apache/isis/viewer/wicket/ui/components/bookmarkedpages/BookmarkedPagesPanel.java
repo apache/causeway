@@ -55,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
 
 import lombok.val;
 
-public class BookmarkedPagesPanel 
+public class BookmarkedPagesPanel
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
@@ -181,8 +181,8 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
                     link.add(label);
                     item.add(link);
-//XXX seems broken when there is only one bookmark entry; 
-// an alternative idea would be to render the item differently eg. bold, but don't disable it                     
+//XXX seems broken when there is only one bookmark entry;
+// an alternative idea would be to render the item differently eg. bold, but don't disable it
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }

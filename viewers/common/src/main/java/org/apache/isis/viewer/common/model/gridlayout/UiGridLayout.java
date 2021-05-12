@@ -57,22 +57,22 @@ public class UiGridLayout {
         protected abstract void onAction(C container, ActionLayoutData actionData);
         protected abstract void onProperty(C container, PropertyLayoutData propertyData);
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
-        
+
     }
-    
+
     @NonNull private final ManagedObject managedObject;
     private _Lazy<Optional<BS3Grid>> gridData = _Lazy.threadSafe(this::initGridData);
-    
+
     public <C, T> void visit(Visitor<C, T> visitor) {
-        
+
         // recursively visit the grid
         gridData.get()
         .ifPresent(bs3Grid->{
             for(val bs3Row: bs3Grid.getRows()) {
-                visitRow(bs3Row, visitor.rootContainer, visitor);         
+                visitRow(bs3Row, visitor.rootContainer, visitor);
             }
         });
-        
+
     }
 
     private Optional<BS3Grid> initGridData() {
@@ -84,14 +84,14 @@ public class UiGridLayout {
     }
 
     private <C, T> void visitRow(BS3Row bs3Row, C container, Visitor<C, T> visitor) {
-        
+
         val uiRow = visitor.newRow(container, bs3Row);
-        
+
         for(val bs3RowContent: bs3Row.getCols()) {
             if(bs3RowContent instanceof BS3Col) {
-                
+
                 visitCol((BS3Col) bs3RowContent, uiRow, visitor);
-                
+
             } else if (bs3RowContent instanceof BS3ClearFix) {
                 visitor.onClearfix(uiRow, (BS3ClearFix) bs3RowContent);
             } else {
@@ -99,66 +99,66 @@ public class UiGridLayout {
             }
         }
     }
-    
+
     private <C, T> void visitCol(BS3Col bS3Col, C container, Visitor<C, T> visitor) {
         val uiCol = visitor.newCol(container, bS3Col);
-        
-        val hasDomainObject = bS3Col.getDomainObject()!=null; 
+
+        val hasDomainObject = bS3Col.getDomainObject()!=null;
         val hasActions = _NullSafe.size(bS3Col.getActions())>0;
         val hasRows = _NullSafe.size(bS3Col.getRows())>0;
-        
+
         if(hasDomainObject || hasActions) {
             val uiActionPanel = visitor.newActionPanel(uiCol);
             if(hasDomainObject) {
-                visitor.onObjectTitle(uiActionPanel, bS3Col.getDomainObject());    
+                visitor.onObjectTitle(uiActionPanel, bS3Col.getDomainObject());
             }
             if(hasActions) {
                 for(val action : bS3Col.getActions()) {
                     visitor.onAction(uiActionPanel, action);
-                }    
+                }
             }
         }
-        
+
         for(val fieldSet : bS3Col.getFieldSets()) {
             visitFieldSet(fieldSet, uiCol, visitor);
         }
-        
+
         for(val tabGroup : bS3Col.getTabGroups()) {
             visitTabGroup(tabGroup, uiCol, visitor);
         }
-        
+
         if(hasRows) {
-            for(val bs3Row: bS3Col.getRows()) { 
-                visitRow(bs3Row, uiCol, visitor);         
-            }    
+            for(val bs3Row: bS3Col.getRows()) {
+                visitRow(bs3Row, uiCol, visitor);
+            }
         }
-        
+
         for(val collectionData : bS3Col.getCollections()) {
             visitor.onCollection(uiCol, collectionData);
         }
-        
+
     }
-    
+
     private <C, T> void visitTabGroup(BS3TabGroup bS3ColTabGroup, C container, Visitor<C, T> visitor) {
         val uiTabGroup = visitor.newTabGroup(container, bS3ColTabGroup);
-        for(val bs3Tab: bS3ColTabGroup.getTabs()) { 
+        for(val bs3Tab: bS3ColTabGroup.getTabs()) {
             visitTab(bs3Tab, uiTabGroup, visitor);
         }
     }
-    
+
     private <C, T> void visitTab(BS3Tab bS3Tab, T container, Visitor<C, T> visitor) {
         val uiTab = visitor.newTab(container, bS3Tab);
-        for(val bs3Row: bS3Tab.getRows()) { 
-            visitRow(bs3Row, uiTab, visitor);         
+        for(val bs3Row: bS3Tab.getRows()) {
+            visitRow(bs3Row, uiTab, visitor);
         }
     }
-    
+
     private <C, T> void visitFieldSet(FieldSet cptFieldSet, C container, Visitor<C, T> visitor) {
         val uiFieldSet = visitor.newFieldSet(container, cptFieldSet);
-        for(val propertyData: cptFieldSet.getProperties()) { 
-            visitor.onProperty(uiFieldSet, propertyData);    
+        for(val propertyData: cptFieldSet.getProperties()) {
+            visitor.onProperty(uiFieldSet, propertyData);
         }
     }
-    
+
 
 }

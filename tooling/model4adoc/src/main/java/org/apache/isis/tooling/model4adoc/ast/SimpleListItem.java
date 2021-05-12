@@ -32,7 +32,7 @@ public class SimpleListItem extends SimpleStructuralNode implements ListItem {
     @Getter @Setter private String source;
     @Getter @Setter private String text;
     @Getter @Setter private String marker;
-    
+
     @Override
     public boolean hasText() {
         return _Strings.isNotEmpty(getText());

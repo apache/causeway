@@ -36,8 +36,8 @@ public class SimpleTable extends SimpleStructuralNode implements Table {
     @Getter private final List<Row> header = new ArrayList<>();
     @Getter private final List<Row> body = new ArrayList<>();
     @Getter private final List<Row> footer = new ArrayList<>();
-    
-    
+
+
     @Override
     public boolean hasHeaderOption() {
         return false;

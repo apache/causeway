@@ -37,10 +37,10 @@ import lombok.ToString;
 import lombok.val;
 
 /**
- * The {@link Result} type represents a value of one of two possible types (a disjoint union). 
+ * The {@link Result} type represents a value of one of two possible types (a disjoint union).
  * The data constructors {@link Result#success(Object)} and {@link Result#failure(Throwable)}
  * represent the two possible values.
- * 
+ *
  * @since 2.0 {@index}
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
@@ -50,7 +50,7 @@ public final class Result<L> {
     private final L value;
     private final Throwable throwable;
     private final boolean isSuccess;
-    
+
     // -- FACTORIES
 
     public static <L> Result<L> of(final @NonNull Callable<L> callable) {
@@ -60,72 +60,72 @@ public final class Result<L> {
             return failure(e);
         }
     }
-    
+
     public static Result<Void> ofVoid(final @NonNull ThrowingRunnable runnable) {
         return of(ThrowingRunnable.toCallable(runnable));
     }
-    
+
     public static <L> Result<L> success(final @Nullable L value) {
         return of(value, null, true);
     }
-    
+
     public static <L> Result<L> failure(final @NonNull Throwable throwable) {
         return of(null, throwable, false);
     }
-    
+
     // -- FACTORY SHORTCUTS
-    
+
     public static <L> Result<L> failure(final @NonNull String message) {
         return failure(new RuntimeException(message));
     }
-    
+
     public static <L> Result<L> failure(final @NonNull String message, final @NonNull Throwable cause) {
         return failure(new RuntimeException(message, cause));
     }
-    
+
     // -- PREDICATES
-    
+
     public boolean isSuccess() {
         return isSuccess;
     }
-    
+
     public boolean isFailure() {
         return !isSuccess();
     }
-    
+
     // -- ACCESSORS
-    
+
     public Optional<L> getValue() {
-        return Optional.ofNullable(value); 
+        return Optional.ofNullable(value);
     }
 
     public Optional<Throwable> getFailure() {
-        return Optional.ofNullable(throwable); 
+        return Optional.ofNullable(throwable);
     }
-    
+
     // -- PEEKING
-    
+
     public Result<L> ifSuccess(final @NonNull Consumer<L> valueConsumer){
         if(isSuccess()) {
             valueConsumer.accept(value);
         }
         return this;
     }
-    
+
     public Result<L> ifSuccessAndValuePresent(final @NonNull Consumer<L> valueConsumer){
         getValue().ifPresent(valueConsumer::accept);
         return this;
     }
-    
+
     public Result<L> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer){
         if(isFailure()) {
             exceptionConsumer.accept(throwable);
         }
         return this;
     }
-    
+
     // -- MAP NULL TO FAILURE
-    
+
     public <E extends Throwable> Result<L> mapSuccessWithEmptyValueToFailure(
             final @NonNull Supplier<E> onNullValue){
         return isSuccess()
@@ -133,11 +133,11 @@ public final class Result<L> {
                 ? Result.failure(onNullValue.get())
                 : this;
     }
-    
+
     public <E extends Throwable> Result<L> mapSuccessWithEmptyValueToNoSuchElement(){
         return mapSuccessWithEmptyValueToFailure(NoSuchElementException::new);
     }
-    
+
     // -- MAPPING
 
     public <T> Result<T> mapSuccess(final @NonNull Function<L, T> successMapper){
@@ -156,9 +156,9 @@ public final class Result<L> {
             return failure(e);
         }
     }
-    
+
     // -- FOLDING
-    
+
     public <T> T fold(
             final @NonNull Function<L, T> successMapper,
             final @NonNull Function<Throwable, T> failureMapper){
@@ -166,9 +166,9 @@ public final class Result<L> {
                 ? successMapper.apply(value)
                 : failureMapper.apply(throwable);
     }
-    
+
     // -- EXTRACTION
-    
+
     @SneakyThrows
     public L presentElseFail() {
         if (isSuccess()) {
@@ -179,7 +179,7 @@ public final class Result<L> {
         }
         throw throwable;
     }
-    
+
     @SneakyThrows
     public Optional<L> optionalElseFail() {
         if (isSuccess()) {
@@ -187,7 +187,7 @@ public final class Result<L> {
         }
         throw throwable;
     }
-    
+
     @SneakyThrows
     public L presentElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
         if (isSuccess()) {
@@ -198,7 +198,7 @@ public final class Result<L> {
         }
         throw toThrowable.apply(throwable);
     }
-    
+
     @SneakyThrows
     public Optional<L> optionalElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
         if (isSuccess()) {
@@ -206,7 +206,7 @@ public final class Result<L> {
         }
         throw toThrowable.apply(throwable);
     }
-    
+
     public L presentElse(final @NonNull L defaultValue) {
         if (isSuccess()) {
             if(value!=null) {
@@ -215,7 +215,7 @@ public final class Result<L> {
         }
         return defaultValue;
     }
-    
+
     public L presentElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
         if (isSuccess()) {
             if(value!=null) {
@@ -229,5 +229,5 @@ public final class Result<L> {
         throw new NoSuchElementException();
     }
 
-    
+
 }

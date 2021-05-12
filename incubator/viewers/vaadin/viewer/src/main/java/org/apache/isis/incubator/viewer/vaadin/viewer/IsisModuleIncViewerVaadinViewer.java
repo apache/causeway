@@ -47,28 +47,28 @@ import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  */
 @Configuration
 @Import({
         // modules
         IsisModuleIncViewerVaadinUi.class,
-        
+
         VaadinConfigurationProperties.class
 
         // @Service's
 
 
         // @Mixin's
-       
+
 
 })
 //disable standard vaadin spring boot bootstrapping
 @EnableAutoConfiguration(exclude = { SpringBootAutoConfiguration.class })
 public class IsisModuleIncViewerVaadinViewer {
-    
-    
+
+
     @Inject private WebApplicationContext context;
     @Inject private VaadinConfigurationProperties configurationProperties;
     @Inject private InteractionFactory isisInteractionFactory;
@@ -99,7 +99,7 @@ public class IsisModuleIncViewerVaadinViewer {
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
-                new IsisServletForVaadin(isisInteractionFactory, context, isRootMapping), 
+                new IsisServletForVaadin(isisInteractionFactory, context, isRootMapping),
                 urlMapping);
         registration.setInitParameters(initParameters);
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());
@@ -116,9 +116,9 @@ public class IsisModuleIncViewerVaadinViewer {
     public ServerEndpointExporter websocketEndpointDeployer() {
         return new VaadinWebsocketEndpointExporter();
     }
-    
+
     // -- HELPER
-    
+
     private static String makeContextRelative(String url) {
         // / -> context://
         // foo -> context://foo
@@ -128,5 +128,5 @@ public class IsisModuleIncViewerVaadinViewer {
         }
         return "context://" + url;
     }
-    
+
 }

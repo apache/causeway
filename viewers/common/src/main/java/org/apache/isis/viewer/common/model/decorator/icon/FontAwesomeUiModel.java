@@ -37,12 +37,12 @@ import lombok.RequiredArgsConstructor;
 public class FontAwesomeUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @NonNull private final String cssClassesSpaceSeparated;
     @NonNull private final CssClassFaPosition position;
 
     public static Optional<FontAwesomeUiModel> of(Optional<CssClassFaFacet> cssClassFaFacetIfAny) {
-        
+
         return cssClassFaFacetIfAny
         .map(cssClassFaFacet->new FontAwesomeUiModel(
                 cssClassFaFacet.streamCssClasses().collect(Collectors.joining(" ")),
@@ -53,8 +53,8 @@ public class FontAwesomeUiModel implements Serializable {
     public Stream<String> streamCssClasses() {
         return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
     }
-    
-    
+
+
 }
 
 

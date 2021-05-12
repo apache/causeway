@@ -97,7 +97,7 @@ public class MmvErrorPage extends WebPageBase {
 
         getConfiguration().getViewer().getWicket().getApplication().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
-        
+
         getConfiguration().getViewer().getWicket().getApplication().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }

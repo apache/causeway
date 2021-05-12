@@ -29,11 +29,11 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 
 /**
- * Each ResourceLinkVolatile instance generates a unique URL, which 
+ * Each ResourceLinkVolatile instance generates a unique URL, which
  * effectively eliminates any caching during the request response cycle.
  * <p>
  * This is the desired behavior for Blob/Clob 'download' buttons.
- * 
+ *
  * @since 2.0
  * @implNote this is almost a copy of Wicket's {@link ResourceLink}.
  */
@@ -48,7 +48,7 @@ public class ResourceLinkVolatile extends Link<Object> implements IRequestListen
 
     /**
      * Constructs a link directly to the provided resource.
-     * 
+     *
      * @param id       See Component
      * @param resource The resource
      */
@@ -56,7 +56,7 @@ public class ResourceLinkVolatile extends Link<Object> implements IRequestListen
         super(id);
         this.resource = resource;
         this.resourceParameters = new PageParameters()
-                .add("antiCache", UUID.randomUUID().toString()); 
+                .add("antiCache", UUID.randomUUID().toString());
     }
 
     @Override

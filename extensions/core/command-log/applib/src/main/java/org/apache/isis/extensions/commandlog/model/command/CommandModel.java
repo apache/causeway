@@ -27,11 +27,11 @@ import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
-public interface CommandModel 
-extends 
-    HasCommandDto, 
+public interface CommandModel
+extends
+    HasCommandDto,
     Comparable<CommandModel> {
-    
+
     public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandModel> { }
     public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandModel> { }
     public static class CssClassUiEvent extends IsisModuleExtCommandLogApplib.CssClassUiEvent<CommandModel> { }
@@ -41,9 +41,9 @@ extends
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandModel, T> { }
     public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandModel> { }
 
-    
+
     Bookmark getResult();
-    
+
     String getException();
 
     Timestamp getStartedAt();
@@ -51,21 +51,21 @@ extends
     Timestamp getTimestamp();
 
     Bookmark getTarget();
-    
+
     String getLogicalMemberIdentifier();
-    
+
     String getUsername();
 
     void saveAnalysis(String analysis);
 
     UUID getInteractionId();
-    
+
     ReplayState getReplayState();
 
     CommandOutcomeHandler outcomeHandler();
 
     void setReplayState(ReplayState excluded);
-    
+
     default String toFriendlyString() {
         return ObjectContracts
                 .toString("interactionId", CommandModel::getInteractionId)
@@ -77,7 +77,7 @@ extends
                 .thenToStringOmitIfAbsent("completedAt", CommandModel::getCompletedAt)
                 .toString(this);
     }
-    
+
     @Override
     default int compareTo(final CommandModel other) {
         return this.getTimestamp().compareTo(other.getTimestamp());

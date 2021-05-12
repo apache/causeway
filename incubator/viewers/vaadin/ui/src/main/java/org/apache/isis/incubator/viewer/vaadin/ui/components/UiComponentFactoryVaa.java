@@ -39,11 +39,11 @@ import lombok.val;
 public class UiComponentFactoryVaa implements UiComponentFactory<Component, Component> {
 
     private final ChainOfResponsibility<ComponentRequest, Component> chainOfHandlers;
-    
+
     /** handlers in order of precedence (debug info)*/
-    @Getter 
-    private final List<Class<?>> registeredHandlers; 
-    
+    @Getter
+    private final List<Class<?>> registeredHandlers;
+
     @Inject
     private UiComponentFactoryVaa(List<Handler<Component>> handlers) {
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
@@ -54,27 +54,27 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
 
     @Override
     public Component buttonFor(ButtonRequest request) {
-        
+
         val managedAction = request.getManagedAction();
         val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
         val actionEventHandler = request.getActionEventHandler();
-        
+
         val uiButton = _vaa.newButton(managedAction.getName());
-        
+
         disablingUiModelIfAny.ifPresent(disablingUiModel->{
 //            uiContext.getDisablingDecoratorForButton()
 //                .decorate(uiButton, disablingUiModel);
             uiButton.setEnabled(false);
         });
-        
+
         if(!disablingUiModelIfAny.isPresent()) {
             uiButton.addClickListener(event->actionEventHandler.accept(managedAction));
         }
-        
+
         return uiButton;
-        
+
     }
-    
+
     @Override
     public Component componentFor(ComponentRequest request) {
         return chainOfHandlers
@@ -96,6 +96,6 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
         throw _Exceptions.unsupportedOperation("unlikely to be needed for Vaadin, "
                 + "since Field components already have their own label");
     }
-    
-    
+
+
 }

@@ -42,48 +42,48 @@ import lombok.val;
 public interface TypeOfFacet extends SingleClassValueFacet {
 
     // -- FACTORIES
-    
+
     static TypeOfFacet inferredFromArray(
             final FacetHolder holder,
             final Class<?> elementType) {
         return new TypeOfFacetInferredFromArray(elementType, holder);
     }
-    
+
     static TypeOfFacet inferredFromGenerics(
             final FacetHolder holder,
             final Class<?> elementType) {
         return new TypeOfFacetInferredFromGenerics(elementType, holder);
     }
-    
+
     static Optional<TypeOfFacet> inferFromParameterType(
             final FacetHolder holder,
             final Parameter param) {
-        
+
         val paramType = param.getType();
-        
+
         if (_Arrays.isArrayType(paramType)) {
             return _Arrays.inferComponentType(paramType)
                     .map(elementType->inferredFromArray(holder, elementType));
         }
-        
+
         return _Collections.inferElementType(param)
-                .map(elementType->inferredFromGenerics(holder, elementType));    
+                .map(elementType->inferredFromGenerics(holder, elementType));
     }
-    
+
     static Optional<TypeOfFacet> inferFromMethodReturnType(
             final FacetHolder holder,
             final Method method) {
-        
+
         val returnType = method.getReturnType();
-        
+
         if (_Arrays.isArrayType(returnType)) {
             return _Arrays.inferComponentType(returnType)
                     .map(elementType->inferredFromArray(holder, elementType));
         }
-        
+
         return _Collections.inferElementType(method)
-                .map(elementType->inferredFromGenerics(holder, elementType));    
+                .map(elementType->inferredFromGenerics(holder, elementType));
     }
-    
-    
+
+
 }

@@ -34,7 +34,7 @@ public class EmployeeManager {
     public String title() {
         return "Employee Manager";
     }
-    
+
     @Collection
     public List<Employee> getAllEmployees(){
         return employeeRepo.findAll();

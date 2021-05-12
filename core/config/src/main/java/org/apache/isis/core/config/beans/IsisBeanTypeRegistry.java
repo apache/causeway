@@ -28,19 +28,19 @@ import java.util.stream.Stream;
  * @since 2.0
  */
 public interface IsisBeanTypeRegistry {
-    
+
     Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type);
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
-    
+
     Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
     Set<Class<?>> getEntityTypes();
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
 
     // -- LOOKUPS
-    
+
     /**
-     * If given type is part of the meta-model and is available for injection, 
+     * If given type is part of the meta-model and is available for injection,
      * returns the <em>Managed Bean's</em> name (id) as
      * recognized by the IoC container.
      *

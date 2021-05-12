@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.decorator.prototyping;
 
 /**
- * 
+ *
  * When in PROTOTYPING mode adds additional UI aspects, which are otherwise (production mode) not visible.
  *
  * @param <T> UI component type to decorate
@@ -28,5 +28,5 @@ package org.apache.isis.viewer.common.model.decorator.prototyping;
 public interface PrototypingDecorator<T, R> {
 
     R decorate(T uiComponent, PrototypingUiModel prototypingUiModel);
-    
+
 }

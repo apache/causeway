@@ -22,8 +22,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class EntityChangePublishingFacetAbstract 
-extends FacetAbstract 
+public abstract class EntityChangePublishingFacetAbstract
+extends FacetAbstract
 implements EntityChangePublishingFacet {
 
     public static Class<? extends Facet> type() {
@@ -33,5 +33,5 @@ implements EntityChangePublishingFacet {
     public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder) {
         super(EntityChangePublishingFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
     }
-    
+
 }

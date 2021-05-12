@@ -36,16 +36,16 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
-public class OrphanedSupportingMethodValidator 
+public class OrphanedSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
-    
+
     @Override
     public void validate(@NonNull ObjectSpecification spec) {
-            
+
         if(!(spec instanceof ObjectSpecificationAbstract)) {
             return; // continue
         }
@@ -68,14 +68,14 @@ extends MetaModelVisitingValidatorAbstract {
         val notRecognizedMethods =
                 _Sets.minus(potentialOrphans, recognizedMethods);
 
-        // find reasons why these are not recognized    
+        // find reasons why these are not recognized
         notRecognizedMethods.forEach(notRecognizedMethod->{
-            
+
             val unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
             val messageFormat = "%s#%s: is assumed to support "
                     + "a property, collection or action. Unmet constraint(s): %s";
-            
+
             ValidationFailure.raiseFormatted(
                     spec,
                     String.format(
@@ -86,7 +86,7 @@ extends MetaModelVisitingValidatorAbstract {
                             .collect(Collectors.joining("; "))));
         });
 
-        potentialOrphans.clear(); // no longer needed  
+        potentialOrphans.clear(); // no longer needed
 
     }
 

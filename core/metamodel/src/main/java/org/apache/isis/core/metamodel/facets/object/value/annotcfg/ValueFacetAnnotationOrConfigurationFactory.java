@@ -74,7 +74,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        
+
         FacetUtil.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
     }
 
@@ -82,7 +82,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
      * Returns a {@link ValueFacet} implementation.
      */
     private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
-        
+
         val config = super.getMetaModelContext().getConfiguration();
 
         // create from annotation, if present
@@ -97,7 +97,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil
                 .semanticsProviderNameFromConfiguration(config, cls);
-        
+
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder);
             if (facet.isValid()) {

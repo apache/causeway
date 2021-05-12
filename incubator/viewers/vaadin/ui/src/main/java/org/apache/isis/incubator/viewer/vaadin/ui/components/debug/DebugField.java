@@ -31,7 +31,7 @@ import lombok.val;
 public class DebugField extends CustomField<DebugUiModel> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Details details = new Details();
     private DebugUiModel model;
 
@@ -54,15 +54,15 @@ public class DebugField extends CustomField<DebugUiModel> {
     @Override
     protected void setPresentationValue(DebugUiModel model) {
         this.model = model;
-        
+
         details.setSummaryText(model.getSummaryText());
 
         details.getContent().findFirst()
         .map(FormLayout.class::cast)
         .ifPresent(formLayout->{
-        
+
             formLayout.removeAll();
-            
+
             model.getKeyValuePairs().forEach((k, v)->{
                 val textArea = new TextArea();
                 textArea.setLabel(k);
@@ -70,10 +70,10 @@ public class DebugField extends CustomField<DebugUiModel> {
                 textArea.setInvalid(true);
                 formLayout.add(textArea);
             });
-            
+
         });
-        
+
     }
 
-    
+
 }

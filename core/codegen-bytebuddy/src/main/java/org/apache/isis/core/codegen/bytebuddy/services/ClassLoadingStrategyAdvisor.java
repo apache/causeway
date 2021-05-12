@@ -27,7 +27,7 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
 /**
  * package private utility to advise on the ClassLoadingStrategy, dependent on the JVM version we are running on
- * 
+ *
  * see <a href="https://mydailyjava.blogspot.com/2018/04/jdk-11-and-proxies-in-world-past.html">byte-buddy blog</a>
  */
 class ClassLoadingStrategyAdvisor {
@@ -48,7 +48,7 @@ class ClassLoadingStrategyAdvisor {
                 return ClassLoadingStrategy.UsingLookup.of(privateLookup);
             } catch (Throwable e) {
                 throw new IllegalStateException(
-                        String.format("Failed to utilize code generation strategy on class '%s'", 
+                        String.format("Failed to utilize code generation strategy on class '%s'",
                                 targetClass.getName())
                         , e);
             }
@@ -68,8 +68,8 @@ class ClassLoadingStrategyAdvisor {
 
             try {
                 Class<?> methodHandles = java.lang.invoke.MethodHandles.class;
-                Method privateLookupIn = methodHandles.getMethod("privateLookupIn", 
-                        Class.class, 
+                Method privateLookupIn = methodHandles.getMethod("privateLookupIn",
+                        Class.class,
                         java.lang.invoke.MethodHandles.Lookup.class);
 
                 MethodHandle mh = MethodHandles.publicLookup().unreflect(privateLookupIn);

@@ -32,11 +32,11 @@ import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 import org.apache.isis.extensions.secman.api.user.app.mixins.ApplicationUserManager_newDelegateUser.DomainEvent;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

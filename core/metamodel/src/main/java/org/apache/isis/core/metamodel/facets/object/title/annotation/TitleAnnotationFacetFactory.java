@@ -65,7 +65,7 @@ implements MetaModelRefiner {
         }
 
         sort(evaluators);
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = 
+        final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents =
                 _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
         FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
     }

@@ -28,7 +28,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class TypeListReprRenderer 
+public class TypeListReprRenderer
 extends ReprRendererAbstract<TypeListReprRenderer, Can<ObjectSpecification>> {
 
     private Can<ObjectSpecification> specifications;

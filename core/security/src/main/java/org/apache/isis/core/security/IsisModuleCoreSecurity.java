@@ -35,7 +35,7 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
         // @Component's
         RandomCodeGeneratorDefault.class,
-        
+
 })
 public class IsisModuleCoreSecurity {
 }

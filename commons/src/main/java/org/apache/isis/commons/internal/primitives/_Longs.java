@@ -46,9 +46,9 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class _Longs {
-    
+
     // -- RANGE
-    
+
     @Value(staticConstructor = "of")
     public static class Bound {
         long value;
@@ -56,20 +56,20 @@ public class _Longs {
         public static @NonNull Bound inclusive(long value) { return of(value, true); }
         public static @NonNull Bound exclusive(long value) { return of(value, true); }
     }
-    
+
     @Value(staticConstructor = "of")
     public static class Range {
         @NonNull Bound lowerBound;
         @NonNull Bound upperBound;
         public boolean contains(long value) {
-            val isBelowLower = lowerBound.isInclusive() 
-                    ? value < lowerBound.getValue() 
-                    : value <= lowerBound.getValue();  
+            val isBelowLower = lowerBound.isInclusive()
+                    ? value < lowerBound.getValue()
+                    : value <= lowerBound.getValue();
             if(isBelowLower) {
                 return false;
             }
-            val isAboveUpper = upperBound.isInclusive() 
-                    ? value > upperBound.getValue() 
+            val isAboveUpper = upperBound.isInclusive()
+                    ? value > upperBound.getValue()
                     : value >= upperBound.getValue();
             if(isAboveUpper) {
                 return false;
@@ -78,7 +78,7 @@ public class _Longs {
         }
         /**
          * @param value
-         * @return the value or if not within range, the nearest integer to the value, that is within range   
+         * @return the value or if not within range, the nearest integer to the value, that is within range
          */
         public long bounded(long value) {
             //if(empty) return value; // noop
@@ -87,7 +87,7 @@ public class _Longs {
             }
             final long nearestToLower = nearestToLower();
             final long nearestToUpper = nearestToUpper();
-            final long distanceToLower = value - nearestToLower; 
+            final long distanceToLower = value - nearestToLower;
             final long distanceToUpper = value - nearestToUpper;
             return (distanceToLower <= distanceToUpper)
                     ? nearestToLower
@@ -95,7 +95,7 @@ public class _Longs {
         }
         private long nearestToLower() {
             //if(empty) throw _Exceptions.unsupportedOperation();
-            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;  
+            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;
         }
         private long nearestToUpper() {
             //if(empty) throw _Exceptions.unsupportedOperation();
@@ -103,14 +103,14 @@ public class _Longs {
         }
         @Override
         public String toString() {
-            return String.format("%s%d,%d%S", 
+            return String.format("%s%d,%d%S",
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
         }
     }
-    
+
     // -- RANGE FACTORIES
-    
+
     /**
      * Range includes a and b.
      */
@@ -120,7 +120,7 @@ public class _Longs {
         }
         return Range.of(Bound.inclusive(a), Bound.inclusive(b));
     }
-    
+
     /**
      * Range includes a but not b.
      */
@@ -134,7 +134,7 @@ public class _Longs {
         }
         return Range.of(Bound.inclusive(a), Bound.exclusive(b));
     }
-    
+
     // -- PARSING
 
     /**
@@ -168,12 +168,12 @@ public class _Longs {
      * @param      radix   the radix to be used while parsing {@code s}.
      * @param      onFailure on parsing failure consumes the failure message
      * @return optionally the long represented by the string argument in the specified radix
-     * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant 
+     * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
     public OptionalLong parseLong(@Nullable final String s, final int radix, final Consumer<String> onFailure) {
        requires(onFailure, "onFailure");
-        
+
         if (s == null) {
             onFailure.accept("null");
             OptionalLong.empty();
@@ -236,16 +236,16 @@ public class _Longs {
         }
         return OptionalLong.of(negative ? result : -result);
     }
-    
+
     // -- SHORTCUTS
-    
+
     public OptionalLong parseLong(final String s, final int radix) {
         return parseLong(s, radix, IGNORE_ERRORS);
     }
-    
+
     // -- HELPER
 
     private static final Consumer<String> IGNORE_ERRORS = t->{};
-    
-    
+
+
 }

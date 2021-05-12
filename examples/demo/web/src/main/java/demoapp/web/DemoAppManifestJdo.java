@@ -32,7 +32,7 @@ import demoapp.dom.DemoModuleJdo;
 @Import({
     DemoModuleJdo.class,
     DemoAppManifestCommon.class,
-    
+
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJdo.class,
 })

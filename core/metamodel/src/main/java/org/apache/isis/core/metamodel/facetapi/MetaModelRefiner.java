@@ -25,10 +25,10 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 /**
  * Provides the ability for components to inform/alter/adjust/refine the meta-model
  * the {@link ProgrammingModel}).
- * 
+ *
  */
 public interface MetaModelRefiner {
-    
+
     void refineProgrammingModel(ProgrammingModel programmingModel);
 
 }

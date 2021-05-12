@@ -26,7 +26,7 @@ final class _InjectorMethodEvaluator {
         final String methodName = setter.getName();
         if (methodName.startsWith("set") || methodName.startsWith("inject")) {
             final Class<?>[] parameterTypes = setter.getParameterTypes();
-            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class) { 
+            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class) {
                 return parameterTypes[0];
             }
         }

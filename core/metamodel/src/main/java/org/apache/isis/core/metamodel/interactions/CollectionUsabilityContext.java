@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionUsabilityEvent}.
  */
-public class CollectionUsabilityContext 
+public class CollectionUsabilityContext
 extends UsabilityContext {
 
     public CollectionUsabilityContext(

@@ -42,5 +42,5 @@ import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 
 })
 public class IsisModuleCoreRuntime {
-    
+
 }

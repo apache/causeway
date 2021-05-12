@@ -52,67 +52,67 @@ public class UiActionHandlerFx {
     public void handleActionLinkClicked(ManagedAction managedAction) {
 
         log.info("about to build an action prompt for {}", managedAction.getIdentifier());
-        
+
         final int paramCount = managedAction.getAction().getParameterCount();
-        
+
         if(paramCount==0) {
-            invoke(managedAction, Can.empty());     
+            invoke(managedAction, Can.empty());
         } else {
             // get an ActionPrompt, then on invocation show the result in the content view
-            
+
             val pendingArgs = managedAction.startParameterNegotiation();
-            
+
             Dialog<ParameterNegotiationModel> dialog = new Dialog<>();
             dialog.setTitle("<Title>");
             dialog.setHeaderText("<HeaderText>");
-           
+
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
             val grid = new GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
             grid.setPadding(new Insets(20, 150, 10, 10));
             dialog.getDialogPane().setContent(grid);
-            
+
             pendingArgs.getParamModels().forEach(paramModel->{
-                
+
                 val paramNr = paramModel.getParamNr(); // zero based
-                
+
                 val request = ComponentRequest.of(paramModel);
-                
+
                 val labelAndPosition = uiComponentFactory.labelFor(request);
                 val uiField = uiComponentFactory.parameterFor(request);
-                
+
                 grid.add(labelAndPosition.getUiLabel(), 0, paramNr);
                 grid.add(uiField, 1, paramNr);
-                
+
             });
-            
+
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
                     return pendingArgs;
                 }
                 return null;
             });
-            
+
             dialog.showAndWait().ifPresent(params->{
                 log.info("param negotiation done");
                 invoke(managedAction, params.getParamValues()); //TODO handle vetoes
             });
-            
-        } 
+
+        }
 
     }
-    
+
     private void invoke(
-            ManagedAction managedAction, 
+            ManagedAction managedAction,
             Can<ManagedObject> params) {
-        
+
         isisInteractionFactory.runAnonymous(()->{
 
             //Thread.sleep(1000); // simulate long running
 
             val actionResultOrVeto = managedAction.invoke(params);
-            
+
             actionResultOrVeto.left()
             .ifPresent(actionResult->uiContext.route(actionResult));
 

@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.routing.RoutingService;
 @Qualifier("Default")
 //@Log4j2
 public class RoutingServiceDefault implements RoutingService {
-    
+
     private final HomePageResolverService homePageResolverService;
 
     @Inject

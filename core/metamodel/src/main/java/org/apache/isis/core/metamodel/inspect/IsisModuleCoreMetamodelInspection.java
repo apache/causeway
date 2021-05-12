@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.inspect.model.TypeNode;
         ParameterNode.class,
         PropertyNode.class,
         TypeNode.class,
-        
+
 })
 public class IsisModuleCoreMetamodelInspection {
 

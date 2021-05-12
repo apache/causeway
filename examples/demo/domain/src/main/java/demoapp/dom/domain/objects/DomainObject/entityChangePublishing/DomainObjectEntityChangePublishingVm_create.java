@@ -42,7 +42,7 @@ public class DomainObjectEntityChangePublishingVm_create {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    
+
     public DomainObjectEntityChangePublishingVm act(
             String newValue
             , boolean publishingEnabled

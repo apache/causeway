@@ -29,25 +29,25 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * with friendly names
  * {@link ActionLayout#fieldSetName()} and {@link PropertyLayout#fieldSetName()}.
  * <p>
- * Collections don't support grouping, but can be associated using 
- * {@link Action#associateWith()}. 
+ * Collections don't support grouping, but can be associated using
+ * {@link Action#associateWith()}.
  * </p><p>
  * An alternative is to use the <code>Xxx.layout.xml</code> file,
  * where <code>Xxx</code> is the domain object name.
  * </p><p>
  * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
  * </p>
- * 
- * @see Action#associateWith() 
+ *
+ * @see Action#associateWith()
  * @see ActionLayout#fieldSetId()
  * @see ActionLayout#fieldSetName()
  * @see PropertyLayout#fieldSetId()
  * @see PropertyLayout#fieldSetName()
- * 
+ *
  * @since 2.0
  */
 public interface LayoutGroupFacet extends Facet {
-    
+
     /**
      * Id and (Friendly) name of the layout group this member is associated with.
      */
@@ -59,20 +59,20 @@ public interface LayoutGroupFacet extends Facet {
     public default String getGroupId() {
         return getGroupIdAndName().getId();
     }
-    
+
     /**
      * (Friendly) name of the layout group this member is associated with.
      */
     public default String getGroupName() {
         return getGroupIdAndName().getName();
     }
-    
-    /** 
-     * {@code true} for layouts originating from XML, 
+
+    /**
+     * {@code true} for layouts originating from XML,
      * {@code false} for layouts originating from annotations.
      */
     public default boolean isExplicitBinding() {
         return false;
     }
-    
+
 }

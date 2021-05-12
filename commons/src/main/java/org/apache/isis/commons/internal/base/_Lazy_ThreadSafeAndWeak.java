@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import lombok.NonNull;
 
 /**
- * package private mixin for _Lazy 
+ * package private mixin for _Lazy
  * @since 2.0
  */
 final class _Lazy_ThreadSafeAndWeak<T> implements _Lazy<T> {
@@ -66,15 +66,15 @@ final class _Lazy_ThreadSafeAndWeak<T> implements _Lazy<T> {
             }
             final T newValue = supplier.get();
             weakValueReference = new WeakReference<T>(newValue);
-            return newValue;    
+            return newValue;
         }
     }
-    
+
     @Override
     public Optional<T> getMemoized() {
         throw _Exceptions.unsupportedOperation("undecidable for weak references");
     }
-    
+
     @Override
     public void set(T newValue) {
         synchronized (this) {

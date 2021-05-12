@@ -42,12 +42,12 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersist
 import lombok.val;
 
 
-public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory 
-extends FacetFactoryAbstract 
+public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject private JdoFacetContext jdoFacetContext;
-    
+
     public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
@@ -61,7 +61,7 @@ implements MetaModelRefiner {
             return;
         }
 
-       
+
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
@@ -113,7 +113,7 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                if(facet instanceof MaxLengthFacetDerivedFromJdoColumn 
+                if(facet instanceof MaxLengthFacetDerivedFromJdoColumn
                         && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
                     if(facet.value() != underlying.value()) {
                         ValidationFailure.raiseFormatted(

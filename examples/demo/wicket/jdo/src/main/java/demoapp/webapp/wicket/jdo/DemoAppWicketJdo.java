@@ -59,7 +59,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
     // Persistence (JDO/DN5)
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
-    
+
     //XrayEnable.class // for debugging only
 })
 //@Log4j2
@@ -73,11 +73,11 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
     	//IsisPresets.prototyping();
-        
+
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
         System.setProperty("spring.profiles.active", "demo-jdo");
-        
+
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
     }

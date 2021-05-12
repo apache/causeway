@@ -46,5 +46,5 @@ public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
     private FontAwesomeCssReferenceWkt() {
         super(IconDecorator.FONTAWESOME_RESOURCE);
     }
-    
+
 }

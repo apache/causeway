@@ -47,11 +47,11 @@ public class JdoBookDto {
     private String name;
     private String description;
     private double price;
-    
+
     private String author;
     private String isbn;
     private String publisher;
-    
+
     public static JdoBookDto from(JdoBook book) {
         return JdoBookDto.builder()
         .author(book.getAuthor())
@@ -62,33 +62,33 @@ public class JdoBookDto {
         .publisher(book.getPublisher())
         .build();
     }
-   
+
     public JdoBook toBook() {
-       return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(), 
-                this.getAuthor(), this.getIsbn(), this.getPublisher());   
+       return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(),
+                this.getAuthor(), this.getIsbn(), this.getPublisher());
     }
 
     public String encode() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-        
+
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(this, sw);
         String newBookXml = sw.toString();
-        
+
         String encoded = _Strings.convert(newBookXml, _Bytes.asCompressedUrlBase64, StandardCharsets.UTF_8);
-        
+
         return encoded;
     }
-    
+
     public static JdoBookDto decode(String encoded) throws JAXBException {
         String bookXml = _Strings.convert(encoded, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
-        
+
         JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        JdoBookDto bookDto = (JdoBookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml)); 
-        
+        JdoBookDto bookDto = (JdoBookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml));
+
         return bookDto;
     }
-    
+
 }

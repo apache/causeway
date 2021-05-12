@@ -40,7 +40,7 @@ import org.apache.isis.applib.value.Clob;
 public class TranslationServicePoMenu {
 
     @Inject private TranslationServicePo translationService;
-    
+
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
 
     // //////////////////////////////////////
@@ -58,7 +58,7 @@ public class TranslationServicePoMenu {
     public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
-        
+
         return translationService.toPot()
                 .map(chars->new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars))
                 .orElse(null);
@@ -93,7 +93,7 @@ public class TranslationServicePoMenu {
                 ? notAvailableForCurrentMode()
                 : null;
     }
-    
+
 
     // //////////////////////////////////////
 
@@ -140,7 +140,7 @@ public class TranslationServicePoMenu {
     // -- HELPER
 
     private String notAvailableForCurrentMode() {
-        return String.format("Not available for Translation Mode '%s'.", 
+        return String.format("Not available for Translation Mode '%s'.",
                 translationService.getMode().name().toLowerCase());
     }
 

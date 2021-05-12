@@ -31,24 +31,24 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
 
-    public static final String MANAGED_VERSION = "<managed>";     
-    
+    public static final String MANAGED_VERSION = "<managed>";
+
     @NonNull private final String groupId;
     @NonNull private final String artifactId;
     @NonNull private final String packaging;
     @NonNull private final String version;
-    
+
     private final AtomicReference<ComparableVersion> comparableVersion = new AtomicReference<ComparableVersion>();
 
     @Override
     public String toString() {
-        return String.format("%s:%s:%s:%s", groupId, artifactId, packaging, version); 
+        return String.format("%s:%s:%s:%s", groupId, artifactId, packaging, version);
     }
-    
+
     public String toStringWithGroupAndId() {
         return String.format("%s:%s", groupId, artifactId);
     }
-    
+
     public String toStringWithGroupAndIdAndVersion() {
         return String.format("%s:%s:%s", groupId, artifactId, version);
     }
@@ -58,15 +58,15 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
                 && !MANAGED_VERSION.equals(version)
                 && !version.startsWith("$");
     }
-    
+
     // -- COMPARATOR
-    
+
     private final static Comparator<ArtifactCoordinates> comparator = Comparator
             .comparing(ArtifactCoordinates::getGroupId)
             .thenComparing(ArtifactCoordinates::getArtifactId)
             .thenComparing(ArtifactCoordinates::getPackaging)
             .thenComparing(ArtifactCoordinates::getComparableVersion);
-    
+
     private ComparableVersion getComparableVersion() {
         if(comparableVersion.get()==null) {
             comparableVersion.set(new ComparableVersion(getVersion()));
@@ -78,5 +78,5 @@ public class ArtifactCoordinates implements Comparable<ArtifactCoordinates> {
     public int compareTo(ArtifactCoordinates o) {
         return comparator.compare(this, o);
     }
-    
+
 }

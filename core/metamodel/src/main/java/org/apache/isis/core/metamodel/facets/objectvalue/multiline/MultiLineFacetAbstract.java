@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class MultiLineFacetAbstract 
-extends FacetAbstract 
+public abstract class MultiLineFacetAbstract
+extends FacetAbstract
 implements MultiLineFacet {
 
     public static Class<? extends Facet> type() {

@@ -42,5 +42,5 @@ public class LayoutDemo {
     @Property
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultiline;
-    
+
 }

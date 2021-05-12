@@ -38,16 +38,16 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
  * @since 2.0
  */
 public abstract class WebPageBase
-extends WebPage 
+extends WebPage
 implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
-    
+
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
     private transient InteractionFactory isisInteractionFactory;
-    
+
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
     }
@@ -55,7 +55,7 @@ implements HasCommonContext {
     protected WebPageBase(final IModel<?> model) {
         super(model);
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -63,23 +63,24 @@ implements HasCommonContext {
     }
 
     // -- FAVICON SUPPORT
-    
+
     protected void renderFavicon(IHeaderResponse response) {
         getConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
         .filter(_Strings::isNotEmpty)
         .map(getWebAppContextPath()::prependContextPathIfLocal)
         .ifPresent(faviconUrl->{
-            response.render(MetaDataHeaderItem.forLinkTag("icon", faviconUrl));    
+            response.render(MetaDataHeaderItem.forLinkTag("icon", faviconUrl));
         });
     }
-    
+
     // -- DEPENDENCIES
-    
+
     @Override
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
+    @Override
     public IsisConfiguration getConfiguration() {
         return getCommonContext().getConfiguration();
     }
@@ -87,7 +88,7 @@ implements HasCommonContext {
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
-    
+
     public PageClassRegistry getPageClassRegistry() {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
@@ -95,17 +96,17 @@ implements HasCommonContext {
     public InteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
-    
+
     public IsisSystemEnvironment getSystemEnvironment() {
         return getCommonContext().getSystemEnvironment();
     }
-    
+
     // -- HELPER
-    
+
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                 : getCommonContext().lookupServiceElseFail(type);
     }
-    
+
 }

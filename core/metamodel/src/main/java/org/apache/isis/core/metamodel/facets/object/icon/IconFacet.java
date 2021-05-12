@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * file into a certain directory).
  *
  * <p>
- * The facet is checked each time the object is rendered, allowing the icon to be 
- * changed on an instance-by-instance basis. For example, the icon might be adapted 
+ * The facet is checked each time the object is rendered, allowing the icon to be
+ * changed on an instance-by-instance basis. For example, the icon might be adapted
  * with an overlay to represent its state through some well-defined lifecycle (eg
  * pending approval, approved, rejected).
  *

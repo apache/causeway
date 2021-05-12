@@ -43,45 +43,45 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
         val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
-        
+
             val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
-            // Whether objects of this type can only be embedded, 
+            // Whether objects of this type can only be embedded,
             // hence have no ID that binds them to the persistence layer
             final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                    || Annotations.getAnnotation(type, EmbeddedOnly.class)!=null; 
+                    || Annotations.getAnnotation(type, EmbeddedOnly.class)!=null;
             if(embeddedOnly) {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
-            
-            String objectType = null; 
-            
+
+            String objectType = null;
+
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 objectType = aDomainObject.objectType();
             }
-            
+
             // don't trample over the @DomainObject(objectType=..) if present
             if(_Strings.isEmpty(objectType)) {
-                val schema = persistenceCapableAnnot.get().schema();      
+                val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
-                    
+
                     val table = persistenceCapableAnnot.get().table();
-                    
-                    objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT), 
+
+                    objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
                             _Strings.isNotEmpty(table)
                                 ? table
                                 : type.getSimpleName());
                 }
             }
-            
-      
+
+
             if(_Strings.isNotEmpty(objectType)) {
                 BeanClassification.selfManaged(
                         BeanSort.ENTITY, objectType);
             }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
-        
+
         return null; // we don't feel responsible to classify given type
     }
 

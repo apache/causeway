@@ -49,7 +49,7 @@ public class TemplateResourceCachingFilter implements Filter {
      * <p>
      * This is intended to inform other filters.
      */
-    private static final String REQUEST_ATTRIBUTE = 
+    private static final String REQUEST_ATTRIBUTE =
             TemplateResourceCachingFilter.class.getName() + ".resource";
 
     /**
@@ -111,7 +111,7 @@ public class TemplateResourceCachingFilter implements Filter {
     /** The cache time in seconds. */
     private long cacheTime = 0L;
 
-    private static final DateFormat httpDateFormat() { 
+    private static final DateFormat httpDateFormat() {
         // not thread-safe, so each thread should have its own instance
         val dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -193,7 +193,7 @@ public class TemplateResourceCachingFilter implements Filter {
         // 2) the exception thrown and the exception message text are specific to the
         //    servlet-engine implementation, so we can only guess here
         try {
-            chain.doFilter(servletRequest, servletResponse);    
+            chain.doFilter(servletRequest, servletResponse);
         } catch (IOException e) {
             FluentException.of(e)
             .suppressIf(this::isConnectionAbortException);

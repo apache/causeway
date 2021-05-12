@@ -58,6 +58,7 @@ public class Markdown implements HasHtml, Serializable {
         return "Markdown[length="+html.length()+"]";
     }
 
+    @Override
     public String asHtml() {
         return html;
     }

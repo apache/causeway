@@ -48,7 +48,7 @@ final class ListeningMarkupComponent_observing  {
                     ListeningMarkupComponent_observing.class, jScriptTemplateResource);
 
         } catch (IOException e) {
-            log.warn("resource not found class:{} path:{}", 
+            log.warn("resource not found class:{} path:{}",
                     ListeningMarkupComponent_observing.class, jScriptTemplateResource, e);
             return resourceNotFound();
         }

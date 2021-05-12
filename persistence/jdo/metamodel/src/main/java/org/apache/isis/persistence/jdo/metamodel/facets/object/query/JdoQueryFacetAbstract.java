@@ -34,8 +34,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public class JdoQueryFacetAbstract 
-extends FacetAbstract 
+public class JdoQueryFacetAbstract
+extends FacetAbstract
 implements JdoQueryFacet {
 
     public static Class<? extends Facet> type() {
@@ -46,16 +46,16 @@ implements JdoQueryFacet {
     private final Can<JdoNamedQuery> namedQueries;
 
     public JdoQueryFacetAbstract(
-            final @NonNull FacetHolder holder, 
+            final @NonNull FacetHolder holder,
             final @NonNull Can<Query> jdoNamedQueries) {
-        
+
         super(JdoQueryFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
-        
+
         val objSpec = (ObjectSpecification) getFacetHolder();
         this.namedQueries = jdoNamedQueries.map(jdoNamedQuery->new JdoNamedQuery(jdoNamedQuery, objSpec));
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("namedQueries", namedQueries);

@@ -31,8 +31,8 @@ import lombok.NonNull;
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
  * Isis' dependencies.
  */
-public abstract class ModelAbstract<T> 
-extends LoadableDetachableModel<T> 
+public abstract class ModelAbstract<T>
+extends LoadableDetachableModel<T>
 implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +52,6 @@ implements HasCommonContext {
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
-    
+
+
 }

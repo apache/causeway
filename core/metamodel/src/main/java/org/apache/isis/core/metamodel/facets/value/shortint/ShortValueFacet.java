@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface ShortValueFacet extends Facet {
-    
+
     Short shortValue(ManagedObject object);
 
     ManagedObject createValue(Short value);

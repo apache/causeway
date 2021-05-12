@@ -23,10 +23,10 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 /**
- * 
+ *
  * @apiNote any implementing class must also be discovered/managed by Spring,
- * that is, it needs a direct- or meta-annotation of type {@link Component}  
- * 
+ * that is, it needs a direct- or meta-annotation of type {@link Component}
+ *
  */
 public interface DateConverterPlugin {
 

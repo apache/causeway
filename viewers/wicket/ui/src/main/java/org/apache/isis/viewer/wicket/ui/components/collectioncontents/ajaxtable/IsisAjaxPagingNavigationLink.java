@@ -61,10 +61,10 @@ public class IsisAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		super.onComponentTag(tag);
-		
+
 		Attributes.addClass(tag, "page-link");
 	}
-    
-    
+
+
 
 }

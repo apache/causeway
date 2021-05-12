@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
-public class CssClassFaFacetOnMemberFactory 
+public class CssClassFaFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
     public CssClassFaFacetOnMemberFactory() {

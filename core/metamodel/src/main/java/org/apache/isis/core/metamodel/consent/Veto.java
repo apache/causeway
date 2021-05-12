@@ -38,7 +38,7 @@ public class Veto extends ConsentAbstract {
      *            - must not be empty or <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {
-        super(null, requiresNotEmpty(reasonVetoed, "reasonVetoed")); 
+        super(null, requiresNotEmpty(reasonVetoed, "reasonVetoed"));
     }
 
     public Veto(final InteractionResult interactionResult) {

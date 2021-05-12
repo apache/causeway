@@ -39,7 +39,7 @@ public class PermissionToRoleMapperFromIni implements PermissionToRoleMapper {
                 section.entrySet()
                 .stream()
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey, 
+                        Map.Entry::getKey,
                         entry->PermissionUtils.toPermissionStrings(entry.getValue())))
 
                 );

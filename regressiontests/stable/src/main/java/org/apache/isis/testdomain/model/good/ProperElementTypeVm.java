@@ -35,20 +35,20 @@ public class ProperElementTypeVm {
 
     @Collection
     @Getter @Setter private List<ElementTypeInterface> interfaceColl;
-    
+
     @Collection
     @Getter @Setter private List<ElementTypeAbstract> abstractColl;
-    
+
     @Collection
     @Getter @Setter private List<ElementTypeConcrete> concreteColl;
-    
+
     @Collection
     @Getter @Setter private List<? extends ElementTypeInterface> interfaceColl2;
-    
+
     @Collection
     @Getter @Setter private List<? extends ElementTypeAbstract> abstractColl2;
-    
+
     @Collection
     @Getter @Setter private List<? extends ElementTypeConcrete> concreteColl2;
-    
+
 }

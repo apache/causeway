@@ -32,13 +32,13 @@ public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
     private final MenuUiModel menuUiModel;
 
     /**
-     * @param commonContext 
+     * @param commonContext
      * @param menuUiModel - may be null in special case of rendering the tertiary menu on the error page.
      */
     public ServiceActionsModel(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final MenuUiModel menuUiModel) {
-        
+
         super(commonContext);
         this.menuUiModel = menuUiModel;
     }

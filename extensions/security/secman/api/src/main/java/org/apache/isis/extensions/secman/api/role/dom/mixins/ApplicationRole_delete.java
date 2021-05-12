@@ -28,8 +28,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_delete.DomainEvent;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_delete.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 

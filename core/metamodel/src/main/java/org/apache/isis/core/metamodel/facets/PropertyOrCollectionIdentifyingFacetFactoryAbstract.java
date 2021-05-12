@@ -30,9 +30,9 @@ extends MethodPrefixBasedFacetFactoryAbstract
 implements PropertyOrCollectionIdentifyingFacetFactory {
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
-            final ImmutableEnumSet<FeatureType> featureTypes, 
+            final ImmutableEnumSet<FeatureType> featureTypes,
             final Can<String> prefixes) {
-        
+
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 

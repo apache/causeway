@@ -37,8 +37,6 @@ import javax.annotation.Nullable;
 
 import com.structurizr.model.Container;
 import com.structurizr.view.AutomaticLayout.RankDirection;
-import com.structurizr.view.LayoutMergeStrategy;
-
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
 

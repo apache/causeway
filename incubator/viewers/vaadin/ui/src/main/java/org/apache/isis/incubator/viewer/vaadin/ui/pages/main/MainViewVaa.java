@@ -53,23 +53,23 @@ import lombok.extern.log4j.Log4j2;
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @CssImport("./css/menu.css")
 @Log4j2
-public class MainViewVaa extends AppLayout 
+public class MainViewVaa extends AppLayout
 implements BeforeEnterObserver {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final transient IsisAppCommonContext commonContext;
     private final transient MetaModelContext metaModelContext;
     private final transient UiContextVaa uiContext;
     private final transient UiActionHandlerVaa uiActionHandler;
     private final transient UiComponentFactoryVaa uiComponentFactory;
     private final transient HeaderUiModelProvider headerUiModelProvider;
-    
-    
+
+
     private Div pageContent = new Div();
-    
+
     /**
-     * Constructs the main view of the web-application, with the menu-bar and page content. 
+     * Constructs the main view of the web-application, with the menu-bar and page content.
      */
     @Inject
     public MainViewVaa(
@@ -85,31 +85,31 @@ implements BeforeEnterObserver {
         this.headerUiModelProvider = headerUiModelProvider;
         this.uiContext = uiContext;
         this.uiComponentFactory = uiComponentFactory;
-        
+
         uiContext.setNewPageHandler(this::replaceContent);
         uiContext.setPageFactory(this::uiComponentForActionResult);
     }
-    
+
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
 
         val faStyleSheet = LocalResourceUtil.ResourceDescriptor.webjars(IconDecorator.FONTAWESOME_RESOURCE);
         LocalResourceUtil.addStyleSheet(faStyleSheet);
-        
+
         setPrimarySection(Section.NAVBAR);
 
         val menuBarContainer = MainView_createHeader.createHeader(
-                commonContext, 
-                headerUiModelProvider.getHeader(), 
+                commonContext,
+                headerUiModelProvider.getHeader(),
                 uiActionHandler::handleActionLinkClicked,
                 this::renderHomepage);
-        
+
         addToNavbar(menuBarContainer);
         setContent(pageContent = new Div());
         setDrawerOpened(false);
         renderHomepage();
     }
-    
+
     private void replaceContent(Component component) {
         pageContent.removeAll();
         pageContent.add(component);
@@ -126,11 +126,11 @@ implements BeforeEnterObserver {
         } else {
             return ObjectViewVaa.fromObject(
                     uiContext,
-                    uiComponentFactory, 
-                    uiActionHandler::handleActionLinkClicked, 
+                    uiComponentFactory,
+                    uiActionHandler::handleActionLinkClicked,
                     actionResult);
         }
     }
-    
-    
+
+
 }

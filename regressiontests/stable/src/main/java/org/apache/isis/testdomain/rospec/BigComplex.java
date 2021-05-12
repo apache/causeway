@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.rospec;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Objects;
 
 import org.apache.isis.commons.internal.assertions._Assert;

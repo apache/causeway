@@ -48,17 +48,17 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     private final boolean isPrototyping;
     private final UiContextFx uiContext;
     private final ChainOfResponsibility<ComponentRequest, Node> chainOfHandlers;
-    
+
     /** handlers in order of precedence (debug info)*/
-    @Getter 
-    private final List<Class<?>> registeredHandlers; 
-    
+    @Getter
+    private final List<Class<?>> registeredHandlers;
+
     @Inject
     private UiComponentFactoryFx(
             IsisSystemEnvironment isisSystemEnvironment,
             UiContextFx uiContext,
             List<UiComponentHandlerFx> handlers) {
-        
+
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
         this.uiContext = uiContext;
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
@@ -66,35 +66,35 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
                 .map(Handler::getClass)
                 .collect(Collectors.toList());
     }
-    
+
     @Override
     public Node componentFor(ComponentRequest request) {
-        
+
         val formField = chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Component Mapper failed to handle request %s", request));
-        
-        val managedMember = (ManagedMember) request.getManagedFeature(); 
-        
+
+        val managedMember = (ManagedMember) request.getManagedFeature();
+
         request.getDisablingUiModelIfAny().ifPresent(disablingUiModel->{
             uiContext.getDisablingDecoratorForFormField()
             .decorate(formField, disablingUiModel);
         });
-        
+
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForFormField()
                         .decorate(formField, PrototypingUiModel.of(managedMember))
                 : formField;
     }
-    
+
     @Override
     public Node buttonFor(ButtonRequest request) {
 
         val managedAction = request.getManagedAction();
         val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
         val actionEventHandler = request.getActionEventHandler();
-        
+
         val uiButton = new Button(managedAction.getName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
 
@@ -102,7 +102,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
             uiContext.getDisablingDecoratorForButton()
             .decorate(uiButton, disablingUiModel);
         });
-        
+
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForButton()
                         .decorate(uiButton, PrototypingUiModel.of(managedAction))
@@ -117,7 +117,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
                         "Component Mapper failed to handle request %s", request));
         return formField;
     }
-    
+
     @Override
     public LabelAndPosition<Node> labelFor(ComponentRequest request) {
         val labelPosition = request.getManagedFeature().getFacet(LabelAtFacet.class)
@@ -126,6 +126,6 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
         val uiLabel = new Label(request.getDisplayLabel());
         return LabelAndPosition.of(labelPosition, uiLabel);
     }
-    
-    
+
+
 }

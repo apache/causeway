@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionUsabilityEvent}.
  */
-public class ActionUsabilityContext 
-extends UsabilityContext 
+public class ActionUsabilityContext
+extends UsabilityContext
 implements ActionInteractionContext {
 
     private final ObjectAction objectAction;

@@ -29,7 +29,7 @@ import org.apache.isis.applib.value.Clob;
 public class ClobField extends CustomField<Clob> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Clob clob;
 
     public ClobField(String label) {
@@ -37,7 +37,7 @@ public class ClobField extends CustomField<Clob> {
         setLabel(label);
         // ...
     }
-    
+
     @Override
     protected Clob generateModelValue() {
         return clob;
@@ -46,12 +46,12 @@ public class ClobField extends CustomField<Clob> {
     @Override
     protected void setPresentationValue(@Nullable Clob clob) {
         this.clob = clob;
-        
+
         if(clob==null) {
             // ...
             return;
         }
-        
+
         // ...
     }
 

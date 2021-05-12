@@ -35,12 +35,12 @@ import lombok.val;
 /**
  * Indicates that details of the action invocation or property edit,
  * captured by a {@link Command},
- * should be dispatched via {@link CommandPublisher} to all subscribed 
+ * should be dispatched via {@link CommandPublisher} to all subscribed
  * {@link CommandSubscriber}s.
- * 
- * Corresponds to annotating the action method or property using 
+ *
+ * Corresponds to annotating the action method or property using
  * {@code @Action/@Property(commandPublishing=ENABLED)}
- * 
+ *
  * @since 2.0
  */
 public interface CommandPublishingFacet extends Facet {
@@ -48,7 +48,7 @@ public interface CommandPublishingFacet extends Facet {
     public CommandDtoProcessor getProcessor();
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        
+
         val commandFacet = facetHolder.getFacet(CommandPublishingFacet.class);
         if(commandFacet!=null) {
             return true;
@@ -61,14 +61,14 @@ public interface CommandPublishingFacet extends Facet {
      * and if the facetHoler has a CommandPublishingFacet.
      */
     public static void ifPublishingEnabledForCommand(
-            final @NonNull Command command, 
+            final @NonNull Command command,
             final @NonNull ObjectMember objectMember,
             final @NonNull FacetHolder facetHolder,
             final @NonNull Runnable runnable) {
 
         val memberId1 = objectMember.getIdentifier().getLogicalIdentityString("#");
         val memberId2 = command.getLogicalMemberIdentifier();
-        
+
         if(Objects.equals(memberId1, memberId2)
                 && isPublishingEnabled(facetHolder)) {
             runnable.run();

@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabl
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionParameterDisabledFacetViaMethod 
-extends ActionParameterDisabledFacetAbstract 
+public class ActionParameterDisabledFacetViaMethod
+extends ActionParameterDisabledFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -49,7 +49,7 @@ implements ImperativeFacet {
             final Method method,
             final TranslationService translationService,
             final TranslationContext translationContext,
-            final Optional<Constructor<?>> ppmFactory, 
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
 
         super(holder);
@@ -75,13 +75,13 @@ implements ImperativeFacet {
 
     @Override
     public String disabledReason(
-            final ManagedObject owningAdapter, 
+            final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs) {
-        
+
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
-                
+
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

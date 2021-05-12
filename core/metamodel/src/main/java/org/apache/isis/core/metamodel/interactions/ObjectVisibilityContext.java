@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectVisibilityEvent}.
  */
-public class ObjectVisibilityContext 
-extends VisibilityContext 
+public class ObjectVisibilityContext
+extends VisibilityContext
 implements ProposedHolder {
 
     public ObjectVisibilityContext(
@@ -40,9 +40,9 @@ implements ProposedHolder {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        
+
         super(
-                InteractionContextType.OBJECT_VISIBILITY, 
+                InteractionContextType.OBJECT_VISIBILITY,
                 InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy, where);
     }
 

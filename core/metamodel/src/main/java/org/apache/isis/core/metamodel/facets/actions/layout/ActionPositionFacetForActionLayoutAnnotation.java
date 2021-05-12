@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 public class ActionPositionFacetForActionLayoutAnnotation extends ActionPositionFacetAbstract {
 
     public static ActionPositionFacet create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny

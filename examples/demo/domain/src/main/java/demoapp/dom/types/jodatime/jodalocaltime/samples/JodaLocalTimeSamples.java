@@ -31,7 +31,7 @@ public class JodaLocalTimeSamples implements Samples<LocalTime> {
     @Override
     public Stream<LocalTime> stream() {
         return Stream.of(0, 8)
-                .flatMap(hour -> 
+                .flatMap(hour ->
                     Stream.of(0, 15)
                         .map(minute -> new org.joda.time.LocalTime(hour, minute, 30)));
     }

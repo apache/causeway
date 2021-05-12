@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
 
-public abstract class JdoNotPersistentFacetAbstract 
-extends FacetAbstract 
+public abstract class JdoNotPersistentFacetAbstract
+extends FacetAbstract
 implements JdoNotPersistentFacet {
 
     public static Class<? extends Facet> type() {

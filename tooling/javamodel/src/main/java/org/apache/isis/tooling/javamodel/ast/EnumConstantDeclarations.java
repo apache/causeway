@@ -23,12 +23,12 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import lombok.NonNull;
 
 public final class EnumConstantDeclarations {
-    
+
     /**
      * Returns given {@link EnumConstantDeclaration} as normal text, without formatting.
      */
     public static String asNormalized(final @NonNull EnumConstantDeclaration ecd) {
         return ecd.getNameAsString().trim();
     }
-    
+
 }

@@ -25,11 +25,11 @@ import org.asciidoctor.ast.Block;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-final class BlockVisitor 
+final class BlockVisitor
 implements StructuralNodeVisitor {
 
     private final Predicate<Block> blockConsumer;
-   
+
     @Override
     public boolean blockHead(Block block, int depth) {
         return blockConsumer.test(block);

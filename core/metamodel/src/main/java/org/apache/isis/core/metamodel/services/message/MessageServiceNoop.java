@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.message.MessageService;
 
-@Vetoed // can be used via producer (optional) 
+@Vetoed // can be used via producer (optional)
 public class MessageServiceNoop implements MessageService {
 
     @Override

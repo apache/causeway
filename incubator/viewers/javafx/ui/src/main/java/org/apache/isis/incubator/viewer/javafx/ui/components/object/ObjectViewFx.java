@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ObjectViewFx extends VBox {
-    
+
     public static ObjectViewFx fromObject(
             @NonNull final UiContextFx uiContext,
             @NonNull final UiComponentFactoryFx uiComponentFactory,
@@ -65,13 +65,13 @@ public class ObjectViewFx extends VBox {
             @NonNull final ManagedObject managedObject) {
         return new ObjectViewFx(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
-    
+
     /**
      * Constructs given domain object's view, with all its visible members and actions.
      * @param managedObject - domain object
      */
     protected ObjectViewFx(
-            final UiContextFx uiContext, 
+            final UiContextFx uiContext,
             final UiComponentFactoryFx uiComponentFactory,
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
@@ -82,7 +82,7 @@ public class ObjectViewFx extends VBox {
         val objectTitle = ManagedObjects.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
-        
+
         val gridVisitor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
             @Override
@@ -102,18 +102,18 @@ public class ObjectViewFx extends VBox {
             protected Pane newCol(Pane container, BS3Col bs3col) {
 
                 val uiCol = _fx.newVBox(container);
-                
+
                 // note: also account for insets and padding, assuming that 98% seems reasonable
-                double realtiveWidthWithRespectToContainer = bs3col.getSpan()*0.98/12; 
-                
+                double realtiveWidthWithRespectToContainer = bs3col.getSpan()*0.98/12;
+
                 uiCol.prefWidthProperty().bind(
                         container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
-                
+
                 uiCol.maxWidthProperty().bind(
                         container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
-                
+
                 uiCol.setFillWidth(true);
-                
+
                 return uiCol;
             }
 
@@ -136,19 +136,19 @@ public class ObjectViewFx extends VBox {
                 val uiTab = _fx.newTab(container, tabData.getName());
                 val uiTabContentPane = new VBox();
                 uiTab.setContent(uiTabContentPane);
-                return uiTabContentPane; 
+                return uiTabContentPane;
             }
 
             @Override
             protected Pane newFieldSet(Pane container, FieldSet fieldSetData) {
 
                 val titledPanel = _fx.add(container, new TitledPanel(fieldSetData.getName()));
-                
+
                 // handle associated actions
                 for(val actionData : fieldSetData.getActions()) {
                     onAction(titledPanel.getUiActionBar(), actionData);
                 }
-                
+
                 val uiFieldSet = _fx.add(titledPanel, new FormPane());
                 return uiFieldSet;
             }
@@ -161,90 +161,90 @@ public class ObjectViewFx extends VBox {
 
             @Override
             protected void onAction(Pane container, ActionLayoutData actionData) {
-                
+
                 val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedAction()
                 .ifPresent(managedAction -> {
-                    
+
                     interaction.checkUsability();
-                    
+
                     val uiButton = uiComponentFactory.buttonFor(
-                                    UiComponentFactory.ButtonRequest.of( 
-                                        managedAction, 
-                                        DisablingUiModel.of(interaction), 
+                                    UiComponentFactory.ButtonRequest.of(
+                                        managedAction,
+                                        DisablingUiModel.of(interaction),
                                         actionEventHandler));
-                    
+
                     if(container instanceof FormPane) {
                         ((FormPane)container).addActionLink(uiButton);
                     } else {
-                        _fx.add(container, uiButton);    
+                        _fx.add(container, uiButton);
                     }
-                    
-                    
+
+
                 });
             }
 
             @Override
             protected void onProperty(Pane container, PropertyLayoutData propertyData) {
-                
+
                 val owner = managedObject;
-                
+
                 val formPane = (FormPane) container;
-                
+
                 val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
-                    
+
                     interaction.checkUsability();
-                    
+
                     val request = UiComponentFactory.ComponentRequest.of(
                             managedProperty,
                             DisablingUiModel.of(interaction));
-                    
+
                     val uiPropertyField = uiComponentFactory.componentFor(request);
                     val labelAndPostion = uiComponentFactory.labelFor(request);
-                    
+
                     formPane.addField(
                             labelAndPostion.getLabelPosition(),
                             labelAndPostion.getUiLabel(),
                             uiPropertyField);
-                    
+
                     // handle associated actions
                     for(val actionData : propertyData.getActions()) {
                         onAction(container, actionData);
                     }
-                    
+
                 });
             }
 
             @Override
             protected void onCollection(Pane container, CollectionLayoutData collectionData) {
-                
+
                 val owner = managedObject;
-                
+
                 CollectionInteraction.start(owner, collectionData.getId(), Where.OBJECT_FORMS)
                 .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
-                    
+
                     val titledPanel = _fx.add(container, new TitledPanel(managedCollection.getName()));
-                    
+
                     // handle associated actions
                     for(val actionData : collectionData.getActions()) {
                         onAction(titledPanel.getUiActionBar(), actionData);
                     }
-                    
-                    _fx.add(titledPanel, 
+
+                    _fx.add(titledPanel,
                             TableViewFx.forManagedCollection(
-                                    uiContext, 
-                                    managedCollection, 
+                                    uiContext,
+                                    managedCollection,
                                     Where.PARENTED_TABLES));
 
                 });
-                
+
             }
 
         };

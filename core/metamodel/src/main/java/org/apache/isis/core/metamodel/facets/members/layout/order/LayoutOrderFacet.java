@@ -25,26 +25,26 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * In the framework's default programming model corresponds to annotations
- * {@link ActionLayout#sequence()}, {@link CollectionLayout#sequence()} and 
+ * {@link ActionLayout#sequence()}, {@link CollectionLayout#sequence()} and
  * {@link PropertyLayout#sequence()}.
  * <p>
  *     An alternative is to use the <code>Xxx.layout.xml</code> file,
  *     where <code>Xxx</code> is the domain object name.
  * </p>
- * 
- * @see ActionLayout#sequence() 
+ *
+ * @see ActionLayout#sequence()
  * @see CollectionLayout#sequence()
  * @see PropertyLayout#sequence()
- * 
+ *
  * @since 2.0
  */
 public interface LayoutOrderFacet extends Facet {
 
     /**
-     * The order of this member relative to other members in the same (layout) group, 
+     * The order of this member relative to other members in the same (layout) group,
      * in dewey-decimal notation. For collections this is relative to each other
      * (collections aren't grouped).
      */
     public String getSequence();
-    
+
 }

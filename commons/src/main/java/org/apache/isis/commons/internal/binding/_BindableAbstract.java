@@ -31,7 +31,7 @@ import lombok.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -73,7 +73,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     public void removeListener(ChangeListener<? super T> listener) {
         util = InternalUtil.removeListener(util, listener);
     }
-    
+
     @Override
     public void bindBidirectional(Bindable<T> other) {
         InternalBidirectionalBinding.bind(this, other);
@@ -87,8 +87,8 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     @Override
     public T getValue() {
         valid = true;
-        return observable == null 
-                ? value 
+        return observable == null
+                ? value
                 : observable.getValue();
     }
 
@@ -129,16 +129,16 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
             observable = null;
         }
     }
-    
+
     protected void fireValueChanged() {
         InternalUtil.fireValueChanged(util);
     }
 
     protected void onInvalidated() {
     }
-    
+
     // -- HELPER
-    
+
     private void markInvalid() {
         if (valid) {
             valid = false;
@@ -147,7 +147,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
         }
     }
 
-    private static class WeakInvalidationListener 
+    private static class WeakInvalidationListener
     implements InvalidationListener, InternalUtil.WeakListener {
 
         private final WeakReference<_BindableAbstract<?>> wref;

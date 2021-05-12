@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 class _Strings_FastSplit {
 
     public static void splitThenAccept(
-            @Nullable final String input, 
-            final String separator, 
+            @Nullable final String input,
+            final String separator,
             BiConsumer<String, String> onNonEmptySplit,
             Consumer<String> onNonEmptyLhs,
             Consumer<String> onNonEmptyRhs) {

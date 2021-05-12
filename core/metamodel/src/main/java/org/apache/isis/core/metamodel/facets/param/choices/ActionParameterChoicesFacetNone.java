@@ -38,7 +38,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return Can.empty();
     }
 

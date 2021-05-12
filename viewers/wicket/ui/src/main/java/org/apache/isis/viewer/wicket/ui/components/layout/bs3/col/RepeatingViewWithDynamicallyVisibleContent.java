@@ -24,8 +24,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-public class RepeatingViewWithDynamicallyVisibleContent 
-extends RepeatingView 
+public class RepeatingViewWithDynamicallyVisibleContent
+extends RepeatingView
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;

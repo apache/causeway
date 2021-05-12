@@ -29,35 +29,35 @@ public class LayoutGroupFacetFromXml
 extends LayoutGroupFacetAbstract {
 
     // -- FACTORIES
-    
+
     public static @Nullable LayoutGroupFacetFromXml create(
-            final @Nullable GroupIdAndName groupIdAndName, 
+            final @Nullable GroupIdAndName groupIdAndName,
             final @NonNull  FacetHolder holder) {
-        
-        return groupIdAndName!=null        
+
+        return groupIdAndName!=null
                 ? new LayoutGroupFacetFromXml(groupIdAndName, holder)
                 : null;
     }
-    
+
     public static @Nullable LayoutGroupFacetFromXml create(
             final @NonNull FieldSet fieldSet,
             final @NonNull FacetHolder holder) {
-        
+
         return GroupIdAndName.forFieldSet(fieldSet)
             .map(groupIdAndName->create(groupIdAndName, holder))
             .orElse(null);
     }
-    
+
     // -- IMPLEMENTATION
 
     private LayoutGroupFacetFromXml(GroupIdAndName groupIdAndName, FacetHolder holder) {
         super(groupIdAndName, holder);
     }
-    
+
     @Override
     public boolean isExplicitBinding() {
         return true;
     }
-    
-    
+
+
 }

@@ -34,17 +34,17 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     private final EncodableFacetUsingEncoderDecoder encodeableFacetUsingEncoderDecoder;
 
     public EncodableFacetAbstract(
-            final String candidateEncoderDecoderName, 
-            final Class<?> candidateEncoderDecoderClass, 
+            final String candidateEncoderDecoderName,
+            final Class<?> candidateEncoderDecoderClass,
             final FacetHolder holder) {
 
         super(EncodableFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.encoderDecoderClass = EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         if (isValid()) {
-            final EncoderDecoder<?> encoderDecoder = 
+            final EncoderDecoder<?> encoderDecoder =
                     (EncoderDecoder<?>) ClassExtensions.newInstance(encoderDecoderClass, FacetHolder.class, holder);
-            this.encodeableFacetUsingEncoderDecoder = 
+            this.encodeableFacetUsingEncoderDecoder =
                     new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder);
         } else {
             this.encodeableFacetUsingEncoderDecoder = null;

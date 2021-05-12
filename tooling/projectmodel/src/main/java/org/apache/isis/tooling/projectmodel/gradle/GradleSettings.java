@@ -30,5 +30,5 @@ public class GradleSettings {
 
     private final String rootProjectName;
     private final Map<ArtifactCoordinates, GradleBuildArtifact> buildArtifactsByArtifactKey = new LinkedHashMap<>();
-    
+
 }

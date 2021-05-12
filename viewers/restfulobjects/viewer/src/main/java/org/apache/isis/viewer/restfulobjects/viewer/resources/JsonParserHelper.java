@@ -151,7 +151,7 @@ public class JsonParserHelper {
         }
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
-        
+
         return Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceId).stringify();
     }
 

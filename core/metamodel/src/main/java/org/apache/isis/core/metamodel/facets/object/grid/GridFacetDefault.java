@@ -58,9 +58,9 @@ implements GridFacet {
 
     private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
         getFacetHolder().getFacet(LayoutFacet.class));
-    
+
     private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
-    
+
     private GridFacetDefault(
             final FacetHolder facetHolder,
             final GridService gridService) {
@@ -70,28 +70,28 @@ implements GridFacet {
 
     @Override
     public Grid getGrid(final @Nullable ManagedObject objectAdapter) {
-        
+
         guardAgainstObjectOfDifferentType(objectAdapter);
-        
+
         // gridByLayoutName is used as cache, unless gridService.supportsReloading() returns true
-        return gridByLayoutName.compute(layoutNameFor(objectAdapter), 
+        return gridByLayoutName.compute(layoutNameFor(objectAdapter),
                 (layoutName, cachedLayout)->
                     (cachedLayout==null
                             || gridService.supportsReloading())
                     ? this.load(layoutName)
                     : cachedLayout
         );
-        
+
     }
-    
+
     // -- HELPER
-    
+
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return; // cannot introspect
         }
-        
+
         if(!getSpecification().equals(objectAdapter.getSpecification())) {
             throw _Exceptions.unrecoverableFormatted(
                     "getGrid(adapter) was called passing an adapter (specId: %s), "
@@ -109,20 +109,20 @@ implements GridFacet {
         }
         return _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
     }
-    
+
     private boolean hasLayoutFacet() {
         return layoutFacetLazy.get()!=null;
     }
 
     private Grid load(final @NonNull String layoutName) {
-        
+
         val domainClass = getSpecification().getCorrespondingClass();
 
         val grid = Optional.ofNullable(
                 // loads from object's XML if available
-                gridService.load(domainClass, _Strings.emptyToNull(layoutName))) 
+                gridService.load(domainClass, _Strings.emptyToNull(layoutName)))
                 // loads from default-XML if available
-                .orElseGet(()->gridService.defaultGridFor(domainClass)); 
+                .orElseGet(()->gridService.defaultGridFor(domainClass));
         return gridService.normalize(grid);
     }
 

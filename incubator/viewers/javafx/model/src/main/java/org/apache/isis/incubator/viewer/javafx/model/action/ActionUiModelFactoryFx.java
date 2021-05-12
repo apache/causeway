@@ -26,5 +26,5 @@ public class ActionUiModelFactoryFx {
     public ActionUiModelFx newActionUiModel(UiContextFx uiContext, ManagedAction managedAction) {
         return ActionUiModelFx.of(uiContext, managedAction);
     }
-    
+
 }

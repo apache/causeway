@@ -56,11 +56,11 @@ public class ZipService {
 
             for (val fileAndName : fileAndNameList) {
                 zos.putNextEntry(new ZipEntry(fileAndName.getName()));
-                
+
                 try(val fis = new FileInputStream(fileAndName.getFile())){
                     zos.write(_Bytes.of(fis));
                 }
-                
+
                 zos.closeEntry();
             }
             zos.close();
@@ -71,7 +71,7 @@ public class ZipService {
     }
 
     /**
-     * As per {@link #zipNamedFiles(List)}, 
+     * As per {@link #zipNamedFiles(List)},
      * but using each file's name as the zip entry (rather than providing it).
      */
     public byte[] zipFiles(final List<File> fileList) {

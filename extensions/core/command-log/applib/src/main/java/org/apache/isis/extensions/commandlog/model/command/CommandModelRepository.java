@@ -44,7 +44,7 @@ public interface CommandModelRepository<C extends CommandModel> {
     List<C> findRecentByUsername(String username);
 
     List<C> findRecentByTarget(Bookmark target);
-    
+
     /**
      * Intended to support the replay of commands on a secondary instance of
      * the application.
@@ -106,13 +106,13 @@ public interface CommandModelRepository<C extends CommandModel> {
     List<C> findReplayedOnSecondary();
 
     C saveForReplay(CommandDto dto);
-    
+
     List<C> saveForReplay(CommandsDto commandsDto);
 
     void persist(C commandJdo);
 
     void truncateLog();
 
-    
-    
+
+
 }

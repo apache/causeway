@@ -30,10 +30,10 @@ public class ProperPrefixedAction {
     public boolean hideWhatever() {
         return false;
     }
-    
+
     // fails: using a reserved prefix makes @Action annotation mandatory
     // public boolean hideWhatever2() {
     //     return false;
     // }
-    
+
 }

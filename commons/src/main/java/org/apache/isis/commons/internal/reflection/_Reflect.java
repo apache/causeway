@@ -253,7 +253,7 @@ public final class _Reflect {
     // -- ANNOTATIONS
 
     /**
-     * Searches for annotation on provided class or any of its super-classes up the type hierarchy 
+     * Searches for annotation on provided class or any of its super-classes up the type hierarchy
      * or any implemented interfaces.
      * @param cls
      * @param annotationClass
@@ -261,7 +261,7 @@ public final class _Reflect {
      * @throws NullPointerException - if annotationClass is {@code null}
      */
     public static <T extends Annotation> T getAnnotation(
-            final Class<?> cls, 
+            final Class<?> cls,
             final Class<T> annotationClass) {
 
         if (cls == null) {
@@ -319,9 +319,9 @@ public final class _Reflect {
      *            if the method or annotation are {@code null}
      */
     public static <A extends Annotation> A getAnnotation(
-            final Method method, 
+            final Method method,
             final Class<A> annotationCls,
-            final boolean searchSupers, 
+            final boolean searchSupers,
             final boolean ignoreAccess) {
 
         _With.requires(method, "method");
@@ -329,19 +329,19 @@ public final class _Reflect {
         if (!ignoreAccess && !isAccessible(method)) {
             return null;
         }
-        
+
         if(searchSupers) {
-            return AnnotationUtils.findAnnotation(method, annotationCls);    
+            return AnnotationUtils.findAnnotation(method, annotationCls);
         } else {
             return AnnotationUtils.getAnnotation(method, annotationCls);
         }
-        
-//        
+
+//
 //
 //        final Stream<Method> methods;
 //
 //        if(searchSupers) {
-//            methods = streamAllMethods(method.getDeclaringClass(), ignoreAccess);    
+//            methods = streamAllMethods(method.getDeclaringClass(), ignoreAccess);
 //        } else {
 //            methods = streamMethods(method.getDeclaringClass(), ignoreAccess);
 //        }
@@ -356,10 +356,10 @@ public final class _Reflect {
     }
 
     /**
-     * Whether given {@code cls} is annotated with any {@link Annotation} of given {@code annotationName}. 
+     * Whether given {@code cls} is annotated with any {@link Annotation} of given {@code annotationName}.
      * @param cls
      * @param annotationName - fully qualified class name of the {@link Annotation} to match against
-     * @return false - if any of the arguments is null 
+     * @return false - if any of the arguments is null
      */
     public static boolean containsAnnotation(@Nullable final Class<?> cls, @Nullable String annotationName) {
         if(cls==null || _Strings.isEmpty(annotationName)) {
@@ -376,7 +376,7 @@ public final class _Reflect {
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(Method method) throws IllegalAccessException {
-        if(!method.isAccessible()) { // java9+ to replace by canAccess 
+        if(!method.isAccessible()) { // java9+ to replace by canAccess
             /*sonar-ignore-on*/
             method.setAccessible(true);
             MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
@@ -400,7 +400,7 @@ public final class _Reflect {
     }
 
     // -- FIND GETTER
-    
+
     @SneakyThrows
     public static Stream<PropertyDescriptor> streamGetters(@NonNull Class<?> cls) {
         return Stream.of(
@@ -408,7 +408,7 @@ public final class _Reflect {
                     .getPropertyDescriptors())
                 .filter(pd->pd.getReadMethod()!=null);
     }
-    
+
     public static Map<String, Method> getGettersByName(@NonNull Class<?> cls) {
         return streamGetters(cls)
                 .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
@@ -424,13 +424,13 @@ public final class _Reflect {
         }
         return null;
     }
-    
+
     // -- MODIFIERS
-    
+
     public static Object getFieldOn(
             @NonNull final Field field,
             @NonNull final Object target) throws IllegalArgumentException, IllegalAccessException {
-        
+
         /*sonar-ignore-on*/
         if(field.isAccessible()) {
             return field.get(target);
@@ -443,12 +443,12 @@ public final class _Reflect {
         }
         /*sonar-ignore-off*/
     }
-    
+
     public static void setFieldOn(
             @NonNull final Field field,
             @NonNull final Object target,
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
-        
+
         /*sonar-ignore-on*/
         if(field.isAccessible()) {
             field.set(target, fieldValue);
@@ -462,13 +462,13 @@ public final class _Reflect {
         }
         /*sonar-ignore-off*/
     }
-    
-    
+
+
     public static Result<Object> invokeMethodOn(
-            @NonNull final Method method, 
-            @NonNull final Object target, 
+            @NonNull final Method method,
+            @NonNull final Object target,
             final Object... args) {
-        
+
         /*sonar-ignore-on*/
         return Result.of(()->{
             if(method.isAccessible()) {
@@ -483,11 +483,11 @@ public final class _Reflect {
         });
         /*sonar-ignore-off*/
     }
-    
+
     public static <T> Result<T> invokeConstructor(
-            @NonNull final Constructor<T> constructor, 
+            @NonNull final Constructor<T> constructor,
             final Object... args) {
-        
+
         /*sonar-ignore-on*/
         return Result.of(()->{
             if(constructor.isAccessible()) {
@@ -502,35 +502,35 @@ public final class _Reflect {
         });
         /*sonar-ignore-off*/
     }
-    
-    
+
+
     // -- COMMON CONSTRUCTOR IDIOMS
-    
+
     public static Can<Constructor<?>> getDeclaredConstructors(Class<?> cls) {
         return Can.ofArray(cls.getDeclaredConstructors());
     }
-    
+
     public static Can<Constructor<?>> getPublicConstructors(Class<?> cls) {
         return Can.ofArray(cls.getConstructors());
     }
-    
+
     // -- FILTER
-    
+
     @UtilityClass
     public static class Filter {
-        
+
         public static Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
         }
-        
+
         public static Predicate<Executable> paramCount(int paramCount) {
             return ex->ex.getParameterCount() == paramCount;
         }
-        
+
         public static Predicate<Executable> paramAssignableFrom(int paramIndex, Class<?> paramType) {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
-        
+
         public static Predicate<Executable> paramSignatureMatch(Class<?>[] matchingParamTypes) {
             return ex->{
                 // check params (if required)
@@ -549,15 +549,15 @@ public final class _Reflect {
                 return true;
             };
         }
-        
+
         public static Predicate<Executable> paramAssignableFromValue(int paramIndex, @Nullable Object value) {
             if(value==null) {
                 return _Predicates.alwaysTrue();
             }
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(value.getClass());
         }
-        
+
     }
-    
+
 
 }

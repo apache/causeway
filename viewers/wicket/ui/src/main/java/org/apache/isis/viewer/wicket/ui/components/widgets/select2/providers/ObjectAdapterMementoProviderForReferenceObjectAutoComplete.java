@@ -41,7 +41,7 @@ extends ObjectAdapterMementoProviderAbstract {
         val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
         val autoCompleteAdapters = autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
         val commonContext = super.getCommonContext();
-        
+
         return autoCompleteAdapters.map(commonContext::mementoFor);
     }
 

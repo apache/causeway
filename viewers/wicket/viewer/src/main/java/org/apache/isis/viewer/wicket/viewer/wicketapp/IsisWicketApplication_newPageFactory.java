@@ -32,13 +32,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * 
+ *
  * Uses Wicket's default page factory, except for {@link EntityPage}s which require special instantiation:
- * <p> 
+ * <p>
  * Constructor
  * {@link EntityPage#EntityPage(IsisAppCommonContext, PageParameters)}
- * needs the common-context as argument. 
- * 
+ * needs the common-context as argument.
+ *
  * @since 2.0
  *
  */
@@ -53,43 +53,43 @@ class IsisWicketApplication_newPageFactory {
 
     @RequiredArgsConstructor
     static class WebPageBaseFactory implements IPageFactory {
-        
+
         private final IsisWicketApplication holder;
         private final IPageFactory delegate;
-        
+
         @Override
         public <C extends IRequestablePage> C newPage(Class<C> pageClass, PageParameters parameters) {
-            
+
             if(EntityPage.class.equals(pageClass)) {
                 return _Casts.uncheckedCast(EntityPage.bookmarked(holder.getCommonContext(), parameters));
             }
-            
+
             return delegate.newPage(pageClass, parameters);
         }
-        
+
         @Override
         public <C extends IRequestablePage> C newPage(Class<C> pageClass) {
-            
+
             if(EntityPage.class.equals(pageClass)) {
-                //TODO whenever this happens we should redirect to home, 
+                //TODO whenever this happens we should redirect to home,
                 // almost certainly the session has timed out
-                
+
                 val pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
                 return _Casts.uncheckedCast(delegate.newPage(pageTimeoutPageClass));
             }
-            
+
             return delegate.newPage(pageClass);
         }
-        
+
         @Override
         public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass) {
-            
+
             if(EntityPage.class.equals(pageClass)) {
                 return true;
             }
-            
+
             return delegate.isBookmarkable(pageClass);
         }
     }
-    
+
 }

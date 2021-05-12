@@ -26,9 +26,10 @@ import org.joda.time.LocalTime;
 import java.util.Locale;
 
 public class ConverterForJodaLocalTime implements IConverter<LocalTime> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
+    @Override
     public LocalTime convertToObject(String value, Locale locale) throws ConversionException {
         try {
             return LocalTime.parse(value);
@@ -36,7 +37,8 @@ public class ConverterForJodaLocalTime implements IConverter<LocalTime> {
             throw new ConversionException("'" + value + "' is not a valid time.");
         }
     }
-    
+
+    @Override
     public String convertToString(LocalTime value, Locale locale) {
         return value.toString();
     }

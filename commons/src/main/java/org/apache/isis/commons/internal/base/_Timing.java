@@ -48,14 +48,14 @@ public final class _Timing {
     }
 
     /**
-     * 
+     *
      * @param startedAtSystemNanos
      * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
      */
     public static StopWatch atSystemNanos(long startedAtSystemNanos) {
         return new StopWatch(startedAtSystemNanos);
     }
-    
+
     /**
      * Non thread safe start/stop watch utilizing the currently running
      * JVM's high-resolution time source.
@@ -92,13 +92,13 @@ public final class _Timing {
         }
 
         /**
-         * @return elapsed nano seconds since started 
-         * (or when stopped, the time interval between started and stopped) 
+         * @return elapsed nano seconds since started
+         * (or when stopped, the time interval between started and stopped)
          */
         public long getNanos() {
             return stopped ? t1 - t0 : System.nanoTime() - t0 ;
         }
-        
+
         /**
          * @return elapsed micro seconds since started
          * (or when stopped, the time interval between started and stopped)
@@ -106,7 +106,7 @@ public final class _Timing {
         public long getMicros() {
             return getNanos()/1000L;
         }
-        
+
         /**
          * @return elapsed milli seconds since started
          * (or when stopped, the time interval between started and stopped)
@@ -114,7 +114,7 @@ public final class _Timing {
         public long getMillis() {
             return getNanos()/1000_000L;
         }
-        
+
         @Override
         public String toString() {
             return String.format(Locale.US, "%d ms", getMillis());

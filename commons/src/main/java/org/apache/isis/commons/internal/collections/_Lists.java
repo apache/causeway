@@ -117,7 +117,7 @@ public final class _Lists {
     public static <T> ArrayList<T> newArrayList() {
         return new ArrayList<T>();
     }
-    
+
     public static <T> ArrayList<T> newArrayList(final int initialSize) {
         return new ArrayList<T>(initialSize);
     }
@@ -184,18 +184,18 @@ public final class _Lists {
                 .filter(filter)
                 .collect(Collectors.toList());
     }
-    
+
     // -- COLLECTORS
 
-    public static <T> 
+    public static <T>
     Collector<T, ?, List<T>> toUnmodifiable(Supplier<List<T>> collectionFactory) {
-        
+
         return Collectors.collectingAndThen(
-                Collectors.toCollection(collectionFactory), 
+                Collectors.toCollection(collectionFactory),
                 Collections::unmodifiableList);
     }
-    
-    public static <T> 
+
+    public static <T>
     Collector<T, ?, List<T>> toUnmodifiable() {
         return toUnmodifiable(ArrayList::new);
     }

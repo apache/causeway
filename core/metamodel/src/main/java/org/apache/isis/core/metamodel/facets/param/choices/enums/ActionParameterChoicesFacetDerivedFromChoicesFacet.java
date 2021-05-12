@@ -41,7 +41,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
         final ObjectSpecification noSpec = specForTypeElseFail(paramPeer.getType());

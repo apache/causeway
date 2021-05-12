@@ -28,11 +28,11 @@ import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(executionPublishing = Publishing.ENABLED) 
-@ActionLayout(named = "foo", describedAs = "bar")  
+@Action(executionPublishing = Publishing.ENABLED)
+@ActionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
 public class ProperMemberSupport_action {
-    
+
     private final ProperMemberSupport holder;
 
     // proper mix-in action
@@ -40,12 +40,12 @@ public class ProperMemberSupport_action {
     public ProperMemberSupport act(String p0, String p1) {
         return holder;
     }
-    
+
     @MemberSupport
     public String disableAct() {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideAct() {
         return false;
@@ -55,7 +55,7 @@ public class ProperMemberSupport_action {
     public String validateAct(String p0, String p1) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> autoComplete0Act(@MinLength(3) String search) {
         return null;
@@ -65,12 +65,12 @@ public class ProperMemberSupport_action {
     public Set<String> autoComplete1Act(@MinLength(3) String search) {
         return null;
     }
-    
+
 //    @MemberSupport
 //    public Set<String> autoComplete1Act(String p0, @MinLength(3) String search) {
 //        return null;
 //    }
-    
+
     @MemberSupport
     public Set<String> choices0Act() {
         return null;
@@ -80,7 +80,7 @@ public class ProperMemberSupport_action {
     public Set<String> choices1Act(String p0) {
         return null;
     }
-    
+
     @MemberSupport
     public String default0Act() {
         return null;
@@ -101,5 +101,5 @@ public class ProperMemberSupport_action {
         return null;
     }
 
-    
+
 }

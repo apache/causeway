@@ -54,7 +54,7 @@ implements MixinFacet {
         this.mixinType = mixinType;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
-        this.holderType = constructor.getParameterTypes()[0]; 
+        this.holderType = constructor.getParameterTypes()[0];
     }
 
     @Override
@@ -91,13 +91,13 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(Method method) {
-        
+
         // include methods from super classes or interfaces
         //
         // it is sufficient to detect any match;
-        // mixin invocation will take care of calling the right method, 
-        // that is in terms of type-hierarchy the 'nearest' to this mixin 
-        
+        // mixin invocation will take care of calling the right method,
+        // that is in terms of type-hierarchy the 'nearest' to this mixin
+
         return method.getName().equals(getMainMethodName())
                 && method.getDeclaringClass()
                     .isAssignableFrom(constructor.getDeclaringClass());

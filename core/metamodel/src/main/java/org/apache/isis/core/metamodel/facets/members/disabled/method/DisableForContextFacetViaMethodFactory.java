@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class DisableForContextFacetViaMethodFactory 
+public class DisableForContextFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
@@ -52,7 +52,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val cls = processMethodContext.getCls();
 
         Method disableMethod = null;
-        
+
         val namingConvention = getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();

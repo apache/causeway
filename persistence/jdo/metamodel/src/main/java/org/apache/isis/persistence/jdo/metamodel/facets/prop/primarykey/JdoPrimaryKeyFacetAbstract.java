@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
 
-public abstract class JdoPrimaryKeyFacetAbstract 
-extends FacetAbstract 
+public abstract class JdoPrimaryKeyFacetAbstract
+extends FacetAbstract
 implements JdoPrimaryKeyFacet {
 
     public static Class<? extends Facet> type() {

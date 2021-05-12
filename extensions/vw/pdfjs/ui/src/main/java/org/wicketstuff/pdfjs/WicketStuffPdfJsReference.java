@@ -18,11 +18,11 @@
  */
 package org.wicketstuff.pdfjs;
 
+import java.util.List;
+
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
-
-import java.util.List;
 
 public class WicketStuffPdfJsReference extends JQueryPluginResourceReference {
 

@@ -21,10 +21,6 @@ package org.apache.isis.extensions.secman.jdo.util;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepositoryAbstract;
 
 import lombok.val;
 

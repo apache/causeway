@@ -35,7 +35,7 @@ final class _Strings_HtmlEscaper {
             _Strings.pair("<", "&lt;"),
             _Strings.pair(">", "&gt;"),
 
-    }; 
+    };
 
     static String htmlEscape(String input) {
         if(_Strings.isEmpty(input)) {

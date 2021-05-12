@@ -21,6 +21,6 @@ package org.apache.isis.viewer.common.model;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 public interface HasParentUiModel<T extends ObjectUiModel> {
-    
+
     T getParentUiModel();
 }

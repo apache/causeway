@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 
 /**
- * Corresponds to annotating the class with {@link DomainObjectLayout#bookmarking()}. 
+ * Corresponds to annotating the class with {@link DomainObjectLayout#bookmarking()}.
  * or an action with {@link ActionLayout#bookmarking()}.
- * 
+ *
  * @see ActionLayout
  * @see DomainObjectLayout
  */

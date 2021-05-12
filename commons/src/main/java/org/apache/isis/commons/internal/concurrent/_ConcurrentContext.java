@@ -25,7 +25,7 @@ import lombok.Builder;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -35,15 +35,15 @@ import lombok.Builder;
  */
 @Builder
 public class _ConcurrentContext {
-    
+
     @Builder.Default final ExecutorService executorService = null;
     @Builder.Default final boolean enableExecutionLogging = true;
-    
+
     public static _ConcurrentContextBuilder forkJoin() {
         return _ConcurrentContext.builder()
                 .executorService(ForkJoinPool.commonPool());
     }
-    
+
     public static _ConcurrentContextBuilder sequential() {
         return _ConcurrentContext.builder();
     }
@@ -51,5 +51,5 @@ public class _ConcurrentContext {
     public boolean shouldRunSequential() {
         return executorService == null;
     }
-    
+
 }

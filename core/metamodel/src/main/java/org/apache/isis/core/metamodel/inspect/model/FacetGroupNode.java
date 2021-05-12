@@ -44,30 +44,30 @@ public class FacetGroupNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Facets facets;
-    
+
     @Override
     public String createTitle() {
         return "Facets";
         //return super.abbreviate(facet.getFqcn());
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        
+
         return _NullSafe.stream(facets.getFacet())
                 .map(facet->MMNodeFactory.facet(facet, this));
     }
-   
-    
+
+
 }
 

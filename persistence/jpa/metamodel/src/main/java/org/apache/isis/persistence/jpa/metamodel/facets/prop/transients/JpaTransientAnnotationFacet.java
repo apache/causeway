@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jpa.metamodel.facets.prop.transients;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class JpaTransientAnnotationFacet 
+public class JpaTransientAnnotationFacet
 extends FacetAbstract {
 
     protected JpaTransientAnnotationFacet(FacetHolder holder) {

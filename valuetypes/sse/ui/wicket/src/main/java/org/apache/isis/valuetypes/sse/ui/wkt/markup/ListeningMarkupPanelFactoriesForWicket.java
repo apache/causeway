@@ -31,8 +31,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFac
 import lombok.val;
 
 /**
- * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
- * {@link MarkupPanelFactories}, but specific to 
+ * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
+ * {@link MarkupPanelFactories}, but specific to
  * the {@link Markup} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -48,7 +48,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
             super(Markup.class);
         }
 
-        
+
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
@@ -56,7 +56,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
                         id, model, getEventStreamResource((ScalarModel)model));
                 markupComponent.setEnabled(false);
                 getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
-                return markupComponent;    
+                return markupComponent;
             };
         }
 
@@ -68,7 +68,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
                     ? observeFacet.getEventStreamResource()
                             : null;
         }
-        
+
 
     }
 
@@ -87,7 +87,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
             return (id, model) -> {
                 val markupComponent = new ListeningMarkupComponent(id, model, /*observing*/ null);
                 getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
-                return markupComponent;    
+                return markupComponent;
             };
         }
 

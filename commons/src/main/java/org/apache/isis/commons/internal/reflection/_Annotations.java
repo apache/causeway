@@ -47,113 +47,113 @@ import lombok.val;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _Annotations {
-    
+
     /**
-     * Determine if the specified annotation is either directly present or meta-present. 
-     * 
+     * Determine if the specified annotation is either directly present or meta-present.
+     *
      * @param <A>
      * @param annotatedElement
      * @param annotationType
      * @return non-null
      */
     public static <A extends Annotation> boolean isPresent(
-            AnnotatedElement annotatedElement, 
+            AnnotatedElement annotatedElement,
             Class<A> annotationType) {
 
         return collect(annotatedElement).isPresent(annotationType);
     }
-    
+
     /**
      * Optionally returns the 'nearest' annotation of given type based on presence.
-     * 
+     *
      * @param <A>
      * @param annotatedElement
      * @param annotationType
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> findNearestAnnotation(
-            AnnotatedElement annotatedElement, 
+            AnnotatedElement annotatedElement,
             Class<A> annotationType) {
         //XXX if synthesize has good runtime performance, then we simply us it here
         return synthesize(annotatedElement, annotationType);
     }
-    
+
     private static final _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
     public static void clearCache() {
         syntCache.clear();
     }
-    
+
     /**
      * Optionally creates a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Does support attribute inheritance.
-     * 
+     *
      * @param <A>
      * @param annotatedElement
      * @param annotationType
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesizeInherited(
-            AnnotatedElement annotatedElement, 
+            AnnotatedElement annotatedElement,
             Class<A> annotationType) {
-        
+
         return calc_synthesizeInherited(annotatedElement, annotationType);
     }
-    
+
     private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
-            AnnotatedElement annotatedElement, 
+            AnnotatedElement annotatedElement,
             Class<A> annotationType) {
-        
+
         val collected = _Annotations
                 .collect(annotatedElement);
-        
+
         if(!collected.isPresent(annotationType)) {
-            
+
             // also handle fields, getter methods might be associated with
-            if(annotatedElement instanceof Method && 
+            if(annotatedElement instanceof Method &&
                     searchAnnotationOnField(annotationType) ) {
-                
+
                 val fieldForGetter = fieldForGetter((Method) annotatedElement);
                 if(fieldForGetter!=null) {
                     return synthesizeInherited(fieldForGetter, annotationType);
                 }
             }
-            
+
             return Optional.empty();
         }
-        
+
         val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
                 .createProxy(collected, annotationType);
-        
+
         return Optional.of(proxy);
     }
-    
-    
+
+
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Does NOT support attribute inheritance.
-     * 
+     *
      * @param <A>
      * @param annotatedElement
      * @param annotationType
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesize(
-            AnnotatedElement annotatedElement, 
+            AnnotatedElement annotatedElement,
             Class<A> annotationType) {
-        
+
         val synthesized = _Annotations
                 .collect(annotatedElement)
                 .get(annotationType)
                 .synthesize(MergedAnnotation::isPresent);
-        
+
         return synthesized;
     }
 
-    
+
     // -- HELPER
-    
+
     /**
      * @apiNote don't expose Spring's MergedAnnotations
      */
@@ -161,7 +161,7 @@ public final class _Annotations {
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }
-    
+
     private static Field fieldForGetter(Method getter) {
         if(ReflectionUtils.isObjectMethod(getter)) {
             return null;
@@ -173,7 +173,7 @@ public final class _Annotations {
         val declaringClass = getter.getDeclaringClass();
         return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
     }
-    
+
     private static String fieldNameForGetter(Method getter) {
         if(getter.getParameterCount()>0) {
             return null;
@@ -193,7 +193,7 @@ public final class _Annotations {
         return _Strings.decapitalize(fieldName);
     }
 
-    
+
     private static boolean searchAnnotationOnField(Class<? extends Annotation> annotationType) {
         val target = annotationType.getAnnotation(Target.class);
         if(target==null) {
@@ -204,8 +204,8 @@ public final class _Annotations {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
 }

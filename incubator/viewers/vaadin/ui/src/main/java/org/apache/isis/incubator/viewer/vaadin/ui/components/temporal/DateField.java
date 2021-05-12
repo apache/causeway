@@ -28,15 +28,15 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 public class DateField extends CustomField<LocalDate> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final DatePicker datePicker = new DatePicker();
-    
+
     public DateField(String label) {
         super();
         setLabel(label);
         add(datePicker);
     }
-    
+
     @Override
     protected LocalDate generateModelValue() {
         return datePicker.getValue();
@@ -44,14 +44,14 @@ public class DateField extends CustomField<LocalDate> {
 
     @Override
     protected void setPresentationValue(@Nullable LocalDate newValue) {
-        
+
         datePicker.setValue(newValue);
-        
+
         if(newValue==null) {
             datePicker.setPlaceholder("no date"); //TODO allow translation
         }
-        
+
     }
-   
-    
+
+
 }

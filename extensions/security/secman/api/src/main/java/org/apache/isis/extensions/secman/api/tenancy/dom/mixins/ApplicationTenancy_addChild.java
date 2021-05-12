@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
 

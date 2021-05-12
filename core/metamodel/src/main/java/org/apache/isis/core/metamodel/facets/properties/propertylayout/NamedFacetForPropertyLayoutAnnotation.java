@@ -32,7 +32,7 @@ public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
     public static NamedFacet create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return propertyLayoutIfAny
                 .filter(propertyLayout->_Strings.isNotEmpty(propertyLayout.named()))
                 .map(propertyLayout -> new NamedFacetForPropertyLayoutAnnotation(

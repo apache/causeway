@@ -49,10 +49,10 @@ final class TemplateResourceServlet_HtmlTemplateVariables {
      */
     public String applyTo(final String template) {
 
-        String acc = template;        
+        String acc = template;
 
         for ( Entry<String, String> entry : placeholders.entrySet()) {
-            final String placeholderLiteral = "${" + entry.getKey() + "}";  
+            final String placeholderLiteral = "${" + entry.getKey() + "}";
             final String placeholderValue = entry.getValue();
 
             acc = acc.replace(placeholderLiteral, placeholderValue);

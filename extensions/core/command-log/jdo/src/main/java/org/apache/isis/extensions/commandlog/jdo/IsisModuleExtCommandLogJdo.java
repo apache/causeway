@@ -41,7 +41,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // @Service's
         , CommandJdo.TableColumnOrderDefault.class
-        
+
         // entities
         , CommandJdo.class
 })
@@ -49,7 +49,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         basePackageClasses= {
                 IsisModuleExtCommandLogJdo.class
         })
-public class IsisModuleExtCommandLogJdo 
+public class IsisModuleExtCommandLogJdo
 implements IsisModuleExtCommandLogApplib {
 
     /**

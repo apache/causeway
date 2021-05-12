@@ -21,5 +21,5 @@ package org.apache.isis.viewer.common.model.decorator.disable;
 public interface DisablingDecorator<T> {
 
     void decorate(T uiComponent, DisablingUiModel disableUiModel);
-    
+
 }

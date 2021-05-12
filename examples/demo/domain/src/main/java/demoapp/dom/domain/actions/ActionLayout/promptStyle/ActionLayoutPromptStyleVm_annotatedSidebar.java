@@ -32,8 +32,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1"
 )
 @ActionLayout(
-        promptStyle = PromptStyle.DIALOG_SIDEBAR, 
-        named = "sidebar", 
+        promptStyle = PromptStyle.DIALOG_SIDEBAR,
+        named = "sidebar",
         describedAs = "promptStyle = DIALOG_SIDEBAR",
         sequence = "3")
 @RequiredArgsConstructor

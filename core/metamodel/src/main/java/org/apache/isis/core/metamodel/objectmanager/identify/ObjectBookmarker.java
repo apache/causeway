@@ -35,13 +35,13 @@ public interface ObjectBookmarker {
     Bookmark bookmarkObject(ManagedObject managedObject);
 
     // -- HANDLER
-    
+
     public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Bookmark> {}
 
     // -- FACTORY
-    
+
     public static ObjectBookmarker createDefault() {
-        
+
         val chainOfHandlers = _Lists.of(
                 new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
@@ -49,15 +49,15 @@ public interface ObjectBookmarker {
                 new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForOthers());
-        
+
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
+
         return managedObject -> chainOfRespo
                 .handle(managedObject)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Could not identify ManagedObject: %s", managedObject));
-        
-        
+
+
     }
-    
+
 }

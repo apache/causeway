@@ -168,7 +168,7 @@ public final class ClassUtil {
         }
         val primitiveClass = primitives.get(fullName);
         if(primitiveClass!=null) {
-            return primitiveClass; 
+            return primitiveClass;
         }
         try {
             return _Context.loadClass(fullName);
@@ -178,7 +178,7 @@ public final class ClassUtil {
     }
 
     /**
-     * Returns {@code cls.getCanonicalName()} if present. 
+     * Returns {@code cls.getCanonicalName()} if present.
      * Otherwise resorts to fully qualified class-name, with any '$' replaced by '.$'.
      * @param cls
      * @return non-null

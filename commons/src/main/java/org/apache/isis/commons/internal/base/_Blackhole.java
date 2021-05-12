@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * "consumes" the values, conceiving no information to JIT whether the value is actually used afterwards. 
+ * "consumes" the values, conceiving no information to JIT whether the value is actually used afterwards.
  * This can save from the dead-code elimination of the computations resulting in the given values.
  * </p>
  * <p>

@@ -29,21 +29,21 @@ import lombok.val;
 
 @Value(staticConstructor = "of")
 public class FormPendingParamUiModel {
-    
+
     final ParameterUiModel paramModel;
     final Consent visibilityConsent;
     final Consent usabilityConsent;
-    
+
     public static FormPendingParamUiModel of(
             InteractionHead head,
-            ParameterUiModel paramUiModel, 
+            ParameterUiModel paramUiModel,
             ParameterNegotiationModel pendingArgs) {
 
         val objectActionParamter = paramUiModel.getMetaModel();
         val pendingArgValues = pendingArgs.getParamValues();
 
         paramUiModel.setPendingParameterModel(pendingArgs);
-        
+
         // visibility
         val visibilityConsent = objectActionParamter
                 .isVisible(head, pendingArgValues, InteractionInitiatedBy.USER);
@@ -51,7 +51,7 @@ public class FormPendingParamUiModel {
         // usability
         val usabilityConsent = objectActionParamter
                 .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
-        
+
         return of(paramUiModel, visibilityConsent, usabilityConsent);
     }
 }

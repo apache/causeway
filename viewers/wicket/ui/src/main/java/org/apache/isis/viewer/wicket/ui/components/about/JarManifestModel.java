@@ -45,21 +45,21 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
     private static final long serialVersionUID = 1L;
 
-//    private static final List<String> VERSION_KEY_CANDIDATES = 
+//    private static final List<String> VERSION_KEY_CANDIDATES =
 //            Arrays.asList("Implementation-Version", "Build-Time");
 
     private final List<JarManifestAttributes> manifests = _Lists.newArrayList();
 
     /**
-     * @param commonContext 
+     * @param commonContext
      * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
     public JarManifestModel(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             Provider<InputStream> metaInfManifestProvider) {
 
         super(commonContext);
-        
+
         Manifest manifest;
         try(val metaInfManifestIs = metaInfManifestProvider.get()) {
             manifest = new Manifest(metaInfManifestIs);
@@ -68,7 +68,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             addAttributes(manifest, manifests);
         } catch (Exception ex) {
             // ignore
-        } 
+        }
 
         Enumeration<?> resEnum;
         try {
@@ -82,7 +82,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             JarManifest jarManifest = new JarManifest(url);
             jarManifests.add(jarManifest);
 
-            
+
             try(val is = url.openStream()) {
                 if (is != null) {
                     manifest = new Manifest(is);
@@ -90,7 +90,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
                 }
             } catch(Exception e3) {
                 // ignore
-            } 
+            }
         }
 
         Collections.sort(jarManifests);
@@ -157,7 +157,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         .flatMap(s->_Strings.splitThenStream(s, "\\"))
         .filter(_Strings::isNotEmpty)
         .collect(Collectors.toList());
-        
+
         //XXX legacy of
         //List<String> parts = _Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
         Collections.reverse(parts);

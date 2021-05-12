@@ -37,8 +37,8 @@ public class LibraryPreloadingService {
     public void preloadLibraries() {
         val tasks = _ConcurrentTaskList.named("LibraryPreloading")
         .addRunnable("Preload JRuby for AsciiDoc", ()-> AsciiDoc.valueOfAdoc("Dummy"));
-        
+
         tasks.submit(_ConcurrentContext.forkJoin());
     }
-    
+
 }

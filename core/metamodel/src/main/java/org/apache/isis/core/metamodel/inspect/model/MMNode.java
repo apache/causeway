@@ -34,7 +34,7 @@ import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 
 import lombok.Setter;
 
-@XmlSeeAlso({        
+@XmlSeeAlso({
     ActionNode.class,
     CollectionNode.class,
     FacetAttrNode.class,
@@ -45,7 +45,7 @@ import lombok.Setter;
     TypeNode.class,})
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class MMNode {
-    
+
     @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
     public abstract MMNode getParentNode();
 
@@ -56,7 +56,7 @@ public abstract class MMNode {
         }
         return childNodes;
     }
-    
+
     protected abstract Stream<MMNode> streamChildNodes();
 
     protected String title;
@@ -68,7 +68,7 @@ public abstract class MMNode {
     public abstract String createTitle();
 
     public abstract String iconName();
-    
+
     protected String typeToString(Object type) {
         if(type instanceof DomainClassDto) {
             return typeToString((DomainClassDto) type);
@@ -77,7 +77,7 @@ public abstract class MMNode {
                 ? abbreviate(""+type)
                 : "void";
     }
-    
+
     protected String typeToString(DomainClassDto type) {
         return type!=null
                 ? abbreviate(type.getId())
@@ -93,11 +93,11 @@ public abstract class MMNode {
                 .replace("org.apache.isis.", "».")
                 .replace("java.lang.", "");
     }
-    
+
     protected String simpleName(String name) {
         return _Strings.splitThenStream(""+name, ".")
         .reduce((first, second) -> second) // get the last
         .orElse("null");
     }
-    
+
 }

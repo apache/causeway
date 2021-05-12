@@ -48,11 +48,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        
-        super(resourceContext, 
-                linkFollowSpecs, 
-                collectionId, 
-                RepresentationType.OBJECT_COLLECTION, 
+
+        super(resourceContext,
+                linkFollowSpecs,
+                collectionId,
+                RepresentationType.OBJECT_COLLECTION,
                 representation,
                 Where.PARENTED_TABLES);
     }

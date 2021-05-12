@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
 
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 Configuration_usingLayout.class
         })
 public class Configuration_usingLayout {

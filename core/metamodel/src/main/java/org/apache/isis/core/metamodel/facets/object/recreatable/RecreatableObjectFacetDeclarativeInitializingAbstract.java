@@ -31,19 +31,19 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
-public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract 
+public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract
 extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
             final PostConstructMethodCache postConstructMethodCache) {
-        
+
         super(holder, recreationMechanism, postConstructMethodCache);
     }
 
     private UrlEncodingService codec;
-    private SerializingAdapter serializer; 
+    private SerializingAdapter serializer;
 
     @Override
     protected void doInitialize(
@@ -62,7 +62,7 @@ extends RecreatableObjectFacetAbstract {
         val spec = viewModelAdapter.getSpecification();
 
         super.getServiceInjector().injectServicesInto(viewModelPojo);
-        
+
         spec.streamProperties(MixedIn.EXCLUDED)
         .filter(property->mementoKeys.contains(property.getId()))
         .forEach(property->{
@@ -84,12 +84,12 @@ extends RecreatableObjectFacetAbstract {
         final _Mementos.Memento memento = newMemento();
 
         val objectManager = super.getObjectManager();
-        
+
         /*
-         * ManagedObject that holds the ObjectSpecification used for 
-         * interrogating the domain object's metadata. 
-         * 
-         * Does _not_ perform dependency injection on the domain object. Also bypasses 
+         * ManagedObject that holds the ObjectSpecification used for
+         * interrogating the domain object's metadata.
+         *
+         * Does _not_ perform dependency injection on the domain object. Also bypasses
          * caching (if any), that is each call to this method creates a new instance.
          */
         val viewModelAdapter = objectManager.adapt(viewModelPojo);
@@ -101,9 +101,9 @@ extends RecreatableObjectFacetAbstract {
         // ignore those explicitly annotated as @NotPersisted
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
-            final ManagedObject propertyValue = 
+            final ManagedObject propertyValue =
                     property.get(viewModelAdapter, InteractionInitiatedBy.FRAMEWORK);
-            if(propertyValue != null 
+            if(propertyValue != null
                     && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());
             }

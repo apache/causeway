@@ -88,7 +88,7 @@ public final class Components {
         final Component childComponent = container.get(wicketId);
         childComponent.setVisible(visibility);
     }
-    
+
     public static boolean isRenderedComponent(final Component component) {
         return (component.getOutputMarkupId() && !(component instanceof Page));
     }
@@ -96,23 +96,23 @@ public final class Components {
     public static boolean hasPage(final Component component) {
         return component.findParent(Page.class)!=null;
     }
-    
+
     public static void addToAjaxRequest(AjaxRequestTarget target, Component component) {
 
         if (target == null || component == null) {
             return;
         }
-        
-        //TODO as of Wicket-8 we (for lack of a better solution) silently ignore 
+
+        //TODO as of Wicket-8 we (for lack of a better solution) silently ignore
         // java.lang.IllegalArgumentException ...
-       
+
         try {
             target.add(component);
         } catch (IllegalArgumentException cause) {
             FluentException.of(cause)
             .suppressIfMessageContains("Cannot update component because its page is not the same");
         }
-        
+
     }
 
 }

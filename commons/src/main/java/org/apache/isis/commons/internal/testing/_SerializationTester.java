@@ -52,7 +52,7 @@ public class _SerializationTester {
         val ois = new ObjectInputStream(bis);
         @SuppressWarnings("unchecked")
         val t = (T) ois.readObject();
-        bis.close(); 
+        bis.close();
         return t;
     }
 

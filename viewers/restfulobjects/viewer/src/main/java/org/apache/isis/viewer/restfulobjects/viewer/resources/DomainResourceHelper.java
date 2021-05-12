@@ -57,20 +57,20 @@ class DomainResourceHelper {
             ManagedObject objectAdapter) {
         return new DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
-    
+
     public static DomainResourceHelper ofServiceResource(
             IResourceContext resourceContext,
             ManagedObject objectAdapter) {
         return new DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
     }
-    
+
     private DomainResourceHelper(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter,
             final ObjectAdapterLinkTo adapterLinkTo) {
 
         ((ResourceContext)resourceContext).setObjectAdapterLinkTo(adapterLinkTo);
-        
+
         this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
 
@@ -161,8 +161,8 @@ class DomainResourceHelper {
      */
     public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
-        return invokeAction( 
-                actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE, 
+        return invokeAction(
+                actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE,
                 arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
@@ -178,8 +178,8 @@ class DomainResourceHelper {
      */
     public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
-        return invokeAction( 
-                actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT, 
+        return invokeAction(
+                actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT,
                 arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
@@ -190,21 +190,21 @@ class DomainResourceHelper {
      */
     public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
 
-        return invokeAction( 
-                actionId, AccessIntent.MUTATE, SemanticConstraint.NONE, 
+        return invokeAction(
+                actionId, AccessIntent.MUTATE, SemanticConstraint.NONE,
                 arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
     private Response invokeAction(
-            @NonNull final String actionId, 
+            @NonNull final String actionId,
             @NonNull final AccessIntent intent,
             @NonNull final SemanticConstraint semanticConstraint,
             @NonNull final JsonRepresentation arguments,
             @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
-        
+
         val where = resourceContext.getWhere();
-        
-        // lombok issue, needs explicit cast here 
+
+        // lombok issue, needs explicit cast here
         val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId, where)
         .checkVisibility()
         .checkUsability(intent)
@@ -218,40 +218,40 @@ class DomainResourceHelper {
                     .getInteractionVeto()
                     .orElseGet(()->InteractionVeto.notFound(MemberType.ACTION, actionId))); // unexpected code reach
         }
-        
-        val hasParams = pendingArgs.getParamCount()>0; 
-        
-        
+
+        val hasParams = pendingArgs.getParamCount()>0;
+
+
         if(hasParams) {
-        
+
             // parse parameters ...
-            
+
             val action = pendingArgs.getHead().getMetaModel();
             val vetoCount = new LongAdder();
-            
+
             val paramsOrVetos = ObjectActionArgHelper
                     .parseArguments(resourceContext, action, arguments);
-            
+
             pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
                 if(paramOrVeto.isRight()) {
-                    val veto = paramOrVeto.rightIfAny(); 
+                    val veto = paramOrVeto.rightIfAny();
                     InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
             });
-            
+
             if(vetoCount.intValue()>0) {
                 throw InteractionFailureHandler.onParameterListInvalid(
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
             }
-            
+
             val argAdapters = paramsOrVetos.map(_Either::leftIfAny);
             pendingArgs.setParamValues(argAdapters);
-            
+
             // validate parameters ...
-            
+
             val individualParamConsents = pendingArgs.validateParameterSetForParameters();
-            
+
             pendingArgs.getParamModels().zip(individualParamConsents, (managedParam, consent)->{
                 if(consent.isVetoed()) {
                     val veto = InteractionVeto.actionParamInvalid(consent);
@@ -259,38 +259,38 @@ class DomainResourceHelper {
                     vetoCount.increment();
                 }
             });
-            
+
             if(vetoCount.intValue()>0) {
                 throw InteractionFailureHandler.onParameterListInvalid(
                         InteractionVeto.actionParamInvalid(
-                                String.format("%d argument(s) failed validation", vetoCount.intValue())), 
+                                String.format("%d argument(s) failed validation", vetoCount.intValue())),
                             arguments);
             }
- 
+
         }
-        
+
         val actionConsent = pendingArgs.validateParameterSetForAction();
         if(actionConsent.isVetoed()) {
             throw InteractionFailureHandler.onParameterListInvalid(
                     InteractionVeto.invalid(actionConsent),
                     arguments);
         }
-            
+
         if(resourceContext.isValidateOnly()) {
             return Response.noContent().build(); // do not progress any further
         }
-        
+
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        
+
         if(resultOrVeto.isRight()) {
             throw InteractionFailureHandler.onFailure(resultOrVeto.rightIfAny());
         }
-        
+
         val actionInteractionResult = Result.of(
                 actionInteraction.getManagedAction().orElse(null),
-                pendingArgs.getParamValues(), 
+                pendingArgs.getParamValues(),
                 resultOrVeto.leftIfAny());
-        
+
         val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
         // response

@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service

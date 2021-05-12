@@ -60,17 +60,17 @@ import lombok.val;
 
 /**
  * Filter for RestfulObjects.
- * 
+ *
  * authenticate user, set up an Isis session
  */
 //@WebFilter(
-//        servletNames={"RestfulObjectsRestEasyDispatcher"}, // this is mapped to the entire application; 
-//            // however the IsisRestfulObjectsInteractionFilter will 
+//        servletNames={"RestfulObjectsRestEasyDispatcher"}, // this is mapped to the entire application;
+//            // however the IsisRestfulObjectsInteractionFilter will
 //            // "notice" if the interaction filter has already been
 //            // executed for the request pipeline, and if so will do nothing
 //        initParams={
 //        @WebInitParam(
-//                name="authenticationStrategy", 
+//                name="authenticationStrategy",
 //                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth"), // authentication required for REST
 //        @WebInitParam(
 //                name="whenNoSession", // what to do if no session was found ...
@@ -160,7 +160,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     @Autowired private InteractionFactory isisInteractionFactory;
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
-    
+
     private List<String> passThruList = Collections.emptyList();
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
@@ -245,7 +245,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     private Collection<Pattern> ignoreExtensions;
 
 
-    
+
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -295,7 +295,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             if (restrictedPathsStr == null) {
                 throw new IllegalStateException(String.format("Require an init-param of '%s' key to be set.", RESTRICTED_KEY));
             }
-            this.restrictedPaths = 
+            this.restrictedPaths =
                     _Strings.splitThenStream(restrictedPathsStr, ",")
                     .collect(Collectors.toList());
 
@@ -326,7 +326,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     private Stream<Pattern> parseIgnorePatterns(final FilterConfig config) {
         final String ignoreExtensionsStr = config.getInitParameter(IGNORE_EXTENSIONS_KEY);
         if (ignoreExtensionsStr != null) {
-            final Stream<String> ignoreExtensions = _Strings.splitThenStream(ignoreExtensionsStr, ","); 
+            final Stream<String> ignoreExtensions = _Strings.splitThenStream(ignoreExtensionsStr, ",");
             return ignoreExtensions.map(STRING_TO_PATTERN);
         }
         return Stream.empty();
@@ -346,7 +346,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
         requires(isisInteractionFactory, "isisInteractionFactory");
         requires(specificationLoader, "specificationLoader");
-        
+
         ensureMetamodelIsValid(specificationLoader);
 
         val httpServletRequest = (HttpServletRequest) request;
@@ -371,25 +371,25 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
-            
+
             // authenticate
             val authentication =
                     authStrategy.lookupValid(httpServletRequest, httpServletResponse);
             if (authentication != null) {
-                
+
                 authStrategy.bind(httpServletRequest, httpServletResponse, authentication);
-                
+
                 isisInteractionFactory.runAuthenticated(
                         authentication,
                         ()->{
-                            
+
                             transactionService.runWithinCurrentTransactionElseCreateNew(()->
                                 chain.doFilter(request, response))
                             .mapFailure(e->new TransactionalException("", e))
                             .optionalElseFail();
-                            
+
                         });
-                                
+
                 return;
             }
 
@@ -418,7 +418,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
         .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
         if(validationResult.hasFailures()) {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
-        }   
+        }
     }
 
 
@@ -433,9 +433,9 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     }
 
     private boolean requestIsIgnoreExtension(
-            final IsisRestfulObjectsInteractionFilter filter, 
+            final IsisRestfulObjectsInteractionFilter filter,
             final HttpServletRequest httpRequest) {
-        
+
         val servletPath = httpRequest.getServletPath();
         for (final Pattern extension : filter.ignoreExtensions) {
             if (extension.matcher(servletPath).matches()) {

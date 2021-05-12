@@ -130,14 +130,14 @@ implements FormExecutor {
             // (The DB exception might actually be thrown by the flush() that follows.
             //
             val resultAdapter = obtainResultAdapter();
-            
+
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             if(commonContext.getInteractionTracker().isInInteraction()) {
                 commonContext.getTransactionService().flushTransaction();
 
                 if(EntityUtil.isDestroyed(targetAdapter)) {
                     // if this was an entity delete action
-                    // then we don't re-fetch / re-create the targetAdapter  
+                    // then we don't re-fetch / re-create the targetAdapter
                     targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
                 } else {
                     // update target, since version updated
@@ -191,12 +191,12 @@ implements FormExecutor {
             // if inline prompt then redirect to error page
             if (withinPrompt) {
                 // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
-                throw ex; // redirect to the error page.                
+                throw ex; // redirect to the error page.
             }
-            
+
             // attempt to recognize this exception using the ExceptionRecognizers
             if(recognizeExceptionThenRaise(ex, targetIfAny, feedbackFormIfAny).isPresent()) {
-                return false; // invalid args, stay on page    
+                return false; // invalid args, stay on page
             }
 
             throw ex; // redirect to the error page.
@@ -375,7 +375,7 @@ implements FormExecutor {
         val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
-        
+
         if(targetIfAny != null && feedbackFormIfAny != null) {
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(errorMsg);

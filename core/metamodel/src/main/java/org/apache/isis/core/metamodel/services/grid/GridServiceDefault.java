@@ -53,7 +53,7 @@ public class GridServiceDefault implements GridService {
 
     public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
     public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
-    
+
     @Inject private GridLoaderService gridLoaderService;
     @Inject private List<GridSystemService<?>> gridSystemServices;
 
@@ -181,15 +181,15 @@ public class GridServiceDefault implements GridService {
     protected List<GridSystemService<?>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
-            
+
             val gridImplementations = _Sets.<Class<?>>newHashSet();
 
             filteredGridSystemServices = getGridSystemServices()
                     .stream()
                     // true only if gridImplementations did not already contain the specified element
-                    .filter(gridService->gridImplementations.add(gridService.gridImplementation())) 
+                    .filter(gridService->gridImplementations.add(gridService.gridImplementation()))
                     .collect(Collectors.toList());
-            
+
         }
         return filteredGridSystemServices;
     }
@@ -198,7 +198,7 @@ public class GridServiceDefault implements GridService {
 
     List<GridSystemService<?>> gridSystemServicesForTest;
     Collection<GridSystemService<?>> getGridSystemServices() {
-        return gridSystemServices!=null 
+        return gridSystemServices!=null
                 ? gridSystemServices
                         : gridSystemServicesForTest;
     }

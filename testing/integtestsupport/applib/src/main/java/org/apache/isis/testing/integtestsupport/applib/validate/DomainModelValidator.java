@@ -143,7 +143,7 @@ public class DomainModelValidator {
      * primarily used for testing
      */
     public boolean anyMatchesContaining(
-            final @NonNull Identifier identifier, 
+            final @NonNull Identifier identifier,
             final @NonNull String messageSnippet) {
         return streamFailuresMatchingOriginatingIdentifier(identifier)
                 .anyMatch(failure->

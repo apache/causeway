@@ -22,7 +22,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Just an entry-point to initialize class-path scanning. 
+ * Just an entry-point to initialize class-path scanning.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JdoTestDomainModule {

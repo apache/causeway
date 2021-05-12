@@ -30,7 +30,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Div div = new Div();
     private AsciiDoc markup;
 
@@ -38,11 +38,11 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
         super();
         setLabel(label);
         add(div);
-        
+
         LocalResourceUtil.addStyleSheet(PrismResources.getCssResourceReference());
         LocalResourceUtil.executeJavaScript(PrismResources::readJsResource);
     }
-    
+
     @Override
     protected AsciiDoc generateModelValue() {
         return markup;
@@ -51,9 +51,9 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
     @Override
     protected void setPresentationValue(@Nullable AsciiDoc markup) {
         this.markup = markup;
-        
+
         div.removeAll();
-        
+
         if(markup==null) {
             return;
         }

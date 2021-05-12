@@ -29,5 +29,5 @@ import lombok.Data;
 public class GradleDependencies {
 
     private final Map<String, Dependency> dependenciesByShortName = new TreeMap<>();
-    
+
 }

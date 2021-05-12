@@ -30,16 +30,16 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Applies to {@link ObjectSpecification}s of classes that can act as a mix-in. 
+ * Applies to {@link ObjectSpecification}s of classes that can act as a mix-in.
  * <p>
  * Mix-ins are annotated e.g. {@link DomainObject} with
- * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and have a public 1-arg 
- * constructor accepting an object (the mix-in's <i>holder</i>), being the object 
+ * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and have a public 1-arg
+ * constructor accepting an object (the mix-in's <i>holder</i>), being the object
  * this is a mix-in for.
  * <p>
  * Since 2.0 there are additional annotations, that when declared on a type, make
  * the type recognized as a mix-in. These are {@link Action}, {@link Property} and
- * {@link Collection}.   
+ * {@link Collection}.
  */
 public interface MixinFacet extends SingleValueFacet<String> {
 
@@ -56,7 +56,7 @@ public interface MixinFacet extends SingleValueFacet<String> {
     Object instantiate(Object holderPojo);
 
     /**
-     * Whether given method matches as a candidate for the mixin's main method. 
+     * Whether given method matches as a candidate for the mixin's main method.
      * @param method
      * @return whether has expected name and same declaring class
      */

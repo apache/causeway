@@ -51,7 +51,7 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         if (actionMethod.getParameterCount() <= 0) {
             return;
         }
-        
+
         Method choicesMethod = null;
         if (choicesMethod == null) {
             choicesMethod = findChoicesMethodReturning(processMethodContext, Object[][].class);
@@ -69,22 +69,22 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
-        
+
         super.addFacet(new ActionChoicesFacetViaMethod(choicesMethod, returnType, action));
-        
+
     }
 
     protected Method findChoicesMethodReturning(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Class<?> returnType) {
 
         val cls = processMethodContext.getCls();
         val namingConvention = getNamingConventionForActionSupport(processMethodContext, PREFIX);
-        
-        Method choicesMethod = 
+
+        Method choicesMethod =
                 MethodFinder.findMethod(cls, namingConvention, returnType, NO_ARG)
                 .findFirst()
-                .orElse(null); 
+                .orElse(null);
         return choicesMethod;
     }
 

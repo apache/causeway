@@ -36,17 +36,17 @@ public class DisablingDecoratorForFormField implements DisablingDecorator<Node> 
 
     @Override
     public void decorate(Node formField, DisablingUiModel disableUiModel) {
-        
+
         val reason = disableUiModel.getReason();
-        
+
             //formField.setDisabledReason(); //TODO lookup vaadin api as rolemodel
             //formField.getStyleClass().add("button-disabled");
             //uiButton.setTooltip(new Tooltip(reason));
             //uiButton.disableProperty().set(true);
-            
-        
-        
+
+
+
     }
 
-    
+
 }

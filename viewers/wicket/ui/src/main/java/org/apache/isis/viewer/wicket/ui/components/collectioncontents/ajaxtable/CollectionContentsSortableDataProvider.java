@@ -109,12 +109,12 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             final SortParam<String> sort) {
 
         val copy = _Lists.newArrayList(adapters);
-        
+
         final ObjectAssociation sortProperty = lookupAssociationFor(sort);
         if(sortProperty != null) {
             Collections.sort(copy, ManagedObjects.orderingBy(sortProperty, sort.isAscending()));
         }
-        
+
         return copy;
     }
 
@@ -134,9 +134,9 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return new Predicate<ManagedObject>() {
             @Override
             public boolean test(ManagedObject input) {
-                final InteractionResult visibleResult = 
+                final InteractionResult visibleResult =
                         InteractionUtils.isVisibleResult(
-                                input.getSpecification(), 
+                                input.getSpecification(),
                                 createVisibleInteractionContext(input));
                 return visibleResult.isNotVetoing();
             }

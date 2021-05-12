@@ -30,7 +30,7 @@ final class _Asserts {
     }
 
     public static void ensureNamespaceOrType(final ApplicationFeatureId applicationFeatureId) {
-        if(applicationFeatureId.getSort() != ApplicationFeatureSort.NAMESPACE 
+        if(applicationFeatureId.getSort() != ApplicationFeatureSort.NAMESPACE
                 && applicationFeatureId.getSort() != ApplicationFeatureSort.TYPE) {
             throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
         }

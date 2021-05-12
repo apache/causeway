@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
-extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> 
+extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>>
 implements
     PropertyClearingAccessor,
     PropertySettingAccessor {
@@ -131,9 +131,9 @@ implements
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val emptyValueAdapter = ManagedObject.empty(owningProperty.getSpecification());
-        
+
         return setOrClearProperty(EditingVariant.CLEAR,
                 owningProperty, targetAdapter, emptyValueAdapter, interactionInitiatedBy);
 
@@ -183,6 +183,7 @@ implements
         private final InteractionHead head;
         private final EditingVariant style;
 
+        @Override
         public Object execute(PropertyEdit currentExecution) {
 
             // TODO: REVIEW - is this safe to do?

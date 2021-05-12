@@ -24,9 +24,9 @@ package org.apache.isis.core.metamodel.progmodel;
 public interface ProgrammingModelService {
 
     /**
-     * 
+     *
      * @apiNote don't call this during '@PostConstruct' phase
      */
     ProgrammingModel getProgrammingModel();
-    
+
 }

@@ -38,7 +38,7 @@ import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 /**
  * This mixin contributes a <tt>recentCommands</tt> action to any domain object
  * (unless also {@link HasInteractionId} - commands don't themselves have commands).
- * 
+ *
  * @since 2.0 {@index}
  */
 @Action(

@@ -23,8 +23,8 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class JpaTableFacetAnnotationImpl 
-extends FacetAbstract 
+public class JpaTableFacetAnnotationImpl
+extends FacetAbstract
 implements JpaTableFacetAnnotation {
 
     private final String schema;
@@ -34,7 +34,7 @@ implements JpaTableFacetAnnotation {
             final String schemaName,
             final String tableOrTypeName,
             final FacetHolder holder) {
-        
+
         super(JpaTableFacetAnnotation.class, holder, Derivation.NOT_DERIVED);
         this.schema = schemaName;
         this.tableOrTypeName = tableOrTypeName;
@@ -44,13 +44,13 @@ implements JpaTableFacetAnnotation {
     public String getSchema() {
         return schema;
     }
-    
+
     @Override
     public String getTable() {
         return tableOrTypeName;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("schema", schema);

@@ -63,7 +63,7 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("org.springframework.")) {
             return "> spring framework " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        
+
         Matcher matcher;
         matcher = tagPatternForJaxbDto.matcher(objType);
         if (matcher.matches()) {
@@ -77,13 +77,13 @@ public class TaggerDefault implements Tagger {
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        
+
         return fallback != null? fallback: objType;
     }
 
-    
+
     private static Stream<String> partsOf(final String objType) {
         return _Strings.splitThenStream(objType, ".");
     }
-    
+
 }

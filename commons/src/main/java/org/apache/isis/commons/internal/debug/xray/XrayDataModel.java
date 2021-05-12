@@ -41,99 +41,101 @@ import lombok.val;
 public abstract class XrayDataModel extends HasIdAndLabel {
 
     public abstract void render(JScrollPane detailPanel);
+    @Override
     public abstract String getId();
+    @Override
     public abstract String getLabel();
     public abstract String getIconResource();
 
     // -- PREDEFINED DATA MODELS
-    
+
     @Getter
-    @EqualsAndHashCode(callSuper = false)  
+    @EqualsAndHashCode(callSuper = false)
     @RequiredArgsConstructor
     public static class KeyValue extends XrayDataModel {
-        
+
         @EqualsAndHashCode.Exclude
         private final Map<String, String> data = new TreeMap<>();
-        
+
         private final String id;
         private final String label;
-        
+
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/key-value.png";
-        
+
         @Override
         public void render(JScrollPane panel) {
             String[] columnNames = {"Key", "Value"};
             Object[][] tableData = new Object[data.size()][columnNames.length];
-            
+
             val rowIndex = _Refs.intRef(0);
-            
+
             data.forEach((k, v)->{
                 val row = tableData[rowIndex.getValue()];
                 rowIndex.inc();
                 row[0] = k;
                 row[1] = v;
             });
-                
-            val table = _SwingUtil.newTable(tableData, columnNames); 
+
+            val table = _SwingUtil.newTable(tableData, columnNames);
             table.setFillsViewportHeight(true);
-            
+
             panel.setViewportView(table);
         }
     }
-    
+
     @Getter
-    @EqualsAndHashCode(callSuper = false)  
+    @EqualsAndHashCode(callSuper = false)
     @RequiredArgsConstructor
     public static class Sequence extends XrayDataModel {
-        
+
         @EqualsAndHashCode.Exclude
         private final SequenceDiagram data = new SequenceDiagram();
-        
+
         private final String id;
         private final String label;
-        
+
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/sequence.png";
-        
+
         private final static Color COLOR_SILVER = new Color(0xf5, 0xf5, 0xf5);
         private final static Color BACKGROUND_COLOR = COLOR_SILVER;
         private final static Color BORDER_COLOR = Color.GRAY;
-        
+
         public Sequence(String label) {
             this(UUID.randomUUID().toString(), label);
         }
-       
+
         @Override
         public void render(JScrollPane panel) {
-            
+
             val dim = data.layout((Graphics2D)panel.getGraphics());
-            
+
             val canvas = new JPanel() {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public void paintComponent(Graphics _g) {
-                    
+
                     val g = (Graphics2D)_g;
 
                     g.setColor(BACKGROUND_COLOR);
                     g.fillRect(0, 0, getWidth(), getHeight());
-                    
+
                     data.render(g);
                   }
             };
-            
+
             if(BORDER_COLOR!=null) {
                 canvas.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
             }
             canvas.setPreferredSize(dim);
-            
+
             panel.setViewportView(canvas);
-            
+
         }
-       
-        
+
+
     }
-    
+
 }

@@ -21,7 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.DomainObject;
 
 @DomainObject(objectType = "isis.testdomain.ElementTypeConcrete")
-public class ElementTypeConcrete 
+public class ElementTypeConcrete
 extends ElementTypeAbstract
 implements ElementTypeInterface {
 

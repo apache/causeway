@@ -27,7 +27,7 @@ public class LayoutGroupFacetFromPropertyLayoutAnnotation
 extends LayoutGroupFacetAbstract {
 
     public static LayoutGroupFacetFromPropertyLayoutAnnotation create(
-            final Optional<PropertyLayout> propertyLayoutIfAny, 
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny

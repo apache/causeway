@@ -34,26 +34,26 @@ public final class IncludeStatement {
     String matchingLine;
     Can<String> namespace;
     String canonicalName;
-    
+
     String version;
     String component;
     String module;
     String type; // usually 'page'
     String ext;
     String options;
-    
+
     public boolean isLocal() {
         return _Strings.isNullOrEmpty(component);
     }
-    
+
     public String toAdocAsString() {
-        //TODO local might look slightly different 
+        //TODO local might look slightly different
         if(isLocal()) {
             throw _Exceptions.notImplemented();
         }
-        
+
         val sb = new StringBuilder();
-        
+
         sb.append("include::")
         .append(_Strings.nullToEmpty(version).isEmpty() ? "" : version + "@")
         .append(_Strings.nullToEmpty(component))
@@ -66,9 +66,9 @@ public final class IncludeStatement {
         .append(canonicalName)
         .append(ext)
         .append(_Strings.nullToEmpty(options));
-        
+
         return sb.toString();
 
     }
-    
+
 }

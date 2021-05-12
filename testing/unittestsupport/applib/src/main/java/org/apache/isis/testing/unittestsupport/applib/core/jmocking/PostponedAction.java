@@ -35,10 +35,12 @@ public class PostponedAction implements Action {
 
     @NonNull private Supplier<Object> resultSupplier;
 
+    @Override
     public Object invoke(Invocation invocation) throws Throwable {
         return resultSupplier.get();
     }
 
+    @Override
     public void describeTo(Description description) {
         description.appendText("returns ");
         description.appendValue(resultSupplier.get());

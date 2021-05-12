@@ -39,7 +39,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  *
  * @since 2.0 {@index}
  */
-public class CollectionContentsAsExcel 
+public class CollectionContentsAsExcel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;

@@ -43,9 +43,9 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
- *  
+ *
  * @see <a href="https://www.w3schools.com/html/html5_serversentevents.asp">www.w3schools.com</a>
- * 
+ *
  * @since 2.0
  *
  */
@@ -70,7 +70,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                 .orElse(null);
 
         response.setStatus(200);
-        
+
         if(eventStream==null) {
             response.setContentType(null);
             flushBuffer(response);
@@ -81,11 +81,11 @@ public class ServerSentEventsServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         //response.setHeader("Access-Control-Allow-Origin", "*"); // not secure, can be used for debugging
         response.setHeader("Cache-Control", "no-cache,no-store");
-        
+
         if(!flushBuffer(response)) {
             return;
         }
-        
+
         asyncContext(request)
         .ifPresent(asyncContext->{
 
@@ -93,7 +93,7 @@ public class ServerSentEventsServlet extends HttpServlet {
             ForkJoinPool.commonPool().submit(()->{
                 fork(asyncContext, eventStream);
             });
-            
+
         });
 
     }
@@ -145,7 +145,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                 .append("\n\n")
                 .flush();
 
-                return true; // continue listening                
+                return true; // continue listening
 
             } catch (Exception e) {
                 log.warn("failed to run the fork task", e);
@@ -164,7 +164,7 @@ public class ServerSentEventsServlet extends HttpServlet {
         }
 
         // Completes the asynchronous operation that was started on the request
-        // that was used to initialize this AsyncContext. 
+        // that was used to initialize this AsyncContext.
         asyncContext.complete();
 
     }
@@ -177,9 +177,9 @@ public class ServerSentEventsServlet extends HttpServlet {
         try {
             return Optional.of(_Context.loadClass(eventStreamId));
         } catch (Throwable e) {
-            
+
             log.warn("failed to resolve class by event stream id {}", eventStreamId, e);
-            
+
             return Optional.empty();
         }
     }

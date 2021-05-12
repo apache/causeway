@@ -43,7 +43,7 @@ public class AsciiDocComponentWkt extends MarkupComponent {
     @Override
     public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
-        replaceComponentTagBody(markupStream, openTag, 
+        replaceComponentTagBody(markupStream, openTag,
                 MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
     }
 
@@ -58,5 +58,5 @@ public class AsciiDocComponentWkt extends MarkupComponent {
     private static final ResourceReference jsRef() {
         return PrismResources.getJsResourceReferenceWkt();
     }
-    
+
 }

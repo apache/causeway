@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 /**
  * The mechanism by which a single parameter of the action can be hidden
  * before the action itself is invoked.
- * 
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>hideNXxx</tt> support method for an action.

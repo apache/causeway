@@ -40,13 +40,13 @@ public interface MethodRemover {
     void removeMethods(
             Predicate<Method> removeIf,
             Consumer<Method> onRemoval);
-    
+
     /** variant with noop consumer */
     default void removeMethods(
             Predicate<Method> removeIf) {
         removeMethods(removeIf, removedMethod -> {});
     }
-    
+
     /**
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
@@ -57,14 +57,14 @@ public interface MethodRemover {
             String methodName,
             Class<?> returnType,
             Class<?>[] parameterTypes) {
-        
+
         removeMethods(MethodUtil.Predicates.signature(methodName, returnType, parameterTypes));
     }
 
     void removeMethod(Method method);
-    
+
     // -- NOOP IMPLEMENTATION
-    
+
     public static final MethodRemover NOOP = new MethodRemover() {
 
         @Override

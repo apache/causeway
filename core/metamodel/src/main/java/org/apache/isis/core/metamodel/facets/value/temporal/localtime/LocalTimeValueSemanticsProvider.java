@@ -45,17 +45,17 @@ extends TemporalValueSemanticsProviderAbstract<LocalTime> {
                 holder, LocalTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 LocalTime::from,
                 TemporalAdjust::adjustLocalTime);
-        
+
         val hourMinuteSecondMillis = "HH:mm:ss.SSS";
         val basicTimeNoMillis = "HHmmssZ";
         val basicTime = "HHmmss.SSSZ";
-        
+
         super.addNamedFormat("iso", basicTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicTime);
         super.updateParsers();
 
         setEncodingFormatter(DateTimeFormatter.ofPattern(hourMinuteSecondMillis, Locale.getDefault()));
-        
+
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getLocalTime().getFormat();
 
         // walk through 3 methods of generating a formatter, first one to return non empty wins
@@ -65,9 +65,9 @@ extends TemporalValueSemanticsProviderAbstract<LocalTime> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));  // fallback
-        
+
         setTitleFormatter(formatter);
-        
+
     }
 
 }

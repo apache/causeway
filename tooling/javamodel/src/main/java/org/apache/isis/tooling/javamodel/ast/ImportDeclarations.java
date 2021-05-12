@@ -30,7 +30,7 @@ import lombok.val;
 public final class ImportDeclarations {
 
     /**
-     * Given a Can of Java import declarations returns a stream of possible fqn names 
+     * Given a Can of Java import declarations returns a stream of possible fqn names
      * represented as Can of parts, where parts are the type's namespace parts and name
      * parts all together.
      * @param nameDiscriminator
@@ -43,9 +43,9 @@ public final class ImportDeclarations {
         return importDeclarations.stream()
                 .flatMap(importDeclaration->streamPotentialFqns(nameDiscriminator, importDeclaration));
     }
-    
+
     /**
-     * Given a Java import declaration returns a stream of possible fqn names 
+     * Given a Java import declaration returns a stream of possible fqn names
      * represented as Can of parts, where parts are the type's namespace parts and name
      * parts all together.
      * @param nameDiscriminator
@@ -54,39 +54,39 @@ public final class ImportDeclarations {
     public static Stream<Can<String>> streamPotentialFqns(
             final Can<String> nameDiscriminator,
             final ImportDeclaration importDeclaration) {
-                        
+
         if(importDeclaration.isStatic()
                 || nameDiscriminator.isEmpty()) {
             return Stream.empty();
         }
-        
+
         val fqnParts = splitIntoParts(importDeclaration);
-        
+
         if(!importDeclaration.isAsterisk()) {
-            
+
             if(!fqnParts.endsWith(nameDiscriminator)) {
                 return Stream.empty();
             }
-            
+
             return Stream.of(fqnParts);
         }
-        
+
         // handle asterisk case
-        
+
         val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
 
         return Stream.iterate(
-                Can.ofSingleton(nameDiscriminatorPartIterator.next()), 
+                Can.ofSingleton(nameDiscriminatorPartIterator.next()),
                 parts->parts.add(0, nameDiscriminatorPartIterator.next()))
             .limit(nameDiscriminator.size())
             .map(fqnParts::addAll);
     }
-    
+
     // -- HELPER
-    
+
     private static Can<String> splitIntoParts(final ImportDeclaration importDeclaration) {
         return Can.ofStream(_Strings.splitThenStream(importDeclaration.getNameAsString(), "."));
     }
-    
+
 
 }

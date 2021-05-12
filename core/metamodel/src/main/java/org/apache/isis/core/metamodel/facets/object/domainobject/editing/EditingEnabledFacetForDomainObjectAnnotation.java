@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFace
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -44,12 +44,12 @@ public class EditingEnabledFacetForDomainObjectAnnotation extends FacetAbstract 
         .map(DomainObject::editing)
         .map(editing->editing==Editing.ENABLED)
         .orElse(false);
-        
+
         return isEditingEnabled
                 ? new EditingEnabledFacetForDomainObjectAnnotation(holder)
                 : null;
     }
-    
+
     protected EditingEnabledFacetForDomainObjectAnnotation(
             final FacetHolder holder) {
         super(EditingEnabledFacet.class, holder);

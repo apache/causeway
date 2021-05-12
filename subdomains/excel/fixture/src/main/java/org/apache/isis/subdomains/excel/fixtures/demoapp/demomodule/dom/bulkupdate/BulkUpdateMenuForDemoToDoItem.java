@@ -62,5 +62,5 @@ public class BulkUpdateMenuForDemoToDoItem {
     @XmlTransient @Inject private UserService userService;
     @XmlTransient @Inject private ExcelService excelService;
     @XmlTransient @Inject private BookmarkService bookmarkService;
-    
+
 }

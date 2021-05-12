@@ -43,9 +43,9 @@ public class BreadcrumbModel implements Serializable {
     private final Map<String, Bookmark> bookmarkByOidStr = _Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
-    
+
     private final transient IsisAppCommonContext commonContext;
-    
+
     public BreadcrumbModel(IsisAppCommonContext commonContext) {
         super();
         this.commonContext = commonContext;

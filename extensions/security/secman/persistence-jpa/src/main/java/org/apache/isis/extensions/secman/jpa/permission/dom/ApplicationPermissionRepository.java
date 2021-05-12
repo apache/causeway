@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.jpa.permission.dom;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -29,10 +28,10 @@ import javax.inject.Named;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepositoryAbstract;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 
 import lombok.NonNull;
 

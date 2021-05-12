@@ -45,7 +45,7 @@ public final class XrayUtil {
         return iaContext.getInteractionId()
                 .map(XrayUtil::sequenceId);
     }
-    
+
     public static String sequenceId(final @NonNull UUID uuid) {
         return String.format("seq-%s", uuid);
     }
@@ -53,29 +53,29 @@ public final class XrayUtil {
     public static ThreadMemento currentThreadAsMemento() {
         val ct = Thread.currentThread();
         return ThreadMemento.of(
-                String.format("thread-%d-%s", ct.getId(), ct.getName()), 
+                String.format("thread-%d-%s", ct.getId(), ct.getName()),
                 String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
-                String.format("Thread-%d\n%s", ct.getId(), ct.getName())); 
+                String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
     }
-    
+
     public static String nestedInteractionId(int authenticationStackSize) {
         return "ia-" + (authenticationStackSize-1);
     }
-    
+
     // -- SEQUENCE HANDLE
 
     public static Optional<SequenceHandle> createSequenceHandle(
             final @NonNull InteractionContext iaContext,
             final @NonNull AuthenticationContext authContext,
             final String ... callees) {
-        
+
         if(!iaContext.isInInteraction()) {
             return Optional.empty();
         }
-        
+
         final int authStackSize = authContext.getAuthenticationLayerCount();
         val interactionId = iaContext.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
-        
+
         val handle = SequenceHandle.builder()
                 .sequenceId(XrayUtil.sequenceId(interactionId))
                 .caller(authStackSize>0
@@ -83,13 +83,13 @@ public final class XrayUtil {
                         : "thread")
                 .callees(Can.ofArray(callees))
                 .build();
-        
+
         return Optional.of(handle);
-        
+
     }
-    
+
     // Using parameter that implements multiple interfaces, because we have no access to InteractionTracker
-    public static <T extends InteractionContext & AuthenticationContext> 
+    public static <T extends InteractionContext & AuthenticationContext>
     Optional<SequenceHandle> createSequenceHandle(
             final @NonNull T iaTracker,
             final String ... callees) {
@@ -97,23 +97,23 @@ public final class XrayUtil {
         if(!iaTracker.isInInteraction()) {
             return Optional.empty();
         }
-        
+
         return createSequenceHandle(iaTracker, iaTracker, callees);
     }
-    
+
     @Value @Builder
     public static final class SequenceHandle {
         final @NonNull String sequenceId;
         final @NonNull String caller;
         final @NonNull Can<String> callees;
-        
+
         public void submit(Consumer<SequenceDiagram> onSubmission) {
             XrayUi.updateModel(model->{
                 model.lookupSequence(getSequenceId())
                 .ifPresent(sequence->onSubmission.accept(sequence.getData()));
             });
         }
-        
+
     }
-    
+
 }

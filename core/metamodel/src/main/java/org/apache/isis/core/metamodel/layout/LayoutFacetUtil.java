@@ -62,7 +62,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -274,47 +274,47 @@ public class LayoutFacetUtil {
     }
 
     public static class LayoutDataFactory {
-        
+
         private final MetamodelToGridOverridingVisitor helper;
-        
+
         public static LayoutDataFactory of(ObjectSpecification objectSpec) {
             return new LayoutDataFactory(objectSpec);
         }
-        
+
         private LayoutDataFactory(ObjectSpecification objectSpec) {
             this.helper = MetamodelToGridOverridingVisitor.of(objectSpec);
         }
-        
+
         public ActionLayoutData createActionLayoutData(String id) {
             val layoutData = new ActionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
-        
+
         public CollectionLayoutData createCollectionLayoutData(String id) {
             val layoutData = new CollectionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
-        
+
         public PropertyLayoutData createPropertyLayoutData(String id) {
             val layoutData = new PropertyLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
-        
+
         public DomainObjectLayoutData createDomainObjectLayoutData() {
             val layoutData = new DomainObjectLayoutData();
             helper.visit(layoutData);
             return layoutData;
         }
-        
+
     }
-    
+
     @RequiredArgsConstructor(staticName = "of")
     public static class MetamodelToGridOverridingVisitor extends Grid.VisitorAdapter  {
 
-        private final @NonNull ObjectSpecification objectSpec; 
+        private final @NonNull ObjectSpecification objectSpec;
 
         @Override
         public void visit(final ActionLayoutData actionLayoutData) {
@@ -326,7 +326,7 @@ public class LayoutFacetUtil {
                 setDescribedAsIfAny(actionLayoutData, objectAction);
                 setHiddenIfAny(actionLayoutData, objectAction);
                 setNamedIfAny(actionLayoutData, objectAction);
-                setActionPositionIfAny(actionLayoutData, objectAction);    
+                setActionPositionIfAny(actionLayoutData, objectAction);
             });
         }
 
@@ -340,7 +340,7 @@ public class LayoutFacetUtil {
                 setHiddenIfAny(collectionLayoutData, collection);
                 setNamedIfAny(collectionLayoutData, collection);
                 setPagedIfAny(collectionLayoutData, collection);
-                setSortedByIfAny(collectionLayoutData, collection);    
+                setSortedByIfAny(collectionLayoutData, collection);
             });
         }
 
@@ -355,7 +355,7 @@ public class LayoutFacetUtil {
                 setLabelPositionIfAny(propertyLayoutData, property);
                 setMultiLineIfAny(propertyLayoutData, property);
                 setRenderedAsDayBeforeIfAny(propertyLayoutData, property);
-                setTypicalLengthIfAny(propertyLayoutData, property);    
+                setTypicalLengthIfAny(propertyLayoutData, property);
             });
         }
 

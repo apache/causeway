@@ -26,12 +26,12 @@ public interface ElementTypeInterface {
     default String title() {
         return "InterfaceTitle";
     }
-    
+
     @Action
     default void interfaceAction(String p0, String p1) {
         // no-op, just testing meta-data
     }
-    
+
     @Property
     default String getInterfaceProp() {
         return "InterfaceProp";
@@ -39,5 +39,5 @@ public interface ElementTypeInterface {
     default void setInterfaceProp(String prop) {
         // no-op, just testing meta-data
     }
-    
+
 }

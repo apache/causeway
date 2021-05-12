@@ -34,71 +34,71 @@ public class AmbiguousMixinAnnotations {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Mixee {
-        
+
     }
 
-    // -- SHOULD FAIL VALIDATION 
-    
+    // -- SHOULD FAIL VALIDATION
+
     @Property
     @RequiredArgsConstructor
     public static class InvalidMixinP {
         private final Mixee mixee;
-        
+
         @Property
         public String prop() {
             return null;
         }
     }
-    
+
     @PropertyLayout
     @RequiredArgsConstructor
     public static class InvalidMixinPL {
         private final Mixee mixee;
-        
+
         @PropertyLayout
         public String prop() {
             return null;
         }
     }
-    
+
     @Collection
     @RequiredArgsConstructor
     public static class InvalidMixinC {
         private final Mixee mixee;
-        
+
         @Collection
         public String coll() {
             return null;
         }
     }
-    
+
     @CollectionLayout
     @RequiredArgsConstructor
     public static class InvalidMixinCL {
         private final Mixee mixee;
-        
+
         @CollectionLayout
         public String coll() {
             return null;
         }
     }
-    
+
     @Action
     @RequiredArgsConstructor
     public static class InvalidMixinA {
         private final Mixee mixee;
-        
+
         @Action
         public String act() {
             return null;
         }
     }
-    
+
     @ActionLayout
     @RequiredArgsConstructor
     public static class InvalidMixinAL {
         private final Mixee mixee;
-        
+
         @ActionLayout
         public String act() {
             return null;

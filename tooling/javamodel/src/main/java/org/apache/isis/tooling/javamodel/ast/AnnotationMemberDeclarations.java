@@ -27,19 +27,19 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import lombok.NonNull;
 
 public final class AnnotationMemberDeclarations {
-    
+
     private static final PrinterConfiguration printingConf = new DefaultPrinterConfiguration()
             .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
-    
+
     /**
      * Returns given {@link AnnotationMemberDeclaration} as normal text, without formatting.
      */
     public static String asNormalized(final @NonNull AnnotationMemberDeclaration amd) {
         return amd.toString(printingConf).trim();
     }
-    
+
     public static String asNormalizedName(final @NonNull AnnotationMemberDeclaration amd) {
         return amd.getNameAsString().trim();
     }
-    
+
 }

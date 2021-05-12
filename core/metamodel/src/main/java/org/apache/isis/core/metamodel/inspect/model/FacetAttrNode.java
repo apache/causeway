@@ -43,27 +43,27 @@ public class FacetAttrNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private FacetAttr facetAttr;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s: %s", facetAttr.getName(), facetAttr.getValue());  
+        return String.format("%s: %s", facetAttr.getName(), facetAttr.getValue());
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private FacetNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
         return Stream.empty();
     }
-   
-    
+
+
 }
 

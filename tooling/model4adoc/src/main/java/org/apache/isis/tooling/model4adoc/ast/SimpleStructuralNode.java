@@ -40,7 +40,7 @@ public class SimpleStructuralNode extends ContentNodeAbstract implements Structu
     @Getter @Setter private Object content;
     @Getter @Setter private int level;
     @Getter @Setter private String convert;
-    
+
     @Override
     @Deprecated
     public String title() {
@@ -97,17 +97,17 @@ public class SimpleStructuralNode extends ContentNodeAbstract implements Structu
 
     @Override
     public void removeSubstitution(String substitution) {
-        
+
     }
 
     @Override
     public void addSubstitution(String substitution) {
-        
+
     }
 
     @Override
     public void prependSubstitution(String substitution) {
-        
+
     }
 
     @Override
@@ -119,5 +119,5 @@ public class SimpleStructuralNode extends ContentNodeAbstract implements Structu
         return Collections.emptyList();
     }
 
-    
+
 }

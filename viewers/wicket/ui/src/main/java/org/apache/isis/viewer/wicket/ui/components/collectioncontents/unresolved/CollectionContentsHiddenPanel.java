@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link EntityCollectionModel collection of entity}s so that they can be only
  * lazily resolved.
  */
-public class CollectionContentsHiddenPanel 
+public class CollectionContentsHiddenPanel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;

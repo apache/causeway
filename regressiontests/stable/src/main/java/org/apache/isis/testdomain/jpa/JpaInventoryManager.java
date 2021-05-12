@@ -33,7 +33,7 @@ import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 public class JpaInventoryManager {
 
     @Inject private RepositoryService repository;
-    
+
     // -- UPDATE PRODUCT PRICE
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
@@ -50,12 +50,12 @@ public class JpaInventoryManager {
     public int countProducts() {
         return listAllProducts().size();
     }
-    
+
     @Action
     public List<JpaProduct> listAllProducts() {
         return repository.allInstances(JpaProduct.class);
     }
 
-    
+
 
 }

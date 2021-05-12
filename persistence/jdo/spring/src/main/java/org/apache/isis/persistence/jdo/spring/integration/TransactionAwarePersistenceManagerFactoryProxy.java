@@ -62,8 +62,8 @@ import org.springframework.util.ClassUtils;
  * @see PersistenceManagerFactoryUtils#getPersistenceManager
  * @see PersistenceManagerFactoryUtils#releasePersistenceManager
  */
-public class TransactionAwarePersistenceManagerFactoryProxy 
-implements 
+public class TransactionAwarePersistenceManagerFactoryProxy
+implements
     FactoryBean<PersistenceManagerFactory> {
 
 	private PersistenceManagerFactory target;

@@ -31,16 +31,16 @@ import lombok.val;
 final class SpecificationLoaderDefault_debug {
 
     static void logBefore(
-            Logger log, 
-            SpecificationCache<ObjectSpecification> cache, 
+            Logger log,
+            SpecificationCache<ObjectSpecification> cache,
             List<? extends ObjectSpecification> scanned) {
-        
+
         if(!log.isDebugEnabled()) {
             return;
         }
-        
+
         val cached = cache.snapshotSpecs();
-        
+
         log.debug(String.format(
                 "scanned.size = %d ; cached.size = %d",
                 scanned.size(), cached.size()));
@@ -58,10 +58,10 @@ final class SpecificationLoaderDefault_debug {
     }
 
     static void logAfter(
-            Logger log, 
-            SpecificationCache<ObjectSpecification> cache, 
+            Logger log,
+            SpecificationCache<ObjectSpecification> cache,
             Collection<? extends ObjectSpecification> scanned) {
-        
+
         if(!log.isDebugEnabled()) {
             return;
         }
@@ -70,7 +70,7 @@ final class SpecificationLoaderDefault_debug {
         val cachedAfterNotBefore = cached.stream()
                 .filter(spec -> !scanned.contains(spec))
                 .collect(Collectors.toList());
-        
+
         log.debug(String.format(
                 "cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
                 cached.size(), cachedAfterNotBefore.size()));

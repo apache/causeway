@@ -32,13 +32,13 @@ public final class ParserUtil {
 
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
 
-        final Class<? extends Parser<?>> type = candidateClass != null 
+        final Class<? extends Parser<?>> type = candidateClass != null
                 ? uncheckedCast(ClassUtil.implementingClassOrNull(
                         candidateClass.getName(), Parser.class, FacetHolder.class))
                         : null;
 
-                return type != null 
-                        ? type 
+                return type != null
+                        ? type
                                 : uncheckedCast(ClassUtil.implementingClassOrNull(
                                         classCandidateName, Parser.class, FacetHolder.class));
     }

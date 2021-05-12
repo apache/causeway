@@ -131,9 +131,9 @@ import net.ftlines.wicketsource.WicketSource;
 @Log4j2
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
-implements 
-    ComponentFactoryRegistryAccessor, 
-    PageClassRegistryAccessor, 
+implements
+    ComponentFactoryRegistryAccessor,
+    PageClassRegistryAccessor,
     WicketViewerSettingsAccessor,
     IsisAppCommonContext.Provider {
 
@@ -147,7 +147,7 @@ implements
     }
 
     @Inject private MetaModelContext metaModelContext;
-    
+
     @Getter(onMethod = @__(@Override)) private IsisAppCommonContext commonContext; // shared
 
     // injected manually
@@ -209,9 +209,10 @@ implements
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
      * for rendering.
      */
+    @Override
     protected void init() {
         super.init();
-        
+
         // Initialize Spring Dependency Injection (into Wicket components)
         val springInjector = new SpringComponentInjector(this);
         Injector.get().inject(this);
@@ -219,9 +220,9 @@ implements
 
         // bootstrap dependencies from the metaModelContext
         {
-            
+
             requires(metaModelContext, "metaModelContext");
-            
+
             commonContext = IsisAppCommonContext.of(metaModelContext);
             configuration = commonContext.lookupServiceElseFail(IsisConfiguration.class);
             componentFactoryRegistry = commonContext.lookupServiceElseFail(ComponentFactoryRegistry.class);
@@ -229,16 +230,16 @@ implements
             settings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
             systemEnvironment = commonContext.lookupServiceElseFail(IsisSystemEnvironment.class);
         }
-        
+
         //spent 2 hours on that one, does not work
         //experimental.enableCsrfTokensForAjaxRequests(configuration);
 
-        val backgroundInitializationTasks = 
+        val backgroundInitializationTasks =
                 _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
                 .addRunnable("Configure WebJars",            this::configureWebJars)
                 .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
                 .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
-        
+
         try {
 
             backgroundInitializationTasks.submit(_ConcurrentContext.sequential());
@@ -255,9 +256,9 @@ implements
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
-            
+
             setupJQuery();
-            
+
             this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
             configureSecurity(configuration);
@@ -309,12 +310,12 @@ implements
             log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
             backgroundInitializationTasks.await();
-            
+
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             log.error("Failed to initialize", ex);
             throw ex;
-        } 
+        }
 
         commonContext.getServiceRegistry().select(IsisWicketThemeSupport.class)
         .getFirst()
@@ -325,9 +326,9 @@ implements
 
         //XXX ISIS-2530, don't recreate expired pages
         getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
-        
+
     }
-    
+
     /*
      * @since 2.0 ... overrides the default, to handle special cases when recreating bookmarked pages
      */
@@ -380,7 +381,7 @@ implements
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
-        
+
         requireNonNull(configuration, "Configuration must be prepared prior to init().");
 
         if(configuration.getViewer().getWicket().isWicketSourcePlugin()) {
@@ -543,11 +544,11 @@ implements
 
     @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with systemEnvironment
     public final RuntimeConfigurationType getConfigurationType() {
-        
+
         if(systemEnvironment==null) {
             return RuntimeConfigurationType.DEPLOYMENT;
         }
-        
+
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
                 : RuntimeConfigurationType.DEPLOYMENT;
@@ -622,17 +623,17 @@ implements
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
     }
-    
+
     protected void setupJQuery() {
         switch(configuration.getViewer().getWicket().getJQueryVersion()) {
-        case 2: 
+        case 2:
             getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
             break;
-        default: 
+        default:
             // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
         	/*
         	 * downgrading to jquery 3.5.1 because of this issue:
-        	 * 
+        	 *
         	 * https://github.com/select2/select2/issues/5993
         	 */
         	getJavaScriptLibrarySettings().setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));

@@ -68,7 +68,7 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final Method setMethod = MethodFinderUtils
                 .findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
-        
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         if (setMethod != null) {
             FacetUtil.addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));

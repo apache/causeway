@@ -51,7 +51,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
 
     @Override
     public ListReprRenderer with(final Stream<ManagedObject> objectAdapters) {
-        this.objectAdapters = objectAdapters!=null 
+        this.objectAdapters = objectAdapters!=null
                 ? objectAdapters
                         .filter(adapter->!adapter.getSpecification().isHidden())
                         .collect(Collectors.toList())
@@ -105,14 +105,14 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
 
             final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");
             if (linkFollower.matches(linkToObject)) {
-                final DomainObjectReprRenderer renderer = 
+                final DomainObjectReprRenderer renderer =
                         new DomainObjectReprRenderer(
-                                getResourceContext(), 
-                                linkFollower, 
+                                getResourceContext(),
+                                linkFollower,
                                 JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
-            }            
+            }
         });
 
         representation.mapPut("value", values);

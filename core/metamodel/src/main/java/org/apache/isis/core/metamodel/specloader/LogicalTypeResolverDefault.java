@@ -42,16 +42,16 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     public Optional<LogicalType> lookup(final @NonNull String logicalTypeName) {
         return Optional.ofNullable(logicalTypeByName.get(logicalTypeName));
     }
-    
+
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
         if(hasUsableSpecId(spec)) {
             logicalTypeByName.put(spec.getLogicalTypeName(), spec.getLogicalType());
         }
     }
-    
+
     // -- HELPER
-    
+
     private boolean hasUsableSpecId(ObjectSpecification spec) {
         // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
         // don't have an ObjectSpecId; hence the guard.

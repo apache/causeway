@@ -28,7 +28,7 @@ import lombok.NonNull;
 
 /**
  * The response to provide as a result of interpreting the response;
- * either to show a {@link #toPage(PageAbstract) page}, or to 
+ * either to show a {@link #toPage(PageAbstract) page}, or to
  * {@link #withHandler(IRequestHandler) redirect} to a
  * handler (eg a download).
  */
@@ -44,23 +44,23 @@ public class ActionResultResponse {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
-    
+
     public static ActionResultResponse toPage(PageAbstract page) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
     }
-    
+
     public static ActionResultResponse openUrlInBrowser(
-            final AjaxRequestTarget target, 
-            final String url, 
+            final AjaxRequestTarget target,
+            final String url,
             final @NonNull OpenUrlStrategy openUrlStrategy) {
         return new ActionResultResponse(
                 openUrlStrategy.isNewWindow()
-                    ? ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW 
+                    ? ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW
                     : ActionResultResponseHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
                 null, null, target, url);
     }
-    
+
     private ActionResultResponse(
             final ActionResultResponseHandlingStrategy strategy,
             final IRequestHandler handler,
@@ -84,25 +84,25 @@ public class ActionResultResponse {
     public IRequestHandler getHandler() {
         return handler;
     }
-    
+
     /**
      * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
      */
     public PageAbstract getToPage() {
         return page;
     }
-    
+
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is 
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is
      * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
      * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */
     public AjaxRequestTarget getTarget() {
         return target;
     }
-    
+
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is 
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is
      * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
      * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */

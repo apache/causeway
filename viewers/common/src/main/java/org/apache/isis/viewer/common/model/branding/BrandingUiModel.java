@@ -29,18 +29,18 @@ import lombok.RequiredArgsConstructor;
 public class BrandingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final String name;
     private final String logoHref;
-    
+
     public Optional<String> getName() {
         return _Strings.isNotEmpty(logoHref)
                 ? Optional.empty()
                 : Optional.ofNullable(name);
     }
-    
+
     public Optional<String> getLogoHref() {
         return Optional.ofNullable(logoHref);
     }
-    
+
 }

@@ -88,7 +88,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
                 nonAnnotatedGroup.add(identifiedHolder);
                 continue;
             }
-            final SortedSet<IdentifiedHolder> sortedMembersForFieldSet = 
+            final SortedSet<IdentifiedHolder> sortedMembersForFieldSet =
                     getSortedSet(sortedMembersByGroup, layoutGroupFacet.getGroupId());
             sortedMembersForFieldSet.add(identifiedHolder);
         }

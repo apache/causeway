@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  *     corresponding panel for property edits is {@link PropertyEditFormPanel}.
  * </p>
  */
-public class ActionParametersFormPanel 
+public class ActionParametersFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

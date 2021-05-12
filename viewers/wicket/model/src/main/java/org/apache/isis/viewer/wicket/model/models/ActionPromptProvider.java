@@ -34,7 +34,7 @@ public interface ActionPromptProvider {
         }
         return getFrom(page);
     }
-    
+
     public static ActionPromptProvider getFrom(Page page) {
         if(page instanceof ActionPromptProvider) {
             final ActionPromptProvider provider = (ActionPromptProvider) page;

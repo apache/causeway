@@ -38,13 +38,13 @@ public final class JsonWriterUtil {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static String jsonFor(Object object, @Nullable IsisSystemEnvironment systemEnvironment) {
         val prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
-                ? JsonMapper.PrettyPrinting.ENABLE 
+                ? JsonMapper.PrettyPrinting.ENABLE
                         : JsonMapper.PrettyPrinting.DISABLE;
         return jsonFor(object, prettyPrinting);
     }
 
-    
+
 }

@@ -63,7 +63,7 @@ import lombok.ToString;
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
          column="id")
 @javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER, 
+        strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
@@ -144,7 +144,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         }
         return buf.toString();
     }
-    
+
     public String iconName() {
         return "ExcelModuleDemoToDoItem-" + (!isComplete() ? "todo" : "done");
     }
@@ -262,7 +262,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
             @Nullable
             @javax.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal cost,
-            
+
             @Nullable
             @javax.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal previousCost
@@ -366,17 +366,17 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     private boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
-        
-        long epochMillisAtStartOfDay = 
+
+        long epochMillisAtStartOfDay =
                 dueBy.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-                
+
         return epochMillisAtStartOfDay < (clockService.getEpochMillis() - ONE_WEEK_IN_MILLIS);
     }
 
     //endregion
 
     public static class Predicates {
-        
+
         public static Predicate<ExcelDemoToDoItem> thoseOwnedBy(final String currentUser) {
             return toDoItem -> Objects.equals(toDoItem.getOwnedBy(), currentUser);
         }
@@ -397,19 +397,19 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
         public static Predicate<ExcelDemoToDoItem> thoseCategorised(
                 final Category category, final Subcategory subcategory) {
-            
-            return 
+
+            return
                     thoseCategorised(category)
-                    .and(thoseSubcategorised(subcategory)); 
+                    .and(thoseSubcategorised(subcategory));
         }
 
     }
-       
-    private static final Comparator<ExcelDemoToDoItem> comparator = 
+
+    private static final Comparator<ExcelDemoToDoItem> comparator =
             Comparator.comparing(ExcelDemoToDoItem::isComplete).reversed() // true first
                 .thenComparing(ExcelDemoToDoItem::getDueBy)
                 .thenComparing(ExcelDemoToDoItem::getDescription);
-                
+
 
     @Override
     public int compareTo(final ExcelDemoToDoItem other) {

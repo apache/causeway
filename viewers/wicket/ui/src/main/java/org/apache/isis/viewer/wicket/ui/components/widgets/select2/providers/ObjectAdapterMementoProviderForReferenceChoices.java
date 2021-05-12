@@ -25,18 +25,18 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import lombok.Getter;
 
 public class ObjectAdapterMementoProviderForReferenceChoices
-extends ObjectAdapterMementoProviderAbstract 
+extends ObjectAdapterMementoProviderAbstract
 implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter(onMethod = @__(@Override))
     private final Can<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForReferenceChoices(
             ScalarModel model,
             Can<ObjectMemento> choiceMementos) {
-        
+
         super(model);
         this.choiceMementos = choiceMementos;
     }

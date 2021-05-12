@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbs
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
 
     public EncodableFacetFromConfiguration(
-            final String candidateEncoderDecoderName, 
+            final String candidateEncoderDecoderName,
             final FacetHolder holder) {
 
         super(candidateEncoderDecoderName, null, holder);

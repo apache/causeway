@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class HiddenObjectFacetViaMethod 
+public class HiddenObjectFacetViaMethod
 extends HiddenObjectFacetAbstract {
-    
+
     private final Method method;
 
     public HiddenObjectFacetViaMethod(final Method method, final FacetHolder holder) {

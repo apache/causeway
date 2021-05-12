@@ -45,5 +45,5 @@ public class BlobFieldFactory implements UiComponentHandlerVaa {
         uiField.setValue(request.getFeatureValue(Blob.class).orElse(null));
         return uiField;
     }
-    
+
 }

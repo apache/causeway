@@ -55,15 +55,15 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class EntityPropertyChangePublisherDefault implements EntityPropertyChangePublisher {
-    
+
     private final List<EntityPropertyChangeSubscriber> subscribers;
     private final UserService userService;
     private final ClockService clockService;
     private final TransactionService transactionService;
     private final InteractionTracker iaTracker;
-    
+
     private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
-    
+
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
@@ -73,44 +73,44 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     @Override
     public void publishChangedProperties(
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
-        
+
         val payload = getPayload(hasEnlistedEntityPropertyChanges);
         val handle = _Xray.enterEntityPropertyChangePublishing(
-                iaTracker, 
+                iaTracker,
                 payload,
                 enabledSubscribers,
                 ()->getCannotPublishReason(payload)
                 );
-        
+
         payload.forEach(propertyChange->{
             for (val subscriber : enabledSubscribers) {
                 subscriber.onChanging(propertyChange);
             }
         });
-        
+
         _Xray.exitPublishing(handle);
     }
 
     // -- HELPER
-    
+
     private Can<EntityPropertyChange> getPayload(
             HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
-        
-        if(enabledSubscribers.isEmpty()) { 
-            return Can.empty(); 
+
+        if(enabledSubscribers.isEmpty()) {
+            return Can.empty();
         }
-        
+
         val currentTime = clockService.getClock().javaSqlTimestamp();
         val currentUser = userService.currentUserNameElseNobody();
         val currentTransactionId = transactionService.currentTransactionId()
                 .orElse(TransactionId.empty());
-        
+
         return hasEnlistedEntityPropertyChanges.getPropertyChanges(
-                currentTime, 
+                currentTime,
                 currentUser,
                 currentTransactionId);
     }
-    
+
     // x-ray support
     private @Nullable String getCannotPublishReason(final @NonNull Can<EntityPropertyChange> payload) {
         return enabledSubscribers.isEmpty()

@@ -40,9 +40,9 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     @Override
     public Object populatePojo(
-            Supplier<Object> emptyCollectionPojoFactory, 
+            Supplier<Object> emptyCollectionPojoFactory,
             ObjectSpecification collectionSpec,
-            Stream<ManagedObject> initData, 
+            Stream<ManagedObject> initData,
             int elementCount) {
 
         final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojoFactory.get());
@@ -52,7 +52,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     /**
-     * @param collectionAdapter - {@link ManagedObject} wrapping a collection. 
+     * @param collectionAdapter - {@link ManagedObject} wrapping a collection.
      */
     @Override
     public Stream<ManagedObject> stream(final @Nullable ManagedObject collectionAdapter) {
@@ -61,7 +61,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     /**
-     * @param collectionAdapter - {@link ManagedObject} wrapping a collection. 
+     * @param collectionAdapter - {@link ManagedObject} wrapping a collection.
      */
     @Override
     public int size(final @Nullable ManagedObject collectionAdapter) {
@@ -79,6 +79,6 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
 
-    
+
 
 }

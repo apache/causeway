@@ -55,7 +55,7 @@ import lombok.ToString;
         )
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED) 
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class JdoProduct implements Comparable<JdoProduct> {
 
@@ -81,10 +81,10 @@ public class JdoProduct implements Comparable<JdoProduct> {
     @Property
     @Getter @Setter @Column(allowsNull = "false")
     private double price;
-    
-    @Collection 
-    @Persistent(mappedBy="product") @Column(allowsNull = "true") 
-    @Getter @Setter 
+
+    @Collection
+    @Persistent(mappedBy="product") @Column(allowsNull = "true")
+    @Getter @Setter
     private List<JdoProductComment> comments;
 
     @Override

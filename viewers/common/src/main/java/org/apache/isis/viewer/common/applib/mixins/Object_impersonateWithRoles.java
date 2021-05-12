@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.common.applib.mixins;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;

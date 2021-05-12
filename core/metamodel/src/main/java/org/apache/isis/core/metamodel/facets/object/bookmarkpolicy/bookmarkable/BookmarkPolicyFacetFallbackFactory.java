@@ -52,14 +52,14 @@ implements MetaModelRefiner {
      */
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        
+
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             // as an optimization only checking declared members (skipping inherited ones)
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(objectAction->{
                 final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
-                if(bookmarkFacet == null || bookmarkFacet.isFallback() || 
+                if(bookmarkFacet == null || bookmarkFacet.isFallback() ||
                         bookmarkFacet.value() == BookmarkPolicy.NEVER) {
                     return false;
                 }

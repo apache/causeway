@@ -42,14 +42,14 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public Component handle(ComponentRequest request) {
-        
+
         val uiField = new TextField(request.getDisplayLabel());
-        
+
         val managedFeature = request.getManagedFeature();
-        
+
         BindingsVaa.bindFeature(uiField, managedFeature);
-                
+
         return uiField;
     }
-    
+
 }

@@ -39,12 +39,12 @@ public class LogoutHandlerVaa implements LogoutHandler {
 
     @Override
     public void logout() {
-        
+
         val sessionVaa = VaadinSession.getCurrent();
         if(sessionVaa==null) {
             return; // ignore if there is no current session
         }
-        
+
         AuthSessionStoreUtil.get()
         .ifPresent(auth->{
             log.info("logging out {}", auth.getUserName());
@@ -52,16 +52,16 @@ public class LogoutHandlerVaa implements LogoutHandler {
             metaModelContext.getAuthenticationManager().closeSession(auth);
             AuthSessionStoreUtil.clear();
         });
-        
+
         sessionVaa.close();
-        
+
     }
 
     @Override
     public boolean isHandlingCurrentThread() {
         return VaadinRequest.getCurrent()!=null;
     }
-    
 
-    
+
+
 }

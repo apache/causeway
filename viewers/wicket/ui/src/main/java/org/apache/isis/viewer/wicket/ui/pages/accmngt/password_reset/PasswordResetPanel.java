@@ -71,7 +71,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
         form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
         val commonContext = super.getCommonContext();
-        
+
         Button signUpButton = new Button("passwordResetSubmit") {
             private static final long serialVersionUID = -6355836432811022200L;
 
@@ -83,7 +83,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
-                val userRegistrationService = 
+                val userRegistrationService =
                         commonContext.lookupServiceElseFail(UserRegistrationService.class);
 
                 Boolean passwordUpdated = getIsisInteractionFactory().callAnonymous(new Callable<Boolean>() {

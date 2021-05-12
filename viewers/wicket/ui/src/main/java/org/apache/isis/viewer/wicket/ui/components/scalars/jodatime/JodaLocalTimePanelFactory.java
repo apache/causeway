@@ -29,13 +29,13 @@ import org.joda.time.LocalTime;
  * {@link ComponentFactory} for {@link JodaLocalTimePanel}.
  */
 public class JodaLocalTimePanelFactory extends ComponentFactoryScalarAbstract {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public JodaLocalTimePanelFactory() {
         super(JodaLocalTimePanel.class, LocalTime.class);
     }
-    
+
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
         return new JodaLocalTimePanel(id, scalarModel);

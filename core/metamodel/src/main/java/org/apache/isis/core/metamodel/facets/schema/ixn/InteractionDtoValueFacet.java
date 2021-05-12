@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface InteractionDtoValueFacet extends Facet {
-    
+
     String interactionDtoValue(ManagedObject object);
     ManagedObject createValue(ManagedObject object, String xml);
 

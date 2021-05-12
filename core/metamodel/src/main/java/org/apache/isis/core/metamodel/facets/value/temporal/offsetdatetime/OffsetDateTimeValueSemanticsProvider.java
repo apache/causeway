@@ -34,25 +34,25 @@ import lombok.val;
 
 
 //@Log4j2
-public class OffsetDateTimeValueSemanticsProvider 
+public class OffsetDateTimeValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
-    
+
     public OffsetDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(TemporalValueFacet.class,
                 TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
                 holder, OffsetDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetDateTime::from,
                 TemporalAdjust::adjustOffsetDateTime);
-        
+
         val basicDateTimeNoMillis = "yyyyMMdd'T'HHmmssZ";
         val basicDateTime = "yyyyMMdd'T'HHmmss.SSSZ";
-        
+
         super.addNamedFormat("iso", basicDateTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicDateTime);
-        
+
         super.updateParsers();
 
         setEncodingFormatter(DateTimeFormatter.ofPattern(basicDateTime, Locale.getDefault()));
@@ -66,10 +66,10 @@ extends TemporalValueSemanticsProviderAbstract<OffsetDateTime> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
-        
+
         //TODO those FormatStyle based formatters potentially need additional zone information
         setTitleFormatter(formatter);
-        
+
     }
 
 }

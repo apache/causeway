@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-public class StringValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<String> 
+public class StringValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<String>
 implements StringValueFacet {
 
     public static Class<? extends Facet> type() {

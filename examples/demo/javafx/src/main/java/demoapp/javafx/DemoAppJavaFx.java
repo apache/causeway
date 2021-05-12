@@ -39,11 +39,11 @@ import demoapp.dom.DemoModuleJdo;
 @SpringBootApplication
 @Import({
     DemoModuleJdo.class,
-    
+
     // INCUBATING
     IsisModuleSecurityBypass.class,
     IsisModuleIncViewerJavaFxViewer.class,
-  
+
 })
 public class DemoAppJavaFx {
 
@@ -58,12 +58,12 @@ public class DemoAppJavaFx {
     }
 
     public static void main(String[] args) {
-        
+
         IsisPresets.logging(InteractionFactoryDefault.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
         IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
-        
+
         JavafxViewer.launch(DemoAppJavaFx.class, args);
     }
 

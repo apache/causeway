@@ -67,27 +67,27 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     @Override
     protected void addParameters() {
         val actionModel = getActionModel();
-        
+
         val repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
         add(repeatingView);
 
         paramPanels.clear();
-        
+
         actionModel.streamPendingParamUiModels()
         .forEach(argsAndConsents->{
-            
-            val paramModel = (ScalarParameterModel) argsAndConsents.getParamModel(); 
-            
+
+            val paramModel = (ScalarParameterModel) argsAndConsents.getParamModel();
+
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
-            
+
             newParamPanel(container, paramModel)
             .ifPresent(paramPanel->{
                 paramPanels.add(paramPanel);
                 //val paramModel = (ScalarParameterModel) paramPanel.getModel();
                 paramPanel.postInit(argsAndConsents);
             });
-            
+
         });
 
         setOutputMarkupId(true);
@@ -96,9 +96,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     private Optional<ScalarPanelAbstract> newParamPanel(
-            final WebMarkupContainer container, 
+            final WebMarkupContainer container,
             final ScalarParameterModel paramModel) {
-        
+
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, paramModel);
 
@@ -106,15 +106,15 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             val markupContainer = (MarkupContainer) component;
             val css = paramModel.getCssClass();
             if (!_Strings.isNullOrEmpty(css)) {
-                CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));    
+                CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
             }
         }
-        
+
         val paramPanel =
                 component instanceof ScalarPanelAbstract
                 ? (ScalarPanelAbstract) component
                 : null;
-                
+
         if (paramPanel != null) {
             paramPanel.setOutputMarkupId(true);
             paramPanel.notifyOnChange(this);
@@ -141,7 +141,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     private void applyAreYouSure(AjaxButton button) {
         val actionModel = getActionModel();
         val action = actionModel.getMetaModel();
-        
+
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
             Decorators.getConfirm().decorate(button, confirmUiModel);
@@ -155,18 +155,18 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         val paramModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = paramModel.getNumber();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
-        final int skipCount = paramNumberUpdated + 1;   
-        
+        final int skipCount = paramNumberUpdated + 1;
+
         actionModel.reassessPendingParamUiModels(skipCount);
-        
+
         actionModel.streamPendingParamUiModels()
         .skip(skipCount)
         .forEach(argAndConsents->{
-            
+
             val paramNumToUpdate = argAndConsents.getParamModel().getNumber();
             val paramPanel = paramPanels.get(paramNumToUpdate);
             val repaint = paramPanel.updateIfNecessary(argAndConsents, Optional.of(target));
-            
+
             switch (repaint) {
             case ENTIRE_FORM:
                 target.add(this);
@@ -179,7 +179,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             default:
                 throw _Exceptions.unmatchedCase(repaint);
             }
-            
+
         });
 
 

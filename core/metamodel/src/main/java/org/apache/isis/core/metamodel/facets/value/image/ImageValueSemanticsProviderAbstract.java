@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-public abstract class ImageValueSemanticsProviderAbstract<T> 
-extends ValueSemanticsProviderAndFacetAbstract<T> 
+public abstract class ImageValueSemanticsProviderAbstract<T>
+extends ValueSemanticsProviderAndFacetAbstract<T>
 implements ImageValueFacet {
 
     private static final int TYPICAL_LENGTH = 18;
@@ -101,13 +101,13 @@ implements ImageValueFacet {
     public String toString() {
         return "ImageValueSemanticsProvider";
     }
-    
+
     // -- DEPRECATED
-    
+
     //  protected abstract T setPixels(int[][] pixels);
     //  public void setMask(final String mask) {}
     //  public String getIconName() {return null;}
-    
+
 //    @Override
 //    protected String doEncode(final Object object) {
 //        final int[][] image = getPixels(object);
@@ -140,8 +140,8 @@ implements ImageValueFacet {
 //        final T image = setPixels(imageData);
 //        return image;
 //    }
-    
-    
+
+
 //  public T restoreFromByteArray(final byte[] byteArray) {
 //  final int[] flatIntArray = new int[byteArray.length / 4];
 //  for (int i = 0; i < flatIntArray.length; i++) {
@@ -178,7 +178,7 @@ implements ImageValueFacet {
 //  }
 //  return newImage;
 //}
-    
+
 //  protected BufferedImage createImage(final int[][] pixels) {
 //  final int lines = pixels.length;
 //  final int width = pixels[0].length;
@@ -205,7 +205,7 @@ implements ImageValueFacet {
 //  }
 //  return pixel;
 //}
-    
+
 //  public byte[] getAsByteArray(final ManagedObject object) {
 //  final int[] flatIntArray = flatten(object);
 //  final byte[] byteArray = new byte[flatIntArray.length * 4];
@@ -227,7 +227,7 @@ implements ImageValueFacet {
 //  }
 //  return value;
 //}
-    
+
 //  protected abstract int[][] getPixels(Object object);
 //
 //  protected int[][] grabPixels(final Image image) {
@@ -274,5 +274,5 @@ implements ImageValueFacet {
 //  }
 //}
 
-    
+
 }

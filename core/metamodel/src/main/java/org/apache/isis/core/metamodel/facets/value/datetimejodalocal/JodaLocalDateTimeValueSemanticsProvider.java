@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public class JodaLocalDateTimeValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime> 
+public class JodaLocalDateTimeValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime>
 implements JodaLocalDateTimeValueFacet {
 
     public static final int MAX_LENGTH = 36;

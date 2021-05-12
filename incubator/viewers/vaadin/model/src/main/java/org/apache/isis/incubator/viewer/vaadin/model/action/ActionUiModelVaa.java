@@ -33,23 +33,23 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of")
 public class ActionUiModelVaa implements ActionUiModel<Component, Component> {
 
-    @Getter 
+    @Getter
     private final ManagedAction managedAction;
-    
-    @Getter(lazy = true, onMethod_ = {@Override}) 
+
+    @Getter(lazy = true, onMethod_ = {@Override})
     private final ActionUiMetaModel actionUiMetaModel = ActionUiMetaModel.of(getManagedAction());
 
 
     @Override
     public Component createMenuUiComponent() {
-        return createRegularUiComponent(); 
+        return createRegularUiComponent();
     }
 
     @Override
     public Component createRegularUiComponent() {
         val actionMeta = getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
-        
+
         return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
     }
 

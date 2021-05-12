@@ -28,15 +28,15 @@ final class _PreAndPostValue {
 
     /**
      * The object that was referenced before this object was changed.
-     * 
+     *
      * @implNote this referenced object itself could end up being deleted in the course of the
      * transaction; in which case use
      * {@link #getPreString()} which is the eagerly cached <tt>toString</tt> of said object.
      */
     @Getter private final Object pre;
-    
+
     /**
-     * Eagerly calculated because it could be that the object referenced ends up being deleted 
+     * Eagerly calculated because it could be that the object referenced ends up being deleted
      * by the time that the transaction completes.
      */
     @Getter private final String preString;
@@ -54,14 +54,14 @@ final class _PreAndPostValue {
         this.post = null;
         this.postString = null;
     }
-    
+
     private _PreAndPostValue(final _PreAndPostValue pre, final Object post) {
         this.pre = pre.getPre();
         this.preString = pre.getPreString();
         this.post = post;
         this.postString = asString(post);
     }
-    
+
     public _PreAndPostValue withPost(final Object post) {
         return new _PreAndPostValue(this, post);
     }
@@ -85,13 +85,13 @@ final class _PreAndPostValue {
         // else - for updated objects - audit only if the property value has changed
         return !Objects.equals(getPre(), getPost());
     }
-    
+
     // -- HELPER
-    
+
     private static String asString(Object object) {
         return object != null
                 ? object.toString()
                 : null;
     }
-    
+
 }

@@ -110,10 +110,10 @@ public class ThemeChooser extends Panel {
         CookieUtils cookieUtils = new CookieUtils();
         String activeTheme = cookieUtils.load(ISIS_THEME_COOKIE_NAME);
         if (!Strings.isEmpty(activeTheme)) {
-            
+
             val isAvailable = getThemeSupport().getThemeProvider().available().stream()
                     .anyMatch(theme->activeTheme.equals(theme.name()));
-            
+
             if(isAvailable) {
                 setActiveTheme(activeTheme);
             }

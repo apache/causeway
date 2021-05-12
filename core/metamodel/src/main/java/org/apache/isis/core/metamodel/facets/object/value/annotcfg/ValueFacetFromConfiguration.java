@@ -26,12 +26,12 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 public class ValueFacetFromConfiguration extends ValueFacetAbstract {
 
     public ValueFacetFromConfiguration(
-            String candidateSemanticsProviderName, 
+            String candidateSemanticsProviderName,
             FacetHolder holder) {
 
         super(
-                ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), 
-                AddFacetsIfInvalidStrategy.DONT_ADD, 
+                ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName),
+                AddFacetsIfInvalidStrategy.DONT_ADD,
                 holder);
     }
 

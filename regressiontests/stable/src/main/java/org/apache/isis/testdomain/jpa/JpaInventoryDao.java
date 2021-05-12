@@ -36,20 +36,20 @@ import lombok.val;
 @Component
 public class JpaInventoryDao {
 
-    @Inject private RepositoryService repositoryService;    
-    
+    @Inject private RepositoryService repositoryService;
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addBook_havingIsbnA_usingRepositoryService() {
         val inventories = repositoryService.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
-        
+
         val inventory = inventories.get(0);
         assertNotNull(inventory);
-        
+
         // add a conflicting book (unique ISBN violation)
         inventory.getProducts()
         .add(JpaBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
                 "Sample Publisher"));
     }
-    
+
 }

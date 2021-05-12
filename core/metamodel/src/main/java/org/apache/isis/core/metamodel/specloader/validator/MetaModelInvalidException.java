@@ -29,7 +29,7 @@ public class MetaModelInvalidException extends IllegalStateException {
 
     public MetaModelInvalidException(Optional<String> failuresAsLineNumberedString) {
         // fails if failuresAsLineNumberedString is empty, which would indicate misuse
-        super(failuresAsLineNumberedString.orElseThrow(_Exceptions::noSuchElement));  
+        super(failuresAsLineNumberedString.orElseThrow(_Exceptions::noSuchElement));
     }
 
 }

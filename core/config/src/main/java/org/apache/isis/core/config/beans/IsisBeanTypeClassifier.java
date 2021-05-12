@@ -34,62 +34,62 @@ import lombok.Value;
 public interface IsisBeanTypeClassifier {
 
     // -- INTERFACE
-   
+
     /**
      * Returns the bean classification for given {@code type}.
-     * 
+     *
      * @apiNote Initially used to collect all concrete types that are considered by Spring
      * for type inspection, but later used by the {@code SpecificationLoader} to also
-     * classify non-concrete types (interfaces and abstract classes).  
+     * classify non-concrete types (interfaces and abstract classes).
      */
     BeanClassification classify(Class<?> type);
 
     // -- FACTORY
-    
+
     /**
      * in support of JUnit testing
      */
     static IsisBeanTypeClassifier createInstance() {
         return new IsisBeanTypeClassifierImpl(Can.empty());
     }
-    
+
     static IsisBeanTypeClassifier createInstance(final @NonNull Environment environment) {
         return new IsisBeanTypeClassifierImpl(Can.ofArray(environment.getActiveProfiles()));
     }
-    
+
     // -- LOOKUP
 
     public static Can<IsisBeanTypeClassifier> get() {
         return Can.ofCollection(_Plugin.loadAll(IsisBeanTypeClassifier.class));
     }
-    
+
     // -- BEAN CLASSIFICATION RESULT
-    
+
     @Value(staticConstructor = "of")
     public static class BeanClassification {
-        
+
         BeanSort beanSort;
         String explicitObjectType;
         boolean delegateLifecycleManagement;
-        
+
         // -- FACTORIES
-        
+
         public static BeanClassification delegated(BeanSort beanSort, String explicitObjectType) {
             return of(beanSort, explicitObjectType, true);
         }
-        
+
         public static BeanClassification delegated(BeanSort beanSort) {
             return delegated(beanSort, null);
         }
-        
+
         public static BeanClassification selfManaged(BeanSort beanSort, String explicitObjectType) {
             return of(beanSort, explicitObjectType, false);
         }
-        
+
         public static BeanClassification selfManaged(BeanSort beanSort) {
             return selfManaged(beanSort, null);
         }
-        
+
     }
-    
+
 }

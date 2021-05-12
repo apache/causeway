@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableFacetAnnotation;
 
-public class ObjectSpecIdFacetForTableAnnotation 
+public class ObjectSpecIdFacetForTableAnnotation
 extends ObjectSpecIdFacetAbstract {
 
     public static ObjectSpecIdFacet create(

@@ -38,7 +38,7 @@ import lombok.Setter;
 import lombok.val;
 
 /**
- * This class should be executed using 
+ * This class should be executed using
  * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
  * (it has value semantics).
  *

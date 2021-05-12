@@ -35,7 +35,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        
+
         val paramType = processParameterContext.getParameterType();
 
         if(!getSpecificationLoader().loadSpecification(paramType).containsNonFallbackFacet(ChoicesFacet.class)) {

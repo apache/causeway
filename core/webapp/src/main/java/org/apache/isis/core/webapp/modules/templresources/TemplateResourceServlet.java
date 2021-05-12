@@ -83,8 +83,8 @@ public class TemplateResourceServlet extends HttpServlet {
         log.debug("request: {}", servletPath);
 
         val resourceInputStream = ifPresentElseGet(
-                loadFromFileSystem(request), // try to load from file-system first 
-                ()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path  
+                loadFromFileSystem(request), // try to load from file-system first
+                ()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path
 
         if (resourceInputStream != null) {
             try {
@@ -98,7 +98,7 @@ public class TemplateResourceServlet extends HttpServlet {
                     resourceInputStream.close();
                 } catch (IOException e) {
                     // fall through
-                }    
+                }
             }
         }
 
@@ -125,15 +125,15 @@ public class TemplateResourceServlet extends HttpServlet {
         if(log.isDebugEnabled()) {
             if(inputStream!=null) {
                 log.debug("request: {} loaded from classpath", path);
-            }	
+            }
         }
         return inputStream;
     }
 
     private void processContent(
-            final InputStream is, 
-            final HttpServletRequest request, 
-            final HttpServletResponse response) 
+            final InputStream is,
+            final HttpServletRequest request,
+            final HttpServletResponse response)
                     throws IOException {
 
         if(request.getServletPath().endsWith(".thtml")) {

@@ -30,12 +30,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class FacetFactoryAbstract 
+public abstract class FacetFactoryAbstract
 implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
-    
+
     @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
     private MetaModelContext metaModelContext;
-    
+
     @Getter(onMethod = @__({@Override}))
     private final ImmutableEnumSet<FeatureType> featureTypes;
 
@@ -54,15 +54,15 @@ implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
-    
+
     // -- FACET UTILITIES
 
     public void addFacet(final Facet facet) {
         FacetUtil.addFacet(facet);
     }
-    
+
     // -- METHOD UTILITITES
-    
+
     protected static final Class<?> NO_RETURN = (Class<?>)null;
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};

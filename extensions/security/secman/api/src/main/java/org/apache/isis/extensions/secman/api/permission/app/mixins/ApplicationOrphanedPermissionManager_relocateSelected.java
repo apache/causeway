@@ -34,8 +34,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.app.ApplicationOrphanedPermissionManager;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.app.mixins.ApplicationOrphanedPermissionManager_relocateSelected.DomainEvent;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

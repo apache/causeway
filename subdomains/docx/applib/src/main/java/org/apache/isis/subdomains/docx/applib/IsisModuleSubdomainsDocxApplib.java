@@ -18,7 +18,6 @@
  */
 package org.apache.isis.subdomains.docx.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

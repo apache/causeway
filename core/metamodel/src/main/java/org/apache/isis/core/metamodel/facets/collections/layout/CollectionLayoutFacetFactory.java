@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 import lombok.val;
 
-public class CollectionLayoutFacetFactory 
+public class CollectionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
     public CollectionLayoutFacetFactory() {
@@ -39,7 +39,7 @@ extends FacetFactoryAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
         val collectionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
-                        CollectionLayout.class, 
+                        CollectionLayout.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), CollectionLayout.class));
 
@@ -50,7 +50,7 @@ extends FacetFactoryAbstract {
         val defaultViewFacet = DefaultViewFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, getConfiguration(), facetHolder);
         super.addFacet(defaultViewFacet);
-        
+
         val describedAsFacet = DescribedAsFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
@@ -58,7 +58,7 @@ extends FacetFactoryAbstract {
         val hiddenFacet = HiddenFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-        
+
         val layoutOrderFacet = LayoutOrderFacetFromCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder);
         super.addFacet(layoutOrderFacet);

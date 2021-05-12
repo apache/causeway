@@ -45,5 +45,5 @@ public class ClobFieldFactory implements UiComponentHandlerVaa {
         uiField.setValue(request.getFeatureValue(Clob.class).orElse(null));
         return uiField;
     }
-    
+
 }

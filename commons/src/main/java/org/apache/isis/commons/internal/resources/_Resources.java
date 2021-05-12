@@ -58,7 +58,7 @@ public final class _Resources {
      * @return An input stream for reading the resource, or null if the resource could not be found.
      */
     public static InputStream load(
-            final @NonNull Class<?> contextClass, 
+            final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
         val absoluteResourceName = resolveName(resourceName, contextClass);
@@ -77,19 +77,19 @@ public final class _Resources {
      * @throws IOException
      */
     public static String loadAsString(
-            final @NonNull Class<?> contextClass, 
-            final @NonNull String resourceName, 
+            final @NonNull Class<?> contextClass,
+            final @NonNull String resourceName,
             final @NonNull Charset charset) throws IOException {
-        
+
         val inputStream = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(inputStream), charset);
     }
 
     /**
-     * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)} 
+     * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)}
      */
     public static String loadAsStringUtf8(
-            final @NonNull Class<?> contextClass, 
+            final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) throws IOException {
         return loadAsString(contextClass, resourceName, StandardCharsets.UTF_8);
     }
@@ -99,9 +99,9 @@ public final class _Resources {
      * @return The resource location as an URL, or null if the resource could not be found.
      */
     public static URL getResourceUrl(
-            final @NonNull Class<?> contextClass, 
+            final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
-        
+
         _With.requires(resourceName, "resourceName");
         final String absoluteResourceName = resolveName(resourceName, contextClass);
         return _Context.getDefaultClassLoader().getResource(absoluteResourceName);
@@ -110,12 +110,12 @@ public final class _Resources {
 
     // -- LOCAL vs EXTERNAL resource path
 
-    private static final Predicate<String> externalResourcePattern = 
-            Pattern.compile("^\\w+?://.*$").asPredicate(); 
+    private static final Predicate<String> externalResourcePattern =
+            Pattern.compile("^\\w+?://.*$").asPredicate();
 
     /**
-     * Returns whether the {@code resourcePath} is intended local and relative 
-     * to the web-app's context root. 
+     * Returns whether the {@code resourcePath} is intended local and relative
+     * to the web-app's context root.
      * @param resourcePath
      */
     public static boolean isLocalResource(String resourcePath) {
@@ -126,7 +126,7 @@ public final class _Resources {
     /**
      * To build a path from chunks {@code 'a' + 'b' -> 'a/b'}, also handling cases eg.
      * {@code 'a/' + '/b' -> 'a/b'}
-     * 
+     *
      * @param extendee
      * @param suffix
      */

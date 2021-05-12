@@ -39,46 +39,46 @@ public final class ValueSemanticsProviderUtil {
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
     public static String semanticsProviderNameFromConfiguration(
-            final IsisConfiguration configuration, 
+            final IsisConfiguration configuration,
             final Class<?> type) {
 
-        final String key = 
-                SEMANTICS_PROVIDER_NAME_KEY_PREFIX + 
-                type.getCanonicalName() + 
+        final String key =
+                SEMANTICS_PROVIDER_NAME_KEY_PREFIX +
+                type.getCanonicalName() +
                 SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
-        
+
         final String semanticsProviderName = configuration.getEnvironment().getProperty(key);
         return !_Strings.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
 
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(
-            final Class<?> candidateClass, 
+            final Class<?> candidateClass,
             final String classCandidateName) {
-        
-        final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null 
+
+        final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null
                 ? uncheckedCast(ClassUtil.implementingClassOrNull(
                         candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class))
                 : null;
-                
+
         if(clazz != null) {
             return clazz;
         }
 
-        final Class<? extends ValueSemanticsProvider<?>> classForName = 
+        final Class<? extends ValueSemanticsProvider<?>> classForName =
                 uncheckedCast(ClassUtil.implementingClassOrNull(
                         classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
-        
+
         if(classForName!=null) {
             return classForName;
         }
-        
+
         if(_Strings.isNotEmpty(classCandidateName)) {
             log.warn("cannot find ValueSemanticsProvider referenced by class name {}", classCandidateName);
         }
-        
+
         return null;
-        
+
     }
 
 }

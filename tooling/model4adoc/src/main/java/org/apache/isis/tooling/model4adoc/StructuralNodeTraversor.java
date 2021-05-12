@@ -30,7 +30,7 @@ import lombok.val;
  * Depth-first node traversing. Use to iterate through all nodes under and including the specified root node.
  */
 final class StructuralNodeTraversor {
-    
+
     /**
      * Start a depth-first traverse of the root and all of its descendants.
      * @param visitor Node visitor.
@@ -39,26 +39,26 @@ final class StructuralNodeTraversor {
     public static void depthFirst(StructuralNodeVisitor visitor, StructuralNode root) {
         traverse(visitor, root, 0, _Refs.booleanRef(true));
     }
-    
+
     // -- HELPER
-    
+
     private static void traverse(
-            final StructuralNodeVisitor visitor, 
-            final StructuralNode node, 
+            final StructuralNodeVisitor visitor,
+            final StructuralNode node,
             final int depth,
             final BooleanReference continueTraverse) {
-        
+
         if(continueTraverse.isFalse()) {
             return;
         }
-        
+
         val continueVisit = visitor.head(node, depth);
         if(!continueVisit) {
             continueTraverse.update(__->false);
         }
-        
+
         val blocks = node.getBlocks();
-        
+
         if(!_NullSafe.isEmpty(blocks)) {
             for(val subNode : blocks) {
                 traverse(visitor, subNode, depth+1, continueTraverse);
@@ -67,9 +67,9 @@ final class StructuralNodeTraversor {
                 }
             }
         }
-        
+
         visitor.tail(node, depth);
-        
+
     }
 
 }

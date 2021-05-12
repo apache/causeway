@@ -31,7 +31,7 @@ import lombok.val;
 final class _Xray {
 
     static void newAuthenticationLayer(Stack<AuthenticationLayer> afterEnter) {
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
@@ -40,38 +40,38 @@ final class _Xray {
         final int authStackSize = afterEnter.size();
         val interactionId = afterEnter.peek().getInteraction().getInteractionId();
         val executionContext = afterEnter.peek().getExecutionContext();
-        
+
         val threadId = XrayUtil.currentThreadAsMemento();
-        
+
         XrayUi.updateModel(model->{
-            
+
             val sequenceId = XrayUtil.sequenceId(interactionId);
             val iaLabel = String.format("Interaction-%s", interactionId);
             val iaLabelMultiline = String.format("Interaction\n%s", interactionId);
-            val iaOpeningLabel = String.format("open interaction\n%s", 
+            val iaOpeningLabel = String.format("open interaction\n%s",
                     executionContext.getUser().toString().replace(", ", ",\n"));
-            
+
             val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
-            
+
             if(authStackSize==1) {
                 val uiThreadNode = model.getThreadNode(threadId);
-                
+
                 //val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
-                
+
                 val sequenceData = model.addDataNode(
-                            uiThreadNode,//uiTopAuthLayerNode, 
+                            uiThreadNode,//uiTopAuthLayerNode,
                             new XrayDataModel.Sequence(sequenceId, iaLabel))
                         .getData();
-                
+
                 sequenceData.alias("thread", threadId.getMultilinelabel());
                 sequenceData.alias(uiInteractionId, iaLabelMultiline);
-                
+
                 sequenceData.enter("thread", uiInteractionId, iaOpeningLabel);
                 sequenceData.activate(uiInteractionId);
-                
+
                 return;
             }
-            
+
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
@@ -79,42 +79,42 @@ final class _Xray {
                 .enter(XrayUtil.nestedInteractionId(authStackSize-1), uiInteractionId, iaOpeningLabel);
                 sequenceData.activate(uiInteractionId);
             });
-            
-            
+
+
         });
-        
+
     }
 
     public static void closeAuthenticationLayer(Stack<AuthenticationLayer> beforeClose) {
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
-        
+
         final int authStackSize = beforeClose.size();
         val interactionId = beforeClose.peek().getInteraction().getInteractionId();
         val sequenceId = XrayUtil.sequenceId(interactionId);
-        
+
         XrayUi.updateModel(model->{
-            
+
             val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
-            
+
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                
+
                 if(authStackSize==1) {
                     sequenceData.exit(uiInteractionId, "thread", "close");
                     return;
                 }
-                
+
                 sequenceData
                 .exit(uiInteractionId, XrayUtil.nestedInteractionId(authStackSize-1), "close");
                 sequenceData.deactivate(uiInteractionId);
             });
-            
+
         });
-        
+
     }
 
 

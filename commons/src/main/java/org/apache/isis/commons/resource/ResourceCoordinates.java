@@ -37,70 +37,70 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Value @Builder
-public class ResourceCoordinates 
+public class ResourceCoordinates
 implements Comparable<ResourceCoordinates> {
 
     public static ResourceCoordinates fromFile(final @NonNull File file) {
         val parts = _Lists.<String>newArrayList();
-        File next = file; 
+        File next = file;
         while(next!=null) {
             if(_Strings.isNotEmpty(next.getName())) {
                 parts.add(next.getName());
             }
             next = next.getParentFile();
         }
-        
+
         val nameRef = _Refs.stringRef(file.getName());
-        
-        //XXX lombok issue, cannot use val 
+
+        //XXX lombok issue, cannot use val
         final String simpleName = nameRef.cutAtLastIndexOfAndDrop(".");
         final String fileNameExtension = nameRef.getValue();
-        
+
         return ResourceCoordinates.builder()
              // could semantically mean the mount-point, but we don't have that info in a file instance
-             .location(Can.empty()) 
+             .location(Can.empty())
              // just the filename without extension
              .simpleName(simpleName)
              .friendlyName(simpleName)
-             .name(_Strings.isEmpty(fileNameExtension) 
+             .name(_Strings.isEmpty(fileNameExtension)
                      ? Can.ofSingleton(simpleName)
                      : Can.of(simpleName, fileNameExtension))
              .nameAsString(file.getName())
              .namespace(Can.ofStream(parts.stream().skip(1)).reverse())
              .build();
     }
-    
+
     /**
-     * multi-part top level location specifier 
+     * multi-part top level location specifier
      * like eg. adoc include {@code component:module:page$}
      * or a file-system location {@code ~/my-projects/my-project},
-     * (whether relative or absolute is not specified)      
+     * (whether relative or absolute is not specified)
      */
     private final @NonNull Can<String> location;
-    
+
     /**
-     * multi-part (location relative) path like eg. {@code org.apache.isis}     
+     * multi-part (location relative) path like eg. {@code org.apache.isis}
      */
     private final @NonNull Can<String> namespace;
-    
+
     /**
      * multi-part name like eg. a filename {@code docs.adoc},
-     * or a nested class name {@code A$B},       
+     * or a nested class name {@code A$B},
      */
     private final @NonNull Can<String> name;
 
     /**
-     * String representation of {@link #getName()}; 
+     * String representation of {@link #getName()};
      */
     private final @NonNull String nameAsString;
-    
+
     /**
-     * usually part of the multi-part name;  
-     * eg. a filename without extension, 
+     * usually part of the multi-part name;
+     * eg. a filename without extension,
      * or a java class simple name when nested
      */
     private final @NonNull String simpleName;
-    
+
     /**
      * ever only used for display, presumably human readable;
      * other than that not specified
@@ -111,16 +111,16 @@ implements Comparable<ResourceCoordinates> {
             Comparator.comparing(ResourceCoordinates::getLocation)
            .thenComparing(ResourceCoordinates::getNamespace)
            .thenComparing(ResourceCoordinates::getName);
-    
+
     @Override
     public int compareTo(final @Nullable ResourceCoordinates other) {
      // when returning
-        // -1 ... this is before other 
+        // -1 ... this is before other
         // +1 ... this is after other
         if(other==null) {
-            return 1; // nulls first 
+            return 1; // nulls first
         }
         return comparator.compare(this, other);
     }
-    
+
 }

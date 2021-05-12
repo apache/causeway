@@ -54,7 +54,7 @@ public interface MutableCurrentHolder extends CurrentHolder {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
-     * As per {@link #set(ManagedObject, ManagedObject, InteractionInitiatedBy)}, 
+     * As per {@link #set(ManagedObject, ManagedObject, InteractionInitiatedBy)},
      * with {@link InteractionInitiatedBy#USER}.
      * @param owner
      * @param newValue

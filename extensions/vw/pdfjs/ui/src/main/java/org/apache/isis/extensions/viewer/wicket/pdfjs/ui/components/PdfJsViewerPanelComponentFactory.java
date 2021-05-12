@@ -45,6 +45,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
         super(ComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
     }
 
+    @Override
     public ApplicationAdvice appliesTo(IModel<?> model) {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
@@ -75,6 +76,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
                Objects.equals("pdf", mimeType.getSubType());
     }
 
+    @Override
     public Component createComponent(String id, IModel<?> model) {
         ScalarModel scalarModel = (ScalarModel) model;
         return new PdfJsViewerPanel(id, scalarModel);

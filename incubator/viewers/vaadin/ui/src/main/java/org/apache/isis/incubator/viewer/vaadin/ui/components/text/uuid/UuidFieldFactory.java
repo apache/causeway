@@ -46,17 +46,17 @@ public class UuidFieldFactory implements UiComponentHandlerVaa {
     public Component handle(ComponentRequest request) {
 
         val uiField = new TextField(request.getDisplayLabel());
-        
+
         val managedFeature = request.getManagedFeature();
-        
+
         BindingsVaa.bindFeatureWithConverter(
-                uiField, 
-                managedFeature, 
+                uiField,
+                managedFeature,
                 new StringToUuidConverter("Unable to convert String to UUID"),
                 UUID.nameUUIDFromBytes(new byte[16]));
-                
+
         return uiField;
-        
+
     }
-    
+
 }

@@ -74,7 +74,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         super.addFacet(describedAsFacet);
         // commenting these out, think this whole isNoop business is a little bogus
-        //FacetUtil.addFacet(new ImmutableFacetNever(holder)); 
+        //FacetUtil.addFacet(new ImmutableFacetNever(holder));
         super.addFacet(titleFacet);
         super.addFacet(pagedFacet);
 
@@ -109,7 +109,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         if (featureType.isCollection()) {
             super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
         }
-        
+
     }
 
     @Override

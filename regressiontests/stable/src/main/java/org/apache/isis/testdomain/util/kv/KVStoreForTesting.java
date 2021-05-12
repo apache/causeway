@@ -39,23 +39,23 @@ import lombok.extern.log4j.Log4j2;
 @Service @Singleton
 @Log4j2
 public class KVStoreForTesting {
-    
+
     private Map<Key, Object> keyValueMap;
     private Map<Class<?>, CountDownLatch> latchMap;
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
         keyValueMap = _Maps.newConcurrentHashMap();
         latchMap = _Maps.newConcurrentHashMap();
     }
-    
+
     @PreDestroy
     public void shutdown() {
         log.info("about to shutdown");
         keyValueMap.clear();
     }
-    
+
     public void put(Object caller, String keyStr, Object value) {
         val key = Key.of(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);
@@ -65,30 +65,30 @@ public class KVStoreForTesting {
             latch.countDown();
         }
     }
-    
+
     public Optional<Object> get(Class<?> callerType, String keyStr) {
         return Optional.ofNullable(keyValueMap.get(Key.of(callerType, keyStr)));
     }
-    
+
     public Optional<Object> get(Object caller, String keyStr) {
         return get(caller.getClass(), keyStr);
     }
 
     // -- COUNTING
-    
+
     public long incrementCounter(Class<?> callerType, String keyStr) {
         val key = Key.of(callerType, keyStr);
         return (long) keyValueMap.compute(key, (k, v) -> (v == null) ? 1L : 1L + (long)v);
     }
-    
+
     public long getCounter(Class<?> callerType, String keyStr) {
         val key = Key.of(callerType, keyStr);
         return (long) keyValueMap.getOrDefault(key, 0L);
     }
-    
+
     // --
-    
-    
+
+
     public void clear(Class<?> callerType) {
         log.debug("clearing {}", callerType);
         keyValueMap.entrySet()
@@ -98,14 +98,14 @@ public class KVStoreForTesting {
     public void clear(Object caller) {
         clear(caller.getClass());
     }
-    
+
     public long countEntries(Class<?> callerType) {
         return keyValueMap.entrySet()
         .stream()
         .filter(entry->entry.getKey().getCaller().equals(callerType))
         .count();
     }
-    
+
     @Value(staticConstructor = "of")
     private final static class Key {
         @NonNull Class<?> caller;

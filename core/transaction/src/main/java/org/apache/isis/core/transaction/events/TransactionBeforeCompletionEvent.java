@@ -22,9 +22,9 @@ import lombok.Value;
 
 @Value
 public class TransactionBeforeCompletionEvent {
-    
-    private final static TransactionBeforeCompletionEvent INSTANCE = new TransactionBeforeCompletionEvent(); 
-    
+
+    private final static TransactionBeforeCompletionEvent INSTANCE = new TransactionBeforeCompletionEvent();
+
     public static TransactionBeforeCompletionEvent instance() {
         return INSTANCE;
     }

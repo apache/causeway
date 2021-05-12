@@ -59,20 +59,20 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
         val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
         val valueSpec = request.getFeatureTypeSpec();
         val converter = new NumberConverterForStringComponent(valueSpec);
-        
+
         // ensure user can only type text that is also parse-able by the value facet (parser)
         // however, not every phase of text entering produces parse-able text
         uiField.setTextFormatter(new TextFormatter<String>(change->{
             val input = change.getText();
-            
+
             val parsingError = converter.tryParse(_Strings.suffix(input, "0"));
             if (parsingError.isPresent()) {
                 log.warn("Failed to parse UI input '{}': {}", input, parsingError.get());
                 return null; // veto change
             }
-            return change; // allow change 
+            return change; // allow change
         }));
-        
+
         if(request.getManagedFeature() instanceof ManagedParameter) {
 
             val managedParameter = (ManagedParameter)request.getManagedFeature();
@@ -81,7 +81,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
                     uiField.textProperty(),
                     managedParameter.getValue(),
                     converter);
-            
+
             BindingsFx.bindValidationFeeback(
                     uiValidationFeedback.textProperty(),
                     uiValidationFeedback.visibleProperty(),
@@ -99,7 +99,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
 
             //TODO allow property editing
             uiField.editableProperty().set(false);
-            
+
             //TODO bind property validation feedback
 
         }

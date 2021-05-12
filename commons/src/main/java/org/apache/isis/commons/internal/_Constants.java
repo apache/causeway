@@ -52,7 +52,7 @@ public final class _Constants {
      * Convenient e.g. for reflective invocation
      */
     public static final Class<?>[] emptyClasses = new Class[0];
-    
+
     /**
      * Convenient e.g. for reflective invocation
      */
@@ -88,16 +88,16 @@ public final class _Constants {
     public static final OutputStream nopOutputStream = new OutputStream() {
         @Override public void write(int b) throws IOException { }
     };
-    
+
     /**
      * PrintStream that does nothing
      */
     public static final PrintStream nopPrintStream = new PrintStream(nopOutputStream);
-    
+
     @Primary private static final class PrimaryAnnotated {}
     public static final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
 
-    
-    
+
+
 
 }

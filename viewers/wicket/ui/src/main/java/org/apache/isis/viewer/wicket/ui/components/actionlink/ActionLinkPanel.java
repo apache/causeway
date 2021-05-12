@@ -36,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class ActionLinkPanel 
+public class ActionLinkPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

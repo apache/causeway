@@ -77,7 +77,7 @@ implements EntityFacet {
         super(EntityFacet.class, holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
     }
-    
+
     @Override
     public PersistenceStandard getPersistenceStandard() {
         return PersistenceStandard.JDO;

@@ -38,8 +38,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<
-    R extends ReprRendererAbstract<R, ManagedMember>, 
-    T extends ObjectMember> 
+    R extends ReprRendererAbstract<R, ManagedMember>,
+    T extends ObjectMember>
 extends ReprRendererAbstract<R, ManagedMember> {
 
     protected enum Mode {

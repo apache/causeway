@@ -28,9 +28,9 @@ import lombok.NonNull;
 interface LogicalTypeResolver {
 
     Optional<LogicalType> lookup(@NonNull String logicalTypeName);
-    
+
     void register(@NonNull ObjectSpecification spec);
-    
+
     void clear();
 
 }

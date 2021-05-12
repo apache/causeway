@@ -42,7 +42,7 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
             return;
         }
 
-        val digits = processMethodContext.synthesizeOnMethod(Digits.class).orElse(null); 
+        val digits = processMethodContext.synthesizeOnMethod(Digits.class).orElse(null);
         if (digits == null) {
             return;
         }

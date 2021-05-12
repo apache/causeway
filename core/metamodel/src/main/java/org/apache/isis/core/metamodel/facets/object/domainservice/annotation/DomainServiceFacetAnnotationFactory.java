@@ -35,13 +35,13 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import lombok.val;
 
 public class DomainServiceFacetAnnotationFactory
-extends FacetFactoryAbstract 
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public DomainServiceFacetAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    
+
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
@@ -63,7 +63,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        
+
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
             if(!spec.containsFacet(DomainServiceFacet.class)) {
@@ -90,6 +90,6 @@ implements MetaModelRefiner {
         });
 
     }
-    
+
 
 }

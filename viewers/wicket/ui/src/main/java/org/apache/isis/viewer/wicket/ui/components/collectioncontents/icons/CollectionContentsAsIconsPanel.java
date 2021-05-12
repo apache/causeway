@@ -35,7 +35,7 @@ import lombok.val;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using a simple list of icons.
  */
-public class CollectionContentsAsIconsPanel 
+public class CollectionContentsAsIconsPanel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -51,7 +51,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         final EntityCollectionModel model = getModel();
         final List<ManagedObject> adapterList = model.getObject();
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
-        
+
         add(entityInstances);
         for (val adapter : adapterList) {
             final String childId = entityInstances.newChildId();

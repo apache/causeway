@@ -35,7 +35,7 @@ public class ExcelDemoToDoItem_export {
     public ExcelDemoToDoItem_export(final ExcelDemoToDoItem toDoItem) {
         this.toDoItem = toDoItem;
     }
-    
+
     public Blob act() {
         throw new UnsupportedOperationException();
 //        if(actionInvocationContext.isLast()) {

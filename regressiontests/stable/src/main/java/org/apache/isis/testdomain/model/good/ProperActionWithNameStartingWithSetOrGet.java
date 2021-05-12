@@ -27,31 +27,31 @@ import org.apache.isis.applib.annotation.Nature;
 public class ProperActionWithNameStartingWithSetOrGet {
 
     // -- SET
-    
+
     // corner case: action starting with set
     @Action
     public ProperActionWithNameStartingWithSetOrGet setToValue(final int value) {
         return this;
     }
-    
+
     // should be properly picked up as supporting method
     @MemberSupport
-    public int default0SetToValue() { 
+    public int default0SetToValue() {
         return 0;
     }
-    
+
     // -- GET
-    
+
     // corner case: action starting with get
     @Action
     public ProperActionWithNameStartingWithSetOrGet getFromValue(final int value) {
         return this;
     }
-    
+
     // should be properly picked up as supporting method
     @MemberSupport
-    public int default0GetFromValue() { 
+    public int default0GetFromValue() {
         return 0;
     }
-    
+
 }

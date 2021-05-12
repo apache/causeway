@@ -51,7 +51,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-    
+
         val facetedMethod = processMethodContext.getFacetHolder();
         val parameters = facetedMethod.getParameters();
 
@@ -60,7 +60,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         }
 
         // attach DefaultFacetForParameters if defaultNumMethod is found ...
-        
+
         val actionMethod = processMethodContext.getMethod();
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
@@ -70,29 +70,29 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
                 .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
-        
+
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            
+
             val defaultMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();
-            
+
             processMethodContext.removeMethod(defaultMethod);
 
             if (facetedMethod.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
                 val cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new default syntax for " 
+                throw new MetaModelException(cls + " uses both old and new default syntax for "
                         + actionMethod.getName() + "(...) - must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             //val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
             val ppmFactory = searchResult.getPpmFactory();
-            
+
             super.addFacet(new ActionParameterDefaultsFacetViaMethod(
                     defaultMethod, paramIndex, ppmFactory, paramAsHolder));
         });
     }
-    
+
 
 }

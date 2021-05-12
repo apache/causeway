@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionParameterDefaultsFacetViaMethod 
-extends ActionParameterDefaultsFacetAbstract 
+public class ActionParameterDefaultsFacetViaMethod
+extends ActionParameterDefaultsFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -78,18 +78,18 @@ implements ImperativeFacet {
 
     @Override
     public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
-            
-        // call with args: defaultNAct(X x, Y y, ...) 
-        
+
+        // call with args: defaultNAct(X x, Y y, ...)
+
         val defaultValue = ppmFactory.isPresent()
             // PPM programming model
             ? ManagedObjects.InvokeUtil
-                    .invokeWithPPM(ppmFactory.get(), method, 
+                    .invokeWithPPM(ppmFactory.get(), method,
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues())
             // else support legacy programming model, call any-arg defaultNAct(...)
             : ManagedObjects.InvokeUtil
-                    .invokeAutofit(method, 
-                        pendingArgs.getActionTarget(), pendingArgs.getParamValues());     
+                    .invokeAutofit(method,
+                        pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
         return defaultValue;
     }
@@ -103,6 +103,6 @@ implements ImperativeFacet {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
-   
+
 
 }

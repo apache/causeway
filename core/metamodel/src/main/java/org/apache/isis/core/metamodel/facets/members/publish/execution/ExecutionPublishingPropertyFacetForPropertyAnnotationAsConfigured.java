@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured 
+public class ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured
 extends ExecutionPublishingPropertyFacetForPropertyAnnotation {
-    
+
     public ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(final FacetHolder holder) {
         super(holder);
     }

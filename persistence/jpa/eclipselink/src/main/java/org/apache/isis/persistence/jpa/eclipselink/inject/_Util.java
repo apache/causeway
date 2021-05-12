@@ -42,7 +42,7 @@ final class _Util {
 
     static <T> CreationalContext<T> createCreationalContext(Contextual<T> contextual) {
         return new CreationalContext<T>() {
-        
+
             @Override
             public void push(T incompleteInstance) {
                 // silently ignore
@@ -52,19 +52,19 @@ final class _Util {
             public void release() {
                 // silently ignore
             }
-            
+
         };
     }
-    
+
     static <T> AnnotatedType<T> createAnnotatedType(Class<T> type) {
-        
+
         return new AnnotatedType<T>() {
 
             @Override
             public Class<T> getJavaClass() {
                 return type;
             }
-            
+
             @Override
             public Type getBaseType() {
                 _Exceptions.throwNotImplemented();
@@ -114,11 +114,11 @@ final class _Util {
             }
         };
     }
-    
+
     static <T> InjectionTarget<T> createInjectionTarget(
             final AnnotatedType<T> type,
             final Provider<ServiceInjector> serviceInjectorProvider) {
-        
+
         return new InjectionTarget<T>() {
 
             @Override @SneakyThrows
@@ -130,7 +130,7 @@ final class _Util {
             public void inject(T instance, CreationalContext<T> ctx) {
                 serviceInjectorProvider.get().injectServicesInto(instance);
             }
-            
+
             @Override
             public void dispose(T instance) {
                 // silently ignore
@@ -153,5 +153,5 @@ final class _Util {
             }
         };
     }
-    
+
 }

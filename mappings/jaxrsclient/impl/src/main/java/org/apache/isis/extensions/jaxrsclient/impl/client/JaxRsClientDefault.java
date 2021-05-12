@@ -123,12 +123,12 @@ public class JaxRsClientDefault implements JaxRsClient {
     }
 
     private MediaType mediaTypeFor(final Class<?> dtoClass, final String reprType) {
-        
+
      // application/xml;profile="urn~org.restfulobjects~repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
         val parameters = new HashMap<String,String>();
         parameters.put("profile", "urn:org.restfulobjects:repr-types/" + reprType);
         parameters.put("x-ro-domain-type", dtoClass.getName());
-        
+
         return new MediaType("application", "xml", parameters);
     }
 

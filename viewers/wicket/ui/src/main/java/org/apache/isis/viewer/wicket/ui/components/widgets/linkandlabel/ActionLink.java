@@ -55,7 +55,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         super(id, model);
 
         this.commonContext = commonContext;
-        
+
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
                 useIndicatorForNoArgAction
@@ -70,14 +70,14 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         objectAction = model.getMetaModel();
 
     }
-    
+
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     @Override
     public void onClick(AjaxRequestTarget target) {
-        
+
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
 

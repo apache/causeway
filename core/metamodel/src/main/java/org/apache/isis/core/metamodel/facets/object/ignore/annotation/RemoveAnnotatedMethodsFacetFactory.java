@@ -85,8 +85,8 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
     }
 
     private static <T extends Annotation> void removeAnnotatedMethods(
-            final MethodRemover methodRemover, 
-            final Method method, 
+            final MethodRemover methodRemover,
+            final Method method,
             final Class<T> annotationClass) {
 
         if (!Annotations.isAnnotationPresent(method, annotationClass)) {

@@ -32,24 +32,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 public interface ScalarUiModel {
 
     ObjectFeature getMetaModel();
-    
+
     /** action's or property's owner */
     ManagedObject getOwner();
-    
+
     /** feature name */
     default String getName() {
         return getMetaModel().getName();
     }
-    
+
     default boolean isCollection() {
         return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
                 || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
-    
+
     default String getDescribedAs() {
         return getMetaModel().getDescription();
     }
-    
+
     /**
      * for {@link BigDecimal}s only.
      *
@@ -79,12 +79,12 @@ public interface ScalarUiModel {
         final FileAcceptFacet facet = getMetaModel().getFacet(FileAcceptFacet.class);
         return facet != null? facet.value(): null;
     }
-   
+
     int getAutoCompleteMinLength();
     boolean hasChoices();
     boolean hasAutoComplete();
     ManagedObject getDefault();
     Can<ManagedObject> getChoices();
     Can<ManagedObject> getAutoComplete(final String searchArg);
-    
+
 }

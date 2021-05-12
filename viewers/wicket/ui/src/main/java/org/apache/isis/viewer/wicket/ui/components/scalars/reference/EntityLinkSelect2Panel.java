@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
-class EntityLinkSelect2Panel 
-extends FormComponentPanelAbstract<ManagedObject> 
+class EntityLinkSelect2Panel
+extends FormComponentPanelAbstract<ManagedObject>
 implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
