@@ -353,7 +353,7 @@ public interface ObjectAction extends ObjectMember {
             .filter(ObjectAction.Predicates.isNotInAnyLayoutGroup(spec))
             .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
                     InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(ObjectAction.Predicates.excludeWizardActions(spec));
+            .filter(ObjectAction.Predicates.isNotWizard(spec));
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -364,7 +364,7 @@ public interface ObjectAction extends ObjectMember {
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.isSameLayoutGroup(association))
-            .filter(ObjectAction.Predicates.excludeWizardActions(spec))
+            .filter(ObjectAction.Predicates.isNotWizard(spec))
             .sorted(Comparators.byMemberOrderSequence(false));
         }
 
@@ -500,11 +500,11 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        private static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
-            return wizardActions(objectSpecification).negate();
+        private static Predicate<ObjectAction> isNotWizard(final ObjectSpecification objectSpecification) {
+            return isWizard(objectSpecification).negate();
         }
 
-        private static Predicate<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
+        private static Predicate<ObjectAction> isWizard(final ObjectSpecification objectSpecification) {
             return (ObjectAction input) -> {
                 if (objectSpecification == null) {
                     return false;

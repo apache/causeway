@@ -112,6 +112,9 @@ extends
      * Returns all actions that are associated with this collection,
      * and hence should be rendered close to this collection's UI representation.
      * Typically at the top bar of the UI collection panel.
+     * <p>
+     * Order matters, that is the order of returned actions corresponds to the order of
+     * rendered (action) buttons.
      */
     default Can<ObjectAction> getAssociatedActions() {
         return Can.empty();
@@ -121,6 +124,8 @@ extends
      * Returns all actions that are targets for the multi-select UI feature.
      * That typically means, their first parameter is a non-scalar type with an
      * element type that corresponds to the element type of this collection.
+     * <p>
+     * Order does not matter.
      */
     default Can<ObjectAction> getActionsWithChoicesFrom() {
         return Can.empty();

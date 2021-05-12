@@ -28,7 +28,9 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -103,6 +105,7 @@ implements
         val associatedActions = managedCollection.getOwner().getSpecification()
                 .streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction.Predicates.associatedWith(collection))
+                .sorted(this::deweyOrderCompare)
                 .collect(Can.toCan());
         return associatedActions;
     }
@@ -177,6 +180,18 @@ implements
 
     public ObjectMemento getParentObjectAdapterMemento() {
         return entityModel.memento();
+    }
+
+    // -- ACTION ORDER
+
+    private int deweyOrderCompare(ObjectAction a, ObjectAction b) {
+        val seqA = a.lookupFacet(LayoutOrderFacet.class)
+            .map(LayoutOrderFacet::getSequence)
+            .orElse("1");
+        val seqB = b.lookupFacet(LayoutOrderFacet.class)
+            .map(LayoutOrderFacet::getSequence)
+            .orElse("1");
+        return _Comparators.deweyOrderCompare(seqA, seqB);
     }
 
 
