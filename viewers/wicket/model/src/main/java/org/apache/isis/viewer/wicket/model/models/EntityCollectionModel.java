@@ -110,8 +110,8 @@ extends
 
     /**
      * Returns all actions that are associated with this collection,
-     * and hence should be rendered close to the collection,
-     * typically at the top bar of the UI collection panel.
+     * and hence should be rendered close to this collection's UI representation.
+     * Typically at the top bar of the UI collection panel.
      */
     default Can<ObjectAction> getAssociatedActions() {
         return Can.empty();
@@ -120,14 +120,14 @@ extends
     /**
      * A subset of {@link #getAssociatedActions()}, with the additional
      * constraint of these actions being targets for the multi-select UI feature.
-     * That typically means, there first parameter is a non-scalar type with an
+     * That typically means, their first parameter is a non-scalar type with an
      * element type that corresponds to the element type of this collection.
      */
     default Can<ObjectAction> getAssociatedActionsWithBulkSupport() {
         return Can.empty();
     }
 
-    // -- TOGGLE SUPPORT
+    // -- TOGGLE SUPPORT / MULTI-SELECT FEATURE
 
     Can<ObjectMemento> getToggleMementosList();
     void clearToggleMementosList();
