@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.other.embedded;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -26,6 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
+@Profile("demo-jdo")
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.EmbeddedTypeMenu")
 @RequiredArgsConstructor
 public class EmbeddedTypeMenu {

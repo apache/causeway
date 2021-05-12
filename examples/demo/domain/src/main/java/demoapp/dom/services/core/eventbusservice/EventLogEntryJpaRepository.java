@@ -32,28 +32,28 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
 
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 @Repository
 @Named("demo.eventLogRepository")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class EventLogEntryJdoRepository
-implements EventLogEntryRepository<EventLogEntryJdo> {
+public class EventLogEntryJpaRepository
+implements EventLogEntryRepository<EventLogEntryJpa> {
 
     final RepositoryService repositoryService;
 
     @Override
-    public List<EventLogEntryJdo> listAll(){
-        return repositoryService.allInstances(EventLogEntryJdo.class);
+    public List<EventLogEntryJpa> listAll(){
+        return repositoryService.allInstances(EventLogEntryJpa.class);
     }
 
     @Override
-    public void add(EventLogEntryJdo entry) {
+    public void add(EventLogEntryJpa entry) {
         repositoryService.persist(entry);
     }
 
     @Override
-    public EventLogEntryJdo newEntityFor(UiButtonEvent event) {
-        return EventLogEntryJdo.of(event);
+    public EventLogEntryJpa newEntityFor(UiButtonEvent event) {
+        return EventLogEntryJpa.of(event);
     }
 
 }
