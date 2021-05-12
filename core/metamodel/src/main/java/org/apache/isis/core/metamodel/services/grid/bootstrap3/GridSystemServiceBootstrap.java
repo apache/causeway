@@ -55,8 +55,10 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
@@ -209,7 +211,10 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
         val boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
 
         for (val fieldSet : gridModel.fieldSets()) {
-            val fieldSetId = fieldSet.getId();
+            val fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
+                .orElseThrow(()->_Exceptions.illegalArgument("invalid fieldSet detected, "
+                        + "requires at least an id or a name"))
+                .getId();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
             if(boundAssociationIds == null) {
                 boundAssociationIds = stream(fieldSet.getProperties())

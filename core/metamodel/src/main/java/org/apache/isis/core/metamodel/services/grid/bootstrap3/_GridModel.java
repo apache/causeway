@@ -30,6 +30,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,19 +47,19 @@ final class _GridModel {
         private final LinkedHashMap<String, BS3Row> rows = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, BS3Col> cols = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, FieldSet> fieldSets = _Maps.newLinkedHashMap();
-        
+
         @Getter private BS3Col colForUnreferencedActionsRef;
         @Getter private BS3Col colForUnreferencedCollectionsRef;
         @Getter private FieldSet fieldSetForUnreferencedActionsRef;
         @Getter private FieldSet fieldSetForUnreferencedPropertiesRef;
         @Getter private BS3TabGroup tabGroupForUnreferencedCollectionsRef;
-        
-        private boolean duplicateIdDetected = false;
-        
+
+        private boolean gridErrorsDetected = false;
+
         public boolean contains(String id) {
             return allIds.contains(id);
         }
-        
+
         public Collection<FieldSet> fieldSets() {
             return fieldSets.values();
         }
@@ -68,17 +69,17 @@ final class _GridModel {
         public FieldSet getFieldSet(String id) {
             return fieldSets.get(id);
         }
-        
+
         /**
          * find all row and col ids<br>
          * - ensure that all Ids are different<br>
-         * - ensure that there is exactly one col with the 
+         * - ensure that there is exactly one col with the
          * unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
          * @param bs3Grid
          * @return empty if not valid
          */
         public static Optional<_GridModel> createFrom(BS3Grid bs3Grid) {
-            
+
             val gridModel = new _GridModel();
 
             bs3Grid.visit(new BS3Grid.VisitorAdapter(){
@@ -89,8 +90,8 @@ final class _GridModel {
                         return;
                     }
                     if(gridModel.contains(id)) {
-                        bs3Row.setMetadataError("There is another element in the grid with this id");
-                        gridModel.duplicateIdDetected = true;
+                        bs3Row.setMetadataError("There is another element in the grid with this id: " + id);
+                        gridModel.gridErrorsDetected = true;
                         return;
                     }
                     gridModel.putRow(id, bs3Row);
@@ -103,8 +104,8 @@ final class _GridModel {
                         return;
                     }
                     if(gridModel.contains(id)) {
-                        bs3Col.setMetadataError("There is another element in the grid with this id");
-                        gridModel.duplicateIdDetected = true;
+                        bs3Col.setMetadataError("There is another element in the grid with this id: " + id);
+                        gridModel.gridErrorsDetected = true;
                         return;
                     }
                     gridModel.putCol(id, bs3Col);
@@ -112,20 +113,26 @@ final class _GridModel {
 
                 @Override
                 public void visit(final FieldSet fieldSet) {
-                    String id = fieldSet.getId();
+                    val groupIdAndName = GroupIdAndName.forFieldSet(fieldSet);
+                    if(!groupIdAndName.isPresent()) {
+                        fieldSet.setMetadataError("a fieldset must at least have an id or a name");
+                        gridModel.gridErrorsDetected = true;
+                        return;
+                    }
+                    String id = groupIdAndName.get().getId();
                     if(gridModel.contains(id)) {
-                        fieldSet.setMetadataError("There is another element in the grid with this id");
-                        gridModel.duplicateIdDetected = true;
+                        fieldSet.setMetadataError("There is another element in the grid with this id: " + id);
+                        gridModel.gridErrorsDetected = true;
                         return;
                     }
                     gridModel.putFieldSet(id, fieldSet);
                 }
             });
-            
-            if(gridModel.duplicateIdDetected) {
+
+            if(gridModel.gridErrorsDetected) {
                 return Optional.empty();
             }
-            
+
             bs3Grid.visit(new BS3Grid.VisitorAdapter(){
 
                 @Override
@@ -193,32 +200,32 @@ final class _GridModel {
             if(gridModel.colForUnreferencedCollectionsRef == null && gridModel.tabGroupForUnreferencedCollectionsRef == null) {
                 bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
             }
-            
-            final boolean hasErrors = 
-                    gridModel.colForUnreferencedActionsRef == null 
-                    && gridModel.fieldSetForUnreferencedActionsRef == null 
-                    || gridModel.fieldSetForUnreferencedPropertiesRef == null 
-                    || gridModel.colForUnreferencedCollectionsRef == null 
+
+            final boolean hasErrors =
+                    gridModel.colForUnreferencedActionsRef == null
+                    && gridModel.fieldSetForUnreferencedActionsRef == null
+                    || gridModel.fieldSetForUnreferencedPropertiesRef == null
+                    || gridModel.colForUnreferencedCollectionsRef == null
                     && gridModel.tabGroupForUnreferencedCollectionsRef == null;
 
             return hasErrors ? Optional.empty() : Optional.of(gridModel);
-            
+
         }
-        
+
         private void putRow(String id, BS3Row bs3Row) {
             rows.put(id, bs3Row);
-            allIds.add(id);            
+            allIds.add(id);
         }
         private void putCol(String id, BS3Col bs3Col) {
             cols.put(id, bs3Col);
-            allIds.add(id);            
+            allIds.add(id);
         }
         private void putFieldSet(String id, FieldSet fieldSet) {
             fieldSets.put(id, fieldSet);
-            allIds.add(id);            
+            allIds.add(id);
         }
         private static Boolean isSet(final Boolean flag) {
             return flag != null && flag;
         }
-        
+
     }
