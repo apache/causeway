@@ -108,7 +108,22 @@ extends
     ObjectSpecification getTypeOfSpecification();
     ObjectMember getMetaModel();
 
+    /**
+     * Returns all actions that are associated with this collection,
+     * and hence should be rendered close to the collection,
+     * typically at the top bar of the UI collection panel.
+     */
     default Can<ObjectAction> getAssociatedActions() {
+        return Can.empty();
+    }
+
+    /**
+     * A subset of {@link #getAssociatedActions()}, with the additional
+     * constraint of these actions being targets for the multi-select UI feature.
+     * That typically means, there first parameter is a non-scalar type with an
+     * element type that corresponds to the element type of this collection.
+     */
+    default Can<ObjectAction> getAssociatedActionsWithBulkSupport() {
         return Can.empty();
     }
 

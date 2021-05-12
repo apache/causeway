@@ -406,7 +406,7 @@ public interface ObjectAction extends ObjectMember {
             return new AssociatedWith(objectAssociation);
         }
 
-        public static Predicate<ObjectAction> associatedWithAndWithCollectionParameterFor(
+        public static Predicate<ObjectAction> associatedWithAndHavingCollectionParameterFor(
                 final OneToManyAssociation collection) {
 
             final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();

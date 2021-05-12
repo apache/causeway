@@ -103,9 +103,23 @@ implements
             return Can.empty();
         }
         final OneToManyAssociation collection = managedCollection.getCollection();
+        val associatedActions = managedCollection.getOwner().getSpecification()
+                .streamRuntimeActions(MixedIn.INCLUDED)
+                .filter(ObjectAction.Predicates.associatedWith(collection))
+                .collect(Can.toCan());
+        return associatedActions;
+    }
+
+    @Override
+    public Can<ObjectAction> getAssociatedActionsWithBulkSupport() {
+        val managedCollection = getManagedCollection();
+        if(managedCollection==null) {
+            return Can.empty();
+        }
+        final OneToManyAssociation collection = managedCollection.getCollection();
         return managedCollection.getOwner().getSpecification()
                 .streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collection))
+                .filter(ObjectAction.Predicates.associatedWithAndHavingCollectionParameterFor(collection))
                 .collect(Can.toCan());
     }
 
