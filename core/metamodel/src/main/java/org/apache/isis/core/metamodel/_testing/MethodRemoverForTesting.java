@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
@@ -71,11 +72,15 @@ public class MethodRemoverForTesting implements MethodRemover {
         public int paramCount;
     }
 
-
-
     @Override
     public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
         removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
+    }
+
+    @Override
+    public Can<Method> snapshot() {
+        // creates a defensive copy, but as far as I know is not thread-safe
+        return Can.ofStream(removedMethodMethodCalls.stream());
     }
 
 

@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -143,6 +144,11 @@ public interface FacetFactory {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
+        @Override
+        public Can<Method> snapshot() {
+            return methodRemover.snapshot();
+        }
+
     }
 
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
@@ -180,7 +186,6 @@ public interface FacetFactory {
             this.methodRemover = methodRemover;
         }
 
-
         @Override
         public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
@@ -189,6 +194,11 @@ public interface FacetFactory {
         @Override
         public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
+        }
+
+        @Override
+        public Can<Method> snapshot() {
+            return methodRemover.snapshot();
         }
 
     }

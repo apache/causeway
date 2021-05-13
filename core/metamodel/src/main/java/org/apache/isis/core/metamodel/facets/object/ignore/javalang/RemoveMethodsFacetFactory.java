@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
@@ -81,8 +80,8 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
 
         for (Method method : methods) {
-            // removeSyntheticOrAbstractMethods(processClassContext);
-            if (method.isSynthetic() || Modifier.isAbstract(method.getModifiers())) {
+            // remove synthetic methods
+            if (method.isSynthetic()) {
                 processClassContext.removeMethod(method);
             }
 

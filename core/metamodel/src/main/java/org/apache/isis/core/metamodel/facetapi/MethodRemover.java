@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 
 /**
@@ -62,6 +63,12 @@ public interface MethodRemover {
     }
 
     void removeMethod(Method method);
+    
+    /**
+     * Returns a defensive copy of the current internal state.
+     * @apiNote introduced for debugging purposes
+     */
+    Can<Method> snapshot();
 
     // -- NOOP IMPLEMENTATION
 
@@ -73,6 +80,11 @@ public interface MethodRemover {
 
         @Override
         public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        }
+
+        @Override
+        public Can<Method> snapshot() {
+            return Can.empty();
         }
 
     };

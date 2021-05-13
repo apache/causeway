@@ -29,11 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -56,11 +51,17 @@ import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
+import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -349,6 +350,21 @@ class DomainModelTest_usingGoodDomain {
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
 
+    }
+
+    @Test
+    void interfaces_shouldSupport_inheritedMembers() {
+
+        val i2Spec = specificationLoader.loadSpecification(ProperInterface2.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+
+        assertEquals(BeanSort.ABSTRACT, i2Spec.getBeanSort());
+        assertHasProperty(i2Spec, "a");
+        assertHasProperty(i2Spec, "b");
+        assertHasProperty(i2Spec, "c");
+        assertHasProperty(i2Spec, "d");
+        assertHasProperty(i2Spec, "e");
+        assertHasProperty(i2Spec, "f");
     }
 
     // -- HELPER

@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -97,6 +98,11 @@ public class FacetedMethodsBuilder {
 
         Stream<Method> streamRemaining() {
             return methodsRemaining.stream();
+        }
+
+        @Override
+        public Can<Method> snapshot() {
+            return Can.ofCollection(methodsRemaining);
         }
 
     }
@@ -172,7 +178,6 @@ public class FacetedMethodsBuilder {
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
-
         getFacetProcessor().process(introspectedClass, methodRemover, inspectedTypeSpec);
 
         // if this class has additional facets (as per @Facets), then process
