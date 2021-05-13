@@ -27,6 +27,7 @@ import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -40,6 +41,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
+@DomainObject(objectType = "isis.ext.secman.api.ApplicationRole")
 public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";

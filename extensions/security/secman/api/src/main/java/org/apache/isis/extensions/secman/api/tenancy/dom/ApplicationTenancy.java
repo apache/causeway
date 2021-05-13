@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -36,6 +37,7 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 /**
  * @since 2.0 {@index}
  */
+@DomainObject(objectType = "isis.ext.secman.api.ApplicationTenancy")
 public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";

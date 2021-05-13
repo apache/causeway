@@ -75,7 +75,7 @@ import lombok.experimental.UtilityClass;
  *
  * @since 2.0 {@index}
  */
-@DomainObject(objectType = "isis.ext.secman.IApplicationPermission")
+@DomainObject(objectType = "isis.ext.secman.api.ApplicationPermission")
 public interface ApplicationPermission extends Comparable<ApplicationPermission> {
 
     String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
