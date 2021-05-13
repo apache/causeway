@@ -34,11 +34,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "accountType",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "accountType",
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )

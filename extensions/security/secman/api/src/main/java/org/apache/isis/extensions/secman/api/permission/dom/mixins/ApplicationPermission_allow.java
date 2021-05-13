@@ -29,11 +29,11 @@ import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPe
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "rule",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "rule",
         sequence = "1"
 )
 @RequiredArgsConstructor

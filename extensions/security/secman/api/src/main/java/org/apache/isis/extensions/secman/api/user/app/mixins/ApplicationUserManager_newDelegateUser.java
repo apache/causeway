@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api.user.app.mixins;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -42,8 +43,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = DomainEvent.class,
-        associateWith = "allUsers")
+        domainEvent = DomainEvent.class
+)
+@ActionLayout(
+        associateWith = "allUsers",
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUserManager_newDelegateUser {
 

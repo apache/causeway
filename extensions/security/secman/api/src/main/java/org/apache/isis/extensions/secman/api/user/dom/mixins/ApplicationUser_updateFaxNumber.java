@@ -30,11 +30,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "faxNumber",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "faxNumber",
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )

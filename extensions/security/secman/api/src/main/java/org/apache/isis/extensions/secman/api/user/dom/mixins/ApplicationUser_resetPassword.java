@@ -35,11 +35,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_res
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "hasPassword",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "hasPassword",
         sequence = "20"
 )
 @RequiredArgsConstructor

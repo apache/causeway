@@ -44,11 +44,11 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action(
-        associateWith = "permissions",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "permissions",
 		named = "Add",
 		promptStyle = PromptStyle.DIALOG_MODAL,
 		sequence = "1"

@@ -47,11 +47,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "permissions",
         domainEvent = ApplicationUser_filterPermissions.DomainEvent.class,
         semantics = SemanticsOf.SAFE
 )
-@ActionLayout(sequence = "1", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(
+        associateWith = "permissions",
+        promptStyle = PromptStyle.DIALOG_MODAL,
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 

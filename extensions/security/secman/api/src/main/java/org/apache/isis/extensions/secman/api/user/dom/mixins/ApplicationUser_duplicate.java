@@ -37,11 +37,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_dup
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "username",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "username",
         position = ActionLayout.Position.PANEL,
         sequence = "1"
 )

@@ -34,11 +34,11 @@ import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_del
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "name",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(
+        associateWith = "name",
         position = ActionLayout.Position.PANEL,
         sequence = "1"
 )

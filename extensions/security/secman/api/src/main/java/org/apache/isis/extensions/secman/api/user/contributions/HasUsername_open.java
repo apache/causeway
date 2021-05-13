@@ -33,10 +33,12 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         semantics = SemanticsOf.SAFE,
-        domainEvent = HasUsername_open.ActionDomainEvent.class,
-        associateWith = "User" // associate with a 'User' property (if any)
-        )
-@ActionLayout(sequence = "1")
+        domainEvent = HasUsername_open.ActionDomainEvent.class
+)
+@ActionLayout(
+        associateWith = "user", // associate with a 'User' property (if any)
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class HasUsername_open {
 

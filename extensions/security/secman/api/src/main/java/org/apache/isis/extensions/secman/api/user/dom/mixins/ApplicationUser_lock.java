@@ -34,12 +34,12 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_loc
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "status",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        named="Disable",
+        associateWith = "status",
+        cssClassFa = "fa-lock",
         sequence = "2"
 )
 @RequiredArgsConstructor

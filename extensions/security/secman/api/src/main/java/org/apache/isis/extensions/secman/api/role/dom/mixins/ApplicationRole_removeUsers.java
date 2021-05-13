@@ -38,11 +38,11 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "users",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "users",
         named = "Remove",
         sequence = "2"
 )

@@ -35,11 +35,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_del
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "username",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(
+        associateWith = "username",
         position = ActionLayout.Position.PANEL,
         sequence = "2"
 )

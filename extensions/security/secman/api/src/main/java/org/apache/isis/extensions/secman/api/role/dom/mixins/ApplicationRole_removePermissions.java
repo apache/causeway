@@ -41,11 +41,11 @@ import org.apache.isis.extensions.secman.api.role.dom.mixins.ApplicationRole_rem
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "permissions",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "permissions",
 		named = "Remove",
 		promptStyle = PromptStyle.DIALOG_MODAL,
 		sequence = "2"

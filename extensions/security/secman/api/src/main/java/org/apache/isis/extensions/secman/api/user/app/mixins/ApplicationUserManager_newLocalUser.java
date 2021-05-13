@@ -23,6 +23,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -44,8 +45,12 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = DomainEvent.class,
-        associateWith = "allUsers")
+        domainEvent = DomainEvent.class
+)
+@ActionLayout(
+        associateWith = "allUsers",
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUserManager_newLocalUser
 extends ApplicationUserManager_newLocalUserAbstract {
