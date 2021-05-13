@@ -38,6 +38,7 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_rem
 import lombok.RequiredArgsConstructor;
 
 @Action(
+        choicesFrom = "roles",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.user.dom.mixins;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -58,9 +59,8 @@ public class ApplicationUser_duplicate {
 
     @MemberSupport
     public ApplicationUser act(
-            @Parameter(optionality = Optionality.MANDATORY)
             final String username,
-            @Parameter(optionality = Optionality.OPTIONAL)
+            @Nullable
             final String emailAddress) {
 
         return applicationUserRepository

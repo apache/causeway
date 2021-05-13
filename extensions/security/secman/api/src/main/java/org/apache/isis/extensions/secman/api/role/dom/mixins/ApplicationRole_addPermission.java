@@ -76,19 +76,11 @@ public class ApplicationRole_addPermission {
      * {@link ApplicationFeature feature}.
      */
     public ApplicationRole act(
-
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
-
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-
-            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
-                    named = "Feature",
-                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
+                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS
+            )
             final ApplicationFeatureChoices.AppFeat feature) {
 
         applicationPermissionRepository.newPermission(target, rule, mode, feature.getFeatureId());

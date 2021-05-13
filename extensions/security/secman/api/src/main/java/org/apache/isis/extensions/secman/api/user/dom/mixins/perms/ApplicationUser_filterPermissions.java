@@ -70,10 +70,9 @@ public class ApplicationUser_filterPermissions {
     @MemberSupport
     public List<UserPermissionViewModel> act(
 
-            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
-                    named = "Feature",
-                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
+                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS
+            )
             final ApplicationFeatureChoices.AppFeat feature) {
 
         val featureId = feature.getFeatureId();

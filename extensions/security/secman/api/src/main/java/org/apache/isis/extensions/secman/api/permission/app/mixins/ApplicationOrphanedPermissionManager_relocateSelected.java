@@ -41,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
+        choicesFrom = "orphanedPermissions",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )

@@ -53,8 +53,7 @@ public class ApplicationUser_updateAccountType {
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act(
-            final AccountType accountType) {
+    public ApplicationUser act(final AccountType accountType) {
         target.setAccountType(accountType);
         return target;
     }
