@@ -15,13 +15,23 @@
 	version="3.1">
 
 	<!-- usually this file helps the DN Eclipse plugin finding the entities, that need enhancing -->
-
-	<package name="org.apache.isis.testdomain.jdo.entities">
-		<class name="JdoProduct" />
-		<class name="JdoProductComment" />
-		<class name="JdoBook" />
-		<class name="JdoInventory" />
+	
+	<package name="org.apache.isis.extensions.secman.jdo.dom.permission">
+		<class name="ApplicationPermission"/>
 	</package>
+	
+	<package name="org.apache.isis.extensions.secman.jdo.dom.role">
+		<class name="ApplicationRole"/>
+	</package>
+	
+	<package name="org.apache.isis.extensions.secman.jdo.dom.tenancy">
+		<class name="ApplicationTenancy"/>
+	</package>
+	
+	<package name="org.apache.isis.extensions.secman.jdo.dom.user">
+		<class name="ApplicationUser"/>
+	</package>
+	
 
 </jdo>
 
