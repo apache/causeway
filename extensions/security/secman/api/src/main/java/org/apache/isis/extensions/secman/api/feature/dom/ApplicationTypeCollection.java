@@ -27,12 +27,17 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationClassCollection"
-        )
-@DomainObjectLayout(paged=100)
+        objectType = ApplicationTypeCollection.OBJECT_TYPE
+)
+@DomainObjectLayout(
+        paged = 100
+)
 public class ApplicationTypeCollection extends ApplicationTypeMember {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTypeCollection";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeCollection, T> {}
 

@@ -40,4 +40,6 @@ import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
 })
 public class IsisModuleJdoMetamodel {
 
+    public static final String NAMESPACE = "isis.persistence.jdo";
+
 }

@@ -70,24 +70,25 @@ import lombok.val;
  */
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isis.ext.secman.UserPermissionViewModel"
-        )
+        objectType = UserPermissionViewModel.OBJECT_TYPE
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-        )
+)
 public class UserPermissionViewModel implements ViewModel {
 
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".UserPermissionViewModel";
+
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<UserPermissionViewModel, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<UserPermissionViewModel, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<UserPermissionViewModel> {}
 
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private FactoryService factory;
-    @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject FactoryService factory;
+    @Inject ApplicationFeatureRepository featureRepository;
+    @Inject ApplicationPermissionRepository applicationPermissionRepository;
 
     // -- constructors, factory methods
+
     public static UserPermissionViewModel newViewModel(
             final ApplicationFeatureId featureId,
             final ApplicationUser user,
@@ -114,6 +115,7 @@ public class UserPermissionViewModel implements ViewModel {
     public String iconName() {
         return "userPermission";
     }
+
 
     // -- ViewModel impl
     @Override
@@ -149,22 +151,22 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationFeatureId changingEvaluationCauseFeatureId = changingEvaluationCause != null? changingEvaluationCause.getFeatureId(): null;
 
         return join(
-        username,
+            username,
 
-        viewingEvaluationGranted,
-        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getSort(): "",
-        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
-        viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
-        viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
+            viewingEvaluationGranted,
+            viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getSort(): "",
+            viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
+            viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
+            viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
 
-        changingEvaluationGranted,
-        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getSort(): "",
-        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
-        changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
-        changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
+            changingEvaluationGranted,
+            changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getSort(): "",
+            changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
+            changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
+            changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
 
-        featureId.getSort(),
-        featureId.getFullyQualifiedName()
+            featureId.getSort(),
+            featureId.getFullyQualifiedName()
         );
     }
 

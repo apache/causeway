@@ -31,12 +31,15 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationNamespace"
-        )
+        objectType = ApplicationNamespace.OBJECT_TYPE
+)
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationNamespace";
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 

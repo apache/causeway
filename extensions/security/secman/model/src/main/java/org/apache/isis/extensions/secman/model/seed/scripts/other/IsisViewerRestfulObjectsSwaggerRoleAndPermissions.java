@@ -16,25 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 
 /**
+ * Provides access to open up the Swagger UI.
+ *
  * @since 2.0 {@index}
  */
-public class IsisExtFixturesFixtureResultsRoleAndPermissions
+public class IsisViewerRestfulObjectsSwaggerRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";
+    private static final String SERVICE_OBJECT_TYPE = "isis.viewer.restfulobjects.SwaggerServiceMenu";
 
-    public IsisExtFixturesFixtureResultsRoleAndPermissions() {
-        super(ROLE_NAME, "Access results of running Fixture Scripts");
+    public static final String ROLE_NAME = SERVICE_OBJECT_TYPE.replace(".","-");
+
+    public IsisViewerRestfulObjectsSwaggerRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the swagger UI");
     }
 
     @Override
@@ -42,7 +46,9 @@ extends AbstractRoleAndPermissionsFixtureScript {
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofSingleton(
-                        ApplicationFeatureId.newType(FixtureResult.OBJECT_TYPE)));
+                Can.of(
+                        ApplicationFeatureId.newType(SERVICE_OBJECT_TYPE)
+                        )
+        );
     }
 }

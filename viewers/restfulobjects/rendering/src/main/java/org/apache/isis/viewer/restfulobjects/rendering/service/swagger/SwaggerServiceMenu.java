@@ -39,18 +39,21 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
 
 
 /**
  * @since 1.x {@index}
  */
-@Named("isis.applib.SwaggerServiceMenu")
-@DomainService(objectType = "isis.applib.SwaggerServiceMenu")
+@Named(SwaggerServiceMenu.OBJECT_TYPE)
+@DomainService(objectType = SwaggerServiceMenu.OBJECT_TYPE)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class SwaggerServiceMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;

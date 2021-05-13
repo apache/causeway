@@ -39,13 +39,15 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepos
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.secman.ApplicationTenancyMenu"
-        )
+        objectType = ApplicationTenancyMenu.OBJECT_TYPE
+)
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 public class ApplicationTenancyMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancyMenu";
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancyMenu, T> {}

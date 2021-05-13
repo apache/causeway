@@ -41,8 +41,12 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(objectType = "isis.ext.secman.api.ApplicationRole")
+@DomainObject(
+        objectType = ApplicationRole.OBJECT_TYPE
+)
 public interface ApplicationRole extends Comparable<ApplicationRole> {
+
+    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRole";
 
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
     String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";

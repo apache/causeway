@@ -45,12 +45,14 @@ import lombok.Getter;
  */
 @DomainService(
     nature = NatureOfService.REST,
-    objectType = "isis.ext.commandReplayPrimary.CommandRetrievalService"
+    objectType = CommandRetrievalService.OBJECT_TYPE
 )
-@Named("isis.ext.commandReplayPrimary.CommandRetrievalService")
+@Named(CommandRetrievalService.OBJECT_TYPE)
 @Order(OrderPrecedence.MIDPOINT)
 //@Log4j2
 public class CommandRetrievalService {
+
+    public static final String OBJECT_TYPE = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalService";
 
     public static abstract class ActionDomainEvent
             extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<CommandRetrievalService> { }

@@ -63,24 +63,24 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission "
+                    + "FROM " + ApplicationPermission.FQCN
                     + "WHERE role == :role"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission "
+                    + "FROM " + ApplicationPermission.FQCN
                     + "WHERE (u.roles.contains(role) && u.username == :username) "
                     + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission "
+                    + "FROM " + ApplicationPermission.FQCN
                     + "WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission "
+                    + "FROM " + ApplicationPermission.FQCN
                     + "WHERE role == :role "
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "
@@ -88,7 +88,7 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission "
+                    + "FROM " + ApplicationPermission.FQCN
                     + "WHERE role == :role "
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "),
@@ -99,7 +99,7 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
             members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationPermission"
+        objectType = ApplicationPermission.OBJECT_TYPE
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
@@ -107,7 +107,9 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 public class ApplicationPermission
     implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
 
-    @Inject private ApplicationFeatureRepository featureRepository;
+    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission";
+
+    @Inject ApplicationFeatureRepository featureRepository;
 
 
     // -- ROLE

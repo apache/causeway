@@ -16,24 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.confview.ConfigurationMenu;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
+import org.apache.isis.applib.services.confview.ConfigurationViewmodel;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 
 /**
- * Role to run in the prototype fixture scripts for the example webapp for the security module.
- *
  * @since 2.0 {@index}
  */
-public class IsisExtSecmanFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisApplibConfigurationRoleAndPermissions
+extends AbstractRoleAndPermissionsFixtureScript {
 
-    public IsisExtSecmanFixtureRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getFixtureRoleName(), "Security module fixtures");
+    public static final String ROLE_NAME = ConfigurationMenu.OBJECT_TYPE.replace(".","-");
+
+    public IsisApplibConfigurationRoleAndPermissions() {
+        super(ROLE_NAME, "Access configuration properties");
     }
 
     @Override
@@ -41,8 +45,11 @@ public class IsisExtSecmanFixtureRoleAndPermissions extends AbstractRoleAndPermi
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofSingleton(
-                        ApplicationFeatureId.newNamespace("isis.ext.secman")));
-
+                Can.of(
+                        ApplicationFeatureId.newType(ConfigurationMenu.OBJECT_TYPE),
+                        ApplicationFeatureId.newType(ConfigurationProperty.OBJECT_TYPE),
+                        ApplicationFeatureId.newType(ConfigurationViewmodel.OBJECT_TYPE)
+                        )
+        );
     }
 }

@@ -31,13 +31,15 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@Named("isis.applib.TranslationServicePoMenu")
-@DomainService(objectType = "isis.applib.TranslationServicePoMenu")
+@Named(TranslationServicePoMenu.OBJECT_TYPE)
+@DomainService(objectType = TranslationServicePoMenu.OBJECT_TYPE)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class TranslationServicePoMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
 
     @Inject private TranslationServicePo translationService;
 

@@ -38,4 +38,6 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 })
 public class IsisModuleCoreSecurity {
+
+    public static final String NAMESPACE = "isis.security";
 }

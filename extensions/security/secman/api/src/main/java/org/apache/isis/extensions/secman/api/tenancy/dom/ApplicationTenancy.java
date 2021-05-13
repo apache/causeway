@@ -37,8 +37,12 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(objectType = "isis.ext.secman.api.ApplicationTenancy")
+@DomainObject(
+        objectType = ApplicationTenancy.OBJECT_TYPE
+)
 public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
+
+    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
 
     String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";

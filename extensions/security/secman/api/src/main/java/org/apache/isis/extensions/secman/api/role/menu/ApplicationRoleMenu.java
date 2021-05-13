@@ -39,14 +39,16 @@ import lombok.RequiredArgsConstructor;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.secman.ApplicationRoleMenu"
-        )
+        objectType = ApplicationRoleMenu.OBJECT_TYPE
+)
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationRoleMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRoleMenu";
 
     // -- domain event classes
     public static class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRoleMenu, T> {}

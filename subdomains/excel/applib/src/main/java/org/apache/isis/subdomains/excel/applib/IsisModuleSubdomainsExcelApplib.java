@@ -27,4 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan
 public class IsisModuleSubdomainsExcelApplib {
+
+    public static final String NAMESPACE = "isis.sub.excel";
+
 }

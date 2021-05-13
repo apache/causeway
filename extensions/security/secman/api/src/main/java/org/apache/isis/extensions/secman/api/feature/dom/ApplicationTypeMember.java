@@ -29,17 +29,20 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 import lombok.NoArgsConstructor;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationTypeMember"
-        )
+        objectType = ApplicationTypeMember.OBJECT_TYPE
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
-        )
+)
 @NoArgsConstructor
 public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTypeMember";
 
     public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
 

@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -29,43 +30,148 @@ import lombok.NonNull;
 import lombok.Singular;
 
 /**
+ * Applications consuming secman must instantiate a
+ * {@link org.springframework.context.annotation.Bean} of this type; secman
+ * then uses this bean to configure itself.
+ *
+ * <p>
+ * The typical place to create this bean is in the top-level
+ * <code>AppManifest</code>
+ * {@link org.springframework.context.annotation.Configuration} class.
+ * </p>
+ *
+ * <p>
+ * This class is implemented as a builder (courtesy of Lombok) but it
+ * provides reasonable defaults.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Builder
 public class SecmanConfiguration {
 
-    // -- ROLES
-
-    @Getter @Builder.Default @NonNull
-    final String regularUserRoleName = "secman-regular-user";
-
-    @Getter @Builder.Default @NonNull
-    final String fixtureRoleName = "secman-fixtures";
-
-    @Getter @Builder.Default @NonNull
-    final String adminRoleName = "secman-admin";
-
     // -- ADMIN
 
-    @Getter @Builder.Default @NonNull
+    /**
+     * The name of the security super user.
+     *
+     * <p>
+     * This user is automatically made a member of the
+     * {@link #getAdminRoleName() admin role}, from which it is granted
+     * permissions to administer other users.
+     * </p>
+     *
+     * <p>
+     * The password for this user is set in {@link #getAdminPassword()}.
+     * </p>
+     *
+     * @see #getAdminPassword()
+     * @see #getAdminRoleName()
+     */
+    @Getter
+    @Builder.Default
+    @NonNull
     final String adminUserName = "secman-admin";
 
     // sonar-ignore-on (detects potential security risk, which we are aware of)
-    @Getter @Builder.Default @NonNull
+    /**
+     * The corresponding password for {@link #getAdminUserName() admin user}.
+     *
+     * @see #getAdminUserName()
+     */
+    @Getter
+    @Builder.Default
+    @NonNull
     final String adminPassword = "pass";
     // sonar-ignore-off
 
     /**
-     * cannot be removed via user interface
+     * The name of security admin role.
+     *
+     * <p>
+     * Users with this role (in particular, the default
+     * {@link #getAdminUserName() admin user} are granted access to a set of
+     * namespaces ({@link #getAdminStickyNamespacePermissions()} and
+     * {@link #getAdminAdditionalNamespacePermissions()}) which are intended to
+     * be sufficient to allow users with this admin role to be able to
+     * administer the security module itself, for example to manage users and
+     * roles.
+     * </p>
+     *
+     * @see #getAdminUserName()
+     * @see #getAdminStickyNamespacePermissions()
+     * @see #getAdminAdditionalNamespacePermissions()
      */
-    @Getter @Builder.Default @NonNull
+    @Getter
+    @Builder.Default
+    @NonNull
+    final String adminRoleName = "secman-admin";
+
+    /**
+     * The set of namespaces to which the {@link #getAdminRoleName() admin role}
+     * is granted.
+     *
+     * <p>
+     * These namespaces are intended to be sufficient to allow users with
+     * this admin role to be able to administer the security module itself,
+     * for example to manage users and roles.  The security user is not
+     * necessarily able to use the main business logic within the domain
+     * application itself, though.
+     * </p>
+     *
+     * <p>
+     * These roles cannot be removed via user interface
+     * </p>
+     *
+     * <p>
+     * WARNING: normally these should not be overridden.  Instead, specify
+     * additional namespaces using
+     * {@link #getAdminAdditionalNamespacePermissions()}.
+     * </p>
+     *
+     * @see #getAdminAdditionalNamespacePermissions()
+     */
+    @Getter
+    @Builder.Default
+    @NonNull
     final String[] adminStickyNamespacePermissions = new String[]{
-            "isis.security",
-            "isis.ext.secman"
+            IsisModuleCoreSecurity.NAMESPACE,
+            IsisModuleExtSecmanApi.NAMESPACE
     };
 
-    @Getter @Singular
+    /**
+     * An (optional) additional set of namespaces that the
+     * {@link #getAdminRoleName() admin role} is granted.
+     *
+     * <p>
+     * These are in addition to the main
+     * {@link #getAdminStickyNamespacePermissions() namespaces} granted.
+     * </p>
+     *
+     * @see #getAdminStickyNamespacePermissions()
+     */
+    @Getter
+    @Singular
     final Set<String> adminAdditionalNamespacePermissions;
+
+
+    // -- REGULAR USER
+
+    /**
+     * The role name for regular users of the application, granting them access
+     * to basic security features.
+     *
+     * <p>
+     *     The exact set of permissions is hard-wired in the
+     *     <code>IsisExtSecmanRegularUserRoleAndPermissions</code> fixture.
+     * </p>
+     */
+    @Getter
+    @Builder.Default
+    @NonNull
+    final String regularUserRoleName = "secman-regular-user";
+
+
 
     /**
      * Delegated users, on first successful logon, are auto-created but disabled (by default).
@@ -74,10 +180,11 @@ public class SecmanConfiguration {
      * users are also auto-enabled.
      * <p>
      * default: false
-     *
      */
-    @Getter @Builder.Default
+    @Getter
+    @Builder.Default
     final boolean autoEnableIfDelegatedAndAuthenticated = false;
+
 
     // -- UTILITIES
 
@@ -89,8 +196,7 @@ public class SecmanConfiguration {
 
     public boolean isStickyAdminNamespace(String featureFqn) {
         return _NullSafe.stream(adminStickyNamespacePermissions)
-        .anyMatch(stickyPackage->stickyPackage.equals(featureFqn));
+                .anyMatch(stickyPackage -> stickyPackage.equals(featureFqn));
     }
-
 
 }

@@ -49,7 +49,7 @@ import lombok.val;
  */
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = "isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService"
+    objectType = CommandReplayOnSecondaryService.OBJECT_TYPE
 )
 @DomainServiceLayout(
     named = "Activity",
@@ -60,6 +60,8 @@ import lombok.val;
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnSecondaryService {
+
+    public static final String OBJECT_TYPE = IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService";
 
     @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
     @Inject final JaxbService jaxbService;

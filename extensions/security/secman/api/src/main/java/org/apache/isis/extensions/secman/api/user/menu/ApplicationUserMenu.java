@@ -35,173 +35,62 @@ import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.secman.ApplicationUserMenu"
+        objectType = ApplicationUserMenu.OBJECT_TYPE
         )
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+    )
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationUserMenu {
 
-    //@Inject private SecmanConfiguration configBean;
-    //@Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    //@Inject private SecurityRealmService securityRealmService;
-    @Inject private FactoryService factory;
-
-    public static abstract class PropertyDomainEvent<T>
-    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUserMenu, T> {
-    }
-
-    public static abstract class CollectionDomainEvent<T>
-    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUserMenu, T> {
-    }
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserMenu";
 
     public static abstract class ActionDomainEvent
-    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserMenu> {
-    }
+        extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserMenu> { }
 
-    public static class FindUsersByNameDomainEvent
-    extends ActionDomainEvent {
-    }
+    private final ApplicationUserRepository applicationUserRepository;
+    private final FactoryService factory;
+
 
     public String iconName() {
         return "applicationUser";
     }
 
+
+
+    public static class FindUsersByNameDomainEvent
+        extends ActionDomainEvent { }
+
     @Action(
             domainEvent = FindUsersByNameDomainEvent.class,
             semantics = SemanticsOf.SAFE
-            )
+    )
     @ActionLayout(sequence = "100.10.2")
     public Collection<? extends ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
     }
 
-    public static class ApplicationUserManagerDomainEvent extends ActionDomainEvent {
-    }
+
+
+    public static class UserManagerDomainEvent extends ActionDomainEvent { }
 
     @Action(
-            domainEvent = ApplicationUserManagerDomainEvent.class,
+            domainEvent = UserManagerDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-            )
+    )
     @ActionLayout(
             sequence = "100.10.3",
-            cssClassFa = "user-plus" )
+            cssClassFa = "user-plus"
+    )
     public ApplicationUserManager userManager() {
-        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
-        return applicationUserManager;
+        return factory.viewModel(new ApplicationUserManager());
     }
-
-//    public static class NewDelegateUserDomainEvent extends ActionDomainEvent {
-//    }
-//
-//    @Action(
-//            domainEvent = NewDelegateUserDomainEvent.class,
-//            semantics = SemanticsOf.NON_IDEMPOTENT
-//            )
-//    @ActionLayout(sequence = "100.10.3", cssClassFa = "user-plus")
-//    public ApplicationUser newDelegateUser(
-//            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
-//            @ParameterLayout(named = "Name")
-//            final String username,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Initial role")
-//            final ApplicationRole initialRole,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Enabled?")
-//            final Boolean enabled) {
-//
-//        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
-//        val newDelegateUserMixin = factory.mixin(
-//                ApplicationUserManager_newDelegateUser.class, applicationUserManager);
-//        return newDelegateUserMixin.act(username, initialRole, enabled);
-//    }
-//
-//    public boolean hideNewDelegateUser() {
-//        return hasNoDelegateAuthenticationRealm();
-//    }
-//
-//    public ApplicationRole default1NewDelegateUser() {
-//        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName()).orElse(null);
-//    }
-
-//    public static class NewLocalUserDomainEvent extends ActionDomainEvent {
-//    }
-//
-//    @Action(
-//            domainEvent = NewLocalUserDomainEvent.class,
-//            semantics = SemanticsOf.IDEMPOTENT
-//            )
-//    @ActionLayout(sequence = "100.10.4", cssClassFa = "user-plus")
-//    public ApplicationUser newLocalUser(
-//            @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
-//            @ParameterLayout(named = "Name")
-//            final String username,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Password")
-//            final Password password,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Repeat password")
-//            final Password passwordRepeat,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Initial role")
-//            final ApplicationRole initialRole,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Enabled?")
-//            final Boolean enabled,
-//            @Parameter(optionality = Optionality.OPTIONAL)
-//            @ParameterLayout(named = "Email Address")
-//            final String emailAddress) {
-//
-//        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
-//        val newLocalUserMixin = factory.mixin(
-//                ApplicationUserManager_newLocalUser.class, applicationUserManager);
-//        return newLocalUserMixin.doAct(username, password, passwordRepeat, initialRole, enabled, emailAddress);
-//    }
-//
-//    public String validateNewLocalUser(
-//            final String username,
-//            final Password password,
-//            final Password passwordRepeat,
-//            final ApplicationRole initialRole,
-//            final Boolean enabled,
-//            final String emailAddress) {
-//
-//        val applicationUserManager = factory.viewModel(new ApplicationUserManager());
-//        val newLocalUserMixin = factory.mixin(
-//                ApplicationUserManager_newLocalUser.class, applicationUserManager);
-//
-//        return newLocalUserMixin.doValidate(
-//                username, password, passwordRepeat, initialRole, enabled, emailAddress);
-//    }
-//
-//    public ApplicationRole default3NewLocalUser() {
-//        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName()).orElse(null);
-//    }
-
-//    public static class AllUsersDomainEvent extends ActionDomainEvent {
-//    }
-//
-//    @Action(
-//            domainEvent = AllUsersDomainEvent.class,
-//            semantics = SemanticsOf.SAFE
-//            )
-//    @ActionLayout(sequence = "100.10.5")
-//    public Collection<? extends ApplicationUser> allUsers() {
-//        return applicationUserRepository.allUsers();
-//    }
-//
-//    private boolean hasNoDelegateAuthenticationRealm() {
-//        val realm = securityRealmService.getCurrentRealm();
-//        return realm == null || !realm.getCharacteristics().contains(SecurityRealmCharacteristic.DELEGATING);
-//    }
-
-
 
 }

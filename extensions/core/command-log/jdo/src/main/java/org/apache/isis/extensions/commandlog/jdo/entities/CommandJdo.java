@@ -54,6 +54,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
 import org.apache.isis.extensions.commandlog.model.util.BigDecimalUtils;
@@ -241,7 +242,7 @@ import lombok.val;
 //        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
 @DomainObject(
-        objectType = "isis.ext.commandLog.Command",
+        objectType = CommandJdo.OBJECT_TYPE,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
@@ -257,6 +258,8 @@ public class CommandJdo
 implements
     CommandModel,
     DomainChangeRecord {
+
+    public final static String OBJECT_TYPE = IsisModuleExtCommandLogJdo.NAMESPACE + ".Command";
 
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
 

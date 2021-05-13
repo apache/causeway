@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -47,12 +48,14 @@ import lombok.Setter;
 )
 @DomainObject(
         editing = Editing.DISABLED,
-        objectType = "isis.applib.ConfigurationProperty"
+        objectType = ConfigurationProperty.OBJECT_TYPE
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)
 @NoArgsConstructor
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
 
     public ConfigurationProperty(final String key, final String value){
         this.key = key;
