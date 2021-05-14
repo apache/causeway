@@ -104,7 +104,7 @@ implements
         final OneToManyAssociation collection = managedCollection.getCollection();
         val associatedActions = managedCollection.getOwner().getSpecification()
                 .streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.associatedWith(collection))
+                .filter(ObjectAction.Predicates.isSameLayoutGroupAs(collection))
                 .sorted(this::deweyOrderCompare)
                 .collect(Can.toCan());
         return associatedActions;

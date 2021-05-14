@@ -349,7 +349,7 @@ public interface ObjectAction extends ObjectMember {
             val spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.isNotInAnyLayoutGroup(spec))
+            .filter(ObjectAction.Predicates.isNotInAnyExistingLayoutGroup(spec))
             .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
                     InteractionInitiatedBy.USER, Where.ANYWHERE))
             .filter(ObjectAction.Predicates.isNotWizard(spec));
@@ -362,7 +362,7 @@ public interface ObjectAction extends ObjectMember {
             val spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.isSameLayoutGroup(association))
+            .filter(ObjectAction.Predicates.isSameLayoutGroupAs(association))
             .filter(ObjectAction.Predicates.isNotWizard(spec))
             .sorted(Comparators.byMemberOrderSequence(false));
         }
@@ -406,9 +406,22 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static Predicate<ObjectAction> associatedWith(final ObjectAssociation association) {
-            //return new AssociateWith(objectAssociation);
-            return isSameLayoutGroup(association);
+        public static Predicate<ObjectAction> isSameLayoutGroupAs(ObjectAssociation association) {
+            final String assocName = association.getName();
+            final String assocId = association.getId();
+            return (ObjectAction objectAction) -> {
+
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
+                    return false;
+                }
+                val layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                    return false;
+                }
+                return layoutGroupId.equalsIgnoreCase(assocName)
+                        || layoutGroupId.equalsIgnoreCase(assocId);
+            };
         }
 
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
@@ -424,31 +437,29 @@ public interface ObjectAction extends ObjectMember {
 
         // -- HELPER
 
-//        private static class AssociateWith implements Predicate<ObjectAction> {
-//            private final @NonNull String memberId;
-//            private final @NonNull String memberName;
-//
-//            public AssociateWith(final @NonNull ObjectAssociation objectAssociation) {
-//                this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
-//                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
-//            }
-//
-//            @Override
-//            public boolean test(final ObjectAction objectAction) {
-//                val associatedWithFacet = objectAction.getFacet(AssociateWithFacet.class);
-//                if(associatedWithFacet == null) {
-//                    return false;
-//                }
-//                val associatedMemberName = associatedWithFacet.value();
-//                if (associatedMemberName == null) {
-//                    return false;
-//                }
-//                val memberNameLowerCase = associatedMemberName.toLowerCase();
-//                return Objects.equals(memberName, memberNameLowerCase)
-//                        || Objects.equals(memberId, memberNameLowerCase);
-//            }
-//
-//        }
+        private static Predicate<ObjectAction> isNotInAnyExistingLayoutGroup(final ObjectSpecification spec) {
+
+            final Set<String> associationNamesAndIds = _Sets.newHashSet();
+
+            spec.streamAssociations(MixedIn.INCLUDED)
+            .forEach(ass->{
+                associationNamesAndIds.add(_Strings.lower(ass.getName()));
+                associationNamesAndIds.add(_Strings.lower(ass.getId()));
+            });
+
+            return (ObjectAction objectAction) -> {
+
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
+                    return true;
+                }
+                val layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                    return true;
+                }
+                return !associationNamesAndIds.contains(layoutGroupId.toLowerCase());
+            };
+        }
 
         private static class ChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;
@@ -514,47 +525,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        private static Predicate<ObjectAction> isSameLayoutGroup(ObjectAssociation association) {
-            final String assocName = association.getName();
-            final String assocId = association.getId();
-            return (ObjectAction objectAction) -> {
 
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
-                val fieldSetId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(fieldSetId)) {
-                    return false;
-                }
-                return fieldSetId.equalsIgnoreCase(assocName)
-                        || fieldSetId.equalsIgnoreCase(assocId);
-            };
-        }
-
-        private static Predicate<ObjectAction> isNotInAnyLayoutGroup(final ObjectSpecification spec) {
-
-            final Set<String> associationNamesAndIds = _Sets.newHashSet();
-
-            spec.streamAssociations(MixedIn.INCLUDED)
-            .forEach(ass->{
-                associationNamesAndIds.add(_Strings.lower(ass.getName()));
-                associationNamesAndIds.add(_Strings.lower(ass.getId()));
-            });
-
-            return (ObjectAction objectAction) -> {
-
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return true;
-                }
-                val fieldSetId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(fieldSetId)) {
-                    return true;
-                }
-                return !associationNamesAndIds.contains(fieldSetId.toLowerCase());
-            };
-        }
     }
 
 

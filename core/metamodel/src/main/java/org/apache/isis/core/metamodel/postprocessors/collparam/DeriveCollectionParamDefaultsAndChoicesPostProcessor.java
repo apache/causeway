@@ -74,7 +74,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                 new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
         objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
-        .filter(ObjectAction.Predicates.associatedWith(collection))
+        .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(collection))
         .forEach(action->{
 
             val parameters = action.getParameters();
