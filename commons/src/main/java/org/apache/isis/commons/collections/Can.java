@@ -539,6 +539,21 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     Can<T> remove(T element);
 
+    /**
+     * Given <i>n</i> indices, returns an equivalent of
+     * <pre>
+     * Can.of(
+     *     this.get(indices[0]).orElse(null),
+     *     this.get(indices[1]).orElse(null),
+     *     ...
+     *     this.get(indices[n-1]).orElse(null)
+     * )
+     * </pre>
+     * (where nulls are being ignored)
+     * @param indices - null-able
+     */
+    Can<T> pickByIndex(@Nullable int ...indices);
+
     // -- SEARCH
 
     /**
@@ -718,6 +733,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
 
 
 }

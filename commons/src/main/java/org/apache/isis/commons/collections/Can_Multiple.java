@@ -220,6 +220,23 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> pickByIndex(final @Nullable int... indices) {
+        if(indices==null
+                ||indices.length==0) {
+            return Can.empty();
+        }
+        val newElements = new ArrayList<T>(indices.length);
+        final int maxIndex = size()-1;
+        for(int index:indices) {
+            if(index>=0
+                    && index<=maxIndex) {
+                newElements.add(elements.get(index));
+            }
+        }
+        return Can.ofCollection(newElements);
+    }
+
+    @Override
     public int indexOf(@NonNull T element) {
         return this.elements.indexOf(element);
     }

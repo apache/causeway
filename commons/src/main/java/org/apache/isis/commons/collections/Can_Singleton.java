@@ -194,6 +194,31 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> pickByIndex(final @Nullable int... indices) {
+        if(indices==null
+                ||indices.length==0) {
+            return Can.empty();
+        }
+        int pickCount = 0; // actual size of the returned Can<T>
+        for(int index:indices) {
+            if(index==0) {
+                ++pickCount;
+            }
+        }
+        if(pickCount==0) {
+            return Can.empty();
+        }
+        if(pickCount==1) {
+            return this;
+        }
+        val newElements = new ArrayList<T>(pickCount);
+        for(int i=0; i<pickCount; i++) {
+            newElements.add(element);
+        }
+        return Can.ofCollection(newElements);
+    }
+
+    @Override
     public int indexOf(@NonNull T element) {
         return this.element.equals(element) ? 0 : -1;
     }

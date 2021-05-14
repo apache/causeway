@@ -169,6 +169,11 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> pickByIndex(final @Nullable int... indices) {
+        return Can.empty();
+    }
+
+    @Override
     public int indexOf(T element) {
         return -1;
     }
