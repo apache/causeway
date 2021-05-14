@@ -51,7 +51,6 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
             val key = spec.getLogicalTypeName();
 
-
             val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
 
             // fail fast
@@ -61,9 +60,9 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
                         + "%s -> %s,\n"
                         + "because there was already a mapping\n "
                         + "%s -> %s",
-                        spec.getLogicalTypeName(),
+                        key,
                         spec.getCorrespondingClass(),
-                        spec.getLogicalTypeName(),
+                        key,
                         previousMapping.getCorrespondingClass());
 
                 throw _Exceptions.unrecoverable(msg);
