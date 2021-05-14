@@ -43,9 +43,6 @@ public class SimulatedUiChoices extends HasValueValidation {
 
     @Override
     public void bind(ManagedValue managedValue) {
-
-        val choices = managedValue.getChoices();
-
         choiceBox.bind(managedValue.getChoices());
         choiceBox.addListener((e,o,n)->{
             choiceBoxUpdateEventCount.increment();
@@ -64,11 +61,18 @@ public class SimulatedUiChoices extends HasValueValidation {
         bind(pendingArgs.getParamModels().getElseFail(paramNr));
     }
 
+    /**
+     * assuming the parameter is a scalar type
+     * @param choiceIndex
+     */
     public void simulateChoiceSelect(int choiceIndex) {
         selectedItem.setValue(choiceBox.getValue().getElseFail(choiceIndex));
     }
 
-    // assuming the parameter is a non-scalar type
+    /**
+     * assuming the parameter is a non-scalar type
+     * @param choiceIndices
+     */
     public void simulateMultiChoiceSelect(int ... choiceIndices) {
         val newValuePojos = choiceBox.getValue()
                 .pickByIndex(choiceIndices)
