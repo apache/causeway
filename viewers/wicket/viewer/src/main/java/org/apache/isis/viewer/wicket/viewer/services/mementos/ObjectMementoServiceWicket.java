@@ -102,7 +102,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
-//        _Probe.errOut("mementoForPojo %s", ""+pojo);
+        //_Probe.errOut("mementoForPojo %s", ""+pojo);
         assertSingleton(pojo);
 
         val managedObject = objectManager.adapt(pojo);

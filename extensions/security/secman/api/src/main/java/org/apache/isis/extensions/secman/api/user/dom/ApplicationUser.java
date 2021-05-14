@@ -52,7 +52,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ApplicationUser.OBJECT_TYPE
+        objectType = IsisModuleExtSecmanApi.NAMESPACE + ".api.ApplicationUser"
 )
 public interface ApplicationUser
         extends HasUsername, HasAtPath, Comparable<ApplicationUser> {

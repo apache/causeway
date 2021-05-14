@@ -24,10 +24,12 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.val;
 
 class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
@@ -46,7 +48,27 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
         if(hasUsableSpecId(spec)) {
-            logicalTypeByName.put(spec.getLogicalTypeName(), spec.getLogicalType());
+
+            val key = spec.getLogicalTypeName();
+
+
+            val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
+
+            // fail fast
+            if(previousMapping!=null) {
+
+                val msg = String.format("failed to register mapping\n"
+                        + "%s -> %s,\n"
+                        + "because there was already a mapping\n "
+                        + "%s -> %s",
+                        spec.getLogicalTypeName(),
+                        spec.getCorrespondingClass(),
+                        spec.getLogicalTypeName(),
+                        previousMapping.getCorrespondingClass());
+
+                throw _Exceptions.unrecoverable(msg);
+            }
+
         }
     }
 
