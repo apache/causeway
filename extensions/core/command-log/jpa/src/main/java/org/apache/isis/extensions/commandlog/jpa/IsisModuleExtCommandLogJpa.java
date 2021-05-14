@@ -46,4 +46,6 @@ import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
         })
 public class IsisModuleExtCommandLogJpa {
 
+    public static final String NAMESPACE = "isis.ext.commandLog";
+
 }

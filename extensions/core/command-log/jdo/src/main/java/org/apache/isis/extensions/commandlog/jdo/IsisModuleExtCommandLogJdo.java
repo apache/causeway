@@ -52,6 +52,8 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 public class IsisModuleExtCommandLogJdo
 implements IsisModuleExtCommandLogApplib {
 
+    public static final String NAMESPACE = "isis.ext.commandLog";
+
     /**
      * For tests that need to delete the command table first.
      * Should be run in the @Before of the test.

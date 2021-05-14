@@ -44,11 +44,11 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action(
-        associateWith = "permissions",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "permissions",
 		named = "Add",
 		promptStyle = PromptStyle.DIALOG_MODAL,
 		sequence = "1"
@@ -76,19 +76,11 @@ public class ApplicationRole_addPermission {
      * {@link ApplicationFeature feature}.
      */
     public ApplicationRole act(
-
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
-
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-
-            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
-                    named = "Feature",
-                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
+                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS
+            )
             final ApplicationFeatureChoices.AppFeat feature) {
 
         applicationPermissionRepository.newPermission(target, rule, mode, feature.getFeatureId());

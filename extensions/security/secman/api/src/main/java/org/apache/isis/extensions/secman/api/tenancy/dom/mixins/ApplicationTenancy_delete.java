@@ -39,11 +39,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "name",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(
+        associateWith = "name",
         position = ActionLayout.Position.PANEL,
         sequence = "1"
 )

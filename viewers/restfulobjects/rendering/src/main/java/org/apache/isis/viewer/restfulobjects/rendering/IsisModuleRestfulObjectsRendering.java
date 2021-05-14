@@ -66,4 +66,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 
 })
 public class IsisModuleRestfulObjectsRendering {
+
+    public static final String NAMESPACE = "isis.viewer.restfulobjects";
 }

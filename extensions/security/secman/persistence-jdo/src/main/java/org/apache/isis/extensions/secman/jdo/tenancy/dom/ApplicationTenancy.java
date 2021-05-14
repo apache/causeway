@@ -67,29 +67,30 @@ import org.apache.isis.commons.internal.base._Casts;
     @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
+                    + "FROM " + ApplicationTenancy.FQCN
                     + "WHERE path == :path"),
     @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
+                    + "FROM " + ApplicationTenancy.FQCN
                     + "WHERE name == :name"),
     @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy "
+                    + "FROM " + ApplicationTenancy.FQCN
                     + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationTenancy",
+        objectType = ApplicationTenancy.OBJECT_TYPE,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
-        )
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationTenancy
     implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
+    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
 
     // -- NAME
 

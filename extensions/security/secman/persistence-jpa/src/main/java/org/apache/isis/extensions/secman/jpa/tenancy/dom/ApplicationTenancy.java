@@ -71,7 +71,7 @@ import org.apache.isis.commons.internal.base._Casts;
                   + "    OR t.path LIKE :regex"),
 })
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationTenancy",
+        objectType = ApplicationTenancy.OBJECT_TYPE,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
         )

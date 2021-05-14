@@ -36,11 +36,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "roles",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "roles",
         named="Add",
         sequence = "1"
 )

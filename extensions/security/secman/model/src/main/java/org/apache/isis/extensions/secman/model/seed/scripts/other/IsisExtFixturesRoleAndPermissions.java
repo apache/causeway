@@ -16,27 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts;
+package org.apache.isis.extensions.secman.model.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 /**
+ * Access to <code>isis.ext.fixtures</code> namespace
+ * ({@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts}
+ * and {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult}.
+ *
  * @since 2.0 {@index}
  */
-public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtFixturesRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private String[] adminInitialPackagePermissions;
+    public static final String ROLE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE.replace(",","-");
 
-    public IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getAdminRoleName(), "Administer security");
-        this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
-                .collect(_Arrays.toArray(String.class));
+    public IsisExtFixturesRoleAndPermissions() {
+        super(ROLE_NAME, String.format("Ability to run fixture scripts (access to the '%s' namespace)", IsisModuleTestingFixturesApplib.NAMESPACE));
     }
 
     @Override
@@ -44,8 +46,8 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofArray(adminInitialPackagePermissions)
-                    .map(ApplicationFeatureId::newNamespace));
-    }
+                Can.ofSingleton(
+                        ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE)));
 
+    }
 }

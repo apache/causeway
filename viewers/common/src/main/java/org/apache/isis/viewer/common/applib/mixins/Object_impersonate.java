@@ -42,10 +42,10 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         cssClassFa = "fa-mask",
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,

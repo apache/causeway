@@ -66,18 +66,17 @@ import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissio
     @Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
+                    + "FROM " + ApplicationRole.FQCN
                     + "WHERE name == :name"),
     @Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole "
+                    + "FROM " + ApplicationRole.FQCN
                     + "WHERE name.matches(:regex) ")
 })
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        //		bounded = true,
-        objectType = "isis.ext.secman.ApplicationRole",
+        objectType = ApplicationRole.OBJECT_TYPE,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteAction = "findMatching"
         )
@@ -86,6 +85,8 @@ import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissio
         )
 public class ApplicationRole
     implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
+
+    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 

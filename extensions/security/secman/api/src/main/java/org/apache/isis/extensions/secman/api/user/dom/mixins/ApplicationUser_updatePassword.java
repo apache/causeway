@@ -39,11 +39,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "hasPassword",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "hasPassword",
         sequence = "10"
 )
 @RequiredArgsConstructor

@@ -22,6 +22,16 @@ import javax.inject.Inject;
 
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisApplibConfigurationRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisApplibMetaModelRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisApplibTranslationRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisExtFixturesRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.secman.GlobalTenancy;
+import org.apache.isis.extensions.secman.model.seed.scripts.secman.IsisExtSecmanAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.secman.IsisExtSecmanAdminUser;
+import org.apache.isis.extensions.secman.model.seed.scripts.secman.IsisExtSecmanRegularUserRoleAndPermissions;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
@@ -43,18 +53,18 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());
 
-        // security module
+        // secman (admin and regular users)
         executionContext.executeChild(this, new IsisExtSecmanAdminRoleAndPermissions(configBean));
-
-        executionContext.executeChild(this, new IsisExtSecmanFixtureRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanAdminUser(configBean));
         executionContext.executeChild(this, new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisExtSecmanAdminUser(configBean));
-
-        // isis applib
-        executionContext.executeChild(this, new IsisExtFixturesFixtureResultsRoleAndPermissions());
+        // other modules
+        executionContext.executeChild(this, new IsisApplibConfigurationRoleAndPermissions());
+        executionContext.executeChild(this, new IsisApplibTranslationRoleAndPermissions());
+        executionContext.executeChild(this, new IsisApplibMetaModelRoleAndPermissions());
+        executionContext.executeChild(this, new IsisExtFixturesRoleAndPermissions());
+        executionContext.executeChild(this, new IsisSudoImpersonateRoleAndPermissions());
+        executionContext.executeChild(this, new IsisViewerRestfulObjectsSwaggerRoleAndPermissions());
     }
-
-
 
 }

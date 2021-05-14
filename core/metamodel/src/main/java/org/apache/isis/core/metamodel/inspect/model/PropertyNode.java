@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -34,11 +35,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isis.metamodel.PropertyNode")
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = PropertyNode.OBJECT_TYPE
+)
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class PropertyNode extends MMNode {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".PropertyNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;

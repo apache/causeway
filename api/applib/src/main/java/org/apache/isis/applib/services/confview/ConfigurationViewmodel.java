@@ -23,34 +23,37 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isis.applib.ConfigurationViewmodel")
+        objectType = ConfigurationViewmodel.OBJECT_TYPE)
 public class ConfigurationViewmodel {
-    
-    @Autowired(required = false) 
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
+
+    @Autowired(required = false)
     private ConfigurationViewService configurationService;
 
     public String title() {
         return "Configuration";
     }
-    
+
     @Collection
     public Set<ConfigurationProperty> getEnvironment(){
         return configurationService!=null
                 ? configurationService.getEnvironmentProperties()
                 : Collections.emptySet();
     }
-    
+
     @Collection
     public Set<ConfigurationProperty> getConfiguration(){
         return configurationService!=null
                 ? configurationService.getVisibleConfigurationProperties()
                 : Collections.emptySet();
     }
-    
+
 }

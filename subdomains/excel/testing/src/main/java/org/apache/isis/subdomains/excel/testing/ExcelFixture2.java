@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.subdomains.excel.applib.IsisModuleSubdomainsExcelApplib;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -45,10 +46,11 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = "isis.sub.excel.ExcelFixture2"
+        objectType = ExcelFixture2.OBJECT_TYPE
 )
 public class ExcelFixture2 extends FixtureScript {
 
+    public final static String OBJECT_TYPE = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture2";
 
     /**
      * Input, optional: defines the name of the resource.

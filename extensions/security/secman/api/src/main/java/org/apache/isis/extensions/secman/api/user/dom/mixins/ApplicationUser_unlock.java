@@ -30,12 +30,12 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_unl
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "status",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        named="Enable", // symmetry with lock (disable)
+        associateWith = "status",
+        named = "fa-lock-open",
         sequence = "1"
 )
 @RequiredArgsConstructor

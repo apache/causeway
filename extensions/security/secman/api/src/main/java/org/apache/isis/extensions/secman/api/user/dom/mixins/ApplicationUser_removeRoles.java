@@ -38,12 +38,14 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_rem
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "roles",
+        choicesFrom = "roles",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        named="Remove", sequence = "2"
+        associateWith = "roles",
+        named="Remove",
+        sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationUser_removeRoles {

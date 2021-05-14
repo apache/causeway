@@ -48,6 +48,12 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("isis.applib.")) {
             return ". apache isis applib";
         }
+        if (objType.startsWith("isis.conf.")) {
+            return ". apache isis conf";
+        }
+        if (objType.startsWith("isis.sudo.")) {
+            return ". apache isis sudo";
+        }
         if (objType.startsWith("isis.persistence.")) {
             return ". apache isis persistence - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
         }

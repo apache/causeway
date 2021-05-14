@@ -36,11 +36,11 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "role",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "role",
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )

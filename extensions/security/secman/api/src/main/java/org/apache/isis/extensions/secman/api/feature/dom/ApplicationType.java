@@ -31,15 +31,18 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationType"
-        )
+        objectType = ApplicationType.OBJECT_TYPE
+)
 @DomainObjectLayout(
-        paged=100,
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT,
+        paged=100
+)
 public class ApplicationType extends ApplicationFeatureViewModel {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationType";
 
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}

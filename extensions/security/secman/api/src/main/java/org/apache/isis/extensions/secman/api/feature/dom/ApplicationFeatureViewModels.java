@@ -39,13 +39,15 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.secman.ApplicationFeatureViewModels"
-        )
+        objectType = ApplicationFeatureViewModels.OBJECT_TYPE
+)
 @DomainServiceLayout(
         named="Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
 public class ApplicationFeatureViewModels  {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationFeatureViewModels";
 
     public static abstract class PropertyDomainEvent<T>
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}

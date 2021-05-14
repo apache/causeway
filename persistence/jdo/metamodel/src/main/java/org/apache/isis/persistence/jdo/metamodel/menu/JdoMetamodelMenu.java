@@ -34,17 +34,22 @@ import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
-@Named("isis.persistence.jdo.JdoMetamodelMenu")
-@DomainService(objectType = "isis.persistence.jdo.JdoMetamodelMenu")
+@Named(JdoMetamodelMenu.OBJECT_TYPE)
+@DomainService(
+        objectType = JdoMetamodelMenu.OBJECT_TYPE
+)
 @DomainServiceLayout(
-        named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        named = "Prototyping"
+)
 public class JdoMetamodelMenu {
+
+    public final static String OBJECT_TYPE = IsisModuleJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
 
     @Inject private JdoSupportService jdoSupport;
     @Inject private JdoFacetContext jdoFacetContext;

@@ -53,6 +53,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
 import org.apache.isis.extensions.commandlog.model.util.BigDecimalUtils;
@@ -227,7 +228,7 @@ import lombok.val;
 */
 @Entity
 @DomainObject(
-        objectType = "isis.ext.commandLog.Command",
+        objectType = CommandJpa.OBJECT_TYPE,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
@@ -244,6 +245,7 @@ implements
     CommandModel,
     DomainChangeRecord {
 
+    public final static String OBJECT_TYPE = IsisModuleExtCommandLogJpa.NAMESPACE + ".Command";
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jpa.entities.CommandJpa";
 
     /**

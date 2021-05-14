@@ -41,11 +41,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "orphanedPermissions",
+        choicesFrom = "orphanedPermissions",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(
+        associateWith = "orphanedPermissions",
         describedAs = "For the selected permissions, relocates to the specified namespace"
 )
 @RequiredArgsConstructor

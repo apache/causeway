@@ -42,7 +42,7 @@ import lombok.experimental.Accessors;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.applib.ImpersonateMenu"
+        objectType = ImpersonateMenu.OBJECT_TYPE
 )
 @DomainServiceLayout(
         named = "Security",
@@ -50,6 +50,8 @@ import lombok.experimental.Accessors;
 )
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
 
     final UserService userService;
     final MessageService messageService;
@@ -183,8 +185,5 @@ public class ImpersonateMenu {
     public String disableStopImpersonating() {
         return ! this.userService.isImpersonating() ? "no user is currently being impersonated": null;
     }
-
-
-
 
 }

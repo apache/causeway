@@ -82,22 +82,22 @@ import lombok.val;
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser "
+                    + "FROM " + ApplicationUser.FQCN
                     + "WHERE username == :username"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser "
+                    + "FROM " + ApplicationUser.FQCN
                     + "WHERE emailAddress == :emailAddress"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser "
+                    + "FROM " + ApplicationUser.FQCN
                     + "WHERE atPath == :atPath"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser "
+                    + "FROM " + ApplicationUser.FQCN
                     + "WHERE username.matches(:regex)"
                     + " || familyName.matches(:regex)"
                     + " || givenName.matches(:regex)"
@@ -105,15 +105,17 @@ import lombok.val;
                     + " || emailAddress.matches(:regex)")
 })
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationUser",
+        objectType = ApplicationUser.OBJECT_TYPE,
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteAction = "findMatching"
-        )
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-        )
+)
 public class ApplicationUser
     implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+
+    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;

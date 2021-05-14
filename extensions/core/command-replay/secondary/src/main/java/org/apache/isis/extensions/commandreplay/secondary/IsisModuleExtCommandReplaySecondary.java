@@ -82,6 +82,8 @@ import lombok.val;
 @Profile("secondary")
 public class IsisModuleExtCommandReplaySecondary {
 
+    public static final String NAMESPACE = "isis.ext.commandReplaySecondary";
+
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }
 

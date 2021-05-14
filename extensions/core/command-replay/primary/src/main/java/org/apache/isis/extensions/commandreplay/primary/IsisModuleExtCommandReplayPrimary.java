@@ -50,6 +50,8 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
 @Profile("primary")
 public class IsisModuleExtCommandReplayPrimary {
 
+    public static final String NAMESPACE = "isis.ext.commandReplayPrimary";
+
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }
 

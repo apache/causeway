@@ -47,11 +47,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        associateWith = "permissions",
         domainEvent = ApplicationUser_filterPermissions.DomainEvent.class,
         semantics = SemanticsOf.SAFE
 )
-@ActionLayout(sequence = "1", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(
+        associateWith = "permissions",
+        promptStyle = PromptStyle.DIALOG_MODAL,
+        sequence = "1"
+)
 @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 
@@ -67,10 +70,9 @@ public class ApplicationUser_filterPermissions {
     @MemberSupport
     public List<UserPermissionViewModel> act(
 
-            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(
-                    named = "Feature",
-                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
+                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS
+            )
             final ApplicationFeatureChoices.AppFeat feature) {
 
         val featureId = feature.getFeatureId();

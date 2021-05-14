@@ -37,13 +37,15 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.secman.ApplicationPermissionMenu"
-        )
+        objectType = ApplicationPermissionMenu.OBJECT_TYPE
+)
 @DomainServiceLayout(
-        named="Security",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        named="Security"
+)
 public class ApplicationPermissionMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermissionMenu";
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermissionMenu, T> {}

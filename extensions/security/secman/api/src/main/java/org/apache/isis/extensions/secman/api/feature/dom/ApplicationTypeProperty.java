@@ -29,14 +29,17 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 import lombok.val;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationClassProperty"
-        )
+        objectType = ApplicationTypeProperty.OBJECT_TYPE
+)
 @DomainObjectLayout(paged=100)
 public class ApplicationTypeProperty extends ApplicationTypeMember {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTypeProperty";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeProperty, T> {}
 

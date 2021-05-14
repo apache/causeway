@@ -20,23 +20,20 @@ package org.apache.isis.extensions.secman.api.user.app;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isis.ext.secman.ApplicationUserManager"
-        )
+        objectType = ApplicationUserManager.OBJECT_TYPE
+)
 public class ApplicationUserManager {
 
-//    @Inject private ApplicationUserRepository applicationUserRepository;
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserManager";
 
     public String title() {
         return "Application User Manager";
     }
 
-//XXX provided via mixins, that is one specific to JPA the other specific to JDO
-//    @Collection
-//    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
-//        return applicationUserRepository.allUsers();
-//    }
+    // behaviour provided by mixins
 
 }

@@ -51,9 +51,13 @@ import lombok.val;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(objectType = "isis.ext.secman.api.ApplicationUser")
+@DomainObject(
+        objectType = ApplicationUser.OBJECT_TYPE
+)
 public interface ApplicationUser
         extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
+
+    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUser";
 
     // -- CONSTANTS
 

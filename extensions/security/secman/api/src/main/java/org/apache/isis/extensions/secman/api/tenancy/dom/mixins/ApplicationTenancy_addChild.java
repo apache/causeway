@@ -32,11 +32,11 @@ import org.apache.isis.extensions.secman.api.tenancy.dom.mixins.ApplicationTenan
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "children",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "children",
         named = "Add",
         sequence = "1"
 )

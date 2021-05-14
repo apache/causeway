@@ -30,9 +30,11 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isis.ext.secman.ApplicationOrphanedPermissionManager"
-        )
+        objectType = ApplicationOrphanedPermissionManager.OBJECT_TYPE
+)
 public class ApplicationOrphanedPermissionManager {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationOrphanedPermissionManager";
 
     public static abstract class CollectionDomainEvent<T>
             extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}

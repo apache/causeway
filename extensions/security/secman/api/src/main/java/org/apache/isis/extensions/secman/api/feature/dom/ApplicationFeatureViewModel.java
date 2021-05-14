@@ -63,9 +63,11 @@ import lombok.val;
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
  */
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationFeatureViewModel"
-        )
+        objectType = ApplicationFeatureViewModel.OBJECT_TYPE
+)
 public abstract class ApplicationFeatureViewModel implements ViewModel {
+
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationFeatureViewModel";
 
     public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}
     public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<S, T> {}

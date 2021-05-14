@@ -171,6 +171,8 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
 })
 public class IsisModuleExtSecmanApi {
 
+    public static final String NAMESPACE = "isis.ext.secman";
+
     public abstract static class ActionDomainEvent<S>
     extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 

@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
@@ -65,13 +66,15 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.fixtures.FixtureScripts"
+        objectType = FixtureScripts.OBJECT_TYPE
 )
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class FixtureScripts {
+
+    public static final String OBJECT_TYPE = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;

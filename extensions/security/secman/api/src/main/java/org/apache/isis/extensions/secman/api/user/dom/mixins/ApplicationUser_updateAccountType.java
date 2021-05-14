@@ -34,11 +34,11 @@ import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_upd
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        associateWith = "accountType",
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        associateWith = "accountType",
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
@@ -53,8 +53,7 @@ public class ApplicationUser_updateAccountType {
     private final ApplicationUser target;
 
     @MemberSupport
-    public ApplicationUser act(
-            final AccountType accountType) {
+    public ApplicationUser act(final AccountType accountType) {
         target.setAccountType(accountType);
         return target;
     }
