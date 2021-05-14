@@ -31,6 +31,7 @@
 		
 			<cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
 				<cpt:action id="useChoices"/>
+				<cpt:action id="useChoices2"/>
             	<cpt:action id="useAutoComplete"/>
             	<cpt:action id="useDefault"/>
 	            <cpt:property id="dependentText1"/>
