@@ -24,13 +24,14 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
     private final Map<String, LogicalType> logicalTypeByName = _Maps.newConcurrentHashMap();
@@ -53,7 +54,6 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
             val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
 
-            // fail fast
             if(previousMapping!=null) {
 
                 val msg = String.format("failed to register mapping\n"
@@ -65,7 +65,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
                         key,
                         previousMapping.getCorrespondingClass());
 
-                throw _Exceptions.unrecoverable(msg);
+                log.warn(msg);
             }
 
         }

@@ -495,7 +495,8 @@ implements
                     @Override
                     public void validate(ObjectSpecification objSpec) {
                         if(objSpec.isManagedBean()
-                                || objSpec.isAbstract()) {
+                                // || objSpec.isAbstract() // we allow abstract types now to have their own logical name
+                                ) {
                             return;
                         }
                         collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
