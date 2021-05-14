@@ -23,7 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisConfigurationRoleAndPermissions;
-import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisExtFixturesRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisExtH2ConsoleRoleAndPermissions;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions;
 import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.isis.extensions.secman.model.seed.scripts.secman.GlobalTenancy;
@@ -52,15 +53,19 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new GlobalTenancy());
 
         // secman (admin and regular users)
-        executionContext.executeChild(this, new IsisExtSecmanAdminRoleAndPermissions(configBean));
-        executionContext.executeChild(this, new IsisExtSecmanAdminUser(configBean));
-        executionContext.executeChild(this, new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
+        executionContext.executeChildren(this,
+                new IsisExtSecmanAdminRoleAndPermissions(configBean),
+                new IsisExtSecmanAdminUser(configBean),
+                new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
 
         // other modules
-        executionContext.executeChild(this, new IsisConfigurationRoleAndPermissions());
-        executionContext.executeChild(this, new IsisExtFixturesRoleAndPermissions());
-        executionContext.executeChild(this, new IsisSudoImpersonateRoleAndPermissions());
-        executionContext.executeChild(this, new IsisViewerRestfulObjectsSwaggerRoleAndPermissions());
+        executionContext.executeChildren(this,
+                new IsisConfigurationRoleAndPermissions(),
+                new IsisSudoImpersonateRoleAndPermissions(),
+                new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
+                new IsisPersistenceJdoMetaModelRoleAndPermissions(),
+                new IsisExtH2ConsoleRoleAndPermissions()
+                );
     }
 
 }
