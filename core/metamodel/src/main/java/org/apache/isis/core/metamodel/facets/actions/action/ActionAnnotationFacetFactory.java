@@ -26,6 +26,7 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -272,16 +273,18 @@ extends FacetFactoryAbstract {
             val choicesFrom = action.choicesFrom();
             if(_Strings.isNotEmpty(choicesFrom)) {
                 super.addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
-                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
                 return;
             }
             @SuppressWarnings("deprecation")
             val associateWith = action.associateWith();
             if(_Strings.isNotEmpty(associateWith)) {
                 super.addFacet(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
-                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+                return;
             }
         });
+
+        FacetUtil.addIfNotAlreadyPresent(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {

@@ -40,4 +40,9 @@ extends LayoutGroupFacetAbstract {
         super(groupIdAndName, holder);
     }
 
+    @Override
+    public boolean isFallback() {
+        return true;
+    }
+
 }

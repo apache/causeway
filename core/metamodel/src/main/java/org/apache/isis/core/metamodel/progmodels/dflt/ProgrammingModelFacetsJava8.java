@@ -141,7 +141,6 @@ import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSup
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.all.DeriveAssociateWithFromChoicesFromPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
@@ -372,7 +371,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveAssociateWithFromChoicesFromPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);

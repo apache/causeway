@@ -41,7 +41,6 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.AssociateWithFacetForLayoutXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
@@ -82,7 +81,6 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addIfNotAlreadyPresent;
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
 
 import lombok.Value;
@@ -239,8 +237,6 @@ implements GridSystemService<G> {
                 }
                 addOrReplaceFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
                 addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
-                addIfNotAlreadyPresent(AssociateWithFacetForLayoutXml.create(groupIdAndName, objectAction));
-
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {

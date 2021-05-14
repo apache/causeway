@@ -57,11 +57,6 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
 
-        // associatedWith
-        AssociateWithFacetForActionLayoutAnnotation associatedWithFacet = AssociateWithFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder);
-        super.addFacet(associatedWithFacet);
-
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder);
@@ -83,7 +78,7 @@ extends FacetFactoryAbstract {
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
 
-        // layoutGroup
+        // layoutGroup (explicit via field set, or implicit via associated collection)
         LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(layoutGroupFacet);
 

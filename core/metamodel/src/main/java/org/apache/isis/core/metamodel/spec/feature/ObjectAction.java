@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
-import org.apache.isis.core.metamodel.facets.actions.layout.AssociateWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -407,8 +406,9 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static Predicate<ObjectAction> associatedWith(final ObjectAssociation objectAssociation) {
-            return new AssociateWith(objectAssociation);
+        public static Predicate<ObjectAction> associatedWith(final ObjectAssociation association) {
+            //return new AssociateWith(objectAssociation);
+            return isSameLayoutGroup(association);
         }
 
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
@@ -424,31 +424,31 @@ public interface ObjectAction extends ObjectMember {
 
         // -- HELPER
 
-        private static class AssociateWith implements Predicate<ObjectAction> {
-            private final @NonNull String memberId;
-            private final @NonNull String memberName;
-
-            public AssociateWith(final @NonNull ObjectAssociation objectAssociation) {
-                this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
-                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
-            }
-
-            @Override
-            public boolean test(final ObjectAction objectAction) {
-                val associatedWithFacet = objectAction.getFacet(AssociateWithFacet.class);
-                if(associatedWithFacet == null) {
-                    return false;
-                }
-                val associatedMemberName = associatedWithFacet.value();
-                if (associatedMemberName == null) {
-                    return false;
-                }
-                val memberNameLowerCase = associatedMemberName.toLowerCase();
-                return Objects.equals(memberName, memberNameLowerCase)
-                        || Objects.equals(memberId, memberNameLowerCase);
-            }
-
-        }
+//        private static class AssociateWith implements Predicate<ObjectAction> {
+//            private final @NonNull String memberId;
+//            private final @NonNull String memberName;
+//
+//            public AssociateWith(final @NonNull ObjectAssociation objectAssociation) {
+//                this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
+//                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
+//            }
+//
+//            @Override
+//            public boolean test(final ObjectAction objectAction) {
+//                val associatedWithFacet = objectAction.getFacet(AssociateWithFacet.class);
+//                if(associatedWithFacet == null) {
+//                    return false;
+//                }
+//                val associatedMemberName = associatedWithFacet.value();
+//                if (associatedMemberName == null) {
+//                    return false;
+//                }
+//                val memberNameLowerCase = associatedMemberName.toLowerCase();
+//                return Objects.equals(memberName, memberNameLowerCase)
+//                        || Objects.equals(memberId, memberNameLowerCase);
+//            }
+//
+//        }
 
         private static class ChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;

@@ -63,17 +63,37 @@ implements
 
     // -- FACTORIES FOR ANNOTATIONS
 
+    @SuppressWarnings("deprecation")
     public static Optional<GroupIdAndName> forAction(
             final @NonNull Action action) {
+
+        val nonLegacy = GroupIdAndName.inferIfOneMissing(
+                action.choicesFrom(),
+                null);
+
+        if(nonLegacy.isPresent()) {
+            return nonLegacy;
+        }
+
         return GroupIdAndName.inferIfOneMissing(
-                action.associateWith(), null);
+                action.associateWith(),
+                null);
     }
 
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
-        return GroupIdAndName.inferIfOneMissing(
+
+        val explicit =  GroupIdAndName.inferIfOneMissing(
                 actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
+
+        if(explicit.isPresent()) {
+            return explicit;
+        }
+
+        return GroupIdAndName.inferIfOneMissing(
+                actionLayout.associateWith(),
+                null);
     }
 
     public static Optional<GroupIdAndName> forPropertyLayout(
@@ -173,5 +193,7 @@ implements
                     : idOrName;
 
     }
+
+
 
 }
