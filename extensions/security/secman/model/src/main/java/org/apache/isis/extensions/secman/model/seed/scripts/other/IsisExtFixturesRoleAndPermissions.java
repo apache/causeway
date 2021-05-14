@@ -31,6 +31,10 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
  * ({@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts}
  * and {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult}.
  *
+ * <p>
+ *     Permission
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public class IsisExtFixturesRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {

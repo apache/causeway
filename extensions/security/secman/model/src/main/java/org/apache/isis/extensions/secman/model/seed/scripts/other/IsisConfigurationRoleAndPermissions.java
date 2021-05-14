@@ -31,12 +31,12 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 /**
  * @since 2.0 {@index}
  */
-public class IsisApplibConfigurationRoleAndPermissions
+public class IsisConfigurationRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
     public static final String ROLE_NAME = ConfigurationMenu.OBJECT_TYPE.replace(".","-");
 
-    public IsisApplibConfigurationRoleAndPermissions() {
+    public IsisConfigurationRoleAndPermissions() {
         super(ROLE_NAME, "Access configuration properties");
     }
 

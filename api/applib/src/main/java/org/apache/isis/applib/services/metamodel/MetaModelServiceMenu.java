@@ -61,7 +61,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 )
 public class MetaModelServiceMenu {
 
-    public static final String OBJECT_TYPE = "isis.applib.MetaModelServiceMenu";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 

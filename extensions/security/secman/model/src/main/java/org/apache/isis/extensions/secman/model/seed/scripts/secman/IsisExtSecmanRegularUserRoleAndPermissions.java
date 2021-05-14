@@ -18,20 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.seed.scripts.secman;
 
-import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.layout.LayoutServiceMenu;
-import org.apache.isis.applib.services.user.RoleMemento;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.inspect.model.ActionNode;
-import org.apache.isis.core.metamodel.inspect.model.CollectionNode;
-import org.apache.isis.core.metamodel.inspect.model.FacetAttrNode;
-import org.apache.isis.core.metamodel.inspect.model.FacetGroupNode;
-import org.apache.isis.core.metamodel.inspect.model.FacetNode;
-import org.apache.isis.core.metamodel.inspect.model.ParameterNode;
-import org.apache.isis.core.metamodel.inspect.model.PropertyNode;
-import org.apache.isis.core.metamodel.inspect.model.TypeNode;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
@@ -40,12 +29,38 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.menu.MeService;
+import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisConfigurationRoleAndPermissions;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 import lombok.val;
 
 /**
- * Role for regular users of the security module, providing the ability to lookup their user account using the
- * {@link MeService}, and for viewing and maintaining their user details.
+ * Role for regular users of the security module.
+ *
+ * <p>
+ * These permissions are intended to be sufficient for most regular users
+ * to have access to the 'safe' features provided by the core framework
+ * (in particular, everything under the {@link IsisModuleApplib#NAMESPACE isis.applib}
+ * namespace.
+ * </p>
+ *
+ * <p>
+ * That said, it does <i>not</i> include the ability to impersonate other users
+ * (for this, grant the
+ * {@link org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
+ * role), and also does <i>not</i> include the ability to access the
+ * configuration properties (for this, grant the
+ * {@link org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
+ * role).
+ * </p>
+ *
+ * <p>
+ * The permissions also provide the ability to lookup their user account using
+ * the {@link MeService}, and for viewing and maintaining their user details.
+ * </p>
+ *
+ * @see org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions
+ * @see IsisConfigurationRoleAndPermissions
  *
  * @since 2.0 {@index}
  */
@@ -58,42 +73,45 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        val allowViewing = Can.of(
-                ApplicationFeatureId.newType(ApplicationUser.OBJECT_TYPE),
-                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "name"),
-                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "description"),
-                ApplicationFeatureId.newType(ActionNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(CollectionNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(FacetAttrNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(FacetGroupNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(FacetNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(ParameterNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(PropertyNode.OBJECT_TYPE),
-                ApplicationFeatureId.newType(TypeNode.OBJECT_TYPE)
-                );
-
         val allowChanging = Can.of(
+                // everything under "isis.applib" is granted.
+                // this includes prototype actions for metamodel and translations
+                ApplicationFeatureId.newNamespace(IsisModuleApplib.NAMESPACE),
+
+                // we also provide default access to run fixtures (prototype action only)
+                ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE),
+
+                // also the ability to logout (!)
+                ApplicationFeatureId.newType(LogoutMenu.OBJECT_TYPE),
+
+                // remaining permissions give access to the user to maintain their details
                 ApplicationFeatureId.newType(MeService.OBJECT_TYPE),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateName"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updatePassword"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateEmailAddress"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updatePhoneNumber"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateFaxNumber"),
-                ApplicationFeatureId.newType(LogoutMenu.OBJECT_TYPE),
-                ApplicationFeatureId.newType(UserMemento.OBJECT_TYPE),
-                ApplicationFeatureId.newType(RoleMemento.OBJECT_TYPE),
-                ApplicationFeatureId.newType(DomainObjectList.OBJECT_TYPE),
-                ApplicationFeatureId.newType(LayoutServiceMenu.OBJECT_TYPE)
+                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateFaxNumber")
+
+        );
+
+        val allowViewing = Can.of(
+                // we also allow the user to see the roles they are in
+                // (but nothing more than that)
+                ApplicationFeatureId.newType(ApplicationUser.OBJECT_TYPE),
+                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "name"),
+                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "description")
                 );
 
         val vetoViewing = Can.of(
+                // we explicitly ensure that the user cannot grant themselves
+                // additional privileges or see stuff that they shouldn't
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "filterPermissions"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "resetPassword"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "lock"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "unlock"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "addRole"),
                 ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "removeRoles")
-                );
+        );
 
         newPermissions(
                 ApplicationPermissionRule.ALLOW,

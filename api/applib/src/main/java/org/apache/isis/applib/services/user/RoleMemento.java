@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -35,7 +36,7 @@ import lombok.Value;
 @Value
 public class RoleMemento implements Serializable {
 
-    public static final String OBJECT_TYPE = "isis.applib.RoleMemento";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".RoleMemento";
 
     private static final long serialVersionUID = -3876856609238378274L;
 
