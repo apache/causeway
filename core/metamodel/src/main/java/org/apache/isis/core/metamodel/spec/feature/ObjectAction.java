@@ -17,10 +17,12 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -35,7 +37,6 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -349,10 +350,12 @@ public interface ObjectAction extends ObjectMember {
             val spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.isNotInAnyExistingLayoutGroup(spec))
-            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter,
-                    InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(ObjectAction.Predicates.isNotWizard(spec));
+            .filter(Predicates
+                    .isSharingAnyLayoutGroupOf(spec.streamAssociations(MixedIn.INCLUDED))
+                    .negate())
+            .filter(Predicates
+                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE))
+            .filter(Predicates.isNotWizard(spec));
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -362,8 +365,8 @@ public interface ObjectAction extends ObjectMember {
             val spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.isSameLayoutGroupAs(association))
-            .filter(ObjectAction.Predicates.isNotWizard(spec))
+            .filter(Predicates.isSameLayoutGroupAs(association))
+            .filter(Predicates.isNotWizard(spec))
             .sorted(Comparators.byMemberOrderSequence(false));
         }
 
@@ -406,9 +409,11 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static Predicate<ObjectAction> isSameLayoutGroupAs(ObjectAssociation association) {
-            final String assocName = association.getName();
-            final String assocId = association.getId();
+        public static Predicate<ObjectAction> isSameLayoutGroupAs(
+                final @NonNull ObjectAssociation association) {
+
+            final String assocIdLower = association.getId();
+
             return (ObjectAction objectAction) -> {
 
                 val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
@@ -419,13 +424,33 @@ public interface ObjectAction extends ObjectMember {
                 if (_Strings.isNullOrEmpty(layoutGroupId)) {
                     return false;
                 }
-                return layoutGroupId.equalsIgnoreCase(assocName)
-                        || layoutGroupId.equalsIgnoreCase(assocId);
+                return layoutGroupId.equals(assocIdLower);
+            };
+        }
+
+        private static Predicate<? super ObjectAction> isSharingAnyLayoutGroupOf(
+                final @NonNull Stream<ObjectAssociation> streamOfAssociations) {
+
+            final Set<String> associationIds = streamOfAssociations
+                    .map(ObjectAssociation::getId)
+                    .collect(Collectors.toCollection(HashSet::new));
+
+            return (ObjectAction objectAction) -> {
+
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
+                    return false;
+                }
+                val layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                    return false;
+                }
+                return associationIds.contains(layoutGroupId);
             };
         }
 
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
-                final OneToManyAssociation collection) {
+                final @NonNull OneToManyAssociation collection) {
 
             final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
 
@@ -436,30 +461,6 @@ public interface ObjectAction extends ObjectMember {
         }
 
         // -- HELPER
-
-        private static Predicate<ObjectAction> isNotInAnyExistingLayoutGroup(final ObjectSpecification spec) {
-
-            final Set<String> associationNamesAndIds = _Sets.newHashSet();
-
-            spec.streamAssociations(MixedIn.INCLUDED)
-            .forEach(ass->{
-                associationNamesAndIds.add(_Strings.lower(ass.getName()));
-                associationNamesAndIds.add(_Strings.lower(ass.getId()));
-            });
-
-            return (ObjectAction objectAction) -> {
-
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return true;
-                }
-                val layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return true;
-                }
-                return !associationNamesAndIds.contains(layoutGroupId.toLowerCase());
-            };
-        }
 
         private static class ChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;
