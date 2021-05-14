@@ -68,17 +68,17 @@ import org.apache.isis.commons.internal.base._Casts;
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
-                    + "WHERE path == :path"),
+                    + " WHERE path == :path"),
     @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
-                    + "WHERE name == :name"),
+                    + " WHERE name == :name"),
     @Query(
             name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
-                    + "WHERE name.matches(:regex) || path.matches(:regex) ")})
+                    + " WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
         objectType = ApplicationTenancy.OBJECT_TYPE,
         autoCompleteRepository = ApplicationTenancyRepository.class,

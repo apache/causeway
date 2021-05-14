@@ -83,22 +83,22 @@ import lombok.val;
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
-                    + "WHERE username == :username"),
+                    + " WHERE username == :username"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
-                    + "WHERE emailAddress == :emailAddress"),
+                    + " WHERE emailAddress == :emailAddress"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
-                    + "WHERE atPath == :atPath"),
+                    + " WHERE atPath == :atPath"),
     @Query(
             name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
-                    + "WHERE username.matches(:regex)"
+                    + " WHERE username.matches(:regex)"
                     + " || familyName.matches(:regex)"
                     + " || givenName.matches(:regex)"
                     + " || knownAs.matches(:regex)"

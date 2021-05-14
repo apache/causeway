@@ -67,12 +67,12 @@ import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissio
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
-                    + "WHERE name == :name"),
+                    + " WHERE name == :name"),
     @Query(
             name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
-                    + "WHERE name.matches(:regex) ")
+                    + " WHERE name.matches(:regex) ")
 })
 @DomainObject(
         bounding = Bounding.BOUNDED,

@@ -64,24 +64,24 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
-                    + "WHERE role == :role"),
+                    + " WHERE role == :role"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
-                    + "WHERE (u.roles.contains(role) && u.username == :username) "
+                    + " WHERE (u.roles.contains(role) && u.username == :username) "
                     + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
-                    + "WHERE featureSort == :featureSort "
+                    + " WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @Query(
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
-                    + "WHERE role == :role "
+                    + " WHERE role == :role "
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn "),
@@ -89,7 +89,7 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
             name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
-                    + "WHERE role == :role "
+                    + " WHERE role == :role "
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "),
 })
