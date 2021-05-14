@@ -253,9 +253,10 @@ public class LayoutFacetUtil {
 
         val sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
         if(isDoOp(sortedByFacet)) {
-            final Class<? extends Comparator<?>> className = sortedByFacet.value();
-            if(className != null) {
-                collectionLayoutData.setSortedBy(className.getCanonicalName());
+            final Class<? extends Comparator<?>> cls = sortedByFacet.value();
+            if(cls != null
+                    && cls.getCanonicalName()!=null) {
+                collectionLayoutData.setSortedBy(cls.getName());
             }
         }
     }
