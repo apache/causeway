@@ -31,7 +31,7 @@ public class TaggerTest {
 
     @Before
     public void setUp() throws Exception {
-        taggerDefault = taggerDefault;
+        taggerDefault = new TaggerDefault();
     }
 
     public static class TagFor extends TaggerTest {
