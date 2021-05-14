@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -188,4 +188,71 @@ public class ProperMemberSupport {
         return false;
     }
 
+    // -- PROPER ACTION - NEW PARAMETER MODEL - XXX only supported with mixins yet
+/*
+    @Value @Accessors(fluent = true)
+    public static class Parameter {
+        List<String> a;
+        List<String> b;
+    }
+
+    public ProperMemberSupport act(List<String> a, List<String> b) {
+        return this;
+    }
+
+    @MemberSupport
+    public String disableAct() {
+        return null;
+    }
+
+    @MemberSupport
+    public boolean hideAct() {
+        return false;
+    }
+
+    @MemberSupport
+    public String validateAct(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> autoComplete0Act(Parameter params, @MinLength(3) String search) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> autoComplete1Act(Parameter params, @MinLength(3) String search) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> choices0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> choices1Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public List<String> default0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public List<String> default1Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public String validate0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public String validate1Act(Parameter params) {
+        return null;
+    }
+*/
 }

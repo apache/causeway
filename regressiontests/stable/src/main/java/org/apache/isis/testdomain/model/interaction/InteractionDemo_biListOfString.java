@@ -18,56 +18,52 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 
 @Action
 @RequiredArgsConstructor
-public class InteractionDemo_multiInt {
+public class InteractionDemo_biListOfString {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
 
     @MemberSupport
-    public int act(int a, int b, int c) {
-        return a * (b + c);
+    public String act(List<String> a, List<String> b) {
+        return Stream.concat(a.stream(), b.stream())
+                .collect(Collectors.joining(","));
     }
 
     // -- PARAM A
 
     @MemberSupport
-    public int defaultA(ParameterSamples.TriInt p) {
-        return 2;
+    public List<String> defaultA(ParameterSamples.BiListOfString p) {
+        return _Lists.of("a1", "a2", "a3");
     }
 
     @MemberSupport
-    public int[] choicesA(ParameterSamples.TriInt p) {
-        return new int[] {1, 2, 3, 4};
+    public List<String> choicesA(ParameterSamples.BiListOfString p) {
+        return _Lists.of("a1", "a2", "a3", "a4");
     }
+
 
     // -- PARAM B
 
     @MemberSupport
-    public int defaultB(ParameterSamples.TriInt p) {
-        return 3;
+    public List<String> defaultB(ParameterSamples.BiListOfString p) {
+        return _Lists.of("b1");
     }
 
     @MemberSupport
-    public int[] choicesB(ParameterSamples.TriInt p) {
-        return new int[] {1, 2, 3, 4};
+    public List<String> choicesB(ParameterSamples.BiListOfString p) {
+        return _Lists.of("b1", "b2", "b3", "b4");
     }
 
-    // -- PARAM C
-
-    @MemberSupport
-    public int defaultC(ParameterSamples.TriInt p) {
-        return 4;
-    }
-
-    @MemberSupport
-    public int[] choicesC(ParameterSamples.TriInt p) {
-        return new int[] {1, 2, 3, 4};
-    }
 }

@@ -38,21 +38,21 @@ public class InteractionDemo_multiEnum {
     // -- PARAM A
 
     @MemberSupport
-    public DemoEnum defaultA(Parameters.TriEnum p) {
+    public DemoEnum defaultA(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[1];
     }
 
     // -- PARAM B
 
     @MemberSupport
-    public DemoEnum defaultB(Parameters.TriEnum p) {
+    public DemoEnum defaultB(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[2];
     }
 
     // -- PARAM C
 
     @MemberSupport
-    public DemoEnum defaultC(Parameters.TriEnum p) {
+    public DemoEnum defaultC(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[3];
     }
 }

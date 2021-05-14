@@ -18,10 +18,16 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import lombok.Value;
 import lombok.experimental.Accessors;
 
-final class Parameters {
+final class ParameterSamples {
+
+    // -- SCALAR PARAMS
 
     @Value @Accessors(fluent = true)
     public static class BiInt {
@@ -42,5 +48,38 @@ final class Parameters {
         DemoEnum b;
         DemoEnum c;
     }
+
+    // -- NON SCALAR PARAMS
+
+    @Value @Accessors(fluent = true)
+    public static class BiListOfString {
+        List<String> a;
+        List<String> b;
+    }
+
+    @Value @Accessors(fluent = true)
+    public static class BiSetOfString {
+        Set<String> a;
+        Set<String> b;
+    }
+
+    @Value @Accessors(fluent = true)
+    public static class BiArrayOfInt {
+        int[] a;
+        int[] b;
+    }
+
+    @Value @Accessors(fluent = true)
+    public static class BiArrayOfEnum {
+        DemoEnum[] a;
+        DemoEnum[] b;
+    }
+
+    @Value @Accessors(fluent = true)
+    public static class BiCollectionOfEnum {
+        Collection<DemoEnum> a;
+        Collection<DemoEnum> b;
+    }
+
 
 }

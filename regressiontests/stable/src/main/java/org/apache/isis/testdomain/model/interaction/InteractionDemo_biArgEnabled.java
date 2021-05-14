@@ -36,12 +36,12 @@ public class InteractionDemo_biArgEnabled {
     }
 
     @MemberSupport
-    public int defaultA(Parameters.BiInt p) {
+    public int defaultA(ParameterSamples.BiInt p) {
         return 5;
     }
 
     @MemberSupport
-    public int[] choicesB(Parameters.BiInt p) {
+    public int[] choicesB(ParameterSamples.BiInt p) {
         return new int[] {1, 2, 3, 4};
     }
 }

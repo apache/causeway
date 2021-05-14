@@ -137,13 +137,17 @@ public final class MethodFinderUtils {
 
     public static Stream<Method> streamMethods(final Class<?> type, final Can<String> names, final Class<?> returnType) {
         try {
+
             return _NullSafe.stream(type.getMethods())
                     .filter(MethodUtil::isPublic)
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
-                    .filter(method -> returnType == null ||
-                                      returnType.isAssignableFrom(method.getReturnType()))
-                    ;
+                    .filter(method -> returnType == null
+                            || returnType.isAssignableFrom(method.getReturnType())
+//XXX for non-scalar types we should probably be a bit smarter
+//                            || (Iterable.class.isAssignableFrom(returnType)
+//                                    && Iterable.class.isAssignableFrom(method.getReturnType()))
+                            );
         } catch (final SecurityException e) {
             log.error("failed to enumerate methods of class %s", type);
             return Stream.empty();
