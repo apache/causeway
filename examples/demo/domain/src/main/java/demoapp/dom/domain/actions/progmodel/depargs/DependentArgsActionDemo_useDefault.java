@@ -70,6 +70,7 @@ public class DependentArgsActionDemo_useDefault {
 
     @MemberSupport
     public Parity defaultParity(Parameters params) {
+
         return mixee.getDialogParityDefault();
     }
 
@@ -78,12 +79,12 @@ public class DependentArgsActionDemo_useDefault {
     @MemberSupport
     public String defaultMessage(Parameters params) {
 
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
+        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
 
-        if(parity == null) {
+        if(parityFromDialog == null) {
             return "no parity selected";
         }
-        return parity.name();
+        return parityFromDialog.name();
     }
 
 }

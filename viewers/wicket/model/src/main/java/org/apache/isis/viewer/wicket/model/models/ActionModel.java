@@ -427,13 +427,17 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         .forEach(actionArgumentModel->{
 
             val actionParameter = actionArgumentModel.getMetaModel();
-            val paramValue = actionArgumentModel.getValue();
-            val hasChoices = actionParameter.hasChoices();
-            val hasAutoComplete = actionParameter.hasAutoComplete();
-            val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue);
+
+//XXX veto removed as of ISIS-2666
+//            val paramValue = actionArgumentModel.getValue();
+//            val hasChoices = actionParameter.hasChoices();
+//            val hasAutoComplete = actionParameter.hasAutoComplete();
+//            val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue);
             // if we have choices or autoSelect, don't override any param value, already chosen by the user
-            val vetoDefaultsToBeSet = !isEmpty
-                    && (hasChoices||hasAutoComplete);
+//            val vetoDefaultsToBeSet = !isEmpty
+//                    && (hasChoices||hasAutoComplete);
+
+            val vetoDefaultsToBeSet = false;
 
             if(!vetoDefaultsToBeSet) {
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);

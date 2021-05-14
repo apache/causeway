@@ -54,9 +54,10 @@ public class DependentArgsActionDemo_useChoices2 {
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
         List<Parity> parities;
-        DemoItem item;
+        List<DemoItem> items;
     }
 
+    @MemberSupport
     public DependentArgsActionDemo act(
 
             // PARAM 0
@@ -65,15 +66,17 @@ public class DependentArgsActionDemo_useChoices2 {
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            DemoItem item
+            List<DemoItem> items
 
             ) {
 
-        messageService.informUser(item.getName());
+        _NullSafe.stream(items)
+        .forEach(item->messageService.informUser(item.getName()));
+
         return holder;
     }
 
-    // -- PARAM 0 (Parity)
+    // -- PARAM 0 (Parities)
 
     @MemberSupport
     public List<Parity> defaultParities(Parameters params) {
@@ -83,7 +86,13 @@ public class DependentArgsActionDemo_useChoices2 {
     // -- PARAM 1 (DemoItem)
 
     @MemberSupport
-    public List<DemoItem> choicesItem(Parameters params) {
+    public List<DemoItem> defaultItems(Parameters params) {
+
+        return choicesItems(params); // <-- fill in all that are possible based on the first param from the UI dialog
+    }
+
+    @MemberSupport
+    public List<DemoItem> choicesItems(Parameters params) {
 
         val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
 
