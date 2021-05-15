@@ -20,17 +20,40 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
+/**
+ * Provides a lookup table for the purpose of recreating domain objects from bookmarks,
+ * in support of logical type names.
+ *
+ * @apiNote only bookmark-able types will be ever registered
+ * @see DomainObject#objectType()
+ *
+ * @since 2.0
+ */
 interface LogicalTypeResolver {
 
+    /**
+     * Optionally returns the bookmark-able concrete type as registered by given {@code logicalTypeName},
+     * based on whether there had been registered any.
+     * @param logicalTypeName
+     */
     Optional<LogicalType> lookup(@NonNull String logicalTypeName);
 
+    /**
+     * Collects concrete types, ignores abstract types and interfaces.
+     * Allows types to override their concrete super types.
+     * @param spec - type's ObjectSpecification
+     */
     void register(@NonNull ObjectSpecification spec);
 
+    /**
+     * Removes all entries from the lookup table.
+     */
     void clear();
 
 }

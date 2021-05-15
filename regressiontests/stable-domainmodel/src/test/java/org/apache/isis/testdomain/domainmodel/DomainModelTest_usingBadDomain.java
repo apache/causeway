@@ -155,17 +155,17 @@ class DomainModelTest_usingBadDomain {
                 "Action method overloading is not allowed"));
     }
 
-    @Test// @Disabled("there is a fail fast guard now in LogicalTypeResolverDefault.register(...) that breaks this test")
+    @Test
     void logicalTypeNameClash_shouldFail() {
         assertTrue(
             validator.anyMatchesContaining(
                     Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)),
                     "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes:")
+                    + "mapped to multiple classes")
             || validator.anyMatchesContaining(
                     Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)),
                     "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes:"));
+                    + "mapped to multiple classes"));
     }
 
 

@@ -48,26 +48,10 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
-        if(hasUsableSpecId(spec)) {
+        if(!spec.isAbstract()
+                && hasUsableSpecId(spec)) {
 
-            val key = spec.getLogicalTypeName();
-
-            val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
-
-            if(previousMapping!=null) {
-
-                val msg = String.format("failed to register mapping\n"
-                        + "%s -> %s,\n"
-                        + "because there was already a mapping\n "
-                        + "%s -> %s",
-                        key,
-                        spec.getCorrespondingClass(),
-                        key,
-                        previousMapping.getCorrespondingClass());
-
-                log.warn(msg);
-            }
-
+            logicalTypeByName.merge(spec.getLogicalTypeName(), spec.getLogicalType(), this::mostSpecializedOfConcrete);
         }
     }
 
@@ -78,5 +62,35 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         // don't have an ObjectSpecId; hence the guard.
         return spec.containsNonFallbackFacet(ObjectSpecIdFacet.class);
     }
+
+    private LogicalType mostSpecializedOfConcrete(final @NonNull LogicalType a, final @NonNull LogicalType b) {
+        if(a.equals(b)) {
+            return a;
+        }
+        if(a.getCorrespondingClass().isAssignableFrom(b.getCorrespondingClass())) {
+            return b;
+        }
+        if(b.getCorrespondingClass().isAssignableFrom(a.getCorrespondingClass())) {
+            return a;
+        }
+
+        val key = a.getLogicalTypeName();
+
+        val msg = String.format("Failed to register mapping\n"
+                + "%s -> %s,\n"
+                + "because there was already a mapping\n "
+                + "%s -> %s.\n"
+                + "Meta-model validation should detect this and fail, if not - that's a bug.",
+                key,
+                b.getCorrespondingClass(),
+                key,
+                a.getCorrespondingClass());
+
+        log.warn(msg);
+
+        // do not fail fast, but clear the entry and let MM validation fail later on
+        return null;
+    }
+
 
 }

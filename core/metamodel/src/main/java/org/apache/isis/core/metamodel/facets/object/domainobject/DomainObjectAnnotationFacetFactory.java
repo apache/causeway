@@ -494,26 +494,35 @@ implements
 
                     @Override
                     public void validate(ObjectSpecification objSpec) {
+
+                        // Allow members of a type hierarchy including interfaces to share the same
+                        // @DomainObject(objectType=...)
+                        // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
+                        // that have the same @DomainObject(objectType=...) should be allowed.
+                        // The only constraint that applies, is that there cannot be multiple bookmark-able
+                        // types that share the same @DomainObject(objectType=...).
+                        // This must be guaranteed by MM validation.
+                        // - see also LogicalTypeResolver.register(...)
+
                         if(objSpec.isManagedBean()
-                                // || objSpec.isAbstract() // we allow abstract types now to have their own logical name
-                                ) {
+                                || objSpec.isAbstract()) {
                             return;
                         }
-                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
+                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
                     }
 
                     @Override
                     public void summarize() {
                         for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
                             val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
-                            val isCollision = collidingSpecs.size()>1;
-                            if(isCollision) {
+                            if(isObjectTypeCollision(collidingSpecs)) {
                                 val csv = asCsv(collidingSpecs);
 
                                 collidingSpecs.forEach(spec->{
                                     ValidationFailure.raiseFormatted(
                                             spec,
-                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
+                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes,"
+                                            + " that do not all share the same type hierarchy:\n %s",
                                             logicalTypeName,
                                             csv);
                                 });
@@ -523,6 +532,29 @@ implements
                         }
                         // so can be revalidated again if necessary.
                         collidingSpecsByLogicalTypeName.clear();
+                    }
+
+                    // detect whether specs (of concrete type) belong to more than one type hierarchy
+                    private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
+                        if(specs.size()<=1) {
+                            return false;
+                        }
+                        // algorithm: check all non-first against the first
+
+                        val first = specs.get(0);
+
+                        val shareSameTypeHierarchy = specs.stream()
+                                .skip(1)
+                                .allMatch(next->shareSameTypeHierarchy(first, next));
+
+                        return !shareSameTypeHierarchy;
+                    }
+
+                    private boolean shareSameTypeHierarchy(
+                            final @NonNull ObjectSpecification  a, final @NonNull ObjectSpecification b) {
+                        return a.equals(b)
+                                || a.getCorrespondingClass().isAssignableFrom(b.getCorrespondingClass())
+                                || b.getCorrespondingClass().isAssignableFrom(a.getCorrespondingClass());
                     }
 
                     private String asCsv(final List<ObjectSpecification> specList) {
