@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = IsisModuleExtSecmanApi.NAMESPACE + ".api.ApplicationTenancy"
+        objectType = ApplicationTenancy.OBJECT_TYPE
 )
 public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 

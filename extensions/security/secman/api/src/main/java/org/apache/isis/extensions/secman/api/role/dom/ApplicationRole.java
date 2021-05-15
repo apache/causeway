@@ -42,7 +42,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = IsisModuleExtSecmanApi.NAMESPACE + ".api.ApplicationRole"
+        objectType = ApplicationRole.OBJECT_TYPE
 )
 public interface ApplicationRole extends Comparable<ApplicationRole> {
 

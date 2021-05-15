@@ -76,7 +76,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = IsisModuleExtSecmanApi.NAMESPACE + ".api.ApplicationPermission"
+        objectType = ApplicationPermission.OBJECT_TYPE
 )
 public interface ApplicationPermission extends Comparable<ApplicationPermission> {
 
