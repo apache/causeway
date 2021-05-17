@@ -95,7 +95,7 @@ extends ChoiceProvider<ObjectMemento> {
                 .orElse(null);
 
         // support enums that are implementing an interface; only know this late in the day
-        // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
+        // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectType
         if(spec != null && spec.isEncodeable()) {
             return logicalType.getLogicalTypeName() + ":" + choiceMemento.asString();
         } else {

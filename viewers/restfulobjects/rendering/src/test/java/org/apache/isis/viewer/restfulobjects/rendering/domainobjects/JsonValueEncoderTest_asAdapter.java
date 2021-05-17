@@ -124,7 +124,7 @@ public class JsonValueEncoderTest_asAdapter {
     private void whenReprIsBoolean(final Class<?> correspondingClass) {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(correspondingClass);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final boolean value = true;
         representation = new JsonRepresentation(BooleanNode.valueOf(value));
         context.checking(new Expectations() {
@@ -145,7 +145,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsBooleanButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(boolean.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(boolean.class);
 
         context.checking(new Expectations() {
             {
@@ -171,7 +171,7 @@ public class JsonValueEncoderTest_asAdapter {
     private void whenReprIsInteger(final Class<?> correspondingClass) {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(correspondingClass);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final int value = 123;
         representation = new JsonRepresentation(IntNode.valueOf(value));
         context.checking(new Expectations() {
@@ -192,7 +192,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsIntegerButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(int.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(int.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
 
@@ -213,7 +213,7 @@ public class JsonValueEncoderTest_asAdapter {
     private void whenReprIsLong(final Class<?> correspondingClass) {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(correspondingClass);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final long value = 1234567890L;
         representation = new JsonRepresentation(LongNode.valueOf(value));
         context.checking(new Expectations() {
@@ -234,7 +234,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsLongButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(long.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(long.class);
 
         context.checking(new Expectations() {
             {
@@ -260,7 +260,7 @@ public class JsonValueEncoderTest_asAdapter {
     private void whenReprIsDouble(final Class<?> correspondingClass) {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(correspondingClass);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final double value = 123.45;
         representation = new JsonRepresentation(DoubleNode.valueOf(value));
         context.checking(new Expectations() {
@@ -281,7 +281,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsDoubleButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(double.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(double.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
 
@@ -293,7 +293,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenReprIsBigInteger() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(BigInteger.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigInteger.class);
         final BigInteger value = BigInteger.valueOf(123);
         representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
         context.checking(new Expectations() {
@@ -314,7 +314,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsBigIntegerButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(BigInteger.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigInteger.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
 
@@ -326,7 +326,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenReprIsBigDecimal() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(BigDecimal.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigDecimal.class);
         final BigDecimal value = new BigDecimal("123234234.45612312343535");
         representation = new JsonRepresentation(DecimalNode.valueOf(value));
         context.checking(new Expectations() {
@@ -347,7 +347,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenObjectSpecIsBigDecimalButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(BigDecimal.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigDecimal.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
 
@@ -359,7 +359,7 @@ public class JsonValueEncoderTest_asAdapter {
     public void whenReprIsString() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        allowingObjectSpecCorrespondingClassAndSpecIdIs(String.class);
+        allowingObjectSpecCorrespondingClassAndObjectTypeIs(String.class);
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
 
         context.checking(new Expectations() {
@@ -385,7 +385,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
     }
 
-    private void allowingObjectSpecCorrespondingClassAndSpecIdIs(final Class<?> result) {
+    private void allowingObjectSpecCorrespondingClassAndObjectTypeIs(final Class<?> result) {
         context.checking(new Expectations() {
             {
                 allowing(mockObjectSpec).getCorrespondingClass();

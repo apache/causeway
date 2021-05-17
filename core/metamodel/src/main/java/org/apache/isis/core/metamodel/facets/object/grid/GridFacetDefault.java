@@ -94,11 +94,11 @@ implements GridFacet {
 
         if(!getSpecification().equals(objectAdapter.getSpecification())) {
             throw _Exceptions.unrecoverableFormatted(
-                    "getGrid(adapter) was called passing an adapter (specId: %s), "
-                    + "for which this GridFacet (specId: %s) is not responsible; "
+                    "getGrid(adapter) was called passing an adapter (type: %s), "
+                    + "for which this GridFacet (type: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
-                    objectAdapter.getSpecification().getLogicalTypeName(),
-                    getSpecification().getLogicalTypeName());
+                    objectAdapter.getSpecification().getCorrespondingClass().getName(),
+                    getSpecification().getCorrespondingClass().getName());
         }
     }
 

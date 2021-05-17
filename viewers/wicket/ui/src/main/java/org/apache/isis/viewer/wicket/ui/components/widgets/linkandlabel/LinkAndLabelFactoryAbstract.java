@@ -241,8 +241,8 @@ implements Serializable {
                     // intercept redirect request to sign-in page
                     Optional.ofNullable(actionModel.getObject())
                     .ifPresent(actionResultAdapter->{
-                        val actionResultSpecId = actionResultAdapter.getSpecification().getLogicalTypeName();
-                        if(LoginRedirect.OBJECT_TYPE.equals(actionResultSpecId)) {
+                        val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
+                        if(LoginRedirect.OBJECT_TYPE.equals(actionResultObjectType)) {
                             val commonContext = targetEntityModel.getCommonContext();
                             val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
                             val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);

@@ -455,7 +455,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 //            log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
 //                    + "class name to use instead. This warning is an indicator, that {} is not "
 //                    + "discovered by Spring during bootstrapping of this application.",
-//                    objectSpecId.getSpecId(),
+//                    logicalType.getName(),
 //                    cls.getName());
             return LogicalType.fqcn(cls);
         }

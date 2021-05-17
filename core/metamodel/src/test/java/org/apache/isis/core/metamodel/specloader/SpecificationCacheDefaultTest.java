@@ -51,7 +51,7 @@ public class SpecificationCacheDefaultTest {
     private ObjectSpecification orderSpec;
 
     private SpecificationCache<ObjectSpecification> specificationCache = new SpecificationCacheDefault<>();
-    private LogicalTypeResolver specIdToClassResolver = new LogicalTypeResolverDefault();
+    private LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
 
     @Before
     public void setUp() throws Exception {
@@ -109,7 +109,7 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        val type = specIdToClassResolver.lookup(cus.getLogicalTypeName());
+        val type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
         assertFalse(type.isPresent());
     }
 

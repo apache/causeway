@@ -141,7 +141,7 @@ implements
      *
      * <p>
      * The {@link ObjectSpecification} can be retrieved using
-     * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}} passing the logical-type-name as argument.
+     * {@link SpecificationLoader#specForLogicalTypeName(String)}} passing the logical-type-name as argument.
      *
      * @see ClassSubstitutorRegistry
      * @see ObjectTypeFacet

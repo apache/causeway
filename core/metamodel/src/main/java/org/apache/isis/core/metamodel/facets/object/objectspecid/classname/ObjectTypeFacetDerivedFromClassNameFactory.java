@@ -117,8 +117,8 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
                 return;
             }
 
-            val objectSpecIdFacet = objectSpec.getFacet(ObjectTypeFacet.class);
-            if(objectSpecIdFacet instanceof ObjectTypeFacetDerivedFromClassName) {
+            val objectTypeFacet = objectSpec.getFacet(ObjectTypeFacet.class);
+            if(objectTypeFacet instanceof ObjectTypeFacetDerivedFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

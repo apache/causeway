@@ -56,9 +56,9 @@ final class MenuUiModel_buildMenuItems {
                 itemsPerSectionCounter.reset();
 
                 for (val actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceSpecId = actionLayoutData.getObjectType();
+                    val serviceBeanName = actionLayoutData.getObjectType();
 
-                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
+                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceBeanName);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;

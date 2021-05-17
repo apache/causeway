@@ -255,8 +255,7 @@ public class FacetProcessor {
             factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
             .forEach(facetFactory->{
                 if (facetFactory instanceof ObjectTypeFacetFactory) {
-                    val objectSpecIdFacetFactory = (ObjectTypeFacetFactory) facetFactory;
-                    facetFactories.add(objectSpecIdFacetFactory);
+                    facetFactories.add((ObjectTypeFacetFactory) facetFactory);
                 }
             });
 

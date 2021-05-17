@@ -46,12 +46,12 @@ implements MetaModelRefiner {
                 return;
             }
 
-            val objectSpecIdFacet = spec.getFacet(ObjectTypeFacet.class);
-            if(objectSpecIdFacet == null) {
+            val objectTypeFacet = spec.getFacet(ObjectTypeFacet.class);
+            if(objectTypeFacet == null) {
                 return;
             }
 
-            val logicalTypeName = objectSpecIdFacet.value();
+            val logicalTypeName = objectTypeFacet.value();
 
             val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                     .collect(Can.toCan());
