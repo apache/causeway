@@ -58,10 +58,10 @@ import lombok.Getter;
 @XmlType(
         propOrder = {
                 "title",
-                "actionOwningType",
+                "actionOwningFqcn",
                 "actionId",
                 "actionArguments",
-                "elementObjectType",
+                "elementTypeFqcn",
                 "objects"
         }
         )
@@ -100,12 +100,12 @@ public class DomainObjectList {
     public DomainObjectList(
             final String title,
             final String elementTypeFqcn,
-            final String actionOwnerFqcn,
+            final String actionOwningFqcn,
             final String actionId,
             final String actionArguments) {
         this.title = title;
         this.elementTypeFqcn = elementTypeFqcn;
-        this.actionOwnerFqcn = actionOwnerFqcn;
+        this.actionOwningFqcn = actionOwningFqcn;
         this.actionId = actionId;
         this.actionArguments = actionArguments;
     }
@@ -140,7 +140,7 @@ public class DomainObjectList {
             editing = Editing.DISABLED
             )
     @Getter
-    private String actionOwnerFqcn;
+    private String actionOwningFqcn;
 
     // -- property: actionId
     public static class ActionIdDomainEvent extends PropertyDomainEvent<String> {  }
