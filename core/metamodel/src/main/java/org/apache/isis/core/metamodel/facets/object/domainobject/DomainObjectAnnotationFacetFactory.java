@@ -258,11 +258,12 @@ implements
 
     void processObjectType(final ProcessObjectTypeContext processClassContext) {
 
+        val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = ObjectTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
+        val facet = ObjectTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
 
         // then add
         super.addFacet(facet);

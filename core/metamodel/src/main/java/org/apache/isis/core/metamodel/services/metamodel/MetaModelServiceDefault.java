@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.metamodel;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -43,8 +45,8 @@ import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -66,24 +68,16 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GridService gridService;
 
-    @Nullable
     @Override
-    public Class<?> fromObjectType(final @Nullable String objectType) {
+    public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String objectType) {
         return specificationLoader.specForLogicalTypeName(objectType)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElse(null);
+                .map(ObjectSpecification::getLogicalType);
     }
 
     @Override
-    public String toObjectType(final @Nullable Class<?> domainType) {
-        if(domainType == null) {
-            return null;
-        }
-
+    public Optional<LogicalType> lookupLogicalTypeByClass(final @Nullable Class<?> domainType) {
         return specificationLoader.specForType(domainType)
-        .flatMap(spec->spec.lookupFacet(ObjectTypeFacet.class))
-        .map(ObjectTypeFacet::value)
-        .orElse(null);
+                .map(ObjectSpecification::getLogicalType);
     }
 
     @Override
@@ -153,7 +147,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public BeanSort sortOf(
-            final Class<?> domainType, final Mode mode) {
+            final @Nullable Class<?> domainType, final Mode mode) {
         if(domainType == null) {
             return null;
         }
@@ -185,17 +179,19 @@ public class MetaModelServiceDefault implements MetaModelService {
         final Class<?> domainType;
         switch (mode) {
         case RELAXED:
-            try {
-                domainType = this.fromObjectType(bookmark.getObjectType());
-            } catch (Exception e) {
-                return BeanSort.UNKNOWN;
-            }
+            domainType = specificationLoader.specForBookmark(bookmark)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .orElse(null);
             break;
 
         case STRICT:
             // fall through to...
         default:
-            domainType = this.fromObjectType(bookmark.getObjectType());
+            domainType = specificationLoader.specForBookmark(bookmark)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .orElseThrow(()->_Exceptions
+                        .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                bookmark.getObjectType()));
             break;
         }
         return sortOf(domainType, mode);

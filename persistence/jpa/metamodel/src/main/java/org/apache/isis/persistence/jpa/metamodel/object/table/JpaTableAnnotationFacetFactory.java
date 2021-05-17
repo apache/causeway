@@ -68,7 +68,7 @@ implements ObjectTypeFacetFactory {
                 annotationTableAttribute,
                 facetHolder);
         FacetUtil.addFacet(jdoPersistenceCapableFacet);
-        FacetUtil.addFacet(ObjectTypeFacetForTableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+        FacetUtil.addFacet(ObjectTypeFacetForTableAnnotation.create(jdoPersistenceCapableFacet, cls, facetHolder));
 
         return;
     }

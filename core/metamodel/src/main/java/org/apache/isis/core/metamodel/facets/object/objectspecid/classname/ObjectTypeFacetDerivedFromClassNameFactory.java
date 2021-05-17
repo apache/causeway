@@ -24,6 +24,7 @@ import java.util.Collections;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -88,7 +89,9 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         val isService = serviceId!=null;
 
         if (isService) {
-            return new ObjectTypeFacetDerivedFromIoCNamingStrategy(serviceId, facetHolder);
+            return new ObjectTypeFacetDerivedFromIoCNamingStrategy(
+                    LogicalType.eager(substitutedClass, serviceId),
+                    facetHolder);
         }
         return new ObjectTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
     }

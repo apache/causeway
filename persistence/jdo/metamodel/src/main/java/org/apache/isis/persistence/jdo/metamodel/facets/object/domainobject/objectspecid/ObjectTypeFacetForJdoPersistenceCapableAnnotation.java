@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.obj
 
 import java.util.Locale;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
@@ -32,6 +33,7 @@ extends ObjectTypeFacetAbstract {
 
     public static ObjectTypeFacet create(
             final JdoPersistenceCapableFacet persistenceCapableFacet,
+            final Class<?> correspondingClass,
             final FacetHolder holder) {
 
         if(persistenceCapableFacet.isFallback()) {
@@ -42,11 +44,14 @@ extends ObjectTypeFacetAbstract {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new ObjectTypeFacetForJdoPersistenceCapableAnnotation(objectType, holder);
+        return new ObjectTypeFacetForJdoPersistenceCapableAnnotation(
+                LogicalType.eager(correspondingClass, objectType),
+                holder);
     }
 
-    private ObjectTypeFacetForJdoPersistenceCapableAnnotation(final String value,
+    private ObjectTypeFacetForJdoPersistenceCapableAnnotation(
+            final LogicalType logicalType,
             final FacetHolder holder) {
-        super(value, holder);
+        super(logicalType, holder);
     }
 }

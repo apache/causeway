@@ -132,8 +132,7 @@ implements ObjectSpecification {
     @Override
     public LogicalType getLogicalType() {
         if(logicalType == null) {
-            val logicalTypeName = getFacet(ObjectTypeFacet.class).value();
-            logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
+            logicalType = getFacet(ObjectTypeFacet.class).getLogicalType();
         }
         return logicalType;
     }

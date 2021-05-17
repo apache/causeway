@@ -18,9 +18,14 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
@@ -36,18 +41,18 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 public interface MetaModelService {
 
     /**
-     * Provides a reverse lookup of a domain class' object type, as defined by
+     * Provides a lookup by objectType of a domain class' object type, as defined by
      * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
-     * <code>ObjectSpecIdFacet</code>).
+     * <code>ObjectTypeFacet</code>).
      */
-    Class<?> fromObjectType(final String objectType);
+    Optional<LogicalType> lookupLogicalTypeByName(final String objectType);
 
     /**
-     * Provides a lookup of a domain class' object type, as defined by
+     * Provides a lookup by class of a domain class' object type, as defined by
      * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
-     * <code>ObjectSpecIdFacet</code>).
+     * <code>ObjectTypeFacet</code>).
      */
-    String toObjectType(final Class<?> domainType);
+    Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType);
 
     /**
      * Invalidates and rebuilds the internal metadata for the specified domain
@@ -76,7 +81,7 @@ public interface MetaModelService {
      * @param domainType
      * @param mode
      */
-    BeanSort sortOf(Class<?> domainType, Mode mode);
+    BeanSort sortOf(@Nullable Class<?> domainType, Mode mode);
 
     /**
      * Override of {@link #sortOf(Class, Mode)}, extracting the domain type

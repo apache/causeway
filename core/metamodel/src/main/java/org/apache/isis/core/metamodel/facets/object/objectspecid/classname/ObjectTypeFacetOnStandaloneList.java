@@ -19,12 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
 public class ObjectTypeFacetOnStandaloneList extends ObjectTypeFacetAbstract {
 
-    public ObjectTypeFacetOnStandaloneList(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.NOT_DERIVED);
+    public ObjectTypeFacetOnStandaloneList(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder, Derivation.NOT_DERIVED);
     }
 }

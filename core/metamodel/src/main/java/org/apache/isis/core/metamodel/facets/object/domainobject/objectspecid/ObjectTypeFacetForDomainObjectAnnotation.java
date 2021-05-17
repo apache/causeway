@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
@@ -31,17 +32,21 @@ public class ObjectTypeFacetForDomainObjectAnnotation extends ObjectTypeFacetAbs
 
     public static ObjectTypeFacet create(
             final Optional<DomainObject> domainObjectIfAny,
+            final Class<?> correspondingClass,
             final FacetHolder holder) {
 
         return domainObjectIfAny
                 .map(DomainObject::objectType)
                 .filter(_Strings::isNotEmpty)
-                .map(objectType -> new ObjectTypeFacetForDomainObjectAnnotation(objectType, holder))
+                .map(objectType -> new ObjectTypeFacetForDomainObjectAnnotation(
+                        LogicalType.eager(correspondingClass, objectType),
+                        holder))
                 .orElse(null);
     }
 
-    private ObjectTypeFacetForDomainObjectAnnotation(final String value,
+    private ObjectTypeFacetForDomainObjectAnnotation(
+            final LogicalType logicalType,
             final FacetHolder holder) {
-        super(value, holder);
+        super(logicalType, holder);
     }
 }

@@ -22,6 +22,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 import javax.inject.Inject;
 import javax.jdo.annotations.Discriminator;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -67,7 +68,8 @@ implements ObjectTypeFacetFactory {
         final ObjectTypeFacet facet;
         if (!_Strings.isNullOrEmpty(annotationValue)) {
             facet = new ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
-                    annotationValue, facetHolder);
+                        LogicalType.eager(cls, annotationValue),
+                        facetHolder);
         } else {
             val substitute = classSubstitutorRegistry.getSubstitution(cls);
             if(substitute.isNeverIntrospect()) {
@@ -76,7 +78,7 @@ implements ObjectTypeFacetFactory {
 
             val substituted = substitute.apply(cls);
             facet = new ObjectTypeFacetDerivedFromClassName(
-                            substituted.getCanonicalName(),
+                            LogicalType.eager(substituted, substituted.getCanonicalName()),
                             facetHolder);
 
         }

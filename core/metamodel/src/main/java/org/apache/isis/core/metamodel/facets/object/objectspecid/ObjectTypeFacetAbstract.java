@@ -21,9 +21,13 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
 import java.util.Map;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.Getter;
+import lombok.NonNull;
 
 public abstract class ObjectTypeFacetAbstract
 extends FacetAbstract
@@ -33,28 +37,26 @@ implements ObjectTypeFacet {
         return ObjectTypeFacet.class;
     }
 
-    private final String value;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull LogicalType logicalType;
 
-    public ObjectTypeFacetAbstract(final String value, final FacetHolder holder) {
-        this(value, holder, Derivation.NOT_DERIVED);
+    public ObjectTypeFacetAbstract(
+            final LogicalType logicalType,
+            final FacetHolder holder) {
+        this(logicalType, holder, Derivation.NOT_DERIVED);
     }
 
     protected ObjectTypeFacetAbstract(
-            final String value,
+            final LogicalType logicalType,
             final FacetHolder holder,
             final Derivation derivation) {
         super(ObjectTypeFacetAbstract.type(), holder, derivation);
-        this.value = value;
-    }
-
-    @Override
-    public String value() {
-        return value;
+        this.logicalType = logicalType;
     }
 
     @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
+        attributeMap.put("logicalType", logicalType.getLogicalTypeName());
     }
 }

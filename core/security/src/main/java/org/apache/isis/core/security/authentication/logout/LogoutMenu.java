@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
@@ -53,7 +52,7 @@ public class LogoutMenu {
 
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
-    private final IsisConfiguration configuration;
+    //private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}

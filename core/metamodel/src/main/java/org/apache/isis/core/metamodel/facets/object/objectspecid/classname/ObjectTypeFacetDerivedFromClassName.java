@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
@@ -27,11 +28,11 @@ public class ObjectTypeFacetDerivedFromClassName
 extends ObjectTypeFacetAbstract {
 
     public ObjectTypeFacetDerivedFromClassName(final Class<?> cls, final FacetHolder holder) {
-        this(ClassUtil.getCanonicalName_friendlyToInnerClasses(cls), holder);
+        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
     }
 
-    public ObjectTypeFacetDerivedFromClassName(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.DERIVED);
+    public ObjectTypeFacetDerivedFromClassName(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder, Derivation.DERIVED);
     }
 
 }

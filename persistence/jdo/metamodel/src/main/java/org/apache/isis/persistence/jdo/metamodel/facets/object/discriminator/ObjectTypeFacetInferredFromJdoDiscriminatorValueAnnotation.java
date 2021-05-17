@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
@@ -25,9 +26,9 @@ public class ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation
 extends ObjectTypeFacetAbstract {
 
     public ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
-            final String value,
+            final LogicalType logicalType,
             final FacetHolder holder) {
-        super(value, holder);
+        super(logicalType, holder);
     }
 
 }

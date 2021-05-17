@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -67,7 +68,9 @@ public class JaxbServiceDefault extends Simple {
             val domainObjectList = (DomainObjectList) domainObject;
             try {
                 val elementType = metaModelServiceProvider.get()
-                        .fromObjectType(domainObjectList.getElementObjectType());
+                        .lookupLogicalTypeByName(domainObjectList.getElementObjectType())
+                        .map(LogicalType::getCorrespondingClass)
+                        .orElse(null);
                 if (elementType!=null
                         && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
 

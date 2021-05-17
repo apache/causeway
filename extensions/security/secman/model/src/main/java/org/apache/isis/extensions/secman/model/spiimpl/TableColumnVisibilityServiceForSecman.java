@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
@@ -28,13 +29,20 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
     final MetaModelService metaModelService;
 
     @Override
-    public boolean hides(Class<?> collectionType, String memberId) {
+    public boolean hides(Class<?> elementType, String memberId) {
         val me = meService.me();
         val permissionSet = me.getPermissionSet();
-        val objectType = metaModelService.toObjectType(collectionType);
-        val featureId = ApplicationFeatureId.newMember(objectType, memberId);
-        val granted = permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
+
+        final boolean granted = metaModelService.lookupLogicalTypeByClass(elementType)
+            .map(LogicalType::getLogicalTypeName)
+            .map(objectType->{
+                val featureId = ApplicationFeatureId.newMember(objectType, memberId);
+                return permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
+            })
+            .orElse(false); // do not grant if elementType has no objectType
+
         return !granted;
+
     }
 
 }

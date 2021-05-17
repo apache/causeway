@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
@@ -27,8 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet
  */
 public class ObjectTypeFacetDerivedFromIoCNamingStrategy extends ObjectTypeFacetAbstract {
 
-    ObjectTypeFacetDerivedFromIoCNamingStrategy(final String value, final FacetHolder holder) {
-        super(value, holder);
+    ObjectTypeFacetDerivedFromIoCNamingStrategy(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder);
     }
 
 }
