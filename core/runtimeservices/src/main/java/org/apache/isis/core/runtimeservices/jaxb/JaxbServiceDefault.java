@@ -39,6 +39,7 @@ import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -66,7 +67,7 @@ public class JaxbServiceDefault extends Simple {
             val domainObjectList = (DomainObjectList) domainObject;
             try {
                 val elementType = specificationLoader
-                        .specForLogicalTypeName(domainObjectList.getElementObjectType())
+                        .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
                         .map(ObjectSpecification::getCorrespondingClass)
                         .orElse(null);
                 if (elementType!=null

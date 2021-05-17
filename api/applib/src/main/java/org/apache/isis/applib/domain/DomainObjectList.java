@@ -37,6 +37,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 
+import lombok.Getter;
+
 /**
  * The initial idea of {@link DomainObjectList} was to simplify restful clients.
  * <p>
@@ -97,13 +99,13 @@ public class DomainObjectList {
     }
     public DomainObjectList(
             final String title,
-            final String elementObjectType,
-            final String actionOwningType,
+            final String elementTypeFqcn,
+            final String actionOwnerFqcn,
             final String actionId,
             final String actionArguments) {
         this.title = title;
-        this.elementObjectType = elementObjectType;
-        this.actionOwningType = actionOwningType;
+        this.elementTypeFqcn = elementTypeFqcn;
+        this.actionOwnerFqcn = actionOwnerFqcn;
         this.actionId = actionId;
         this.actionArguments = actionArguments;
     }
@@ -119,30 +121,26 @@ public class DomainObjectList {
     // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> {  }
 
-    private String elementObjectType;
     @Property(
             domainEvent = ElementObjectTypeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    public String getElementObjectType() {
-        return elementObjectType;
-    }
+    @Getter
+    private String elementTypeFqcn;
 
 
     // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> {  }
 
-    private String actionOwningType;
+
 
     @Property(
             domainEvent = ActionOwningTypeDomainEvent.class,
             optionality = Optionality.OPTIONAL,
             editing = Editing.DISABLED
             )
-    public String getActionOwningType() {
-        return actionOwningType;
-    }
-
+    @Getter
+    private String actionOwnerFqcn;
 
     // -- property: actionId
     public static class ActionIdDomainEvent extends PropertyDomainEvent<String> {  }

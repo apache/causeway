@@ -541,4 +541,8 @@ extends
                 || Externalizable.class.isAssignableFrom(getCorrespondingClass());
     }
 
+    default String fqcn() {
+        return  getCorrespondingClass().getName();
+    }
+
 }
