@@ -53,7 +53,23 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         if(!spec.isAbstract()
                 && hasUsableObjectTypeFacet(spec)) {
 
-            logicalTypeByName.merge(spec.getLogicalTypeName(), spec.getLogicalType(), this::mostSpecializedOfConcrete);
+            val key = spec.getLogicalTypeName();
+
+            val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
+
+            if(previousMapping!=null) {
+
+                val msg = String.format("Overriding existing mapping\n"
+                        + "%s -> %s,\n"
+                        + "with\n "
+                        + "%s -> %s\n "
+                        + "This will result in the meta-model validation to fail.",
+                        key, previousMapping.getCorrespondingClass(),
+                        key, spec.getCorrespondingClass());
+
+                log.warn(msg);
+
+            }
         }
     }
 
@@ -64,35 +80,5 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         // don't have an ObjectType; hence the guard.
         return spec.containsNonFallbackFacet(ObjectTypeFacet.class);
     }
-
-    private LogicalType mostSpecializedOfConcrete(final @NonNull LogicalType a, final @NonNull LogicalType b) {
-        if(a.equals(b)) {
-            return a;
-        }
-        if(a.getCorrespondingClass().isAssignableFrom(b.getCorrespondingClass())) {
-            return b;
-        }
-        if(b.getCorrespondingClass().isAssignableFrom(a.getCorrespondingClass())) {
-            return a;
-        }
-
-        val key = a.getLogicalTypeName();
-
-        val msg = String.format("Failed to register mapping\n"
-                + "%s -> %s,\n"
-                + "because there was already a mapping\n "
-                + "%s -> %s.\n"
-                + "Meta-model validation should detect this and fail, if not - that's a bug.",
-                key,
-                b.getCorrespondingClass(),
-                key,
-                a.getCorrespondingClass());
-
-        log.warn(msg);
-
-        // do not fail fast, but clear the entry and let MM validation fail later on
-        return null;
-    }
-
 
 }

@@ -57,6 +57,7 @@ implements ObjectTypeFacet {
     @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("logicalType", logicalType.getLogicalTypeName());
+        attributeMap.put("logicalTypeName", logicalType.getLogicalTypeName());
+        attributeMap.put("logicalTypeCorrespondingClass", logicalType.getCorrespondingClass().getName());
     }
 }

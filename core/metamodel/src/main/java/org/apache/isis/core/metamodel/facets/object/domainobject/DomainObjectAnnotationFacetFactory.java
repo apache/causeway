@@ -496,17 +496,15 @@ implements
                     @Override
                     public void validate(ObjectSpecification objSpec) {
 
-                        // Allow members of a type hierarchy including interfaces to share the same
-                        // @DomainObject(objectType=...)
+                        // @DomainObject(objectType=...) must be unique among non-abstract types
                         // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
                         // that have the same @DomainObject(objectType=...) should be allowed.
-                        // The only constraint that applies, is that there cannot be multiple bookmark-able
+                        // A hard constraint that applies, is that there cannot be multiple bookmark-able
                         // types that share the same @DomainObject(objectType=...).
                         // This must be guaranteed by MM validation.
                         // - see also LogicalTypeResolver.register(...)
 
-                        if(objSpec.isManagedBean()
-                                || objSpec.isAbstract()) {
+                        if(objSpec.isAbstract()) {
                             return;
                         }
                         collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
@@ -535,27 +533,8 @@ implements
                         collidingSpecsByLogicalTypeName.clear();
                     }
 
-                    // detect whether specs (of concrete type) belong to more than one type hierarchy
                     private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
-                        if(specs.size()<=1) {
-                            return false;
-                        }
-                        // algorithm: check all non-first against the first
-
-                        val first = specs.get(0);
-
-                        val shareSameTypeHierarchy = specs.stream()
-                                .skip(1)
-                                .allMatch(next->shareSameTypeHierarchy(first, next));
-
-                        return !shareSameTypeHierarchy;
-                    }
-
-                    private boolean shareSameTypeHierarchy(
-                            final @NonNull ObjectSpecification  a, final @NonNull ObjectSpecification b) {
-                        return a.equals(b)
-                                || a.getCorrespondingClass().isAssignableFrom(b.getCorrespondingClass())
-                                || b.getCorrespondingClass().isAssignableFrom(a.getCorrespondingClass());
+                        return specs.size()>1;
                     }
 
                     private String asCsv(final List<ObjectSpecification> specList) {
