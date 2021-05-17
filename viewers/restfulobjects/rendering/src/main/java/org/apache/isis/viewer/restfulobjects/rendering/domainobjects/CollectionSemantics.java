@@ -22,25 +22,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public enum CollectionSemantics {
 
-    SET("addToSet"),
-    LIST("addToList");
-
-    private final String addToKey;
-
-    private CollectionSemantics(final String addToKey) {
-        this.addToKey = addToKey;
-    }
-
-    public String getAddToKey() {
-        return addToKey;
-    }
-
-    public String getRemoveFromKey() {
-        return "removeFrom";
-    }
+    SET,
+    LIST;
 
     public static CollectionSemantics determine(final OneToManyAssociation collection) {
-        return collection.getCollectionSemantics().isAnySet() ? CollectionSemantics.SET : CollectionSemantics.LIST;
+        return collection.getCollectionSemantics().isAnySet()
+                ? CollectionSemantics.SET
+                : CollectionSemantics.LIST;
     }
 
 }

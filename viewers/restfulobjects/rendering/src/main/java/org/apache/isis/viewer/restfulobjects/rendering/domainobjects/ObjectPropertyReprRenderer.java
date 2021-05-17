@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -192,12 +191,9 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
         if (usability().isVetoed()) {
             return;
         }
-        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
-        for (final String mutator : mutators.keySet()) {
-            final MutatorSpec mutatorSpec = mutators.get(mutator);
-            addLinkFor(mutatorSpec);
-        }
-        return;
+        objectMemberType.getMutators()
+            .values()
+            .forEach(this::addLinkFor);
     }
 
     // ///////////////////////////////////////////////////

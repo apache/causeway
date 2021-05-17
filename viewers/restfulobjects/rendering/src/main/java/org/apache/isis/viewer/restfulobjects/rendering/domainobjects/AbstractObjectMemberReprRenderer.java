@@ -37,6 +37,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
+import lombok.NonNull;
+
 public abstract class AbstractObjectMemberReprRenderer<
     R extends ReprRendererAbstract<R, ManagedMember>,
     T extends ObjectMember>
@@ -222,7 +224,7 @@ extends ReprRendererAbstract<R, ManagedMember> {
      * For subclasses to call back to when {@link #addMutatorLinksIfEnabled() adding
      * mutators}.
      */
-    protected void addLinkFor(final MutatorSpec mutatorSpec) {
+    protected void addLinkFor(final @NonNull MutatorSpec mutatorSpec) {
         if (!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
             return;
         }
