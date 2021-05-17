@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -132,7 +132,7 @@ implements ObjectSpecification {
     @Override
     public LogicalType getLogicalType() {
         if(logicalType == null) {
-            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value();
+            val logicalTypeName = getFacet(ObjectTypeFacet.class).value();
             logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
         }
         return logicalType;

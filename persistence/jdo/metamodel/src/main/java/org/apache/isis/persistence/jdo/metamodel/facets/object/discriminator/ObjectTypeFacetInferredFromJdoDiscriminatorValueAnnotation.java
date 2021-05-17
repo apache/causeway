@@ -16,15 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
+package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
-public class ObjectSpecIdFacetOnStandaloneList extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation
+extends ObjectTypeFacetAbstract {
 
-    public ObjectSpecIdFacetOnStandaloneList(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.NOT_DERIVED);
+    public ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
+            final String value,
+            final FacetHolder holder) {
+        super(value, holder);
     }
+
 }
+

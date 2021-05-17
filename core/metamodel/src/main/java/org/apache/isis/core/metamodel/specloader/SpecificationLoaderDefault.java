@@ -306,7 +306,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
-        log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
+        log.info("Metamodel created in " + stopWatch.getMillis() + " ms.");
 
         if(isFullIntrospect()) {
             setMetamodelFullyIntrospected(true);
@@ -452,7 +452,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(cls!=null) {
 
 //TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...
-//            log.warn("Lookup for ObjectSpecId '{}' failed, but found a matching fully qualified "
+//            log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
 //                    + "class name to use instead. This warning is an indicator, that {} is not "
 //                    + "discovered by Spring during bootstrapping of this application.",
 //                    objectSpecId.getSpecId(),

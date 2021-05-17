@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassName;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
@@ -39,7 +39,7 @@ import lombok.val;
 
 public class JdoDiscriminatorAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements ObjectSpecIdFacetFactory {
+implements ObjectTypeFacetFactory {
 
     @Inject private ClassSubstitutorRegistry classSubstitutorRegistry;
     @Inject @Setter private JdoFacetContext jdoFacetContext;
@@ -49,7 +49,7 @@ implements ObjectSpecIdFacetFactory {
     }
 
     @Override
-    public void process(final ProcessObjectSpecIdContext processClassContext) {
+    public void process(final ProcessObjectTypeContext processClassContext) {
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processClassContext.getCls();
@@ -64,9 +64,9 @@ implements ObjectSpecIdFacetFactory {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final String annotationValue = annotation.value();
-        final ObjectSpecIdFacet facet;
+        final ObjectTypeFacet facet;
         if (!_Strings.isNullOrEmpty(annotationValue)) {
-            facet = new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
+            facet = new ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
                     annotationValue, facetHolder);
         } else {
             val substitute = classSubstitutorRegistry.getSubstitution(cls);
@@ -75,7 +75,7 @@ implements ObjectSpecIdFacetFactory {
             }
 
             val substituted = substitute.apply(cls);
-            facet = new ObjectSpecIdFacetDerivedFromClassName(
+            facet = new ObjectTypeFacetDerivedFromClassName(
                             substituted.getCanonicalName(),
                             facetHolder);
 

@@ -24,8 +24,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 
@@ -70,16 +70,16 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         assertTrue(facet instanceof JdoDiscriminatorFacetDefault);
     }
 
-    public void testObjectSpecIdAnnotationPickedUpOnClass() {
+    public void testObjectTypeAnnotationPickedUpOnClass() {
         @Discriminator("CUS")
         abstract class Customer {
         }
 
-        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
+        facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation);
+        assertTrue(facet instanceof ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation);
     }
 
     public void testIfNoEntityAnnotationThenNoFacet() {
@@ -89,7 +89,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertNull(facet);
     }
 
@@ -98,9 +98,9 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer {
         }
 
-        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
+        facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final ObjectSpecIdFacet discriminatorValueFacet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final ObjectTypeFacet discriminatorValueFacet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertEquals("CUS", discriminatorValueFacet.value());
     }
 

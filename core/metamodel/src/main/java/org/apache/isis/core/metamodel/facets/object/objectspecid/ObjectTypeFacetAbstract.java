@@ -25,25 +25,25 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ObjectSpecIdFacetAbstract
+public abstract class ObjectTypeFacetAbstract
 extends FacetAbstract
-implements ObjectSpecIdFacet {
+implements ObjectTypeFacet {
 
     public static Class<? extends Facet> type() {
-        return ObjectSpecIdFacet.class;
+        return ObjectTypeFacet.class;
     }
 
     private final String value;
 
-    public ObjectSpecIdFacetAbstract(final String value, final FacetHolder holder) {
+    public ObjectTypeFacetAbstract(final String value, final FacetHolder holder) {
         this(value, holder, Derivation.NOT_DERIVED);
     }
 
-    protected ObjectSpecIdFacetAbstract(
+    protected ObjectTypeFacetAbstract(
             final String value,
             final FacetHolder holder,
             final Derivation derivation) {
-        super(ObjectSpecIdFacetAbstract.type(), holder, derivation);
+        super(ObjectTypeFacetAbstract.type(), holder, derivation);
         this.value = value;
     }
 

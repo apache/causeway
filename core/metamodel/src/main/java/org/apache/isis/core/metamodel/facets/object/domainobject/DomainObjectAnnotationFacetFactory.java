@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -88,7 +88,7 @@ extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
     PostConstructMethodCache,
-    ObjectSpecIdFacetFactory {
+    ObjectTypeFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
@@ -105,7 +105,7 @@ implements
     }
 
     @Override
-    public void process(final ProcessObjectSpecIdContext processClassContext) {
+    public void process(final ProcessObjectTypeContext processClassContext) {
         processObjectType(processClassContext);
     }
 
@@ -256,13 +256,13 @@ implements
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
-    void processObjectType(final ProcessObjectSpecIdContext processClassContext) {
+    void processObjectType(final ProcessObjectTypeContext processClassContext) {
 
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
+        val facet = ObjectTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         // then add
         super.addFacet(facet);

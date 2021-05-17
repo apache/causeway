@@ -16,22 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets;
+
+package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
-public interface ObjectSpecIdFacetFactory extends FacetFactory {
+/**
+ * @since 2.0
+ */
+public class ObjectTypeFacetDerivedFromIoCNamingStrategy extends ObjectTypeFacetAbstract {
 
-    // //////////////////////////////////////
-    // process objectSpecId
-    // //////////////////////////////////////
-
-    public static class ProcessObjectSpecIdContext extends AbstractProcessWithClsContext<FacetHolder> {
-        public ProcessObjectSpecIdContext(final Class<?> cls, final FacetHolder facetHolder) {
-            super(cls, facetHolder);
-        }
+    ObjectTypeFacetDerivedFromIoCNamingStrategy(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
-
-    void process(final ProcessObjectSpecIdContext processClassContext);
 
 }

@@ -61,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -222,9 +222,9 @@ implements ObjectSpecification {
     }
 
     private LogicalType lookupLogicalType() {
-        val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
+        val objectSpecIdFacet = getFacet(ObjectTypeFacet.class);
         if(objectSpecIdFacet == null) {
-            throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
+            throw new IllegalStateException("could not find an ObjectTypeFacet for " + this.getFullIdentifier());
         }
         return LogicalType.eager(correspondingClass, objectSpecIdFacet.value());
     }

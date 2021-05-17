@@ -29,20 +29,20 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForJdoPersistenceCapableAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
 import lombok.val;
 
 /**
- * Implements {@link ObjectSpecIdFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
+ * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JdoPersistenceCapableAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements ObjectSpecIdFacetFactory {
+implements ObjectTypeFacetFactory {
 
     @Inject @Setter private JdoFacetContext jdoFacetContext;
 
@@ -51,7 +51,7 @@ implements ObjectSpecIdFacetFactory {
     }
 
     @Override
-    public void process(ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext processClassContext) {
+    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
@@ -89,7 +89,7 @@ implements ObjectSpecIdFacetFactory {
                     annotationSchemaAttribute,
                     annotationTableAttribute, annotationIdentityType, facetHolder);
             FacetUtil.addFacet(jdoPersistenceCapableFacet);
-            FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+            FacetUtil.addFacet(ObjectTypeFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
         }
 
         return;

@@ -23,14 +23,14 @@ import java.util.Locale;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation
-extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetForJdoPersistenceCapableAnnotation
+extends ObjectTypeFacetAbstract {
 
-    public static ObjectSpecIdFacet create(
+    public static ObjectTypeFacet create(
             final JdoPersistenceCapableFacet persistenceCapableFacet,
             final FacetHolder holder) {
 
@@ -42,10 +42,10 @@ extends ObjectSpecIdFacetAbstract {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new ObjectSpecIdFacetForJdoPersistenceCapableAnnotation(objectType, holder);
+        return new ObjectTypeFacetForJdoPersistenceCapableAnnotation(objectType, holder);
     }
 
-    private ObjectSpecIdFacetForJdoPersistenceCapableAnnotation(final String value,
+    private ObjectTypeFacetForJdoPersistenceCapableAnnotation(final String value,
             final FacetHolder holder) {
         super(value, holder);
     }

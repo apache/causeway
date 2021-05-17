@@ -33,7 +33,7 @@ import lombok.val;
  *
  * @since 2.0
  */
-public class ObjectSpecIdMalformedValidator
+public class ObjectTypeMalformedValidator
 implements MetaModelRefiner {
 
     @Override
@@ -46,7 +46,7 @@ implements MetaModelRefiner {
                 return;
             }
 
-            val objectSpecIdFacet = spec.getFacet(ObjectSpecIdFacet.class);
+            val objectSpecIdFacet = spec.getFacet(ObjectTypeFacet.class);
             if(objectSpecIdFacet == null) {
                 return;
             }

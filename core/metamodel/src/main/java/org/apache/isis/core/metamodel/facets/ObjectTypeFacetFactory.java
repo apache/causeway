@@ -16,19 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
+package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
-public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation
-extends ObjectSpecIdFacetAbstract {
+public interface ObjectTypeFacetFactory extends FacetFactory {
 
-    public ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
-            final String value,
-            final FacetHolder holder) {
-        super(value, holder);
+    // -- process objectType
+
+    public static class ProcessObjectTypeContext
+    extends AbstractProcessWithClsContext<FacetHolder> {
+        public ProcessObjectTypeContext(final Class<?> cls, final FacetHolder facetHolder) {
+            super(cls, facetHolder);
+        }
     }
 
-}
+    void process(ProcessObjectTypeContext processClassContext);
 
+}

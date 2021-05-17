@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactory;
@@ -238,24 +238,24 @@ public class FacetProcessor {
         return false;
     }
 
-    public void processObjectSpecId(Class<?> cls, FacetHolder facetHolder) {
+    public void processObjectType(Class<?> cls, FacetHolder facetHolder) {
         val factoryList = getObjectSpecIfFacetFactoryList();
         for (val facetFactory : factoryList) {
-            facetFactory.process(new ProcessObjectSpecIdContext(cls, facetHolder));
+            facetFactory.process(new ProcessObjectTypeContext(cls, facetHolder));
         }
     }
 
-    private List<ObjectSpecIdFacetFactory> objectSpecIfFacetFactoryList = null;
+    private List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList = null;
 
 
-    private List<ObjectSpecIdFacetFactory> getObjectSpecIfFacetFactoryList() {
+    private List<ObjectTypeFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
-            val facetFactories = _Lists.<ObjectSpecIdFacetFactory>newArrayList();
+            val facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
 
             factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
             .forEach(facetFactory->{
-                if (facetFactory instanceof ObjectSpecIdFacetFactory) {
-                    val objectSpecIdFacetFactory = (ObjectSpecIdFacetFactory) facetFactory;
+                if (facetFactory instanceof ObjectTypeFacetFactory) {
+                    val objectSpecIdFacetFactory = (ObjectTypeFacetFactory) facetFactory;
                     facetFactories.add(objectSpecIdFacetFactory);
                 }
             });

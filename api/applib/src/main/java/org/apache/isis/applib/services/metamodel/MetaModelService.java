@@ -28,19 +28,24 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 /**
  * This service provides a formal API into the framework's metamodel.
  *
- * @apiNote This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
+ * @apiNote This API is currently extremely limited, but the intention is to extend it
+ * gradually as use cases emerge.
  *
  * @since 1.x {@index}
  */
 public interface MetaModelService {
 
     /**
-     * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
+     * Provides a reverse lookup of a domain class' object type, as defined by
+     * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
+     * <code>ObjectSpecIdFacet</code>).
      */
     Class<?> fromObjectType(final String objectType);
 
     /**
-     * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
+     * Provides a lookup of a domain class' object type, as defined by
+     * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
+     * <code>ObjectSpecIdFacet</code>).
      */
     String toObjectType(final Class<?> domainType);
 
@@ -58,7 +63,8 @@ public interface MetaModelService {
      * </p>
      *
      * <p>
-     *     Note that {@link MetaModelService#exportMetaModel(Config)} provides a superset of the functionality provided by this method.
+     *     Note that {@link MetaModelService#exportMetaModel(Config)} provides a superset of
+     *     the functionality provided by this method.
      * </p>
      *
      */

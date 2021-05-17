@@ -112,7 +112,7 @@ implements FacetHolder {
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
-        facetProcessor.processObjectSpecId(correspondingClass, this);
+        facetProcessor.processObjectType(correspondingClass, this);
 
     }
 

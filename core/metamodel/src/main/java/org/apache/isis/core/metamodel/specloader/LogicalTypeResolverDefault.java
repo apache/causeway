@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -48,8 +48,10 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
+
+        // collect concrete classes (do not collect abstract or anonymous types or interfaces)
         if(!spec.isAbstract()
-                && hasUsableSpecId(spec)) {
+                && hasUsableObjectTypeFacet(spec)) {
 
             logicalTypeByName.merge(spec.getLogicalTypeName(), spec.getLogicalType(), this::mostSpecializedOfConcrete);
         }
@@ -57,10 +59,10 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
     // -- HELPER
 
-    private boolean hasUsableSpecId(ObjectSpecification spec) {
-        // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
-        // don't have an ObjectSpecId; hence the guard.
-        return spec.containsNonFallbackFacet(ObjectSpecIdFacet.class);
+    private boolean hasUsableObjectTypeFacet(ObjectSpecification spec) {
+        // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+        // don't have an ObjectType; hence the guard.
+        return spec.containsNonFallbackFacet(ObjectTypeFacet.class);
     }
 
     private LogicalType mostSpecializedOfConcrete(final @NonNull LogicalType a, final @NonNull LogicalType b) {

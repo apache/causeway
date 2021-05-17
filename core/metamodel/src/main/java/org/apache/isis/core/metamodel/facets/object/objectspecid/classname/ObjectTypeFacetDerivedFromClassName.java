@@ -21,14 +21,16 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
-public class ObjectSpecIdFacetDerivedFromClassName extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetDerivedFromClassName
+extends ObjectTypeFacetAbstract {
 
-    public ObjectSpecIdFacetDerivedFromClassName(final Class<?> cls, final FacetHolder holder) {
+    public ObjectTypeFacetDerivedFromClassName(final Class<?> cls, final FacetHolder holder) {
         this(ClassUtil.getCanonicalName_friendlyToInnerClasses(cls), holder);
     }
-    public ObjectSpecIdFacetDerivedFromClassName(final String value, final FacetHolder holder) {
+
+    public ObjectTypeFacetDerivedFromClassName(final String value, final FacetHolder holder) {
         super(value, holder, Derivation.DERIVED);
     }
 

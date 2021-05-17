@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -81,8 +81,8 @@ public class MetaModelServiceDefault implements MetaModelService {
         }
 
         return specificationLoader.specForType(domainType)
-        .flatMap(spec->spec.lookupFacet(ObjectSpecIdFacet.class))
-        .map(ObjectSpecIdFacet::value)
+        .flatMap(spec->spec.lookupFacet(ObjectTypeFacet.class))
+        .map(ObjectTypeFacet::value)
         .orElse(null);
     }
 

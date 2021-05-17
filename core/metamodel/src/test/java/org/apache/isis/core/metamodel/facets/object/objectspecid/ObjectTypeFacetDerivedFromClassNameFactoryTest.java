@@ -24,22 +24,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassNameFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class ObjectTypeFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private ObjectSpecIdFacetDerivedFromClassNameFactory facetFactory;
+    private ObjectTypeFacetDerivedFromClassNameFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory();
+        facetFactory = new ObjectTypeFacetDerivedFromClassNameFactory();
     }
 
     public static class Customer {
@@ -49,12 +49,12 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
     public void installsFacet_passedThroughClassSubstitutor() {
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(CustomerAsProxiedByDataNucleus.class, facetHolder));
+        facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(CustomerAsProxiedByDataNucleus.class, facetHolder));
 
-        final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final ObjectTypeFacet facet = facetHolder.getFacet(ObjectTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));
+        assertThat(facet instanceof ObjectTypeFacetDerivedFromClassName, is(true));
         assertThat(facet.value(), is(Customer.class.getCanonicalName()));
     }
 

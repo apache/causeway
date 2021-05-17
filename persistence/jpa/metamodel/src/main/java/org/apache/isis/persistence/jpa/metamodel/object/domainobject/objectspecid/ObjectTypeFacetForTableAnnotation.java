@@ -22,14 +22,14 @@ import java.util.Locale;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableFacetAnnotation;
 
-public class ObjectSpecIdFacetForTableAnnotation
-extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetForTableAnnotation
+extends ObjectTypeFacetAbstract {
 
-    public static ObjectSpecIdFacet create(
+    public static ObjectTypeFacet create(
             final JpaTableFacetAnnotation tableFacet,
             final FacetHolder holder) {
 
@@ -41,10 +41,10 @@ extends ObjectSpecIdFacetAbstract {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
-        return new ObjectSpecIdFacetForTableAnnotation(objectType, holder);
+        return new ObjectTypeFacetForTableAnnotation(objectType, holder);
     }
 
-    private ObjectSpecIdFacetForTableAnnotation(
+    private ObjectTypeFacetForTableAnnotation(
             final String value,
             final FacetHolder holder) {
         super(value, holder);

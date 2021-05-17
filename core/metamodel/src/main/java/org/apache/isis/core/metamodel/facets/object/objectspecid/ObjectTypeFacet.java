@@ -19,13 +19,18 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Identifies the type of entity, such that OIDs are self-describing.
+ *  Corresponds to the value of {@link DomainObject#objectType()},
+ *  that specifies the <i>logical type name</i> of a domain object.
+ *  <p>
+ *  The <i>logical type name</i> must be unique among non-abstract classes,
+ *  but is allowed to be shared with interfaces and abstract classes.
  */
-public interface ObjectSpecIdFacet extends Facet {
+public interface ObjectTypeFacet extends Facet {
 
     String value();
 

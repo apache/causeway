@@ -20,15 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
-/**
- * @since 2.0
- */
-public class ObjectSpecIdFacetDerivedFromIoCNamingStrategy extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetOnStandaloneList extends ObjectTypeFacetAbstract {
 
-    ObjectSpecIdFacetDerivedFromIoCNamingStrategy(final String value, final FacetHolder holder) {
-        super(value, holder);
+    public ObjectTypeFacetOnStandaloneList(final String value, final FacetHolder holder) {
+        super(value, holder, Derivation.NOT_DERIVED);
     }
-
 }

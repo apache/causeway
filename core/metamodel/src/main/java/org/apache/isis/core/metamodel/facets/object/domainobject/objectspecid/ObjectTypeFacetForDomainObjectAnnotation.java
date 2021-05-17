@@ -24,23 +24,23 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
 
-public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFacetAbstract {
+public class ObjectTypeFacetForDomainObjectAnnotation extends ObjectTypeFacetAbstract {
 
-    public static ObjectSpecIdFacet create(
+    public static ObjectTypeFacet create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder) {
 
         return domainObjectIfAny
                 .map(DomainObject::objectType)
                 .filter(_Strings::isNotEmpty)
-                .map(objectType -> new ObjectSpecIdFacetForDomainObjectAnnotation(objectType, holder))
+                .map(objectType -> new ObjectTypeFacetForDomainObjectAnnotation(objectType, holder))
                 .orElse(null);
     }
 
-    private ObjectSpecIdFacetForDomainObjectAnnotation(final String value,
+    private ObjectTypeFacetForDomainObjectAnnotation(final String value,
             final FacetHolder holder) {
         super(value, holder);
     }

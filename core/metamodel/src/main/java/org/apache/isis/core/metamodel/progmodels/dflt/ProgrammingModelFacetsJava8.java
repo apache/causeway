@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilt
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -178,7 +178,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
 
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ObjectSpecIdFacetDerivedFromClassNameFactory.class);
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ObjectTypeFacetDerivedFromClassNameFactory.class);
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, DomainServiceFacetAnnotationFactory.class);
 
         addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, IteratorFilteringFacetFactory.class);

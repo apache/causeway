@@ -26,25 +26,25 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid.ObjectSpecIdFacetForTableAnnotation;
+import org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid.ObjectTypeFacetForTableAnnotation;
 
 import lombok.val;
 
 /**
- * Implements {@link ObjectSpecIdFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
+ * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JpaTableAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements ObjectSpecIdFacetFactory {
+implements ObjectTypeFacetFactory {
 
     public JpaTableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext processClassContext) {
+    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         final Table annotation = Annotations.getAnnotation(cls, Table.class);
@@ -68,7 +68,7 @@ implements ObjectSpecIdFacetFactory {
                 annotationTableAttribute,
                 facetHolder);
         FacetUtil.addFacet(jdoPersistenceCapableFacet);
-        FacetUtil.addFacet(ObjectSpecIdFacetForTableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+        FacetUtil.addFacet(ObjectTypeFacetForTableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
 
         return;
     }

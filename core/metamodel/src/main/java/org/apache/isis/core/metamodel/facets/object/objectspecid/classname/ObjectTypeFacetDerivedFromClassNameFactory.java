@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -41,9 +41,9 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class ObjectSpecIdFacetDerivedFromClassNameFactory
+public class ObjectTypeFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
-implements MetaModelRefiner, ObjectSpecIdFacetFactory {
+implements MetaModelRefiner, ObjectTypeFacetFactory {
 
     @Inject
     private ClassSubstitutorRegistry classSubstitutorRegistry =
@@ -51,19 +51,19 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault()));
 
 
-    public ObjectSpecIdFacetDerivedFromClassNameFactory() {
+    public ObjectTypeFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    public ObjectSpecIdFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
+    public ObjectTypeFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
         this();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     @Override
-    public void process(final ProcessObjectSpecIdContext processClassContext) {
+    public void process(final ProcessObjectTypeContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         // don't trash existing facet
-        if(facetHolder.containsNonFallbackFacet(ObjectSpecIdFacet.class)) {
+        if(facetHolder.containsNonFallbackFacet(ObjectTypeFacet.class)) {
             return;
         }
         val cls = processClassContext.getCls();
@@ -71,8 +71,8 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         if(substitute.isNeverIntrospect()) {
             return;
         }
-        val objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitute.apply(cls));
-        FacetUtil.addFacet(objectSpecIdFacet);
+        val objectTypeFacet = createObjectTypeFacet(facetHolder, substitute.apply(cls));
+        FacetUtil.addFacet(objectTypeFacet);
     }
 
     @Override
@@ -80,7 +80,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         // now a no-op.
     }
 
-    private static ObjectSpecIdFacet createObjectSpecIdFacet(
+    private static ObjectTypeFacet createObjectTypeFacet(
             final FacetHolder facetHolder,
             final Class<?> substitutedClass) {
 
@@ -88,9 +88,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         val isService = serviceId!=null;
 
         if (isService) {
-            return new ObjectSpecIdFacetDerivedFromIoCNamingStrategy(serviceId, facetHolder);
+            return new ObjectTypeFacetDerivedFromIoCNamingStrategy(serviceId, facetHolder);
         }
-        return new ObjectSpecIdFacetDerivedFromClassName(substitutedClass, facetHolder);
+        return new ObjectTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {
@@ -117,8 +117,8 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                 return;
             }
 
-            val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-            if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
+            val objectSpecIdFacet = objectSpec.getFacet(ObjectTypeFacet.class);
+            if(objectSpecIdFacet instanceof ObjectTypeFacetDerivedFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

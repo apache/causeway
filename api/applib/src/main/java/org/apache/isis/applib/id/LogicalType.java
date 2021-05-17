@@ -39,22 +39,22 @@ import lombok.val;
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
  * <p>
- * Equality is driven by the corresponding class exclusively, meaning the logical name is ignored 
+ * Equality is driven by the corresponding class exclusively, meaning the logical name is ignored
  * in order to not cause any side-effects on logical name memoization eg. it happening too early.
  * <p>
- * Meta-model validators will take care, that there is no logical name ambiguity: 
- * There cannot be any LogicalTypes sharing the same corresponding class while having different 
- * logical names. 
- * 
+ * Meta-model validators will take care, that there is no logical name ambiguity:
+ * There cannot be any LogicalTypes sharing the same corresponding class while having different
+ * logical names.
+ *
  * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
  */
 @ToString
-public final class LogicalType 
-implements 
+public final class LogicalType
+implements
     Comparable<LogicalType>,
     Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -62,89 +62,89 @@ implements
      */
     @Getter
     private final Class<?> correspondingClass;
-    
+
     @ToString.Exclude
     private final Supplier<String> logicalNameProvider;
-    
+
     @ToString.Exclude // lazy, so don't use in toString (keep free from side-effects)
     private String logicalName;
 
     // -- FACTORIES
-    
+
     /**
      * Returns a new TypeIdentifier based on the corresponding class
-     * and a {@code logicalNameProvider} for lazy logical name lookup.  
+     * and a {@code logicalNameProvider} for lazy logical name lookup.
      */
     public static LogicalType lazy(
-            final @NonNull Class<?> correspondingClass, 
+            final @NonNull Class<?> correspondingClass,
             final @NonNull Supplier<String> logicalNameProvider) {
-        
+
         return new LogicalType(correspondingClass, logicalNameProvider);
     }
-    
+
     /**
      * Returns a new TypeIdentifier based on the corresponding class
-     * and (ahead of time) known {@code logicalName}. 
+     * and (ahead of time) known {@code logicalName}.
      */
     public static LogicalType eager(
-            final @NonNull Class<?> correspondingClass, 
+            final @NonNull Class<?> correspondingClass,
             final String logicalName) {
-        
+
         return new LogicalType(correspondingClass, logicalName);
     }
-    
+
     /**
-     * Use the corresponding class's fully qualified name for the {@code logicalName}. 
+     * Use the corresponding class's fully qualified name for the {@code logicalName}.
      * Most likely used in testing scenarios.
      */
     public static LogicalType fqcn(
             final @NonNull Class<?> correspondingClass) {
-        
+
         return eager(correspondingClass, correspondingClass.getName());
     }
-    
+
     // -- HIDDEN CONSTRUTORS
-    
+
     private LogicalType(
-            final @NonNull Class<?> correspondingClass, 
+            final @NonNull Class<?> correspondingClass,
             final @NonNull Supplier<String> logicalNameProvider) {
-        
+
         this.correspondingClass = correspondingClass;
         this.logicalNameProvider = logicalNameProvider;
     }
-    
+
     private LogicalType(
-            final @NonNull Class<?> correspondingClass, 
+            final @NonNull Class<?> correspondingClass,
             final String logicalName) {
-        
+
         this.correspondingClass = correspondingClass;
         this.logicalName = requireNonEmpty(logicalName);
         this.logicalNameProvider = null;
     }
-    
+
     /**
      * Canonical name of the corresponding class.
      */
     public String getClassName() {
         return getCorrespondingClass().getCanonicalName();
     }
-    
+
     /**
-     * Returns the (unique) logical-type-name, as per the 
-     * {@link ObjectSpecIdFacet}.
+     * Returns the logical-type-name (unique amongst non-abstract classes), as per the
+     * {@link ObjectTypeFacet}.
      *
      * <p>
      * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
-     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime 
+     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
      * bytecode enhancement.
      *
-     * <p> 
-     * The {@link ObjectSpecification} can be retrieved using 
+     * <p>
+     * The {@link ObjectSpecification} can be retrieved using
      * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}} passing the logical-type-name as argument.
-     * 
+     *
      * @see ClassSubstitutorRegistry
-     * @see ObjectSpecIdFacet
+     * @see ObjectTypeFacet
      * @see ObjectSpecification
      * @see SpecificationLoader
      */
@@ -155,12 +155,12 @@ implements
         }
         return logicalName;
     }
-    
+
     /**
      * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
      * <p>
      * Returns the <i>logical simple name</i> part.
-     * @implNote the result is not memoized, to keep it simple 
+     * @implNote the result is not memoized, to keep it simple
      */
     public String getLogicalTypeSimpleName() {
         val logicalTypeName = getLogicalTypeName();
@@ -169,7 +169,7 @@ implements
             ? logicalTypeName.substring(lastDot + 1)
             : logicalTypeName;
     }
-    
+
     /**
      * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
      * <p>
@@ -183,11 +183,11 @@ implements
             ? logicalTypeName.substring(0, lastDot)
             : "";
     }
-    
+
     /**
      * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
-     * Returns a concatenation of <i>namespace</i>, {@code delimiter} and the <i>logical simple name</i>, 
-     * whereas in the absence of a <i>namespace</i> returns a concatenation of {@code root} and the 
+     * Returns a concatenation of <i>namespace</i>, {@code delimiter} and the <i>logical simple name</i>,
+     * whereas in the absence of a <i>namespace</i> returns a concatenation of {@code root} and the
      * <i>logical simple name</i>.
      * @param root
      * @param delimiter
@@ -205,7 +205,7 @@ implements
             return root + logicalTypeName;
         }
     }
-    
+
     // -- OBJECT CONTRACT
 
     @Override
@@ -218,7 +218,7 @@ implements
         }
         return false;
     }
-    
+
     public boolean isEqualTo(final @Nullable LogicalType other) {
         if(other==null) {
             return false;
@@ -253,7 +253,7 @@ implements
         private static final long serialVersionUID = 1L;
         private final @NonNull Class<?> correspondingClass;
         private final @NonNull String logicalTypeName;
-        
+
         private SerializationProxy(LogicalType typeIdentifier) {
             this.correspondingClass = typeIdentifier.getCorrespondingClass();
             this.logicalTypeName = typeIdentifier.getLogicalTypeName();
@@ -263,16 +263,16 @@ implements
             return LogicalType.eager(correspondingClass, logicalTypeName);
         }
     }
-    
+
     // -- HELPER
-    
+
     private String requireNonEmpty(final String logicalName) {
         if(_Strings.isEmpty(logicalName)) {
-            throw _Exceptions.illegalArgument("logical name for type %s cannot be empty", 
+            throw _Exceptions.illegalArgument("logical name for type %s cannot be empty",
                     getCorrespondingClass().getName());
         }
         return logicalName;
     }
-    
-    
+
+
 }
