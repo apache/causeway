@@ -799,7 +799,7 @@ public class IsisConfiguration {
                             "next.*:fa-step-forward",
                             "pause.*:fa-pause",
                             "previous.*:fa-step-backward",
-                            "refresh.*:fa-refresh",
+                            "refresh.*:fa-sync",
                             "remove.*:fa-minus-square",
                             "renew.*:fa-redo",
                             "reset.*:fa-redo",

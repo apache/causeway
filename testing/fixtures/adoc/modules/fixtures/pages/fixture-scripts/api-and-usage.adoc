@@ -78,7 +78,7 @@ You are free, of course, to add additional "convenience" actions into it if you 
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh"
+            cssClassFa="fa fa-sync"
     )
     public Object recreateObjectsAndReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(RecreateSimpleObjects.class).run(null);

@@ -320,7 +320,7 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh",
+            cssClassFa="fa fa-sync",
             sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
@@ -517,6 +517,7 @@ public class FixtureScripts {
     /**
      * @deprecated renamed to {@link #run(FixtureScript...)}
      */
+    @Deprecated
     @Programmatic
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
         run(fixtureScriptList);
@@ -525,6 +526,7 @@ public class FixtureScripts {
     /**
      * @deprecated renamed to {@link #runBuilder(BuilderScriptAbstract)}
      */
+    @Deprecated
     @Programmatic
     public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
         return runBuilder(builderScript);

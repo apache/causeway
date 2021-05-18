@@ -45,7 +45,7 @@ isis.applib.annotation.action-layout.css-class-fa.patterns=\
                         new.*:fa-plus,\
                         add.*:fa-plus-square,\
                         create.*:fa-plus,\
-                        renew.*:fa-refresh,\
+                        renew.*:fa-sync,\
                         list.*:fa-list, \
                         all.*:fa-list, \
                         download.*:fa-download, \
