@@ -436,7 +436,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named/>
             <mb3:section>
                 <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
-                <mb3:serviceAction objectType="isis.applib.ConfigurationMenu" id="configuration"/>
+                <mb3:serviceAction objectType="isis.conf.ConfigurationMenu" id="configuration"/>
             </mb3:section><mb3:section>
 	            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout">
 	                <cpt:named>Logout</cpt:named>
