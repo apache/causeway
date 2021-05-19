@@ -56,7 +56,7 @@ public class SeedSecurityModuleService {
         log.debug("received metamodel event {}", event);
 
         if (event.isPostMetamodel()) {
-        	log.info("SEED security fixtures (JDO)");
+        	log.info("SEED security fixtures (Users and Roles)");
 
             fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
         }

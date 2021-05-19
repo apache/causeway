@@ -48,6 +48,12 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationUserRepository.class,
         RegexReplacer.class,
 
+        // entities, eager meta-model inspection
+        ApplicationPermission.class,
+        ApplicationRole.class,
+        ApplicationTenancy.class,
+        ApplicationUser.class,
+
 })
 @EntityScan(basePackageClasses = {
         ApplicationPermission.class,

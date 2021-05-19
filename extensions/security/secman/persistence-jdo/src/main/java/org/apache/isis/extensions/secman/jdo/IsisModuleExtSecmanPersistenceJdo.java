@@ -47,10 +47,7 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
         ApplicationUserRepository.class,
         RegexReplacer.class,
 
-        // JDO entities
-        // required to be listed in order for Spring to pick them up,
-        // such that as a side-effect these get eagerly introspected by the framework;
-        // whereas the JPA counterpart makes use of the @EntityScan annotation instead
+        // entities, eager meta-model inspection
         ApplicationPermission.class,
         ApplicationRole.class,
         ApplicationTenancy.class,
