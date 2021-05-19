@@ -76,7 +76,6 @@ implements
     private final IsisConfiguration configuration;
     private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
-    //private final List<DataSource> dataSources;
 
 //    @org.springframework.beans.factory.annotation.Value("${spring.profiles.active}")
 //    private String activeProfiles;
@@ -143,13 +142,19 @@ implements
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         add("Isis Version", configuration.getViewer().getWicket().getApplication().getVersion(), map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
-        add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
+        //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
         addSystemProperty("java.version", map);
         addSystemProperty("java.vm.name", map);
         addSystemProperty("java.vm.vendor", map);
         addSystemProperty("java.vm.version", map);
         addSystemProperty("java.vm.info", map);
+
+        add("Active Spring Profiles",
+                Can.ofArray(springEnvironment.getActiveProfiles())
+                .stream()
+                .collect(Collectors.joining(", ")),
+                map);
 
         add("Web Modules", Can.ofCollection(webModules)
                 .stream()
@@ -169,13 +174,6 @@ implements
     private Map<String, ConfigurationProperty> loadConfiguration() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-
-
-            val activeProfiles = Can.ofArray(springEnvironment.getActiveProfiles())
-            .stream()
-            .collect(Collectors.joining(", "));
-
-            add("Active Spring Profiles", activeProfiles, map);
 
             configProps.getIsis().forEach((k, v)->add("isis." + k, v, map));
             configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
