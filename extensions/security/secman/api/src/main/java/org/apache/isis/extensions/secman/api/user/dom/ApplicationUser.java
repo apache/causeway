@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Objects;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -474,7 +474,7 @@ public interface ApplicationUser
     }
 
     @Roles
-    SortedSet<ApplicationRole> getRoles();
+    Set<ApplicationRole> getRoles();
 
 
     // -- PERMISSION SET

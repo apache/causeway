@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jpa.role.dom;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -124,11 +124,11 @@ public class ApplicationRole
 
     @Users
     @ManyToMany
-    private SortedSet<org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser> users = new TreeSet<>();
+    private Set<org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser> users = new TreeSet<>();
 
     @Users
     @Override
-    public SortedSet<ApplicationUser> getUsers() {
+    public Set<ApplicationUser> getUsers() {
         return _Casts.uncheckedCast(users);
     }
     // necessary for integration tests

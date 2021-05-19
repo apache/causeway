@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -136,11 +137,11 @@ public class ApplicationTenancy
     // -- CHILDREN
 
     @OneToMany(mappedBy = "parent")
-    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
+    private Set<ApplicationTenancy> children = new TreeSet<>();
 
     @Children
     @Override
-    public SortedSet<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> getChildren() {
+    public Set<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> getChildren() {
         return _Casts.uncheckedCast(children);
     }
     public void setChildren(SortedSet<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> children) {

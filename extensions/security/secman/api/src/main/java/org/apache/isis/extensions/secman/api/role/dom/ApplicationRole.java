@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -153,7 +153,7 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
     }
 
     @Users
-    SortedSet<ApplicationUser> getUsers();
+    Set<ApplicationUser> getUsers();
 
 
     // -- PERMISSIONS

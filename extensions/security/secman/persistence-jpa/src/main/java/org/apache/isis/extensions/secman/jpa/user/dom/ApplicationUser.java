@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jpa.user.dom;
 
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -339,11 +339,11 @@ public class ApplicationUser
             name = "ApplicationUserRoles",
             joinColumns = {@JoinColumn(name = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "roleId")})
-    private SortedSet<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
+    private Set<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
 
     @Roles
     @Override
-    public SortedSet<ApplicationRole> getRoles() {
+    public Set<ApplicationRole> getRoles() {
         return _Casts.uncheckedCast(roles);
     }
 
