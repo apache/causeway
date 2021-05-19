@@ -27,9 +27,9 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepositoryA
 @Repository
 @Named("isis.ext.secman.ApplicationRoleRepository")
 public class ApplicationRoleRepository
-extends ApplicationRoleRepositoryAbstract {
+extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
 
-    public ApplicationRoleRepository(Class applicationRoleClass) {
+    public ApplicationRoleRepository() {
         super(ApplicationRole.class);
     }
 

@@ -26,6 +26,7 @@ import javax.persistence.Entity;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
@@ -38,7 +39,7 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 
 @Profile("demo-jpa")
 @Entity
-@DomainObject
+@DomainObject(objectType = "demo.EventLogEntryJpa")
 public class EventLogEntryJpa {
 
     public static EventLogEntryJpa of(UiButtonEvent even) {
@@ -70,7 +71,8 @@ public class EventLogEntryJpa {
     @Getter @Setter
     private Acknowledge acknowledge;
 
-    @Action(associateWith = "acknowledge")
+    @Action
+    @ActionLayout(associateWith = "acknowledge")
     public EventLogEntryJpa acknowledge(Acknowledge acknowledge) {
         setAcknowledge(acknowledge);
         return this;
