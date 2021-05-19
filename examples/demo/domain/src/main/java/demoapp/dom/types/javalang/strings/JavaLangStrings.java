@@ -36,19 +36,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdo;
-import demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities;
+import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
 import demoapp.dom.types.javalang.strings.vm.JavaLangStringVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaLangStrings", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaLangStrings implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +63,13 @@ public class JavaLangStrings implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaLangStringJdo> getEntities() {
+    public List<? extends JavaLangStringEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaLangStringJdoEntities entities;
+    ValueHolderRepository<String, ? extends JavaLangStringEntity> entities;
 
     @Inject
     @XmlTransient
