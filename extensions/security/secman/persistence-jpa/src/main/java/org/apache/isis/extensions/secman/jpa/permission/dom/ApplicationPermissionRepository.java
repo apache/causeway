@@ -28,7 +28,6 @@ import javax.inject.Named;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepositoryAbstract;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
@@ -46,7 +45,8 @@ extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
 
     // TODO NAMED_QUERY_FIND_BY_USER not working yet, using workaround  ...
     @Override
-    public List<ApplicationPermission> findByUser(@NonNull final ApplicationUser user) {
+    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission>
+    findByUser(final @NonNull ApplicationUser user) {
         final String username = user.getUsername();
 
         return userRepository.findByUsername(username)
@@ -55,6 +55,7 @@ extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
                 .map(roleStream -> roleStream
                         .map(this::findByRole)
                         .flatMap(List::stream)
+                        .map(org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.class::cast)
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }
