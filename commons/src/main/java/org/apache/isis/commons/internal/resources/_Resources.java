@@ -57,7 +57,7 @@ public final class _Resources {
      * @param resourceName
      * @return An input stream for reading the resource, or null if the resource could not be found.
      */
-    public static InputStream load(
+    public static @Nullable InputStream load(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
