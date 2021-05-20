@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,6 +27,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -64,10 +67,12 @@ public class JodaDateTimes implements HasAsciiDocDescription {
 
     @Collection
     public List<? extends JodaDateTimeEntity> getEntities() {
-        return entities.all();
+        return entities!=null
+                ? entities.all()
+                : Collections.emptyList();
     }
 
-    @Inject
+    @Autowired(required = false)
     @XmlTransient
     ValueHolderRepository<org.joda.time.DateTime, ? extends JodaDateTimeEntity> entities;
 

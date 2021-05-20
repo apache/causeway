@@ -19,23 +19,26 @@
  */
 package demoapp.dom.types.jodatime;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.jodatime.jodadatetime.JodaDateTimes;
+import demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeEntity;
 import demoapp.dom.types.jodatime.jodalocaldate.JodaLocalDates;
 import demoapp.dom.types.jodatime.jodalocaldatetime.JodaLocalDateTimes;
 import demoapp.dom.types.jodatime.jodalocaltime.JodaLocalTimes;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JodaTimeTypesMenu")
 @DomainObjectLayout(named="JodaTimeTypes")
-@Log4j2
+//@Log4j2
 public class JodaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -43,11 +46,19 @@ public class JodaTimeTypesMenu {
     public JodaDateTimes dateTimes(){
         return new JodaDateTimes();
     }
+    @MemberSupport
+    public String disableDateTimes(){
+        return getJodaDisabledMessage();
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
     public JodaLocalDates localDates(){
         return new JodaLocalDates();
+    }
+    @MemberSupport
+    public String disableLocalDates(){
+        return getJodaDisabledMessage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -55,11 +66,35 @@ public class JodaTimeTypesMenu {
     public JodaLocalDateTimes localDateTimes(){
         return new JodaLocalDateTimes();
     }
+    @MemberSupport
+    public String disableLocalDateTimes(){
+        return getJodaDisabledMessage();
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
     public JodaLocalTimes localTimes(){
         return new JodaLocalTimes();
     }
+    @MemberSupport
+    public String disableLocalTimes(){
+        return getJodaDisabledMessage();
+    }
+
+    // -- HELPER
+
+    @Autowired(required = false)
+    private ValueHolderRepository<org.joda.time.DateTime, ? extends JodaDateTimeEntity> entities;
+
+    private boolean isJodaSupported() {
+        return entities!=null;
+    }
+
+    private String getJodaDisabledMessage() {
+        return isJodaSupported()
+                ? null
+                : "Joda is deprecated use java.time classes instead.";
+    }
+
 
 }

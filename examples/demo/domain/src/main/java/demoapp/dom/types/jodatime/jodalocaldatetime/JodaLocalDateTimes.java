@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodalocaldatetime;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -66,10 +68,12 @@ public class JodaLocalDateTimes implements HasAsciiDocDescription {
 
     @Collection
     public List<? extends JodaLocalDateTimeEntity> getEntities() {
-        return entities.all();
+        return entities!=null
+                ? entities.all()
+                : Collections.emptyList();
     }
 
-    @Inject
+    @Autowired(required = false)
     @XmlTransient
     ValueHolderRepository<org.joda.time.LocalDateTime, ? extends JodaLocalDateTimeEntity> entities;
 
