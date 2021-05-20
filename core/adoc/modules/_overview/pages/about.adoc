@@ -33,7 +33,7 @@ package "App\n[Software System]" {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Starter Parent
 [source,yaml]
@@ -126,7 +126,7 @@ package "Mavendeps\n[Software System]" {
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Maven Deps
 [source,yaml]
@@ -408,7 +408,7 @@ package "Testing\n[Software System]" {
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Testing
 [source,yaml]
@@ -767,7 +767,7 @@ package "Examples\n[Software System]" {
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Demo - Parent
 [source,yaml]
@@ -1135,7 +1135,7 @@ package "Root\n[Software System]" {
 .Projects/Modules (Root)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis (Aggregator)
 [source,yaml]
@@ -1214,7 +1214,7 @@ package "Commons\n[Software System]" {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Commons
 [source,yaml]
@@ -1370,7 +1370,7 @@ package "Core\n[Software System]" {
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Core
 [source,yaml]
@@ -1901,7 +1901,7 @@ package "JDO\n[Software System]" {
 .Projects/Modules (JDO)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Persistence - JDO
 [source,yaml]
@@ -1972,7 +1972,7 @@ org.springframework.boot:spring-boot-starter-jdbc:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[IsisModuleJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
+xref:refguide:persistence:index/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[IsisModuleJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
 ****
 
 |Apache Isis Persistence - JDO (integration)
@@ -2125,7 +2125,7 @@ package "JPA\n[Software System]" {
 .Projects/Modules (JPA)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Persistence - JPA
 [source,yaml]
@@ -2258,7 +2258,7 @@ package "Security\n[Software System]" {
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Security - Spring
 [source,yaml]
@@ -2323,7 +2323,7 @@ package "Bypass\n[Software System]" {
 .Projects/Modules (Bypass)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Security - Bypass
 [source,yaml]
@@ -2380,7 +2380,7 @@ package "Keycloak\n[Software System]" {
 .Projects/Modules (Keycloak)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Security - Keycloak
 [source,yaml]
@@ -2442,7 +2442,7 @@ package "Shiro\n[Software System]" {
 .Projects/Modules (Shiro)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Security - Shiro
 [source,yaml]
@@ -2509,7 +2509,7 @@ package "Common\n[Software System]" {
 .Projects/Modules (Common)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Viewer - Common Model
 [source,yaml]
@@ -2605,7 +2605,7 @@ package "Restful Objects\n[Software System]" {
 .Projects/Modules (Restful Objects)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Viewer - RO
 [source,yaml]
@@ -2813,7 +2813,7 @@ package "Wicket\n[Software System]" {
 .Projects/Modules (Wicket)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Viewer - Wicket
 [source,yaml]
@@ -2964,7 +2964,7 @@ package "Valuetypes\n[Software System]" {
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Value types
 [source,yaml]
@@ -3060,7 +3060,7 @@ package "Asciidoc\n[Software System]" {
 .Projects/Modules (Asciidoc)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Val - Asciidoctor (parent)
 [source,yaml]
@@ -3288,7 +3288,7 @@ package "Markdown\n[Software System]" {
 .Projects/Modules (Markdown)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Val - Markdown (parent)
 [source,yaml]
@@ -3471,7 +3471,7 @@ package "SSE\n[Software System]" {
 .Projects/Modules (SSE)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Val - Server Sent Events (parent)
 [source,yaml]
@@ -3594,7 +3594,7 @@ package "Mappings\n[Software System]" {
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Mappings
 [source,yaml]
@@ -3657,7 +3657,7 @@ package "JAX-RS Client Library\n[Software System]" {
 .Projects/Modules (JAX-RS Client Library)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Map - JaxRS Client (parent)
 [source,yaml]
@@ -3739,7 +3739,7 @@ package "REST Client\n[Software System]" {
 .Projects/Modules (REST Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Ext - REST Client (parent)
 [source,yaml]
@@ -3964,7 +3964,7 @@ package "Extensions\n[Software System]" {
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Extensions
 [source,yaml]
@@ -4463,7 +4463,7 @@ package "Core: Command Log\n[Software System]" {
 .Projects/Modules (Core: Command Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Ext - Command Log
 [source,yaml]
@@ -4572,7 +4572,7 @@ package "Core: Command Replay\n[Software System]" {
 .Projects/Modules (Core: Command Replay)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Ext - Command Replay
 [source,yaml]
@@ -4694,7 +4694,7 @@ package "Core: Quartz\n[Software System]" {
 .Projects/Modules (Core: Quartz)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Ext - Quartz
 [source,yaml]
@@ -4839,7 +4839,7 @@ package "Subdomains\n[Software System]" {
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Subdomains
 [source,yaml]
@@ -5019,7 +5019,7 @@ package "Base\n[Software System]" {
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Sub - Base (parent)
 [source,yaml]
@@ -5117,7 +5117,7 @@ package "Excel\n[Software System]" {
 .Projects/Modules (Excel)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Sub - Excel (parent)
 [source,yaml]
@@ -5253,7 +5253,7 @@ package "Spring\n[Software System]" {
 .Projects/Modules (Spring)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Sub - Spring (parent)
 [source,yaml]
@@ -5327,7 +5327,7 @@ package "XDocReport\n[Software System]" {
 .Projects/Modules (XDocReport)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Sub - XdocReport (parent)
 [source,yaml]
@@ -5442,7 +5442,7 @@ package "Tooling\n[Software System]" {
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis - Tooling
 [source,yaml]
@@ -5705,7 +5705,7 @@ package "Regression Tests\n[Software System]" {
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis - Regression Tests
 [source,yaml]
@@ -5964,7 +5964,7 @@ package "Incubator\n[Software System]" {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Incubator
 [source,yaml]
@@ -6012,7 +6012,7 @@ package "Kroviz Client\n[Software System]" {
 .Projects/Modules (Kroviz Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Inc - Client kroViz
 [source,yaml]
@@ -6076,7 +6076,7 @@ package "JavaFX Viewer\n[Software System]" {
 .Projects/Modules (JavaFX Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Inc - Viewer JavaFX
 [source,yaml]
@@ -6209,7 +6209,7 @@ package "Vaadin Viewer\n[Software System]" {
 .Projects/Modules (Vaadin Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Isis Inc - Viewer Vaadin
 [source,yaml]

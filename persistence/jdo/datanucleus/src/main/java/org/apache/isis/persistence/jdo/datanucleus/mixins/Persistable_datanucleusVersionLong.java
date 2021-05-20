@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
  * Only visible if the version can be cast to a long.
  * </p>
  *
- * @see Persistable_datanucleusIdLong
  * @see Persistable_datanucleusVersionTimestamp
  *
  * @since 2.0 {@index}

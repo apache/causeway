@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
  * Only visible if the version can be cast to a {@link java.sql.Timestamp}.
  * </p>
  *
- * @see Persistable_datanucleusIdLong
  * @see Persistable_datanucleusVersionLong
  *
  * @since 2.0 {@index}
