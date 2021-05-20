@@ -283,13 +283,22 @@ public class FixtureScripts {
                 .getPackagePrefix() + "'": null;
     }
 
-
     public String default0RunFixtureScript() {
-        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
-        if(defaultScript == null) {
-            return null;
+        val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
+        if(defaultFixtureScript != null) {
+            return defaultFixtureScript;
         }
-        return findFixtureScriptNameFor(defaultScript);
+        val choices = choices0RunFixtureScript();
+        return choices.size() == 1
+                ? choices.iterator().next()
+                : null;
+    }
+
+    private String defaultFromFixtureScriptsSpecification() {
+        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
+        return defaultScript != null
+                ? findFixtureScriptNameFor(defaultScript)
+                : null;
     }
 
     public Set<String> choices0RunFixtureScript() {
