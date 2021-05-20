@@ -126,7 +126,7 @@
 		<jakarta.annotation-api.version>2.0.0</jakarta.annotation-api.version>
 		<javaee.version>8.0.1</javaee.version>
 		<javafaker.version>1.0.2</javafaker.version>
-		<javassist.version>3.27.0-GA</javassist.version>
+		<javassist.version>3.28.0-GA</javassist.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-core.version>2.3.0.1</jaxb-core.version> <!-- 2.3.2 is not yet available -->
 		<jaxb-impl.version>2.3.4</jaxb-impl.version>
