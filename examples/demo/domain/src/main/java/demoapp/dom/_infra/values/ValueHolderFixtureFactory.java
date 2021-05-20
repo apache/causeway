@@ -16,25 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.strings.jdo;
+package demoapp.dom._infra.values;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import java.util.function.Supplier;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
-@Profile("demo-jdo")
-@Service
-public class JavaLangStringJdoEntities
-extends ValueHolderRepository<String, JavaLangStringJdo> {
+import lombok.NonNull;
 
-    protected JavaLangStringJdoEntities() {
-        super(JavaLangStringJdo.class);
+public class ValueHolderFixtureFactory {
+
+    public static <T, E extends ValueHolder<T>> Supplier<FixtureScript>
+        fixtureScriptSupplierFor(final @NonNull ValueHolderRepository<T, E> entities) {
+        return ()->fixtureScriptFor(entities);
     }
 
-    @Override
-    protected JavaLangStringJdo newDetachedEntity(String value) {
-        return new JavaLangStringJdo(value);
+    public static <T, E extends ValueHolder<T>> FixtureScript
+        fixtureScriptFor(final @NonNull ValueHolderRepository<T, E> entities) {
+
+        return new FixtureScript() {
+
+            @Override
+            protected void execute(ExecutionContext executionContext) {
+                entities.seedSamples(domainObject->
+                    executionContext.addResult(this, domainObject));
+            }
+
+        };
     }
 
 }

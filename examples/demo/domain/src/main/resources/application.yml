@@ -104,7 +104,7 @@ isis:
 # schema auto creation etc. ...
   persistence:
     schema:
-       autoCreateSchemas: isisExtensionsSecman
+       autoCreateSchemas: isisExtensionsSecman,demo
 
     
 # note that properties under 'datanucleus' must use camelCase rather than kebab-case

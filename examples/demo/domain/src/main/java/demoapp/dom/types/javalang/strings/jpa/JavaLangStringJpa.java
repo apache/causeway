@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.strings.jdo;
+package demoapp.dom.types.javalang.strings.jpa;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
@@ -32,50 +33,61 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
 
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Entity
+@Table(
+        schema = "demo",
+        name = "JavaLangStringJpa"
+)
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "demo.JavaLangStringEntity"
 )
-public class JavaLangStringJdo                                                  // <.>
+@NoArgsConstructor
+public class JavaLangStringJpa
         extends JavaLangStringEntity {
 
 //end::class[]
-    public JavaLangStringJdo(String initialValue) {
+    public JavaLangStringJpa(String initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @Title(prepend = "StringJDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(nullable = false)                                                   // <.>
     @Getter @Setter
     private String readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
+    @Column(nullable = false)
     @Getter @Setter
     private String readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(nullable = true)                                                    // <.>
     @Getter @Setter
     private String readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private String readWriteOptionalProperty;
 

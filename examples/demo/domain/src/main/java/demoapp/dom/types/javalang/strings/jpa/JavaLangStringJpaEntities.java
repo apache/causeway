@@ -16,32 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.web;
+package demoapp.dom.types.javalang.strings.jpa;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import demoapp.dom.DemoModuleJpa;
-import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
+@Profile("demo-jpa")
+@Service
+public class JavaLangStringJpaEntities
+extends ValueHolderRepository<String, JavaLangStringJpa> {
 
-/**
- * Makes the integral parts of the 'demo' web application.
- */
-@Configuration
-@Import({
-    DemoModuleJpa.class,
-    DemoAppManifestCommon.class,
+    protected JavaLangStringJpaEntities() {
+        super(JavaLangStringJpa.class);
+    }
 
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJpa.class,
-
-})
-@EntityScan(basePackageClasses = {
-        JavaLangStringJpa.class,
-})
-public class DemoAppManifestJpa {
+    @Override
+    protected JavaLangStringJpa newDetachedEntity(String value) {
+        return new JavaLangStringJpa(value);
+    }
 
 }
