@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javalang.floats.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class WrapperFloatJdoEntities {
+public class WrapperFloatJdoEntities
+extends ValueHolderRepository<Float, WrapperFloatJdo> {
 
-    public Optional<WrapperFloatJdo> find(final Float readOnlyProperty) {
-        return repositoryService.firstMatch(WrapperFloatJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected WrapperFloatJdoEntities() {
+        super(WrapperFloatJdo.class);
     }
 
-    public List<WrapperFloatJdo> all() {
-        return repositoryService.allInstances(WrapperFloatJdo.class);
+    @Override
+    protected WrapperFloatJdo newDetachedEntity(Float value) {
+        return new WrapperFloatJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

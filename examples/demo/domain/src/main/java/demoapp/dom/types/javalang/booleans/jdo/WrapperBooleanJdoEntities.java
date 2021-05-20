@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javalang.booleans.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class WrapperBooleanJdoEntities {
+public class WrapperBooleanJdoEntities
+extends ValueHolderRepository<Boolean, WrapperBooleanJdo> {
 
-    public Optional<WrapperBooleanJdo> find(final Boolean readOnlyProperty) {
-        return repositoryService.firstMatch(WrapperBooleanJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected WrapperBooleanJdoEntities() {
+        super(WrapperBooleanJdo.class);
     }
 
-    public List<WrapperBooleanJdo> all() {
-        return repositoryService.allInstances(WrapperBooleanJdo.class);
+    @Override
+    protected WrapperBooleanJdo newDetachedEntity(Boolean value) {
+        return new WrapperBooleanJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

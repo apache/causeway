@@ -16,25 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.shorts.jdo;
+package demoapp.dom.types.javalang.booleans.persistence;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jdo")
 @Service
-public class WrapperShortJdoEntities
-extends ValueHolderRepository<Short, WrapperShortJdo> {
+public class WrapperBooleanSeeding extends SeedServiceAbstract {
 
-    protected WrapperShortJdoEntities() {
-        super(WrapperShortJdo.class);
+    @Inject
+    public WrapperBooleanSeeding(ValueHolderRepository<Boolean, ? extends WrapperBooleanEntity> entities) {
+        super(entities);
     }
-
-    @Override
-    protected WrapperShortJdo newDetachedEntity(Short value) {
-        return new WrapperShortJdo(value);
-    }
-
 }

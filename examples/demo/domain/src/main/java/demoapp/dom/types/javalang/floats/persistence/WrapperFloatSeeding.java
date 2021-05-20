@@ -16,41 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.longs.jdo;
+package demoapp.dom.types.javalang.floats.persistence;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class WrapperLongJdoSeedService extends SeedServiceAbstract {
+public class WrapperFloatSeeding extends SeedServiceAbstract {
 
-    public WrapperLongJdoSeedService() {
-        super(WrapperLongJdoEntityFixture::new);
-    }
-
-    static class WrapperLongJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(WrapperLongJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-        }
-
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<Long> samples;
+    @Inject
+    public WrapperFloatSeeding(ValueHolderRepository<Float, ? extends WrapperFloatEntity> entities) {
+        super(entities);
     }
 }

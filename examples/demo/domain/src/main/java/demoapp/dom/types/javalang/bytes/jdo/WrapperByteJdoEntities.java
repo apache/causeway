@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javalang.bytes.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class WrapperByteJdoEntities {
+public class WrapperByteJdoEntities
+extends ValueHolderRepository<Byte, WrapperByteJdo> {
 
-    public Optional<WrapperByteJdo> find(final Byte readOnlyProperty) {
-        return repositoryService.firstMatch(WrapperByteJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected WrapperByteJdoEntities() {
+        super(WrapperByteJdo.class);
     }
 
-    public List<WrapperByteJdo> all() {
-        return repositoryService.allInstances(WrapperByteJdo.class);
+    @Override
+    protected WrapperByteJdo newDetachedEntity(Byte value) {
+        return new WrapperByteJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

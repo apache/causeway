@@ -16,42 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.doubles.jdo;
+package demoapp.dom.types.javalang.doubles.persistence;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class WrapperDoubleJdoSeedService extends SeedServiceAbstract {
+public class WrapperDoubleSeeding extends SeedServiceAbstract {
 
-    public WrapperDoubleJdoSeedService() {
-        super(WrapperDoubleJdoEntityFixture::new);
-    }
-
-    static class WrapperDoubleJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(WrapperDoubleJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-
-        }
-
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<Double> samples;
+    @Inject
+    public WrapperDoubleSeeding(ValueHolderRepository<Double, ? extends WrapperDoubleEntity> entities) {
+        super(entities);
     }
 }
