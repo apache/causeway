@@ -35,6 +35,18 @@ import demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpa;
 import demoapp.dom.types.javalang.longs.jpa.WrapperLongJpa;
 import demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpa;
 import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
+import demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpa;
+import demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpa;
+import demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpa;
+import demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpa;
+import demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpa;
+import demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpa;
+import demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpa;
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpa;
+import demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpa;
+import demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpa;
+import demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpa;
+import demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpa;
 import demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpa;
 import demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpa;
 import demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpa;
@@ -52,7 +64,21 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
     IsisModuleExtCommandLogJpa.class,
 })
 @EntityScan(basePackageClasses = {
+
         JavaLangStringJpa.class,
+
+        JavaMathBigDecimalJpa.class,
+        JavaMathBigIntegerJpa.class,
+        JavaNetUrlJpa.class,
+        JavaSqlDateJpa.class,
+        JavaSqlTimestampJpa.class,
+        JavaTimeLocalDateJpa.class,
+        JavaTimeLocalDateTimeJpa.class,
+        JavaTimeOffsetDateTimeJpa.class,
+        JavaTimeOffsetTimeJpa.class,
+        JavaTimeZonedDateTimeJpa.class,
+        JavaUtilDateJpa.class,
+        JavaUtilUuidJpa.class,
 
         PrimitiveBooleanJpa.class,
         PrimitiveDoubleJpa.class,
