@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javautil.javautildate.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaUtilDateJdoEntities {
+public class JavaUtilDateJdoEntities
+extends ValueHolderRepository<java.util.Date, JavaUtilDateJdo> {
 
-    public Optional<JavaUtilDateJdo> find(final java.util.Date readOnlyProperty) {
-        return repositoryService.firstMatch(JavaUtilDateJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected JavaUtilDateJdoEntities() {
+        super(JavaUtilDateJdo.class);
     }
 
-    public List<JavaUtilDateJdo> all() {
-        return repositoryService.allInstances(JavaUtilDateJdo.class);
+    @Override
+    protected JavaUtilDateJdo newDetachedEntity(java.util.Date value) {
+        return new JavaUtilDateJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

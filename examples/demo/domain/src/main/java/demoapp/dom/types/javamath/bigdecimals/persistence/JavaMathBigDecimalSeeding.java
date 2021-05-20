@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javamath.bigdecimals.jdo;
+package demoapp.dom.types.javamath.bigdecimals.persistence;
 
 import java.math.BigDecimal;
 
@@ -24,36 +24,16 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class JavaMathBigDecimalJdoSeedService extends SeedServiceAbstract {
+public class JavaMathBigDecimalSeeding
+extends SeedServiceAbstract {
 
-    public JavaMathBigDecimalJdoSeedService() {
-        super(JavaMathBigDecimalJdoEntityFixture::new);
+    @Inject
+    public JavaMathBigDecimalSeeding(ValueHolderRepository<BigDecimal, ? extends JavaMathBigDecimalEntity> entities) {
+        super(entities);
     }
 
-    static class JavaMathBigDecimalJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(JavaMathBigDecimalJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-        }
-
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<BigDecimal> samples;
-
-    }
 }

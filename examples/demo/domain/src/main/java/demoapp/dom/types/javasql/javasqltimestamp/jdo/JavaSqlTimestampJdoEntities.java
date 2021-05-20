@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaSqlTimestampJdoEntities {
+public class JavaSqlTimestampJdoEntities
+extends ValueHolderRepository<java.sql.Timestamp, JavaSqlTimestampJdo> {
 
-    public Optional<JavaSqlTimestampJdo> find(final java.sql.Timestamp readOnlyProperty) {
-        return repositoryService.firstMatch(JavaSqlTimestampJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected JavaSqlTimestampJdoEntities() {
+        super(JavaSqlTimestampJdo.class);
     }
 
-    public List<JavaSqlTimestampJdo> all() {
-        return repositoryService.allInstances(JavaSqlTimestampJdo.class);
+    @Override
+    protected JavaSqlTimestampJdo newDetachedEntity(java.sql.Timestamp value) {
+        return new JavaSqlTimestampJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

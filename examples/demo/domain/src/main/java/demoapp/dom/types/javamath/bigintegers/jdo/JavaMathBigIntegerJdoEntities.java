@@ -18,27 +18,25 @@
  */
 package demoapp.dom.types.javamath.bigintegers.jdo;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigInteger;
 
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaMathBigIntegerJdoEntities {
+public class JavaMathBigIntegerJdoEntities
+extends ValueHolderRepository<BigInteger, JavaMathBigIntegerJdo> {
 
-    public Optional<JavaMathBigIntegerJdo> find(final java.math.BigInteger readOnlyProperty) {
-        return repositoryService.firstMatch(JavaMathBigIntegerJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected JavaMathBigIntegerJdoEntities() {
+        super(JavaMathBigIntegerJdo.class);
     }
 
-    public List<JavaMathBigIntegerJdo> all() {
-        return repositoryService.allInstances(JavaMathBigIntegerJdo.class);
+    @Override
+    protected JavaMathBigIntegerJdo newDetachedEntity(BigInteger value) {
+        return new JavaMathBigIntegerJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

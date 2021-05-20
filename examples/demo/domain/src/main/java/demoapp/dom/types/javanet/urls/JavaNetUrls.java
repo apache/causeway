@@ -37,19 +37,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdo;
-import demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities;
+import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
 import demoapp.dom.types.javanet.urls.vm.JavaNetUrlVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaNetUrls", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaNetUrls implements HasAsciiDocDescription {
 
     public String title() {
@@ -66,13 +64,13 @@ public class JavaNetUrls implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaNetUrlJdo> getEntities() {
+    public List<? extends JavaNetUrlEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaNetUrlJdoEntities entities;
+    ValueHolderRepository<java.net.URL, ? extends JavaNetUrlEntity> entities;
 
     @Inject
     @XmlTransient

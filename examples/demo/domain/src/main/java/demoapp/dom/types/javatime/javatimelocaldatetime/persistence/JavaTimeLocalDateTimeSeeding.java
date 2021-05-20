@@ -16,44 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javanet.urls.jdo;
-
-import java.net.URL;
+package demoapp.dom.types.javatime.javatimelocaldatetime.persistence;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class JavaNetUrlJdoSeedService extends SeedServiceAbstract {
+public class JavaTimeLocalDateTimeSeeding
+extends SeedServiceAbstract {
 
-    public JavaNetUrlJdoSeedService() {
-        super(JavaNetUrlJdoEntityFixture::new);
+    @Inject
+    public JavaTimeLocalDateTimeSeeding(ValueHolderRepository<java.time.LocalDateTime, ? extends JavaTimeLocalDateTimeEntity> entities) {
+        super(entities);
     }
 
-    static class JavaNetUrlJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(JavaNetUrlJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-        }
-
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<URL> samples;
-
-    }
 }

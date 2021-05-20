@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsettime.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaTimeOffsetTimeJdoEntities {
+public class JavaTimeOffsetTimeJdoEntities
+extends ValueHolderRepository<java.time.OffsetTime, JavaTimeOffsetTimeJdo> {
 
-    public Optional<JavaTimeOffsetTimeJdo> find(final java.time.OffsetTime readOnlyProperty) {
-        return repositoryService.firstMatch(JavaTimeOffsetTimeJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected JavaTimeOffsetTimeJdoEntities() {
+        super(JavaTimeOffsetTimeJdo.class);
     }
 
-    public List<JavaTimeOffsetTimeJdo> all() {
-        return repositoryService.allInstances(JavaTimeOffsetTimeJdo.class);
+    @Override
+    protected JavaTimeOffsetTimeJdo newDetachedEntity(java.time.OffsetTime value) {
+        return new JavaTimeOffsetTimeJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

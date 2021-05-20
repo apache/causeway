@@ -36,18 +36,16 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdo;
-import demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateEntity;
 import demoapp.dom.types.javatime.javatimelocaldate.vm.JavaTimeLocalDateVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaTimeLocalDates", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaTimeLocalDates implements HasAsciiDocDescription {
 
     public String title() {
@@ -64,13 +62,13 @@ public class JavaTimeLocalDates implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaTimeLocalDateJdo> getEntities() {
+    public List<? extends JavaTimeLocalDateEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaTimeLocalDateJdoEntities entities;
+    ValueHolderRepository<java.time.LocalDate, ? extends JavaTimeLocalDateEntity> entities;
 
 
 }
