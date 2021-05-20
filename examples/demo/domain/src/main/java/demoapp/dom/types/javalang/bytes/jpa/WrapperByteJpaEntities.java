@@ -16,27 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.web;
+package demoapp.dom.types.javalang.bytes.jpa;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import demoapp.dom.DemoModuleJpa;
+@Profile("demo-jpa")
+@Service
+public class WrapperByteJpaEntities
+extends ValueHolderRepository<Byte, WrapperByteJpa> {
 
-/**
- * Makes the integral parts of the 'demo' web application.
- */
-@Configuration
-@Import({
-    DemoModuleJpa.class,
-    DemoAppManifestCommon.class,
+    protected WrapperByteJpaEntities() {
+        super(WrapperByteJpa.class);
+    }
 
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJpa.class,
-
-})
-public class DemoAppManifestJpa {
+    @Override
+    protected WrapperByteJpa newDetachedEntity(Byte value) {
+        return new WrapperByteJpa(value);
+    }
 
 }

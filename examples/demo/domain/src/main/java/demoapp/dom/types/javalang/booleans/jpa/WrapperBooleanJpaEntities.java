@@ -16,27 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.web;
+package demoapp.dom.types.javalang.booleans.jpa;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import demoapp.dom.DemoModuleJpa;
+@Profile("demo-jpa")
+@Service
+public class WrapperBooleanJpaEntities
+extends ValueHolderRepository<Boolean, WrapperBooleanJpa> {
 
-/**
- * Makes the integral parts of the 'demo' web application.
- */
-@Configuration
-@Import({
-    DemoModuleJpa.class,
-    DemoAppManifestCommon.class,
+    protected WrapperBooleanJpaEntities() {
+        super(WrapperBooleanJpa.class);
+    }
 
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJpa.class,
-
-})
-public class DemoAppManifestJpa {
+    @Override
+    protected WrapperBooleanJpa newDetachedEntity(Boolean value) {
+        return new WrapperBooleanJpa(value);
+    }
 
 }

@@ -29,26 +29,24 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdo;
-import demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
 import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperBooleans", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class WrapperBooleans implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +63,13 @@ public class WrapperBooleans implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<WrapperBooleanJdo> getEntities() {
+    public List<? extends WrapperBooleanEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperBooleanJdoEntities entities;
+    ValueHolderRepository<Boolean, ? extends WrapperBooleanEntity> entities;
 
 
     //FIXME[ISIS-2387]
