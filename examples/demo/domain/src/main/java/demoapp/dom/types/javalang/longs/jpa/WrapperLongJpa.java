@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperLongJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

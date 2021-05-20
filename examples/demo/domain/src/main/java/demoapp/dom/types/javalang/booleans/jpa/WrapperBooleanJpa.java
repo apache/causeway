@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperBooleanJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.characters.persistence.WrapperCharacterEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperCharacterJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

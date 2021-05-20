@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperDoubleJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

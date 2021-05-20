@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperFloatJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

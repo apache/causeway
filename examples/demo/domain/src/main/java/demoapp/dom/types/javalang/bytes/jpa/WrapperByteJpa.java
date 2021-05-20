@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.bytes.persistence.WrapperByteEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperByteJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

@@ -46,7 +46,7 @@ import demoapp.dom.types.javalang.shorts.persistence.WrapperShortEntity;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaLangStringJpa"
+      name = "WrapperShortJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
