@@ -33,4 +33,9 @@ implements
     WrapperBooleanHolder2,
     ValueHolder<Boolean> {
 
+    @Override
+    public Boolean value() {
+        return getReadOnlyProperty();
+    }
+
 }

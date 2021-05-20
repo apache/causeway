@@ -16,25 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.jdo;
+package demoapp.dom.types.primitive.booleans.persistence;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jdo")
 @Service
-public class PrimitiveCharJdoEntities
-extends ValueHolderRepository<Character, PrimitiveCharJdo> {
+public class PrimitiveBooleanSeeding extends SeedServiceAbstract {
 
-    protected PrimitiveCharJdoEntities() {
-        super(PrimitiveCharJdo.class);
-    }
-
-    @Override
-    protected PrimitiveCharJdo newDetachedEntity(Character value) {
-        return new PrimitiveCharJdo(value);
+    @Inject
+    public PrimitiveBooleanSeeding(ValueHolderRepository<Boolean, ? extends PrimitiveBooleanEntity> entities) {
+        super(entities);
     }
 
 }

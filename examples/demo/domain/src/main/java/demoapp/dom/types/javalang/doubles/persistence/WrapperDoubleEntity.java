@@ -33,4 +33,9 @@ implements
     WrapperDoubleHolder2,
     ValueHolder<Double> {
 
+    @Override
+    public Double value() {
+        return getReadOnlyProperty();
+    }
+
 }

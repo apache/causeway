@@ -46,7 +46,7 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
         return repositoryService
                 .firstMatch(
                         entityType,
-                        x -> Objects.equals(x.getReadOnlyProperty(), readOnlyProperty));
+                        x -> Objects.equals(x.value(), readOnlyProperty));
     }
 
     public List<E> all() {

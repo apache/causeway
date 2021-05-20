@@ -16,42 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.longs.jdo;
+package demoapp.dom.types.primitive.doubles.persistence;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class PrimitiveLongJdoSeedService extends SeedServiceAbstract {
+public class PrimitiveDoubleSeeding extends SeedServiceAbstract {
 
-    public PrimitiveLongJdoSeedService() {
-        super(PrimitiveLongJdoEntityFixture::new);
+    @Inject
+    public PrimitiveDoubleSeeding(ValueHolderRepository<Double, ? extends PrimitiveDoubleEntity> entities) {
+        super(entities);
     }
 
-    static class PrimitiveLongJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(PrimitiveLongJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-
-        }
-
-        @Inject
-        RepositoryService repositoryService;
-
-        @Inject
-        Samples<Long> samples;
-    }
 }

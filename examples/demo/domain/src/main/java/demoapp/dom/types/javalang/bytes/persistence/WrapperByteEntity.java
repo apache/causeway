@@ -33,4 +33,9 @@ implements
     WrapperByteHolder2,
     ValueHolder<Byte> {
 
+    @Override
+    public Byte value() {
+        return getReadOnlyProperty();
+    }
+
 }

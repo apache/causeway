@@ -33,4 +33,9 @@ implements
     WrapperFloatHolder2,
     ValueHolder<Float> {
 
+    @Override
+    public Float value() {
+        return getReadOnlyProperty();
+    }
+
 }

@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.primitive.doubles.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class PrimitiveDoubleJdoEntities {
+public class PrimitiveDoubleJdoEntities
+extends ValueHolderRepository<Double, PrimitiveDoubleJdo> {
 
-    public Optional<PrimitiveDoubleJdo> find(final double readOnlyProperty) {
-        return repositoryService.firstMatch(PrimitiveDoubleJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected PrimitiveDoubleJdoEntities() {
+        super(PrimitiveDoubleJdo.class);
     }
 
-    public List<PrimitiveDoubleJdo> all() {
-        return repositoryService.allInstances(PrimitiveDoubleJdo.class);
+    @Override
+    protected PrimitiveDoubleJdo newDetachedEntity(Double value) {
+        return new PrimitiveDoubleJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

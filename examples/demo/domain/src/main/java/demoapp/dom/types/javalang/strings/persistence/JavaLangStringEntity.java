@@ -33,4 +33,9 @@ implements
     JavaLangStringHolder2,
     ValueHolder<String> {
 
+    @Override
+    public String value() {
+        return getReadOnlyProperty();
+    }
+
 }

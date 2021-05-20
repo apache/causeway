@@ -16,25 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.jdo;
+package demoapp.dom.types.primitive.chars.persistence;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder2;
 
-@Profile("demo-jdo")
-@Service
-public class PrimitiveCharJdoEntities
-extends ValueHolderRepository<Character, PrimitiveCharJdo> {
-
-    protected PrimitiveCharJdoEntities() {
-        super(PrimitiveCharJdo.class);
-    }
+@DomainObject(
+        objectType = "demo.PrimitiveCharEntity" // shared permissions with concrete sub class
+)
+public abstract class PrimitiveCharEntity
+implements
+    HasAsciiDocDescription,
+    PrimitiveCharHolder2,
+    ValueHolder<Character> {
 
     @Override
-    protected PrimitiveCharJdo newDetachedEntity(Character value) {
-        return new PrimitiveCharJdo(value);
+    public Character value() {
+        return getReadOnlyProperty();
     }
 
 }

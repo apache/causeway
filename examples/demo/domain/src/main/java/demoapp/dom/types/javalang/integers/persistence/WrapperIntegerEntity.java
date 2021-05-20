@@ -33,4 +33,9 @@ implements
     WrapperIntegerHolder2,
     ValueHolder<Integer> {
 
+    @Override
+    public Integer value() {
+        return getReadOnlyProperty();
+    }
+
 }

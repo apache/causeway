@@ -33,4 +33,9 @@ implements
     WrapperCharacterHolder2,
     ValueHolder<Character> {
 
+    @Override
+    public Character value() {
+        return getReadOnlyProperty();
+    }
+
 }

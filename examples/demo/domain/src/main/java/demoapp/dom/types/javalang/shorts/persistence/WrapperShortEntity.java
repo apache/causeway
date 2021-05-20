@@ -33,4 +33,9 @@ implements
     WrapperShortHolder2,
     ValueHolder<Short> {
 
+    @Override
+    public Short value() {
+        return getReadOnlyProperty();
+    }
+
 }

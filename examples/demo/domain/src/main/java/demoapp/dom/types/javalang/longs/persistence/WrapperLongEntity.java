@@ -33,4 +33,9 @@ implements
     WrapperLongHolder2,
     ValueHolder<Long> {
 
+    @Override
+    public Long value() {
+        return getReadOnlyProperty();
+    }
+
 }

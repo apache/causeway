@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.primitive.shorts.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class PrimitiveShortJdoEntities {
+public class PrimitiveShortJdoEntities
+extends ValueHolderRepository<Short, PrimitiveShortJdo> {
 
-    public Optional<PrimitiveShortJdo> find(final short readOnlyProperty) {
-        return repositoryService.firstMatch(PrimitiveShortJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected PrimitiveShortJdoEntities() {
+        super(PrimitiveShortJdo.class);
     }
 
-    public List<PrimitiveShortJdo> all() {
-        return repositoryService.allInstances(PrimitiveShortJdo.class);
+    @Override
+    protected PrimitiveShortJdo newDetachedEntity(Short value) {
+        return new PrimitiveShortJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }
