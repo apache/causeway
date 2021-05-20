@@ -35,6 +35,14 @@ import demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpa;
 import demoapp.dom.types.javalang.longs.jpa.WrapperLongJpa;
 import demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpa;
 import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
+import demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpa;
+import demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpa;
+import demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpa;
+import demoapp.dom.types.primitive.doubles.jpa.PrimitiveDoubleJpa;
+import demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpa;
+import demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpa;
+import demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpa;
+import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 
 @Configuration
 @Profile("demo-jpa")
@@ -45,6 +53,16 @@ import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
 })
 @EntityScan(basePackageClasses = {
         JavaLangStringJpa.class,
+
+        PrimitiveBooleanJpa.class,
+        PrimitiveDoubleJpa.class,
+        PrimitiveFloatJpa.class,
+        PrimitiveCharJpa.class,
+        PrimitiveLongJpa.class,
+        PrimitiveIntJpa.class,
+        PrimitiveShortJpa.class,
+        PrimitiveByteJpa.class,
+
         WrapperBooleanJpa.class,
         WrapperDoubleJpa.class,
         WrapperFloatJpa.class,
