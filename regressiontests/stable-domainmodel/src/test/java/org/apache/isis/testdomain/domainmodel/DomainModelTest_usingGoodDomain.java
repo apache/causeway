@@ -29,6 +29,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -40,6 +45,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
+import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -50,6 +59,7 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
+import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
@@ -57,11 +67,6 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -365,6 +370,29 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(i2Spec, "d");
         assertHasProperty(i2Spec, "e");
         assertHasProperty(i2Spec, "f");
+    }
+
+    @Test
+    void actionParamChoices_shouldBeAllowed_toBeDerivedFromChoicesFrom() {
+
+        val spec = specificationLoader.loadSpecification(ProperChoicesWhenChoicesFrom.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+
+        val action = spec.getActionElseFail("appendACharacterToCandidates");
+        val param0 = action.getParameters().getFirstOrFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetFromParentedCollection.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+
+        assertEquals(
+                ActionParameterDefaultsFacetFromAssociatedCollection.class,
+                param0.lookupFacet(ActionParameterDefaultsFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+
     }
 
     // -- HELPER

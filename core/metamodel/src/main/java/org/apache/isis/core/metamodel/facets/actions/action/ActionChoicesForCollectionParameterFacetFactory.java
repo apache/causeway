@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -115,19 +114,11 @@ implements MetaModelRefiner {
             }
         }
 
-        val actionParameterChoicesFacet = parameter.getFacet(ActionParameterChoicesFacet.class);
-        val actionParameterAutoCompleteFacet = parameter.getFacet(ActionParameterAutoCompleteFacet.class);
-        if (actionParameterChoicesFacet != null || actionParameterAutoCompleteFacet != null) {
-            return;
-        }
+        val parameterTypeSpec = parameter.getSpecification();
 
-        val parameterSpec = parameter.getSpecification();
-        if(parameterSpec.containsNonFallbackFacet(AutoCompleteFacet.class)) {
-            return;
-        }
-
-        //TODO[2253] remove this hotfix once ISIS-2253 is fixed
-        if(paramNum==0 && objectAction.containsNonFallbackFacet(ChoicesFromFacet.class)) {
+        if (parameter.containsFacet(ActionParameterChoicesFacet.class)
+                || parameter.containsFacet(ActionParameterAutoCompleteFacet.class)
+                || parameterTypeSpec.containsNonFallbackFacet(AutoCompleteFacet.class)) {
             return;
         }
 

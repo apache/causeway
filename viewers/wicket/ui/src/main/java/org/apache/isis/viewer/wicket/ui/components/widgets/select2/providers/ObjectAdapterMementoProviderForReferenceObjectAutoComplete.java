@@ -39,7 +39,7 @@ extends ObjectAdapterMementoProviderAbstract {
     protected Can<ObjectMemento> obtainMementos(String term) {
         val typeOfSpecification = getScalarModel().getTypeOfSpecification();
         val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-        val autoCompleteAdapters = autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
+        val autoCompleteAdapters = autoCompleteFacet.execute(term, InteractionInitiatedBy.USER);
         val commonContext = super.getCommonContext();
 
         return autoCompleteAdapters.map(commonContext::mementoFor);
