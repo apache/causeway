@@ -49,7 +49,6 @@ public class BookmarkTreeNode implements Serializable {
 
     @Getter private final Bookmark oidNoVer; //TODO rename field, versions have been removed
     @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
-    private final PageType pageType;
 
     private String title;
     private PageParameters pageParameters;
@@ -75,9 +74,6 @@ public class BookmarkTreeNode implements Serializable {
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, getOidNoVerStr());
 
         this.title = bookmarkableModel.getTitle();
-        this.pageType = bookmarkableModel instanceof EntityModel
-                ? PageType.ENTITY
-                : PageType.ACTION_PROMPT;
         this.depth = depth;
 
     }
@@ -87,10 +83,6 @@ public class BookmarkTreeNode implements Serializable {
     }
     private void setTitle(String title) {
         this.title = title;
-    }
-
-    public PageType getPageType() {
-        return pageType;
     }
 
     public List<BookmarkTreeNode> getChildren() {
@@ -118,18 +110,9 @@ public class BookmarkTreeNode implements Serializable {
      */
     public boolean matches(BookmarkableModel candidateBookmarkableModel) {
         if(candidateBookmarkableModel instanceof EntityModel) {
-            if(this.pageType != PageType.ENTITY) {
-                return false;
-            }
             return matchAndUpdateTitleFor((EntityModel) candidateBookmarkableModel);
-        } else if(candidateBookmarkableModel instanceof ActionModel) {
-            if(this.pageType != PageType.ACTION_PROMPT) {
-                return false;
-            }
-            return matchFor((ActionModel) candidateBookmarkableModel);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

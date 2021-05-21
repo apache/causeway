@@ -35,14 +35,6 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
     @Override
     public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
 
-        final PageType pageType1 = o1.getPageType();
-        final PageType pageType2 = o2.getPageType();
-
-        final int pageTypeComparison = pageType1.compareTo(pageType2);
-        if(pageTypeComparison != 0) {
-            return pageTypeComparison;
-        }
-
         final Oid oid1 = o1.getOidNoVer();
         final Oid oid2 = o2.getOidNoVer();
 

@@ -29,7 +29,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.TertiaryMenuPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
@@ -154,7 +153,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForEntity(componentFactories);
         addComponentFactoriesForActionInfo(componentFactories);
         addComponentFactoriesForAction(componentFactories);
-        addComponentFactoriesForActionLink(componentFactories);
         addComponentFactoriesForPropertyEdit(componentFactories);
         addComponentFactoriesForEntityCollectionContents(componentFactories);
         addComponentFactoriesForEmptyCollection(componentFactories);
@@ -291,10 +289,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForPropertyEdit(final ComponentFactoryList componentFactories) {
         componentFactories.add(new PropertyEditPanelFactory());
         componentFactories.add(new PropertyEditFormPanelFactory());
-    }
-
-    protected void addComponentFactoriesForActionLink(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new ActionLinkPanelFactory());
     }
 
     protected void addComponentFactoriesForApplicationActions(final ComponentFactoryList componentFactories) {
