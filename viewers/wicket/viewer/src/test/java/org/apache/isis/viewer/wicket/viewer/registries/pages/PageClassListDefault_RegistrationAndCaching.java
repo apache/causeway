@@ -23,14 +23,11 @@ import org.apache.wicket.Page;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
+import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 
 public class PageClassListDefault_RegistrationAndCaching {
 
@@ -45,24 +42,18 @@ public class PageClassListDefault_RegistrationAndCaching {
     }
 
     @Test
-    public void cachesPageByPageType() {
-        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
-        assertThat(pageClass, is(not(nullValue())));
-    }
-
-    @Test
     public void canRegisterNewPageType() {
-        class TestingActionPage extends ActionPromptPage {
+        class TestingStandaloneCollectionPage extends StandaloneCollectionPage {
             private static final long serialVersionUID = 1L;
 
-            TestingActionPage() {
-                super((ActionModel) null);
+            TestingStandaloneCollectionPage() {
+                super(null);
             }
         }
-        registryImpl.registerPage(PageType.ACTION_PROMPT, TestingActionPage.class);
+        registryImpl.registerPage(PageType.STANDALONE_COLLECTION, TestingStandaloneCollectionPage.class);
 
-        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
-        assertThat(pageClass, is(org.hamcrest.Matchers.equalTo(TestingActionPage.class)));
+        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.STANDALONE_COLLECTION);
+        assertThat(pageClass, is(org.hamcrest.Matchers.equalTo(TestingStandaloneCollectionPage.class)));
     }
 
 }

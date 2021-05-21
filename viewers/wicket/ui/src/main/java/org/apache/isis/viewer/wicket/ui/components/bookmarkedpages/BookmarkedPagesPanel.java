@@ -134,8 +134,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             protected void populateItem(ListItem<BookmarkTreeNode> item) {
                 final BookmarkTreeNode node = item.getModelObject();
                 try {
-                    final PageType pageType = node.getPageType();
-                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
+                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
                     final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
 
