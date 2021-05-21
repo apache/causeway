@@ -70,7 +70,7 @@ public class ObjectActionLayoutXmlDefaultTest {
             }
         });
 
-        action = new ObjectActionDefault(mockFacetedMethod);
+        action = ObjectActionDefault.forMethod(mockFacetedMethod);
     }
 
 

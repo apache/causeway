@@ -56,19 +56,19 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
     public static LinkBuilder newLinkToBuilder(
-            final IResourceContext resourceContext, 
-            final Rel rel, 
+            final IResourceContext resourceContext,
+            final Rel rel,
             final ManagedObject objectAdapter) {
-        
+
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef;
-        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString());
     }
 
     public static LinkBuilder newLinkToObjectLayoutBuilder(
-            final IResourceContext resourceContext, 
+            final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
-        
+
         final Rel rel = Rel.OBJECT_LAYOUT;
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef + "/object-layout";
@@ -76,9 +76,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     public static LinkBuilder newLinkToObjectIconBuilder(
-            final IResourceContext resourceContext, 
+            final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
-        
+
         final Rel rel = Rel.OBJECT_ICON;
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef + "/image";
@@ -150,8 +150,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         this.objectAdapter = objectAdapter;
         String domainTypeHref = DomainTypeReprRenderer
                 .newLinkToBuilder(
-                        getResourceContext(), 
-                        Rel.DOMAIN_TYPE, 
+                        getResourceContext(),
+                        Rel.DOMAIN_TYPE,
                         objectAdapter.getSpecification())
                 .build()
                 .getString("href");
@@ -171,7 +171,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!(mode.isArgs())) {
 
             val oidIfAny = objectAdapter.getBookmark();
-            
+
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
@@ -184,7 +184,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             }
 
             // title
-            final String title = objectAdapter.titleString(null);
+            final String title = objectAdapter.titleString();
             representation.mapPut("title", title);
 
             // serviceId or instance Id
@@ -300,7 +300,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             if (mode.isRegular()) {
                 final Stream<ObjectAction> actions = objectAdapter.getSpecification()
-                        .streamActions(MixedIn.INCLUDED);
+                        .streamAnyActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
             }
@@ -369,7 +369,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
             val where = resourceContext.getWhere();
-            
+
             renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
                 renderer.asEventSerialization();
@@ -380,8 +380,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addActions(
-            final ManagedObject objectAdapter, 
-            final Stream<ObjectAction> actions, 
+            final ManagedObject objectAdapter,
+            final Stream<ObjectAction> actions,
             final JsonRepresentation members) {
 
         actions
@@ -391,12 +391,12 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         })
         .forEach(action->{
             final LinkFollowSpecs linkFollowSpecs = getLinkFollowSpecs().follow("members["+action.getId()+"]");
-            final ObjectActionReprRenderer renderer = 
-                    new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(), 
+            final ObjectActionReprRenderer renderer =
+                    new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
             val where = resourceContext.getWhere();
-            
+
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
             members.mapPut(action.getId(), renderer.render());
         });
@@ -458,7 +458,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
 
     public static Object valueOrRef(IResourceContext context, JsonValueEncoder jsonValueEncoder, ManagedObject adapter) {
-        
+
         val spec = adapter.getSpecification();
         if(spec.isValue()) {
             String format = null; // TODO
@@ -467,8 +467,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         val titleFacet = spec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(adapter);
         return DomainObjectReprRenderer.newLinkToBuilder(
-                context, 
-                Rel.VALUE, 
+                context,
+                Rel.VALUE,
                 adapter)
                 .withTitle(title)
                 .build();

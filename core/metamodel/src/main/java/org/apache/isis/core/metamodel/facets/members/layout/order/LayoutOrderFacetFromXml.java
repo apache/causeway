@@ -20,11 +20,11 @@ package org.apache.isis.core.metamodel.facets.members.layout.order;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class LayoutOrderFacetFromXml 
+public class LayoutOrderFacetFromXml
 extends LayoutOrderFacetAbstract {
 
     public static LayoutOrderFacetFromXml create(
-            final int sequenceAsInt, 
+            final int sequenceAsInt,
             final FacetHolder holder) {
         return new LayoutOrderFacetFromXml("" + sequenceAsInt, holder);
     }

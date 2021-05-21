@@ -35,11 +35,11 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
-public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract 
+public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject private JdoFacetContext jdoFacetContext;
-    
+
     public JdoQueryAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -68,23 +68,23 @@ implements MetaModelRefiner {
                     namedQueryAnnotation, facetHolder));
         }
     }
-    
+
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        val isValidateFromClause = 
+        val isValidateFromClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
             programmingModel.addValidator(new MetaModelVisitingValidatorForFromClause());
         }
 
-        val isValidateVariablesClause = 
+        val isValidateVariablesClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
             programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause());
         }
     }
 
-    private static final Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*", 
+    private static final Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*",
             Pattern.CASE_INSENSITIVE);
 
     static String from(final String query) {
@@ -92,9 +92,9 @@ implements MetaModelRefiner {
         return matcher.matches() ? matcher.group(1) :  null;
     }
 
-    private static final Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*", 
+    private static final Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*",
             Pattern.CASE_INSENSITIVE);
-    
+
     static String variables(final String query) {
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;

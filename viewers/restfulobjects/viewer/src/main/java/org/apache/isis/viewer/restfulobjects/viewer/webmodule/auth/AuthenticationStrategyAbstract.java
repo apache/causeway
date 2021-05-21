@@ -27,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;

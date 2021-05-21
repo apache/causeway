@@ -72,7 +72,7 @@ class MyMockomatic {
 
     private <T> void checking(final Field field, final T mock) {
         JUnitRuleMockery2.Checking checking = field.getAnnotation(JUnitRuleMockery2.Checking.class);
-        Class<? extends JUnitRuleMockery2.ExpectationsOn> expectationsOnClass = 
+        Class<? extends JUnitRuleMockery2.ExpectationsOn> expectationsOnClass =
                 (Class<? extends JUnitRuleMockery2.ExpectationsOn>) checking.value();
         context.checking(mock, expectationsOnClass);
     }

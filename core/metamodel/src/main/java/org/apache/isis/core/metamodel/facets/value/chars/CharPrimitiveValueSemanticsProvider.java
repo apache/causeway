@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
 public class CharPrimitiveValueSemanticsProvider
-extends CharValueSemanticsProviderAbstract 
+extends CharValueSemanticsProviderAbstract
 implements PropertyDefaultFacet {
 
     /**

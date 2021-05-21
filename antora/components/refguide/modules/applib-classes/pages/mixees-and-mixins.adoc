@@ -60,9 +60,6 @@ All JDO domain entities implement the DataNucleus `Persistable` role interface a
 Using this, the following mixins (actions and properties) are available for all JDO entities:
 
 * xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong] (property)
-+
-only visible if the JDO entity has datastore identity, and the `id` field introduced by enhancing can be cast to `Long`.
 
 * xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
 +

@@ -31,49 +31,49 @@ public class InteractionNpmDemo_biArgDisabled {
 
     @SuppressWarnings("unused")
     private final InteractionNpmDemo holder;
-    
-    @Value @Accessors(fluent = true)            
-    public static class Parameters {      
+
+    @Value @Accessors(fluent = true)
+    public static class Parameters {
         int a;
         int b;
     }
-    
+
     @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
-    
+
     @MemberSupport
     public boolean hide() {
         return false;
     }
-    
+
     @MemberSupport
     public String disable() {
         return "Disabled for demonstration.";
     }
-    
+
     @MemberSupport
     public String validate(Parameters params) {
         return "Never valid for demonstration.";
     }
-    
-    // -- PARAM SUPPORTING METHODS 
-    
+
+    // -- PARAM SUPPORTING METHODS
+
     // testing whether all of these get picked up by the meta-model
-    
-    @MemberSupport public boolean hideA(Parameters params) { return false; }         
-    @MemberSupport public String disableA(Parameters params) { return null; }                           
+
+    @MemberSupport public boolean hideA(Parameters params) { return false; }
+    @MemberSupport public String disableA(Parameters params) { return null; }
     @MemberSupport public String validateA(Parameters params) { return null; }
-    @MemberSupport public int[] choicesA(Parameters params) { return null; }          
+    @MemberSupport public int[] choicesA(Parameters params) { return null; }
     @MemberSupport public int[] autoCompleteA(Parameters params, String search) { return null; }
     @MemberSupport public int defaultA(Parameters params) { return 0; }
-    
-    @MemberSupport public boolean hideB(Parameters params) { return false; }         
-    @MemberSupport public String disableB(Parameters params) { return null; }                           
+
+    @MemberSupport public boolean hideB(Parameters params) { return false; }
+    @MemberSupport public String disableB(Parameters params) { return null; }
     @MemberSupport public String validateB(Parameters params) { return null; }
-    @MemberSupport public int[] choicesB(Parameters params) { return null; }          
+    @MemberSupport public int[] choicesB(Parameters params) { return null; }
     @MemberSupport public int[] autoCompleteB(Parameters params, String search) { return null; }
     @MemberSupport public int defaultB(Parameters params) { return 0; }
-    
+
 }

@@ -34,7 +34,7 @@ import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 public class JdoInventoryManager {
 
     @Inject private RepositoryService repository;
-    
+
     // -- UPDATE PRODUCT PRICE
 
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
@@ -51,12 +51,12 @@ public class JdoInventoryManager {
     public int countProducts() {
         return listAllProducts().size();
     }
-    
+
     @Action
     public List<JdoProduct> listAllProducts() {
         return repository.allInstances(JdoProduct.class);
     }
 
-    
+
 
 }

@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
 import lombok.NonNull;
 import lombok.val;
@@ -46,9 +47,9 @@ public class Tooltips {
      * @param response
      */
     public static void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css"))); 
+        response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css")));
     }
-    
+
     /**
      * Adds popover behavior to the {@code target}, if at least the body is not empty/blank.
      * @param target
@@ -60,15 +61,15 @@ public class Tooltips {
         if(tooltipUiModel==null || _Strings.isEmpty(tooltipUiModel.getBody())) {
             return; // no body so don't render
         }
-        
+
         final IModel<String> labelModel = tooltipUiModel
                 .getLabel()
                 .map(label->Model.of(label))
-                .orElseGet(()->Model.of());  
+                .orElseGet(()->Model.of());
         final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
-        
+
         val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
-        target.add(new CssClassAppender("isis-component-with-tooltip"));    
+        target.add(new CssClassAppender("isis-component-with-tooltip"));
         target.add(tooltipBehavior);
     }
 
@@ -76,11 +77,11 @@ public class Tooltips {
         target.getBehaviors(PopoverBehavior.class)
         .forEach(target::remove);
     }
-    
+
     // -- SHORTCUTS
-    
+
     //sonar-ignore-on ... fails to interpret _Strings.isEmpty as null guard
-    
+
     public static void addTooltip(@NonNull Component target, @Nullable String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
@@ -92,17 +93,18 @@ public class Tooltips {
                 ? null
                 : TooltipUiModel.of(label, body));
     }
-    
+
     //sonar-ignore-off
 
     // -- HELPER
-    
+
     private static PopoverBehavior createTooltipBehavior(IModel<String> label, IModel<String> body) {
         return new PopoverBehavior(label, body, createTooltipConfig());
     }
-    
+
     private static PopoverConfig createTooltipConfig() {
-        return new PopoverConfig()
+        return new ExtendedPopoverConfig()
+        		.withBoundary(PopoverBoundary.viewport)
                 .withTrigger(OpenTrigger.hover)
                 .withPlacement(Placement.bottom)
                 .withAnimation(true);

@@ -56,8 +56,8 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
         }
 
         // attach ActionParameterValidationFacet if validateNumMethod is found ...
-        // in any case single-arg, either same as param-type or PPM style 
-        
+        // in any case single-arg, either same as param-type or PPM style
+
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
@@ -66,20 +66,20 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
                 .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
                 .build();
-        
+
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-        
+
             val validateMethod = searchResult.getSupportingMethod();
             val paramNum = searchResult.getParamIndex();
-            
+
             processMethodContext.removeMethod(validateMethod);
-            
+
             if (facetedMethod.containsNonFallbackFacet(ActionParameterValidationFacet.class)) {
                 val cls = processMethodContext.getCls();
                 throw new MetaModelException(cls + " uses both old and new 'validate' syntax - "
                         + "must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
             val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getIdentifier());
@@ -89,7 +89,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
             super.addFacet(
                     new ActionParameterValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
-        
+
         });
     }
 

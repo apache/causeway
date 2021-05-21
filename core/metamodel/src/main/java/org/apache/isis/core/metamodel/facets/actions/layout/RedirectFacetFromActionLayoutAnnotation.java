@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstr
 public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
 
     public static RedirectFacet create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return actionLayoutIfAny
                 .map(ActionLayout::redirectPolicy)
                 .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))

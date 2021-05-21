@@ -19,6 +19,7 @@
 package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -26,35 +27,71 @@ import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
-import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE) 
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 //@Log4j2
-final class IsisBeanTypeClassifierImpl 
+final class IsisBeanTypeClassifierImpl
 implements IsisBeanTypeClassifier {
 
+    private final Can<String> activeProfiles;
     private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
-    
-    @Override
-    public BeanClassification classify(Class<?> type) {
 
-        requires(type, "type");
-        
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.UNKNOWN); // reject
+    @Override
+    public BeanClassification classify(final @NonNull Class<?> type) {
+
+        // handle arbitrary types ...
+
+        if(type.isPrimitive()) {
+            return BeanClassification.delegated(BeanSort.VALUE);
+        }
+
+        if(Collection.class.isAssignableFrom(type)
+                || Can.class.isAssignableFrom(type)
+                || type.isArray()) {
+            return BeanClassification.selfManaged(BeanSort.COLLECTION);
+        }
+
+        if(type.isInterface()
+                // modifier predicate must be called after testing for non-scalar type above,
+                // otherwise we'd get false positives
+                || Modifier.isAbstract(type.getModifiers())) {
+
+            // apiNote: abstract types and interfaces cannot be vetoed
+            // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
+            // however, concrete types that inherit abstract ones with vetoes,
+            // will effectively be vetoed through means of annotation synthesis
+            return BeanClassification.delegated(BeanSort.ABSTRACT);
+        }
+
+        // handle actual bean types ...
+
+        if(findNearestAnnotation(type, Vetoed.class).isPresent()
+                || findNearestAnnotation(type, Programmatic.class).isPresent()) {
+            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+        }
+
+        val profiles = Can.ofArray(findNearestAnnotation(type, Profile.class)
+                .map(Profile::value)
+                .orElse(null));
+        if(profiles.isNotEmpty()
+                && !profiles.stream().anyMatch(this::isProfileActive)) {
+            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
         }
 
         val aDomainService = findNearestAnnotation(type, DomainService.class);
@@ -77,36 +114,36 @@ implements IsisBeanTypeClassifier {
 
         val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-            
-            String objectType = null; 
-            
+
+            String objectType = null;
+
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 objectType = aDomainObject.objectType();
             }
-            
+
             // don't trample over the @DomainObject(objectType=..) if present
             if(_Strings.isEmpty(objectType)) {
                 val aTable = findNearestAnnotation(type, Table.class).orElse(null);
                 if(aTable!=null) {
-                    val schema = aTable.schema();      
+                    val schema = aTable.schema();
                     if(_Strings.isNotEmpty(schema)) {
                         val table = aTable.name();
-                        objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT), 
+                        objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
                                 _Strings.isNotEmpty(table)
                                     ? table
                                     : type.getSimpleName());
-                    }    
+                    }
                 }
             }
-      
+
             if(_Strings.isNotEmpty(objectType)) {
                 BeanClassification.selfManaged(
                         BeanSort.ENTITY, objectType);
             }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
-        
+
         val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
@@ -120,17 +157,11 @@ implements IsisBeanTypeClassifier {
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above
                 return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
-            } 
+            }
         }
 
         if(findNearestAnnotation(type, Component.class).isPresent()) {
             return BeanClassification.delegated(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
-        }
-        
-        if(Collection.class.isAssignableFrom(type)
-                || Can.class.isAssignableFrom(type)
-                || type.isArray()) {
-            return BeanClassification.selfManaged(BeanSort.COLLECTION);
         }
 
         if(Serializable.class.isAssignableFrom(type)) {
@@ -139,14 +170,14 @@ implements IsisBeanTypeClassifier {
 
         return BeanClassification.delegated(BeanSort.UNKNOWN);
     }
-    
+
     // -- HELPER
 
     private String objectType(DomainService aDomainService) {
         if(aDomainService!=null) {
             val objectType = aDomainService.objectType();
             if(_Strings.isNotEmpty(objectType)) {
-                return objectType; 
+                return objectType;
             }
         }
         return null;
@@ -156,11 +187,17 @@ implements IsisBeanTypeClassifier {
         if(aDomainObject!=null) {
             val objectType = aDomainObject.objectType();
             if(_Strings.isNotEmpty(objectType)) {
-                return objectType; 
+                return objectType;
             }
         }
         return null;
     }
 
+    //XXX yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
+    //either we find a Spring Boot utility class that does this logic for us, or we make it clear with the
+    //docs, that we have only limited support for the @Profile annotation
+    private boolean isProfileActive(final String profile) {
+        return activeProfiles.contains(profile);
+    }
 
 }

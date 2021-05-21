@@ -43,27 +43,27 @@ public class ComponentHintKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static ComponentHintKey create(
-            IsisAppCommonContext commonContext, 
-            Provider<Component> pathProvider, 
+            IsisAppCommonContext commonContext,
+            Provider<Component> pathProvider,
             String key) {
         return new ComponentHintKey(
-                commonContext.lookupServiceElseFail(HintStore.class), 
+                commonContext.lookupServiceElseFail(HintStore.class),
                 pathProvider, null, key, null);
     }
 
     public static ComponentHintKey create(
-            IsisAppCommonContext commonContext, 
-            Component path, 
+            IsisAppCommonContext commonContext,
+            Component path,
             String key) {
         return new ComponentHintKey(
-                commonContext.lookupServiceElseFail(HintStore.class), 
+                commonContext.lookupServiceElseFail(HintStore.class),
                 null, path, key, null);
     }
 
     public static ComponentHintKey create(
-            HintStore hintStore, 
+            HintStore hintStore,
             String fullKey) {
-        return new ComponentHintKey(hintStore, 
+        return new ComponentHintKey(hintStore,
                 null, null, null, fullKey);
     }
 
@@ -77,7 +77,7 @@ public class ComponentHintKey implements Serializable {
         return fullKey != null
                 ? fullKey
                 : keyFor(component != null
-                        ? component 
+                        ? component
                         : (component = componentProvider.get()), // memoize for de-serialization
                     keyName);
     }
@@ -159,9 +159,9 @@ public class ComponentHintKey implements Serializable {
     public HintStore getHintStore() {
         return hintStore = computeIfAbsent(HintStore.class, hintStore);
     }
-    
+
     // -- HELPER
-    
+
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny

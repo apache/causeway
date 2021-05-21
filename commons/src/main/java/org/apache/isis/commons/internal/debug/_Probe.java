@@ -35,11 +35,11 @@ import lombok.extern.log4j.Log4j2;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Replacement for the use of System.out.println when adding temporary debug code, 
+ * Replacement for the use of System.out.println when adding temporary debug code,
  * that needs to be removed later.
  * </p>
- * <p>EXAMPLE:<br/><pre>{@code 
- * _Probe probe = 
+ * <p>EXAMPLE:<br/><pre>{@code
+ * _Probe probe =
  *    _Probe.maxCallsThenExitWithStacktrace(1).label("IsisInteractionFactoryDefault");
  * probe.println("Hallo World!");
  * }
@@ -179,7 +179,7 @@ public class _Probe {
         errOut("-------------------------------------");
         out=restore_out;
     }
-    
+
     public void run(Runnable runnable) {
         val t0 = System.nanoTime();
         runnable.run();
@@ -189,20 +189,20 @@ public class _Probe {
     }
 
     // -- DEBUG ENTRY POINTS
-    
+
     public static enum EntryPoint {
         USER_INTERACTION
     }
-    
+
     /** idea is to keep these for reuse (so these are not just for temporary troubleshooting) */
     public static void entryPoint(EntryPoint entryPoint, String description) {
         if(log.isDebugEnabled()) {
             log.debug("entering {}: {}", entryPoint.name(), description);
         }
     }
-    
+
     // -- CONVENIENT DEBUG TOOLS (STATIC)
-    
+
     public static String currentThreadId() {
         val ct = Thread.currentThread();
         return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
@@ -217,7 +217,7 @@ public class _Probe {
     }
 
 
-    private static final Map<String, String> abbreviations = 
+    private static final Map<String, String> abbreviations =
             _Maps.unmodifiableEntries(
                     _Maps.entry("org.apache.isis", "~"),
                     _Maps.entry("core", "c"),
@@ -246,13 +246,13 @@ public class _Probe {
         for(int i=0; i<indent; ++i) {
             out.print(indentLiteral);
         }
-        final String message = "["+label+" "+counterValue+"] "+chars; 
+        final String message = "["+label+" "+counterValue+"] "+chars;
         out.println(String.format(emphasisFormat, message));
     }
 
-   
 
-    
+
+
 
 
 }

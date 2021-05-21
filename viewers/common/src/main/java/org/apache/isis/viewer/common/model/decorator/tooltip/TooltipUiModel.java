@@ -30,14 +30,14 @@ import lombok.Value;
 public class TooltipUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @NonNull final Optional<String> label;
     @NonNull final String body;
-    
+
     public static TooltipUiModel ofBody(@NonNull String body) {
         return of(Optional.empty(), body);
     }
-    
+
     public static TooltipUiModel of(@Nullable String label, @NonNull String body) {
         return of(Optional.ofNullable(label), body);
     }

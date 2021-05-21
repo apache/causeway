@@ -38,12 +38,12 @@ import lombok.RequiredArgsConstructor;
 class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInfo {
 
     private static final long serialVersionUID = 1L;
-    
+
     static AuthenticationInfo of(
-            PrincipalForApplicationUser principal, 
+            PrincipalForApplicationUser principal,
             String realmName,
             Object credentials) {
-        
+
         return new AuthInfoForApplicationUser(principal, realmName, credentials);
     }
 
@@ -70,12 +70,12 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
     public Collection<Permission> getObjectPermissions() {
         return principal.getObjectPermissions();
     }
-    
+
     // -- HELPER
-    
-    private final transient _Lazy<PrincipalCollection> principalCollection = 
+
+    private final transient _Lazy<PrincipalCollection> principalCollection =
             _Lazy.threadSafe(this::createPrincipalCollection);
-    
+
     private PrincipalCollection createPrincipalCollection() {
         return ShiroUtils.isSingleRealm()
                 ? PrincipalCollectionForApplicationUserOnSingleRealm.of(principal, realmName)
@@ -83,5 +83,5 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
     }
 
 
-    
+
 }

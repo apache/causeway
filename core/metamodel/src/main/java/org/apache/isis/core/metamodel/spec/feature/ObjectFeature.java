@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -38,6 +39,9 @@ public interface ObjectFeature extends Specification {
      * Returns the identifier of the member, which must not change. This should
      * be all camel-case with no spaces: so if the member is called 'Return
      * Date' then a suitable id would be 'returnDate'.
+     * @implNote for {@link ObjectMember}(s) this is a shortcut for
+     * {@link ObjectMember#getIdentifier()}.getMemberName()
+     * @see Identifier#getMemberName()
      */
     String getId();
 

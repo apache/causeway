@@ -22,7 +22,7 @@ import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -33,15 +33,15 @@ import lombok.val;
 public class _Bindables {
 
     private static class SimpleBindable<T> extends _BindableAbstract<T> {}
-    
+
     public static <T> _BindableAbstract<T> empty() {
         return new SimpleBindable<T>();
     }
-    
+
     public static <T> _BindableAbstract<T> forValue(T initialValue) {
         val bindable = new SimpleBindable<T>();
         bindable.setValue(initialValue);
         return bindable;
     }
-    
+
 }

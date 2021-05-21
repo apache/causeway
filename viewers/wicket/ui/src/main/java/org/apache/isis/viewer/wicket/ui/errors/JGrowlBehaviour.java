@@ -48,14 +48,14 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
     private transient IsisAppCommonContext commonContext;
-    
+
     public JGrowlBehaviour(IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
     }
 
     @Override
     protected void respond(AjaxRequestTarget target) {
-        
+
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
             if(!_Strings.isNullOrEmpty(feedbackMsg)) {
@@ -77,14 +77,14 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
                 .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
 
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{
-        
+
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
             if(_Strings.isNotEmpty(feedbackMsg)) {
                 response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
             }
-            
+
         });
-        
+
     }
 
     protected IsisAppCommonContext getCommonContext() {

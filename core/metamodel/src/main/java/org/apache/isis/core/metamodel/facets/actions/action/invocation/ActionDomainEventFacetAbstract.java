@@ -43,7 +43,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class ActionDomainEventFacetAbstract
-extends SingleClassValueFacetAbstract 
+extends SingleClassValueFacetAbstract
 implements ActionDomainEventFacet {
 
     @Getter @Setter private Class<? extends ActionDomainEvent<?>> eventType;
@@ -54,7 +54,7 @@ implements ActionDomainEventFacet {
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final FacetHolder holder) {
-        
+
         super(ActionDomainEventFacet.class, holder, eventType);
         setEventType(eventType);
 
@@ -70,7 +70,7 @@ implements ActionDomainEventFacet {
     public Class<?> value() {
         return eventType;
     }
-    
+
     @Override
     public String hides(final VisibilityContext ic) {
 
@@ -113,7 +113,7 @@ implements ActionDomainEventFacet {
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
             String.format("expecting an action context but got %s", ic.getIdentifier()));
-        
+
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -132,9 +132,9 @@ implements ActionDomainEventFacet {
 
         return null;
     }
-    
+
     // -- HELPER
-    
+
     private static ObjectAction actionFrom(final InteractionContext ic) {
         if(!(ic instanceof ActionInteractionContext)) {
             throw new IllegalStateException(

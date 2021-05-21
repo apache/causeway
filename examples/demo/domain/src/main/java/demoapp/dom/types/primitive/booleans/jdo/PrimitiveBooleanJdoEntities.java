@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.primitive.booleans.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class PrimitiveBooleanJdoEntities {
+public class PrimitiveBooleanJdoEntities
+extends ValueHolderRepository<Boolean, PrimitiveBooleanJdo> {
 
-    public Optional<PrimitiveBooleanJdo> find(final boolean readOnlyProperty) {
-        return repositoryService.firstMatch(PrimitiveBooleanJdo.class, x -> x.isReadOnlyProperty() == readOnlyProperty);
+    protected PrimitiveBooleanJdoEntities() {
+        super(PrimitiveBooleanJdo.class);
     }
 
-    public List<PrimitiveBooleanJdo> all() {
-        return repositoryService.allInstances(PrimitiveBooleanJdo.class);
+    @Override
+    protected PrimitiveBooleanJdo newDetachedEntity(Boolean value) {
+        return new PrimitiveBooleanJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

@@ -20,6 +20,7 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -60,29 +61,24 @@ import lombok.val;
 public class Object_objectIdentifier {
 
     @Inject private BookmarkService bookmarkService;
-    @Inject private MetaModelService mmService;
+    @Inject private MetaModelService metaModelService;
 
     private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
+    @Action(
+            domainEvent = Object_objectIdentifier.ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)
+    )
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        val sort = mmService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
-        if(!sort.isEntity()) {
-            return shortend(bookmark.getIdentifier());
-        }
         return bookmark.getIdentifier();
     }
 
-    // -- HELPER
-
-    private String shortend(@NonNull String identifier) {
-
-        val hashHexed = Integer.toHexString(identifier.hashCode());
-        val hashPadded = _Strings.padStart(hashHexed, 8, '0');
-        return "»" + hashPadded;
+    public boolean hideProp() {
+        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        return !metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED).isEntity();
     }
 
 

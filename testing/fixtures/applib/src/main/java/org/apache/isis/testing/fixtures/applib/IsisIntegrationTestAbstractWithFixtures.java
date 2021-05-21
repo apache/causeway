@@ -67,7 +67,7 @@ public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegr
      * To use instead of {@link #getFixtureClock()}'s {@link FixtureClock#setDate(int, int, int)} ()}.
      */
     protected void setFixtureClockDate(final int year, final int month, final int day) {
-        
+
         final Clock instance = Clock.getInstance();
 
         if(instance instanceof TickingFixtureClock) {

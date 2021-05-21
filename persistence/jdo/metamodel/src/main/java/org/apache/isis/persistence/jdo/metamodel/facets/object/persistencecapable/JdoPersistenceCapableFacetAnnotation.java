@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class JdoPersistenceCapableFacetAnnotation 
-extends FacetAbstract 
+public class JdoPersistenceCapableFacetAnnotation
+extends FacetAbstract
 implements JdoPersistenceCapableFacet {
 
     private final String schema;
@@ -40,7 +40,7 @@ implements JdoPersistenceCapableFacet {
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder) {
-        
+
         super(JdoPersistenceCapableFacet.class, holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
         this.schema = schemaName;
@@ -57,13 +57,13 @@ implements JdoPersistenceCapableFacet {
     public String getSchema() {
         return schema;
     }
-    
+
     @Override
     public String getTable() {
         return table;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("schema", schema);

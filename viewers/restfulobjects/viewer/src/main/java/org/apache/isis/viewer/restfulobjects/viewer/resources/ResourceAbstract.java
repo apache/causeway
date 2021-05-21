@@ -69,22 +69,22 @@ public abstract class ResourceAbstract {
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
             final InteractionTracker isisInteractionTracker) {
-        
+
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
         this.isisInteractionTracker = isisInteractionTracker;
     }
-    
+
     // -- FACTORIES
 
     protected ResourceContext createResourceContext(
             final RepresentationType representationType,
             final Where where,
             final RepresentationService.Intent intent) {
-        
+
         return createResourceContext(ResourceDescriptor.of(representationType, where, intent));
     }
-    
+
     protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
         return createResourceContext(resourceDescriptor, queryStringIfAny);
@@ -93,7 +93,7 @@ public abstract class ResourceAbstract {
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
-        
+
         final String urlDecodedQueryString = Util.asStringUtf8(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
@@ -101,7 +101,7 @@ public abstract class ResourceAbstract {
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
-        
+
         if (!isisInteractionTracker.isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
@@ -114,9 +114,9 @@ public abstract class ResourceAbstract {
     }
 
     public ResourceContext resourceContextForTesting(
-            final ResourceDescriptor resourceDescriptor, 
+            final ResourceDescriptor resourceDescriptor,
             final Map<String, String[]> requestParams) {
-        
+
         return resourceContext(
                 resourceDescriptor, "/restful", /*urlUnencodedQueryString*/ null, requestParams);
     }
@@ -129,16 +129,16 @@ public abstract class ResourceAbstract {
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
         return metaModelContext.loadObject(bookmark)
                 .orElseThrow(()->RestfulObjectsApplicationException
-                        .createWithMessage(HttpStatusCode.NOT_FOUND, 
-                                "Could not determine adapter for bookmark: '%s'", 
+                        .createWithMessage(HttpStatusCode.NOT_FOUND,
+                                "Could not determine adapter for bookmark: '%s'",
                                 bookmark));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {
         final ManagedObject serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
         if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                    "Could not locate service '%s'", serviceId);    
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
+                    "Could not locate service '%s'", serviceId);
         }
         return serviceAdapter;
     }
@@ -146,27 +146,27 @@ public abstract class ResourceAbstract {
     protected SpecificationLoader getSpecificationLoader() {
         return metaModelContext.getSpecificationLoader();
     }
-    
-    // -- HELPER 
-    
+
+    // -- HELPER
+
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
         return _UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
     }
-    
+
     private ResourceContext resourceContext(
             final ResourceDescriptor resourceDescriptor,
             final String baseUri,
-            final String urlUnencodedQueryString, 
+            final String urlUnencodedQueryString,
             final Map<String, String[]> requestParams) {
-        
+
         return new ResourceContext(
-                resourceDescriptor, 
+                resourceDescriptor,
                 httpHeaders, providers, baseUri, request,
-                urlUnencodedQueryString, 
+                urlUnencodedQueryString,
                 httpServletRequest, httpServletResponse,
                 securityContext,
-                metaModelContext, 
+                metaModelContext,
                 InteractionInitiatedBy.USER,
                 requestParams);
     }

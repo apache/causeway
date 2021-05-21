@@ -29,12 +29,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -44,17 +40,28 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
+import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
+import org.apache.isis.testdomain.model.good.ElementTypeInterface;
+import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
+import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -113,13 +120,13 @@ class DomainModelTest_usingGoodDomain {
         val validateDomainModel = new DomainModelValidator(serviceRegistry);
         validateDomainModel.throwIfInvalid(); // should not throw
     }
-    
+
     @Test
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
-     
+
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
                 IntrospectionState.FULLY_INTROSPECTED);
-        
+
         val prefixed_action = holderSpec.getActionElseFail("hideMe");
         assertNotNull(prefixed_action);
         assertEquals("hideMe", prefixed_action.getId());
@@ -243,7 +250,7 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("foo", super_action.getName());
         assertEquals("bar", super_action.getDescription());
 
-        assertEquals(1L, holderSpec.streamActions(MixedIn.EXCLUDED)
+        assertEquals(1L, holderSpec.streamAnyActions(MixedIn.EXCLUDED)
                 .filter(prop->prop.getId().equals("sampleActionOverride"))
                 .count());
 
@@ -273,7 +280,102 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @Test
+    void elementTypes_shouldBeIntrospected_whenDiscoveredViaGenerics_usingNoWildcards() {
+
+        // when using generic type (no wild-cards)
+
+        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+
+        val concreteColl = vmSpec.getCollectionElseFail("concreteColl");
+        val concreteCollSpec = concreteColl.getSpecification();
+
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
+        assertHasAction(concreteCollSpec, "abstractAction");
+        assertHasAction(concreteCollSpec, "interfaceAction");
+        assertHasProperty(concreteCollSpec, "abstractProp");
+        assertHasProperty(concreteCollSpec, "interfaceProp");
+
+        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
+        val interfaceCollSpec = interfaceColl.getSpecification();
+
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        assertHasAction(interfaceCollSpec, "interfaceAction");
+        assertHasProperty(interfaceCollSpec, "interfaceProp");
+
+        val abstractColl = vmSpec.getCollectionElseFail("abstractColl");
+        val abstractCollSpec = abstractColl.getSpecification();
+
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
+        assertHasAction(abstractCollSpec, "abstractAction");
+        assertHasProperty(abstractCollSpec, "abstractProp");
+
+    }
+
+    @Test
+    void elementTypes_shouldBeIntrospected_whenDiscoveredViaGenerics_usingWildcards() {
+
+        // when using generic type (w/ wild-cards)
+
+        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+
+        val concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
+        val concreteCollSpec = concreteColl.getSpecification();
+
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
+        assertHasAction(concreteCollSpec, "abstractAction");
+        assertHasAction(concreteCollSpec, "interfaceAction");
+        assertHasProperty(concreteCollSpec, "abstractProp");
+        assertHasProperty(concreteCollSpec, "interfaceProp");
+
+        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
+        val interfaceCollSpec = interfaceColl.getSpecification();
+
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
+        assertHasAction(interfaceCollSpec, "interfaceAction");
+        assertHasProperty(interfaceCollSpec, "interfaceProp");
+
+        val abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
+        val abstractCollSpec = abstractColl.getSpecification();
+
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
+        assertHasAction(abstractCollSpec, "abstractAction");
+        assertHasProperty(abstractCollSpec, "abstractProp");
+
+    }
+
+    @Test
+    void interfaces_shouldSupport_inheritedMembers() {
+
+        val i2Spec = specificationLoader.loadSpecification(ProperInterface2.class,
+                IntrospectionState.FULLY_INTROSPECTED);
+
+        assertEquals(BeanSort.ABSTRACT, i2Spec.getBeanSort());
+        assertHasProperty(i2Spec, "a");
+        assertHasProperty(i2Spec, "b");
+        assertHasProperty(i2Spec, "c");
+        assertHasProperty(i2Spec, "d");
+        assertHasProperty(i2Spec, "e");
+        assertHasProperty(i2Spec, "f");
+    }
+
     // -- HELPER
+
+    private void assertHasProperty(ObjectSpecification spec, String propertyId) {
+        spec.getPropertyElseFail(propertyId);
+    }
+
+    private void assertHasAction(ObjectSpecification spec, String actionId) {
+        spec.getActionElseFail(actionId);
+    }
 
     private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
         val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);

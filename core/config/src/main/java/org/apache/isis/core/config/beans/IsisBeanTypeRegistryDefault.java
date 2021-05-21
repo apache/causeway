@@ -54,42 +54,42 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
      * (immutable) scan result, as used by the SpecificationLoader for introspection
      */
     private final Can<IsisBeanMetaData> introspectableTypes;
-    
+
     private final Map<Class<?>, IsisBeanMetaData> introspectableTypesByClass = _Maps.newHashMap();
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
-    
+
     @Getter(onMethod_ = {@Override}) private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    
+
     // -- LOOKUPS
-    
+
     @Override
     public Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));
     }
-    
+
     // -- ITERATORS
-    
+
     @Override
     public Stream<IsisBeanMetaData> streamIntrospectableTypes() {
         return _NullSafe.stream(introspectableTypes);
     }
-    
+
     // -- CONSTRUCTOR
-    
+
     @Inject @Named("isis.bean-meta-data")
     public IsisBeanTypeRegistryDefault(final @NonNull Can<IsisBeanMetaData> introspectableTypes) {
         this.introspectableTypes = introspectableTypes;
-        
+
         introspectableTypes.forEach(type->{
-            
+
             val cls = type.getCorrespondingClass();
-            
+
             introspectableTypesByClass.put(type.getCorrespondingClass(), type);
-            
+
             switch (type.getBeanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
                 managedBeansContributing.put(cls, type);
@@ -103,16 +103,18 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             case VIEW_MODEL:
                 viewModelTypes.add(cls);
                 return;
-            
+
             // skip introspection for these
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
             case VALUE:
+            case ABSTRACT: // <-- unexpected code reach
+            case VETOED:
             case UNKNOWN:
                 return;
-            }    
+            }
         });
-        
+
     }
-    
+
 }

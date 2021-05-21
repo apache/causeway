@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1"
 )
 @ActionLayout(
-        position = ActionLayout.Position.PANEL, 
-        named = "Positioned on panel", 
+        position = ActionLayout.Position.PANEL,
+        named = "Positioned on panel",
         describedAs = "position = PANEL",
         sequence = "2")
 @RequiredArgsConstructor

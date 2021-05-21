@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
  * See {@link InteractionContext} for overview; analogous to
  * {@link UsabilityEvent}.
  */
-public abstract class UsabilityContext 
+public abstract class UsabilityContext
 extends InteractionContext
 implements InteractionEventSupplier<UsabilityEvent> {
 

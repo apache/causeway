@@ -51,5 +51,5 @@ public class ExceptionPojo {
         this.message = message;
         this.detail = detail;
     }
-    
+
 }

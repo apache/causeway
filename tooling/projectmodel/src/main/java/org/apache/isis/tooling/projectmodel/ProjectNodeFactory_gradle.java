@@ -42,13 +42,13 @@ class ProjectNodeFactory_gradle {
             return rootNode;
         }
     }
-    
+
     // -- HELPER
-    
+
     private static ProjectNode visitGradleProject(
-            final @Nullable ProjectNode parent, 
+            final @Nullable ProjectNode parent,
             final @NonNull GradleProject gradleProj) {
-        
+
         val projNode = toProjectNode(parent, gradleProj);
         for(val child : gradleProj.getChildren()){
             visitGradleProject(projNode, child);
@@ -57,9 +57,9 @@ class ProjectNodeFactory_gradle {
     }
 
     private static ProjectNode toProjectNode(
-            final @Nullable ProjectNode parent, 
+            final @Nullable ProjectNode parent,
             final @NonNull GradleProject gradleProj) {
-        
+
         val projNode = ProjectNode.builder()
                 .parent(parent)
                 .artifactCoordinates(artifactKeyOf(gradleProj))

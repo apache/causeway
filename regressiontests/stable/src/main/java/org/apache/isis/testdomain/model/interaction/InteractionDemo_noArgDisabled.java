@@ -29,16 +29,16 @@ public class InteractionDemo_noArgDisabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public Integer act() {
         return 99;
     }
-    
+
     @MemberSupport
     public String disable() {
         return "Disabled for demonstration.";
     }
-    
-    
+
+
 }

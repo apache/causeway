@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.security.IsisModuleCoreSecurity;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
@@ -48,11 +48,11 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
-    public static final String OBJECT_TYPE = "isis.security.LogoutMenu"; // referenced by secman seeding
-    
+    public static final String OBJECT_TYPE = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
+
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
-    private final IsisConfiguration configuration;
+    //private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
@@ -68,7 +68,7 @@ public class LogoutMenu {
         _NullSafe.stream(logoutHandler)
             .filter(LogoutHandler::isHandlingCurrentThread)
             .forEach(LogoutHandler::logout);
-        
+
         return getRedirect();
     }
 
@@ -86,24 +86,24 @@ public class LogoutMenu {
         default: return null; // redirects to the homepage
         }
     }
-    
+
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
-            nature = Nature.VIEW_MODEL, 
-            objectType = LoginRedirect.OBJECT_TYPE)  
+            nature = Nature.VIEW_MODEL,
+            objectType = LoginRedirect.OBJECT_TYPE)
     public static class LoginRedirect {
         public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
-    
+
     private LocalResourcePath createLogoutRedirect() {
-        val logoutRedirect = "/logout"; 
-        
+        val logoutRedirect = "/logout";
+
         //TODO make this a config option (or use the spring option, if there is any)
-        //configuration.getSecurity().getSpring().getLogoutRedirect(); 
-        
+        //configuration.getSecurity().getSpring().getLogoutRedirect();
+
         return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
     }
-    
-    
+
+
 }
 

@@ -18,19 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.header;
 
-import java.util.Objects;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -99,6 +96,8 @@ extends PanelAbstract<String, Model<String>> {
 
     protected void addUserName(UserProfileUiModel userProfile) {
         add(new MarkupContainer(ID_USER_ICON){
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,42 +27,49 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TaggerTest {
 
+    TaggerDefault taggerDefault;
+
+    @Before
+    public void setUp() throws Exception {
+        taggerDefault = new TaggerDefault();
+    }
+
     public static class TagFor extends TaggerTest {
 
         @Test
         public void fullyQualifiedClass() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("foo.bar.Abc", null);
+            String tag = taggerDefault.tagForObjectType("foo.bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void jaxb() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
+            String tag = taggerDefault.tagForObjectType("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
             assertThat(tag, is(equalTo("todoitem")));
         }
 
         @Test
         public void schemaClass() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("bar.Abc", null);
+            String tag = taggerDefault.tagForObjectType("bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void noPackage() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("Abc", null);
+            String tag = taggerDefault.tagForObjectType("Abc", null);
             assertThat(tag, is(equalTo("Abc")));
         }
 
         @Test
         public void internals() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("org.apache.isis.applib.fixturescripts.FixtureResult", null);
+            String tag = taggerDefault.tagForObjectType("org.apache.isis.Xxx", null);
             assertThat(tag, is(equalTo(". apache isis internals")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = new TaggerDefault().tagForObjectType("isis.applib.ConfigurationServiceMenu", null);
-            assertThat(tag, is(equalTo(". apache isis applib")));
+            String tag = taggerDefault.tagForObjectType("isis.conf.ConfigurationServiceMenu", null);
+            assertThat(tag, is(equalTo(". apache isis conf")));
         }
 
     }

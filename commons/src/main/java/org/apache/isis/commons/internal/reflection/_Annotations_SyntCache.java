@@ -33,17 +33,17 @@ import lombok.Value;
 import lombok.val;
 
 final class _Annotations_SyntCache {
-    
+
     // -- L2 CACHE
-    
+
     @Value(staticConstructor = "of")
     private static final class Key {
-        AnnotatedElement annotatedElement; 
+        AnnotatedElement annotatedElement;
         Class<? extends Annotation> annotationType;
     }
-    
+
     private Map<Key, Optional<?>> map = _Maps.newConcurrentHashMap();
-    
+
     @SuppressWarnings("unchecked")
     <A extends Annotation> Optional<A> computeIfAbsent(
             AnnotatedElement annotatedElement,
@@ -54,11 +54,11 @@ final class _Annotations_SyntCache {
 
         return (Optional<A>) map.computeIfAbsent(key, __->factory.apply(annotatedElement, annotationType));
     }
-    
+
     // -- L1 CACHE
-    
+
     private Map<AnnotatedElement, MergedAnnotations> mergedByTarget = _Maps.newConcurrentHashMap();
-    
+
     MergedAnnotations computeIfAbsent(
             AnnotatedElement annotatedElement,
             Function<AnnotatedElement, MergedAnnotations> factory) {
@@ -68,7 +68,7 @@ final class _Annotations_SyntCache {
     }
 
     // -- CLEANUP
-    
+
     void clear() {
         map.clear();
         mergedByTarget.clear();

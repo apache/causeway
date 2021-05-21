@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1"
 )
 @ActionLayout(
-        position = ActionLayout.Position.RIGHT, 
-        named = "Positioned right", 
+        position = ActionLayout.Position.RIGHT,
+        named = "Positioned right",
         describedAs = "position = RIGHT",
         sequence = "4")
 @RequiredArgsConstructor

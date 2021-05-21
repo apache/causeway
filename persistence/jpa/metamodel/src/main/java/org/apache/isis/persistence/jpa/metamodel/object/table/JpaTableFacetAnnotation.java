@@ -31,8 +31,8 @@ public interface JpaTableFacetAnnotation extends Facet {
      * Corresponds to {@link Table#schema()}, or null if not specified.
      */
     String getSchema();
-    
-    
+
+
     /**
      * Corresponds to {@link Table#name()}, or to the
      * class' {@link Class#getSimpleName() simple name} if no table specified.

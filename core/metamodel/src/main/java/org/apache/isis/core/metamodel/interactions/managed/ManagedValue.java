@@ -31,6 +31,6 @@ public interface ManagedValue {
     Observable<String> getValidationMessage();
     Bindable<String> getSearchArgument();
     Observable<Can<ManagedObject>> getChoices();
-    
-    
+
+
 }

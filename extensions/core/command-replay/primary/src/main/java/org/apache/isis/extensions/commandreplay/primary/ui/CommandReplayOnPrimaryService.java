@@ -40,8 +40,8 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
  */
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = "isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService"
+    objectType = CommandReplayOnPrimaryService.OBJECT_TYPE
 )
 @DomainServiceLayout(
     named = "Activity",
@@ -67,7 +67,9 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 public class CommandReplayOnPrimaryService {
 
-    @Inject final CommandJdoRepository commandServiceRepository;
+    public static final String OBJECT_TYPE = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService";
+
+    @Inject final CommandModelRepository<? extends CommandModel> commandModelRepository;
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
@@ -98,7 +100,7 @@ public class CommandReplayOnPrimaryService {
      */
     @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
-    public List<CommandJdo> findCommands(
+    public List<? extends CommandModel> findCommands(
             @Nullable
             @ParameterLayout(named="Interaction Id")
             final UUID interactionId,
@@ -131,7 +133,7 @@ public class CommandReplayOnPrimaryService {
             @Nullable
             final Integer batchSize,
             final String filenamePrefix) {
-        final List<CommandJdo> commands = commandServiceRepository.findSince(interactionId, batchSize);
+        final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
         if(commands == null) {
             messageService.informUser("No commands found");
         }
@@ -168,7 +170,7 @@ public class CommandReplayOnPrimaryService {
             final UUID interactionId,
             final String filenamePrefix) {
 
-        return commandServiceRepository.findByInteractionId(interactionId)
+        return commandModelRepository.findByInteractionId(interactionId)
                 .map(commandJdo -> {
 
                     final CommandDto commandDto = commandJdo.getCommandDto();

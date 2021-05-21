@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 @Configuration
 @Import({
-    
+
 })
 @EnableJpaRepositories(basePackageClasses = EmployeeRepository.class)
 @EntityScan(basePackageClasses = Employee.class)
@@ -39,10 +39,10 @@ public class SpringDataJpaTestModule {
         repository.save(new Employee("Sundar", "Pichai"));
         repository.save(new Employee("Jeff", "Bezos"));
     }
-    
+
     public static EmployeeManager createEmployeeManager(final FactoryService factoryService){
         return factoryService.viewModel(EmployeeManager.class);
     }
-    
+
 }
 

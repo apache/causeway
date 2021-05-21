@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -48,11 +47,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        
-        super(resourceContext, 
-                linkFollowSpecs, 
-                collectionId, 
-                RepresentationType.OBJECT_COLLECTION, 
+
+        super(resourceContext,
+                linkFollowSpecs,
+                collectionId,
+                RepresentationType.OBJECT_COLLECTION,
                 representation,
                 Where.PARENTED_TABLES);
     }
@@ -99,7 +98,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         }
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
-        boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
+        boolean eagerlyRender = resourceContext.honorUiHints()
+                && renderEagerly(valueAdapter)
+                || !followHref.isTerminated();
 
         final Stream<ManagedObject> elementAdapters = CollectionFacet.streamAdapters(valueAdapter);
 
@@ -109,14 +110,14 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
                     .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap()
-                        );
-                renderer.with(elementAdapter);
+                val domainObjectReprRenderer =
+                        new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap())
+                        .with(elementAdapter);
                 if(mode.isEventSerialization()) {
-                    renderer.asEventSerialization();
+                    domainObjectReprRenderer.asEventSerialization();
                 }
 
-                valueLinkBuilder.withValue(renderer.render());
+                valueLinkBuilder.withValue(domainObjectReprRenderer.render());
             }
 
             list.add(valueLinkBuilder.build());
@@ -139,11 +140,12 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         val where = resourceContext.getWhere();
-        final JsonRepresentation representation = JsonRepresentation.newMap();
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null,
-                representation);
-        renderer.with(ManagedCollection.of(objectAdapter, objectMember, where)).asFollowed();
-        detailsLink.mapPut("value", renderer.render());
+        val jsonRepresentation = JsonRepresentation.newMap();
+        val objectCollectionReprRenderer =
+                new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
+                .with(ManagedCollection.of(objectAdapter, objectMember, where))
+                .asFollowed();
+        detailsLink.mapPut("value", objectCollectionReprRenderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -152,21 +154,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     protected void addMutatorLinksIfEnabled() {
-        if (usability().isVetoed()) {
-            return;
-        }
-
-        final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
-        addMutatorLink(semantics.getAddToKey());
-        addMutatorLink(semantics.getRemoveFromKey());
-
-        return;
-    }
-
-    private void addMutatorLink(final String key) {
-        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
-        final MutatorSpec mutatorSpec = mutators.get(key);
-        addLinkFor(mutatorSpec);
+        // no-op
     }
 
     // ///////////////////////////////////////////////////
@@ -178,7 +166,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         if(resourceContext.suppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = CollectionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link =
+                CollectionDescriptionReprRenderer
+                .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

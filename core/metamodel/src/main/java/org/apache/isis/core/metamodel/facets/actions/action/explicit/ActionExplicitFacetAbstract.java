@@ -28,7 +28,7 @@ implements ActionExplicitFacet {
 
     public ActionExplicitFacetAbstract(
             final FacetHolder holder) {
-        
+
         super(ActionExplicitFacet.class, holder, Derivation.NOT_DERIVED);
     }
 }

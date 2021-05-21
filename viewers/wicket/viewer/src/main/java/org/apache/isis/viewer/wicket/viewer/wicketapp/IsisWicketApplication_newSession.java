@@ -26,9 +26,9 @@ import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionF
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
- * Initializes new sessions with the common-context. 
- * 
+ *
+ * Initializes new sessions with the common-context.
+ *
  * @since 2.0
  *
  */
@@ -41,7 +41,7 @@ class IsisWicketApplication_newSession {
      * overrides the default, to 'inject' the commonContext into new sessions
      */
     public Session interceptNewSession(Session session) {
-        
+
         ((AuthenticatedWebSessionForIsis) session).init(holder.getCommonContext());
         return session;
     }

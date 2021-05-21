@@ -31,14 +31,14 @@ import org.apache.wicket.model.Model;
  * Responsibility: Display 'Showing all of 123' at the bottom of data tables.
  * <p>
  * Implementation Note: this is almost a copy of {@link NoRecordsToolbar}
- * 
+ *
  * @since 2.0
  */
 public class IsisTotalRecordsToolbar extends AbstractToolbar {
 
     private static final long serialVersionUID = 1L;
     private static final String navigatorContainerId = "navigatorContainer";
-    
+
     public IsisTotalRecordsToolbar(final DataTable<?, ?> table) {
 
         this(table, new Model<String>() {
@@ -47,7 +47,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
 
             @Override
             public String getObject() {
-                return String.format("Showing all of %d", 
+                return String.format("Showing all of %d",
                         table.getRowCount());
             }
 
@@ -84,7 +84,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
     /**
      * only shows this toolbar when there is only one page (when page navigation not available),
      * and when there are at least 6 elements in the list
-     * 
+     *
      */
     @Override
     protected void onConfigure() {

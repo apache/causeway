@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -125,7 +126,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
 
     /**
-     * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
+     * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full}
      * introspection mode.
      */
     @Getter @Setter
@@ -147,8 +148,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 isisSystemEnvironment,
                 serviceRegistry,
                 isisBeanTypeClassifier,
-                isisBeanTypeRegistry, 
-                valueTypeRegistry, 
+                isisBeanTypeRegistry,
+                valueTypeRegistry,
                 classSubstitutorRegistry);
     }
 
@@ -188,7 +189,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 new ClassSubstitutorRegistry(_Lists.of(
                         //new ClassSubstitutorForDomainObjects(),
                         new ClassSubstitutorForCollections(),
-                        new ClassSubstitutorDefault() 
+                        new ClassSubstitutorDefault()
                         )));
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
@@ -207,16 +208,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         this.facetProcessor = new FacetProcessor(programmingModel, metaModelContext);
     }
-    
+
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link IsisBeanTypeRegistry}).
      */
     @Override
     public void createMetaModel() {
-        
+
         log.info("About to create the Metamodel ...");
-        
+
         // initialize subcomponents, only after @PostConstruct has globally completed
         facetProcessor.init();
         postProcessor.init();
@@ -224,7 +225,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         val stopWatch = _Timing.now();
-        
+
         //XXX[ISIS-2403] these classes only get discovered by validators, so just preload their specs
         // (an optimization, not strictly required)
         loadSpecifications(ApplicationFeatureSort.class/*, ...*/);
@@ -252,17 +253,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
             val cls = type.getCorrespondingClass();
             val sort = type.getBeanSort();
-            
+
             val spec = primeSpecification(cls, sort);
             if(spec==null) {
                 //XXX only ever happens when the class substitutor vetoes
                 return;
-            } 
-            
+            }
+
             knownSpecs.add(spec);
 
             if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() ) {
-                domainObjectSpecs.add(spec);   
+                domainObjectSpecs.add(spec);
             } else if(sort.isMixin()) {
                 mixinSpecs.add(spec);
             }
@@ -270,7 +271,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         });
 
         //XXX[ISIS-2382] when parallel introspecting, make sure we have the mixins before their holders
-        
+
         SpecificationLoaderDefault_debug.logBefore(log, cache, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
@@ -281,7 +282,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
-        
+
         log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
 //        log.info(" - introspecting {}/{} entities (JDO/JPA)",
 //                isisBeanTypeRegistry.getEntityTypesJdo().size(),
@@ -300,12 +301,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
             introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
         }
-        
+
         log.info(" - running remaining validators");
-        _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
+        _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
-        log.info("Metamodel created in " + (long)stopWatch.getMillis() + " ms.");
+        log.info("Metamodel created in " + stopWatch.getMillis() + " ms.");
 
         if(isFullIntrospect()) {
             setMetamodelFullyIntrospected(true);
@@ -313,7 +314,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public ValidationFailures getValidationResult() {
+    public Optional<ValidationFailures> getValidationResult() {
+        return validationResult.getMemoized();
+    }
+
+    @Override
+    public ValidationFailures getOrAssessValidationResult() {
         return validationResult.get();
     }
 
@@ -324,7 +330,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         validationResult.clear();
         log.info("Metamodel disposed.");
     }
-    
+
     @PreDestroy
     public void shutdown() {
         log.debug("shutting down {}", this);
@@ -368,11 +374,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final @NonNull IntrospectionState upTo) {
 
         return _loadSpecification(
-                type, 
+                type,
                 __->isisBeanTypeRegistry
                     .lookupIntrospectableType(type)
                     .map(IsisBeanMetaData::getBeanSort)
-                    .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()), 
+                    .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()),
                 upTo);
     }
 
@@ -381,39 +387,39 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(!isMetamodelFullyIntrospected()) {
             // don't trigger validation during bootstrapping
             // getValidationResult() is lazily populated later on first request anyway
-            return; 
+            return;
         }
         if(!isisConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
             // re-validation after the initial one can be turned off by means of above config option
             return;
         }
-        
+
         log.info("re-validation triggered by {}", objectSpec);
-        
-        // validators might discover new specs 
+
+        // validators might discover new specs
         // to prevent deadlocks, we queue up validation requests to be processed later
         if(validationInProgress.get()) {
-            _Assert.assertTrue(validationQueue.offer(objectSpec), 
+            _Assert.assertTrue(validationQueue.offer(objectSpec),
                     "The Validation Queue is expected to never deadlock or grow beyond its capacity.");
-            return; 
+            return;
         }
-        
+
         while(validationQueue.poll()!=null) {
             // keep re-validating until the queue is empty
             validationQueue.clear(); // shortcut
             validationResult.clear(); // invalidate
-            // potentially triggers a call to the method we are currently in, 
+            // potentially triggers a call to the method we are currently in,
             // which adds more entries to the validationQueue
-            getValidationResult(); 
+            getOrAssessValidationResult();
         }
-        
-        // only after things have settled we offer feedback to the user (interface) 
-        
-        final ValidationFailures validationFailures = getValidationResult();
+
+        // only after things have settled we offer feedback to the user (interface)
+
+        final ValidationFailures validationFailures = getOrAssessValidationResult();
         if(validationFailures.hasFailures()) {
             throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
         }
-        
+
     }
 
     // -- LOOKUP
@@ -422,7 +428,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public Can<ObjectSpecification> snapshotSpecifications() {
         return cache.snapshotSpecs();
     }
-    
+
     @Override
     public void forEach(Consumer<ObjectSpecification> onSpec) {
         val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
@@ -436,24 +442,24 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(logicalType!=null) {
             return logicalType;
         }
-        
-        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported 
-        
+
+        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
+
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
-        // which might not always be true, 
-        
+        // which might not always be true,
+
         val cls = ClassUtil.forNameElseNull(logicalTypeName);
         if(cls!=null) {
 
-//TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...              
-//            log.warn("Lookup for ObjectSpecId '{}' failed, but found a matching fully qualified "
+//TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...
+//            log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
 //                    + "class name to use instead. This warning is an indicator, that {} is not "
-//                    + "discovered by Spring during bootstrapping of this application.", 
-//                    objectSpecId.getSpecId(),
+//                    + "discovered by Spring during bootstrapping of this application.",
+//                    logicalType.getName(),
 //                    cls.getName());
             return LogicalType.fqcn(cls);
         }
-        
+
         // immediately fail to not cause any NPEs further down the path
         throw _Exceptions.unrecoverableFormatted(
                 "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
@@ -461,11 +467,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 + " is not discovered by Spring during bootstrapping of this application.",
                 logicalTypeName);
     }
-    
+
     // -- VALIDATION STUFF
-    
+
     private final ValidationFailures validationFailures = new ValidationFailures();
-    
+
     @Override
     public void addValidationFailure(ValidationFailure validationFailure) {
 //        if(validationResult.isMemoized()) {
@@ -477,16 +483,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             validationFailures.add(validationFailure);
         }
     }
-    
-    private _Lazy<ValidationFailures> validationResult = 
+
+    private _Lazy<ValidationFailures> validationResult =
             _Lazy.threadSafe(this::collectFailuresFromMetaModel);
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
     private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
-    
+
     private ValidationFailures collectFailuresFromMetaModel() {
-        validationInProgress.set(true);               
-        
+        validationInProgress.set(true);
+
         programmingModel.streamValidators()
         .map(MetaModelValidatorAbstract.class::cast)
         .forEach(validator -> {
@@ -501,24 +507,24 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 log.debug("Done validator: {}", validator);
             }
         });
-        
+
         log.debug("Done");
         validationInProgress.set(false);
-        
+
         return validationFailures;
     }
 
 
     // -- HELPER
-    
+
     @Nullable
     private ObjectSpecification primeSpecification(
             final @Nullable Class<?> type,
             final @NonNull BeanSort sort) {
         return _loadSpecification(type, __->sort, IntrospectionState.NOT_INTROSPECTED);
-        
+
     }
-    
+
     @Nullable
     private ObjectSpecification _loadSpecification(
             final @Nullable Class<?> type,
@@ -533,11 +539,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if (substitute.isNeverIntrospect()) {
             return null; // never inspect
         }
-        
+
         val substitutedType = substitute.apply(type);
-        
+
         final ObjectSpecification spec = cache.computeIfAbsent(substitutedType, __->{
-            val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
+            val newSpec = createSpecification(substitutedType, beanClassifier.apply(substitutedType));
             logicalTypeResolver.register(newSpec);
             return newSpec;
         });
@@ -546,9 +552,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         return spec;
     }
-    
+
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
-        if(isMetamodelFullyIntrospected() 
+        if(isMetamodelFullyIntrospected()
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
             val category = isisBeanTypeClassifier.classify(cls);
@@ -563,11 +569,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 //                    cls.getName(), sort);
 
             log.warn("Missed class '{}' when the metamodel was fully introspected.", cls.getName());
-            
+
             if(sort.isValue()) {
                 return; // opinionated: just relax when value
             }
-            
+
             if(sort.isToBeIntrospected()) {
                 log.error("Introspecting class '{}' of sort {}, after the metamodel had been fully introspected and is now locked. " +
                       "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
@@ -577,7 +583,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             }
         }
     }
-    
+
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
@@ -600,7 +606,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     private void introspectSequential(
-            final Can<ObjectSpecification> specs, 
+            final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
         for (val spec : specs) {
             spec.introspectUpTo(upTo);
@@ -608,21 +614,21 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     private void introspectParallel(
-            final Can<ObjectSpecification> specs, 
+            final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
         specs.parallelStream()
         .forEach(spec -> {
             try {
                 spec.introspectUpTo(upTo);
-            } catch (Throwable ex) {    
+            } catch (Throwable ex) {
                 log.error(ex);
                 throw ex;
             }
         });
     }
-    
+
     private void introspect(
-            final Can<ObjectSpecification> specs, 
+            final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
         val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
         if(isConcurrentFromConfig) {
@@ -639,9 +645,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return;
         }
 
-        ObjectSpecification spec = 
+        ObjectSpecification spec =
                 loadSpecification(substitute.apply(cls), IntrospectionState.FULLY_INTROSPECTED);
-        
+
         while(spec != null) {
             val type = spec.getCorrespondingClass();
             cache.remove(type);
@@ -649,6 +655,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
     }
 
-   
+
 
 }

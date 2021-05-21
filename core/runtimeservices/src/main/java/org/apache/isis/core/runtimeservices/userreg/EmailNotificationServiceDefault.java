@@ -52,7 +52,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Inject private EmailService emailService;
 
     // -- CONSTANTS

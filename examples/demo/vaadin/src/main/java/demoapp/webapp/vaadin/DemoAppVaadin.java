@@ -32,40 +32,40 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.web.DemoAppManifest;
+import demoapp.web.DemoAppManifestCommon;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifest.class,
-    
+    DemoAppManifestCommon.class,
+
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
     IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
-    
+
     // WICKET INTEGRATION ... to allow side by side comparison
     IsisModuleViewerWicketViewer.class, // wicket viewer
     IsisModuleValSseUiWkt.class, // server sent events
     IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
-  
+
 })
 public class DemoAppVaadin extends SpringBootServletInitializer {
 
     /**
-     * 
+     *
      * @param args
-     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-        
+
         IsisPresets.logging(InteractionFactoryDefault.class, "debug");
 //        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
 //        IsisPresets.logging(IsisServletForVaadin.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
-        
+
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
 

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.publish.entitychange;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class EntityChangePublishingFacetImpl 
+public class EntityChangePublishingFacetImpl
 extends EntityChangePublishingFacetAbstract {
 
     public EntityChangePublishingFacetImpl(final FacetHolder facetHolder) {

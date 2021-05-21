@@ -41,10 +41,10 @@ public interface ScalarModelWithPending extends Serializable {
     public static Model<ObjectMemento> create(ScalarModel scalarModel) {
         return Factory.createModel(Factory.asScalarModelWithPending(scalarModel));
     }
-    
+
     @Log4j2
     static class Factory {
-        
+
         private static ScalarModelWithPending asScalarModelWithPending(final ScalarModel scalarModel) {
             return new ScalarModelWithPending(){
 

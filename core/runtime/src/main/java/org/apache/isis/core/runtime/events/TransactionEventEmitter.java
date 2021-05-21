@@ -36,12 +36,12 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class TransactionEventEmitter 
+public class TransactionEventEmitter
 implements TransactionSynchronization, InteractionScopeAware {
 
     private final EventBusService eventBusService;
     private final InteractionTracker interactionTracker;
-    
+
     @Override
     public void beforeCompletion() {
         _Xray.txBeforeCompletion(interactionTracker, "tx: beforeCompletion");
@@ -54,10 +54,10 @@ implements TransactionSynchronization, InteractionScopeAware {
         eventBusService.post(event);
         _Xray.txAfterCompletion(interactionTracker, String.format("tx: afterCompletion (%s)", event.name()));
     }
-    
+
     @Override
     public void afterEnteringTransactionalBoundary(
-            final Interaction interaction, 
+            final Interaction interaction,
             final boolean isSynchronizationActive) {
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);

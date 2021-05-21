@@ -46,14 +46,14 @@ import lombok.val;
 public class _Yaml {
 
     // -- FROM INPUT STREAM
-    
+
     private static <T> T _readYaml(final Class<T> clazz, InputStream content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
 
     /**
-     * Either deserialize YAML content from given YAML content InputStream into an instance of 
+     * Either deserialize YAML content from given YAML content InputStream into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -62,16 +62,16 @@ public class _Yaml {
     public static <T> Result<T> readYaml(final Class<T> clazz, InputStream content) {
         return Result.of(()->_readYaml(clazz, content));
     }
-    
+
     // -- FROM STRING
-    
+
     private static <T> T _readYaml(final Class<T> clazz, String content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
 
     /**
-     * Either deserialize YAML content from given YAML content String into an instance of 
+     * Either deserialize YAML content from given YAML content String into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -80,9 +80,9 @@ public class _Yaml {
     public static <T> Result<T> readYaml(final Class<T> clazz, String content) {
         return Result.of(()->_readYaml(clazz, content));
     }
-    
+
     // -- FROM FILE
-    
+
     private static <T> T _readYaml(final Class<T> clazz, File content) throws FileNotFoundException, IOException {
         try(val fis = new FileInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
@@ -91,7 +91,7 @@ public class _Yaml {
     }
 
     /**
-     * Either deserialize YAML content from given YAML content File into an instance of 
+     * Either deserialize YAML content from given YAML content File into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -100,9 +100,9 @@ public class _Yaml {
     public static <T> Result<T> readYaml(final Class<T> clazz, File content) {
         return Result.of(()->_readYaml(clazz, content));
     }
-    
+
     // -- FROM BYTE ARRAY
-    
+
     private static <T> T _readYaml(final Class<T> clazz, byte[] content) throws IOException {
         try(val bais = new ByteArrayInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
@@ -111,7 +111,7 @@ public class _Yaml {
     }
 
     /**
-     * Either deserialize YAML content from given YAML content byte[] into an instance of 
+     * Either deserialize YAML content from given YAML content byte[] into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -120,5 +120,5 @@ public class _Yaml {
     public static <T> Result<T> readYaml(final Class<T> clazz, byte[] content) {
         return Result.of(()->_readYaml(clazz, content));
     }
-    
+
 }

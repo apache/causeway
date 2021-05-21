@@ -29,11 +29,11 @@ public class GradleBuildArtifact {
     private final String name;
     private final String realtivePath;
     private final File projectDirectory;
-    
+
     public final boolean isRoot() {
         return realtivePath.equals("/");
     }
-    
+
     public final Optional<File> getDefaultBuildFile() {
         val buildFile = new File(getProjectDirectory(), "build.gradle");
         if(buildFile.exists()) {
@@ -41,5 +41,5 @@ public class GradleBuildArtifact {
         }
         return Optional.empty();
     }
-    
+
 }

@@ -95,13 +95,13 @@ public final class _Strings {
      * Parses a string assumed to be of the form <kbd>key[separator]value</kbd> into its parts.
      * @param keyValueLiteral
      * @param separator
-     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} 
+     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral}
      * does contain at least one {@code separator}
      */
     public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral, char separator) {
         return _Strings_KeyValuePair.parse(keyValueLiteral, separator);
     }
-    
+
     // -- FILLING
 
     public static String of(int length, char c) {
@@ -112,24 +112,24 @@ public final class _Strings {
         Arrays.fill(chars, c);
         return String.valueOf(chars);
     }
-    
+
     // -- COMPARE
-    
+
     /**
      * Compares two strings lexicographically (and nulls-frist).
-     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
-     * {@link Comparator#nullsFirst(Comparator)}. 
-     * @implNote this utility method does not produce objects on the heap   
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsFirst(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
      * @param a
      * @param b
      * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
-     * @see String#compareTo(String) 
+     * @see String#compareTo(String)
      */
     public static int compareNullsFirst(final @Nullable String a, final @Nullable String b) {
         if(Objects.equals(a, b)) {
             return 0;
         }
-        // at this point not both can be null, so which ever is null wins 
+        // at this point not both can be null, so which ever is null wins
         if(a==null) {
             return -1;
         }
@@ -139,22 +139,22 @@ public final class _Strings {
         // at this point neither can be null
         return a.compareTo(b);
     }
-    
+
     /**
      * Compares two strings lexicographically (and nulls-last).
-     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
-     * {@link Comparator#nullsFirst(Comparator)}. 
-     * @implNote this utility method does not produce objects on the heap   
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsFirst(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
      * @param a
      * @param b
      * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
-     * @see String#compareTo(String) 
+     * @see String#compareTo(String)
      */
     public static int compareNullsLast(final @Nullable String a, final @Nullable String b) {
         if(Objects.equals(a, b)) {
             return 0;
         }
-        // at this point not both can be null, so which ever is null wins 
+        // at this point not both can be null, so which ever is null wins
         if(a==null) {
             return 1;
         }
@@ -193,12 +193,12 @@ public final class _Strings {
     public static boolean isNotEmpty(@Nullable final CharSequence x){
         return x!=null && x.length()!=0;
     }
-    
+
     // -- OPTIONAL
-    
+
     /**
      * @param x - input string
-     * @return optionally the input string based on whether the input is not empty 
+     * @return optionally the input string based on whether the input is not empty
      */
     public static Optional<String> nonEmpty(@Nullable final CharSequence x) {
         return isEmpty(x) ? Optional.empty() : Optional.of(x.toString());
@@ -208,7 +208,7 @@ public final class _Strings {
 
     /**
      * @param input
-     * @return null if the {@code input} is null or empty, the {@code input} otherwise 
+     * @return null if the {@code input} is null or empty, the {@code input} otherwise
      */
     public static @Nullable String emptyToNull(@Nullable String input) {
         if(isEmpty(input)) {
@@ -219,7 +219,7 @@ public final class _Strings {
 
     /**
      * @param input
-     * @return the empty string if the {@code input} is null, the {@code input} otherwise 
+     * @return the empty string if the {@code input} is null, the {@code input} otherwise
      */
     public static String nullToEmpty(@Nullable String input) {
         if(input==null) {
@@ -273,7 +273,7 @@ public final class _Strings {
         }
         return Character.toUpperCase(input.charAt(0)) + input.substring(1);
     }
-    
+
     /**
      * Converts the first character in {@code input} to lower case using the rules of the default locale.
      * @param input
@@ -336,12 +336,12 @@ public final class _Strings {
 
     // -- REDUCTION (BINARY OPERATIOR)
 
-    /**    
+    /**
      * Combines 2 strings {@code left} and {@code right} into a single string, such that left
      * and right are delimited by the {@code delimiter} and such that
-     * the result does not introduce a sequence of delimiters, like for example when building file-system 
+     * the result does not introduce a sequence of delimiters, like for example when building file-system
      * paths from chunks.
-     *    
+     *
      * @param left
      * @param right
      * @param delimiter
@@ -444,9 +444,9 @@ public final class _Strings {
                 Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
                 false); // not parallel
     }
-    
+
     /**
-     * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
+     * Creates a stream from the given input sequence around matches of {@code delimiterPattern}.
      * @param input
      * @param delimiterPattern
      */
@@ -459,18 +459,18 @@ public final class _Strings {
     }
 
     /**
-     * Optionally applies {@code onNonEmptySplit} function, based on whether both split parts 
-     * <i>lhs</i> and <i>rhs</i> are non empty Strings. 
+     * Optionally applies {@code onNonEmptySplit} function, based on whether both split parts
+     * <i>lhs</i> and <i>rhs</i> are non empty Strings.
      * @param <T>
      * @param input
      * @param separator
      * @param onNonEmptySplit
      */
     public static <T> Optional<T> splitThenApplyRequireNonEmpty(
-            @Nullable final String input, 
-            final String separator, 
+            @Nullable final String input,
+            final String separator,
             final BiFunction<String, String, T> onNonEmptySplit) {
-        
+
         if(isEmpty(input)) {
             return Optional.empty();
         }
@@ -490,8 +490,8 @@ public final class _Strings {
     }
 
     public static void splitThenAccept(
-            @Nullable final String input, 
-            final String separator, 
+            @Nullable final String input,
+            final String separator,
             final BiConsumer<String, String> onNonEmptySplit,
             final Consumer<String> onNonEmptyLhs,
             final Consumer<String> onNonEmptyRhs) {
@@ -500,16 +500,16 @@ public final class _Strings {
     }
 
     public static void splitThenAcceptEmptyAsNull(
-            @Nullable final String input, 
-            final String separator, 
+            @Nullable final String input,
+            final String separator,
             final BiConsumer<String, String> onSplit) {
 
-        _Strings_FastSplit.splitThenAccept(input, separator, onSplit, 
-                lhs->onSplit.accept(lhs, null), 
+        _Strings_FastSplit.splitThenAccept(input, separator, onSplit,
+                lhs->onSplit.accept(lhs, null),
                 rhs->onSplit.accept(null, rhs));
     }
 
-    
+
     public static Stream<String> grep(@Nullable final String input, @Nullable Predicate<String> matcher){
         matcher = matcher!=null ? matcher : _Predicates.alwaysTrue();
         return splitThenStream(input, "\n")
@@ -517,7 +517,7 @@ public final class _Strings {
                 .filter(matcher)
                 .map(s->s.replace("\r", ""));
     }
-    
+
     public static Stream<String> grep(@Nullable final String input, @Nullable String contains){
         final Predicate<String> matcher = contains!=null ? line->line.contains(contains) : _Predicates.alwaysTrue();
         return grep(input, matcher);
@@ -546,14 +546,14 @@ public final class _Strings {
      * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
      */
     public static String ellipsifyAtStart(
-            @Nullable final CharSequence input, 
-            final int maxLength, 
+            @Nullable final CharSequence input,
+            final int maxLength,
             @NonNull final CharSequence ellipsis) {
-        
+
         if(input==null) {
             return "";
         }
-        if(input.length()<=maxLength) {   
+        if(input.length()<=maxLength) {
             return input.toString();
         }
         final int trimmedLength = maxLength - ellipsis.length();
@@ -561,7 +561,7 @@ public final class _Strings {
         final int start = end - trimmedLength;
         return String.join("", ellipsis, input.subSequence(start, end));
     }
-    
+
     /**
      * abc...
      * @param input
@@ -570,14 +570,14 @@ public final class _Strings {
      * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
      */
     public static String ellipsifyAtEnd(
-            @Nullable final CharSequence input, 
-            final int maxLength, 
+            @Nullable final CharSequence input,
+            final int maxLength,
             @NonNull final CharSequence ellipsis) {
-        
+
         if(input==null) {
             return "";
         }
-        if(input.length()<=maxLength) {   
+        if(input.length()<=maxLength) {
             return input.toString();
         }
         final int trimmedLength = maxLength - ellipsis.length();
@@ -597,15 +597,15 @@ public final class _Strings {
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     @SneakyThrows
     public static String readFromResource(
-            final @NonNull Class<?> resourceLocation, 
-            final @NonNull String resourceName, 
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName,
             final @NonNull Charset charset) {
         try(val input = resourceLocation.getResourceAsStream(resourceName)){
-            return read(input, charset);    
-        } 
+            return read(input, charset);
+        }
     }
 
     // -- BYTE ARRAY CONVERSION
@@ -710,9 +710,9 @@ public final class _Strings {
                 .map(String::trim)
                 .filter(not(String::isEmpty));
     }
-    
+
     /**
-     * Like {@link _Strings#splitThenStream(CharSequence, Pattern)} but also trimming each junk, 
+     * Like {@link _Strings#splitThenStream(CharSequence, Pattern)} but also trimming each junk,
      * then discarding empty chunks.
      * @return empty stream if {@code input} is null
      */
@@ -721,7 +721,7 @@ public final class _Strings {
                 .map(String::trim)
                 .filter(not(String::isEmpty));
     }
-    
+
     public static String base64UrlDecode(final String str) {
         return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
     }

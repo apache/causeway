@@ -70,7 +70,7 @@ public class LayoutServiceDefault implements LayoutService {
     protected Grid toGrid(final Class<?> domainClass, final Style style) {
 
         if (style == Style.CURRENT) {
-            
+
             return specificationLoader.specForType(domainClass)
                     .flatMap(spec->spec.lookupFacet(GridFacet.class))
                     .map(gridFacet->gridFacet.getGrid(null))

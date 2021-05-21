@@ -39,7 +39,7 @@ public class BlobDemoMenu {
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
         val demo = factoryService.viewModel(new BlobDemo());
-        demo.initDefaults();  
+        demo.initDefaults();
         return demo;
     }
 

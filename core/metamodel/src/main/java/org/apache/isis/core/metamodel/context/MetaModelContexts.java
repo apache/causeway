@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */

@@ -60,7 +60,7 @@ public class IsisMarkdownVm
     public String title() {
         return "Markdown view model";
     }
-    
+
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter

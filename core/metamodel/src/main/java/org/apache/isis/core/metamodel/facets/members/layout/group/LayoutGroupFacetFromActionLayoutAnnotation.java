@@ -27,9 +27,9 @@ public class LayoutGroupFacetFromActionLayoutAnnotation
 extends LayoutGroupFacetAbstract {
 
     public static LayoutGroupFacetFromActionLayoutAnnotation create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return actionLayoutIfAny
             .flatMap(GroupIdAndName::forActionLayout)
             .map(groupIdAndName->new LayoutGroupFacetFromActionLayoutAnnotation(groupIdAndName, holder))
@@ -39,5 +39,5 @@ extends LayoutGroupFacetAbstract {
     private LayoutGroupFacetFromActionLayoutAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
         super(groupIdAndName, holder);
     }
-    
+
 }

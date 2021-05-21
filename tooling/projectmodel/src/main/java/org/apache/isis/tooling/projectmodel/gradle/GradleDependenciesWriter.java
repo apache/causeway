@@ -37,7 +37,7 @@ public class GradleDependenciesWriter extends WriterAbstract {
         return stringWriter.toString();
     }
 
-// EXAMPLE    
+// EXAMPLE
 //    ext {
 //        cucumberVersion = "6.7.0"
 //        jacksonVersion = "2.11.1"
@@ -50,25 +50,25 @@ public class GradleDependenciesWriter extends WriterAbstract {
 //        ]
 //    }
     public void write(GradleDependencies gradleDependencies, Writer writer) {
-        
+
         writeWithFormat(writer, "ext {\n");
         writeWithFormat(writer, "    Libs = [\n");
-        
+
         gradleDependencies.getDependenciesByShortName().forEach((shortName, dependency)->{
-            
-            val shortNameWithPadding = _Strings.padEnd(shortName, 64, ' ');    
-        
-            writeWithFormat(writer, "        %s : \"%s\",\n", 
-                    shortNameWithPadding, 
+
+            val shortNameWithPadding = _Strings.padEnd(shortName, 64, ' ');
+
+            writeWithFormat(writer, "        %s : \"%s\",\n",
+                    shortNameWithPadding,
                     dependency.getArtifactCoordinates().toStringWithGroupAndIdAndVersion());
-            
-            
+
+
         });
-        
+
         writeWithFormat(writer, "    ]\n");
         writeWithFormat(writer, "}\n");
     }
-    
 
-    
+
+
 }

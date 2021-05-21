@@ -27,25 +27,25 @@ import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Application;
 
 @Service
 public class BrandingUiModelProvider {
-    
+
     private final Application appConfig;
 
-    @Inject 
+    @Inject
     public BrandingUiModelProvider(IsisConfiguration isisConfiguration) {
         //TODO application name/logo borrowed from Wicket's configuration, we might generalize this config option to all viewers
         this.appConfig = isisConfiguration.getViewer().getWicket().getApplication();
     }
-    
+
     public BrandingUiModel getHeaderBranding() {
         return BrandingUiModel.of(
                 appConfig.getName(),
                 appConfig.getBrandLogoHeader().orElse(null));
     }
-    
+
     public BrandingUiModel getSignInBranding() {
         return BrandingUiModel.of(
                 appConfig.getName(),
                 appConfig.getBrandLogoSignin().orElse(null));
     }
-    
+
 }

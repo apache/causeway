@@ -35,7 +35,7 @@ import lombok.Getter;
  * {@link ActionInvocationEvent}.
  */
 public class ActionValidityContext
-extends ValidityContext 
+extends ValidityContext
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
@@ -47,7 +47,7 @@ implements ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         super(InteractionContextType.ACTION_INVOKE, head, id, interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;

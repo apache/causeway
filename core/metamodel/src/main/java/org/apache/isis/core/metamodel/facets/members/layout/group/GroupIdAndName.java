@@ -36,7 +36,7 @@ import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor = "of")
-public class GroupIdAndName 
+public class GroupIdAndName
 implements
     Comparable<GroupIdAndName>,
     Serializable {
@@ -47,7 +47,7 @@ implements
      * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
      */
     private final @NonNull String id;
-    
+
     /**
      * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
      */
@@ -60,66 +60,86 @@ implements
         }
         return this.getId().compareTo(other.getId());
     }
-    
+
     // -- FACTORIES FOR ANNOTATIONS
 
+    @SuppressWarnings("deprecation")
     public static Optional<GroupIdAndName> forAction(
             final @NonNull Action action) {
+
+        val nonLegacy = GroupIdAndName.inferIfOneMissing(
+                action.choicesFrom(),
+                null);
+
+        if(nonLegacy.isPresent()) {
+            return nonLegacy;
+        }
+
         return GroupIdAndName.inferIfOneMissing(
-                action.associateWith(), null);
+                action.associateWith(),
+                null);
     }
-    
+
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
-        return GroupIdAndName.inferIfOneMissing(
-                actionLayout.fieldSetId(), 
+
+        val explicit =  GroupIdAndName.inferIfOneMissing(
+                actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
+
+        if(explicit.isPresent()) {
+            return explicit;
+        }
+
+        return GroupIdAndName.inferIfOneMissing(
+                actionLayout.associateWith(),
+                null);
     }
 
     public static Optional<GroupIdAndName> forPropertyLayout(
             final @NonNull PropertyLayout propertyLayout) {
         return GroupIdAndName.inferIfOneMissing(
-                propertyLayout.fieldSetId(), 
+                propertyLayout.fieldSetId(),
                 propertyLayout.fieldSetName());
     }
-    
+
     // -- FACTORIES FOR XML LAYOUT
 
     public static Optional<GroupIdAndName> forPropertyLayoutData(
             final @NonNull PropertyLayoutData propertyLayoutData) {
         return GroupIdAndName.inferIfOneMissing(
-                propertyLayoutData.getId(), 
+                propertyLayoutData.getId(),
                 propertyLayoutData.getNamed());
     }
-    
+
     public static Optional<GroupIdAndName> forCollectionLayoutData(
             final @NonNull CollectionLayoutData collectionLayoutData) {
         return GroupIdAndName.inferIfOneMissing(
-                collectionLayoutData.getId(), 
+                collectionLayoutData.getId(),
                 collectionLayoutData.getNamed());
     }
-    
+
     public static Optional<GroupIdAndName> forFieldSet(
             final @NonNull FieldSet fieldSet) {
         return GroupIdAndName.inferIfOneMissing(
-                fieldSet.getId(), 
+                fieldSet.getId(),
                 fieldSet.getName());
     }
-    
+
     // -- HELPER
-    
-    /** 
+
+    /**
      * if id is missing tries to infer it;<br>
      * if name is missing tries to infer it;<br>
      * if cannot reason about a usable id, returns Optional.empty()<br>
      */
     private static Optional<GroupIdAndName> inferIfOneMissing(
-            final @Nullable String _id, 
+            final @Nullable String _id,
             final @Nullable String _name) {
-        
+
         val id = nullToUnspecified(_id);
         val name = nullToUnspecified(_name);
-        
+
         val isIdUnspecified = isUnspecified(id) || id.isEmpty();
         val isNameUnspecified = isUnspecified(name);
         if(isIdUnspecified
@@ -138,7 +158,7 @@ implements
         }
         return Optional.of(GroupIdAndName.of(id, name));
     }
-    
+
     /**
      * @implNote this is a copy of the original logic from GridSystemServiceBS3
      */
@@ -149,7 +169,7 @@ implements
         final char c = name.charAt(0);
         return Character.toLowerCase(c) + name.substring(1).replaceAll("\\s+", "");
     }
-    
+
     /**
      * @implNote could potentially be improved to work similar as the title service
      */
@@ -171,7 +191,9 @@ implements
         return idOrName==null
                     ? "__infer"
                     : idOrName;
-        
+
     }
-    
+
+
+
 }

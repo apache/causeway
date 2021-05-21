@@ -22,6 +22,9 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -33,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -42,37 +45,39 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 
+import lombok.val;
+
 public class CollectionSelectorHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    static final String UIHINT_EVENT_VIEW_KEY = EntityCollectionModel.HINT_KEY_SELECTED_ITEM;
+    static final String UIHINT_EVENT_VIEW_KEY = EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM;
 
-    private final EntityCollectionModel model;
+    private final EntityCollectionModel collectionModel;
 
     private final List<ComponentFactory> componentFactories;
     private final ComponentHintKey componentHintKey;
 
     public CollectionSelectorHelper(
-            final EntityCollectionModel model,
+            final EntityCollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry) {
-        this(model, componentFactoryRegistry, ComponentHintKey.noop());
+        this(collectionModel, componentFactoryRegistry, ComponentHintKey.noop());
     }
 
     public CollectionSelectorHelper(
-            final EntityCollectionModel model,
+            final EntityCollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
-        this.model = model;
+        this.collectionModel = collectionModel;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
-        this.componentHintKey = componentHintKey != null 
-                ? componentHintKey 
+        this.componentHintKey = componentHintKey != null
+                ? componentHintKey
                 : ComponentHintKey.noop();
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
-        final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, model);
-        final List<ComponentFactory> otherFactories = _Lists.filter(componentFactories, 
+        final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel);
+        final List<ComponentFactory> otherFactories = _Lists.filter(componentFactories,
                 (final ComponentFactory input) ->
         input.getClass() != CollectionContentsMultipleViewsPanelFactory.class);
         return ordered(otherFactories);
@@ -111,14 +116,17 @@ public class CollectionSelectorHelper implements Serializable {
     private String determineInitialFactory() {
 
         // try to load from session, if can
-        final Bookmark bookmark = bookmarkHintIfAny();
+        final Bookmark bookmark = collectionModel.parentedHintingBookmark().orElse(null);
         final String sessionAttribute = componentHintKey.get(bookmark);
         if(sessionAttribute != null) {
             return sessionAttribute;
         }
 
         // else grid layout hint
-        final CollectionLayoutData layoutData = this.model.getLayoutData();
+        final CollectionLayoutData layoutData = toParentedEntityCollectionModel(collectionModel)
+                .map(EntityCollectionModelParented::getLayoutData)
+                .orElse(null);
+
         if(layoutData != null) {
             final String defaultView = layoutData.getDefaultView();
             if(defaultView != null) {
@@ -127,8 +135,8 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         // else @CollectionLayout#defaultView attribute
-        if (hasDefaultViewFacet(model)) {
-            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection(model.getSpecificationLoader()).getFacet(DefaultViewFacet.class);
+        if (hasDefaultViewFacet(collectionModel)) {
+            DefaultViewFacet defaultViewFacet = collectionModel.getMetaModel().getFacet(DefaultViewFacet.class);
             for (ComponentFactory componentFactory : componentFactories) {
                 final String componentName = componentFactory.getName();
                 final String viewName = defaultViewFacet.value();
@@ -139,16 +147,10 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         // else honour @CollectionLayout#renderEagerly
-        return hasRenderEagerlyFacet(model) || model.isStandalone()
+        return hasRenderEagerlyFacet(collectionModel) || collectionModel.isStandalone()
                 ? CollectionContentsAsAjaxTablePanelFactory.NAME
-                        : CollectionContentsHiddenPanelFactory.NAME;
+                : CollectionContentsHiddenPanelFactory.NAME;
 
-    }
-
-    private Bookmark bookmarkHintIfAny() {
-        final EntityModel entityModel = this.model.getEntityModel();
-        return entityModel != null
-                ? entityModel.asHintingBookmarkIfSupported(): null;
     }
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
@@ -177,49 +179,30 @@ public class CollectionSelectorHelper implements Serializable {
     }
 
     private static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModel.class);
+        return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModelParented.class);
     }
 
     private static boolean hasRenderEagerlyFacet(IModel<?> model) {
-        final EntityCollectionModel entityCollectionModel = toEntityCollectionModel(model);
-        if (entityCollectionModel == null) {
-            return false;
-        }
-
-        final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
-        return renderEagerly(collection);
+        return toParentedEntityCollectionModel(model)
+        .map(EntityCollectionModelParented::getMetaModel)
+        .map(CollectionSelectorHelper::isRenderEagerly)
+        .orElse(false);
     }
 
-    private static boolean renderEagerly(final OneToManyAssociation otma) {
-        final DefaultViewFacet defaultViewFacet = otma.getFacet(DefaultViewFacet.class);
+    private static boolean isRenderEagerly(final OneToManyAssociation collectionMetaModel) {
+        final DefaultViewFacet defaultViewFacet = collectionMetaModel.getFacet(DefaultViewFacet.class);
         return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
     }
 
 
     private static boolean hasDefaultViewFacet(IModel<?> model) {
-        final EntityCollectionModel entityCollectionModel = toEntityCollectionModel(model);
+        val entityCollectionModel = toParentedEntityCollectionModel(model).orElse(null);
         if (entityCollectionModel == null) {
             return false;
         }
-
-        final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
+        final OneToManyAssociation collection = entityCollectionModel.getMetaModel();
         DefaultViewFacet defaultViewFacet = collection.getFacet(DefaultViewFacet.class);
         return defaultViewFacet != null;
-    }
-
-    private static EntityCollectionModel toEntityCollectionModel(IModel<?> model) {
-        if (!(model instanceof EntityCollectionModel)) {
-            return null;
-        }
-
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        if (!entityCollectionModel.isParented()) {
-            return null;
-        }
-
-        return entityCollectionModel;
     }
 
     public ComponentFactory find(final String selected) {
@@ -228,9 +211,7 @@ public class CollectionSelectorHelper implements Serializable {
             return componentFactory;
         }
 
-        final EntityCollectionModel entityCollectionModel = model;
-        final String fallback;
-        fallback = entityCollectionModel.isParented()
+        final String fallback = collectionModel.isParented()
                 ? CollectionContentsHiddenPanelFactory.NAME
                 : CollectionContentsAsAjaxTablePanelFactory.NAME;
         componentFactory = doFind(fallback);
@@ -262,6 +243,15 @@ public class CollectionSelectorHelper implements Serializable {
         return 0;
     }
 
+    // -- HELPER
+
+    private static Optional<EntityCollectionModelParented> toParentedEntityCollectionModel(
+            final @Nullable IModel<?> model) {
+        if (model instanceof EntityCollectionModelParented) {
+            return Optional.of((EntityCollectionModelParented) model);
+        }
+        return Optional.empty();
+    }
 
 
 }

@@ -105,14 +105,14 @@ public enum FeatureType {
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public static final ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
+    public static final ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS =
             ImmutableEnumSet.complementOf(
                     ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public static final ImmutableEnumSet<FeatureType> EVERYTHING = ImmutableEnumSet.allOf(FeatureType.class); 
+    public static final ImmutableEnumSet<FeatureType> EVERYTHING = ImmutableEnumSet.allOf(FeatureType.class);
 
     private final String name;
 
@@ -121,9 +121,9 @@ public enum FeatureType {
     }
 
     private static Identifier propertyOrCollectionIdentifierFor(
-            final LogicalType typeIdentifier, 
+            final LogicalType typeIdentifier,
             final Method method) {
-        
+
         final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
         final String beanName = Introspector.decapitalize(capitalizedName);
         return Identifier.propertyOrCollectionIdentifier(typeIdentifier, beanName);

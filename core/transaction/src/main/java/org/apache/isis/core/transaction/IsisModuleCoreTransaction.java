@@ -32,5 +32,5 @@ import org.apache.isis.core.transaction.changetracking.events.TimestampService;
 })
 public class IsisModuleCoreTransaction {
 
-    
+
 }

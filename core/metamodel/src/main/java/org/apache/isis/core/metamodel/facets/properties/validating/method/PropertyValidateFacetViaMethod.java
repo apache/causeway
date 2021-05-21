@@ -39,7 +39,7 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
-    public PropertyValidateFacetViaMethod(final Method method, final TranslationService translationService, 
+    public PropertyValidateFacetViaMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
         this.method = method;

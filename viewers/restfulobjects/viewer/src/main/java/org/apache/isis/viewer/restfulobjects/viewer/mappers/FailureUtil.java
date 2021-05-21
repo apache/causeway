@@ -42,7 +42,7 @@ final class FailureUtil {
                 // ignore
             }
         }
-        
+
         return null;
 
     }

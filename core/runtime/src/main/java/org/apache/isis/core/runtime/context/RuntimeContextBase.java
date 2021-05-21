@@ -36,7 +36,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import lombok.Getter;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -50,13 +50,13 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     @Getter(onMethod = @__(@Override)) protected final InteractionTracker interactionTracker;
-    
+
     @Getter protected final InteractionFactory interactionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
     @Getter protected final ObjectManager objectManager;
-    
+
     // -- SINGLE ARG CONSTRUCTOR
 
     protected RuntimeContextBase(MetaModelContext mmc) {
@@ -72,9 +72,9 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
         this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
     }
-    
+
     // -- AUTH
-    
+
     public AuthenticationContext getAuthenticationContext() {
         return interactionTracker;
     }
@@ -83,17 +83,17 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     public void logoutFromSession() {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
-        
+
         interactionTracker
         .currentAuthentication()
         .ifPresent(authentication->{
-        
+
             authenticationManager.closeSession(authentication);
             interactionFactory.closeSessionStack();
-            
+
         });
-        
-        	
+
+
     }
 
 

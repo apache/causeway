@@ -37,7 +37,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -68,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
 @Log4j2
-public class ApplicationFeatureRepositoryDefault 
+public class ApplicationFeatureRepositoryDefault
 implements ApplicationFeatureRepository {
 
     // -- caches
@@ -101,9 +100,9 @@ implements ApplicationFeatureRepository {
     }
 
     private boolean isEagerInitialize() {
-        ApplicationFeaturesInitConfiguration setting = 
+        ApplicationFeaturesInitConfiguration setting =
                 configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
-        return setting == ApplicationFeaturesInitConfiguration.EAGER 
+        return setting == ApplicationFeaturesInitConfiguration.EAGER
                 || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
     }
 
@@ -120,20 +119,20 @@ implements ApplicationFeatureRepository {
             return;
         }
         initializationState = InitializationState.INITIALIZED;
-        
+
         for (val spec : specificationLoader.snapshotSpecifications()) {
             createApplicationFeaturesFor(spec);
         }
-        
+
         val featuresByName = new HashMap<String, ApplicationFeatureId>();
         visitFeatureIdentifierByName(namespaceFeatures, featuresByName::put);
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
         this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
     }
-    
+
     private void visitFeatureIdentifierByName(
-            final Map<ApplicationFeatureId, ApplicationFeature> map, 
+            final Map<ApplicationFeatureId, ApplicationFeature> map,
             final BiConsumer<String, ApplicationFeatureId> onEntry) {
         map.forEach((k, v)->onEntry.accept(k.getFullyQualifiedName(), k));
     }
@@ -148,14 +147,14 @@ implements ApplicationFeatureRepository {
                 .collect(Collectors.toList());
         final List<ObjectAssociation> collections = spec.streamCollections(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
-        final List<ObjectAction> actions = spec.streamActions(MixedIn.INCLUDED)
+        final List<ObjectAction> actions = spec.streamAnyActions(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {
             return;
         }
 
-        
+
         final String logicalTypeName = spec.getLogicalTypeName();
         final ApplicationFeatureId typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
@@ -298,7 +297,7 @@ implements ApplicationFeatureRepository {
             final @Nullable SemanticsOf actionSemantics) {
         final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(typeFeatureId.getFullyQualifiedName(), memberId);
 
-        final ApplicationFeatureDefault memberFeature = 
+        final ApplicationFeatureDefault memberFeature =
                 (ApplicationFeatureDefault)newApplicationFeature(featureId);
         memberFeature.setMemberSort(Optional.of(memberSort));
 
@@ -330,15 +329,18 @@ implements ApplicationFeatureRepository {
 
     protected boolean exclude(final ObjectSpecification spec) {
 
-        val excluded = spec.isMixin() || spec.isAbstract() ||
-                spec.getBeanSort().isUnknown() ||
-                isBuiltIn(spec) ||
-                isHidden(spec);
+        val excluded = spec.isMixin()
+                || spec.isAbstract()
+                || spec.getBeanSort().isVetoed()
+                || spec.getBeanSort().isUnknown()
+                || isBuiltIn(spec)
+                || isHidden(spec);
 
         if(excluded && log.isDebugEnabled()) {
-            log.debug("{} excluded because: abstract:{} unknown-sort:{} builtIn:{} hidden:{}",
+            log.debug("{} excluded because: abstract:{} vetoed:{} unknown-sort:{} builtIn:{} hidden:{}",
                     spec.getCorrespondingClass().getSimpleName(),
                     spec.isAbstract(),
+                    spec.getBeanSort().isVetoed(),
                     spec.getBeanSort().isUnknown(),
                     isBuiltIn(spec),
                     isHidden(spec)
@@ -349,10 +351,7 @@ implements ApplicationFeatureRepository {
     }
 
     protected boolean isHidden(final ObjectSpecification spec) {
-        final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
-        return facet != null &&
-                !facet.isFallback() &&
-                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE);
+        return HiddenFacet.isAlwaysHidden(spec);
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
@@ -361,12 +360,12 @@ implements ApplicationFeatureRepository {
     }
 
     // -- FACTORY
-    
+
     @Override
     public ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
         return new ApplicationFeatureDefault(featId); // value type
     }
-    
+
     // -- packageFeatures, classFeatures, memberFeatures
 
     @Override
@@ -462,6 +461,6 @@ implements ApplicationFeatureRepository {
         initializeIfRequired();
         return featureIdentifiersByName;
     }
-    
+
 
 }

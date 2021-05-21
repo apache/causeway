@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
@@ -65,13 +66,15 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.fixtures.FixtureScripts"
+        objectType = FixtureScripts.OBJECT_TYPE
 )
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class FixtureScripts {
+
+    public static final String OBJECT_TYPE = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;
@@ -241,7 +244,7 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-chevron-right", 
+            cssClassFa="fa fa-chevron-right",
             sequence="10")
     public List<FixtureResult> runFixtureScript(
             @ParameterLayout(named = "Fixture script")
@@ -280,13 +283,22 @@ public class FixtureScripts {
                 .getPackagePrefix() + "'": null;
     }
 
-
     public String default0RunFixtureScript() {
-        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
-        if(defaultScript == null) {
-            return null;
+        val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
+        if(defaultFixtureScript != null) {
+            return defaultFixtureScript;
         }
-        return findFixtureScriptNameFor(defaultScript);
+        val choices = choices0RunFixtureScript();
+        return choices.size() == 1
+                ? choices.iterator().next()
+                : null;
+    }
+
+    private String defaultFromFixtureScriptsSpecification() {
+        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
+        return defaultScript != null
+                ? findFixtureScriptNameFor(defaultScript)
+                : null;
     }
 
     public Set<String> choices0RunFixtureScript() {
@@ -317,7 +329,7 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh", 
+            cssClassFa="fa fa-sync",
             sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
@@ -343,26 +355,26 @@ public class FixtureScripts {
 
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
-    	
+
     	val singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
-    	
+
     	isisInteractionFactory.runAnonymous(()->{
     	    transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 runScript(singleScript, parameters);
-            });    
+            });
     	});
-    	
+
     }
 
     @SafeVarargs
     @Programmatic
     public final void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
         for (val personaWithBuilderScript : personaScripts) {
-            
+
             val script = _Casts.<PersonaWithBuilderScript<BuilderScriptAbstract<Object>>>
                 uncheckedCast(personaWithBuilderScript);
-            
+
             runPersona(script);
         }
     }
@@ -380,7 +392,7 @@ public class FixtureScripts {
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
-        
+
         return isisInteractionFactory.callAnonymous(()->
             transactionService.callWithinCurrentTransactionElseCreateNew(()->
                 runBuilderScriptNonTransactional(builderScript)
@@ -502,7 +514,7 @@ public class FixtureScripts {
     }
 
     // -- DEPRECATIONS
- 
+
     /**
      * @deprecated renamed to {@link #runPersona(PersonaWithBuilderScript)}
      */
@@ -510,10 +522,11 @@ public class FixtureScripts {
     public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
         return runPersona(persona);
     }
-    
+
     /**
      * @deprecated renamed to {@link #run(FixtureScript...)}
      */
+    @Deprecated
     @Programmatic
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
         run(fixtureScriptList);
@@ -522,6 +535,7 @@ public class FixtureScripts {
     /**
      * @deprecated renamed to {@link #runBuilder(BuilderScriptAbstract)}
      */
+    @Deprecated
     @Programmatic
     public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
         return runBuilder(builderScript);

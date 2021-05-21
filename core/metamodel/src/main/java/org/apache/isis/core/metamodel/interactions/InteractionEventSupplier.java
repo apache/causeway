@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 /**
- * 
+ *
  * @since 2.0
  *
  * @param <T>
@@ -32,5 +32,5 @@ public interface InteractionEventSupplier<T extends InteractionEvent> {
      * Factory method to create an {@link InteractionEvent}.
      */
     T createInteractionEvent();
-    
+
 }

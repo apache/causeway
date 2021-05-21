@@ -23,25 +23,37 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+
+@Profile("demo-jdo")
 @Repository
 @Named("demo.eventLogRepository")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class EventLogEntryJdoRepository {
+public class EventLogEntryJdoRepository
+implements EventLogEntryRepository<EventLogEntryJdo> {
 
     final RepositoryService repositoryService;
 
+    @Override
     public List<EventLogEntryJdo> listAll(){
         return repositoryService.allInstances(EventLogEntryJdo.class);
     }
 
+    @Override
     public void add(EventLogEntryJdo entry) {
         repositoryService.persist(entry);
+    }
+
+    @Override
+    public EventLogEntryJdo newEntityFor(UiButtonEvent event) {
+        return EventLogEntryJdo.of(event);
     }
 
 }

@@ -36,27 +36,27 @@ import org.apache.isis.commons.internal.collections._Lists;
 public interface ObjectMemento extends HasLogicalType, Serializable {
 
     String asString();
-    
+
     /**
-     * Returns a bookmark only if 
+     * Returns a bookmark only if
      * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
-     * Returns {@code null} otherwise. 
+     * Returns {@code null} otherwise.
      */
     Bookmark asBookmarkIfSupported();
 
     /**
-     * Returns a bookmark only if 
+     * Returns a bookmark only if
      * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
-     * Returns {@code null} otherwise. 
+     * Returns {@code null} otherwise.
      */
     Bookmark asHintingBookmarkIfSupported();
-    
+
     // -- FACTORIES
 
     static ObjectMemento wrapMementoList(
-            Collection<ObjectMemento> container, 
+            Collection<ObjectMemento> container,
             LogicalType logicalType) {
 
         // ArrayList is serializable
@@ -76,6 +76,6 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
         }
         return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
     }
-    
-    
+
+
 }

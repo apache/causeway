@@ -43,9 +43,9 @@ public final class NumberConverterForStringComponent implements BindingConverter
 
     @Getter(onMethod_ = {@Override})
     private final ObjectSpecification valueSpecification;
-    private final ValueSemanticsProviderAndFacetAbstract<? extends Number> valueFacet; 
+    private final ValueSemanticsProviderAndFacetAbstract<? extends Number> valueFacet;
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public NumberConverterForStringComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
 
@@ -56,12 +56,12 @@ public final class NumberConverterForStringComponent implements BindingConverter
 
     @Override
     public ManagedObject wrap(String stringifiedNumber) {
-        
+
         if(tryParse(stringifiedNumber).isPresent()) {
             // return an intermediate placeholder
             return ManagedObject.empty(getValueSpecification());
         }
-        
+
         val number = valueFacet.parseTextEntry(null, stringifiedNumber);
         return ManagedObject.of(getValueSpecification(), number);
     }
@@ -71,8 +71,8 @@ public final class NumberConverterForStringComponent implements BindingConverter
         val number = (Number) ManagedObjects.UnwrapUtil.single(object);
         return valueFacet.parseableTitleOf(number);
     }
-    
-    
+
+
     // for performance reasons in order of likelihood (just guessing)
     @Getter
     private final static Can<Class<? extends Facet>> supportedFacets = Can.of(

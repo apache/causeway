@@ -22,9 +22,9 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class MethodByClassMap 
+public final class MethodByClassMap
 extends ConcurrentHashMap<Class<?>, Optional<Method>> {
 
     private static final long serialVersionUID = 1L;
-    
+
 }

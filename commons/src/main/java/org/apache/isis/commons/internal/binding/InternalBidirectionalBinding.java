@@ -30,7 +30,7 @@ import lombok.NonNull;
 import lombok.val;
 
 //@Log4j2
-abstract class InternalBidirectionalBinding<T> 
+abstract class InternalBidirectionalBinding<T>
 implements ChangeListener<T>, InternalUtil.WeakListener {
 
     public static <T> InternalBidirectionalBinding<T> bind(Bindable<T> left, Bindable<T> right) {
@@ -64,7 +64,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     protected abstract Object getRight();
 
-    
+
     @Override
     public int hashCode() {
         return cachedHash;
@@ -104,15 +104,15 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
         }
         return false;
     }
-    
+
     // -- HELPER
-    
+
     private static void checkParameters(@NonNull Object left, @NonNull Object right) {
         if (left == right) {
             throw _Exceptions.illegalArgument("Cannot bind to self");
         }
     }
-    
+
     private final int cachedHash;
 
     private InternalBidirectionalBinding(Object left, Object right) {
@@ -148,7 +148,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             }
             val left = getLeft();
             val right = getRight();
-            
+
             if ((left == null) || (right == null)) {
                 if (left != null) {
                     left.removeListener(this);
@@ -158,7 +158,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
                 }
                 return;
             }
-            
+
             try {
                 updating = true;
                 if (left == observable) {
@@ -181,7 +181,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
                             + "Observable to the previous value. "
                             + "Removing the bidirectional binding from bindables %s and %s",
                             ""+left,
-                            ""+right, 
+                            ""+right,
                             e2);
                 }
                 throw _Exceptions.unrecoverable(
@@ -189,7 +189,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             } finally {
                 updating = false;
             }
-            
+
         }
     }
 

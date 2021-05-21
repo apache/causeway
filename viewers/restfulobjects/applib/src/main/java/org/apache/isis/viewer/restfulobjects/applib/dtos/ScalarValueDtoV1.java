@@ -30,17 +30,17 @@ import lombok.Setter;
 @Deprecated
 @JsonIgnoreProperties({"links", "resulttype"})
 class ScalarValueDtoV1 {
-    
+
     @JsonIgnoreProperties({"links", "extensions"})
     public static class ScalarValue {
         @Getter @Setter private Object value;
     }
 
     @Getter @Setter private ScalarValue result;
-    
+
     @JsonIgnore
     public Object getValue() {
         return result!=null ? result.getValue() : null;
     }
-    
+
 }

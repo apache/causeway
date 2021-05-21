@@ -27,7 +27,7 @@ import lombok.Setter;
 
 @RequiredArgsConstructor
 class ServiceAndAction {
-    
+
     @Getter private final String serviceName;
     @Getter private final ManagedObject serviceAdapter;
     @Getter private final ObjectAction objectAction;

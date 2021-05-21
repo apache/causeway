@@ -46,7 +46,7 @@ import lombok.val;
 class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @NonNull private final MetaModelContext metaModelContext;
-    
+
     @Getter @Setter private _IocContainer iocContainer;
     private final Set<_ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
@@ -57,7 +57,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             return iocContainer.select(type, qualifiers);
         }
 
-// ignore        
+// ignore
 //        if(qualifiers!=null && qualifiers.length>0) {
 //            throw _Exceptions.notImplemented();
 //        }
@@ -71,7 +71,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             return Can.ofSingleton(match.get());
         }
 
-        // lookup the _Context 
+        // lookup the _Context
         // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
         T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
@@ -107,7 +107,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                 .map(s->toBeanAdapter(s))
                 .filter(_NullSafe::isPresent)
                 .forEach(registeredBeans::add);
-            }    
+            }
         }
         return registeredBeans;
     }

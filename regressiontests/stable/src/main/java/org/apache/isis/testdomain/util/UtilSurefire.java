@@ -26,5 +26,5 @@ public class UtilSurefire {
 	public static boolean isRunningWithSurefire() {
 		return "true".equals(System.getProperty("isRunningWithSurefire"));
 	}
-	
+
 }

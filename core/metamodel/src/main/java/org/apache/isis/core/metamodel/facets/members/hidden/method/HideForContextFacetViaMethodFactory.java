@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class HideForContextFacetViaMethodFactory 
+public class HideForContextFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
@@ -48,14 +48,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method actionOrGetter = processMethodContext.getMethod();
-        
+
         val namingConvention = getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX);
-        
+
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder.findMethod(
-                cls, 
-                namingConvention, 
-                boolean.class, 
+                cls,
+                namingConvention,
+                boolean.class,
                 NO_ARG)
                 .findFirst()
                 .orElse(null);
@@ -65,9 +65,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
                 hideMethod = MethodFinder.findMethod(
-                        cls, 
-                        namingConvention, 
-                        boolean.class, 
+                        cls,
+                        namingConvention,
+                        boolean.class,
                         actionOrGetter.getParameterTypes())
                         .findFirst()
                         .orElse(null);

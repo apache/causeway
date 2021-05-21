@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class ExecutionPublishingPropertyFacetFromConfiguration 
+public class ExecutionPublishingPropertyFacetFromConfiguration
 extends ExecutionPublishingFacetAbstract {
 
     public ExecutionPublishingPropertyFacetFromConfiguration(final FacetHolder holder) {

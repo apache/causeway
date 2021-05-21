@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -62,7 +61,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     private final String describedAs;
 
     public ObjectAdapterPropertyColumn(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             EntityCollectionModel.Variant collectionVariant,
             IModel<String> columnNameModel,
             String sortProperty,
@@ -70,7 +69,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
             boolean escaped,
             String parentTypeName,
             String describedAs) {
-        
+
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
         this.propertyExpression = propertyName;
@@ -99,10 +98,10 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem, 
-            final String componentId, 
+            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final String componentId,
             final IModel<ManagedObject> rowModel) {
-        
+
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
     }
@@ -111,10 +110,13 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
         val adapter = rowModel.getObject();
         final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
-        final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociationElseFail(propertyExpression);
-        final PropertyMemento pm = new PropertyMemento(property);
+        final OneToOneAssociation property = adapter.getSpecification().getPropertyElseFail(propertyExpression);
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, collectionVariant.renderingHint());
+        final ScalarModel scalarModel = entityModel
+                .getPropertyModel(
+                        property,
+                        EntityModel.Mode.VIEW,
+                        collectionVariant.getColumnRenderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         return componentFactory.createComponent(id, scalarModel);

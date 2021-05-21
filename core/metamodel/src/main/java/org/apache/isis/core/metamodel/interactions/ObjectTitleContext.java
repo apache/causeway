@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectTitleEvent}.
  */
-public class ObjectTitleContext 
+public class ObjectTitleContext
 extends AccessContext {
 
     private final String title;
@@ -40,8 +40,8 @@ extends AccessContext {
             final Identifier identifier,
             final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        super(InteractionContextType.OBJECT_TITLE, 
+
+        super(InteractionContextType.OBJECT_TITLE,
                 identifier, InteractionHead.simple(targetAdapter), interactionInitiatedBy);
         this.title = title;
     }

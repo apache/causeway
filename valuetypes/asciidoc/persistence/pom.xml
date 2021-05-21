@@ -46,5 +46,6 @@
 
 	<modules>
 		<module>jdo-dn5</module>
+		<module>jpa</module>
 	</modules>
 </project>

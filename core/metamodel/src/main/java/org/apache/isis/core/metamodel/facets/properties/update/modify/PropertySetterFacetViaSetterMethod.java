@@ -61,7 +61,7 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter, valueAdapter);
         return cloneIfViewModelCloneable(targetAdapter);
     }

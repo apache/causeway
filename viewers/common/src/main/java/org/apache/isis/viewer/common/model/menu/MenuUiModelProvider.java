@@ -36,15 +36,15 @@ import lombok.val;
 
 @Service
 public class MenuUiModelProvider {
-    
+
     @Inject private MetaModelContext metaModelContext;
 
     public MenuUiModel getMenu(final DomainServiceLayout.MenuBar menuBarSelect) {
         return MenuUiModel.of(menuBarSelect, select(menuBarSelect));
     }
- 
+
     // -- HELPER
-    
+
     private List<String> select(final DomainServiceLayout.MenuBar menuBarSelect) {
         return metaModelContext.streamServiceAdapters()
                 .filter(with(menuBarSelect))
@@ -57,11 +57,11 @@ public class MenuUiModelProvider {
         return (ManagedObject adapter) -> {
             val domainServiceLayoutFacet = adapter.getSpecification()
                     .getFacet(DomainServiceLayoutFacet.class);
-            return (domainServiceLayoutFacet != null 
-                        && domainServiceLayoutFacet.getMenuBar() == menuBarSelect) 
-                    || (domainServiceLayoutFacet == null 
+            return (domainServiceLayoutFacet != null
+                        && domainServiceLayoutFacet.getMenuBar() == menuBarSelect)
+                    || (domainServiceLayoutFacet == null
                         && menuBarSelect == DomainServiceLayout.MenuBar.PRIMARY);
         };
     }
-    
+
 }

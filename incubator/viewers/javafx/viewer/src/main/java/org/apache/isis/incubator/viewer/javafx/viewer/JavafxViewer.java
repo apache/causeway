@@ -29,5 +29,5 @@ public class JavafxViewer {
         JavafxViewerApplication.sources = new Class<?>[]{appClass};
         Application.launch(JavafxViewerApplication.class, args);
     }
-    
+
 }

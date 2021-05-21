@@ -25,7 +25,7 @@ import org.apache.isis.testdomain.model.stereotypes.MyService;
 
 @Configuration
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 MyService.class
         })
 public class Configuration_usingStereotypes {

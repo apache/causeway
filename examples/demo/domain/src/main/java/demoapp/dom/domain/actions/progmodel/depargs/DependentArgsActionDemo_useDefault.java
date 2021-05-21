@@ -41,7 +41,7 @@ public class DependentArgsActionDemo_useDefault {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final DependentArgsActionDemo mixee;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
@@ -63,27 +63,28 @@ public class DependentArgsActionDemo_useDefault {
             ) {
 
         messageService.informUser(message);
-        return holder;
+        return mixee;
     }
 
     // -- PARAM 0 (Parity)
 
     @MemberSupport
-    public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    public Parity defaultParity(Parameters params) {
+
+        return mixee.getDialogParityDefault();
     }
 
     // -- PARAM 1 (String message)
 
     @MemberSupport
-    public String default1Act(Parameters params) {
+    public String defaultMessage(Parameters params) {
 
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
+        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
 
-        if(parity == null) {
+        if(parityFromDialog == null) {
             return "no parity selected";
         }
-        return parity.name();
+        return parityFromDialog.name();
     }
 
 }

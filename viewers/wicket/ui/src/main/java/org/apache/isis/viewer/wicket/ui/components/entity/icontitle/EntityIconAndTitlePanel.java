@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import javax.annotation.Nullable;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,7 +31,6 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -49,7 +46,7 @@ import lombok.val;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class EntityIconAndTitlePanel 
+public class EntityIconAndTitlePanel
 extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
@@ -105,7 +102,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
         addOrReplace(entityLinkWrapper);
     }
-    
+
     protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
         val adapter = entityModel.getObject();
 
@@ -122,7 +119,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         if(adapterIfAny != null) {
 
             val spec = adapterIfAny.getSpecification();
-            
+
             final String iconName = spec.getIconName(adapterIfAny);
             final CssClassFaFacet cssClassFaFacet = spec.getFacet(CssClassFaFacet.class);
             if (iconName != null || cssClassFaFacet == null) {
@@ -159,7 +156,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             val redirectToAdapter =
                     projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-                    redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter); 
+                    redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter);
 
         } else {
             redirectToModel = entityModel;
@@ -171,7 +168,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
         final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(
                 ID_ENTITY_LINK, pageClass, pageParameters) {
-            
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -196,7 +193,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private String determineTitle() {
         ObjectAdapterModel model = getModel();
         val adapter = model.getObject();
-        return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
+        return adapter != null ? adapter.titleString(this::isContextAdapter) : "(no object)";
     }
 
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
@@ -222,13 +219,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return image;
     }
 
-    @Nullable
-    public ManagedObject getContextAdapterIfAny() {
-        ObjectAdapterModel model = getModel();
-        ObjectMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return contextAdapterMementoIfAny!=null
-                ? getCommonContext().reconstructObject(contextAdapterMementoIfAny)
-                : null;
+    private boolean isContextAdapter(ManagedObject other) {
+        final ObjectAdapterModel model = getModel();
+        return model.isContextAdapter(other);
     }
 
     static String abbreviated(final String str, final int maxLength) {
@@ -240,6 +233,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
 
-    
+
 
 }

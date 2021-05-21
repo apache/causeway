@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
  * See {@link InteractionContext} for overview; analogous to
  * {@link VisibilityEvent}.
  */
-public abstract class VisibilityContext 
+public abstract class VisibilityContext
 extends InteractionContext
 implements InteractionEventSupplier<VisibilityEvent> {
 

@@ -28,10 +28,10 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Emp
 
 import lombok.Getter;
 
-public class Select2ChoiceExt 
-extends Select2Choice<ObjectMemento> 
+public class Select2ChoiceExt
+extends Select2Choice<ObjectMemento>
 implements ChoiceExt {
-    
+
     private static final long serialVersionUID = 1L;
 
     public static Select2ChoiceExt create(
@@ -51,6 +51,8 @@ implements ChoiceExt {
         logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
+        getSettings().setWidth("auto");
+        getSettings().setDropdownAutoWidth(true);
 
         setOutputMarkupPlaceholderTag(true);
     }

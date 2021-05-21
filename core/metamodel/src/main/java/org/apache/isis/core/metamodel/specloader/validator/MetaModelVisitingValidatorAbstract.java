@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-public abstract class MetaModelVisitingValidatorAbstract 
+public abstract class MetaModelVisitingValidatorAbstract
 extends MetaModelValidatorAbstract
 implements MetaModelVisitingValidator {
 
@@ -28,12 +28,12 @@ implements MetaModelVisitingValidator {
         if(!isEnabled()){
             return;
         }
-        
+
         super.getMetaModelContext().getSpecificationLoader()
         .forEach(this::validate);
-        
+
         summarize();
-        
+
     }
-    
+
 }

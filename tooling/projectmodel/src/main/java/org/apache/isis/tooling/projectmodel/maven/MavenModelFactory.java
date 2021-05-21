@@ -38,13 +38,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @UtilityClass
 public class MavenModelFactory {
-    
+
     public static Model interpolateModel(final Model model, final ModelResolver modelResolver) {
-        
+
         val pomFile = model.getPomFile();
-        
+
         log.info("interpolating model {}", pomFile);
-        
+
         val modelBuildRequest = new DefaultModelBuildingRequest()
         .setProcessPlugins(false)
         .setPomFile(pomFile)
@@ -58,12 +58,12 @@ public class MavenModelFactory {
              log.warn("maven model interpolation failed {}", pomFile, e);
              //throw new RuntimeException(String.format("maven model building failed %s", pomFile), e);
         }
-        
+
         // fallback to non interpolated
         return model;
-        
+
     }
-    
+
 
     /** non interpolated read */
     public static Model readModel(File pomFile) {
@@ -77,24 +77,24 @@ public class MavenModelFactory {
             throw new RuntimeException(String.format("failed to read %s", pomFile.getAbsolutePath()), e);
         }
     }
-    
+
     public static String readArtifactKey(Model model) {
         if(model==null) {
             return null;
         }
-        val artifactKey = String.format("%s:%s:%s", 
-                getGroupId(model), 
-                model.getArtifactId(), 
+        val artifactKey = String.format("%s:%s:%s",
+                getGroupId(model),
+                model.getArtifactId(),
                 getVersion(model));
         return artifactKey;
     }
-    
+
     public static String getGroupId(@NonNull Model model) {
         return Optional.ofNullable(model.getGroupId()).orElseGet(()->model.getParent().getGroupId());
     }
-    
+
     public static String getVersion(@NonNull Model model) {
         return Optional.ofNullable(model.getVersion()).orElseGet(()->model.getParent().getVersion());
     }
-    
+
 }

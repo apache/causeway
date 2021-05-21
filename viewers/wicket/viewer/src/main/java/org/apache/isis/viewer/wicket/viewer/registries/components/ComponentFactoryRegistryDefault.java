@@ -65,7 +65,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
     @Inject private MetaModelContext metaModelContext;
-    
+
     private ListMultimap<ComponentType, ComponentFactory> componentFactoriesByType;
 
     @PostConstruct
@@ -84,11 +84,11 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     protected void registerComponentFactories(final ComponentFactoryRegistrar componentFactoryRegistrar) {
 
         val componentFactories = new ComponentFactoryList();
-        
+
         componentFactoryRegistrar.addComponentFactories(componentFactories);
 
         val commonContext = IsisAppCommonContext.of(metaModelContext);
-        
+
         for (val componentFactory : componentFactories) {
             registerComponentFactory(commonContext, componentFactory);
         }
@@ -97,15 +97,15 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     }
 
     private void registerComponentFactory(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final ComponentFactory componentFactory) {
-        
+
         // handle dependency injection for factories
         commonContext.getServiceInjector().injectServicesInto(componentFactory);
         if(componentFactory instanceof ComponentFactoryAbstract) {
             ((ComponentFactoryAbstract)componentFactory).setCommonContext(commonContext);
         }
-        
+
         componentFactoriesByType.putElement(componentFactory.getComponentType(), componentFactory);
     }
 

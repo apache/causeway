@@ -37,9 +37,9 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BindingsFx {
-    
+
     public static <T> void bind(
-            final @NonNull Property<T> leftProperty, 
+            final @NonNull Property<T> leftProperty,
             final @NonNull Observable<T> rightObservable) {
 
         leftProperty.setValue(rightObservable.getValue());
@@ -47,10 +47,10 @@ public class BindingsFx {
             leftProperty.setValue(n);
         });
     }
-    
+
     public static <L> void bind(
-            final @NonNull Property<L> leftProperty, 
-            final @NonNull Observable<ManagedObject> rightObservable, 
+            final @NonNull Property<L> leftProperty,
+            final @NonNull Observable<ManagedObject> rightObservable,
             final @NonNull BindingConverter<L> converter) {
 
         leftProperty.setValue(converter.unwrap(rightObservable.getValue()));
@@ -60,17 +60,17 @@ public class BindingsFx {
     }
 
     public static <L> void bindBidirectional(
-            final @NonNull Property<L> leftProperty, 
-            final @NonNull Bindable<ManagedObject> rightProperty, 
+            final @NonNull Property<L> leftProperty,
+            final @NonNull Bindable<ManagedObject> rightProperty,
             final @NonNull BindingConverter<L> converter) {
         final InternalBidirBinding<L> binding = new InternalBidirBinding<L>(leftProperty, rightProperty, converter);
         leftProperty.setValue(converter.unwrap(rightProperty.getValue()));
         leftProperty.addListener(binding);
         rightProperty.addListener(binding);
     }
-    
+
     // -- VALIDATION
-    
+
     public static void bindValidationFeeback(
             final @NonNull StringProperty textProperty,
             final @NonNull Property<Boolean> visibilityProperty,
@@ -79,12 +79,12 @@ public class BindingsFx {
         bind(textProperty, textObservable);
         visibilityProperty.bind(textProperty.isNotEmpty());
     }
-    
+
     // -- INTERNAL
-    
-    private static class InternalBidirBinding<T> 
-    implements 
-        javafx.beans.value.ChangeListener<T>, 
+
+    private static class InternalBidirBinding<T>
+    implements
+        javafx.beans.value.ChangeListener<T>,
         ChangeListener<ManagedObject>{
 
         private final WeakReference<Property<T>> leftRef;
@@ -100,11 +100,11 @@ public class BindingsFx {
         private Bindable<ManagedObject> getRight() {
             return rightRef.get();
         }
-        
-        
+
+
         public InternalBidirBinding(
-                final @NonNull Property<T> left, 
-                final @NonNull Bindable<ManagedObject> right, 
+                final @NonNull Property<T> left,
+                final @NonNull Bindable<ManagedObject> right,
                 final @NonNull BindingConverter<T> converter) {
 
             this.leftRef = new WeakReference<>(left);
@@ -120,12 +120,12 @@ public class BindingsFx {
 
         @Override
         public void changed(
-                Observable<? extends ManagedObject> rightObservable, 
+                Observable<? extends ManagedObject> rightObservable,
                 ManagedObject oldValue,
                 ManagedObject newValue) {
             changed(null, null, oldValue, newValue);
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {
@@ -155,22 +155,22 @@ public class BindingsFx {
             }
             return false;
         }
-        
+
         @Override
         public int hashCode() {
             return cachedHash;
         }
-        
+
         // -- HELPER
-        
+
         /**
          * @param oldPojo
          * @param newPojo
          * @param oldValue
          * @param newValue
-         * @apiNote not pretty, but to not having to duplicate this logic: 
-         * either uses both pojos and ignores both managed objects (propagate changes left to right) 
-         * or vice versa. 
+         * @apiNote not pretty, but to not having to duplicate this logic:
+         * either uses both pojos and ignores both managed objects (propagate changes left to right)
+         * or vice versa.
          */
         private void changed(T oldPojo, T newPojo, ManagedObject oldValue, ManagedObject newValue) {
             if (updating) {
@@ -181,19 +181,19 @@ public class BindingsFx {
             if(!isStillBound(left, right)) {
                 return;
             }
-            
+
             try {
                 updating = true;
                 if(newValue!=null) { // direction
                     left.setValue(converter.unwrap(newValue)); // propagate changes right to left
-                } else { 
+                } else {
                     right.setValue(converter.wrap(newPojo)); // propagate changes left to right
                 }
             } catch (RuntimeException e) {
                 try {
                     if(newValue!=null) { // direction
                         left.setValue(converter.unwrap(oldValue)); // propagate changes right to left
-                    } else { 
+                    } else {
                         right.setValue(converter.wrap(oldPojo)); // propagate changes left to right
                     }
                 } catch (Exception e2) {
@@ -205,7 +205,7 @@ public class BindingsFx {
                             + "Observable to the previous value. "
                             + "Removing the bidirectional binding from bindables %s and %s",
                             ""+left,
-                            ""+right, 
+                            ""+right,
                             e2);
                 }
                 throw _Exceptions.unrecoverable(
@@ -214,11 +214,11 @@ public class BindingsFx {
                 updating = false;
             }
         }
-        
+
         private boolean isStillBound(
-                final Property<T> left, 
+                final Property<T> left,
                 final Bindable<ManagedObject> right) {
-            
+
             if ((left == null) || (right == null)) {
                 if (left != null) {
                     left.removeListener(this);
@@ -232,5 +232,5 @@ public class BindingsFx {
         }
 
     }
-    
+
 }

@@ -30,7 +30,7 @@ interface SpecificationCache<T extends ObjectSpecification> {
     Optional<T> lookup(Class<?> cls);
 
     T computeIfAbsent(Class<?> cls, Function<Class<?>, T> mappingFunction);
-    
+
     T remove(Class<?> cls);
 
     void clear();

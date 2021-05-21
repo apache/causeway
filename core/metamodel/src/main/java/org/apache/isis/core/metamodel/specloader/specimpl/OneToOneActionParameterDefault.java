@@ -23,8 +23,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
-public class OneToOneActionParameterDefault 
-extends ObjectActionParameterAbstract 
+public class OneToOneActionParameterDefault
+extends ObjectActionParameterAbstract
 implements OneToOneActionParameter {
 
     public OneToOneActionParameterDefault(

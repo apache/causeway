@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DomainModelDefault implements DomainModel {
 
-    // to support JAX-B marshaling 
+    // to support JAX-B marshaling
     DomainModelDefault(){
         throw _Exceptions.unexpectedCodeReach();
     }

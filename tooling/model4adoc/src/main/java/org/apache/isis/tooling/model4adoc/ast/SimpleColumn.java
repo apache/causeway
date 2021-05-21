@@ -27,7 +27,7 @@ import lombok.Setter;
 public class SimpleColumn extends ContentNodeAbstract implements Column {
 
     @Getter @Setter private String style;
-    
+
     @Override
     public Table getTable() {
         return (Table) getParent();

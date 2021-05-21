@@ -31,25 +31,25 @@ public enum TransactionAfterCompletionEvent {
 
     /** Completion status in case of proper rollback. */
     ROLLED_BACK,
-    
+
     /** Completion status in case of heuristic mixed completion or system errors. */
     UNKNOWN,
     ;
-    
+
     public static TransactionAfterCompletionEvent forStatus(int status) {
         return TransactionAfterCompletionEvent.values()[status];
     }
-    
+
     public boolean isCommitted() {
         return this == COMMITTED;
     }
-    
+
     public boolean isRolledBack() {
         return this == ROLLED_BACK;
     }
-    
+
     public boolean isUnknown() {
         return this == UNKNOWN;
     }
-    
+
 }

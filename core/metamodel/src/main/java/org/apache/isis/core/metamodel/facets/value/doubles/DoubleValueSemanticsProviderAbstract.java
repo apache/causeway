@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public abstract class DoubleValueSemanticsProviderAbstract 
-extends ValueSemanticsProviderAndFacetAbstract<Double> 
+public abstract class DoubleValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Double>
 implements DoubleFloatingPointValueFacet {
 
     private static Class<? extends Facet> type() {

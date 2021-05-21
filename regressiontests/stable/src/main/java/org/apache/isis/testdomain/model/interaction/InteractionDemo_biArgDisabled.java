@@ -29,12 +29,12 @@ public class InteractionDemo_biArgDisabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
-    
+
     @MemberSupport
     public String disable() {
         return "Disabled for demonstration.";

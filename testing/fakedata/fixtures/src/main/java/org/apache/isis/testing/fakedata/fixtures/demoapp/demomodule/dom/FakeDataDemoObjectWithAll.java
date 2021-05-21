@@ -64,7 +64,7 @@ import lombok.Setter;
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
          column="id")
 @javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER, 
+        strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @DomainObject(editing = Editing.DISABLED)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_ROOT)
@@ -685,10 +685,10 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-    private static final Comparator<FakeDataDemoObjectWithAll> comparator = 
+    private static final Comparator<FakeDataDemoObjectWithAll> comparator =
             Comparator.nullsFirst(
                     Comparator.comparing(FakeDataDemoObjectWithAll::getName));
-    
+
     @Override
     public int compareTo(final FakeDataDemoObjectWithAll other) {
         return comparator.compare(this, other);

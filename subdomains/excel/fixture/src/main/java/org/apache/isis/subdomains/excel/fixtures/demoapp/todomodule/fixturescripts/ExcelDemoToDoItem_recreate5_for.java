@@ -38,7 +38,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
     public ExcelDemoToDoItem_recreate5_for() {
         this(null);
     }
-    
+
     public ExcelDemoToDoItem_recreate5_for(String ownedBy) {
         this.user = ownedBy;
     }
@@ -52,7 +52,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         executionContext.executeChild(this, new ExcelDemoToDoItem_tearDown2(ownedBy));
 
         installFor(ownedBy, executionContext);
-        
+
         transactionService.flushTransaction();
     }
 
@@ -67,9 +67,9 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
 
         createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, daysFromToday(3), null, executionContext);
         createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, daysFromToday(14), null, executionContext);
-        
+
         createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null, executionContext);
-        
+
         createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, daysFromToday(7), null, executionContext).setComplete(true);
         createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, daysFromToday(14), null, executionContext);
         createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, daysFromToday(21), null, executionContext);
@@ -79,11 +79,11 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         t1.add(t3);
         t1.add(t4);
         t1.add(t5);
-        
+
         t2.add(t3);
         t2.add(t4);
         t2.add(t5);
-        
+
         t3.add(t4);
 
         transactionService.flushTransaction();

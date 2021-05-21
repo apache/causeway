@@ -25,7 +25,7 @@ import lombok.NonNull;
 public final class PublishingPolicies {
 
     // -- ACTIONS
-    
+
     public static enum ActionPublishingPolicy {
         ALL,
         IGNORE_SAFE,
@@ -35,47 +35,47 @@ public final class PublishingPolicies {
         IGNORE_QUERY_ONLY,
         NONE;
     }
-    
+
     // -- PROPERTIES
-    
+
     public enum PropertyPublishingPolicy {
         ALL,
         NONE;
     }
-    
+
     // -- ENTITIES
-    
+
     public enum EntityChangePublishingPolicy {
         ALL,
         NONE;
     }
 
     // -- FACTORIES
-    
+
     public static ActionPublishingPolicy actionCommandPublishingPolicy(
             final @NonNull IsisConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getAction().getCommandPublishing();
     }
-    
+
     public static ActionPublishingPolicy actionExecutionPublishingPolicy(
             final @NonNull IsisConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getAction().getExecutionPublishing();
     }
-    
+
     public static PropertyPublishingPolicy propertyCommandPublishingPolicy(
             final @NonNull IsisConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getProperty().getCommandPublishing();
     }
-    
+
     public static PropertyPublishingPolicy propertyExecutionPublishingPolicy(
             final @NonNull IsisConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getProperty().getExecutionPublishing();
     }
-    
+
     public static EntityChangePublishingPolicy entityChangePublishingPolicy(
             final @NonNull IsisConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getDomainObject().getEntityChangePublishing();
     }
 
-    
+
 }

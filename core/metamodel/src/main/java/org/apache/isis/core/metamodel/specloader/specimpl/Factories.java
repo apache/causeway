@@ -32,16 +32,16 @@ import lombok.val;
 final class Factories {
 
     // -- MIXINS
-    
+
     static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
             final ObjectSpecification mixinTypeSpec,
-            final Class<?> mixinType, 
+            final Class<?> mixinType,
             final String mixinMethodName) {
 
         return mixinTypeAction -> new ObjectActionMixedIn(
                 mixinType, mixinMethodName, mixinTypeAction, mixinTypeSpec);
     }
-    
+
     static Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
@@ -52,7 +52,7 @@ final class Factories {
             if (returnType.isNotCollection()) {
                 return new OneToOneAssociationMixedIn(
                         mixinAction, mixedInType, mixinType, mixinMethodName);
-            } 
+            }
             return new OneToManyAssociationMixedIn(
                     mixinAction, mixedInType, mixinType, mixinMethodName);
         };

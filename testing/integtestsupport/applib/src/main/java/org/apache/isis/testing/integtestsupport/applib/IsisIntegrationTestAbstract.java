@@ -116,8 +116,8 @@ public abstract class IsisIntegrationTestAbstract {
     // -- DEPENDENCIES
 
     @Getter(AccessLevel.PACKAGE) // share with _Helper
-    @Inject protected ServiceRegistry serviceRegistry; 
-    
+    @Inject protected ServiceRegistry serviceRegistry;
+
     @Inject protected MetaModelService metaModelService;
     @Inject protected FactoryService factoryService;
     @Inject protected RepositoryService repositoryService;

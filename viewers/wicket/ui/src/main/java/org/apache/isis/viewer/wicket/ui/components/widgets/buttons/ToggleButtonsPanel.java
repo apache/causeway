@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * Abstraction of show/hide, ie two buttons only one of which is visible.
  */
-public class ToggleButtonsPanel 
+public class ToggleButtonsPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;

@@ -37,18 +37,18 @@ public class LogoutHandlerWkt implements LogoutHandler {
 
     @Override
     public void logout() {
-        
+
         val currentWktSession = AuthenticatedWebSession.get();
         if(currentWktSession==null) {
             return;
         }
-        
+
         if(isisInteractionTracker.isInInteraction()) {
             isisInteractionTracker.currentInteraction()
             .map(IsisInteraction.class::cast)
             .ifPresent(interaction->
                 interaction.setOnClose(currentWktSession::invalidateNow));
-            
+
         } else {
             currentWktSession.invalidateNow();
         }

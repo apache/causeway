@@ -18,17 +18,42 @@
  */
 package org.apache.isis.extensions.secman.jdo;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy;
+import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jdo.util.RegexReplacer;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanPersistenceJdo.class
-        })
+@Import({
+        // modules
+        IsisModuleExtSecmanModel.class,
+
+        // services
+        ApplicationPermissionRepository.class,
+        ApplicationRoleRepository.class,
+        ApplicationTenancyRepository.class,
+        ApplicationUserRepository.class,
+        RegexReplacer.class,
+
+        // entities, eager meta-model inspection
+        ApplicationPermission.class,
+        ApplicationRole.class,
+        ApplicationTenancy.class,
+        ApplicationUser.class,
+
+})
 public class IsisModuleExtSecmanPersistenceJdo {
 
 }

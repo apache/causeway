@@ -32,7 +32,7 @@ import lombok.val;
 
 /** package private utility */
 final class MemberSortingUtils {
-    
+
     // -- ASSOCIATION SORTING
 
     static List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
@@ -57,7 +57,7 @@ final class MemberSortingUtils {
             }
         }
     }
-    
+
     // -- ACTION SORTING
 
     static List<ObjectAction> sortActions(final List<ObjectAction> actions) {

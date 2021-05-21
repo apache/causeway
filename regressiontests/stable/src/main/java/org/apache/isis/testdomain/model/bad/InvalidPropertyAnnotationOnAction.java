@@ -27,11 +27,11 @@ import org.apache.isis.applib.value.Blob;
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class InvalidPropertyAnnotationOnAction {
 
-    // TODO as this is no getter representing a property, @Property should not be allowed here 
-    
+    // TODO as this is no getter representing a property, @Property should not be allowed here
+
     @Action @Property(fileAccept=".xlsx")
     public Blob exportToJson() {
         return null;
     }
-    
+
 }

@@ -21,35 +21,41 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.stream.Stream;
 
 public interface HasFacetHolder extends FacetHolder {
-    
+
     // -- INTERFACE
-    
+
     FacetHolder getFacetHolder();
 
     // -- SHORTCUTS
-    
+
+    @Override
     default public int getFacetCount() {
         return getFacetHolder().getFacetCount();
     }
 
+    @Override
     default public <T extends Facet> T getFacet(Class<T> cls) {
         return getFacetHolder().getFacet(cls);
     }
 
+    @Override
     default public boolean containsFacet(Class<? extends Facet> facetType) {
         return getFacetHolder().containsFacet(facetType);
     }
 
+    @Override
     default public Stream<Facet> streamFacets() {
         return getFacetHolder().streamFacets();
     }
 
+    @Override
     default public void addFacet(Facet facet) {
         getFacetHolder().addFacet(facet);
     }
 
+    @Override
     default public void addOrReplaceFacet(Facet facet) {
         getFacetHolder().addOrReplaceFacet(facet);
     }
-    
+
 }

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class StandaloneTreePanel 
+public class StandaloneTreePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         super(id, valueModel);
 
         final Component tree = IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel);
-        final Behavior treeTheme = super.getTreeThemeProvider().treeThemeFor(valueModel); 
+        final Behavior treeTheme = super.getTreeThemeProvider().treeThemeFor(valueModel);
 
         add(tree.add(treeTheme));
     }

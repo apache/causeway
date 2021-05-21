@@ -48,5 +48,5 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacet(new JpaTransientAnnotationFacet(holder));
     }
 
-    
+
 }

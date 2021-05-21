@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.user.UserService;
         objectType = "libExcelFixture.ExcelDemoToDoItemMenu"
 )
 public class ExcelDemoToDoItemMenu {
-    
+
     @Inject private MessageService messageService;
     @Inject private RepositoryService repositoryService;
     @Inject private UserService userService;
@@ -65,7 +65,7 @@ public class ExcelDemoToDoItemMenu {
 
     public List<ExcelDemoToDoItem> notYetCompleteNoUi() {
         return repositoryService.allMatches(
-                Query.named(ExcelDemoToDoItem.class, "todo_notYetComplete") 
+                Query.named(ExcelDemoToDoItem.class, "todo_notYetComplete")
                 .withParameter("ownedBy", currentUserName()));
     }
 
@@ -123,8 +123,8 @@ public class ExcelDemoToDoItemMenu {
         return Subcategory.listFor(category);
     }
     public String validateNewToDoItem(
-            final String description, 
-            final Category category, final Subcategory subcategory, 
+            final String description,
+            final Category category, final Subcategory subcategory,
             final LocalDate dueBy, final BigDecimal cost) {
         return Subcategory.validate(category, subcategory);
     }
@@ -146,18 +146,18 @@ public class ExcelDemoToDoItemMenu {
     @Programmatic
     public List<ExcelDemoToDoItem> autoComplete(@MinLength(1) final String description) {
         return repositoryService.allMatches(
-                Query.named(ExcelDemoToDoItem.class, "todo_autoComplete") 
-                .withParameter("ownedBy", currentUserName()) 
+                Query.named(ExcelDemoToDoItem.class, "todo_autoComplete")
+                .withParameter("ownedBy", currentUserName())
                 .withParameter("description", description));
     }
 
 
     @Programmatic // for use by fixtures
     public ExcelDemoToDoItem newToDoItem(
-            final String description, 
-            final Category category, 
+            final String description,
+            final Category category,
             final Subcategory subcategory,
-            final String userName, 
+            final String userName,
             final LocalDate dueBy, final BigDecimal cost) {
         final ExcelDemoToDoItem toDoItem = new ExcelDemoToDoItem();
         toDoItem.setDescription(description);
@@ -183,7 +183,7 @@ public class ExcelDemoToDoItemMenu {
         return newToDoItem(description, null, null, user, null, null);
     }
 
-// not used    
+// not used
 //    private static double random(final double from, final double to) {
 //        return Math.random() * (to-from) + from;
 //    }
@@ -197,11 +197,11 @@ public class ExcelDemoToDoItemMenu {
     public List<ExcelDemoToDoItem> allInstances() {
         return repositoryService.allInstances(ExcelDemoToDoItem.class);
     }
-    
+
     private String currentUserName() {
         return userService.currentUserNameElseNobody();
     }
-    
+
     private LocalDate currentDate() {
         return clockService.getClock().localDate(ZoneId.systemDefault());
     }

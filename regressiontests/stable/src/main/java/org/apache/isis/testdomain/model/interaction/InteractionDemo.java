@@ -50,32 +50,32 @@ public class InteractionDemo {
             editing = Editing.DISABLED,
             editingDisabledReason = "Disabled for demonstration.")
     @XmlElement @Getter @Setter private String stringDisabled;
-    
+
     @MemberSupport public List<String> autoCompleteStringDisabled(String search) { return null;}
-    
+
     @Property
     @PropertyLayout(multiLine=3, labelPosition = LabelPosition.TOP)
     @XmlElement @Getter @Setter private String stringMultiline = "initial";
 
     // verify, all the parameter supporting methods get picked up
-    
-    @MemberSupport public boolean hideStringMultiline() { return false; }         
-    @MemberSupport public String disableStringMultiline() { return null; }                           
+
+    @MemberSupport public boolean hideStringMultiline() { return false; }
+    @MemberSupport public String disableStringMultiline() { return null; }
     @MemberSupport public String validateStringMultiline(String proposeValue) { return null; }
     @MemberSupport public String defaultStringMultiline() { return "default"; }
     @MemberSupport public String[] choicesStringMultiline() { return new String[] {"Hello", "World"}; }
-    
+
     // -- auto search tests
-    
+
     @Property
     @XmlElement @Getter @Setter private String string2 = "initial";
-    
-    @MemberSupport public List<String> autoCompleteString2(String search) { 
+
+    @MemberSupport public List<String> autoCompleteString2(String search) {
         return _Strings.isEmpty(search)
                 ? null
                 : Stream.of(choicesStringMultiline())
                 .filter(s->s.contains(search))
-                .collect(Collectors.toList()); 
+                .collect(Collectors.toList());
     }
-     
+
 }

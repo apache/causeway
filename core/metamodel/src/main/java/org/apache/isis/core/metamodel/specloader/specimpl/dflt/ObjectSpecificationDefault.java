@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
-import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -48,6 +46,8 @@ import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetI
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -69,9 +69,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDef
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2 
-public class ObjectSpecificationDefault 
-extends ObjectSpecificationAbstract 
+@Log4j2
+public class ObjectSpecificationDefault
+extends ObjectSpecificationAbstract
 implements FacetHolder {
 
     private static String determineShortName(final Class<?> introspectedClass) {
@@ -89,7 +89,7 @@ implements FacetHolder {
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    
+
     /**
      * available only for managed-beans
      */
@@ -103,7 +103,7 @@ implements FacetHolder {
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
-        
+
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
 
         setMetaModelContext(metaModelContext);
@@ -112,8 +112,8 @@ implements FacetHolder {
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
-        facetProcessor.processObjectSpecId(correspondingClass, this);
-        
+        facetProcessor.processObjectType(correspondingClass, this);
+
     }
 
     @Override
@@ -160,7 +160,7 @@ implements FacetHolder {
         updateAsSubclassTo(interfaceSpecList);
         updateInterfaces(interfaceSpecList);
     }
-    
+
     @Override
     protected void introspectMembers() {
 
@@ -216,9 +216,9 @@ implements FacetHolder {
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationDefault(facetMethod);
+            return OneToManyAssociationDefault.forMethod(facetMethod);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationDefault(facetMethod);
+            return OneToOneAssociationDefault.forMethod(facetMethod);
         } else {
             return null;
         }
@@ -239,7 +239,7 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionDefault(facetedMethod);
+            return ObjectActionDefault.forMethod(facetedMethod);
         } else {
             return null;
         }
@@ -266,43 +266,28 @@ implements FacetHolder {
     public String getManagedBeanName() {
         return nameIfIsManagedBean;
     }
-    
+
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(
+            final @Nullable String id,
+            final @Nullable ActionType type) {
+
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        final Stream<ObjectAction> actions =
-                streamDeclaredActions(
-                        type==null 
-                            ? ActionType.ANY 
-                            : ImmutableEnumSet.of(type), 
-                        MixedIn.INCLUDED);
-        return firstAction(actions, id);
-    }
-
-    private static Optional<ObjectAction> firstAction(
-            final Stream<ObjectAction> candidateActions,
-            final String id) {
-
-        if (id == null) {
-            return Optional.empty();
-        }
-
-        return candidateActions
-                .filter(action->{
-                    final Identifier identifier = action.getIdentifier();
-
-                    if (id.equals(identifier.getMemberNameAndParameterClassNamesIdentityString())) {
-                        return true;
-                    }
-                    if (id.equals(identifier.getMemberName())) {
-                        return true;
-                    }
-                    return false;
-                })
-                .findFirst();
+        return id == null
+                ? Optional.empty()
+                : streamDeclaredActions(
+                        type==null
+                            ? ActionType.ANY
+                            : ImmutableEnumSet.of(type),
+                        MixedIn.INCLUDED)
+                    .filter(action->
+                        id.equals(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                                || id.equals(action.getIdentifier().getMemberName())
+                    )
+                    .findFirst();
     }
 
     @Override
@@ -363,7 +348,7 @@ implements FacetHolder {
 
     // -- ELEMENT SPECIFICATION
 
-    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification);
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {

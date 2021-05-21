@@ -28,54 +28,54 @@ import lombok.Data;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 final class ObjectBulkLoader_builtinHandlers {
 
     // -- NULL GUARD
-    
+
     @Data
     public static class GuardAgainstNull implements ObjectBulkLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ObjectBulkLoader.Request objectQuery) {
-            
+
             if(objectQuery==null) {
                 return true;
             }
-            
+
             val spec = objectQuery.getObjectSpecification();
             if(spec == null) {
                 // eg "NONEXISTENT:123"
                 return true;
             }
-            
-            // we don't guard against the identifier being null, because, this is ok 
+
+            // we don't guard against the identifier being null, because, this is ok
             // for services and values
             return false;
         }
 
         @Override
         public Can<ManagedObject> handle(ObjectBulkLoader.Request objectQuery) {
-            return Can.empty(); 
+            return Can.empty();
         }
 
     }
 
     // -- ENTITIES
-    
+
     @Data
     public static class BulkLoadEntity implements ObjectBulkLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(ObjectBulkLoader.Request objectQuery) {
-            
+
             val spec = objectQuery.getObjectSpecification();
             return spec.isEntity();
         }
@@ -89,22 +89,22 @@ final class ObjectBulkLoader_builtinHandlers {
                 throw _Exceptions.illegalArgument(
                         "ObjectSpecification is missing an EntityFacet: %s", spec.getCorrespondingClass());
             }
-            
+
             val entities = entityFacet.fetchByQuery(spec, objectQuery.getQuery());
             val serviceInjector = metaModelContext.getServiceInjector();
-            
+
             //TODO injection should have already be done by DataNucleus
             entities.forEach(serviceInjector::injectServicesInto);
             return entities;
         }
 
     }
-    
+
     // -- UNKNOWN LOAD REQUEST
-    
+
     @Data
     public static class LoadOther implements ObjectBulkLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
@@ -116,9 +116,9 @@ final class ObjectBulkLoader_builtinHandlers {
         public Can<ManagedObject> handle(ObjectBulkLoader.Request objectQuery) {
 
             // unknown object load request
-            
+
             throw _Exceptions.illegalArgument(
-                    "unknown bulk object load request, loader: %s loading ObjectSpecification %s", 
+                    "unknown bulk object load request, loader: %s loading ObjectSpecification %s",
                         this.getClass().getName(), objectQuery.getObjectSpecification());
 
         }

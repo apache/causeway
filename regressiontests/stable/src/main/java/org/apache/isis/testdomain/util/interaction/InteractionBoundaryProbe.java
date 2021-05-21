@@ -40,14 +40,14 @@ import lombok.extern.log4j.Log4j2;
 public class InteractionBoundaryProbe implements InteractionScopeAware {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
-    
+
     /** INTERACTION BEGIN BOUNDARY */
     @Override
     public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         log.debug("iaStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
-    
+
     /** INTERACTION END BOUNDARY */
     @Override
     public void afterLeavingTransactionalBoundary(Interaction interaction) {
@@ -71,13 +71,13 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
             kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txCommitted");
         }
     }
-    
+
     // -- ACCESS TO COUNTERS
-    
+
     public static long totalInteractionsStarted(KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaStarted");
     }
-    
+
     public static long totalInteractionsEnded(KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "iaEnded");
     }
@@ -85,21 +85,21 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
     public static long totalTransactionsEnding(KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txEnding");
     }
-    
+
     public static long totalTransactionsCommitted(KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txCommitted");
     }
-    
+
     public static long totalTransactionsRolledBack(KVStoreForTesting kvStoreForTesting) {
         return kvStoreForTesting.getCounter(InteractionBoundaryProbe.class, "txRolledBack");
     }
 
     // -- ASSERTIONS (INTERACTIONAL)
-    
+
     public static void assertInteractional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
         assertInteractional(kvStoreForTesting, ()->{ runnable.run(); return null; });
     }
-    
+
     public static <T> T assertInteractional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
 
         final long iaStartCountBefore = totalInteractionsStarted(kvStoreForTesting);
@@ -110,16 +110,16 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
 
         Assertions.assertEquals(1, iaStartCountAfter - iaStartCountBefore);
         Assertions.assertEquals(1, iaEndCountAfter - iaEndCountBefore);
-        
+
         return result;
     }
-    
+
     // -- ASSERTIONS (TRANSACTIONAL)
-    
+
     public static void assertTransactional(KVStoreForTesting kvStoreForTesting, Runnable runnable) {
         assertTransactional(kvStoreForTesting, ()->{ runnable.run(); return null; });
     }
-    
+
     public static <T> T assertTransactional(KVStoreForTesting kvStoreForTesting, Supplier<T> supplier) {
 
         final long txEndCountBefore = totalTransactionsEnding(kvStoreForTesting);
@@ -127,9 +127,9 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
         final long txEndCountAfter = totalTransactionsEnding(kvStoreForTesting);
 
         Assertions.assertEquals(1, txEndCountAfter - txEndCountBefore);
-        
+
         return result;
     }
-    
+
 
 }

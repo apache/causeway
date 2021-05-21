@@ -52,24 +52,24 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class JdoObjectIdSerializer {
-    
+
     public static String identifierForElseFail(
-            final @NonNull PersistenceManager pm, 
+            final @NonNull PersistenceManager pm,
             final @Nullable Object pojo) {
 
         return identifierFor(pm, pojo)
                 .orElseThrow(()->_Exceptions
                         .illegalArgument(
-                                "Pojo of type '%s' is not recognized by JDO.", 
+                                "Pojo of type '%s' is not recognized by JDO.",
                                 pojo.getClass().getName()));
     }
-    
+
     public static Optional<String> identifierFor(
-            final @NonNull PersistenceManager pm, 
+            final @NonNull PersistenceManager pm,
             final @Nullable Object pojo) {
 
         final Object jdoOid = pm.getObjectId(pojo);
-        return Optional.ofNullable(jdoOid)       
+        return Optional.ofNullable(jdoOid)
                 .map(JdoObjectIdSerializer::toOidIdentifier);
     }
 
@@ -81,16 +81,16 @@ public final class JdoObjectIdSerializer {
             // re-create-able through the constructor
             jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString());
     }
-    
+
     public static Object toJdoObjectId(ObjectSpecification spec, Oid oid) {
-        
+
         val request = JdoObjectIdDecodingRequest.parse(spec, oid.getIdentifier());
-        
+
         return decodingChain.handle(request)
         .orElseGet(()->{
 
             val clsName = request.getDistinguisher();
-            val keyStr = request.getKeyStr();         
+            val keyStr = request.getKeyStr();
 
             try {
                 final Class<?> cls = _Context.loadClass(clsName);
@@ -101,35 +101,35 @@ public final class JdoObjectIdSerializer {
                 throw _Exceptions.unrecoverableFormatted(
                         "failed to instantiate %s with arg %s", clsName, keyStr, e);
             }
-            
+
         });
 
     }
-    
+
     // -- HELPER
-    
+
     static final char SEPARATOR = '_';
-    
+
     private static List<_JdoObjectIdEncoder> encoders() {
-        
+
         final List<String> nonSafeUrlChars = Arrays.asList("/", "\\");
-        
+
         val encoders = Arrays.asList(
                 // Byte
                 _JdoObjectIdEncoder.of(
-                        _JdoObjectIdEncoder.filter(ByteIdentity.class),   
+                        _JdoObjectIdEncoder.filter(ByteIdentity.class),
                         _JdoObjectIdEncoder.stringifier("b")),
                 // Int
                 _JdoObjectIdEncoder.of(
-                        _JdoObjectIdEncoder.filter(IntIdentity.class),   
+                        _JdoObjectIdEncoder.filter(IntIdentity.class),
                         _JdoObjectIdEncoder.stringifier("i")),
                 // Long
                 _JdoObjectIdEncoder.of(
-                        _JdoObjectIdEncoder.filter(LongIdentity.class),   
+                        _JdoObjectIdEncoder.filter(LongIdentity.class),
                         _JdoObjectIdEncoder.stringifier("l")),
                 // String
                 _JdoObjectIdEncoder.of(
-                        _JdoObjectIdEncoder.filter(StringIdentity.class),   
+                        _JdoObjectIdEncoder.filter(StringIdentity.class),
                         jdoOid->{
                             val stringified = "" + jdoOid;
                             if(nonSafeUrlChars.stream()
@@ -145,7 +145,7 @@ public final class JdoObjectIdSerializer {
                                 val id = (ObjectIdentity) jdoOid;
                                 return id.getKeyAsObject() instanceof UUID;
                             }
-                            return false;            
+                            return false;
                         },
                         jdoOid->{
                             val id = (ObjectIdentity) jdoOid;
@@ -153,7 +153,7 @@ public final class JdoObjectIdSerializer {
                             return "u" + SEPARATOR + uuid.toString();
                         }),
                 // DatastoreId
-                _JdoObjectIdEncoder.of( 
+                _JdoObjectIdEncoder.of(
                         jdoOid->{
                             if(jdoOid instanceof DatastoreId) {
                                 final DatastoreId dnOid = (DatastoreId) jdoOid;
@@ -167,7 +167,7 @@ public final class JdoObjectIdSerializer {
                                     return true;
                                 }
                             }
-                            return false;            
+                            return false;
                         },
                         jdoOid->{
                             final DatastoreId dnOid = (DatastoreId) jdoOid;
@@ -176,13 +176,13 @@ public final class JdoObjectIdSerializer {
                         })
                 );
         return encoders;
-        
+
     }
-    
+
     private static List<_JdoObjectIdDecoder> decoders() {
-        
+
         final List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
-        
+
         val decoders = Arrays.asList(
                 _JdoObjectIdDecoder.of(
                         _JdoObjectIdDecoder.filter("b"),
@@ -199,12 +199,12 @@ public final class JdoObjectIdSerializer {
                 _JdoObjectIdDecoder.of(
                         _JdoObjectIdDecoder.filter("base64"),
                         _JdoObjectIdDecoder.parser(
-                                _Strings::base64UrlDecode, 
+                                _Strings::base64UrlDecode,
                                 (type, keyStr)-> new StringIdentity(type, _Strings.base64UrlDecode(keyStr)) )),
                 _JdoObjectIdDecoder.of(
                         _JdoObjectIdDecoder.filter("u"),
                         _JdoObjectIdDecoder.parser(
-                                UUID::fromString, 
+                                UUID::fromString,
                                 (type, keyStr)-> new ObjectIdentity(type, UUID.fromString(keyStr)) )),
                 // if there is no separator, the identifier is for
                 // @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
@@ -214,17 +214,17 @@ public final class JdoObjectIdSerializer {
                 _JdoObjectIdDecoder.of(
                         request->dnPrefixes.contains(request.getDistinguisher()),
                         request->request.getKeyStr() + "[OID]" + request.getSpec().getFullIdentifier())
-                
+
                 );
         return decoders;
     }
 
-    private final static ChainOfResponsibility<Object, String> 
+    private final static ChainOfResponsibility<Object, String>
         encodingChain = ChainOfResponsibility.of(encoders());
-    
-    private final static ChainOfResponsibility<JdoObjectIdDecodingRequest, Object> 
+
+    private final static ChainOfResponsibility<JdoObjectIdDecodingRequest, Object>
         decodingChain = ChainOfResponsibility.of(decoders());
-    
+
 
 
 

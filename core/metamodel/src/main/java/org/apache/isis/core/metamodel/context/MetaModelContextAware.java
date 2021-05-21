@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.context;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */

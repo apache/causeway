@@ -20,8 +20,6 @@ package org.apache.isis.tooling.j2adoc.format;
 
 import java.io.File;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import org.asciidoctor.ast.Document;
 
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;

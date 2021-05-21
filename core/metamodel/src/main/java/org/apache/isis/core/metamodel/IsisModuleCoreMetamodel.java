@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdMalformedValidator;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeMalformedValidator;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerFor
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBootstrap;
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
@@ -85,7 +85,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         GridLoaderServiceDefault.class,
         GridReaderUsingJaxb.class,
         GridServiceDefault.class,
-        GridSystemServiceBS3.class,
+        GridSystemServiceBootstrap.class,
         LayoutServiceDefault.class,
         MetaModelServiceDefault.class,
         ProgrammingModelServiceDefault.class,
@@ -99,7 +99,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
         IsisSchemaMetaModelRefiner.class,
         IsisSchemaValueTypeProvider.class,
-        ObjectSpecIdMalformedValidator.class,
+        ObjectTypeMalformedValidator.class,
 
 })
 public class IsisModuleCoreMetamodel {

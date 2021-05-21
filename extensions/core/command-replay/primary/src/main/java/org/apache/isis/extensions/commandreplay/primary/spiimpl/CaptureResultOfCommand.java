@@ -20,7 +20,6 @@ package org.apache.isis.extensions.commandreplay.primary.spiimpl;
 
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +30,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.common.v2.PeriodDto;
 
 import lombok.val;
 
@@ -55,16 +52,16 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
     @Override
     public CommandDto process(final Object domainObject, CommandDto commandDto) {
 
-        if (!(domainObject instanceof CommandJdo)) {
+        if (!(domainObject instanceof CommandModel)) {
             return commandDto;
         }
 
-        val commandJdo = (CommandJdo) domainObject;
+        val commandModel = (CommandModel) domainObject;
         if(commandDto == null) {
-            commandDto = commandJdo.getCommandDto();
+            commandDto = commandModel.getCommandDto();
         }
 
-        final Bookmark result = commandJdo.getResult();
+        final Bookmark result = commandModel.getResult();
         CommandDtoUtils.setUserData(commandDto, UserDataKeys.RESULT, result);
 
         // knowing whether there was an exception is on the primary is
@@ -72,11 +69,11 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
         // secondary if an exception occurs there also
         CommandDtoUtils.setUserData(commandDto,
                 UserDataKeys.EXCEPTION,
-                commandJdo.getException());
+                commandModel.getException());
 
         val timings = CommandDtoUtils.timingsFor(commandDto);
-        timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandJdo.getStartedAt()));
-        timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandJdo.getCompletedAt()));
+        timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandModel.getStartedAt()));
+        timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandModel.getCompletedAt()));
 
         return commandDto;
     }

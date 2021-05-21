@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.common.applib.mixins;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
@@ -65,8 +65,10 @@ public class Object_impersonateWithRoles {
 
     public Object act(
             final String userName,
+            @ParameterLayout(named = "Use user's roles?", labelPosition = LabelPosition.RIGHT)
+            final boolean useUsersRoles,
             final List<String> roleNames) {
-        impersonateMenu.impersonateWithRoles(userName, roleNames);
+        impersonateMenu.impersonateWithRoles(userName, useUsersRoles, roleNames);
         return holder;
     }
 
@@ -82,12 +84,16 @@ public class Object_impersonateWithRoles {
         return impersonateMenu.choices0ImpersonateWithRoles();
     }
 
-    public List<String> choices1Act() {
-        return impersonateMenu.choices1ImpersonateWithRoles();
+    public List<String> choices2Act(
+            final String userName,
+            final boolean useUsersRoles) {
+        return impersonateMenu.choices2ImpersonateWithRoles(userName, useUsersRoles);
     }
 
-    public List<String> default1Act(String userName) {
-        return impersonateMenu.default1ImpersonateWithRoles(userName);
+    public List<String> default2Act(
+            final String userName,
+            final boolean useUsersRoles) {
+        return impersonateMenu.default2ImpersonateWithRoles(userName, useUsersRoles);
     }
 
     @Inject ImpersonateMenu impersonateMenu;

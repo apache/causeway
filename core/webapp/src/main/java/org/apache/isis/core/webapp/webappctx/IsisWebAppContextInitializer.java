@@ -43,30 +43,30 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
- * <p> 
- * Acts as the single application entry-point for setting up the 
+ * <p>
+ * Acts as the single application entry-point for setting up the
  * ServletContext programmatically.
- * </p><p> 
+ * </p><p>
  * Installs {@link WebModule}s on the ServletContext.
- * </p>   
- *  
+ * </p>
+ *
  * @since 2.0
  *
  */
 @Component
 @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
-    
+
     private static final _Oneshot oneshot = new _Oneshot();
-    
+
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
     @Inject private IsisConfiguration isisConfiguration;
     @Inject private WebAppContextPath webAppContextPath;
 
     // -- INTERFACE IMPLEMENTATION
-    
+
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
@@ -76,16 +76,16 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
                     + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
             return;
         }
-        
+
         if(!isIsisProvisioned()) {
             log.error("skipping initialization, Spring should already have provisioned all configured Beans");
             return;
         }
-        
+
         // set the ServletContext initializing thread as preliminary default until overridden by
         // IsisWicketApplication#init() or others, that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
-        
+
         val contextPath = servletContext.getContextPath();
 
         log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
@@ -99,7 +99,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
 
         webModuleContext.init();
         servletContext.addListener(new ShutdownHook(webModuleContext));
-        
+
         log.info("=== DONE === ServletContext initialized.");
 
     }
@@ -114,11 +114,11 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     }
 
     // -- HELPER
-    
+
     @Value
     private class ShutdownHook implements EventListener, ServletContextListener {
         @NonNull WebModuleContext webModuleContext;
-        
+
         @Override
         public void contextDestroyed(ServletContextEvent sce) {
             IsisWebAppContextInitializer.this.contextDestroyed(webModuleContext, sce);

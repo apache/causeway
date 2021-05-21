@@ -37,35 +37,37 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 
+import lombok.Getter;
+
 /**
  * The initial idea of {@link DomainObjectList} was to simplify restful clients.
  * <p>
- * In the original Restful Objects specification, invoking an action that returned 
- * a list meant that the RO client needed to handle this collection, which didn't 
- * have any identity. That made for special case logic in the client.  
+ * In the original Restful Objects specification, invoking an action that returned
+ * a list meant that the RO client needed to handle this collection, which didn't
+ * have any identity. That made for special case logic in the client.
  * <p>
- * Instead, if the RO client invokes the action but uses the <i>Accept Header</i> to 
- * request an object, then the RO viewer would automatically wrap the returned list 
+ * Instead, if the RO client invokes the action but uses the <i>Accept Header</i> to
+ * request an object, then the RO viewer would automatically wrap the returned list
  * in this {@link DomainObjectList} view model.
  * <p>
  * Thus, the RO client then only ever needs to know how to render an object, in all cases.
- *  
+ *
  * @since 1.x {@index}
  */
 @XmlRootElement(name = "list")
 @XmlType(
         propOrder = {
                 "title",
-                "actionOwningType",
+                "actionOwningFqcn",
                 "actionId",
                 "actionArguments",
-                "elementObjectType",
+                "elementTypeFqcn",
                 "objects"
         }
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        objectType = "isis.applib.DomainObjectList",
+        objectType = DomainObjectList.OBJECT_TYPE,
         editing = Editing.DISABLED,
         nature = Nature.VIEW_MODEL
         )
@@ -76,6 +78,8 @@ import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
         layoutUiEvent = DomainObjectList.LayoutUiEvent.class
         )
 public class DomainObjectList {
+
+    public static final String OBJECT_TYPE = "isis.applib.DomainObjectList";
 
     // -- ui event classes
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<DomainObjectList>{  }
@@ -95,13 +99,13 @@ public class DomainObjectList {
     }
     public DomainObjectList(
             final String title,
-            final String elementObjectType,
-            final String actionOwningType,
+            final String elementTypeFqcn,
+            final String actionOwningFqcn,
             final String actionId,
             final String actionArguments) {
         this.title = title;
-        this.elementObjectType = elementObjectType;
-        this.actionOwningType = actionOwningType;
+        this.elementTypeFqcn = elementTypeFqcn;
+        this.actionOwningFqcn = actionOwningFqcn;
         this.actionId = actionId;
         this.actionArguments = actionArguments;
     }
@@ -117,30 +121,26 @@ public class DomainObjectList {
     // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> {  }
 
-    private String elementObjectType;
     @Property(
             domainEvent = ElementObjectTypeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    public String getElementObjectType() {
-        return elementObjectType;
-    }
+    @Getter
+    private String elementTypeFqcn;
 
 
     // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> {  }
 
-    private String actionOwningType;
+
 
     @Property(
             domainEvent = ActionOwningTypeDomainEvent.class,
             optionality = Optionality.OPTIONAL,
             editing = Editing.DISABLED
             )
-    public String getActionOwningType() {
-        return actionOwningType;
-    }
-
+    @Getter
+    private String actionOwningFqcn;
 
     // -- property: actionId
     public static class ActionIdDomainEvent extends PropertyDomainEvent<String> {  }

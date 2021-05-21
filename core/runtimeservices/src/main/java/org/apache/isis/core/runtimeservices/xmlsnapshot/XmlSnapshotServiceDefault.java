@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 @Primary
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {
-    
+
     private final XmlService xmlService;
     private final SpecificationLoader specificationLoader;
 
@@ -93,10 +93,10 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
 
     /**
      * Creates a builder that allows a custom snapshot - traversing additional associated
-     * properties or collections 
-     * (using {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePath(String)} 
+     * properties or collections
+     * (using {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePath(String)}
      * and
-     * {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePathAndAnnotation(String, String)}) 
+     * {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot.Builder#includePathAndAnnotation(String, String)})
      * - to be created.
      */
     @Override

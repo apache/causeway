@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetA
 public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
     public static CssClassFaFacet create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         class Annot {

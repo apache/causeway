@@ -42,7 +42,7 @@ public enum CollectionSemantics {
     SET_INTERFACE(true),
 
     CAN,
-    
+
     OTHER_IMPLEMENTATION
     ;
 
@@ -88,7 +88,7 @@ public enum CollectionSemantics {
     public boolean isCan() {
         return this == CAN;
     }
-    
+
     /**
      * {@link List} is assignable from the corresponding class.
      */

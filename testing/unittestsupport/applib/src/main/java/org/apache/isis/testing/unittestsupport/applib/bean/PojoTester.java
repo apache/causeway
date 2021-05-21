@@ -94,7 +94,8 @@ public final class PojoTester {
 
 		this.mode = mode;
         FixtureDatumFactory<Boolean> booleanDatumFactory = new FixtureDatumFactory<Boolean>(Boolean.class) {
-			public Boolean getNext() {
+			@Override
+            public Boolean getNext() {
 				return counter.getAndIncrement() == 0;
 			}
 		};
@@ -103,7 +104,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Byte> byteDatumFactory = new FixtureDatumFactory<Byte>(Byte.class) {
-			public Byte getNext() {
+			@Override
+            public Byte getNext() {
 				return (byte) counter.getAndIncrement();
 			}
 		};
@@ -112,7 +114,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Short> shortDatumFactory = new FixtureDatumFactory<Short>(Short.class) {
-			public Short getNext() {
+			@Override
+            public Short getNext() {
 				return (short) counter.getAndIncrement();
 			}
 		};
@@ -121,7 +124,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Character> charDatumFactory = new FixtureDatumFactory<Character>(Character.class) {
-			public Character getNext() {
+			@Override
+            public Character getNext() {
 				return (char) counter.getAndIncrement();
 			}
 		};
@@ -130,7 +134,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Integer> intDatumFactory = new FixtureDatumFactory<Integer>(Integer.class) {
-			public Integer getNext() {
+			@Override
+            public Integer getNext() {
 				return counter.getAndIncrement();
 			}
 		};
@@ -139,7 +144,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Long> longDatumFactory = new FixtureDatumFactory<Long>(Long.class) {
-			public Long getNext() {
+			@Override
+            public Long getNext() {
 				return (long) counter.getAndIncrement();
 			}
 		};
@@ -148,7 +154,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Float> floatDatumFactory = new FixtureDatumFactory<Float>(Float.class) {
-			public Float getNext() {
+			@Override
+            public Float getNext() {
 				return new Float(counter.getAndIncrement());
 			}
 		};
@@ -157,7 +164,8 @@ public final class PojoTester {
 
 
 		FixtureDatumFactory<Double> doubleDatumFactory = new FixtureDatumFactory<Double>(Double.class) {
-			public Double getNext() {
+			@Override
+            public Double getNext() {
 				return new Double(counter.getAndIncrement());
 			}
 		};
@@ -165,49 +173,57 @@ public final class PojoTester {
 		fixtureDataByType.put(Double.class, doubleDatumFactory);
 
 		fixtureDataByType.put(String.class, new FixtureDatumFactory<String>(String.class) {
-			public String getNext() {
+			@Override
+            public String getNext() {
 				return "string" + counter.getAndIncrement();
 			}
 		});
 
 		fixtureDataByType.put(BigDecimal.class, new FixtureDatumFactory<BigDecimal>(BigDecimal.class) {
-			public BigDecimal getNext() {
+			@Override
+            public BigDecimal getNext() {
 				return new BigDecimal(counter.getAndIncrement());
 			}
 		});
 
 		fixtureDataByType.put(BigInteger.class, new FixtureDatumFactory<BigInteger>(BigInteger.class) {
-			public BigInteger getNext() {
+			@Override
+            public BigInteger getNext() {
 				return BigInteger.valueOf(counter.getAndIncrement());
 			}
 		});
 
 		fixtureDataByType.put(Date.class, new FixtureDatumFactory<Date>(Date.class) {
-			public Date getNext() {
+			@Override
+            public Date getNext() {
 				return new Date(counter.getAndIncrement());
 			}
 		});
 
 		fixtureDataByType.put(Timestamp.class, new FixtureDatumFactory<Timestamp>(Timestamp.class) {
-			public Timestamp getNext() {
+			@Override
+            public Timestamp getNext() {
 				return new Timestamp(counter.getAndIncrement());
 			}
 		});
 
 		fixtureDataByType.put(Pattern.class, new FixtureDatumFactory<Pattern>(Pattern.class) {
-			public Pattern getNext() {
+			@Override
+            public Pattern getNext() {
 				return Pattern.compile("p" + counter.getAndIncrement());
 			}
 		});
 
 		fixtureDataByType.put(File.class, new FixtureDatumFactory<File>(File.class) {
-			public File getNext() {
+			@Override
+            public File getNext() {
 				return new File("file" + counter.getAndIncrement());
 			}
 		});
 
 		FixtureDatumFactory<List<?>> listDatumFactory = new FixtureDatumFactory<List<?>>() {
-			public List<?> getNext() {
+			@Override
+            public List<?> getNext() {
 				final List<String> list = new ArrayList<>();
 				list.add("element" + counter.getAndIncrement());
 				list.add("element" + counter.getAndIncrement());
@@ -220,7 +236,8 @@ public final class PojoTester {
 		fixtureDataByType.put(List.class, listDatumFactory);
 
 		fixtureDataByType.put(Set.class, new FixtureDatumFactory<Set<?>>() {
-			public Set<?> getNext() {
+			@Override
+            public Set<?> getNext() {
 				final Set<String> list = new HashSet<>();
 				list.add("element" + counter.getAndIncrement());
 				list.add("element" + counter.getAndIncrement());
@@ -229,7 +246,8 @@ public final class PojoTester {
 			}
 		});
 		fixtureDataByType.put(SortedSet.class, new FixtureDatumFactory<SortedSet<?>>() {
-		    public SortedSet<?> getNext() {
+		    @Override
+            public SortedSet<?> getNext() {
 		        final SortedSet<String> list = new TreeSet<>();
 		        list.add("element" + counter.getAndIncrement());
 		        list.add("element" + counter.getAndIncrement());
@@ -238,12 +256,14 @@ public final class PojoTester {
 		    }
 		});
 		fixtureDataByType.put(byte[].class, new FixtureDatumFactory<byte[]>() {
-		    public byte[] getNext() {
+		    @Override
+            public byte[] getNext() {
 		        return new byte[]{ (byte) counter.getAndIncrement() };
 		    }
 		});
 		fixtureDataByType.put(char[].class, new FixtureDatumFactory<char[]>() {
-		    public char[] getNext() {
+		    @Override
+            public char[] getNext() {
 				return new char[]{ (char) counter.getAndIncrement() };
 		    }
 		});
@@ -357,7 +377,8 @@ public final class PojoTester {
 				final Object[] testData = parameterType.getEnumConstants();
 				factory = new FixtureDatumFactory<Object>(Object.class) {
 					private int index = testData.length - 1;
-					public Object getNext() {
+					@Override
+                    public Object getNext() {
 						index = (index + 1) % testData.length;
 						return testData[index];
 					}

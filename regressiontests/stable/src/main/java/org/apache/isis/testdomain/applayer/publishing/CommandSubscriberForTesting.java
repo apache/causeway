@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class CommandSubscriberForTesting 
+public class CommandSubscriberForTesting
 implements CommandSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
@@ -50,7 +50,7 @@ implements CommandSubscriber {
     public void onCompleted(Command command) {
 
         @SuppressWarnings("unchecked")
-        val publishedCommands = 
+        val publishedCommands =
         (List<Command>) kvStore.get(this, "publishedCommands").orElseGet(ArrayList::new);
 
         publishedCommands.add(command);

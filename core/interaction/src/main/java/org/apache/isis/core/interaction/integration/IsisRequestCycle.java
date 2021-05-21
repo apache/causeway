@@ -24,7 +24,7 @@ import org.apache.isis.core.security.authentication.Authentication;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
+ *
  * @since 2.0
  */
 @RequiredArgsConstructor(staticName = "next")

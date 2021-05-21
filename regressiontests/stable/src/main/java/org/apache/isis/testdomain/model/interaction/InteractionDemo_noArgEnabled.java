@@ -29,10 +29,10 @@ public class InteractionDemo_noArgEnabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public Integer act() {
         return 99;
     }
-    
+
 }

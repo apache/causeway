@@ -32,28 +32,28 @@ public final class TypeDeclarations {
      * Whether to include given {@link TypeDeclaration} with the index.
      * <p>
      * This is decided base on whether the type's java-doc has a
-     * {@literal @since} tag that contains the literal {@literal {@index}}. 
+     * {@literal @since} tag that contains the literal {@literal {@index}}.
      */
     public static boolean hasIndexDirective(final @NonNull TypeDeclaration<?> td) {
         return td.getJavadoc()
         .map(javadoc->{
-        
-            val toBeIncluded = Javadocs.streamTagContent(javadoc, "since") 
+
+            val toBeIncluded = Javadocs.streamTagContent(javadoc, "since")
             .anyMatch(since->since.toText().contains("{@index}"));
-            
+
             return toBeIncluded;
-            
-        }) 
+
+        })
         .orElse(false);
     }
-    
+
     public static Can<TypeParameter> getTypeParameters(final @NonNull TypeDeclaration<?> td) {
-        
+
         return Can.ofStream(td.getChildNodes()
                 .stream()
                 .filter(tp->TypeParameter.class.isAssignableFrom(tp.getClass()))
                 .map(TypeParameter.class::cast)
                 );
     }
-    
+
 }

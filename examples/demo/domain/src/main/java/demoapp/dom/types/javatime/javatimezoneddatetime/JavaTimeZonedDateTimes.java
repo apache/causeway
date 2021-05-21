@@ -37,18 +37,16 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdo;
-import demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeEntity;
 import demoapp.dom.types.javatime.javatimezoneddatetime.vm.JavaTimeZonedDateTimeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaTimeZonedDateTimes", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaTimeZonedDateTimes implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +63,13 @@ public class JavaTimeZonedDateTimes implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaTimeZonedDateTimeJdo> getEntities() {
+    public List<? extends JavaTimeZonedDateTimeEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaTimeZonedDateTimeJdoEntities entities;
+    ValueHolderRepository<java.time.ZonedDateTime, ? extends JavaTimeZonedDateTimeEntity> entities;
 
 
 }

@@ -25,15 +25,15 @@ import lombok.SneakyThrows;
 abstract class WriterAbstract {
 
     // -- HELPER
-    
+
     @SneakyThrows
     protected static void writeWithFormat(Writer writer, String format, Object...args) {
         writer.write(String.format(format, args));
     }
-    
+
     @SneakyThrows
     protected static void writeEmptyLine(Writer writer) {
         writer.write("\n");
     }
-    
+
 }

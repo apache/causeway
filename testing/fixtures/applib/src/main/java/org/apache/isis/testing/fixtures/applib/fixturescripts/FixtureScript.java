@@ -55,7 +55,9 @@ import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class FixtureScript {
 
     public static final FixtureScript NOOP = new FixtureScript() {
@@ -457,7 +459,7 @@ public abstract class FixtureScript {
          */
         @Programmatic
         public void executeChild(
-                final FixtureScript callingFixtureScript, 
+                final FixtureScript callingFixtureScript,
                 final String localNameOverride,
                 final FixtureScript childFixtureScript) {
 
@@ -476,8 +478,8 @@ public abstract class FixtureScript {
          */
         @Programmatic
         public <T extends FixtureScript> T executeChildT(
-                final FixtureScript callingFixtureScript, 
-                final String localNameOverride, 
+                final FixtureScript callingFixtureScript,
+                final String localNameOverride,
                 final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
@@ -487,9 +489,14 @@ public abstract class FixtureScript {
             }
             callingFixtureScript.serviceInjector.injectServicesInto(childFixtureScript);
 
-            final T childOrPreviouslyExecuted = executeChildIfNotAlready(childFixtureScript);
+            try {
+                final T childOrPreviouslyExecuted = executeChildIfNotAlready(childFixtureScript);
+                return childOrPreviouslyExecuted;
+            } catch(Exception ex) {
+                log.error("{}: {}", childFixtureScript.getQualifiedName(), ex.getMessage());
+                throw ex;
+            }
 
-            return childOrPreviouslyExecuted;
         }
 
 
@@ -740,8 +747,8 @@ public abstract class FixtureScript {
      * Subclasses should <b>implement this</b> but SHOULD <i>NOT</i> CALL DIRECTLY.
      *
      * <p>
-     *  Instead call sub fixture scripts using 
-     *  {@link FixtureScript.ExecutionContext#executeChild(FixtureScript, FixtureScript)} 
+     *  Instead call sub fixture scripts using
+     *  {@link FixtureScript.ExecutionContext#executeChild(FixtureScript, FixtureScript)}
      *  or {@link FixtureScript.ExecutionContext#executeChild(FixtureScript, String, FixtureScript)}.
      * </p>
      */

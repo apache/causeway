@@ -44,8 +44,8 @@ public class MandatoryFacetInvertedByNullableAnnotationOnProperty extends Mandat
     }
 
     public static MandatoryFacet create(
-            final Optional<Nullable> annotation, 
-            final Method method, 
+            final Optional<Nullable> annotation,
+            final Method method,
             final FacetHolder holder) {
 
         if(!annotation.isPresent()) {

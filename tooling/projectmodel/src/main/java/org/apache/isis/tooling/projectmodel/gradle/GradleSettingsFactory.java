@@ -36,24 +36,24 @@ public class GradleSettingsFactory {
         val projTree = ProjectNodeFactory.maven(projRootFolder);
         return generateFromMaven(projTree, rootProjectName);
     }
-    
+
     public static GradleSettings generateFromMaven(ProjectNode projTree, String rootProjectName) {
-        
+
         val rootPath = _Files.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
-        
+
         val gradleSettings = new GradleSettings(rootProjectName);
         val folderByArtifactKey = gradleSettings.getBuildArtifactsByArtifactKey();
-        
+
         projTree.depthFirst(projModel -> {
             folderByArtifactKey.put(projModel.getArtifactCoordinates(), gradleBuildArtifactFor(projModel, rootPath));
         });
-        
+
         return gradleSettings;
     }
-    
+
     // -- HELPER
-    
+
     private static GradleBuildArtifact gradleBuildArtifactFor(ProjectNode projModel, String rootPath) {
         val name = toCanonicalBuildName(projModel.getArtifactCoordinates());
         val realtivePath = toCanonicalRelativePath(projModel, rootPath);
@@ -63,14 +63,14 @@ public class GradleSettingsFactory {
     private static String toCanonicalBuildName(final @NonNull ArtifactCoordinates artifactKey) {
         return String.format(":%s:%s", artifactKey.getGroupId(), artifactKey.getArtifactId());
     }
-    
+
     private static String toCanonicalRelativePath(ProjectNode projModel, String rootPath) {
         val canonicalProjDir = _Files.canonicalPath(projModel.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve relative path"));
-                
+
         val relativePath = _Files.toRelativePath(rootPath, canonicalProjDir);
         return _Strings.prefix(relativePath.replace('\\', '/'), "/");
     }
 
-    
+
 }

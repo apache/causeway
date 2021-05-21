@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.isis.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
+import org.apache.isis.extensions.hsqldbmgr.dom.IsisModuleExtHsqldbMgr;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -42,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.hsqldbMgr.HsqlDbManagerMenu"
+        objectType = HsqlDbManagerMenu.OBJECT_TYPE
         )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -51,11 +52,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HsqlDbManagerMenu {
 
+    public final static String OBJECT_TYPE = IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu";
+
     private final String url;
 
     @Inject
     public HsqlDbManagerMenu(DataSourceIntrospectionService datasourceIntrospector) {
-        this.url = datasourceIntrospector.streamDataSourceInfos()
+        this.url = datasourceIntrospector.getDataSourceInfos()
+        .stream()
         .map(DataSourceInfo::getJdbcUrl)
         .filter(jdbcUrl->{
             if(jdbcUrl.contains("hsqldb:mem")) {

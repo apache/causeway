@@ -98,7 +98,7 @@ public final class _Sets {
         return Stream.of(elements)
                 .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
-    
+
     /**
      * Copies all elements into a new unmodifiable SortedSet (of natural order).
      * @param elements
@@ -114,7 +114,7 @@ public final class _Sets {
                 Stream.of(elements)
                 .collect(Collectors.toCollection(TreeSet::new))); // natural order
     }
-    
+
 
     /**
      * Copies all elements from iterable into a new unmodifiable Set preserving iteration order.
@@ -247,7 +247,7 @@ public final class _Sets {
     }
 
     /**
-     * Returns the intersection (set theory) of two given (sorted) sets, 
+     * Returns the intersection (set theory) of two given (sorted) sets,
      * retaining order only when natural order.
      * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param a
@@ -266,48 +266,48 @@ public final class _Sets {
                 .filter(b::contains)
                 .collect(toUnmodifiableSorted());
     }
-    
+
     /**
-     * Returns a new set containing all the elements of {@code a} that are not in {@code b}, 
-     * not retaining any order. 
+     * Returns a new set containing all the elements of {@code a} that are not in {@code b},
+     * not retaining any order.
      * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param <T>
      * @param a
      * @param b
-     * @return {@code a - b}, non null, unmodifiable 
+     * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> Set<T> minus(@Nullable Set<T> a, @Nullable Set<T> b) {
         return minus(a, b, HashSet::new);
     }
-    
+
     /**
-     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b}, 
-     * retaining order only when natural order. 
+     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b},
+     * retaining order only when natural order.
      * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param <T>
      * @param a
      * @param b
-     * @return {@code a - b}, non null, unmodifiable 
+     * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> SortedSet<T> minusSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
         return minusSorted(a, b, TreeSet::new);
     }
 
     /**
-     * Returns a new set containing all the elements of {@code a} that are not in {@code b}, 
-     * not retaining any order. 
+     * Returns a new set containing all the elements of {@code a} that are not in {@code b},
+     * not retaining any order.
      * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param <T>
      * @param a
      * @param b
      * @param collectionFactory
-     * @return {@code a - b}, non null, unmodifiable 
+     * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> Set<T> minus(
-            @Nullable Set<T> a, 
-            @Nullable Set<T> b, 
+            @Nullable Set<T> a,
+            @Nullable Set<T> b,
             @NonNull Supplier<Set<T>> collectionFactory) {
-        
+
         if(a==null || a.isEmpty()) {
             return Collections.emptySet();
         }
@@ -321,22 +321,22 @@ public final class _Sets {
                 .filter(not(b::contains))
                 .collect(toUnmodifiable(collectionFactory));
     }
-    
+
     /**
-     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b}, 
-     * retaining order only when natural order. 
+     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b},
+     * retaining order only when natural order.
      * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param <T>
      * @param a
      * @param b
      * @param collectionFactory
-     * @return {@code a - b}, non null, unmodifiable 
+     * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> SortedSet<T> minusSorted(
-            @Nullable SortedSet<T> a, 
-            @Nullable SortedSet<T> b, 
+            @Nullable SortedSet<T> a,
+            @Nullable SortedSet<T> b,
             @NonNull Supplier<SortedSet<T>> collectionFactory) {
-        
+
         if(a==null || a.isEmpty()) {
             return Collections.emptySortedSet();
         }
@@ -350,36 +350,36 @@ public final class _Sets {
                 .filter(not(b::contains))
                 .collect(toUnmodifiableSorted());
     }
-    
+
     // -- COLLECTORS
 
-    public static <T> 
+    public static <T>
     Collector<T, ?, Set<T>> toUnmodifiable(Supplier<Set<T>> collectionFactory) {
         return Collectors.collectingAndThen(
                 Collectors.toCollection(collectionFactory),
                 Collections::unmodifiableSet);
     }
-    
-    public static <T> 
+
+    public static <T>
     Collector<T, ?, Set<T>> toUnmodifiable() {
         return toUnmodifiable(HashSet::new);
     }
-    
-    public static <T> 
+
+    public static <T>
     Collector<T, ?, Set<T>> toUnmodifiablePreservingOrder() {
         return toUnmodifiable(LinkedHashSet::new);
     }
-    
-    public static <T> 
+
+    public static <T>
     Collector<T, ?, SortedSet<T>> toUnmodifiableSorted(Supplier<SortedSet<T>> collectionFactory) {
         return Collectors.collectingAndThen(
-                Collectors.toCollection(collectionFactory), 
+                Collectors.toCollection(collectionFactory),
                 Collections::unmodifiableSortedSet);
     }
 
-    public static <T> 
+    public static <T>
     Collector<T, ?, SortedSet<T>> toUnmodifiableSorted() {
         return toUnmodifiableSorted(TreeSet::new);
     }
-    
+
 }

@@ -58,7 +58,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
                 facet.addMethod(method);
             }
         }
-        
+
         FacetUtil.addFacets(facets);
     }
 

@@ -9,4 +9,4 @@
 // the asciidoctor-intellij-plugin will only preview interactive links if mode is [inline]
 // see discussion here https://github.com/asciidoctor/asciidoctor-intellij-plugin/issues/548
 :kroki-default-options: inline
-:isis-version: 2.0.0-M4
+

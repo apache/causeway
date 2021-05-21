@@ -28,15 +28,11 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
@@ -56,8 +52,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel 
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
+public class CollectionPanel
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModelParented>
 implements CollectionSelectorProvider, BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
@@ -68,33 +64,25 @@ implements CollectionSelectorProvider, BulkActionsProvider {
 
     private Label label;
 
-    private final AssociatedWithActionsHelper associatedWithActionsHelper;
-
     public CollectionPanel(
             final String id,
-            final EntityCollectionModel collectionModel) {
+            final EntityCollectionModelParented collectionModel) {
         super(id, collectionModel);
 
-        final List<LinkAndLabel> entityActionLinks = _Lists.newArrayList();
+        val associatedActions = collectionModel.getAssociatedActions();
 
-        final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
-        final EntityModel entityModel = collectionModel.getEntityModel();
-        val adapter = entityModel.getManagedObject();
-
-        final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(adapter, otma);
-
-        associatedWithActionsHelper = new AssociatedWithActionsHelper(collectionModel);
-
-        final ToggledMementosProvider toggledMementosProvider =
+        val toggledMementosProvider =
                 new MyToggledMementosProvider(collectionModel, this, this);
 
-        entityActionLinks.addAll(
-                LinkAndLabelUtil
+        val entityActionLinks = LinkAndLabelUtil
                 .asActionLinksForAdditionalLinksPanel(
-                        entityModel, associatedActions, null, toggledMementosProvider));
+                        collectionModel.getEntityModel(),
+                        associatedActions.stream(),
+                        null,
+                        toggledMementosProvider)
+                .collect(Can.toCan());
 
-        collectionModel.addLinkAndLabels(entityActionLinks);
+        collectionModel.setLinkAndLabels(entityActionLinks);
 
     }
 
@@ -138,16 +126,15 @@ implements CollectionSelectorProvider, BulkActionsProvider {
     public ObjectAdapterToggleboxColumn getToggleboxColumn() {
 
         if(toggleboxColumn == null) {
-            final List<ObjectAction> associatedActions =
-                    associatedWithActionsHelper.getAssociatedActions(getSpecificationLoader());
-
             val entityCollectionModel = getModel();
-            if(associatedActions.isEmpty() || entityCollectionModel.isStandalone()) {
+
+            val associatedActions = entityCollectionModel.getActionsWithChoicesFrom();
+            if(associatedActions.isEmpty()) {
                 return null;
             }
 
             toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
-            
+
             val handler = new OnSelectionHandler() {
 
                 private static final long serialVersionUID = 1L;
@@ -157,9 +144,9 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                         final Component context,
                         final ManagedObject selectedAdapter,
                         final AjaxRequestTarget ajaxRequestTarget) {
-                    
+
                     val togglePanel = (ContainedToggleboxPanel) context;
-                    
+
                     val isSelected = getModel().toggleSelectionOn(selectedAdapter);
                     togglePanel.setModel(isSelected); // sync the checkbox's model
                 }

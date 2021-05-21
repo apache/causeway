@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JodaDateTimeJdoEntities {
+public class JodaDateTimeJdoEntities
+extends ValueHolderRepository<org.joda.time.DateTime, JodaDateTimeJdo> {
 
-    public Optional<JodaDateTimeJdo> find(final org.joda.time.DateTime readOnlyProperty) {
-        return repositoryService.firstMatch(JodaDateTimeJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected JodaDateTimeJdoEntities() {
+        super(JodaDateTimeJdo.class);
     }
 
-    public List<JodaDateTimeJdo> all() {
-        return repositoryService.allInstances(JodaDateTimeJdo.class);
+    @Override
+    protected JodaDateTimeJdo newDetachedEntity(org.joda.time.DateTime value) {
+        return new JodaDateTimeJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

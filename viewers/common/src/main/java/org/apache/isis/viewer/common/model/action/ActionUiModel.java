@@ -21,11 +21,11 @@ package org.apache.isis.viewer.common.model.action;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
 public interface ActionUiModel<M, R> {
-    
+
     ActionUiMetaModel getActionUiMetaModel();
     ManagedAction getManagedAction();
-    
-    M createMenuUiComponent();    
+
+    M createMenuUiComponent();
     R createRegularUiComponent();
 
 }

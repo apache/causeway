@@ -40,7 +40,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     private transient ComponentFactoryRegistry componentFactoryRegistry;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
-    
+
     public FormAbstract(final String id) {
         super(id);
     }
@@ -52,11 +52,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     @Override
     public ComponentFactoryRegistry getComponentFactoryRegistry() {
         if(componentFactoryRegistry==null) {
-            componentFactoryRegistry = ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry(); 
+            componentFactoryRegistry = ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
         }
         return componentFactoryRegistry;
     }
@@ -76,7 +76,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     protected ServiceRegistry getServiceRegistry() {
         return getCommonContext().getServiceRegistry();
     }
-    
+
     protected TranslationService getTranslationService() {
         return getCommonContext().getTranslationService();
     }

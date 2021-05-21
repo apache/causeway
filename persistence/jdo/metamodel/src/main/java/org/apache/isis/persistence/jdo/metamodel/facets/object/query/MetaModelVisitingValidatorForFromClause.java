@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-class MetaModelVisitingValidatorForFromClause 
+class MetaModelVisitingValidatorForFromClause
 extends MetaModelVisitingValidatorForClauseAbstract {
 
     MetaModelVisitingValidatorForFromClause() {
@@ -55,8 +55,8 @@ extends MetaModelVisitingValidatorForClauseAbstract {
         val fromSpecResult = Result.of(()->getSpecificationLoader()
                     .specForType(_Context.loadClass(classNameFromClause))
                     .orElse(null));
-                
-        if(fromSpecResult.isFailure() 
+
+        if(fromSpecResult.isFailure()
                 || !fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
@@ -64,19 +64,19 @@ extends MetaModelVisitingValidatorForClauseAbstract {
                     String.format(
                             "%s: error in JDOQL query, "
                             + "logical type name after '%s' clause could not be loaded (JDOQL : %s)",
-                            className, 
-                            clause, 
+                            className,
+                            clause,
                             query)
                     );
             return;
         }
-        
+
         val fromSpec = fromSpecResult.getValue().get();
         val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;
         }
-        
+
         ValidationFailure.raise(
                 objectSpec.getSpecificationLoader(),
                 Identifier.classIdentifier(objectSpec.getLogicalType()),
@@ -85,7 +85,7 @@ extends MetaModelVisitingValidatorForClauseAbstract {
                         + "clause should be same as class name on which annotated, "
                         + "or one of its supertypes (JDOQL : %s)",
                         className,
-                        clause, 
+                        clause,
                         query)
                 );
     }

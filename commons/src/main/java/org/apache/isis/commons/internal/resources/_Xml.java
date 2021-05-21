@@ -60,30 +60,30 @@ import lombok.val;
  * @since 2.0
  */
 public final class _Xml {
-    
+
     // -- OPTIONS
-    
+
     @Value @Builder
     public static class ReadOptions {
         private final @Builder.Default boolean useContextCache = false;
         private final @Builder.Default boolean allowMissingRootElement = false;
-        
+
         public static ReadOptions defaults() {
             return ReadOptions.builder().build();
         }
     }
-    
+
     @Value @Builder
     public static class WriteOptions {
         private final @Builder.Default boolean useContextCache = false;
         private final @Builder.Default boolean formattedOutput = false;
         private final @Builder.Default boolean allowMissingRootElement = false;
-        
+
         public static WriteOptions defaults() {
             return WriteOptions.builder().build();
         }
     }
-    
+
     // -- READ
 
     @SneakyThrows
@@ -91,16 +91,16 @@ public final class _Xml {
             final @NonNull Class<T> dtoClass,
             final @NonNull Reader reader,
             final @NonNull ReadOptions readOptions) {
-        
+
         val unmarshaller = jaxbContextFor(dtoClass, readOptions.isUseContextCache()).createUnmarshaller();
-        
+
         if(readOptions.isAllowMissingRootElement()
                 && !_Annotations.isPresent(dtoClass, XmlRootElement.class)) {
             val xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(reader);
             final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, dtoClass);
-            return userElement.getValue();            
+            return userElement.getValue();
         }
-        
+
         return _Casts.uncheckedCast(unmarshaller.unmarshal(reader));
     }
 
@@ -119,12 +119,12 @@ public final class _Xml {
             final @NonNull WriteOptions writeOptions) {
         return Result.of(()->_writeXml(dto, writeOptions));
     }
-    
+
     public static <T> void writeXml(
-            final @NonNull T dto, 
+            final @NonNull T dto,
             final @NonNull Writer writer,
             final @NonNull WriteOptions writeOptions) throws JAXBException {
-        
+
         val dtoClass = _Casts.<Class<T>>uncheckedCast(dto.getClass());
         val marshaller = jaxbContextFor(dtoClass, writeOptions.useContextCache).createMarshaller();
         if(writeOptions.isFormattedOutput()) {
@@ -136,12 +136,12 @@ public final class _Xml {
             val jaxbElement = new JAXBElement<T>(qName, dtoClass, null, dto);
             marshaller.marshal(jaxbElement, writer);
         } else {
-            marshaller.marshal(dto, writer);    
+            marshaller.marshal(dto, writer);
         }
     }
 
     // -- CLONE
-    
+
     private static <T> T _clone(final @Nullable T dto) throws JAXBException {
         if(dto==null) {
             return dto;
@@ -159,28 +159,28 @@ public final class _Xml {
                 .allowMissingRootElement(true)
                 .build());
     }
-    
+
     public static <T> Result<T> clone(final @Nullable T dto) {
         return Result.of(()->_clone(dto));
     }
-    
-    
+
+
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
-    
+
     public static Exception verboseException(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
-        
+
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
-        
+
         if(isIllegalAnnotationsException(e)) {
             // report a better error if possible
-            // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK 
+            // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK
             try {
-                
+
                 val errors = _Casts.<List<? extends Exception>>uncheckedCast(
                         e.getClass().getMethod("getErrors").invoke(e));
 
                 if(_NullSafe.size(errors)>0) {
-                    
+
                     return _Exceptions.unrecoverable(String.format("Error %s, "
                             + "due to illegal annotations on object class '%s'; "
                             + "%d error(s) reported: %s",
@@ -201,13 +201,13 @@ public final class _Xml {
         return _Exceptions.unrecoverable(String.format("Error %s; "
                 + "object class is '%s'", doingWhat, dtoClassName), e);
     }
-    
+
     private static boolean isIllegalAnnotationsException(Exception e) {
         /*sonar-ignore-on*/
         return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName());
         /*sonar-ignore-off*/
     }
-    
+
     // -- JAXB CONTEXT CACHE
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();

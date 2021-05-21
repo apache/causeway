@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetViaMethodFactory 
+public class ActionParameterChoicesFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
@@ -55,7 +55,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         if (parameters.isEmpty()) {
             return;
         }
-        
+
         // attach ActionChoicesFacet if choicesNumMethod is found ...
 
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
@@ -68,11 +68,11 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            
+
             val choicesMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();
             val returnType = searchResult.getReturnType();
-            
+
             processMethodContext.removeMethod(choicesMethod);
 
             if (facetedMethod.containsNonFallbackFacet(ActionChoicesFacet.class)) {
@@ -80,7 +80,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 throw new MetaModelException(cls + " uses both old and new choices syntax - "
                         + "must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
@@ -88,9 +88,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                     new ActionParameterChoicesFacetViaMethod(
                             choicesMethod, returnType, ppmFactory, paramAsHolder));
         });
-        
+
     }
-    
-    
+
+
 
 }

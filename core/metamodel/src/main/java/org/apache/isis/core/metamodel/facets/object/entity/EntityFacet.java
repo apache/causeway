@@ -38,13 +38,13 @@ public interface EntityFacet extends Facet {
 
     ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
     Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query);
-    
+
     void persist(ObjectSpecification spec, Object pojo);
-    
+
     void refresh(Object pojo);
-    
+
     void delete(ObjectSpecification spec, Object pojo);
-    
+
     EntityState getEntityState(Object pojo);
 
     /**
@@ -54,7 +54,7 @@ public interface EntityFacet extends Facet {
     boolean isProxyEnhancement(Method method);
 
     <T> T detach(T pojo);
-    
+
     PersistenceStandard getPersistenceStandard();
-    
+
 }

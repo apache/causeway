@@ -94,9 +94,9 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val domainTypeSpecifications = getSpecificationLoader().snapshotSpecifications()
-                .filter(spec->spec.isEntityOrViewModel());
+                .filter(spec->spec.isEntityOrViewModel()); // concrete types only, no abstract types
 
-        final TypeListReprRenderer renderer = 
+        final TypeListReprRenderer renderer =
                 new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(domainTypeSpecifications).includesSelf();
 
@@ -131,13 +131,13 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         val resourceContext = createResourceContext(
                 RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
-        
+
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
         val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
                 .map(spec->spec.getFacet(GridFacet.class))
                 .orElse(null);
-        
+
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
@@ -167,7 +167,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         val objectMember = parentSpec.getAssociation(propertyId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
-        
+
         if (objectMember.isOneToManyAssociation()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -184,7 +184,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId) {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
@@ -195,7 +195,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         val objectMember = parentSpec.getAssociation(collectionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
-        
+
         if (objectMember.isOneToOneAssociation()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -212,7 +212,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId) {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
@@ -223,7 +223,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         val action = parentSpec.getAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
-        
+
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
@@ -246,7 +246,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         val parentAction = parentSpec.getAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
-        
+
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
         final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -268,7 +268,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("supertype") final String superTypeStr, // simple style
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
-        
+
         val resourceContext = createResourceContext(
                 ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
 
@@ -280,7 +280,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 || supertypeSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
-        
+
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 
         final String url = "domain-types/" + domainType + "/type-actions/isSubtypeOf/invoke";

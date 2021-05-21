@@ -69,7 +69,7 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
         fakeRuntimeExceptionIfXFail(resourceContext);

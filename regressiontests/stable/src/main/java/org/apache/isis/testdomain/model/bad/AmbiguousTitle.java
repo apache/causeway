@@ -24,14 +24,14 @@ import org.apache.isis.applib.annotation.Title;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class AmbiguousTitle {
-    
-    @Title 
+
+    @Title
     public void invalidTitleProvider() {
-        
+
     }
-    
+
     public String title() {
         return null;
     }
-    
+
 }

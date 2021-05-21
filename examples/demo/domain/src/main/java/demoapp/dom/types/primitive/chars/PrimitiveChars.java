@@ -36,11 +36,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdo;
-import demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.primitive.chars.persistence.PrimitiveCharEntity;
 import demoapp.dom.types.primitive.chars.vm.PrimitiveCharVm;
 
 @XmlRootElement(name = "Demo")
@@ -51,7 +49,7 @@ import demoapp.dom.types.primitive.chars.vm.PrimitiveCharVm;
         objectType = "demo.PrimitiveChars",
         editing=Editing.ENABLED
 )
-@Log4j2
+//@Log4j2
 public class PrimitiveChars implements HasAsciiDocDescription {
 
     public String title() {
@@ -68,13 +66,13 @@ public class PrimitiveChars implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<PrimitiveCharJdo> getEntities() {
+    public List<? extends PrimitiveCharEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    PrimitiveCharJdoEntities entities;
+    ValueHolderRepository<Character, ? extends PrimitiveCharEntity> entities;
 
 
 }

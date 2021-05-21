@@ -27,26 +27,26 @@ import lombok.Data;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 final class ObjectRefresher_builtinHandlers {
 
     // -- NULL GUARD
-    
+
     @Data
     public static class GuardAgainstNull implements ObjectRefresher.Handler {
-        
+
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ManagedObject managedObject) {
-            
+
             if(managedObject==null || managedObject.getPojo()==null) {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -56,10 +56,10 @@ final class ObjectRefresher_builtinHandlers {
         }
 
     }
-    
+
     @Data
     public static class RefreshEntity implements ObjectRefresher.Handler {
-        
+
         @Override
         public boolean isHandling(ManagedObject request) {
             val spec = request.getSpecification();
@@ -68,27 +68,27 @@ final class ObjectRefresher_builtinHandlers {
 
         @Override
         public Void handle(ManagedObject request) {
-            
+
             val spec = request.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             if(entityFacet==null) {
                 throw _Exceptions.illegalArgument(
                         "ObjectSpecification is missing an EntityFacet: %s", spec);
             }
-            
+
             entityFacet.refresh(request.getPojo());
-            
-            // we assume that we don't need to inject services again, because this should 
+
+            // we assume that we don't need to inject services again, because this should
             // already have been done, when the entity object got fetched with the ObjectLoader
-            
+
             return null;
         }
-        
+
     }
-    
+
     @Data
     public static class RefreshOther implements ObjectRefresher.Handler {
-        
+
         @Override
         public boolean isHandling(ManagedObject request) {
             // if no one else feels responsible, we do
@@ -99,9 +99,9 @@ final class ObjectRefresher_builtinHandlers {
         public Void handle(ManagedObject request) {
             return null; // noop
         }
-        
+
     }
-    
-    
-    
+
+
+
 }

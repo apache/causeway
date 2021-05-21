@@ -27,9 +27,9 @@ public class LayoutGroupFacetFromActionAnnotation
 extends LayoutGroupFacetAbstract {
 
     public static LayoutGroupFacetFromActionAnnotation create(
-            final Optional<Action> actionIfAny, 
+            final Optional<Action> actionIfAny,
             final FacetHolder holder) {
-        
+
         return actionIfAny
             .flatMap(GroupIdAndName::forAction)
             .map(groupIdAndName->new LayoutGroupFacetFromActionAnnotation(groupIdAndName, holder))
@@ -39,5 +39,10 @@ extends LayoutGroupFacetAbstract {
     private LayoutGroupFacetFromActionAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
         super(groupIdAndName, holder);
     }
-    
+
+    @Override
+    public boolean isFallback() {
+        return true;
+    }
+
 }

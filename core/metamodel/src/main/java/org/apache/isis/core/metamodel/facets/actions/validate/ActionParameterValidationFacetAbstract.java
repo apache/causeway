@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public abstract class ActionParameterValidationFacetAbstract 
-extends FacetAbstract 
+public abstract class ActionParameterValidationFacetAbstract
+extends FacetAbstract
 implements ActionParameterValidationFacet {
 
     public static Class<? extends Facet> type() {

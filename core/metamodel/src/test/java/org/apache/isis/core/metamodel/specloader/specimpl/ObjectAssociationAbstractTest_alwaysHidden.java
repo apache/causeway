@@ -80,6 +80,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
+                facetedMethod.getIdentifier(),
                 facetedMethod, FeatureType.PROPERTY, mockObjectSpecification) {
 
             @Override

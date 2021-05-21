@@ -28,6 +28,12 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import lombok.NonNull;
+
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom._infra.values.ValueHolderFixtureFactory;
+import demoapp.dom._infra.values.ValueHolderRepository;
+
 public abstract class SeedServiceAbstract implements SeedService {
 
     private final Supplier<FixtureScript> fixtureScriptSupplier;
@@ -35,6 +41,12 @@ public abstract class SeedServiceAbstract implements SeedService {
     protected SeedServiceAbstract(Supplier<FixtureScript> fixtureScriptSupplier) {
         this.fixtureScriptSupplier = fixtureScriptSupplier;
     }
+
+    protected <T, E extends ValueHolder<T>>
+    SeedServiceAbstract(final @NonNull ValueHolderRepository<T, E> entities) {
+        this.fixtureScriptSupplier = ()->ValueHolderFixtureFactory.fixtureScriptFor(entities);
+    }
+
 
     @EventListener(MetamodelEvent.class)
     public void onAppLifecycleEvent(MetamodelEvent event) {

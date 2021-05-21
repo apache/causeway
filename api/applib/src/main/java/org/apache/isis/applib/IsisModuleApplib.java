@@ -94,6 +94,10 @@ import org.apache.isis.schema.IsisModuleSchema;
 })
 public class IsisModuleApplib {
 
+    public static final String NAMESPACE = "isis.applib";
+    public static final String NAMESPACE_CONF = "isis.conf";    // for configuration; to minimize the risk of granting perms accidentally
+    public static final String NAMESPACE_SUDO = "isis.sudo";    // for configuration; to minimize the risk of granting perms accidentally
+
     // -- UI EVENT CLASSES
 
     public abstract static class TitleUiEvent<S>

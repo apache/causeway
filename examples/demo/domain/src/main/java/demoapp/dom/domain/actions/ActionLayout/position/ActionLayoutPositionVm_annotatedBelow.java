@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty1"
 )
 @ActionLayout(
-        position = ActionLayout.Position.BELOW, 
-        named = "Positioned below", 
+        position = ActionLayout.Position.BELOW,
+        named = "Positioned below",
         describedAs = "position = BELOW",
         sequence = "1")
 @RequiredArgsConstructor

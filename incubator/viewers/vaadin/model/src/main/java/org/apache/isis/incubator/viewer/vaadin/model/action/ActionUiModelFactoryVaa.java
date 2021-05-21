@@ -25,5 +25,5 @@ public class ActionUiModelFactoryVaa {
     public ActionUiModelVaa newActionUiModel(ManagedAction managedAction) {
         return ActionUiModelVaa.of(managedAction);
     }
-    
+
 }

@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 
-public class ClobValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<Clob> 
+public class ClobValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<Clob>
 implements ClobValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;

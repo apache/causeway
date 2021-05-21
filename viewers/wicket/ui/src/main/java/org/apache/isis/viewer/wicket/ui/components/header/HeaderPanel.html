@@ -20,44 +20,41 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-            <header class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<!-- <header> -->
+			<nav class="navbar navbar-expand-md sticky-top navbar-dark bg-primary" role="navigation">
 
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse.app-actions">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" wicket:id="applicationName">
-                        <span wicket:id="brandText"></span>
-                        <img alt="Brand" wicket:id="brandLogo"/>
+    <div class="container-fluid">
+        <a class="navbar-brand mr-1 ml-n2 mt-n2 mb-n2" wicket:id="applicationName">
+            <span wicket:id="brandText"></span>
+            <img class="navbar-brand-logo" alt="Brand" wicket:id="brandLogo"/>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse.app-actions" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse app-actions mr-auto">
+            <ul class="navbar-nav navbar-wrap" wicket:id="primaryMenuBar"></ul>
+        </div>
+        <div class="navbar collapse navbar-collapse app-actions p-0 flex-grow-0">
+            <ul class="navbar-nav" wicket:id="secondaryMenuBar"></ul>
+            <ul class="navbar-nav tertiary">
+                <li class="nav-item dropdown">                        	
+                    <a href="#" class="nav-link dropdown-toggle" id="tertiaryDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span wicket:id="userIcon">
+                            <i class="fa fa-fw fa-user"></i>
+                        </span>
+                        <img class="avatar" alt="Avatar" wicket:id="userAvatar" />
+                        <span class="userName" wicket:id="userName"></span>
+                        <span class="caret"></span>
                     </a>
-                </div>
-                <div class="navbar-collapse app-actions collapse navbar-left">
-                    <ul class="nav navbar-nav" wicket:id="primaryMenuBar"></ul>
-                </div>
-                <div class="navbar-collapse app-actions collapse navbar-right">
-                    <ul class="nav navbar-nav" wicket:id="secondaryMenuBar"></ul>
-                    <ul class="nav navbar-nav tertiary">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom: 5px;">
-                                <span wicket:id="userIcon">
-                                    <i class="fa fa-fw fa-user"></i>
-                                </span>
-                                <img class="avatar" alt="Avatar" wicket:id="userAvatar" />
-                                <span class="userName" wicket:id="userName"></span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul wicket:id="tertiaryMenuBar" class="dropdown-menu" role="menu" style="min-width: 0px;">
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                    <ul wicket:id="tertiaryMenuBar" class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tertiaryDropdownMenuLink">
+                    </ul>                            
+                </li>
+            </ul>
+        </div>
+    </div>
 
-            </header>
+           	</nav>
+		<!-- </header> -->
         </wicket:panel>
     </body>
 </html>

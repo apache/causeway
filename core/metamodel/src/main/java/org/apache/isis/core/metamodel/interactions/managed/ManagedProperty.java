@@ -38,31 +38,31 @@ import lombok.NonNull;
 import lombok.val;
 
 public final class ManagedProperty extends ManagedMember {
-    
+
     // -- FACTORIES
-    
+
     public static final ManagedProperty of(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
             final @NonNull Where where) {
         return new ManagedProperty(owner, property, where);
     }
-    
+
     public static final Optional<ManagedProperty> lookupProperty(
             @NonNull final ManagedObject owner,
-            @NonNull final String memberId, 
+            @NonNull final String memberId,
             @NonNull final Where where) {
-        
+
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
-    
+
     // -- IMPLEMENTATION
-    
+
     @Getter private final OneToOneAssociation property;
-    
+
     private ManagedProperty(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
             final @NonNull Where where) {
         super(owner, where);
@@ -79,39 +79,39 @@ public final class ManagedProperty extends ManagedMember {
     public MemberType getMemberType() {
         return MemberType.PROPERTY;
     }
-    
+
     public Can<ObjectAction> getAssociatedActions() {
-        return Can.ofCollection(ObjectAction.Util.findForAssociation(getOwner(), getProperty()));
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getProperty()));
     }
-    
+
     // -- INTERACTION
-    
+
     public Optional<InteractionVeto> checkValidity(ManagedObject proposedNewValue) {
         try {
-            
-            val validityConsent = 
+
+            val validityConsent =
                     property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
-            
+
             return validityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.invalid(validityConsent)) 
+                    ? Optional.of(InteractionVeto.invalid(validityConsent))
                     : Optional.empty();
-            
+
         } catch (final Exception ex) {
-            
+
             return Optional.of(InteractionVeto
                     .invalid(
                             new Veto(ex.getLocalizedMessage())));
-            
+
         }
     }
-    
-    
+
+
     /**
      * @param proposedNewValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
     public Optional<InteractionVeto> modifyProperty(@Nullable ManagedObject proposedNewValue) {
-            
+
         val interactionVeto = checkValidity(proposedNewValue);
         if(interactionVeto.isPresent()) {
             return interactionVeto;
@@ -131,14 +131,14 @@ public final class ManagedProperty extends ManagedMember {
     private ManagedObject reassessPropertyValue() {
         val property = getProperty();
         val owner = getOwner();
-        
-        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed() 
+
+        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getSpecification());
     }
-    
-    
+
+
     // -- NEGOTIATION
 
     public PropertyNegotiationModel startNegotiation() {
@@ -146,9 +146,9 @@ public final class ManagedProperty extends ManagedMember {
     }
 
     // -- BINDING
-    
+
     @NonNull private final LazyObservable<ManagedObject> observablePropValue;
-    
+
     public Observable<ManagedObject> getValue() {
         return observablePropValue;
     }
@@ -156,7 +156,7 @@ public final class ManagedProperty extends ManagedMember {
     public ManagedObject getPropertyValue() {
         return getValue().getValue();
     }
-    
-    
+
+
 }
 

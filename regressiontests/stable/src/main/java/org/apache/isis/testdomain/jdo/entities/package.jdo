@@ -14,6 +14,8 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/jdo http://xmlns.jcp.org/xml/ns/jdo/jdo_3_1.xsd"
 	version="3.1">
 
+	<!-- usually this file helps the DN Eclipse plugin finding the entities, that need enhancing -->
+
 	<package name="org.apache.isis.testdomain.jdo.entities">
 		<class name="JdoProduct" />
 		<class name="JdoProductComment" />

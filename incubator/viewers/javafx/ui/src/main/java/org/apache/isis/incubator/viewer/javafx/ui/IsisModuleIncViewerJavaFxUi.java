@@ -44,7 +44,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
- * 
+ *
  * @since 2.0
  */
 @Configuration
@@ -52,35 +52,35 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         // Modules
         IsisModuleViewerCommon.class,
         IsisModuleIncViewerJavaFxModel.class,
-        
+
         // @Components's
         UiBuilderFx.class,
         MainViewFx.class,
-        
-        // Component Factories 
+
+        // Component Factories
         TextFieldFactory.class,
         MarkupFieldFactory.class,
         ObjectReferenceFieldFactory.class,
         NumberFieldFactory.class,
         TemporalFieldFactory.class,
         FallbackFieldFactory.class,
-        
+
         // Decorators
         PrototypingDecoratorForButton.class,
         PrototypingDecoratorForFormField.class,
         PrototypingInfoPopupProvider.class,
-        
+
         DisablingDecoratorForButton.class,
         DisablingDecoratorForFormField.class,
-        
+
         IconDecoratorForLabeled.class,
         IconDecoratorForMenuItem.class,
         IconServiceDefault.class,
-        
+
         // @Service's
         UiComponentFactoryFx.class,
         UiActionHandlerFx.class,
-        
+
         UiContextFxDefault.class,
 
         // @Mixin's

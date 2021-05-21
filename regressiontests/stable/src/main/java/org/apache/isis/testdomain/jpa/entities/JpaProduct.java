@@ -50,19 +50,19 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("Product")
 @DiscriminatorColumn(
-        name="product_type", 
+        name="product_type",
         discriminatorType = DiscriminatorType.STRING)
 @DomainObject(
         objectType = "testdomain.jpa.Product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED) 
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class JpaProduct implements Comparable<JpaProduct> {
 
     public String title() {
         return toString();
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -83,10 +83,10 @@ public class JpaProduct implements Comparable<JpaProduct> {
     @Property
     @Column(nullable = false)
     private @Getter @Setter double price;
-    
+
     // 1:n relation
-    @Collection 
-    @OneToMany(mappedBy = "product") @JoinColumn(nullable = true)  
+    @Collection
+    @OneToMany(mappedBy = "product") @JoinColumn(nullable = true)
     private @Getter @Setter List<JpaProductComment> comments;
 
     @Override

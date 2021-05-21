@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-abstract class AbstractCollectionInvocationHandler<T, C> 
+abstract class AbstractCollectionInvocationHandler<T, C>
 extends DelegatingInvocationHandlerDefault<C> {
 
     private final List<Method> interceptedMethods = _Lists.newArrayList();
@@ -42,11 +42,11 @@ extends DelegatingInvocationHandlerDefault<C> {
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
-        
+
         super(otma.getMetaModelContext(),
-                collectionOrMapToProxy, 
+                collectionOrMapToProxy,
                 handler.getSyncControl());
-        
+
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();

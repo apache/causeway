@@ -35,7 +35,7 @@ import lombok.ToString;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 @ToString
-public class DemoToDoItemRowHandler2 
+public class DemoToDoItemRowHandler2
 implements FixtureAwareRowHandler<DemoToDoItemRowHandler2>, ExcelMetaDataEnabled {
 
     @Getter @Setter

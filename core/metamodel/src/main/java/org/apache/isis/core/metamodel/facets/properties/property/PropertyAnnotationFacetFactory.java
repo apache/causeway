@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class PropertyAnnotationFacetFactory 
+public class PropertyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     public PropertyAnnotationFacetFactory() {
@@ -83,7 +83,7 @@ extends FacetFactoryAbstract {
 
         val propertyIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
-                        Property.class, 
+                        Property.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                             .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
 

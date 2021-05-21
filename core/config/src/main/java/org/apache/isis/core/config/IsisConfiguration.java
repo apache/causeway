@@ -799,7 +799,7 @@ public class IsisConfiguration {
                             "next.*:fa-step-forward",
                             "pause.*:fa-pause",
                             "previous.*:fa-step-backward",
-                            "refresh.*:fa-refresh",
+                            "refresh.*:fa-sync",
                             "remove.*:fa-minus-square",
                             "renew.*:fa-redo",
                             "reset.*:fa-redo",
@@ -1865,6 +1865,12 @@ public class IsisConfiguration {
              * Whether the Ajax debug should be shown, by default this is disabled.
              */
             private boolean ajaxDebugMode = false;
+
+            /**
+             * Which major JQuery version the <i>Wicket Viewer</i> should use, default is 3.
+             * @see org.apache.wicket.resource.JQueryResourceReference
+             */
+            private int jQueryVersion = 3;
 
             /**
              * The base path at which the Wicket viewer is mounted.

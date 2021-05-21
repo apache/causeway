@@ -37,4 +37,5 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 })
 public class IsisModuleTestingH2ConsoleUi {
 
+    public static final String NAMESPACE = "isis.ext.h2Console";
 }

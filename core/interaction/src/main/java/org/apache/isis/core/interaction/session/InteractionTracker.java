@@ -28,40 +28,40 @@ import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
-public interface InteractionTracker 
+public interface InteractionTracker
 extends InteractionContext, AuthenticationContext {
 
-    /** @return the AuthenticationLayer that sits on top of the current 
+    /** @return the AuthenticationLayer that sits on top of the current
      * request- or test-scoped InteractionSession's stack*/
     Optional<AuthenticationLayer> currentAuthenticationLayer();
-    
+
     default AuthenticationLayer currentAuthenticationLayerElseFail() {
         return currentAuthenticationLayer()
         .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
     }
-    
+
     default Optional<ExecutionContext> currentExecutionContext() {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
 
     // -- AUTHENTICATION CONTEXT
-    
+
     @Override
     default Optional<Authentication> currentAuthentication() {
         return currentAuthenticationLayer().map(AuthenticationLayer::getAuthentication);
     }
-    
+
     // -- INTERACTION CONTEXT
-    
+
     @Override
     default Optional<Interaction> currentInteraction(){
     	return currentAuthenticationLayer().map(AuthenticationLayer::getInteraction);
     }
 
-    
-    
+
+
 }

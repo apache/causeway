@@ -46,7 +46,7 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
     /**
      * Whether (this facet is able to determine that) the supplied
      * {@link Method} possibly represents the accessor of either a
-     * {@link OneToOneAssociation reference property} 
+     * {@link OneToOneAssociation reference property}
      * or a {@link OneToManyAssociation collection}.
      *
      * <p>
@@ -58,7 +58,7 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
 
     /**
      * Whether (this facet is able to determine that) the supplied
-     * {@link Method} represents <i>either</i> a 
+     * {@link Method} represents <i>either</i> a
      * {@link OneToOneAssociation reference property}.
      */
     public boolean isPropertyAccessor(Method method);

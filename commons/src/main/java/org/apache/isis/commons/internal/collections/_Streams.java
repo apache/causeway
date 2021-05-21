@@ -51,7 +51,7 @@ public final class _Streams {
      */
     public static <T> Stream<T> concat(
             Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d) {
-        
+
         return Stream.concat(Stream.concat(a, b), Stream.concat(c, d));
     }
 
@@ -59,43 +59,43 @@ public final class _Streams {
      * 5 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d, 
+            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
             Stream<? extends T> e) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
                 e);
     }
-    
+
     /**
      * 6 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d, 
+            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
             Stream<? extends T> e, Stream<? extends T> f) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
                 Stream.concat(e, f));
     }
-    
+
     /**
      * 7 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d, 
+            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
             Stream<? extends T> e, Stream<? extends T> f, Stream<? extends T> g) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
                 Stream.concat(Stream.concat(e, f), g));
     }
-    
+
     /**
      * 8 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d, 
+            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
             Stream<? extends T> e, Stream<? extends T> f, Stream<? extends T> g, Stream<? extends T> h) {
 
         return Stream.concat(

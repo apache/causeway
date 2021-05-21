@@ -44,6 +44,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
@@ -97,14 +98,14 @@ class MetaModelServiceDefaultTest {
                 will(returnValue("mocked"));
 
                 allowing(mockSpec).subclasses(Hierarchical.Depth.DIRECT);
-                will(returnValue(Collections.emptyList()));
+                will(returnValue(Can.empty()));
 
                 allowing(mockSpec).isManagedBean();
                 will(returnValue(true));
             }
         });
 
-        action = new ObjectActionDefault(mockFacetedMethod);
+        action = ObjectActionDefault.forMethod(mockFacetedMethod);
 
         mockMetaModelService = context.mock(MetaModelServiceDefault.class);
         context.checking(new Expectations() {
@@ -159,7 +160,7 @@ class MetaModelServiceDefaultTest {
     private OutputStream noopOutput(){
         return new OutputStream() {
             @Override public void write(int b) throws IOException {}
-        };  
+        };
     }
 
     @XmlRootElement(name = "employee")

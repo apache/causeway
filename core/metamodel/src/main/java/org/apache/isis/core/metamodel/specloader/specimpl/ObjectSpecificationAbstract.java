@@ -20,9 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +32,7 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -63,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -91,89 +89,80 @@ import lombok.extern.log4j.Log4j2;
 
 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 @lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
-@Log4j2 
-public abstract class ObjectSpecificationAbstract 
+@Log4j2
+public abstract class ObjectSpecificationAbstract
 extends ObjectMemberContainer
 implements ObjectSpecification {
 
-
+    /**
+     * @implNote thread-safe
+     */
     private static class Subclasses {
-        private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
+
+        // List performs better compared to a Set, when the number of elements is low
+        private Can<ObjectSpecification> classes = Can.empty();
+        private final Object $lock = new Object();
 
         public void addSubclass(final ObjectSpecification subclass) {
-            classes.add(subclass);
+            synchronized($lock) {
+                classes = classes.addUnique(subclass);
+            }
         }
 
         public boolean hasSubclasses() {
-            return !classes.isEmpty();
+            synchronized($lock) {
+                return classes.isNotEmpty();
+            }
         }
 
-        public Collection<ObjectSpecification> toCollection() {
-            return Collections.unmodifiableSet(classes); //just a view, thread-safe only if classes is thread-safe
+        public Can<ObjectSpecification> snapshot() {
+            synchronized($lock) {
+                return classes;
+            }
         }
     }
 
-//XXX drop-in for the above, rather a question which performs better 
-//    private static class Subclasses {
-//        private final List<ObjectSpecification> classes = new ArrayList<>();
-//
-//        public void addSubclass(final ObjectSpecification subclass) {
-//            if(classes.contains(subclass)) {
-//                return;
-//            }
-//            classes.add(subclass);
-//        }
-//
-//        public boolean hasSubclasses() {
-//            return !classes.isEmpty();
-//        }
-//
-//        public List<ObjectSpecification> toCollection() {
-//            return Collections.unmodifiableList(classes);
-//        }
-//    }
-    
-    
-    // -- fields
 
-    //protected final ServiceInjector servicesInjector;
+    // -- FIELDS
 
     private final PostProcessor postProcessor;
     private final FacetProcessor facetProcessor;
 
+    @Getter private final BeanSort beanSort;
+
     // -- ASSOCIATIONS
-    
+
     private final List<ObjectAssociation> associations = _Lists.newArrayList();
-    
+
     // defensive immutable lazy copy of associations
-    private final _Lazy<List<ObjectAssociation>> unmodifiableAssociations = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(associations)));
-    
+    private final _Lazy<Can<ObjectAssociation>> unmodifiableAssociations =
+            _Lazy.threadSafe(()->Can.ofCollection(associations));
+
     // -- ACTIONS
-    
+
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
-    
+
     /** not API, used for validation */
     @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
-    private final _Lazy<List<ObjectAction>> unmodifiableActions = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(objectActions)));
+    private final _Lazy<Can<ObjectAction>> unmodifiableActions =
+            _Lazy.threadSafe(()->Can.ofCollection(objectActions));
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
-    private final ListMultimap<ActionType, ObjectAction> objectActionsByType = 
+    private final ListMultimap<ActionType, ObjectAction> objectActionsByType =
             _Multimaps.newConcurrentListMultimap();
-    
+
     // -- INTERFACES
 
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
-    
+
     // defensive immutable lazy copy of interfaces
-    private final _Lazy<List<ObjectSpecification>> unmodifiableInterfaces = 
-            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(interfaces)));
-    
-    
-    
+    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
+            _Lazy.threadSafe(()->Can.ofCollection(interfaces));
+
+
+
     private final Subclasses directSubclasses = new Subclasses();
     // built lazily
     private Subclasses transitiveSubclasses;
@@ -231,13 +220,13 @@ implements ObjectSpecification {
     public LogicalType getLogicalType() {
         return logicalTypeLazy.get();
     }
-        
+
     private LogicalType lookupLogicalType() {
-        val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
-        if(objectSpecIdFacet == null) {
-            throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
+        val objectTypeFacet = getFacet(ObjectTypeFacet.class);
+        if(objectTypeFacet == null) {
+            throw new IllegalStateException("could not find an ObjectTypeFacet for " + this.getFullIdentifier());
         }
-        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value());
+        return objectTypeFacet.getLogicalType();
     }
 
     /**
@@ -268,7 +257,7 @@ implements ObjectSpecification {
 
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {
-        
+
         if(!isLessThan(upTo)) {
             return; // optimization
         }
@@ -326,7 +315,7 @@ implements ObjectSpecification {
     boolean isLessThan(IntrospectionState upTo) {
         return this.introspectionState.compareTo(upTo) < 0;
     }
-    
+
     protected abstract void introspectTypeHierarchy();
     protected abstract void introspectMembers();
 
@@ -391,7 +380,7 @@ implements ObjectSpecification {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 objectActions.stream()
-                .filter(ObjectAction.Predicates.ofType(actionType))
+                .filter(ObjectAction.Predicates.ofActionType(actionType))
                 .forEach(objectActionForType::add);
             }
         }
@@ -415,11 +404,11 @@ implements ObjectSpecification {
 
     @Override
     public String getTitle(
-            final ManagedObject contextAdapterIfAny,
+            final Predicate<ManagedObject> isContextAdapter,
             final ManagedObject targetAdapter) {
-        
+
         if (titleFacet != null) {
-            val titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
+            val titleString = titleFacet.title(isContextAdapter, targetAdapter);
             if (!_Strings.isEmpty(titleString)) {
                 return titleString;
             }
@@ -446,7 +435,7 @@ implements ObjectSpecification {
     }
 
     // -- HIERARCHICAL
-    
+
     /**
      * Determines if this class represents the same class, or a subclass, of the
      * specified class.
@@ -470,15 +459,15 @@ implements ObjectSpecification {
      */
     @Override
     public boolean isOfType(final ObjectSpecification other) {
-        
+
         val thisClass = this.getCorrespondingClass();
         val otherClass = other.getCorrespondingClass();
-        
-        return thisClass == otherClass 
+
+        return thisClass == otherClass
                 || otherClass.isAssignableFrom(thisClass);
-        
-//XXX legacy of ...        
-//        
+
+//XXX legacy of ...
+//
 //        for (val interfaceSpec : interfaces()) {
 //            if (interfaceSpec.isOfType(other)) {
 //                return true;
@@ -500,7 +489,7 @@ implements ObjectSpecification {
     }
 
     // -- NAME, DESCRIPTION, PERSISTABILITY
-    
+
     /**
      * The name according to any available {@link NamedFacet},
      * but falling back to {@link #getFullIdentifier()} otherwise.
@@ -549,28 +538,28 @@ implements ObjectSpecification {
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
 
         synchronized(unmodifiableInterfaces) {
-        
+
             // lookup facet holder's facet
             val facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
-    
+
             // lookup all interfaces
             val facets2 = _NullSafe.stream(interfaces())
                     .filter(_NullSafe::isPresent) // just in case
                     .map(interfaceSpec->interfaceSpec.getFacet(facetType));
-    
+
             // search up the inheritance hierarchy
-            val facets3 = _NullSafe.streamNullable(superclass()) 
+            val facets3 = _NullSafe.streamNullable(superclass())
                     .map(superSpec->superSpec.getFacet(facetType));
-    
+
             val facetsCombined = _Streams.concat(facets1, facets2, facets3);
 
             val notANoopFacetFilter = new NotANoopFacetFilter<Q>();
-    
+
             return facetsCombined
                     .filter(notANoopFacetFilter)
                     .findFirst()
                     .orElse(notANoopFacetFilter.noopFacet);
-        
+
         }
     }
 
@@ -612,29 +601,29 @@ implements ObjectSpecification {
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(
-            final ManagedObject targetObjectAdapter, 
+            final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
 
-        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
+        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(),
                 interactionMethod);
     }
 
     // -- SUPERCLASS, INTERFACES, SUBCLASSES, IS-ABSTRACT
-    
+
     @Override
     public ObjectSpecification superclass() {
         return superclassSpec;
     }
 
     @Override
-    public Collection<ObjectSpecification> interfaces() {
+    public Can<ObjectSpecification> interfaces() {
         return unmodifiableInterfaces.get();
     }
 
     @Override
-    public Collection<ObjectSpecification> subclasses(final Depth depth) {
+    public Can<ObjectSpecification> subclasses(final Depth depth) {
         if (depth == Depth.DIRECT) {
-            return directSubclasses.toCollection();
+            return directSubclasses.snapshot();
         }
 
         // depth == Depth.TRANSITIVE)
@@ -642,7 +631,7 @@ implements ObjectSpecification {
             transitiveSubclasses = transitiveSubclasses();
         }
 
-        return transitiveSubclasses.toCollection();
+        return transitiveSubclasses.snapshot();
     }
 
     private synchronized Subclasses transitiveSubclasses() {
@@ -686,12 +675,12 @@ implements ObjectSpecification {
                 return stream(unmodifiableAssociations.get());
             }
         }
-        
+
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
-                    .filter(MixedIn::isNotMixedIn);    
+                    .filter(MixedIn::isNotMixedIn);
         }
-        
+
     }
 
     @Override
@@ -709,11 +698,6 @@ implements ObjectSpecification {
         return Optional.empty();
     }
 
-
-
-    /**
-     * The association with the given {@link ObjectAssociation#getId() id}.
-     */
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
@@ -721,23 +705,29 @@ implements ObjectSpecification {
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
-    
 
+    @Override
+    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
+                ? ActionType.USER_AND_PROTOTYPE
+                : ActionType.USER_ONLY;
+        return streamActions(actionTypes, mixedIn);
+    }
 
     @Override
     public Stream<ObjectAction> streamDeclaredActions(
-            final ImmutableEnumSet<ActionType> types, 
-            final MixedIn contributed) {
+            final ImmutableEnumSet<ActionType> actionTypes,
+            final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(contributed.isIncluded()) { // conditional not strictly required, could instead always go this code path 
+        if(mixedIn.isIncluded()) { // conditional not strictly required, could instead always go this code path
             createMixedInActions(); // only if not already
         }
-        
-        return types.stream()
-                .flatMap(type->stream(objectActionsByType.get(type)))
-                .filter(contributed.isIncluded()
-                        ? _Predicates.alwaysTrue() 
+
+        return actionTypes.stream()
+                .flatMap(actionType->stream(objectActionsByType.get(actionType)))
+                .filter(mixedIn.isIncluded()
+                        ? _Predicates.alwaysTrue()
                         : MixedIn::isNotMixedIn);
     }
 
@@ -757,7 +747,7 @@ implements ObjectSpecification {
     }
 
     private void forEachMixedInAssociation(
-            final Class<?> mixinType, 
+            final Class<?> mixinType,
             final Consumer<ObjectAssociation> onNewMixedInAssociation) {
 
         val specification = getSpecificationLoader().loadSpecification(mixinType,
@@ -776,7 +766,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         specification.streamActions(ActionType.ANY, MixedIn.INCLUDED)
-        .filter(Predicates::isMixedInAssociation)
+        .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
@@ -827,8 +817,8 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        mixinSpec.streamActions(ActionType.ANY, MixedIn.INCLUDED)
-        .filter(Predicates::isMixedInAction)
+        mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
+        .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
@@ -837,12 +827,12 @@ implements ObjectSpecification {
     }
 
     // -- VALIDITY
-    
+
     @Override
     public Consent isValid(
-            final ManagedObject targetAdapter, 
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
     }
 
@@ -865,19 +855,6 @@ implements ObjectSpecification {
             final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
-
-    //@Setter(AccessLevel.PROTECTED)
-    @Getter
-    private final BeanSort beanSort;
-
-//    @Override
-//    public BeanSort getBeanSort() {
-//        if(beanSort==null) {
-//            setBeanSort(sortOf(this));
-//        }
-//        return beanSort;
-//    }
-
 
     // -- convenience isXxx (looked up from facets)
     @Override
@@ -918,7 +895,7 @@ implements ObjectSpecification {
         synchronized (unmodifiableActions) {
             if(!contributeeAndMixedInActionsAdded) {
                 val actions = _Lists.newArrayList(this.objectActions);
-                if (isEntityOrViewModel()) {
+                if (isEntityOrViewModelOrAbstract()) {
                     createMixedInActions(actions::add);
                 }
                 sortCacheAndUpdateActions(actions);
@@ -933,7 +910,7 @@ implements ObjectSpecification {
         synchronized (unmodifiableAssociations) {
             if(!contributeeAndMixedInAssociationsAdded) {
                 val associations = _Lists.newArrayList(this.associations);
-                if(isEntityOrViewModel()) {
+                if(isEntityOrViewModelOrAbstract()) {
                     createMixedInAssociations(associations::add);
                 }
                 sortAndUpdateAssociations(associations);

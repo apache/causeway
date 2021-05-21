@@ -65,10 +65,10 @@ public class FormPane extends GridPane {
             return associatedActionBar;
         }
     }
-    
+
     private final List<FieldAssembly> fields = _Lists.newArrayList();
     private int rowCount = 0;
-    
+
     public FormPane() {
         super();
         val grid = grid();
@@ -79,9 +79,9 @@ public class FormPane extends GridPane {
     }
 
     public FormPane addField(LabelPosition labelPosition, Node uiFormLabel, Node uiFormField) {
-        
+
         fields.add(FieldAssembly.of(this, labelPosition, uiFormField));
-        
+
         switch(labelPosition) {
         case NONE:
             addRow(uiFormField);
@@ -107,19 +107,19 @@ public class FormPane extends GridPane {
         _fx.add(actionBarAssociatedWithField, uiButton);
         return this;
     }
-   
-    
+
+
     // -- HELPER
-    
+
     private GridPane grid() {
         return this;
     }
-    
+
     private void addRow(@NonNull Node spanningNode) {
         grid().add(spanningNode, 0, rowCount, 2, 1);
         ++rowCount;
     }
-    
+
     private void addRow(@Nullable Node left, @NonNull Node right) {
         if(left!=null) {
             grid().add(left, 0, rowCount);
@@ -130,7 +130,7 @@ public class FormPane extends GridPane {
 
 
 
-    
-    
+
+
 
 }

@@ -31,7 +31,7 @@ public interface JodaLocalTimeHolder2 extends JodaLocalTimeHolder {
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES, 
+        hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")  // <.>
     default org.joda.time.LocalTime getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();

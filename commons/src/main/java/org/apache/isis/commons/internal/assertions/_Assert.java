@@ -87,7 +87,7 @@ public final class _Assert {
     }
 
     // -- NULL
-    
+
     public static void assertNull(Object object) {
         assertNull(object, (String) null);
     }
@@ -103,7 +103,7 @@ public final class _Assert {
             fail(lazyMessage.get(), "null", "not null");
         }
     }
-    
+
     // -- NOT NULL
 
     public static void assertNotNull(Object object) {
@@ -158,7 +158,7 @@ public final class _Assert {
             fail(message, range.toString(), value);
         }
     }
-    
+
     public static void assertRangeContains(_Ints.Range range, int value, Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
@@ -170,7 +170,7 @@ public final class _Assert {
             fail(message, range.toString(), value);
         }
     }
-    
+
     public static void assertRangeContains(_Longs.Range range, long value, Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
@@ -185,31 +185,31 @@ public final class _Assert {
                     "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
         }
     }
-    
+
     // -- OPEN/CLOSE STATE
 
     public enum OpenCloseState {
 
-        NOT_INITIALIZED, 
-        OPEN, 
+        NOT_INITIALIZED,
+        OPEN,
         CLOSED
         ;
 
         public boolean isNotInitialized() { return this == NOT_INITIALIZED; }
         public boolean isOpen() { return this == OPEN; }
         public boolean isClosed() { return this == CLOSED; }
-        
+
         /**
          * @param expected - nullable
-         * @throws IllegalArgumentException if {@code this} not equal to {@code expected} 
+         * @throws IllegalArgumentException if {@code this} not equal to {@code expected}
          */
         public void assertEquals(
                 final @Nullable OpenCloseState expected) {
             if (expected != this) {
-                throw new IllegalStateException("State is: " + this + "; should be: " + expected);    
+                throw new IllegalStateException("State is: " + this + "; should be: " + expected);
             }
         }
-        
+
     }
 
     // -- HELPER
@@ -220,7 +220,7 @@ public final class _Assert {
 
     private static void fail(String message, Object expected, Object actual) {
         val error = _Exceptions.assertionError(
-                buildPrefix(message) 
+                buildPrefix(message)
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
         log.error(error); // in case exceptions get swallowed, make sure errors at least get logged
         throw error;

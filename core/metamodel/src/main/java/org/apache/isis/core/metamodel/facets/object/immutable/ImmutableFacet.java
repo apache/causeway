@@ -50,11 +50,11 @@ public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
      * {@link ObjectMember}s.
      */
     void copyOnto(FacetHolder holder);
-    
+
     default String disabledReason(final ManagedObject targetAdapter) {
         return "Always immmutable";
     }
-    
+
      public static final class Utils {
 
         private Utils(){}
@@ -71,5 +71,5 @@ public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
 
     }
 
-    
+
 }

@@ -32,16 +32,16 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  * @since 2.0
  */
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE) 
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Log4j2
-final class IsisComponentScanInterceptorImpl 
+final class IsisComponentScanInterceptorImpl
 implements IsisComponentScanInterceptor {
 
     private final @NonNull IsisBeanTypeClassifier isisBeanTypeClassifier;
-    
+
     /**
      * Inbox for introspection, as used by the SpecificationLoader
      */
@@ -53,9 +53,9 @@ implements IsisComponentScanInterceptor {
         if(introspectableTypes==null) {
             throw _Exceptions.illegalState("introspectable types had already been drained (one shot)");
         }
-        
+
         val defensiveCopy = Can.ofCollection(introspectableTypes.values());
-        
+
         if(log.isDebugEnabled()) {
             defensiveCopy.forEach(type->{
                 log.debug("to be introspected: {}", type);
@@ -63,45 +63,44 @@ implements IsisComponentScanInterceptor {
         }
 
         introspectableTypes = null;
-        
+
         return defensiveCopy;
     }
 
     // -- FILTER
-    
+
     @Override
     public void intercept(ScannedTypeMetaData typeMeta) {
-        
+
         val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
-        
         if(classOrFailure.isFailure()) {
             log.warn(classOrFailure.getFailure());
             return;
         }
-        
+
         val type = classOrFailure.getUnderlyingClass();
         val classification = isisBeanTypeClassifier.classify(type);
-        
+
         val delegated = classification.isDelegateLifecycleManagement();
         typeMeta.setInjectable(delegated);
         if(delegated) {
-            typeMeta.setBeanNameOverride(classification.getExplicitObjectType());    
+            typeMeta.setBeanNameOverride(classification.getExplicitObjectType());
         }
-        
+
         val beanSort = classification.getBeanSort();
-        
+
         if(beanSort.isToBeIntrospected()) {
             addIntrospectableType(beanSort, typeMeta);
-            
+
             if(log.isDebugEnabled()) {
-                log.debug("to-be-introspected: {} [{}]",                        
+                log.debug("to-be-introspected: {} [{}]",
                                 type,
                                 beanSort.name());
             }
         }
-        
+
     }
-    
+
     // -- HELPER
 
     private void addIntrospectableType(BeanSort sort, ScannedTypeMetaData typeMeta) {

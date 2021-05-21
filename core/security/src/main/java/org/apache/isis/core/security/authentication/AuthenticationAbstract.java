@@ -28,21 +28,21 @@ import org.apache.isis.core.security.authentication.standard.SimpleAuthenticatio
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class AuthenticationAbstract 
+public abstract class AuthenticationAbstract
 implements Authentication, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     protected static final String DEFAULT_AUTH_VALID_CODE = "";
-    
+
     // -- FIELDS
 
-    @Getter(onMethod_ = {@Override})  
+    @Getter(onMethod_ = {@Override})
     private final @NonNull ExecutionContext executionContext;
-    
+
     @Getter(onMethod_ = {@Override})
     private final @NonNull String validationCode;
-    
+
     // -- CONSTRUCTOR
 
     protected AuthenticationAbstract(
@@ -52,9 +52,9 @@ implements Authentication, Serializable {
         this.executionContext = executionContext;
         this.validationCode = validationCode;
     }
-    
+
     // -- WITHERS
-    
+
     /**
      * Returns a copy with given {@code executionContext}.
      * @param executionContext
@@ -74,7 +74,7 @@ implements Authentication, Serializable {
     public String toString() {
         return toString.toString(this);
     }
-    
+
     @Override
     public boolean equals(final Object obj) {
         if (obj == this) {

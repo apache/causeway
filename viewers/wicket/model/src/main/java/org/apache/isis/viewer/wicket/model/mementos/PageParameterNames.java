@@ -117,7 +117,7 @@ public enum PageParameterNames {
     public void addStringTo(final PageParameters pageParameters, final String value) {
         pageParameters.add(this.toString(), value);
     }
-    
+
     public void addEnumTo(final PageParameters pageParameters, final Enum<?> someEnum) {
         addStringTo(pageParameters, someEnum.name());
     }

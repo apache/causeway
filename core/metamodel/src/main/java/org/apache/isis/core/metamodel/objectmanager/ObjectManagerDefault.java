@@ -41,7 +41,7 @@ import lombok.Getter;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -51,9 +51,9 @@ import lombok.val;
 @Primary
 @Qualifier("DEFAULT")
 public class ObjectManagerDefault implements ObjectManager {
-    
+
     @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;
-    
+
     @Getter(onMethod = @__(@Override)) private ObjectLoader objectLoader;
     @Getter(onMethod = @__(@Override)) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod = @__(@Override)) private ObjectCreator objectCreator;
@@ -73,7 +73,7 @@ public class ObjectManagerDefault implements ObjectManager {
         objectSerializer = ObjectSerializer.createDefault(metaModelContext);
     }
 
-    
+
     // JUnit support
     public static ObjectManager forTesting(MetaModelContext metaModelContext) {
 
@@ -82,5 +82,5 @@ public class ObjectManagerDefault implements ObjectManager {
         objectManager.init();
         return objectManager;
     }
-    
+
 }

@@ -38,40 +38,40 @@ import lombok.val;
 public interface ObjectBulkLoader {
 
     Can<ManagedObject> loadObject(Request objectQuery);
-    
+
     // -- REQUEST (VALUE) TYPE
-    
+
     @Value(staticConstructor = "of")
     public static class Request {
         ObjectSpecification objectSpecification;
         Query<?> query;
     }
-    
+
     // -- HANDLER
-    
-    static interface Handler 
-    extends 
-        MetaModelContextAware, 
+
+    static interface Handler
+    extends
+        MetaModelContextAware,
         ChainOfResponsibility.Handler<ObjectBulkLoader.Request, Can<ManagedObject>> {
     }
 
     // -- FACTORY
-    
+
     public static ObjectBulkLoader createDefault(MetaModelContext metaModelContext) {
-        
+
         val chainOfHandlers = _Lists.of(
                 new ObjectBulkLoader_builtinHandlers.GuardAgainstNull(),
                 new ObjectBulkLoader_builtinHandlers.BulkLoadEntity(),
                 new ObjectBulkLoader_builtinHandlers.LoadOther());
-        
+
         chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
-        
+
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
+
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "ObjectBulkLoader failed to handle request %s", request));
     }
-    
+
 }

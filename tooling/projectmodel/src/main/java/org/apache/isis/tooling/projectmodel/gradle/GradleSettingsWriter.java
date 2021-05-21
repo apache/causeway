@@ -34,36 +34,36 @@ public class GradleSettingsWriter extends WriterAbstract {
         adocWriter.write(gradleSettings, stringWriter);
         return stringWriter.toString();
     }
-  
+
     public void write(GradleSettings gradleSettings, Writer writer) {
         writeWithFormat(writer, "rootProject.name = '%s'\n", gradleSettings.getRootProjectName());
-        
+
         writeEmptyLine(writer);
-        
+
         gradleSettings.getBuildArtifactsByArtifactKey().forEach((artifactKey, buildArtifact)->{
-            
+
             if(buildArtifact.isRoot()) {
                 return; // don't write include statements for the project's root
             }
-            
+
             writeWithFormat(writer, "include '%s'\n", buildArtifact.getName());
         });
-        
+
         writeEmptyLine(writer);
-        
+
         gradleSettings.getBuildArtifactsByArtifactKey().forEach((artifactKey, buildArtifact)->{
-            
+
             if(buildArtifact.isRoot()) {
                 return; // don't write include statements for the project's root
             }
-            
-            writeWithFormat(writer, 
-                    "project('%s').projectDir = \"$rootDir%s\" as File\n", 
+
+            writeWithFormat(writer,
+                    "project('%s').projectDir = \"$rootDir%s\" as File\n",
                     buildArtifact.getName(),
                     buildArtifact.getRealtivePath());
         });
     }
-    
 
-    
+
+
 }

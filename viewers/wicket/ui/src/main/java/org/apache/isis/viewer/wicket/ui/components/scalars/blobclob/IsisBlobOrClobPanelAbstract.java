@@ -47,7 +47,7 @@ import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
-public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> 
+public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
 extends ScalarPanelAbstract {
 
 
@@ -142,9 +142,9 @@ extends ScalarPanelAbstract {
         if(!(object instanceof Blob)) {
             return null;
         }
-        
+
         val blob = (Blob)object;
-        
+
         return WicketImageUtil.asWicketImage(id, blob).orElse(null);
     }
 
@@ -200,14 +200,14 @@ extends ScalarPanelAbstract {
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         updateRegularFormComponents(
-                InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, 
+                InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE,
                 disableReason, target);
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         updateRegularFormComponents(
-                InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, 
+                InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE,
                 null, target);
     }
 
@@ -232,10 +232,10 @@ extends ScalarPanelAbstract {
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
 
-        // sonar-ignore-on (detects potential NPE, which is a false positive here) 
+        // sonar-ignore-on (detects potential NPE, which is a false positive here)
         final Component component = formComponent.get(ID_SCALAR_VALUE);
         // sonar-ignore-off
-        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE 
+        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE
                 ? InputFieldVisibility.VISIBLE
                 : InputFieldVisibility.NOT_VISIBLE;
         sync(component, editingWidgetVisibility, null, disabledReason, target);
@@ -270,7 +270,7 @@ extends ScalarPanelAbstract {
             target.ifPresent(ajax->{
                 Components.addToAjaxRequest(ajax, component);
             });
-            
+
         }
 
 
@@ -361,7 +361,7 @@ extends ScalarPanelAbstract {
             ajax.add(clearButton);
             ajax.add(ajaxLink);
         });
-        
+
     }
 
     private MarkupContainer updateDownloadLink(String downloadId, MarkupContainer container) {

@@ -84,8 +84,8 @@ public interface Facet extends FacetWithAttributes {
     public boolean isDerived();
 
     /**
-     * Whether this facet implementation is a fallback. Meaning it is treated 
-     * with lowest priority, always overruled by any other facet of same type.  
+     * Whether this facet implementation is a fallback. Meaning it is treated
+     * with lowest priority, always overruled by any other facet of same type.
      */
     public boolean isFallback();
 
@@ -96,7 +96,7 @@ public interface Facet extends FacetWithAttributes {
     public boolean alwaysReplace();
 
     // -- FACET ALIAS SUPPORT
-    
+
     /**
      * Adds a facet this facet contributes.
      * @since 2.0
@@ -111,9 +111,9 @@ public interface Facet extends FacetWithAttributes {
 
     /**
      * An alternative type this Facet can be looked up via {@link FacetHolder#getFacet(Class)}.
-     * @apiNote like {@link #facetType()} the alias must be unique within any facet-holder's 
+     * @apiNote like {@link #facetType()} the alias must be unique within any facet-holder's
      * registered facet-types, otherwise an {@link IllegalArgumentException} is thrown during
-     * facet-processing; this is to ensure unambiguous lookup of facets by their alias type 
+     * facet-processing; this is to ensure unambiguous lookup of facets by their alias type
      * @since 2.0
      */
     Class<? extends Facet> facetAliasType();

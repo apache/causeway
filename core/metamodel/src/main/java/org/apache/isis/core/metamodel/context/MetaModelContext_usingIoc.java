@@ -58,75 +58,75 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         this.iocContainer = iocContainer;
     }
 
-    @Getter(lazy=true) 
-    private final IsisSystemEnvironment systemEnvironment = 
+    @Getter(lazy=true)
+    private final IsisSystemEnvironment systemEnvironment =
     getSingletonElseFail(IsisSystemEnvironment.class);
-    
-    @Getter(lazy=true) 
-    private final IsisConfiguration configuration = 
+
+    @Getter(lazy=true)
+    private final IsisConfiguration configuration =
     getSingletonElseFail(IsisConfiguration.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final ServiceInjector serviceInjector =
     getSingletonElseFail(ServiceInjector.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final FactoryService factoryService =
     getSingletonElseFail(FactoryService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final ServiceRegistry serviceRegistry =
     getSingletonElseFail(ServiceRegistry.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final SpecificationLoader specificationLoader =
     getSingletonElseFail(SpecificationLoader.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final TranslationService translationService =
     getSingletonElseFail(TranslationService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final AuthorizationManager authorizationManager =
-    getSingletonElseFail(AuthorizationManager.class); 
+    getSingletonElseFail(AuthorizationManager.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final AuthenticationManager authenticationManager =
     getSingletonElseFail(AuthenticationManager.class);
-    
-    @Getter(lazy=true) 
+
+    @Getter(lazy=true)
     private final AuthenticationContext authenticationContext =
     getSingletonElseFail(AuthenticationContext.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final TitleService titleService =
     getSingletonElseFail(TitleService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final RepositoryService repositoryService =
     getSingletonElseFail(RepositoryService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final TransactionService transactionService =
     getSingletonElseFail(TransactionService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final HomePageResolverService homePageResolverService =
     getSingletonElseFail(HomePageResolverService.class);
 
-    @Getter(lazy=true) 
+    @Getter(lazy=true)
     private final ObjectManager objectManager =
     getSingletonElseFail(ObjectManager.class);
-    
-    @Getter(lazy=true) 
+
+    @Getter(lazy=true)
     private final WrapperFactory wrapperFactory =
     getSingletonElseFail(WrapperFactory.class);
-    
-    @Getter(lazy=true) 
+
+    @Getter(lazy=true)
     private final MemberExecutorService memberExecutor =
     getSingletonElseFail(MemberExecutorService.class);
-    
-    
+
+
 //    @Override
 //    public final TransactionState getTransactionState() {
 //        return getTransactionService().currentTransactionState();
@@ -157,29 +157,29 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         return iocContainer.getSingletonElseFail(type);
     }
 
-    
+
     // -- HELPER
 
-    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort = 
+    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
     private Map<String, ManagedObject> collectBeansOfKnownSort() {
 
         return getServiceRegistry()
                 .streamRegisteredBeans()
-                .map(this::toManagedObject) 
+                .map(this::toManagedObject)
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
-    
+
     private ManagedObject toManagedObject(_ManagedBeanAdapter managedBeanAdapter) {
-        
+
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Cannot get service instance of type '%s'", 
+                        "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
-        
+
         return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
-        
+
     }
 
 

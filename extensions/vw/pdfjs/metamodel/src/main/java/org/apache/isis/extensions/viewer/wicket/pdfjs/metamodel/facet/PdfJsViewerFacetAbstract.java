@@ -18,12 +18,10 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 
@@ -39,6 +37,7 @@ public abstract class PdfJsViewerFacetAbstract extends FacetAbstract implements 
         this.config = config;
     }
 
+    @Override
     public PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey) {
         return config;
     }

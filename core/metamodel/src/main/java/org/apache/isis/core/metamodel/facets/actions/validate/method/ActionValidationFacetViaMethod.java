@@ -44,12 +44,12 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
     private final Optional<Constructor<?>> ppmFactory;
 
     public ActionValidationFacetViaMethod(
-            final Method method, 
-            final TranslationService translationService, 
-            final TranslationContext translationContext, 
-            Optional<Constructor<?>> ppmFactory, 
+            final Method method,
+            final TranslationService translationService,
+            final TranslationContext translationContext,
+            Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.translationService = translationService;
@@ -73,7 +73,7 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
-        
+
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, proposedArgumentAdapters)
                 : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);

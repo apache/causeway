@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import lombok.val;
 
 /**
- * Indicates that the action should be contributed to objects either 
- * as ACTION or ASSOCIATION.  
+ * Indicates that the action should be contributed to objects either
+ * as ACTION or ASSOCIATION.
  * <p>
  * Since v2 only ever used for mixed in actions.
  * @since 2.0
@@ -47,33 +47,33 @@ public interface ContributingFacet extends Facet {
        */
       AS_ASSOCIATION,
   }
-    
+
     public Contributing contributed();
 
     default boolean isActionContributionVetoed() {
         // not contributed to actions if...
         return contributed() == Contributing.AS_ASSOCIATION;
     }
-    
+
     default boolean isAssociationContributionVetoed() {
         // not contributed to associations if...
         return contributed() == Contributing.AS_ACTION;
     }
-    
+
     // -- UTILITIES
-    
+
     static boolean isActionContributionVetoed(final ObjectAction action) {
         val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null 
+        if(notContributed != null
                 && notContributed.isActionContributionVetoed()) {
             return true;
         }
         return false;
     }
-    
+
     static boolean isAssociationContributionVetoed(final ObjectAction action) {
         val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null 
+        if(notContributed != null
                 && notContributed.isAssociationContributionVetoed()) {
             return true;
         }

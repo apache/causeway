@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class ObjectAdapterAccessHelper {
-    
+
     public static ObjectAdapterAccessHelper of(
             final IResourceContext resourceContext,
             final ManagedObject managedObject) {
@@ -50,12 +50,12 @@ public class ObjectAdapterAccessHelper {
 
     private final ManagedObject managedObject;
     private final Where where;
-    
+
     public ManagedAction getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
-            @NonNull final String actionId, 
+            @NonNull final String actionId,
             @NonNull final AccessIntent intent,
             @NonNull final SemanticConstraint semanticConstraint) {
-        
+
         return ActionInteraction
                 .start(managedObject, actionId, where)
                 .checkVisibility()
@@ -65,19 +65,19 @@ public class ObjectAdapterAccessHelper {
     }
 
     public ManagedProperty getPropertyThatIsVisibleForIntent(
-            @NonNull final String propertyId, 
+            @NonNull final String propertyId,
             @NonNull final AccessIntent intent) {
-        
+
         return PropertyInteraction
                 .start(managedObject, propertyId, where)
                 .checkVisibility()
                 .checkUsability(intent)
                 .getManagedPropertyElseThrow(InteractionFailureHandler::onFailure);
-        
+
     }
 
     public ManagedCollection getCollectionThatIsVisibleForIntent(
-            @NonNull final String collectionId, 
+            @NonNull final String collectionId,
             @NonNull final AccessIntent intent) {
 
         return CollectionInteraction

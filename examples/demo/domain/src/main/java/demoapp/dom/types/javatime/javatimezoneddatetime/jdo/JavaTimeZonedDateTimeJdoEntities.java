@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaTimeZonedDateTimeJdoEntities {
+public class JavaTimeZonedDateTimeJdoEntities
+extends ValueHolderRepository<java.time.ZonedDateTime, JavaTimeZonedDateTimeJdo> {
 
-    public Optional<JavaTimeZonedDateTimeJdo> find(final java.time.ZonedDateTime readOnlyProperty) {
-        return repositoryService.firstMatch(JavaTimeZonedDateTimeJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected JavaTimeZonedDateTimeJdoEntities() {
+        super(JavaTimeZonedDateTimeJdo.class);
     }
 
-    public List<JavaTimeZonedDateTimeJdo> all() {
-        return repositoryService.allInstances(JavaTimeZonedDateTimeJdo.class);
+    @Override
+    protected JavaTimeZonedDateTimeJdo newDetachedEntity(java.time.ZonedDateTime value) {
+        return new JavaTimeZonedDateTimeJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

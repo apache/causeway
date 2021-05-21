@@ -85,13 +85,13 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     // -- HELPERS
 
     boolean autowireSetters;
-    boolean autowireInject;    
+    boolean autowireInject;
 
     private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
 
         val type = targetPojo.getClass();
-        
-//XXX check is too slow        
+
+//XXX check is too slow
 //        if(serviceRegistry.isResolvableBean(type)) {
 //            log.warn("Skipping call injectServices() on an already managed bean {}.", type);
 //            return; // already managed
@@ -130,12 +130,13 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         }
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
-        final Class<?> elementType = _Collections.inferElementTypeIfAny(field);
+        final Class<?> elementType = _Collections.inferElementType(field)
+                .orElse(null);
         if(elementType!=null) {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;
         }
-        
+
         val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
 
         if(beans.isEmpty()) {
@@ -144,12 +145,12 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             val bean = beans.getSingleton().get();
             invokeInjectorField(field, targetPojo, bean);
         } else {
-            
+
             val requiredAnnotations = _Arrays.combineWithExplicitType(
-                    Annotation.class, 
-                    _Constants.ANNOTATION_PRIMARY, 
+                    Annotation.class,
+                    _Constants.ANNOTATION_PRIMARY,
                     field.getAnnotations());
-            
+
             // look for primary
             val primaryBean = serviceRegistry.select(typeToBeInjected, requiredAnnotations);
             if(!primaryBean.isEmpty()) {
@@ -157,19 +158,19 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
                 invokeInjectorField(field, targetPojo, bean);
                 return;
             }
-            
+
             // fallback: pick first in list
             val bean = beans.getFirst().get();
-            invokeInjectorField(field, targetPojo, bean);    
+            invokeInjectorField(field, targetPojo, bean);
         }
 
     }
 
     @SuppressWarnings("unchecked")
     private void injectToField_nonScalar(
-            final Object targetPojo, 
-            final Field field, 
-            final Class<?> elementType, 
+            final Object targetPojo,
+            final Field field,
+            final Class<?> elementType,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<? extends Collection<Object>> collectionTypeToBeInjected =
@@ -179,7 +180,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         if(!beans.isEmpty()) {
             final Collection<Object> collectionOfServices = beans.stream()
                     .filter(isOfType(elementType))
-                    // javac does require an explicit type argument here, 
+                    // javac does require an explicit type argument here,
                     // while eclipse compiler does not ...
                     .collect(_Collections.<Object>toUnmodifiableOfType(collectionTypeToBeInjected));
 
@@ -193,7 +194,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     private void injectViaPrefixedMethods(
             final Object targetPojo,
             final Class<?> cls,
-            final String prefix, 
+            final String prefix,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         _NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
@@ -203,7 +204,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
 
     private void injectIntoSetter(
             final Object targetPojo,
-            final Method setter, 
+            final Method setter,
             final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = injectorMethodEvaluator.getTypeToBeInjected(setter);
@@ -214,7 +215,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         val instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
         if(instance.isCardinalityOne()) {
             val bean = instance.getSingleton().get();
-            invokeInjectorMethod(setter, targetPojo, bean);    
+            invokeInjectorMethod(setter, targetPojo, bean);
         } else {
             onNotResolvable.accept(new InjectionPoint(new MethodParameter(setter, 0)));
         }
@@ -276,7 +277,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     // -- TESTING
 
     /**
-     * JUnit Test support. 
+     * JUnit Test support.
      */
     public static _ServiceInjectorLegacy getInstanceAndInit(
             IsisConfiguration configuration,

@@ -75,9 +75,9 @@ public class AccountManagementPageAbstract extends WebPageBase {
     }
 
     protected AccountManagementPageAbstract(
-            PageParameters parameters, 
+            PageParameters parameters,
             ExceptionModel exceptionModel) {
-        
+
         super(parameters);
 
         Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.SIGN_IN);
@@ -122,11 +122,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
         getConfiguration().getViewer().getWicket().getApplication().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
-        
+
         getConfiguration().getViewer().getWicket().getApplication().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 
 
-    
+
 }

@@ -27,15 +27,15 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
  * Indicates that the instances of this class are not immutable and so may be
  * modified either through the viewer or indeed programmatically.
  * <p>
- * Overrides at type level the object editing configuration  
+ * Overrides at type level the object editing configuration
  * {@link org.apache.isis.core.config.IsisConfiguration.Applib.Annotation.DomainObject#getEditing()}
  *
  * @see EqualByContentFacet
  * @see ValueFacet
- * 
+ *
  * @since 2.0
  */
 public interface EditingEnabledFacet extends Facet {
 
-    
+
 }

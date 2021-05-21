@@ -68,9 +68,9 @@ public final class MethodFinderUtils {
             final String name,
             final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
-        
+
         val methodCache = _MethodCache.getInstance();
-        
+
         val method = methodCache.lookupMethod(type, name, paramTypes);
         if(method == null) {
             return null;
@@ -107,13 +107,13 @@ public final class MethodFinderUtils {
 
         return method;
     }
-    
+
     public static Method findMethod_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
-        
+
         for (val returnType : returnTypes) {
             val method = findMethod(type, name, returnType, paramTypes);
             if(method != null) {
@@ -122,28 +122,32 @@ public final class MethodFinderUtils {
         }
         return null;
     }
-    
+
     public static Optional<Method> findNoArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
         return streamMethods(type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(0))
                 .findFirst();
     }
-    
+
     public static Optional<Method> findSingleArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
         return streamMethods(type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(1))
                 .findFirst();
     }
-    
+
     public static Stream<Method> streamMethods(final Class<?> type, final Can<String> names, final Class<?> returnType) {
         try {
+
             return _NullSafe.stream(type.getMethods())
                     .filter(MethodUtil::isPublic)
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
-                    .filter(method -> returnType == null ||
-                                      returnType.isAssignableFrom(method.getReturnType()))
-                    ;
+                    .filter(method -> returnType == null
+                            || returnType.isAssignableFrom(method.getReturnType())
+//XXX for non-scalar types we should probably be a bit smarter
+//                            || (Iterable.class.isAssignableFrom(returnType)
+//                                    && Iterable.class.isAssignableFrom(method.getReturnType()))
+                            );
         } catch (final SecurityException e) {
             log.error("failed to enumerate methods of class %s", type);
             return Stream.empty();
@@ -151,7 +155,7 @@ public final class MethodFinderUtils {
     }
 
     public static List<Method> findMethodsWithAnnotation(
-            final Class<?> type, 
+            final Class<?> type,
             final Class<? extends Annotation> annotationClass) {
 
         // Validate arguments
@@ -193,7 +197,7 @@ public final class MethodFinderUtils {
             final MethodByClassMap methods) {
 
         val clz = pojo.getClass();
-        val annotatedMethodIfAny = 
+        val annotatedMethodIfAny =
                 methods.computeIfAbsent(clz, __->search(clz, annotationClass, methods));
         return annotatedMethodIfAny.orElse(null);
     }
@@ -217,52 +221,52 @@ public final class MethodFinderUtils {
     }
 
     // -- SHORTCUTS
-    
+
     private static final Class<?>[] BOOLEAN_TYPES = new Class<?>[]{
         boolean.class};
 
-    
+
     public static Method findMethod_returningBoolean(
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
         return findMethod_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes);
     }
-    
+
     private static final Class<?>[] TEXT_TYPES = new Class<?>[]{
-        String.class, 
+        String.class,
         TranslatableString.class};
 
-    
+
     public static Method findMethod_returningText(
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
         return findMethod_returningAnyOf(TEXT_TYPES, type, name, paramTypes);
     }
-    
+
     public static Method findMethod_returningNonScalar(
             final Class<?> type,
-            final String name, 
+            final String name,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes) {
-        
+
         val nonScalarTypes = new Class<?>[]{
-            Collection.class, 
+            Collection.class,
             Array.newInstance(elementReturnType, 0).getClass()};
-        
+
         return findMethod_returningAnyOf(nonScalarTypes, type, name, paramTypes);
     }
-    
+
     // -- PPM SUPPORT
-    
-    
+
+
     @Value(staticConstructor = "of")
     public static class MethodAndPpmConstructor {
         @NonNull Method supportingMethod;
         @NonNull Constructor<?> ppmFactory;
     }
-    
+
     @Value(staticConstructor = "of")
     private static class MethodAndPpmCandidate {
         @NonNull Method supportingMethod;
@@ -274,14 +278,14 @@ public final class MethodFinderUtils {
             .findFirst();
         }
     }
-    
+
     public static MethodAndPpmConstructor findMethodWithPPMArg(
-            final Class<?> type, 
-            final String name, 
+            final Class<?> type,
+            final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
-        
+
         return streamMethods(type, Can.ofSingleton(name), returnType)
             .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
@@ -292,14 +296,14 @@ public final class MethodFinderUtils {
             .findFirst()
             .orElse(null);
     }
-    
+
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningAnyOf(
             final Class<?>[] returnTypes,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
-        
+
         for (val returnType : returnTypes) {
             val result = findMethodWithPPMArg(type, name, returnType, paramTypes, additionalParamTypes);
             if(result != null) {
@@ -307,40 +311,40 @@ public final class MethodFinderUtils {
             }
         }
         return null;
-    } 
+    }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningBoolean(
-            final Class<?> type, 
+            final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
-        
+
         return findMethodWithPPMArg_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningText(
-            final Class<?> type, 
+            final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
-        
+
         return findMethodWithPPMArg_returningAnyOf(TEXT_TYPES, type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningNonScalar(
-            final Class<?> type, 
-            final String name, 
+            final Class<?> type,
+            final String name,
             final Class<?> elementReturnType,
-            final Class<?>[] paramTypes, 
+            final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
-        
+
         val nonScalarTypes = new Class<?>[]{
-            Collection.class, 
+            Collection.class,
             Array.newInstance(elementReturnType, 0).getClass()};
-        
+
         return findMethodWithPPMArg_returningAnyOf(nonScalarTypes, type, name, paramTypes, additionalParamTypes);
     }
-    
+
 
 
 

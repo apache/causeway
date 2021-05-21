@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class VoidReturnPanel 
+public class VoidReturnPanel
 extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;

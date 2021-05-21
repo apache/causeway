@@ -50,6 +50,7 @@ public class ScratchpadDefault implements Scratchpad {
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
+    @Override
     public Object get(Object key) {
         return userData.get(key);
     }
@@ -57,6 +58,7 @@ public class ScratchpadDefault implements Scratchpad {
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
      */
+    @Override
     public void put(Object key, Object value) {
         userData.put(key, value);
     }

@@ -29,7 +29,7 @@ public final class EventUtil {
             final Class<? extends T> noopClass,
             final Class<? extends T> defaultClass,
             final boolean configurationPropertyValue) {
-        
+
         if (noopClass.isAssignableFrom(eventType)) {
             return false;
         }

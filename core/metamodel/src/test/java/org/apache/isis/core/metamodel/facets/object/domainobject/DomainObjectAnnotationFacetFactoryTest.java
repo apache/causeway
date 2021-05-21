@@ -27,11 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
-
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
@@ -41,7 +36,7 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
@@ -51,14 +46,19 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 
 import lombok.val;
 
@@ -551,14 +551,14 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
 
-            facetFactory.process(new ProcessObjectSpecIdContext(CustomerWithDomainObjectAndObjectTypeSet.class, facetHolder));
+            facetFactory.process(new ProcessObjectTypeContext(CustomerWithDomainObjectAndObjectTypeSet.class, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+            final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
             Assert.assertNotNull(facet);
 
-            Assert.assertTrue(facet instanceof ObjectSpecIdFacetForDomainObjectAnnotation);
-            final ObjectSpecIdFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
-                    (ObjectSpecIdFacetForDomainObjectAnnotation) facet;
+            Assert.assertTrue(facet instanceof ObjectTypeFacetForDomainObjectAnnotation);
+            final ObjectTypeFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
+                    (ObjectTypeFacetForDomainObjectAnnotation) facet;
 
             assertThat(facetForDomainObjectAnnotation.value(), is("CUS"));
 
@@ -570,7 +570,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+            final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();
@@ -581,7 +581,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+            final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();

@@ -47,37 +47,37 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 public interface MetaModelContext {
 
     IsisSystemEnvironment getSystemEnvironment();
-    
+
     /**
-     * 
+     *
      * Configuration 'beans' with meta-data (IDE-support).
-     * 
+     *
      * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
      *
      */
     IsisConfiguration getConfiguration();
 
     ObjectManager getObjectManager();
-    
+
     WrapperFactory getWrapperFactory();
-    
+
     ServiceInjector getServiceInjector();
 
     ServiceRegistry getServiceRegistry();
-    
+
     SpecificationLoader getSpecificationLoader();
-    
+
     public default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
         return getSpecificationLoader().specForType(type);
     }
-    
+
     public default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
         return getSpecificationLoader().specForTypeElseFail(type);
     }
@@ -87,7 +87,7 @@ public interface MetaModelContext {
     AuthorizationManager getAuthorizationManager();
 
     AuthenticationManager getAuthenticationManager();
-    
+
     AuthenticationContext getAuthenticationContext();
 
     TitleService getTitleService();
@@ -95,7 +95,7 @@ public interface MetaModelContext {
     RepositoryService getRepositoryService();
 
     FactoryService getFactoryService();
-    
+
     MemberExecutorService getMemberExecutor();
 
     TransactionService getTransactionService();
@@ -105,27 +105,27 @@ public interface MetaModelContext {
     Stream<ManagedObject> streamServiceAdapters();
 
     ManagedObject lookupServiceAdapterById(String serviceId);
-    
+
     <T> T getSingletonElseFail(Class<T> type);
-    
+
     default Optional<ManagedObject> loadObject(final @Nullable Oid oid) {
         if(oid==null) {
             return Optional.empty();
         }
         val objectId = oid.getIdentifier();
-        val specLoader = getSpecificationLoader(); 
+        val specLoader = getSpecificationLoader();
         val objManager = getObjectManager();
         return specLoader
                 .specForLogicalTypeName(oid.getLogicalTypeName())
                 .map(spec->objManager.loadObject(
                         ObjectLoader.Request.of(spec, objectId)));
     }
-    
+
     // -- EXTRACTORS
-    
+
     public static MetaModelContext from(ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
-    
+
 
 }

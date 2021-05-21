@@ -35,7 +35,7 @@ public class SimpleCell extends ContentNodeAbstract implements Cell {
     @Getter @Setter private int rowspan;
     @Getter @Setter private int colspan;
     @Getter @Setter private Document innerDocument;
-    
+
     @Override
     public Column getColumn() {
         return (Column) getParent();
@@ -60,5 +60,5 @@ public class SimpleCell extends ContentNodeAbstract implements Cell {
     public void setVerticalAlignment(Table.VerticalAlignment valign) {
         setAttribute("valign", valign.name().toLowerCase(), true);
     }
-    
+
 }

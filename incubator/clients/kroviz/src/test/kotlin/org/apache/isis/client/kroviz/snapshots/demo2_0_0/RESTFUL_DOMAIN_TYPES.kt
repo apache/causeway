@@ -53,7 +53,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
@@ -185,7 +185,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.ApplicationPermission",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
@@ -887,7 +887,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },

@@ -64,7 +64,7 @@ public final class _Text {
     private _Text() {}
 
     /**
-     * Converts given {@code text} into a {@link Stream} of lines, 
+     * Converts given {@code text} into a {@link Stream} of lines,
      * removing new line characters {@code \n,\r} in the process.
      * @param text - nullable
      * @return non-null
@@ -74,9 +74,9 @@ public final class _Text {
         return _Strings.splitThenStream(text, "\n")
                 .map(s->s.replace("\r", ""));
     }
-    
+
     /**
-     * Converts given {@code text} into a {@link Can} of lines, 
+     * Converts given {@code text} into a {@link Can} of lines,
      * removing new line characters {@code \n,\r} in the process.
      * @param text - nullable
      * @return non-null
@@ -84,7 +84,7 @@ public final class _Text {
     public static Can<String> getLines(final @Nullable String text){
         return Can.ofStream(streamLines(text));
     }
-    
+
     public static Can<String> breakLines(Can<String> lines, int maxChars) {
         if(lines.isEmpty()) {
             return lines;
@@ -93,15 +93,15 @@ public final class _Text {
         .flatMap(line->breakLine(line, maxChars))
         .collect(Can.toCan());
     }
-    
+
     /**
-     * Reads content from given {@code input} into a {@link Can} of lines, 
+     * Reads content from given {@code input} into a {@link Can} of lines,
      * removing new line characters {@code \n,\r} in the process.
      * @param input - nullable
      * @return non-null
      */
     public static Can<String> readLines(
-            final @Nullable InputStream input, 
+            final @Nullable InputStream input,
             final @NonNull  Charset charset){
         if(input==null) {
             return Can.empty();
@@ -116,94 +116,94 @@ public final class _Text {
         }
         return Can.ofCollection(lines);
     }
-    
+
     @SneakyThrows
     public static Can<String> readLinesFromResource(
-            final @NonNull Class<?> resourceLocation, 
-            final @NonNull String resourceName, 
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName,
             final @NonNull Charset charset) {
         try(val input = resourceLocation.getResourceAsStream(resourceName)){
-            return readLines(input, charset);    
-        } 
+            return readLines(input, charset);
+        }
     }
-    
+
     @SneakyThrows
     public static Can<String> readLinesFromUrl(
-            final @NonNull URL url, 
+            final @NonNull URL url,
             final @NonNull Charset charset) {
         try(val input = url.openStream()){
-            return readLines(input, charset);    
-        } 
+            return readLines(input, charset);
+        }
     }
-    
+
     @SneakyThrows
     public static Can<String> readLinesFromFile(
-            final @NonNull File file, 
+            final @NonNull File file,
             final @NonNull Charset charset) {
         try(val input = new FileInputStream(file)){
-            return readLines(input, charset);    
-        } 
+            return readLines(input, charset);
+        }
     }
 
     // -- WRITING
-    
+
     @SneakyThrows
     public static void writeLinesToFile(
             final @NonNull Iterable<String> lines,
-            final @NonNull File file, 
+            final @NonNull File file,
             final @NonNull Charset charset) {
-        
+
         try(val bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
             for(val line : lines) {
-                bw.append(line).append("\n");    
+                bw.append(line).append("\n");
             }
-        } 
+        }
     }
-    
+
     // -- NORMALIZING
-    
+
     public static String normalize(final @Nullable String text) {
         if(text==null) {
             return "";
         }
         return normalize(getLines(text)).stream().collect(Collectors.joining("\n"));
     }
-    
+
     /**
-     * Converts given {@code lines} into a {@link Can} of lines, 
-     * with any empty lines removed that appear 
+     * Converts given {@code lines} into a {@link Can} of lines,
+     * with any empty lines removed that appear
      * <ul>
      * <li>before the first non-empty line</li>
      * <li>immediately after an empty line</li>
      * <li>after the last non-empty line</li>
      * </ul>
-     * A line is considered non-empty, 
+     * A line is considered non-empty,
      * if it contains non-whitespace characters.
-     * 
+     *
      * @param lines
      * @return non-null
      */
     public static Can<String> normalize(final @NonNull Can<String> lines) {
         return removeRepeatedEmptyLines(removeTrailingEmptyLines(removeLeadingEmptyLines(lines)));
     }
-    
+
     /**
-     * Converts given {@code lines} into a {@link Can} of lines, 
+     * Converts given {@code lines} into a {@link Can} of lines,
      * with any empty lines removed that appear before the first non-empty line.
-     * A line is considered non-empty, 
+     * A line is considered non-empty,
      * if it contains non-whitespace characters.
-     * 
+     *
      * @param lines
      * @return non-null
      */
     public static Can<String> removeLeadingEmptyLines(final @NonNull Can<String> lines) {
-        
+
         if(lines.isEmpty()) {
             return lines;
         }
-        
-        final int[] nonEmptyLineCount = {0}; 
-        
+
+        final int[] nonEmptyLineCount = {0};
+
         return lines.stream()
                 // peek with side-effect
                 .peek(line->{
@@ -212,24 +212,24 @@ public final class _Text {
                 .filter(line->nonEmptyLineCount[0]>0)
                 .collect(Can.toCan());
     }
-    
+
     /**
-     * Converts given {@code lines} into a {@link Can} of lines, 
+     * Converts given {@code lines} into a {@link Can} of lines,
      * with any empty lines removed that appear after the last non-empty line.
-     * A line is considered non-empty, 
+     * A line is considered non-empty,
      * if it contains non-whitespace characters.
-     * 
+     *
      * @param lines
      * @return non-null
      */
     public static Can<String> removeTrailingEmptyLines(final @NonNull Can<String> lines) {
-        
+
         if(lines.isEmpty()) {
             return lines;
         }
-        
+
         final int lastLineIndex = lines.size()-1;
-        
+
         final int lastNonEmptyLineIndex = lines.stream()
         .mapToInt(indexAndlineToIntFunction((index, line)->hasNonWhiteSpaceChars(line) ? index : -1))
         .max()
@@ -238,28 +238,28 @@ public final class _Text {
         if(lastLineIndex == lastNonEmptyLineIndex) {
             return lines; // reuse immutable object
         }
-        
+
         return lines.stream().limit(1L + lastNonEmptyLineIndex).collect(Can.toCan());
     }
-    
+
     /**
-     * Converts given {@code lines} into a {@link Can} of lines, 
+     * Converts given {@code lines} into a {@link Can} of lines,
      * with any empty lines removed that appear immediately after an empty line.
-     * A line is considered non-empty, 
+     * A line is considered non-empty,
      * if it contains non-whitespace characters.
-     * 
+     *
      * @param lines
      * @return non-null
      */
     public static Can<String> removeRepeatedEmptyLines(final @NonNull Can<String> lines) {
-        
+
         // we need at least 2 lines
         if(lines.size()<2) {
             return lines;
         }
-        
+
         final int[] latestEmptyLineIndex = {-2};
-        
+
         return streamLineObjects(lines)
         .peek(line->{
             if(!line.isEmpty()) {
@@ -268,33 +268,33 @@ public final class _Text {
             if(latestEmptyLineIndex[0] == line.getIndex()-1) {
                 line.setMarkedForRemoval(true);
             }
-            latestEmptyLineIndex[0] = line.getIndex(); 
+            latestEmptyLineIndex[0] = line.getIndex();
         })
         .filter(line->!line.isMarkedForRemoval())
         .map(Line::getString)
         .collect(Can.toCan());
 
     }
-    
+
     // -- TESTING SUPPORT
-    
+
     public static void assertTextEquals(final @Nullable String a, final @Nullable String b) {
         assertTextEquals(getLines(a), getLines(b));
     }
-    
+
     public static void assertTextEquals(final @NonNull Can<String> a, final @Nullable String b) {
         assertTextEquals(a, getLines(b));
     }
-    
+
     public static void assertTextEquals(final @Nullable String a, final @NonNull Can<String> b) {
         assertTextEquals(getLines(a), b);
     }
-    
+
     public static void assertTextEquals(final @NonNull Can<String> a, final @NonNull Can<String> b) {
-        
+
         val na = normalize(a);
         val nb = normalize(b);
-        
+
         val lineNrRef = _Refs.intRef(0);
 
         if(na.size()<=nb.size()) {
@@ -308,19 +308,19 @@ public final class _Text {
                 _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
             });
         }
-        
+
         _Assert.assertEquals(na.size(), nb.size(), ()->String.format("normalized texts differ in number of lines"));
     }
-    
+
     // -- HELPER
-    
+
     private static boolean hasNonWhiteSpaceChars(String s) {
         if(s==null) {
             return false;
         }
         return !s.trim().isEmpty();
     }
-    
+
     @Getter
     private static class Line {
         private final int index; // zero based
@@ -333,23 +333,23 @@ public final class _Text {
             this.string = string;
             this.empty = !hasNonWhiteSpaceChars(string);
         }
-        
+
     }
-    
+
     private static Stream<Line> streamLineObjects(final @NonNull Can<String> lines) {
         final int[] indexRef = {0};
         return lines.stream().map(line->new Line(indexRef[0]++, line));
     }
-    
+
     private static interface IndexAwareLineToIntFunction {
         public int apply(int lineIndex, String line);
     }
-    
+
     private static ToIntFunction<String> indexAndlineToIntFunction(IndexAwareLineToIntFunction mapper) {
         final int[] indexRef = {0};
         return line->mapper.apply(indexRef[0]++, line);
     }
-    
+
     private static Stream<String> breakLine(String line, final int maxChars) {
         line = line.trim();
         if(line.length()<=maxChars) {
@@ -357,39 +357,39 @@ public final class _Text {
         }
         val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
                 .map(String.class::cast);
-        
+
         val constraintLines = _Lists.<String>newArrayList();
         val partialSum = _Refs.intRef(0);
         val partialCount = _Refs.intRef(0);
-        
+
         val tokenIterator = tokens.iterator();
-        
+
         tokens.stream()
         .mapToInt(String::length)
         .forEach(tokenLen->{
-          
+
             final int nextLen = partialSum.getValue() + tokenLen;
             if(nextLen <= maxChars) {
                 partialSum.update(x->nextLen);
                 partialCount.inc();
             } else {
-                
+
                 constraintLines.add(
                         IntStream.range(0, partialCount.getValue())
                             .mapToObj(__->tokenIterator.next())
                             .collect(Collectors.joining()));
-                
+
                 partialSum.update(x->tokenLen);
                 partialCount.setValue(1);
             }
         });
-        
+
         // add remaining
         constraintLines.add(
                 IntStream.range(0, partialCount.getValue())
                     .mapToObj(__->tokenIterator.next())
                     .collect(Collectors.joining()));
-        
+
         return constraintLines.stream();
     }
 

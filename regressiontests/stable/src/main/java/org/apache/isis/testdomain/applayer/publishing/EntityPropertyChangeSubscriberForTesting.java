@@ -35,11 +35,11 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
-public class EntityPropertyChangeSubscriberForTesting 
+public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
-    
+
     @PostConstruct
     public void init() {
         log.info("about to initialize");
@@ -48,24 +48,24 @@ implements EntityPropertyChangeSubscriber {
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'", 
-                entityPropertyChange.getTargetClassName(), 
-                entityPropertyChange.getPropertyName(), 
-                entityPropertyChange.getPreValue(), 
+        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'",
+                entityPropertyChange.getTargetClassName(),
+                entityPropertyChange.getPropertyName(),
+                entityPropertyChange.getPreValue(),
                 entityPropertyChange.getPostValue());
 
         @SuppressWarnings("unchecked")
         val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
             .orElseGet(ArrayList::new);
         kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
-        
+
         propertyChangeEntries.add(propertyChangeEntry);
-        
+
         log.debug("property changes {}", propertyChangeEntry);
     }
-    
+
     // -- UTILITIES
-    
+
     @SuppressWarnings("unchecked")
     public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
         return Can.ofCollection(
@@ -73,11 +73,11 @@ implements EntityPropertyChangeSubscriber {
                 .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
                 .orElse(null));
     }
-    
+
     public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 
-   
+
 
 }

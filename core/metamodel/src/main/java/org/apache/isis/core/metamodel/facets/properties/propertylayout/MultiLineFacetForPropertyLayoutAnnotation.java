@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbstract {
 
     public static MultiLineFacet create(
-            final Optional<PropertyLayout> propertyLayoutIfAny, 
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny

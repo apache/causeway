@@ -29,41 +29,41 @@ import lombok.val;
 final class _Xray {
 
     static void addConfiguration(ConfigurationViewService configurationService) {
-        
+
         XrayUi.updateModel(model->{
-            
+
             val root = model.getRootNode();
-            
+
             val env = model.addDataNode(root, new XrayDataModel.KeyValue("isis-env", "Environment"));
             configurationService.getEnvironmentProperties().forEach(item->{
-                env.getData().put(item.getKey(), item.getValue());    
+                env.getData().put(item.getKey(), item.getValue());
             });
-            
+
             val config = model.addDataNode(root, new XrayDataModel.KeyValue("isis-conf", "Config"));
             configurationService.getVisibleConfigurationProperties().forEach(item->{
-                config.getData().put(item.getKey(), item.getValue());    
+                config.getData().put(item.getKey(), item.getValue());
             });
-            
+
         });
-        
+
     }
 
     public static void txBeforeCompletion(InteractionTracker iaTracker, String txInfo) {
         // append to the current interaction if any
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
-        
+
         val threadId = XrayUtil.currentThreadAsMemento();
-        
+
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
         .orElse(null);
-        
+
         XrayUi.updateModel(model->{
-    
+
             val seq = model.lookupSequence(sequenceId);
-            
+
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
             if(!seq.isPresent()) {
@@ -73,33 +73,33 @@ final class _Xray {
                         txInfo);
                 return;
             }
-            
+
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 sequenceData.alias("evb", "EventBus");
                 sequenceData.enter("tx", "evb", "tx: before completion");
             });
-            
+
         });
-        
+
     }
 
     public static void txAfterCompletion(InteractionTracker iaTracker, String txInfo) {
         // append to the current interaction if any
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
-        
+
         val threadId = XrayUtil.currentThreadAsMemento();
-        
+
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
                 .orElse(null);
-        
+
         XrayUi.updateModel(model->{
-    
+
             val seq = model.lookupSequence(sequenceId);
-            
+
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
             if(!seq.isPresent()) {
@@ -109,14 +109,14 @@ final class _Xray {
                         txInfo);
                 return;
             }
-            
+
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 sequenceData.enter("tx", "evb", txInfo);
             });
-            
+
         });
-        
+
     }
-    
+
 }

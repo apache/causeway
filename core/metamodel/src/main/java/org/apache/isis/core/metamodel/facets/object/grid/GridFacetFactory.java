@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import lombok.val;
 
 public class GridFacetFactory extends FacetFactoryAbstract {
-    
+
     public GridFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -37,10 +37,10 @@ public class GridFacetFactory extends FacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
         super.addFacet(GridFacetDefault.create(facetHolder, gridService.get()));
     }
-    
+
     private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->
         getServiceRegistry().lookupService(GridService.class).orElse(null));
-    
+
 
 
 }

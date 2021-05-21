@@ -67,16 +67,16 @@ implements ParseableFacet {
             final ManagedObject contextAdapter,
             final String entry,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
 
         // check string is valid
         // (eg pick up any @RegEx on value type)
-        if (contextAdapter!=null 
+        if (contextAdapter!=null
                 && getFacetHolder().containsFacet(ValueFacet.class)) {
-            
+
             val entryAdapter = getObjectManager().adapt(entry);
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =

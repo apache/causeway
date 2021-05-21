@@ -40,10 +40,10 @@ public interface TypicalLengthFacet extends SingleIntValueFacet {
 
     @Override
     public int value();
-    
+
     /**
-     * 
-     * @param min lower bound allowed 
+     *
+     * @param min lower bound allowed
      * @param max upper bound allowed
      * @param fallback
      * @return #value() if within given constraints [min,max], or else {@code fallback}
@@ -53,7 +53,7 @@ public interface TypicalLengthFacet extends SingleIntValueFacet {
         val bounds = _Ints.Range.of(Bound.inclusive(min), Bound.inclusive(max));
         return bounds.contains(value)
                 ? value
-                : bounds.bounded(fallback); 
+                : bounds.bounded(fallback);
     }
 
 }

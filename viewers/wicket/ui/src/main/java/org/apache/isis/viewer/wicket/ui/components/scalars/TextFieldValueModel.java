@@ -60,9 +60,9 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     @Override
     public void setObject(final T object) {
-        
+
         val scalarModel = scalarModelProvider.getModel();
-        
+
         if (object == null) {
             scalarModel.setObject(null);
         } else {

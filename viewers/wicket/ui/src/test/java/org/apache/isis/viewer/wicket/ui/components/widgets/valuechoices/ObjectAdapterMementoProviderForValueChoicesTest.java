@@ -63,9 +63,9 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     @Before
     public void setUp() throws Exception {
-        final String fakeSpecId = "FAKE";
+        final String fakeObjectType = "FAKE";
         
-        val fakeLocalType = LogicalType.lazy(getClass(), ()->fakeSpecId);
+        val fakeLocalType = LogicalType.lazy(getClass(), ()->fakeObjectType);
 
         mockMemento1 = mock(fakeLocalType, "mockMemento1");
         mockMemento2 = mock(fakeLocalType, "mockMemento2");

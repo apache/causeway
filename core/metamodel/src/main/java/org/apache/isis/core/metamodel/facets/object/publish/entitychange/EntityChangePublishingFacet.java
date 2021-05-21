@@ -27,24 +27,24 @@ import lombok.val;
 
 
 /**
- * Corresponds to annotating the entity class with 
+ * Corresponds to annotating the entity class with
  * {@Code @DomainObject(entityChangePublishing=ENABLED)}.
- * 
+ *
  * @since 2.0
  */
 public interface EntityChangePublishingFacet extends Facet {
-    
+
     public static boolean isPublishingEnabled(final FacetHolder facetHolder) {
         if(facetHolder==null) {
             return false;
         }
-        
+
         if(facetHolder instanceof ObjectSpecification) {
             if(!((ObjectSpecification)facetHolder).isEntity()) {
                 return false;
-            }    
+            }
         }
-        
+
         val auditableFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
         if(auditableFacet == null) {
             return false;

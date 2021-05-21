@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -68,8 +67,6 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    private final Identifier identifier;
-
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction) {
 
@@ -90,7 +87,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        super(mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
+        super(Identifier.actionIdentifier(
+                    LogicalType.eager(
+                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.getLogicalTypeName()),
+                    determineIdFrom(mixinAction),
+                    mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
+                mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -124,16 +127,6 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
 
-        // calculate the identifier
-        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        val memberParameterNames = mixinIdentifier.getMemberParameterClassNames();
-
-        identifier = Identifier.actionIdentifier(
-                LogicalType.eager(
-                        mixeeSpec.getCorrespondingClass(), 
-                        mixeeSpec.getLogicalTypeName()), 
-                getId(), 
-                memberParameterNames);
     }
 
     @Override
@@ -145,7 +138,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where() == Where.ANYWHERE) {
+                originalFacet.where().isAlways()) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
@@ -160,21 +153,6 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         return getPublishingServiceInternal().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
                         headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public String getId() {
-        return determineIdFrom(this.mixinAction);
-    }
-
-    @Override
-    public String getOriginalId() {
-        return super.getId();
     }
 
     @Override

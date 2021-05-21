@@ -95,11 +95,11 @@ public class FixturesLifecycleService {
 
         if (event.isPostMetamodel()
                 && initialFixtureScript != null) {
-            
+
             log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
             fixtureScripts.run(initialFixtureScript);
         }
-        
+
     }
 
 

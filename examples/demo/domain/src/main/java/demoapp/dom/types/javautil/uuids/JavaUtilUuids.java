@@ -36,19 +36,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdo;
-import demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities;
+import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaUtilUuids", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaUtilUuids implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +63,13 @@ public class JavaUtilUuids implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaUtilUuidJdo> getEntities() {
+    public List<? extends JavaUtilUuidEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaUtilUuidJdoEntities entities;
+    ValueHolderRepository<java.util.UUID, ? extends JavaUtilUuidEntity> entities;
 
     @Inject
     @XmlTransient

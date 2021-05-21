@@ -58,7 +58,7 @@ public class PrototypingInfoPopupProvider {
     }
 
     // -- HELPER
-    
+
     @Value(staticConstructor = "of")
     private static class Info implements Comparable<Info> {
         private final String key;
@@ -68,11 +68,11 @@ public class PrototypingInfoPopupProvider {
             return this.getKey().compareTo(other.getKey());
         }
     }
-    
+
     private Node getPrototypingInfoUiComponent(final PrototypingUiModel prototypingUiModel) {
 
         val infos = _Sets.<Info>newTreeSet();
-        
+
         val handlerInfo = (String)uiComponentFactory.get().getRegisteredHandlers()
                 .stream()
                 .map(Class::getSimpleName)
@@ -82,14 +82,14 @@ public class PrototypingInfoPopupProvider {
         infos.add(Info.of("Handlers", handlerInfo));
 
         prototypingUiModel.streamFeatureFacets()
-        .forEach(facet -> 
+        .forEach(facet ->
             infos.add(Info.of(
-                    facet.facetType().getSimpleName(), 
+                    facet.facetType().getSimpleName(),
                     summarize(facet))));
 
         val detailPane = new VBox();
         TableView<Info> tableView = _fx.add(detailPane, new TableView<Info>());
-        
+
         TableColumn<Info, String> column1 = new TableColumn<>("Key");
         column1.setCellValueFactory(c->new SimpleStringProperty(c.getValue().getKey()));
 
@@ -98,11 +98,11 @@ public class PrototypingInfoPopupProvider {
 
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
-        
+
         infos.forEach(tableView.getItems()::add);
-        
+
         tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        
+
         //TODO this is a candidate to be moved to _fx, to also account for max screen sizes
         val scrollPane = new ScrollPane(detailPane);
         scrollPane.fitToWidthProperty().set(true);
@@ -112,9 +112,9 @@ public class PrototypingInfoPopupProvider {
         scrollPane.setPrefHeight(800);
         scrollPane.setMaxHeight(800);
         scrollPane.setPrefWidth(1200);
-        
+
         tableView.prefHeightProperty().bind(scrollPane.heightProperty());
-        
+
         return scrollPane;
     }
 
@@ -125,7 +125,7 @@ public class PrototypingInfoPopupProvider {
             val attributeMap = _Maps.<String, Object>newTreeMap();
             ((FacetAbstract)facet).appendAttributesTo(attributeMap);
             attributeMap.forEach((k, v)->{
-                sb.append("\n • ").append(k).append(": ").append(v);    
+                sb.append("\n • ").append(k).append(": ").append(v);
             });
         }
         return sb.toString();

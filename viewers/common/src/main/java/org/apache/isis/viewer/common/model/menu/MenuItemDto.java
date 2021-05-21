@@ -33,15 +33,15 @@ public class MenuItemDto {
 
     @NonNull
     private final String name;
-    
+
     @Nullable
     private final String cssClassFa;
-    
+
     @Nullable // eg. topLevel
     private final ManagedAction managedAction;
-    
+
     private final boolean isTertiaryRoot;
-    
+
     public static MenuItemDto topLevel(String name, String cssClassFa) {
         return of(name, cssClassFa, null, false);
     }
@@ -49,12 +49,12 @@ public class MenuItemDto {
     public static MenuItemDto tertiaryRoot(String name, String cssClassFa) {
         return of(name, cssClassFa, null, true);
     }
-    
+
     public static MenuItemDto subMenu(@NonNull ManagedAction managedAction, String named, String cssClassFa) {
         val name = _Strings.isNotEmpty(named)
                 ? named
                 : ActionUiMetaModel.of(managedAction).getLabel();
         return of(name, cssClassFa, managedAction, false);
     }
-    
+
 }

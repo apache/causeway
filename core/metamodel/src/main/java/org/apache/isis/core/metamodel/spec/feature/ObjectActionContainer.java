@@ -31,45 +31,45 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
 
 public interface ObjectActionContainer {
-    
+
     // -- ACTION LOOKUP (INHERITANCE CONSIDERED)
-    
+
     /**
-     * Similar to {@link #getDeclaredAction(String, ActionType)}, 
+     * Similar to {@link #getDeclaredAction(String, ActionType)},
      * but also considering any inherited object members. (mixed-in included)
      * @param id
      * @param type
-     * 
-     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
+     *
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types,
      * and if nothing found there, search the interfaces. Special care needs to be taken, as the
      * {@link ActionType} might be redeclared when inheriting from a super-type or interface.
      */
     Optional<ObjectAction> getAction(String id, @Nullable ActionType type);
-    
+
     default ObjectAction getActionElseFail(String id, @Nullable ActionType type) {
         return getAction(id, type)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
-                        id, 
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s",
+                        id,
                         type==null ? "any" : type.name()));
     }
 
     default Optional<ObjectAction> getAction(String id) {
         return getAction(id, null);
     }
-    
+
     default ObjectAction getActionElseFail(String id) {
         return getActionElseFail(id, null);
     }
-    
-    
+
+
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
-    
+
     /**
      * Get the action object represented by the specified identity string. (mixed-in included)
      * <p>
      * The identity string can be either fully specified with parameters (as per
-     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
-     * {@link Identifier#toNameIdentityString()}).
+     * {@link Identifier#getMemberNameAndParameterClassNamesIdentityString()} or in abbreviated form (
+     * {@link Identifier#getMemberName()}).
      *
      * @see #getDeclaredAction(String)
      */
@@ -84,42 +84,69 @@ public interface ObjectActionContainer {
         return getDeclaredAction(id, null);
     }
 
-    // -- ACTION STREAM (W/ INHERITANCE)
-    
+    // -- ACTION STREAM (WITH INHERITANCE)
+
+    /**
+     * Returns a Stream of all actions of given {@code actionTypes}, with inheritance considered.
+     * @param actionTypes
+     * @param mixedIn - whether to include mixed in actions
+     * @param onActionOverloaded - callback on overloaded action detected
+     */
     Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> types, 
-            MixedIn contributed,
+            ImmutableEnumSet<ActionType> actionTypes,
+            MixedIn mixedIn,
             Consumer<ObjectAction> onActionOverloaded);
-    
+
+    /**
+     * Returns a Stream of all actions of given {@code actionTypes}, with inheritance considered.
+     * @param actionTypes
+     * @param mixedIn - whether to include mixed in actions
+     */
     default Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> types, 
-            MixedIn contributed) {
-        return streamActions(types, contributed, __->{});
+            ImmutableEnumSet<ActionType> actionTypes,
+            MixedIn mixedIn) {
+        return streamActions(actionTypes, mixedIn, __->{});
     }
-    
-    default Stream<ObjectAction> streamActions(ActionType type, MixedIn contributed) {
-        return streamActions(ImmutableEnumSet.of(type), contributed);
+
+    /**
+     * Returns a Stream of all actions of given {@code actionType}, with inheritance considered.
+     * @param actionType
+     * @param mixedIn - whether to include mixed in actions
+     */
+    default Stream<ObjectAction> streamActions(ActionType actionType, MixedIn mixedIn) {
+        return streamActions(ImmutableEnumSet.of(actionType), mixedIn);
     }
-    
-    default Stream<ObjectAction> streamActions(MixedIn contributed) {
-        return streamActions(ActionType.ANY, contributed);
+
+    /**
+     * Returns a Stream of all actions of any type, with inheritance considered.
+     * @param mixedIn - whether to include mixed in actions
+     */
+    default Stream<ObjectAction> streamAnyActions(MixedIn mixedIn) {
+        return streamActions(ActionType.ANY, mixedIn);
     }
-    
+
+    /**
+     * Returns a Stream of all actions enabled for the current runtime environment,
+     * with inheritance considered.
+     * @param mixedIn - whether to include mixed in actions
+     */
+    Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn);
+
     // -- ACTION STREAM (NO INHERITANCE)
 
     /**
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> actionTypes, MixedIn mixedIn);
 
-    default Stream<ObjectAction> streamDeclaredActions(ActionType type, MixedIn contributed) {
-        return streamDeclaredActions(ImmutableEnumSet.of(type), contributed);
-    }
-    
-    default Stream<ObjectAction> streamDeclaredActions(MixedIn contributed) {
-        return streamDeclaredActions(ActionType.ANY, contributed);
+    default Stream<ObjectAction> streamDeclaredActions(ActionType type, MixedIn mixedIn) {
+        return streamDeclaredActions(ImmutableEnumSet.of(type), mixedIn);
     }
 
-    
+    default Stream<ObjectAction> streamDeclaredActions(MixedIn mixedIn) {
+        return streamDeclaredActions(ActionType.ANY, mixedIn);
+    }
+
+
 }

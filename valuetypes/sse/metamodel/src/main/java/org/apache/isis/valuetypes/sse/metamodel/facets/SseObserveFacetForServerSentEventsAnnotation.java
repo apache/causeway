@@ -26,7 +26,7 @@ import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -45,7 +45,7 @@ public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFace
     }
 
     private SseObserveFacetForServerSentEventsAnnotation(
-            Class<? extends SseSource> eventStreamType, 
+            Class<? extends SseSource> eventStreamType,
             FacetHolder holder) {
 
         super(eventStreamType, holder);

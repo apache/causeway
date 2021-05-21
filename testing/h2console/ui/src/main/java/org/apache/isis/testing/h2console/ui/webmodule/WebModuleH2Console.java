@@ -160,7 +160,8 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
     private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {
 
-        return datasourceIntrospector.streamDataSourceInfos()
+        return datasourceIntrospector.getDataSourceInfos()
+        .stream()
         .map(DataSourceInfo::getJdbcUrl)
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {

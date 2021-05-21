@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -53,24 +54,29 @@ public interface _Lazy<T> extends Supplier<T> {
      * Evaluates this lazy value and memoizes it, when called the first time
      * after initialization or clear().
      * <p>
-     * Postcondition when memoization throws an exception: isMemoized()->true and get()->null  
+     * Postcondition when memoization throws an exception: isMemoized()->true and get()->null
      */
     @Override
     public T get();
-    
+
     /**
-     * Sets the memoized value, if not already memoized. 
+     * Optionally returns the value, based on whether this lazy got initialized and holds a memoized value.
+     */
+    public Optional<T> getMemoized();
+
+    /**
+     * Sets the memoized value, if not already memoized.
      * @param value
      * @throws IllegalStateException if already memoized
      */
     public void set(T value);
-    
+
 
     // -- FACTORIES
 
     /**
-     * Concurrent calls to this lazy's get() method might result in concurrent calls to the 
-     * specified {@code supplier}. 
+     * Concurrent calls to this lazy's get() method might result in concurrent calls to the
+     * specified {@code supplier}.
      * @param supplier
      * @return an (non-thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
      */
@@ -81,8 +87,8 @@ public interface _Lazy<T> extends Supplier<T> {
     /**
      * Thread-safe variant to {@link _Lazy#of(Supplier)}.
      * <p>
-     * Concurrent calls to this lazy's get() method will never result in concurrent calls to the 
-     * specified {@code supplier}. 
+     * Concurrent calls to this lazy's get() method will never result in concurrent calls to the
+     * specified {@code supplier}.
      * @param supplier
      * @return an (thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
      */
@@ -96,14 +102,14 @@ public interface _Lazy<T> extends Supplier<T> {
      * The memoized value is held via weak reference, hence may be garbage collected any time.
      * <p>
      * @param supplier
-     * @return an (thread-safe and weakly referenced) instance of _Lacy that initializes with 
+     * @return an (thread-safe and weakly referenced) instance of _Lacy that initializes with
      *      the specified {@code supplier}
-     * @implNoteThis This variant does not support {@link _Lazy#isMemoized()}, 
+     * @implNoteThis This variant does not support {@link _Lazy#isMemoized()},
      *      since this predicate is undecidable.
      */
     public static <T> _Lazy<T> threadSafeAndWeak(Supplier<? extends T> supplier) {
         return new _Lazy_ThreadSafeAndWeak<T>(supplier);
     }
-    
+
 
 }

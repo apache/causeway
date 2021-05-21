@@ -38,14 +38,14 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.clock.TickingClockService;
+import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.executor.CommandExecutorServiceWithTime;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
-import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob;
 import org.apache.isis.extensions.commandreplay.secondary.mixins.Object_openOnPrimary;
 import org.apache.isis.extensions.commandreplay.secondary.ui.CommandReplayOnSecondaryService;
@@ -60,7 +60,7 @@ import lombok.val;
 @Configuration
 @Import({
         // @Configuration's
-        IsisModuleExtCommandLogImpl.class,
+        IsisModuleExtCommandLogApplib.class,
         IsisModuleExtQuartzImpl.class,
 
         // @Service's
@@ -81,6 +81,8 @@ import lombok.val;
 })
 @Profile("secondary")
 public class IsisModuleExtCommandReplaySecondary {
+
+    public static final String NAMESPACE = "isis.ext.commandReplaySecondary";
 
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }

@@ -36,7 +36,8 @@ import lombok.extern.log4j.Log4j2;
 public class JpaSupportServiceUsingSpring implements JpaSupportService {
 
     private final JpaContext jpaContextSpring;
-    
+
+    @Override
     public Result<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
         try {
             val em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
@@ -46,5 +47,5 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
             return Result.failure(e);
         }
     }
-    
+
 }

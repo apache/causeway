@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -38,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
+// import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -49,7 +47,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAut
  * </p>
  */
 public class ServiceActionsPanel extends MenuActionPanel {
-    
+
     private static final long serialVersionUID = 1L;
 
     public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
@@ -64,13 +62,13 @@ public class ServiceActionsPanel extends MenuActionPanel {
                 val topMenu = new WebMarkupContainer("topMenu");
                 topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
                 topMenu.add(new CssClassAppender(cssForTopMenu(menuItem)));
-                
+
                 listItem.add(new Label("name", menuItem.getName()));
                 listItem.add(topMenu);
                 if(menuItem.getItemType().isActionOrSubMenuContainer()) {
-                    listItem.add(new CssClassAppender(cssForServices(menuItem)));    
+                    listItem.add(new CssClassAppender(cssForServices(menuItem)));
                 }
-                
+
             }
         };
         add(menuItemsView);
@@ -82,20 +80,16 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
-
-        response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
-        response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
-
         SSESupport.renderHead(response);
 
     }
-    
+
     // -- HELPER
-    
+
     private static String cssForTopMenu(CssMenuItem menuItem) {
-        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());        
+        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());
     }
-    
+
     private static String cssForServices(CssMenuItem menuItem) {
         return _NullSafe.stream(menuItem.getSubMenuItems())
         .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())

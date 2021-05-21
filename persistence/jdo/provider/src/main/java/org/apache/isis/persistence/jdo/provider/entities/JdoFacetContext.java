@@ -30,6 +30,6 @@ public interface JdoFacetContext {
     boolean isPersistenceEnhanced(Class<?> cls);
 
     boolean isMethodProvidedByEnhancement(Method method);
-    
-    
+
+
 }

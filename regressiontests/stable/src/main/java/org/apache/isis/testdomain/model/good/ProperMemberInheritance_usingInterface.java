@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperMemberInheritance_usingInterface 
+public class ProperMemberInheritance_usingInterface
 implements ProperMemberInheritanceInterface {
 
     @Action
@@ -37,10 +37,10 @@ implements ProperMemberInheritanceInterface {
     @Override
     public void sampleActionOverride() {
     }
-    
+
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter 
+    @Getter @Setter
     private String samplePropertyOverride;
-    
+
 }

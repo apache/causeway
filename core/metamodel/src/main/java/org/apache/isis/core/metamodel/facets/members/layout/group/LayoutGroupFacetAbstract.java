@@ -25,21 +25,21 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
 
-public abstract class LayoutGroupFacetAbstract 
-extends FacetAbstract 
+public abstract class LayoutGroupFacetAbstract
+extends FacetAbstract
 implements LayoutGroupFacet {
 
     @Getter(onMethod_ = {@Override})
     private final GroupIdAndName groupIdAndName;
-    
+
     protected LayoutGroupFacetAbstract(
-            final GroupIdAndName groupIdAndName, 
+            final GroupIdAndName groupIdAndName,
             final FacetHolder holder) {
         super(LayoutGroupFacet.class, holder);
         this.groupIdAndName = groupIdAndName;
     }
-    
-    @Override 
+
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("groupId", getGroupId());

@@ -34,12 +34,12 @@ import lombok.Getter;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
-public class ActionArgValidityContext 
-extends ValidityContext 
+public class ActionArgValidityContext
+extends ValidityContext
 implements ProposedHolder, ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter(onMethod = @__(@Override)) private final ManagedObject proposed; 
+    @Getter(onMethod = @__(@Override)) private final ManagedObject proposed;
     @Getter private final Can<ManagedObject> args;
     @Getter private final int position;
 
@@ -50,10 +50,10 @@ implements ProposedHolder, ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, 
-                head, 
-                id, 
+
+        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
+                head,
+                id,
                 interactionInitiatedBy);
         this.objectAction = objectAction;
 
@@ -65,9 +65,9 @@ implements ProposedHolder, ActionInteractionContext {
     @Override
     public ActionArgumentEvent createInteractionEvent() {
         return new ActionArgumentEvent(
-                UnwrapUtil.single(getTarget()), 
-                getIdentifier(), 
-                UnwrapUtil.multipleAsArray(getArgs().toList()), 
+                UnwrapUtil.single(getTarget()),
+                getIdentifier(),
+                UnwrapUtil.multipleAsArray(getArgs().toList()),
                 getPosition());
     }
 

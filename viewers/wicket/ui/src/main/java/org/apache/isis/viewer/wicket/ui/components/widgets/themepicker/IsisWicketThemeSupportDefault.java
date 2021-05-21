@@ -56,7 +56,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.of(this::createThemeProvider);
-    
+
     @Inject private IsisConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
 
@@ -67,9 +67,9 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     @Override
     public List<String> getEnabledThemeNames() {
-        
+
         val composite = themeProvider.get();
-        
+
         List<String> allThemes = composite.availableNames();
 
         allThemes = filterThemes(allThemes);
@@ -86,10 +86,10 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
         if(providerBeans.isEmpty()) {
             return ThemeProviderComposite.of(Can.ofSingleton(createFallbackThemeProvider()));
         }
-        
+
         return ThemeProviderComposite.of(providerBeans);
     }
-    
+
     private ThemeProvider createFallbackThemeProvider() {
         val themeName = configuration.getViewer().getWicket().getThemes().getInitial();
         BootswatchTheme bootswatchTheme;
@@ -97,8 +97,8 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
         } catch(Exception ex) {
             bootswatchTheme = BootswatchTheme.Flatly;
-            log.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", 
-                    themeName, 
+            log.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'",
+                    themeName,
                     bootswatchTheme);
 
         }
@@ -116,16 +116,16 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
     private List<String> filterThemes(List<String> allThemes) {
         List<String> enabledThemes;
 
-        final Set<String> enabledThemesSet = 
+        final Set<String> enabledThemesSet =
         _NullSafe.stream(configuration.getViewer().getWicket().getThemes().getEnabled())
         .collect(Collectors.toSet());
-        
+
         if (enabledThemesSet.size() > 0) {
 
             enabledThemes = allThemes.stream()
                     .filter(enabledThemesSet::contains)
                     .collect(Collectors.toList());
-            
+
         } else {
             enabledThemes = allThemes;
         }

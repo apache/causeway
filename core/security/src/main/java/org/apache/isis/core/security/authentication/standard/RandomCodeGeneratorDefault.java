@@ -45,7 +45,7 @@ public class RandomCodeGeneratorDefault implements RandomCodeGenerator {
     public String generateRandomCode() {
         final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);
         for (int i = 0; i < NUMBER_CHARACTERS; i++) {
-            final int pos = random.nextInt(CHARACTERS.length()); 
+            final int pos = random.nextInt(CHARACTERS.length());
             buf.append(CHARACTERS.charAt(pos));
         }
         return buf.toString();

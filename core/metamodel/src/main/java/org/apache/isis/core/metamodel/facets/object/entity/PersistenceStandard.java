@@ -23,11 +23,11 @@ public enum PersistenceStandard {
     JDO,
     OTHER,
     ;
-    
+
     public boolean isJpa() {
         return this == JPA;
     }
-    
+
     public boolean isJdo() {
         return this == JDO;
     }

@@ -27,7 +27,7 @@ import lombok.val;
 public enum IntrospectionMode {
 
     /**
-     * Lazy (don't introspect members for most classes unless required), 
+     * Lazy (don't introspect members for most classes unless required),
      * irrespective of the deployment mode.
      */
     LAZY {
@@ -63,5 +63,5 @@ public enum IntrospectionMode {
         val introspectionMode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         return introspectionMode.isFullIntrospect(isisSystemEnvironment.getDeploymentType());
     }
-    
+
 }

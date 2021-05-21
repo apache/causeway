@@ -19,11 +19,12 @@
 package org.apache.isis.core.metamodel.services.grid;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,12 +37,16 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
+import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -62,13 +67,20 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         private final String layoutIfAny;
     }
 
+    @Value
+    static class XmlAndResourceName {
+        private final @NonNull String xmlContent;
+        private final @NonNull String resourceName;
+    }
+
+
     // for better logging messages (used only in prototyping mode)
     private final Map<DomainClassAndLayout, String> badXmlByDomainClassAndLayout = _Maps.newHashMap();
 
     @Value
     static class DomainClassAndLayoutAndXml {
         private final DomainClassAndLayout domainClassAndLayout;
-        private final String xml;
+        private final XmlAndResourceName xml;
     }
 
     // cache (used only in prototyping mode)
@@ -81,13 +93,13 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public void remove(final Class<?> domainClass) {
-        final String layoutIfAny = null;
-        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
         if(!supportsReloading()) {
             return;
         }
+        final String layoutIfAny = null;
+        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
         badXmlByDomainClassAndLayout.remove(dcal);
-        final String xml = loadXml(dcal);
+        final XmlAndResourceName xml = loadXml(dcal).orElse(null);
         if(xml == null) {
             return;
         }
@@ -96,13 +108,13 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean existsFor(final Class<?> domainClass) {
-        return resourceNameFor(new DomainClassAndLayout(domainClass, null)) != null;
+        return loadXml(new DomainClassAndLayout(domainClass, null)).isPresent();
     }
 
     @Override
     public Grid load(final Class<?> domainClass, final String layoutIfAny) {
         final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
-        final String xml = loadXml(dcal);
+        final XmlAndResourceName xml = loadXml(dcal).orElse(null);
         if(xml == null) {
             return null;
         }
@@ -116,7 +128,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             final String badXml = badXmlByDomainClassAndLayout.get(dcal);
             if(badXml != null) {
-                if(Objects.equals(xml, badXml)) {
+                if(Objects.equals(xml.getXmlContent(), badXml)) {
                     // seen this before and already logged; just quit
                     return null;
                 } else {
@@ -127,7 +139,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         }
 
         try {
-            final Grid grid = gridReader.loadGrid(xml);
+            final Grid grid = gridReader.loadGrid(xml.getXmlContent());
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
                 gridByDomainClassAndLayoutAndXml.put(dcalax, grid);
@@ -137,12 +149,12 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             if(supportsReloading()) {
                 // save fact that this was bad XML, so that we don't log again if called next time
-                badXmlByDomainClassAndLayout.put(dcal, xml);
+                badXmlByDomainClassAndLayout.put(dcal, xml.getXmlContent());
             }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
-            final String resourceName = resourceNameFor(dcal);
+            final String resourceName = xml.getResourceName();
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
             if(supportsReloading()) {
                 messageService.warnUser(message);
@@ -153,45 +165,55 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         }
     }
 
+    // -- HELPER
 
-
-    private String loadXml(final DomainClassAndLayout dcal) {
-        final String resourceName = resourceNameFor(dcal);
-        if(resourceName == null) {
-            log.debug("Failed to locate layout file for '{}'", dcal.toString());
-            return null;
-        }
-        try {
-            return _Resources.loadAsStringUtf8(dcal.domainClass, resourceName);
-        } catch (IOException ex) {
-            log.debug(
-                    "Failed to locate file {} (relative to {}.class)",
-                    resourceName, dcal.domainClass.getName(), ex);
-            return null;
-        }
+    Optional<XmlAndResourceName> loadXml(final DomainClassAndLayout dcal) {
+        return _Reflect.streamTypeHierarchy(dcal.getDomainClass(), InterfacePolicy.EXCLUDE)
+        .map(type->loadXml(type, dcal.getLayoutIfAny()))
+        .filter(Optional::isPresent)
+        .findFirst()
+        .map(Optional::get);
     }
 
-    String resourceNameFor(final DomainClassAndLayout dcal) {
-        final List<String> candidateResourceNames = _Lists.newArrayList();
-        if(dcal.layoutIfAny != null) {
-            candidateResourceNames.add(
-                    String.format("%s-%s.layout.xml", dcal.domainClass.getSimpleName(), dcal.layoutIfAny));
+    private Optional<XmlAndResourceName> loadXml(
+            final @NonNull Class<?> domainClass,
+            final @Nullable String layoutIfAny) {
+        return streamResourceNameCandidatesFor(domainClass, layoutIfAny)
+        .map(candidateResourceName->tryLoadXml(domainClass, candidateResourceName))
+        .filter(Optional::isPresent)
+        .findFirst()
+        .map(Optional::get);
+    }
+
+    private Stream<String> streamResourceNameCandidatesFor(
+            final @NonNull Class<?> domainClass,
+            final @Nullable String layoutIfAny) {
+
+        val typeSimpleName = domainClass.getSimpleName();
+
+        return _Strings.isNotEmpty(layoutIfAny)
+                ? Stream.of(
+                        String.format("%s-%s.layout.xml", typeSimpleName, layoutIfAny),
+                        String.format("%s.layout.xml", typeSimpleName),
+                        String.format("%s.layout.fallback.xml", typeSimpleName))
+                : Stream.of(
+                        String.format("%s.layout.xml", typeSimpleName),
+                        String.format("%s.layout.fallback.xml", typeSimpleName));
+    }
+
+    private Optional<XmlAndResourceName> tryLoadXml(
+            final @NonNull Class<?> type,
+            final @NonNull String candidateResourceName) {
+        try {
+            return Optional.ofNullable(
+                    _Resources.loadAsStringUtf8(type, candidateResourceName))
+                    .map(xml->new XmlAndResourceName(xml, candidateResourceName));
+        } catch (IOException ex) {
+            log.error(
+                    "Failed to load layout file {} (relative to {}.class)",
+                    candidateResourceName, type.getName(), ex);
         }
-        candidateResourceNames.add(
-                String.format("%s.layout.xml", dcal.domainClass.getSimpleName()));
-        candidateResourceNames.add(
-                String.format("%s.layout.fallback.xml", dcal.domainClass.getSimpleName()));
-        for (final String candidateResourceName : candidateResourceNames) {
-            try {
-                final URL resource = _Resources.getResourceUrl(dcal.domainClass, candidateResourceName);
-                if (resource != null) {
-                    return candidateResourceName;
-                }
-            } catch(IllegalArgumentException ex) {
-                // continue
-            }
-        }
-        return null;
+        return Optional.empty();
     }
 
 

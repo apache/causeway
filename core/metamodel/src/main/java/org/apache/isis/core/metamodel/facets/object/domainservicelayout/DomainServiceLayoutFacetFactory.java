@@ -43,10 +43,10 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
         val domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
 
         // either one is enough to treat this as a domain service
-        val isAnyPresent = 
-                domainServiceIfAny.isPresent() || 
+        val isAnyPresent =
+                domainServiceIfAny.isPresent() ||
                 domainServiceLayoutIfAny.isPresent();
-        
+
         if(!isAnyPresent) {
             return;
         }
@@ -55,7 +55,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .map(DomainServiceLayout::menuBar)
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
-        
+
         super.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
         val named = domainServiceLayoutIfAny
@@ -63,7 +63,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .map(_Strings::emptyToNull)
                 .filter(Objects::nonNull)
                 .orElse(null);
-        
+
         super.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
     }
 

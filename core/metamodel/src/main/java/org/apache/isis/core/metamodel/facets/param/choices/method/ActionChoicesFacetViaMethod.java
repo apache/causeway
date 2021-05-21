@@ -69,7 +69,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     public CanVector<ManagedObject> getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final Object objectOrCollection = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
@@ -78,10 +78,10 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                             objectOrCollection));
         }
         final Object[] options = (Object[]) objectOrCollection;
-        
+
         val choicesVector = new CanVector<ManagedObject>(options.length);
         val parameterTypes = method.getParameterTypes();
-        
+
         for (int i = 0; i < choicesVector.size(); i++) {
             choicesVector.set(i, handleResults(options[i], parameterTypes[i], interactionInitiatedBy));
         }
@@ -92,7 +92,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Object collectionOrArray,
             final Class<?> parameterType,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val elementSpec = specForTypeElseFail(parameterType);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(

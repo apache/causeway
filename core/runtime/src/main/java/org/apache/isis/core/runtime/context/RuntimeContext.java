@@ -27,15 +27,15 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * TODO [2033] this was introduced when refactoring, maybe use MetaModelContext instead if possible
- *  
+ *
  * @since 2.0
- * 
+ *
  */
 public interface RuntimeContext {
 
     MetaModelContext getMetaModelContext();
 
-    InteractionTracker getInteractionTracker(); 
+    InteractionTracker getInteractionTracker();
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();

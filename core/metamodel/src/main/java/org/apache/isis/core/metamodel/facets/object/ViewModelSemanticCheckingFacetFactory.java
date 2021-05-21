@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class ViewModelSemanticCheckingFacetFactory 
+public class ViewModelSemanticCheckingFacetFactory
 extends FacetFactoryAbstract {
 
     public ViewModelSemanticCheckingFacetFactory() {
@@ -43,7 +43,7 @@ extends FacetFactoryAbstract {
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
     }
-    
+
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
@@ -106,8 +106,8 @@ extends FacetFactoryAbstract {
         }
 
         if(annotatedWithDomainObject
-                && (domainObject.nature() == Nature.NOT_SPECIFIED 
-                    || domainObject.nature().isEntity()) 
+                && (domainObject.nature() == Nature.NOT_SPECIFIED
+                    || domainObject.nature().isEntity())
                 && implementsRecreatableDomainObject) {
             ValidationFailure.raise(
                     facetHolder.getSpecificationLoader(),

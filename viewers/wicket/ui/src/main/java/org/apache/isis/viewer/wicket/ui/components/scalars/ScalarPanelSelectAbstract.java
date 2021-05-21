@@ -123,11 +123,11 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
         val dependsOnPreviousArgs = (choiceProvider instanceof ObjectAdapterMementoProviderAbstract)
                 && ((ObjectAdapterMementoProviderAbstract) choiceProvider).dependsOnPreviousArgs();
-        
+
         if(dependsOnPreviousArgs) {
             syncIfNull(select2);
         }
-        
+
     }
 
     /**
@@ -246,7 +246,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
                 proposedValue = (ObjectMemento) proposedValueObj;
             }
 
-            val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue); 
+            val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue);
             final String reasonIfAny = scalarModel.validate(proposedAdapter);
             if (reasonIfAny != null) {
                 final ValidationError error = new ValidationError();

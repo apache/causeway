@@ -48,6 +48,12 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("isis.applib.")) {
             return ". apache isis applib";
         }
+        if (objType.startsWith("isis.conf.")) {
+            return ". apache isis conf";
+        }
+        if (objType.startsWith("isis.sudo.")) {
+            return ". apache isis sudo";
+        }
         if (objType.startsWith("isis.persistence.")) {
             return ". apache isis persistence - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
         }
@@ -63,7 +69,7 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("org.springframework.")) {
             return "> spring framework " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        
+
         Matcher matcher;
         matcher = tagPatternForJaxbDto.matcher(objType);
         if (matcher.matches()) {
@@ -77,13 +83,13 @@ public class TaggerDefault implements Tagger {
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        
+
         return fallback != null? fallback: objType;
     }
 
-    
+
     private static Stream<String> partsOf(final String objType) {
         return _Strings.splitThenStream(objType, ".");
     }
-    
+
 }

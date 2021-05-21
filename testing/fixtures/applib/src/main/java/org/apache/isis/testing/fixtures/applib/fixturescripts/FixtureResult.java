@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,8 +56,8 @@ import lombok.Setter;
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
-    
-    public static final String OBJECT_TYPE = "isis.ext.fixtures.FixtureResult"; // secman seeding
+
+    public static final String OBJECT_TYPE = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureResult"; // secman seeding
 
     @PropertyLayout(named="Fixture script")
     @Property(optionality = Optionality.OPTIONAL)

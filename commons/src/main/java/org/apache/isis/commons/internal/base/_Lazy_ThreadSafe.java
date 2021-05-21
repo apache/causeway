@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -26,7 +27,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
- * package private mixin for _Lazy 
+ * package private mixin for _Lazy
  * @since 2.0
  */
 final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
@@ -42,7 +43,7 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
     @Override
     public boolean isMemoized() {
         synchronized (this) {
-            return memoized;    
+            return memoized;
         }
     }
 
@@ -61,10 +62,17 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
                 return value;
             }
             memoized = true;
-            return value = supplier.get();    
+            return value = supplier.get();
         }
     }
-    
+
+    @Override
+    public Optional<T> getMemoized() {
+        synchronized (this) {
+            return Optional.ofNullable(value);
+        }
+    }
+
     @Override
     public void set(T value) {
         synchronized (this) {

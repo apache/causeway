@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetViaMethod 
-extends ActionParameterChoicesFacetAbstract 
+public class ActionParameterChoicesFacetViaMethod
+extends ActionParameterChoicesFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -51,7 +51,7 @@ implements ImperativeFacet {
             final Class<?> choicesType,
             final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
@@ -78,14 +78,14 @@ implements ImperativeFacet {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final Object collectionOrArray = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, head.getTarget(), pendingArgs) 
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, head.getTarget(), pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }
-        
+
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(
                         requiredSpec, collectionOrArray, interactionInitiatedBy);
@@ -98,7 +98,7 @@ implements ImperativeFacet {
         return "method=" + method + ",type=" + choicesType;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);

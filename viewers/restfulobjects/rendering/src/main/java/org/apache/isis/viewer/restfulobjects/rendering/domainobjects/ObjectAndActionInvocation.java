@@ -41,18 +41,18 @@ import lombok.val;
 public class ObjectAndActionInvocation {
 
     public static ObjectAndActionInvocation of(
-            @NonNull ActionInteraction.Result actionInteractionResult, 
+            @NonNull ActionInteraction.Result actionInteractionResult,
             @NonNull JsonRepresentation argsJsonRepr,
             @NonNull ActionResultReprRenderer.SelfLink selfLink) {
         return new ObjectAndActionInvocation(
-                actionInteractionResult.getManagedAction().getOwner(), 
+                actionInteractionResult.getManagedAction().getOwner(),
                 actionInteractionResult.getManagedAction().getAction(),
                 argsJsonRepr,
                 actionInteractionResult.getParameterList(),
-                actionInteractionResult.getActionReturnedObject(), 
+                actionInteractionResult.getActionReturnedObject(),
                 selfLink);
     }
-    
+
     @Getter private final ManagedObject objectAdapter;
     @Getter private final ObjectAction action;
     @Getter private final JsonRepresentation arguments;
@@ -67,13 +67,13 @@ public class ObjectAndActionInvocation {
     public ActionResultRepresentation.ResultType determineResultType() {
 
         val returnTypeSpec = this.action.getReturnType();
-        
+
         if (returnTypeSpec.getCorrespondingClass() == void.class) {
             return ActionResultRepresentation.ResultType.VOID;
         }
-        
+
         if (isVector(returnedAdapter.getSpecification())) {
-            
+
             // though not strictly required, try to be consistent:  empty list vs populated list
             if(elementAdapters.get().isEmpty()) {
                 val isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
@@ -83,11 +83,11 @@ public class ObjectAndActionInvocation {
                         ? ActionResultRepresentation.ResultType.SCALAR_VALUES
                         : ActionResultRepresentation.ResultType.LIST;
             }
-            
+
             // inspect the collection's elements
             val isListOfDomainObjects = streamElementAdapters()
                     .allMatch(elementAdapter->!isScalarValue(elementAdapter.getSpecification()));
-                        
+
             return isListOfDomainObjects
                     ? ActionResultRepresentation.ResultType.LIST
                     : ActionResultRepresentation.ResultType.SCALAR_VALUES;
@@ -104,26 +104,26 @@ public class ObjectAndActionInvocation {
     public Stream<ManagedObject> streamElementAdapters() {
         return elementAdapters.get().stream();
     }
-    
+
     public boolean hasElements() {
         return !elementAdapters.get().isEmpty();
     }
-    
+
     // -- HELPER
-    
+
     private final _Lazy<Can<ManagedObject>> elementAdapters = _Lazy.threadSafe(this::initElementAdapters);
     private Can<ManagedObject> initElementAdapters() {
         return CollectionFacet.streamAdapters(returnedAdapter).collect(Can.toCan());
     }
-    
+
     //TODO[2449] need to check whether that strategy holds consistently
     private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
         return spec.getFacet(EncodableFacet.class)!=null;
     }
-    
+
     private static boolean isVector(final @NonNull ObjectSpecification spec) {
         return spec.getFacet(CollectionFacet.class)!=null;
     }
 
-   
+
 }

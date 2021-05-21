@@ -20,16 +20,16 @@
 package org.apache.isis.core.metamodel.testspec;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -53,16 +53,15 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import lombok.Synchronized;
 import lombok.val;
 
-public class ObjectSpecificationStub 
+public class ObjectSpecificationStub
 extends FacetHolderImpl
 implements ObjectSpecification {
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
-    private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
-     * lazily derived, see {@link #getLogicalType()} 
+     * lazily derived, see {@link #getLogicalType()}
      */
     private LogicalType logicalType;
 
@@ -133,8 +132,7 @@ implements ObjectSpecification {
     @Override
     public LogicalType getLogicalType() {
         if(logicalType == null) {
-            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value();
-            logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
+            logicalType = getFacet(ObjectTypeFacet.class).getLogicalType();
         }
         return logicalType;
     }
@@ -165,17 +163,17 @@ implements ObjectSpecification {
     public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
-        
+
         if(type==null) {
             return action;
         }
-        
+
         if (action.isPresent()
                 && action.get().getType() == type) {
             return action;
         }
         return Optional.empty();
-        
+
     }
 
     @Override
@@ -205,7 +203,7 @@ implements ObjectSpecification {
 
     @Override
     public String getTitle(
-            final ManagedObject contextAdapterIfAny,
+            final Predicate<ManagedObject> isContextAdapter,
             final ManagedObject targetAdapter) {
         return title;
     }
@@ -216,8 +214,8 @@ implements ObjectSpecification {
     }
 
     @Override
-    public List<ObjectSpecification> interfaces() {
-        return Collections.emptyList();
+    public Can<ObjectSpecification> interfaces() {
+        return Can.empty();
     }
 
     @Override
@@ -241,8 +239,8 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Set<ObjectSpecification> subclasses(final Depth depth) {
-        return subclasses;
+    public Can<ObjectSpecification> subclasses(final Depth depth) {
+        return Can.empty();
     }
 
     @Override
@@ -306,7 +304,7 @@ implements ObjectSpecification {
     public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return null;
     }
-    
+
     // /////////////////////////////////////////////////////////
     // view models and wizards
     // /////////////////////////////////////////////////////////
@@ -357,16 +355,16 @@ implements ObjectSpecification {
         // poorly implemented, inheritance not supported
         return getDeclaredAction(id, type);
     }
-    
+
     @Override
     public Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> types, 
+            ImmutableEnumSet<ActionType> types,
             MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
         return streamDeclaredActions(contributed);
     }
-    
+
     @Override
     public Optional<ObjectAssociation> getAssociation(String id) {
         // poorly implemented, inheritance not supported
@@ -377,6 +375,14 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
         // poorly implemented, inheritance not supported
         return streamDeclaredAssociations(contributed);
+    }
+
+    @Override
+    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
+                ? ActionType.USER_AND_PROTOTYPE
+                : ActionType.USER_ONLY;
+        return streamActions(actionTypes, mixedIn);
     }
 
 }

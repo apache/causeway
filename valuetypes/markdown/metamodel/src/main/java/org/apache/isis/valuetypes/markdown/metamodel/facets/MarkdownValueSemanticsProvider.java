@@ -82,9 +82,9 @@ implements MarkdownValueFacet {
     public String toString() {
         return "MarkdownValueSemanticsProvider";
     }
-    
+
     // -- MarkdownValueFacet
-    
+
     @Override
     public String markdownValue(final ManagedObject object) {
         if (object == null) {

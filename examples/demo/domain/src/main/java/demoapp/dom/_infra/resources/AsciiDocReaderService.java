@@ -55,7 +55,7 @@ public class AsciiDocReaderService {
 
     private String readResourceAndReplaceProperties(Class<?> aClass, String adocResourceName) {
         val adoc = resourceReaderService.readResource(aClass, adocResourceName);
-        return adoc.replace("{isis-version}", 
+        return adoc.replace("{isis-version}",
                 configuration.getViewer().getWicket().getApplication().getVersion());
     }
 
@@ -64,7 +64,7 @@ public class AsciiDocReaderService {
 
     @Inject
     ResourceReaderService resourceReaderService;
-    
+
     @Inject
     IsisConfiguration configuration;
 

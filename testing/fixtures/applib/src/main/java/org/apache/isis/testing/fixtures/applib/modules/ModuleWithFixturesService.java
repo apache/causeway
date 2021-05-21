@@ -121,7 +121,7 @@ public class ModuleWithFixturesService {
                         final Import importAnnot = Annotations.getAnnotation(annotatedWithImport.getClass(), Import.class);
                         if(importAnnot!=null) {
                             final Class<?>[] importedClasses = importAnnot.value();
-    
+
                             Arrays.stream(importedClasses)
                             .forEach(importedClass -> {
                                 final Map<String, ?> importedBeansOfType = context.getBeansOfType(importedClass);

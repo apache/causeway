@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface LongValueFacet extends Facet {
-    
+
     Long longValue(ManagedObject object);
 
     ManagedObject createValue(Long value);

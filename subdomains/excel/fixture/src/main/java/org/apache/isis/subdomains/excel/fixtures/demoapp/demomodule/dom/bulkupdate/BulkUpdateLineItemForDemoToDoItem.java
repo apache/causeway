@@ -86,7 +86,7 @@ public class BulkUpdateLineItemForDemoToDoItem
         }
         return "NEW: " + getDescription();
     }
-    
+
     @Getter @Setter
     private ExcelDemoToDoItem toDoItem;
 
@@ -102,7 +102,7 @@ public class BulkUpdateLineItemForDemoToDoItem
         setOwnedBy(toDoItem.getOwnedBy());
     }
 
-    
+
     @Getter @Setter
     private String description;
 

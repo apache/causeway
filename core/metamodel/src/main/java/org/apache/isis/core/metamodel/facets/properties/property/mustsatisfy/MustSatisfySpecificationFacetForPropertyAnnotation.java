@@ -38,12 +38,12 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
             final Optional<Property> propertyIfAny,
             final FacetHolder holder,
             final FactoryService factoryService) {
-        
+
         val specifications = propertyIfAny
                 .map(Property::mustSatisfy)
                 .map(classes -> toSpecifications(factoryService, classes))
                 .orElse(Collections.emptyList());
-        
+
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder)
                         : null;

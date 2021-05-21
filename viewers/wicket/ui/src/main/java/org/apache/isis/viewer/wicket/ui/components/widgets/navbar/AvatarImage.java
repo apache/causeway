@@ -18,12 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import java.net.URL;
-import java.util.Objects;
-
 import org.apache.wicket.markup.ComponentTag;
 
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
 

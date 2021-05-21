@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Nature;
 public class InvalidLogicalTypeNameClash {
 
     // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL, 
+    @DomainObject(nature = Nature.VIEW_MODEL,
             objectType = "isis.testdomain.InvalidLogicalTypeNameClash")
     public static class VariantA {
 
@@ -33,11 +33,11 @@ public class InvalidLogicalTypeNameClash {
         public boolean anAction() {
             return false;
         }
-        
+
     }
-    
+
     // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL, 
+    @DomainObject(nature = Nature.VIEW_MODEL,
             objectType = "isis.testdomain.InvalidLogicalTypeNameClash")
     public static  class VariantB {
 
@@ -45,7 +45,7 @@ public class InvalidLogicalTypeNameClash {
         public boolean anAction() {
             return false;
         }
-        
+
     }
-    
+
 }

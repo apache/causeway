@@ -50,23 +50,23 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * 
- * Immutable {@link Iterable}, that can specifically represent 3 possible variants of 
- * {@link Cardinality}. 
+ *
+ * Immutable {@link Iterable}, that can specifically represent 3 possible variants of
+ * {@link Cardinality}.
  * <p>
- * Java's {@link Optional}, can be seen as a holder of element(s), that is restricted to 
- * cardinality ZERO or ONE. {@link Can} is the logical extension to that, allowing also a 
+ * Java's {@link Optional}, can be seen as a holder of element(s), that is restricted to
+ * cardinality ZERO or ONE. {@link Can} is the logical extension to that, allowing also a
  * cardinality of MULTIPLE.
- * <p> 
- * Same idiomatic convention applies: References to {@link Can} 
+ * <p>
+ * Same idiomatic convention applies: References to {@link Can}
  * should never be initialized to {@code null}.
  * <p>
  * A {@link Can} must not contain elements equal to {@code null}.
- * 
+ *
  * @param <T>
  * @since 2.0 {@index}
  */
-public interface Can<T> 
+public interface Can<T>
 extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     /**
@@ -75,18 +75,18 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     Cardinality getCardinality();
 
     /**
-     * @return number of elements this Can contains 
+     * @return number of elements this Can contains
      */
     int size();
-    
+
     /**
      * Will only ever return an empty Optional, if the elementIndex is out of bounds.
      * @param elementIndex
-     * @return optionally this Can's element with index {@code elementIndex}, 
-     * based on whether this index is within bounds 
+     * @return optionally this Can's element with index {@code elementIndex},
+     * based on whether this index is within bounds
      */
     Optional<T> get(int elementIndex);
-    
+
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
      * <p>
@@ -94,16 +94,16 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param elementIndex
      * @return this Can's element with index {@code elementIndex}
      * @throws NoSuchElementException when the elementIndex is out of bounds
-     * @see {@link #get(int)} 
+     * @see {@link #get(int)}
      */
     default T getElseFail(final int elementIndex) {
         return get(elementIndex)
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
     }
-    
+
     /**
-     * For convenience allows the argument to be {@code null} treating {@code null} 
+     * For convenience allows the argument to be {@code null} treating {@code null}
      * equivalent to {@link Can#empty()}.
      * @see {@link Comparable#compareTo(Object)}
      */
@@ -114,7 +114,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return Stream of elements this Can contains
      */
     Stream<T> stream();
-    
+
     /**
      * @return possibly concurrent Stream of elements this Can contains
      */
@@ -132,7 +132,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     default T getFirstOrFail() {
         return getFirst().orElseThrow(_Exceptions::noSuchElement);
     }
-    
+
     /**
      * @return this Can's last element or an empty Optional if no such element
      */
@@ -147,10 +147,10 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     }
 
     /**
-     * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE 
+     * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE
      */
     Optional<T> getSingleton();
-    
+
     /**
      * Shortcut for {@code getSingleton().orElseThrow(_Exceptions::noSuchElement)}
      * @throws NoSuchElementException if result is empty
@@ -158,10 +158,10 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     default T getSingletonOrFail() {
         return getSingleton().orElseThrow(_Exceptions::noSuchElement);
     }
-    
+
     /**
-     * @return whether this Can contains given {@code element}, that is, at least one contained element 
-     * passes the {@link Objects#equals(Object, Object)} test with respect to the given element.  
+     * @return whether this Can contains given {@code element}, that is, at least one contained element
+     * passes the {@link Objects#equals(Object, Object)} test with respect to the given element.
      */
     boolean contains(T element);
 
@@ -214,9 +214,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     public static <T> Can<T> of(T ... array) {
         return ofArray(array);
     }
-    
+
     /**
-     * Returns either a {@code Can} with all the elements from given {@code array} 
+     * Returns either a {@code Can} with all the elements from given {@code array}
      * or an empty {@code Can} if the {@code array} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
@@ -232,7 +232,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         // this is just an optimization, to pre-allocate a reasonable list size,
         // specifically targeted at small list sizes
         val maxSize = Math.min(array.length, 1024);
-        
+
         val nonNullElements = Stream.of(array)
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toCollection(()->new ArrayList<>(maxSize)));
@@ -254,7 +254,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     }
 
     /**
-     * Returns either a {@code Can} with all the elements from given {@code collection} 
+     * Returns either a {@code Can} with all the elements from given {@code collection}
      * or an empty {@code Can} if the {@code collection} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
@@ -269,7 +269,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
         // this is just an optimization, to pre-allocate a reasonable list size,
         // specifically targeted at small list sizes
-        val maxSize = Math.min(collection.size(), 1024); 
+        val maxSize = Math.min(collection.size(), 1024);
 
         val nonNullElements = collection.stream()
                 .filter(_NullSafe::isPresent)
@@ -289,9 +289,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
         return Can_Multiple.of(nonNullElements);
     }
-    
+
     /**
-     * Returns either a {@code Can} with all the elements from given {@code iterable} 
+     * Returns either a {@code Can} with all the elements from given {@code iterable}
      * or an empty {@code Can} if the {@code iterable} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
@@ -299,19 +299,19 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofIterable(@Nullable Iterable<T> iterable) {
-        
+
         if(iterable==null) {
             return empty();
         }
-        
+
         val elements = new ArrayList<T>();
         iterable.forEach(elements::add);
-        
+
         return ofCollection(elements);
     }
-    
+
     /**
-     * Returns either a {@code Can} with all the elements from given {@code enumeration} 
+     * Returns either a {@code Can} with all the elements from given {@code enumeration}
      * or an empty {@code Can} if the {@code enumeration} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * <p>
@@ -321,11 +321,11 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofEnumeration(@Nullable Enumeration<T> enumeration) {
-        
+
         if(enumeration==null) {
             return empty();
         }
-        
+
         val elements = new ArrayList<T>();
         while(enumeration.hasMoreElements()) {
             elements.add(enumeration.nextElement());
@@ -334,7 +334,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     }
 
     /**
-     * Returns either a {@code Can} with all the elements from given {@code stream} 
+     * Returns either a {@code Can} with all the elements from given {@code stream}
      * or an empty {@code Can} if the {@code stream} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * <p>
@@ -351,7 +351,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
         val nonNullElements = stream
                 .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(()->new ArrayList<>()));        
+                .collect(Collectors.toCollection(()->new ArrayList<>()));
 
         val size = nonNullElements.size();
 
@@ -367,7 +367,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     }
 
     /**
-     * Returns either a {@code Can} with all the elements from given {@code instance} 
+     * Returns either a {@code Can} with all the elements from given {@code instance}
      * or an empty {@code Can} if the {@code instance} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      * @param <T>
@@ -378,7 +378,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         if(instance==null || instance.isUnsatisfied()) {
             return empty();
         }
-        if(instance.isResolvable()) { 
+        if(instance.isResolvable()) {
             return Can_Singleton.of(instance.get());
         }
         val nonNullElements = instance.stream()
@@ -391,7 +391,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- OPERATORS
 
     /**
-     * Returns a {@code Can} with all the elements from this {@code Can} but 
+     * Returns a {@code Can} with all the elements from this {@code Can} but
      * contained in reversed order.
      * @return non-null
      */
@@ -410,9 +410,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * Returns a {@code Can} with all the elements from this {@code Can}
      * 'transformed' by the given {@code mapper} function. Any resulting elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
-     * 
+     *
      * @param <R>
-     * @param mapper - if absent throws if this {@code Can} is non-empty 
+     * @param mapper - if absent throws if this {@code Can} is non-empty
      * @return non-null
      */
     default <R> Can<R> map(Function<? super T, R> mapper) {
@@ -423,7 +423,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
         requires(mapper, "mapper");
 
-        val mappedElements = 
+        val mappedElements =
                 stream()
                 .map(mapper)
                 .filter(_NullSafe::isPresent)
@@ -435,7 +435,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- CONCATENATION
 
     /**
-     * Returns a {@code Can} with all the elements from given {@code can} joined by 
+     * Returns a {@code Can} with all the elements from given {@code can} joined by
      * the given {@code element}. If any of given {@code can} or {@code element} are {@code null}
      * these do not contribute any elements and are ignored.
      * @param <T>
@@ -460,21 +460,22 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- TRAVERSAL
 
     Iterator<T> reverseIterator();
-    
+
+    @Override
     void forEach(@NonNull Consumer<? super T> action);
-    
+
     /**
-     * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through 
+     * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code action}.
      * @param <R>
-     * @param zippedIn must have at least as much elements as this {@code Can} 
+     * @param zippedIn must have at least as much elements as this {@code Can}
      * @param action
      * @throws NoSuchElementException if {@code zippedIn} overflows
      */
     <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
-    
+
     /**
-     * Similar to {@link #map(Function)}, but zipps in {@code zippedIn} to iterate through 
+     * Similar to {@link #map(Function)}, but zipps in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code mapper}.
      * @param <R>
      * @param <Z>
@@ -483,12 +484,25 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @throws NoSuchElementException if {@code zippedIn} overflows
      */
     <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
-    
+
     // -- MANIPULATION
-    
+
     Can<T> add(T element);
+
+    /**
+     * Adds the specified element to the list if it is not already present.
+     * @param element
+     * @return same or new instance
+     */
+    default Can<T> addUnique(@NonNull T element) {
+        if(contains(element)) {
+            return this;
+        }
+        return add(element);
+    }
+
     Can<T> addAll(Can<T> other);
-    
+
     /**
      * Inserts the specified element at the specified position in this list
      * (optional operation).  Shifts the element currently at that position
@@ -507,7 +521,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      *         (<tt>index &lt; 0 || index &gt; size()</tt>)
      */
     Can<T> add(int index, T element);
-    
+
     Can<T> replace(int index, T element);
 
     /**
@@ -522,11 +536,26 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
      */
     Can<T> remove(int index);
-    
+
     Can<T> remove(T element);
-    
+
+    /**
+     * Given <i>n</i> indices, returns an equivalent of
+     * <pre>
+     * Can.of(
+     *     this.get(indices[0]).orElse(null),
+     *     this.get(indices[1]).orElse(null),
+     *     ...
+     *     this.get(indices[n-1]).orElse(null)
+     * )
+     * </pre>
+     * (where nulls are being ignored)
+     * @param indices - null-able
+     */
+    Can<T> pickByIndex(@Nullable int ...indices);
+
     // -- SEARCH
-    
+
     /**
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
@@ -545,9 +574,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      *         (<a href="Collection.html#optional-restrictions">optional</a>)
      */
     int indexOf(T element);
-    
+
     // -- EQUALITY
-    
+
     /**
      * @param other
      * @return whether this is element-wise equal to {@code other}
@@ -559,24 +588,24 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         if(this.size()!=other.size()) {
             return false;
         }
-        
+
         val otherIterator = other.iterator();
-        
+
         for(T element: this) {
             val otherElement = otherIterator.next();
             if(!element.equals(otherElement)) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     // -- PARTIAL EQUALITY
 
     /**
-     * Let {@literal n} be the number of elements in {@code other}. 
-     * Returns whether the first {@literal n} elements of this {@code Can} are 
+     * Let {@literal n} be the number of elements in {@code other}.
+     * Returns whether the first {@literal n} elements of this {@code Can} are
      * element-wise equal to {@code other}.
      * @param other
      */
@@ -588,24 +617,24 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         if(this.size()<other.size()) {
             return false;
         }
-        
+
         val thisIterator = this.iterator();
         val otherIterator = other.iterator();
-        
+
         while(otherIterator.hasNext()) {
             val otherElement = otherIterator.next();
             val thisElement  = thisIterator.next();
-            
+
             if(!thisElement.equals(otherElement)) {
                 return false;
             }
         }
-        return true; 
+        return true;
     }
 
     /**
-     * Let {@literal n} be the number of elements in {@code other}. 
-     * Returns whether the last {@literal n} elements of this {@code Can} are 
+     * Let {@literal n} be the number of elements in {@code other}.
+     * Returns whether the last {@literal n} elements of this {@code Can} are
      * element-wise equal to {@code other}.
      * @param other
      */
@@ -617,19 +646,19 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         if(this.size()<other.size()) {
             return false;
         }
-        
+
         val thisIterator = this.reverseIterator();
         val otherIterator = other.reverseIterator();
-        
+
         while(otherIterator.hasNext()) {
             val otherElement = otherIterator.next();
             val thisElement  = thisIterator.next();
-            
+
             if(!thisElement.equals(otherElement)) {
                 return false;
             }
         }
-        return true; 
+        return true;
     }
 
     // -- SHORTCUTS FOR PREDICATES
@@ -652,32 +681,32 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     // -- COLLECTORS
 
-    public static <T> 
+    public static <T>
     Collector<T, ?, Can<T>> toCan() {
-        
+
         return Collectors.collectingAndThen(
-                Collectors.toList(), 
+                Collectors.toList(),
                 Can::ofCollection);
     }
 
     // -- CONVERSIONS
-    
+
     /**
      * @return a serializable and immutable List, containing the elements of this Can
      */
     List<T> toList();
-    
+
     /**
      * @return a serializable and immutable Set, containing the elements of this Can
      */
     Set<T> toSet();
-    
+
     /**
      * @return a serializable and immutable Set, containing the elements of this Can
      */
     Set<T> toSet(@NonNull Consumer<T> onDuplicated);
 
-//XXX to implement when needed    
+//XXX to implement when needed
 //    Set<T> toSortedSet();
 //    Set<T> toSortedSet(Comparator<T> comparator);
 
@@ -697,7 +726,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     default T[] toArray(T[] a) {
         return toList().toArray(a);
     }
-    
+
     /**
      * @param elementType the {@code Class} object representing the component
      *          type of the new array
@@ -705,5 +734,6 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      */
     T[] toArray(Class<T> elementType);
 
-        
+
+
 }

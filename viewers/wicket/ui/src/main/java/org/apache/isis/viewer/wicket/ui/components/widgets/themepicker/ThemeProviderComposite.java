@@ -37,7 +37,7 @@ import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -45,12 +45,12 @@ import de.agilecoders.wicket.core.settings.ThemeProvider;
 public class ThemeProviderComposite implements ThemeProvider {
 
     private final Can<ThemeProvider> themeProviders;
-    
+
     private ITheme defaultTheme;
     private Map<String, ITheme> themesByName;
     private List<String> availableNames;
     private List<ITheme> availableThemes;
-    
+
     @Override
     public ITheme byName(String name) {
         if (!Strings.isEmpty(name)) {
@@ -60,14 +60,14 @@ public class ThemeProviderComposite implements ThemeProvider {
                 return theme;
             }
         }
-        
+
         log.warn("'{}' theme not found amoung providers {} provinding {}, "
-                + "using default '{}' instead", 
-                name, 
-                themeProviders.toList(), 
+                + "using default '{}' instead",
+                name,
+                themeProviders.toList(),
                 available().stream().map(ITheme::name).collect(Collectors.joining(", ")),
                 defaultTheme().name());
-        
+
         return defaultTheme();
     }
 
@@ -82,33 +82,33 @@ public class ThemeProviderComposite implements ThemeProvider {
         ensureInit();
         return defaultTheme;
     }
-    
+
     public List<String> availableNames() {
         ensureInit();
         return availableNames;
     }
- 
+
     // -- HELPER
-    
+
     private void ensureInit() {
         if(themesByName!=null) {
             return;
         }
         themesByName = _Maps.newLinkedHashMap();
         themeProviders.forEach(themeProvider->{
-            
+
             if(defaultTheme==null) {
                 defaultTheme = themeProvider.defaultTheme();
             }
-            
+
             themeProvider.available().forEach(theme->{
                 themesByName.put(theme.name().toLowerCase(), theme);
             });
-            
+
         });
         availableThemes = Collections.unmodifiableList(_Lists.newArrayList(themesByName.values()));
         availableNames = Collections.unmodifiableList(_Lists.map(availableThemes, ITheme::name));
     }
-    
+
 
 }

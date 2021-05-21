@@ -71,10 +71,10 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
         pm.addFactory(step2, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
         pm.addFactory(step2, JdoNotPersistentAnnotationFacetFactory.class, Marker.JDO);
-        
+
         // breaks idea of logical-type-names having namespaces
         //pm.addFactory(step2, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
-        
+
         pm.addFactory(step2, JdoVersionAnnotationFacetFactory.class, Marker.JDO);
 
         pm.addFactory(step2, JdoQueryAnnotationFacetFactory.class, Marker.JDO);
@@ -93,7 +93,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
         addValidatorToCheckForUnsupportedAnnotations(pm);
 
     }
-    
+
     // -- HELPER
 
     private void addValidatorToEnsureIdentityType(ProgrammingModel pm) {

@@ -90,28 +90,28 @@ implements ExecutionPublisher {
     // -- HELPER
 
     private void notifySubscribers(final Execution<?,?> execution) {
-        
+
         val handle = _Xray.enterExecutionPublishing(
-                iaTracker, 
-                execution, 
+                iaTracker,
+                execution,
                 enabledSubscribers,
                 this::getCannotPublishReason);
-        
+
         if(canPublish()) {
             for (val subscriber : enabledSubscribers) {
                 subscriber.onExecution(execution);
-            }    
+            }
         }
-        
+
         _Xray.exitPublishing(handle);
-        
+
     }
 
     private final LongAdder suppressionRequestCounter = new LongAdder();
 
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty()
-                && suppressionRequestCounter.longValue() < 1L;    
+                && suppressionRequestCounter.longValue() < 1L;
     }
 
     // x-ray support

@@ -25,5 +25,5 @@ public interface InteractionScopeLifecycleHandler {
 
     void onTopLevelInteractionOpened();
     void onTopLevelInteractionClosing();
-    
+
 }

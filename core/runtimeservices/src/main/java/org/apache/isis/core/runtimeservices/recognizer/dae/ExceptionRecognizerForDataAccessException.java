@@ -57,13 +57,13 @@ implements ExceptionRecognizer {
 
     @Getter
     private final boolean disabled;
-    
+
     @Inject
     public ExceptionRecognizerForDataAccessException(IsisConfiguration conf) {
         this.disabled = conf.getCore().getRuntimeServices()
               .getExceptionRecognizer().getDae().isDisable();
     }
-    
+
     @Override
     public Optional<Recognition> recognize(Throwable ex) {
         if(ex instanceof DataAccessException
@@ -74,46 +74,46 @@ implements ExceptionRecognizer {
     }
 
     // -- HELPER
-    
+
     private Optional<Recognition> recognizeDae(DataAccessException ex) {
         if(ex instanceof ConcurrencyFailureException) {
             return recognitionOf(Category.CONCURRENCY, ex);
-             
+
         }
         if(ex instanceof TransientDataAccessException
                 || ex instanceof RecoverableDataAccessException) {
-            return recognitionOf(Category.RETRYABLE, ex); 
+            return recognitionOf(Category.RETRYABLE, ex);
         }
         if(ex instanceof DataIntegrityViolationException) {
             // eg. Data or related data already exists
-            return recognitionOf(Category.CONSTRAINT_VIOLATION, ex); 
+            return recognitionOf(Category.CONSTRAINT_VIOLATION, ex);
         }
         if(ex instanceof DataRetrievalFailureException) {
             // Unable to load object. eg. Has it been deleted by someone else?
-            return recognitionOf(Category.NOT_FOUND, ex); 
+            return recognitionOf(Category.NOT_FOUND, ex);
         }
         if(ex instanceof NonTransientDataAccessException) {
-            // eg. Unable to save changes. Does similar data already exist, 
+            // eg. Unable to save changes. Does similar data already exist,
             // or has referenced data been deleted?"
-            return recognitionOf(Category.SERVER_ERROR, ex); 
+            return recognitionOf(Category.SERVER_ERROR, ex);
         }
         return recognitionOf(Category.OTHER, ex);
     }
 
     private Optional<Recognition> recognitionOf(Category category, DataAccessException ex) {
         val causeMessage = _Strings.nullToEmpty(ex.getMostSpecificCause().getMessage()).trim();
-        
+
         val exceptionFriendlyName = _Strings.asNaturalName2
                 .apply(ex.getClass().getSimpleName())
                 .toLowerCase();
-        
-        val friendlyMessage = String.format("%s (%s): %s", 
+
+        val friendlyMessage = String.format("%s (%s): %s",
                 category.getFriendlyName(),
                 exceptionFriendlyName,
                 _Strings.isEmpty(causeMessage)
                     ? "Cannot find any details for what is causing the issue."
                     : causeMessage);
-        
+
         return Recognition.of(category, friendlyMessage);
     }
 

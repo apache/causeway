@@ -24,9 +24,9 @@ import java.util.Optional;
 /**
  * Building blocks for the <em>Chain of Responsibility</em> design pattern.
  * <p>
- * <em>Chain of Responsibility</em> allows passing requests along the chain of handlers, 
+ * <em>Chain of Responsibility</em> allows passing requests along the chain of handlers,
  * until one of them handles the request.
- *  
+ *
  * @since 2.0
  *
  * @param <X> request type
@@ -37,15 +37,15 @@ public interface ChainOfResponsibility<X, R> {
     /**
      * The {@code request} is passed along the chain of handlers, until one of them handles the request.
      * @param request
-     * @return response of the first handler that handled the request wrapped in an Optional, 
-     * or an empty Optional, if no handler handled the request  
+     * @return response of the first handler that handled the request wrapped in an Optional,
+     * or an empty Optional, if no handler handled the request
      */
     Optional<R> handle(X request);
 
     /**
-     * A chain of responsibility is made up of handlers, that are asked in sequence, 
-     * whether they handle a request. 
-     * 
+     * A chain of responsibility is made up of handlers, that are asked in sequence,
+     * whether they handle a request.
+     *
      * @since 2.0
      *
      * @param <X> request type
@@ -57,15 +57,15 @@ public interface ChainOfResponsibility<X, R> {
     }
 
     /**
-     * Creates a new ChainOfResponsibility of given {@code chainOfHandlers} 
+     * Creates a new ChainOfResponsibility of given {@code chainOfHandlers}
      * @param <X>
      * @param <R>
      * @param chainOfHandlers
      */
-    static <X, R> ChainOfResponsibility<X, R> 
+    static <X, R> ChainOfResponsibility<X, R>
     of(
             final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
-    
+
         return request -> {
 
             final Optional<R> responseIfAny = chainOfHandlers.stream()
@@ -74,7 +74,7 @@ public interface ChainOfResponsibility<X, R> {
                     .map(h -> h.handle(request));
             return responseIfAny;
         };
-        
+
     }
-    
+
 }

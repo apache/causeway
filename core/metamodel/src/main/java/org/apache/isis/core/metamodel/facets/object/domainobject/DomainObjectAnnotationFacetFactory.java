@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -83,12 +83,12 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import lombok.NonNull;
 import lombok.val;
 
-public class DomainObjectAnnotationFacetFactory 
+public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements 
-    MetaModelRefiner, 
-    PostConstructMethodCache, 
-    ObjectSpecIdFacetFactory {
+implements
+    MetaModelRefiner,
+    PostConstructMethodCache,
+    ObjectTypeFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
@@ -105,7 +105,7 @@ implements
     }
 
     @Override
-    public void process(final ProcessObjectSpecIdContext processClassContext) {
+    public void process(final ProcessObjectTypeContext processClassContext) {
         processObjectType(processClassContext);
     }
 
@@ -220,9 +220,9 @@ implements
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 String.format(
                         "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
-                        annotationName, 
-                        cls.getName(), 
-                        methodName, 
+                        annotationName,
+                        cls.getName(),
+                        methodName,
                         repositoryClass.getName())
                 );
         return null;
@@ -256,13 +256,14 @@ implements
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
-    void processObjectType(final ProcessObjectSpecIdContext processClassContext) {
+    void processObjectType(final ProcessObjectTypeContext processClassContext) {
 
+        val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
+        val facet = ObjectTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
 
         // then add
         super.addFacet(facet);
@@ -494,25 +495,33 @@ implements
 
                     @Override
                     public void validate(ObjectSpecification objSpec) {
-                        if(objSpec.isManagedBean()
-                                || objSpec.isAbstract()) {
+
+                        // @DomainObject(objectType=...) must be unique among non-abstract types
+                        // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
+                        // that have the same @DomainObject(objectType=...) should be allowed.
+                        // A hard constraint that applies, is that there cannot be multiple bookmark-able
+                        // types that share the same @DomainObject(objectType=...).
+                        // This must be guaranteed by MM validation.
+                        // - see also LogicalTypeResolver.register(...)
+
+                        if(objSpec.isAbstract()) {
                             return;
                         }
-                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
+                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
                     }
 
                     @Override
                     public void summarize() {
                         for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
                             val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
-                            val isCollision = collidingSpecs.size()>1;
-                            if(isCollision) {
+                            if(isObjectTypeCollision(collidingSpecs)) {
                                 val csv = asCsv(collidingSpecs);
 
                                 collidingSpecs.forEach(spec->{
                                     ValidationFailure.raiseFormatted(
                                             spec,
-                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
+                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes,"
+                                            + " that do not all share the same type hierarchy:\n %s",
                                             logicalTypeName,
                                             csv);
                                 });
@@ -522,6 +531,10 @@ implements
                         }
                         // so can be revalidated again if necessary.
                         collidingSpecsByLogicalTypeName.clear();
+                    }
+
+                    private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
+                        return specs.size()>1;
                     }
 
                     private String asCsv(final List<ObjectSpecification> specList) {

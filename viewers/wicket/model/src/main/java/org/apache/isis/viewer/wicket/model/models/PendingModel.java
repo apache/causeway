@@ -37,7 +37,7 @@ final class PendingModel extends Model<ObjectMemento> {
      * Whether pending has been set (could have been set to null)
      */
     private boolean hasPending;
-    
+
     /**
      * The new value (could be set to null; hasPending is used to distinguish).
      */
@@ -60,17 +60,17 @@ final class PendingModel extends Model<ObjectMemento> {
     }
 
     public ManagedObject getPendingElseCurrentAdapter() {
-        return hasPending 
-                ? getCommonContext().reconstructObject(pendingMemento) 
+        return hasPending
+                ? getCommonContext().reconstructObject(pendingMemento)
                 : ownerModel.getObject();
     }
 
-    
+
     // -- HELPER
-    
+
     private IsisAppCommonContext getCommonContext() {
         return ownerModel.getCommonContext();
     }
-    
-    
+
+
 }

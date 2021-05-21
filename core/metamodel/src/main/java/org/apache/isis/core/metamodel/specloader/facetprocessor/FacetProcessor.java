@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactory;
@@ -80,7 +80,7 @@ public class FacetProcessor {
      * {@link MethodPrefixBasedFacetFactory}.
      *
      */
-    private final _Lazy<Set<String>> methodPrefixes = 
+    private final _Lazy<Set<String>> methodPrefixes =
             _Lazy.threadSafe(this::init_methodPrefixes);
 
     /**
@@ -111,13 +111,13 @@ public class FacetProcessor {
      * Lazily initialized, then cached. The lists remain in the same order that
      * the factories were {@link #registerFactory(FacetFactory) registered}.
      */
-    private final _Lazy<ListMultimap<FeatureType, FacetFactory>> factoryListByFeatureType = 
+    private final _Lazy<ListMultimap<FeatureType, FacetFactory>> factoryListByFeatureType =
             _Lazy.threadSafe(this::init_factoriesByFeatureType);
-    
+
     // -- LIFECYCLE
-    
+
     public void init() {
-        cleanUp(); 
+        cleanUp();
         programmingModel.streamFactories()
         .forEach(this::registerFactory);
     }
@@ -131,7 +131,7 @@ public class FacetProcessor {
         factories.clear();
         factoryByFactoryType.clear();
     }
-    
+
     private void registerFactory(FacetFactory factory) {
         factoryByFactoryType.put(factory.getClass(), factory);
         factories.add(factory);
@@ -155,11 +155,11 @@ public class FacetProcessor {
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
     public void findAssociationCandidateAccessors(
-            Stream<Method> methods, 
+            Stream<Method> methods,
             Consumer<Method> onCandidate) {
-        
+
         val factories = propertyOrCollectionIdentifyingFactories.get();
-        
+
         methods.forEach(method->{
             for (val facetFactory : factories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
@@ -178,9 +178,9 @@ public class FacetProcessor {
      * Intended to be called after {@link #findAndRemovePropertyAccessors(MethodRemover, java.util.List)} once only reference properties remain.
      */
     public void findAndRemovePropertyAccessors(
-            MethodRemover methodRemover, 
+            MethodRemover methodRemover,
             List<Method> methodListToAppendTo) {
-        
+
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }
@@ -195,9 +195,9 @@ public class FacetProcessor {
      *      List)
      */
     public void findAndRemoveCollectionAccessors(
-            MethodRemover methodRemover, 
+            MethodRemover methodRemover,
             List<Method> methodListToAppendTo) {
-        
+
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
         }
@@ -238,28 +238,27 @@ public class FacetProcessor {
         return false;
     }
 
-    public void processObjectSpecId(Class<?> cls, FacetHolder facetHolder) {
+    public void processObjectType(Class<?> cls, FacetHolder facetHolder) {
         val factoryList = getObjectSpecIfFacetFactoryList();
         for (val facetFactory : factoryList) {
-            facetFactory.process(new ProcessObjectSpecIdContext(cls, facetHolder));
+            facetFactory.process(new ProcessObjectTypeContext(cls, facetHolder));
         }
     }
 
-    private List<ObjectSpecIdFacetFactory> objectSpecIfFacetFactoryList = null;
+    private List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList = null;
 
-    
-    private List<ObjectSpecIdFacetFactory> getObjectSpecIfFacetFactoryList() {
+
+    private List<ObjectTypeFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
-            val facetFactories = _Lists.<ObjectSpecIdFacetFactory>newArrayList();
-            
+            val facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
+
             factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
             .forEach(facetFactory->{
-                if (facetFactory instanceof ObjectSpecIdFacetFactory) {
-                    val objectSpecIdFacetFactory = (ObjectSpecIdFacetFactory) facetFactory;
-                    facetFactories.add(objectSpecIdFacetFactory);
+                if (facetFactory instanceof ObjectTypeFacetFactory) {
+                    facetFactories.add((ObjectTypeFacetFactory) facetFactory);
                 }
             });
-            
+
             objectSpecIfFacetFactoryList = Collections.unmodifiableList(facetFactories);
         }
         return objectSpecIfFacetFactoryList;
@@ -284,12 +283,12 @@ public class FacetProcessor {
             Class<?> cls,
             MethodRemover methodRemover,
             FacetHolder facetHolder) {
-        
+
         val ctx = new ProcessClassContext(
-                cls, 
-                removerElseNoopRemover(methodRemover), 
+                cls,
+                removerElseNoopRemover(methodRemover),
                 facetHolder);
-        
+
         factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
         .forEach(facetFactory->facetFactory.process(ctx));
     }
@@ -315,7 +314,7 @@ public class FacetProcessor {
      *            - what type of feature the method represents (property,
      *            action, collection etc)
      * @param isMixinMain
-     *            - Whether we are currently processing a mixin type AND this context's method 
+     *            - Whether we are currently processing a mixin type AND this context's method
      *            can be identified as the main method of the processed mixin class. (since 2.0)
      */
     public void process(
@@ -323,24 +322,26 @@ public class FacetProcessor {
             Method method,
             MethodRemover methodRemover,
             FacetedMethod facetedMethod,
-            FeatureType featureType, 
+            FeatureType featureType,
             boolean isMixinMain) {
-        
+
         facetedMethod.setMetaModelContext(metaModelContext);
-        
+
         val processMethodContext =
                 new ProcessMethodContext(
-                        cls, 
-                        featureType, 
-                        method, 
+                        cls,
+                        featureType,
+                        method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
-        
-        factoryListByFeatureType.get().getOrElseEmpty(featureType)
-        .forEach(facetFactory->facetFactory.process(processMethodContext));
+
+        for (FacetFactory facetFactory : factoryListByFeatureType.get().getOrElseEmpty(featureType)) {
+
+            facetFactory.process(processMethodContext);
+        }
     }
 
     public void processMemberOrder(ObjectMember facetHolder) {
-        
+
     }
 
     /**
@@ -367,9 +368,9 @@ public class FacetProcessor {
             int paramNum,
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter) {
-        
+
         facetedMethodParameter.setMetaModelContext(metaModelContext);
-        
+
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
             processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
@@ -382,12 +383,12 @@ public class FacetProcessor {
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter,
             FeatureType featureType) {
-        
+
         facetedMethodParameter.setMetaModelContext(metaModelContext);
-        
+
         val processParameterContext =
                 new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
-        
+
         factoryListByFeatureType.get().getOrElseEmpty(featureType)
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
     }
@@ -399,7 +400,7 @@ public class FacetProcessor {
         methodFilteringFactories.clear();
         propertyOrCollectionIdentifyingFactories.clear();
     }
-    
+
     // -- INITIALIZERS
 
     private ListMultimap<FeatureType, FacetFactory> init_factoriesByFeatureType() {
@@ -443,7 +444,7 @@ public class FacetProcessor {
         }
         return propertyOrCollectionIdentifyingFactories;
     }
-    
+
     // -- HELPER
 
     private static MethodRemover removerElseNoopRemover(MethodRemover methodRemover) {

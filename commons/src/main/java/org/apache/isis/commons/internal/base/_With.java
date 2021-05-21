@@ -212,7 +212,7 @@ public final class _With<T> {
     /**
      * Allows for convenient named parameter non-null-check.
      * @param obj target for the non-null-check
-     * @param paramName to use for the exception message, when the non-null-check fails 
+     * @param paramName to use for the exception message, when the non-null-check fails
      * @return {@code obj!=null ? obj : throw NullPointerException}
      * @throws NullPointerException if {@code obj} is {@code null}
      */
@@ -229,7 +229,7 @@ public final class _With<T> {
     /**
      * Allows for convenient named parameter non-empty-check.
      * @param obj target for the non-empty-check
-     * @param paramName to use for the exception message, when the non-empty-check fails 
+     * @param paramName to use for the exception message, when the non-empty-check fails
      * @return {@code obj}
      * @throws NullPointerException if {@code obj} is {@code null}
      * @throws IllegalArgumentException if {@code obj} is 'empty'
@@ -311,10 +311,10 @@ public final class _With<T> {
     }
 
     // -- EXCEPTION SWALLOW IDIOMS
-    
+
     /**
      * Returns Optional of the callable's result after invocation. Any exception during
-     * invocation will result in an empty Optional.  
+     * invocation will result in an empty Optional.
      */
     public static <T> Optional<T> tryCall(Callable<T> callable) {
         try {
@@ -327,7 +327,7 @@ public final class _With<T> {
 
     /**
      * Returns the callable's result after invocation. Any exception during
-     * invocation will result in the defaultValue being returned instead.  
+     * invocation will result in the defaultValue being returned instead.
      */
     public static <T> T tryOrDefault(Callable<T> callable, T defaultValue) {
         try {

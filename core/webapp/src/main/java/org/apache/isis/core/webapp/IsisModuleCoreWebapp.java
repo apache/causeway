@@ -29,6 +29,7 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
+import org.apache.isis.core.webapp.impersonation.ImpersonatedUserHolderUsingHttpSession;
 import org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.core.webapp.modules.templresources.WebModuleTemplateResources;
 import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
@@ -44,8 +45,9 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
         WebModuleTemplateResources.class,
 
         // @Component's
-        
+
         HealthIndicatorUsingHealthCheckService.class,
+        ImpersonatedUserHolderUsingHttpSession.class,
 
         // (not annotated)
         IsisWebAppContextInitializer.class,
@@ -55,10 +57,10 @@ public class IsisModuleCoreWebapp {
 
     @Bean
     @Scope(
-            value = WebApplicationContext.SCOPE_SESSION, 
+            value = WebApplicationContext.SCOPE_SESSION,
             proxyMode = ScopedProxyMode.TARGET_CLASS)
     public MessageBroker sessionScopedMessageBroker() {
         return new MessageBroker();
     }
-    
+
 }

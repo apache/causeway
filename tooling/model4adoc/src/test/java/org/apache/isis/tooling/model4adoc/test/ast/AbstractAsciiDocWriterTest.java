@@ -20,9 +20,9 @@ package org.apache.isis.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +56,7 @@ abstract class AbstractAsciiDocWriterTest {
     protected void assertReferenceDocumentIsCorrectlyWritten() {
         val adocRef = _Strings.readFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
-        val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
+        val refDoc = asciidoctor.load(adocRef, Options.builder().build());
         
         if(debugEnabled) {
             System.out.println("==========================================");

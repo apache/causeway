@@ -37,7 +37,7 @@ import lombok.val;
 public class MarkupVariableResolverService {
 
     private final Map<String, String> constants;
-    
+
     @Inject
     public MarkupVariableResolverService(IsisConfiguration configuration) {
         constants = _Maps.unmodifiable(
@@ -65,5 +65,5 @@ public class MarkupVariableResolverService {
     private String var(String name) {
         return String.format("${%s}", name);
     }
-    
+
 }

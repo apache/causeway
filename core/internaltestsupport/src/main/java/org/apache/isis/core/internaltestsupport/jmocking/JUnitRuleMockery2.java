@@ -77,10 +77,10 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
-        
+
 //        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
 //        .setUnitTesting(true);
-        
+
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());
@@ -177,7 +177,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                     container.addComponent(cutType);
 
                     final Object cut = container.getComponent(cutType);
-                    
+
                     _Reflect.setFieldOn(cutField, target, cut);
 
                 } else {
@@ -290,18 +290,18 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         }
     }
 
-    
+
     private static class ExpectationsWithInitializer extends Expectations {
         private ExpectationsWithInitializer(Consumer<Expectations> initializer) {
             super();
             initializer.accept(this);
         }
     }
-    
+
     public static Expectations expectationsWith(Consumer<Expectations> initializer) {
         return new ExpectationsWithInitializer(initializer);
     }
-    
+
 
 
 }

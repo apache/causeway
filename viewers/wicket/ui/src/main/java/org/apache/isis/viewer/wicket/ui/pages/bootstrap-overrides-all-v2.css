@@ -33,22 +33,26 @@ body {
     margin-bottom: 0px;
 }
 
-header.navbar-fixed-top {
-    position: sticky;
+/* emulate .dropdown-menu-right for secondary dropdown menus */
+.navbar-nav.secondary .dropdown-menu {
+	right: 0;
+	left: auto;
 }
 
-.navbar-fixed-top {
-    position: initial;
-    right: initial;
-    left: initial;
+.card {
+	margin-bottom: 21px;
 }
 
-.panel-default .panel-heading {
+.card .card-header {
 	padding: 3px 15px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 3em; /* for panel-headings that contain no buttons, to make them same height */
+	min-height: 3em; /* for card-headers that contain no buttons, to make them same height */
+}
+
+.card .card-header .card-title {
+	margin-bottom: 0rem;
 }
 
 .table .form-control:disabled {
@@ -426,7 +430,7 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 }
 
 .entityHeaderPanel .entityTitle {
-    font-size: 1.8em;
+    font-size: 1.52em;
     font-weight:normal;
     text-decoration:none;
     padding-right: 30px;
@@ -438,6 +442,10 @@ div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
 .breadcrumbPanel {
     display: inline-block;
     width: 300px;
+}
+
+footer nav.navbar .breadcrumbPanel {
+    vertical-align: middle;
 }
 
 
@@ -478,17 +486,17 @@ span.containedButtonPanel {
 
 
 
-.navbar .powered-by {
-    margin-top: 23px;
+.navbar-text .powered-by {
+    /* margin-top: 23px; */
     margin-right: 10px;
     font-size: small;
     font-style: italic;
-    vertical-align: middle;
+    /* vertical-align: middle; */
 }
 
 .navbar .creditName {
     padding-left: 2px;
-    padding-right: 10px;
+    /* padding-right: 10px; */
     vertical-align: middle;
 }
 
@@ -502,14 +510,17 @@ span.containedButtonPanel {
 /* from entityPropertiesPanel */
 
 
-.entityPropertiesPanel .properties.panel-body {
+.entityPropertiesPanel .properties.card-body {
     padding-bottom: 5px;
 }
-.entityPropertiesPanel .collection.panel-body {
+.entityPropertiesPanel .collection.card-body {
     padding-bottom: 0px;
 }
 
-
+/* add some space between an FA icon and the text on the right */
+.btn .fa {
+	margin-right: 4px;
+}
 
 /* from additionalLinksPanel.css */
 
@@ -545,13 +556,55 @@ div.additionalLinkList {
 
 }
 
+/* dropdown-menu: distinguished rendering for disabled menu-items
+   (assuming grey foreground text color is reasonable to apply to light as well as dark themes) */
+.dropdown-menu > .disabled > a, 
+.dropdown-menu > .disabled > a:hover, 
+.dropdown-menu > .disabled > a:focus {
+    /*color: rgba(123, 138, 139, 0.5);*/
+    opacity: 0.5; 
+    cursor: not-allowed;
+}
 
+/* menu-bar: distinguished rendering for selected menu items
+   (assuming white-ish background overlay color is reasonable to apply to light as well as dark themes) */
+.navbar-nav .active > .nav-link, 
+.navbar-nav .nav-link.active, 
+.navbar-nav .nav-link.show, 
+.navbar-nav .show > .nav-link {
+    background-color: rgba(255, 255, 255, 0.3);
+}
 
+/* buttons: distinguished rendering for disabled action buttons
+   (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed!important;
+    opacity: 0.65;
+    box-shadow: none;
+}
 
+/* make sure there is no gap between the menu toggle and its menu, otherwise menu hides on focus transition*/
+ul.dropdown-menu {
+	padding-top: 0;
+	margin-top: 0;
+}
+.dropup ul.dropdown-menu {
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
 
+/* removes the caret (arrow down) from the additional links selector dropdowns */
+.additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
+	content: none;
+}
+/* removes default margin right after fa-icon in dropdown-toggles */
+.additionalLinkList .btn.btn-secondary.dropdown-toggle .fa {
+	margin-right: 0px;
+}
 
-
-
+.additionalLinkList.additionalLinkListDropDown li.dropdown-item.additionalLinkItem {
+	padding: 0px;
+}
 
 .col .additionalLinks,
 .col .additionalLinksAndSelectorDropDown,
@@ -560,16 +613,14 @@ div.additionalLinkList {
     /*margin-top: -0.3em;*/
 }
 
-.collection.panel-body {
+.collection.card-body {
     padding-top: 0px;
 }
 
-.collectionPanel .well {
+.collectionPanel .card.card-body {
     background-color: transparent;
     margin-bottom: 0px;
 }
-
-
 
 .nav > li > a {
     padding-left: 10px;
@@ -581,18 +632,23 @@ th > a > div > strong {
     float: left;
 }
 
+/* makes disabled fields darker */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e6e6e6;
+    opacity: 1;
+}
+
 /* Labels on the left/top/none START */
 
 .form-group {
     margin-bottom: 0;
 }
 
-
 div.label-left.form-group {
     width: 100%;
 }
 
-div.label-left label.control-label {
+div.label-left label.col-form-label {
     width: 30%;
     float: left;
     padding-top: 2px;
@@ -600,17 +656,17 @@ div.label-left label.control-label {
     text-align: left;
 }
 
-.propertyEditForm .label-left label.control-label,
-.actionParametersForm .label-left label.control-label {
+.propertyEditForm .label-left label.col-form-label,
+.actionParametersForm .label-left label.col-form-label {
     padding-left: 10px;
 }
 
-div.label-top label.control-label {
+div.label-top label.col-form-label {
     /*padding-left: 10px;*/
     /*padding-bottom: 4px;*/
 }
 
-div.label-none label.control-label {
+div.label-none label.col-form-label {
     display: none;
 }
 
@@ -628,7 +684,7 @@ div.label-left.actions-right .scalarValueWrapper {
     /*width: 3%;*/
 }
 
-.pull-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
+.float-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
     text-align: inherit;
 }
 
@@ -673,7 +729,7 @@ div.label-right .scalarValueWrapper {
     padding-left: 30%;
 }
 
-div.label-right .scalarValueWrapper .control-label{
+div.label-right .scalarValueWrapper .col-form-label{
     vertical-align: sub;
 }
 
@@ -728,7 +784,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     height: 20px;
 }
 
-.referencePanel .form-group.label-left .scalarName.control-label {
+.referencePanel .form-group.label-left .scalarName.col-form-label {
     padding-right: 10px;
 }
 
@@ -746,23 +802,23 @@ div.referencePanel.scalarNameAndValueComponentType {
     padding-top: 20px;
 }
 
-.entityCollectionsPanel .panel-heading {
+.entityCollectionsPanel .card-header {
     padding-bottom: 10px;
 }
-.standaloneCollectionPanel .panel-heading {
+.standaloneCollectionPanel .card-header {
     padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
 }
 
-.additionalLinks.pull-right {
+.additionalLinks.float-right {
     /*margin-right: 5px;*/
 }
 
-.additionalLinks.pull-right div {
+.additionalLinks.float-right div {
     /* display: inline-block; */
     /*margin-left: 5px;*/
 }
 
-.additionalLinks.pull-right div .additionalLinkListDropDown {
+.additionalLinks.float-right div .additionalLinkListDropDown {
     margin-left: 10px;
     margin-right: 0px;
 }
@@ -776,15 +832,15 @@ div.referencePanel.scalarNameAndValueComponentType {
     /*padding-bottom: 5px;*/
 }
 
-.scalarValueWrapper .help-block {
+.scalarValueWrapper .form-text {
     margin-bottom: 5px;
 }
 
-.scalarValueWrapper .help-block ul {
+.scalarValueWrapper .form-text ul {
     margin-bottom: 0px;
 }
 
-.scalarValueWrapper .help-block .alert {
+.scalarValueWrapper .form-text .alert {
     margin-bottom: 0px;
 }
 
@@ -1129,12 +1185,22 @@ ul.tertiary li.dropdown img.avatar {
     padding-right: 5px;
 }
 
-ul.tertiary li.dropdown a.dropdown-toggle {
-    padding-bottom: 13px;
-    margin-bottom: 0px;
-}
-
 ul.tertiary li.dropdown ul.dropdown-menu {
     min-width: 0px;
 }
 
+.fs-15em {
+	font-size: 1.5em;
+}
+
+/* header/footer vertical padding fix */
+nav.sticky-top,
+footer > .navbar {
+    padding: 0.5rem 1rem;
+}
+
+/* enable line wrapping on nav-bar's content, so we don't overflow */
+div.navbar-wrap,
+ul.navbar-wrap {
+	flex-wrap:wrap;
+}

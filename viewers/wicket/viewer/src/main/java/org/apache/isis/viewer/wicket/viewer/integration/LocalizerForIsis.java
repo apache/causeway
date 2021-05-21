@@ -51,7 +51,7 @@ public class LocalizerForIsis extends Localizer {
     @Inject private InteractionTracker isisInteractionTracker;
     @Inject private InteractionFactory isisInteractionFactory;
     @Inject private TranslationService translationService;
-    
+
     /**
      * Uses Isis' {@link TranslationService} to translate the key, but falls back to Wicket's own implementation
      * if no translation is available.
@@ -84,7 +84,7 @@ public class LocalizerForIsis extends Localizer {
     }
 
     private Class<?> determineContextClassElse(final Component component, final Class<?> fallback) {
-        
+
         if(component==null) {
             return fallback;
         }
@@ -94,7 +94,7 @@ public class LocalizerForIsis extends Localizer {
                 component instanceof org.wicketstuff.select2.Select2MultiChoice) {
             return component.getClass();
         }
-        
+
         return pageElseSignificantParentOf(component)
                 .map(parentComponent->enclosing(parentComponent.getClass()))
                 .orElse(_Casts.uncheckedCast(fallback));

@@ -43,14 +43,14 @@ public class IsisSelectorEvent extends IsisEventLetterAbstract {
     public String hintFor(Component component, String hintKey) {
         return sameComponent(component) && sameKey(hintKey) ? hintValue : null;
     }
-    
+
     private boolean sameComponent(Component other) {
         return Objects.equals(this.component, other);
     }
-    
+
     private boolean sameKey(String other) {
         return Objects.equals(this.hintKey, other);
     }
-    
+
 }
 

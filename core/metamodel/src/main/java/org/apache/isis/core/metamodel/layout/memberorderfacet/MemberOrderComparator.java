@@ -76,8 +76,8 @@ public class MemberOrderComparator implements Comparator<Object> {
             return +1; // members before OrderSets.
         }
         throw _Exceptions.illegalArgument(
-                "can only compare IdentifiedHolders and DeweyOrderSets, got: %s, %s", 
-                o1==null ? null : o1.getClass().getName(), 
+                "can only compare IdentifiedHolders and DeweyOrderSets, got: %s, %s",
+                o1==null ? null : o1.getClass().getName(),
                 o2==null ? null : o2.getClass().getName());
     }
 

@@ -50,7 +50,7 @@ import lombok.val;
 public class WebAppContextPath implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Either "" or "/xxx".
      */
@@ -58,13 +58,13 @@ public class WebAppContextPath implements Serializable {
     private String contextPath = "";
 
     /**
-     * @param contextPath - any form allowed: leading or trailing '/', 
+     * @param contextPath - any form allowed: leading or trailing '/',
      * no matter what, gets normalized
      */
     public void setContextPath(@Nullable final String contextPath) {
         this.contextPath = normalizeContextPath(contextPath);
     }
-    
+
     /**
      * @return whether a context-path is in use
      */
@@ -87,7 +87,7 @@ public class WebAppContextPath implements Serializable {
     }
 
     /**
-     * @param urlOrLocalPath - when detected to be a localPath prepends the context-path if any, 
+     * @param urlOrLocalPath - when detected to be a localPath prepends the context-path if any,
      * identity operator otherwise
      */
     @Nullable
@@ -100,15 +100,15 @@ public class WebAppContextPath implements Serializable {
         }
         return urlOrLocalPath;
     }
-    
+
     public Optional<String> prependContextPathIfLocal(final Optional<String> urlOrLocalPath) {
         return urlOrLocalPath.map(this::prependContextPathIfLocal);
     }
 
     // -- HELPER
-    
+
     private final Pattern pattern = Pattern.compile("^[/]*(.+?)[/]*$");
-    
+
     /**
      * make sure result is either empty or has a leading slash followed by a non-empty string
      */
@@ -118,16 +118,16 @@ public class WebAppContextPath implements Serializable {
         }
         val matcher = pattern.matcher(contextPath);
         val path = matcher.matches()
-                ? matcher.group(1) 
+                ? matcher.group(1)
                         : "";
-                
+
         if("".equals(path) || "/".equals(path)) {
             return "";
         }
-        
+
         return ensureLeadingSlash(path);
     }
-    
+
     @Nullable
     private String ensureLeadingSlash(@Nullable final String url) {
         if(url==null || url.length()<2) {

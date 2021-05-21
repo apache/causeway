@@ -43,38 +43,38 @@ public class InteractionHead {
      * The owning object of an interaction.
      */
     @NonNull private final ManagedObject owner;
-    
-    /** 
-     * Typically equal to {@code owner}, except for mixins, 
-     * where {@code target} is the mixin instance. 
+
+    /**
+     * Typically equal to {@code owner}, except for mixins,
+     * where {@code target} is the mixin instance.
      */
     @NonNull private final ManagedObject target;
-    
+
     /** factory with consistency checks */
     public static InteractionHead of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
-        if(ManagedObjects.isSpecified(owner) 
+        if(ManagedObjects.isSpecified(owner)
                 && owner.getSpecification().getBeanSort().isMixin()) {
             throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
         }
-        if(ManagedObjects.isSpecified(target)                    
+        if(ManagedObjects.isSpecified(target)
                 && target.getSpecification().getBeanSort().isMixin()
                 && target.getPojo()==null) {
             throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
         }
         return new InteractionHead(owner, target);
     }
-    
+
     /** Simple case, when owner equals target. (no mixin) */
     public static InteractionHead simple(ManagedObject owner) {
         return InteractionHead.of(owner, owner);
     }
-    
-    /** 
+
+    /**
      * as used by the domain event subsystem
      * @return optionally the owner, based on whether the target is a mixin
      */
     public Optional<ManagedObject> getMixedIn() {
-        return Objects.equals(getOwner(), getTarget()) 
+        return Objects.equals(getOwner(), getTarget())
                 ? Optional.empty()
                 : Optional.of(getOwner());
     }
@@ -85,5 +85,5 @@ public class InteractionHead {
                 ? of(target, target)
                 : of(mixedIn, target);
     }
-    
+
 }

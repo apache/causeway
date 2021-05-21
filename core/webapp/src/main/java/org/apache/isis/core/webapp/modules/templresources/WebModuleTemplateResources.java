@@ -37,7 +37,7 @@ import lombok.Getter;
 
 /**
  * WebModule to provide static resources utilizing an in-memory cache.
- * 
+ *
  * @since 2.0
  */
 @Service

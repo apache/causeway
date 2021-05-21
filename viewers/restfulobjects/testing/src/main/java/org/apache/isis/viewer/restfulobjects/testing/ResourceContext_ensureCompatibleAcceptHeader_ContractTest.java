@@ -58,8 +58,8 @@ import lombok.val;
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
     /*sonar-ignore-on*/
-    
-    @Rule public JUnitRuleMockery2 context = 
+
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock HttpHeaders mockHttpHeaders;
@@ -72,7 +72,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock WebApplicationContext webApplicationContext;
     @Mock InteractionTracker mockIsisInteractionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
-    
+
     MetaModelContext metaModelContext;
 
     @Before
@@ -90,19 +90,19 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                 will(returnValue(webApplicationContext));
-                
+
                 allowing(webApplicationContext).getBean(MetaModelContext.class);
                 will(returnValue(metaModelContext));
-                
+
                 allowing(mockHttpServletRequest).getServletContext();
                 will(returnValue(mockServletContext));
-                
+
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                
+
             }
         });
     }
@@ -204,13 +204,13 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
-        
+
         val resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
-        
-        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, 
+
+        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null,
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null);
     }
-    
+
     /*sonar-ignore-off*/
 }

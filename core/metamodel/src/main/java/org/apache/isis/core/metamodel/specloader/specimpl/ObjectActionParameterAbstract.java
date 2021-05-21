@@ -60,7 +60,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ObjectActionParameterAbstract 
+public abstract class ObjectActionParameterAbstract
 implements ObjectActionParameter, HasFacetHolder {
 
     private final FeatureType featureType;
@@ -73,13 +73,13 @@ implements ObjectActionParameter, HasFacetHolder {
             final int number,
             final ObjectActionDefault objectAction,
             final TypedHolder peer) {
-        
+
         this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
         this.peer = requires(peer, "peer");
     }
-    
+
     @Override
     public MetaModelContext getMetaModelContext() {
         return parentAction.getMetaModelContext();
@@ -145,9 +145,9 @@ implements ObjectActionParameter, HasFacetHolder {
         final int indexOf = parameters.indexOf(this);
         return singularName + " " + (indexOf + 1);
     }
-    
+
     private boolean equalsShortIdentifier(final ObjectActionParameter objParam) {
-        val spec1 = objParam.getSpecification(); 
+        val spec1 = objParam.getSpecification();
         val spec2 = getSpecification();
         return spec1.getShortIdentifier().toLowerCase()
                 .equals(spec2.getShortIdentifier().toLowerCase());
@@ -189,11 +189,11 @@ implements ObjectActionParameter, HasFacetHolder {
         if (autoCompleteFacet == null) {
             return Can.empty();
         }
-        
+
         val visibleChoices = autoCompleteFacet
                 .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
         checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
-        
+
         return visibleChoices;
     }
 
@@ -217,18 +217,18 @@ implements ObjectActionParameter, HasFacetHolder {
             final ParameterNegotiationModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val paramSpec = getSpecification();        
+        val paramSpec = getSpecification();
         val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();
         }
-        
-        val visibleChoices = choicesFacet.getChoices(paramSpec, 
-                pendingArgs.getHead(), 
-                pendingArgs.getParamValues(), 
+
+        val visibleChoices = choicesFacet.getChoices(paramSpec,
+                pendingArgs.getHead(),
+                pendingArgs.getParamValues(),
                 interactionInitiatedBy);
         checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
-        
+
         return visibleChoices;
     }
 
@@ -238,15 +238,15 @@ implements ObjectActionParameter, HasFacetHolder {
     @NonNull
     public ManagedObject getDefault(
             @NonNull final ParameterNegotiationModel pendingArgs) {
-        
+
         val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null && !defaultsFacet.isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
             return ManagedObjects.emptyToDefault(
                     !isOptional(),
-                    ManagedObject.of(paramSpec, paramValuePojo));    
-        }   
+                    ManagedObject.of(paramSpec, paramValuePojo));
+        }
         return ManagedObjects.emptyToDefault(
                 !isOptional(),
                 pendingArgs.getParamValue(getNumber()));
@@ -257,9 +257,9 @@ implements ObjectActionParameter, HasFacetHolder {
             final SpecificationLoader specificationLookup,
             final Can<ManagedObject> choices,
             final ObjectSpecification paramSpec) {
-        
+
         for (final ManagedObject choice : choices) {
-            
+
             val choicePojo = choice.getPojo();
 
             if(choicePojo == null) {
@@ -289,7 +289,7 @@ implements ObjectActionParameter, HasFacetHolder {
         }
     }
 
-  
+
     // > Visibility
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
@@ -297,7 +297,7 @@ implements ObjectActionParameter, HasFacetHolder {
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return new ActionArgVisibilityContext(
                 head, parentAction, getIdentifier(), pendingArgs, position, interactionInitiatedBy);
     }
@@ -321,13 +321,13 @@ implements ObjectActionParameter, HasFacetHolder {
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return new ActionArgUsabilityContext(
-                head, 
-                parentAction, 
-                getIdentifier(), 
-                pendingArgs, 
-                position, 
+                head,
+                parentAction,
+                getIdentifier(),
+                pendingArgs,
+                position,
                 interactionInitiatedBy);
     }
 
@@ -353,24 +353,24 @@ implements ObjectActionParameter, HasFacetHolder {
             final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return new ActionArgValidityContext(
                 head, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public Consent isValid(
-            InteractionHead head, 
+            InteractionHead head,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val validityContext = createProposedArgumentInteractionContext(
                 head, pendingArgs, getNumber(), interactionInitiatedBy);
-        
+
         val validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
     }
-    
+
     @Override @Deprecated
     public String isValid(
             final InteractionHead head,

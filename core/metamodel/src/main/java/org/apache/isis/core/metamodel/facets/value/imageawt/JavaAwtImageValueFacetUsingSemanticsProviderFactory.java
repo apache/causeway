@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JavaAwtImageValueFacetUsingSemanticsProviderFactory 
+public class JavaAwtImageValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<BufferedImage> {
 
     public JavaAwtImageValueFacetUsingSemanticsProviderFactory() {

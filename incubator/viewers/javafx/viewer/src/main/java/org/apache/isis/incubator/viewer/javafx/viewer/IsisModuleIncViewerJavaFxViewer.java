@@ -24,15 +24,15 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.incubator.viewer.javafx.ui.IsisModuleIncViewerJavaFxUi;
 
 /**
- * 
+ *
  * @since 2.0
  */
 @Configuration
 @Import({
         // modules
-    
+
         IsisModuleIncViewerJavaFxUi.class,
-        
+
         // @Service's
 
         // @Mixin's

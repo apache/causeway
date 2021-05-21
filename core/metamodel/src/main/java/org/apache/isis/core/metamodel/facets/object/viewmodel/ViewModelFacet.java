@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to
- * applying either {@link org.apache.isis.applib.annotation.DomainObject} annotation with 
+ * applying either {@link org.apache.isis.applib.annotation.DomainObject} annotation with
  * {@link Nature} = {@link Nature#VIEW_MODEL}  or
  * {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
  *
@@ -64,8 +64,8 @@ public interface ViewModelFacet extends Facet {
     }
 
     default Object createViewModelPojo(
-            ObjectSpecification spec, 
-            String mementoStr, 
+            ObjectSpecification spec,
+            String mementoStr,
             Function<ObjectSpecification, Object> factory) {
 
         final Object viewModelPojo;

@@ -18,11 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -35,23 +32,23 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class LinkAndLabelUtil {
 
-    public static List<LinkAndLabel> asActionLinks(
+    public static Stream<LinkAndLabel> asActionLinks(
             final ScalarModel scalarModel,
-            final List<ObjectAction> associatedActions) {
+            final Stream<ObjectAction> associatedActions) {
 
         final EntityModel parentEntityModel = scalarModel.getParentUiModel();
         return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel);
     }
 
-    public static LinkAndLabel asActionLink(final ScalarModel scalarModel, final ObjectAction inlineActionIfAny) {
-        if(inlineActionIfAny == null) {
-            return null;
-        }
-        return asActionLinks(scalarModel, Collections.singletonList(inlineActionIfAny)).get(0);
+    public static Stream<LinkAndLabel> asActionLink(
+            final ScalarModel scalarModel,
+            final ObjectAction inlineAction) {
+        return asActionLinks(scalarModel, Stream.of(inlineAction));
     }
 
     /**
-     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link ObjectAction}s into a
+     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its)
+     * {@link ObjectAction}s into a
      * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be passed
      * to the {@link AdditionalLinksPanel}.
      *
@@ -60,32 +57,28 @@ public final class LinkAndLabelUtil {
      *     (for invisible actions) will be discarded.
      * </p>
      */
-    public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
+    public static Stream<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
-            final List<ObjectAction> objectActions,
+            final Stream<ObjectAction> objectActions,
             final ScalarModel scalarModelIfAny) {
 
         return asActionLinksForAdditionalLinksPanel(parentEntityModel, objectActions, scalarModelIfAny, null);
     }
 
-    public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
+    public static Stream<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
-            final List<ObjectAction> objectActions,
+            final Stream<ObjectAction> objectActions,
             final ScalarModel scalarModelIfAny,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         val actionLinkFactory = new EntityActionLinkFactory(
-                AdditionalLinksPanel.ID_ADDITIONAL_LINK, 
-                parentEntityModel, 
+                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                parentEntityModel,
                 scalarModelIfAny,
                 toggledMementosProviderIfAny);
-        
-        val named = (String)null;
-        
-        return _NullSafe.stream(objectActions)
-                .map(objectAction->actionLinkFactory.newActionLink(objectAction, named))
-                .filter(_NullSafe::isPresent)
-                .collect(Collectors.toList());
+
+        return objectActions
+                .map(objectAction->actionLinkFactory.newActionLink(objectAction, /*named*/null));
     }
 
 }

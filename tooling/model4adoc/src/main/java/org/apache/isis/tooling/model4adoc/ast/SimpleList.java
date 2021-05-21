@@ -28,12 +28,12 @@ import lombok.ToString;
 
 @ToString(callSuper = true)
 public class SimpleList extends SimpleStructuralNode implements org.asciidoctor.ast.List {
-    
+
     @Override
     public List<StructuralNode> getItems() {
         return getBlocks();
     }
-    
+
     @Override
     public boolean hasItems() {
         return !getItems().isEmpty();

@@ -46,7 +46,7 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
 
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
         add(markupContainer);
-        
+
         final Form<Object> form = new Form<Object>(ID_FORM);
         markupContainer.add(form);
 
@@ -55,13 +55,13 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                
+
                 ContainedToggleboxPanel.this.toggle(target);
             }
-            
+
         };
         form.add(checkbox);
-        
+
     }
 
     /**
@@ -78,7 +78,7 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         setModel(!isChecked());
         onSubmit(target);
     }
-    
+
     public boolean isChecked() {
         return checkbox.getModelObject();
     }

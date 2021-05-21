@@ -27,6 +27,7 @@ import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -56,6 +58,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
@@ -81,41 +84,41 @@ import lombok.val;
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface ObjectSpecification 
-extends 
-    Specification, 
+public interface ObjectSpecification
+extends
+    Specification,
     ObjectActionContainer,
-    ObjectAssociationContainer, 
-    Hierarchical, 
+    ObjectAssociationContainer,
+    Hierarchical,
     DefaultProvider,
     HasLogicalType {
 
     final class Comparators{
         private Comparators(){}
 
-        public static final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = 
-                (final ObjectSpecification o1, final ObjectSpecification o2) -> 
+        public static final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
+                (final ObjectSpecification o1, final ObjectSpecification o2) ->
         o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
 
-        public static final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
-                (final ObjectSpecification s1, final ObjectSpecification s2) -> 
+        public static final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE =
+                (final ObjectSpecification s1, final ObjectSpecification s2) ->
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-    
+
     /**
      * @param memberId
-     * @return optionally the ObjectMember associated with given {@code memberId}, 
+     * @return optionally the ObjectMember associated with given {@code memberId},
      * based on whether given memberId exists
      */
     Optional<? extends ObjectMember> getMember(String memberId);
-    
+
     /**
      * @param method
-     * @return optionally the ObjectMember associated with given {@code method}, 
+     * @return optionally the ObjectMember associated with given {@code method},
      * based on whether such an association exists
      */
     Optional<? extends ObjectMember> getMember(Method method);
-    
+
     default ObjectMember getMemberElseFail(final @NonNull Method method) {
         return getMember(method).orElseThrow(()->{
             val methodName = method.getName();
@@ -130,7 +133,7 @@ extends
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
-        return streamActions(MixedIn.INCLUDED)
+        return streamAnyActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
@@ -202,9 +205,9 @@ extends
      * of some other adapter (if any).
      *
      * <p>
-     * @see TitleFacet#title(ManagedObject, ManagedObject)
+     * @see TitleFacet#title(Predicate, ManagedObject)
      */
-    String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter);
+    String getTitle(Predicate<ManagedObject> isContextAdapter, ManagedObject targetAdapter);
 
     /**
      * Returns the name of an icon to use for the specified object.
@@ -233,8 +236,6 @@ extends
      */
     String getCssClass(ManagedObject objectAdapter);
 
-    boolean isAbstract();
-
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet
      * @since 2.0
@@ -242,7 +243,7 @@ extends
     Optional<ObjectSpecification> getElementSpecification();
 
     /**
-     * 
+     *
      * @since 2.0
      */
     BeanSort getBeanSort();
@@ -372,22 +373,18 @@ extends
 
     /**
      * Whether this specification represents a bean, that is a managed bean
-     * with scoped life-cycle, available for dependency injection. 
+     * with scoped life-cycle, available for dependency injection.
      */
     default boolean isManagedBean() {
         return getManagedBeanName()!=null;
     }
-    
+
     /**
      * If this specification represents a bean, that is a managed bean, then
      * returns the bean's name/id as recognized by the IoC container.
-     * <p>Otherwise returns {@code null}. 
+     * <p>Otherwise returns {@code null}.
      */
     String getManagedBeanName();
-
-    default boolean isViewModel() {
-        return getBeanSort().isViewModel();
-    }
 
     default boolean isMixin() {
         return getBeanSort().isMixin();
@@ -396,12 +393,30 @@ extends
     boolean isViewModelCloneable(ManagedObject targetAdapter);
     boolean isWizard();
 
+    //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
+    boolean isAbstract();
+
+    default boolean isEntity() {
+        return getBeanSort().isEntity()
+                || (getBeanSort().isAbstract()
+                        && lookupFacet(EntityFacet.class).isPresent());
+    }
+
+    default boolean isViewModel() {
+        return getBeanSort().isViewModel()
+                || (getBeanSort().isAbstract()
+                        && lookupFacet(ViewModelFacet.class).isPresent());
+    }
+
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }
 
-    default boolean isEntity() {
-        return getBeanSort().isEntity();
+    default boolean isEntityOrViewModelOrAbstract() {
+        // optimized, no need to check facets
+        return getBeanSort().isViewModel()
+                || getBeanSort().isEntity()
+                || getBeanSort().isAbstract();
     }
 
     /**
@@ -425,7 +440,7 @@ extends
             throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
         }
 
-        return newInstance; 
+        return newInstance;
     }
 
     /**
@@ -433,10 +448,10 @@ extends
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
-        
+
         val self = Stream.of(this);
-        val actions = streamActions(MixedIn.EXCLUDED);
-        val actionParameters = streamActions(MixedIn.EXCLUDED)
+        val actions = streamAnyActions(MixedIn.EXCLUDED);
+        val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                         : Stream.empty());
@@ -444,7 +459,7 @@ extends
         val collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
-        
+
     }
 
     /**
@@ -455,13 +470,13 @@ extends
 
     /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
-     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
+     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
      * @since 2.0
      */
     default boolean isIdentifiable() {
         return isManagedBean() || isViewModel() || isEntity();
     }
-    
+
     /**
      * Delegates to {@link ObjectManager#createObject(org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator.Request)}
      * @since 2.0
@@ -472,16 +487,16 @@ extends
         val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
         return managedObject;
     }
-    
+
     // -- TYPE COMPATIBILITY UTILITIES
-    
+
     default public void assertPojoCompatible(@Nullable Object pojo) {
-        
+
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;
         }
-        
+
         if(!isPojoCompatible(pojo)) {
             val expectedType = getCorrespondingClass();
             throw _Exceptions.illegalArgument(
@@ -492,17 +507,17 @@ extends
                     expectedType, pojo.getClass(), pojo.toString());
         }
     }
-    
+
     default public boolean isPojoCompatible(Object pojo) {
-        
+
         val expectedType = getCorrespondingClass();
         val actualType = pojo.getClass();
-        
+
         if(expectedType.isAssignableFrom(actualType)
                 || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
             return true;
         }
-        
+
         // XXX rather hard to understand ...
         // for non-scalar param types, param-spec is always the element-type spec (not the spec of any container)
         val elementSpec = getElementSpecification()
@@ -513,17 +528,21 @@ extends
     }
 
     /**
-     * @return whether corresponding class implements {@link java.io.Serializable} or 
+     * @return whether corresponding class implements {@link java.io.Serializable} or
      * {@link java.io.Externalizable}.
-     * @apiNote: per se does not tell what recreation strategy to use, the corresponding class 
+     * @apiNote: per se does not tell what recreation strategy to use, the corresponding class
      * might be an entity or a view-model or a value with eg. encodable semantics, which have
      * different object recreation mechanics
-     * @since 2.0.0 
+     * @since 2.0.0
      */
     default boolean isSerializable() {
         return
                 Serializable.class.isAssignableFrom(getCorrespondingClass())
                 || Externalizable.class.isAssignableFrom(getCorrespondingClass());
+    }
+
+    default String fqcn() {
+        return  getCorrespondingClass().getName();
     }
 
 }

@@ -38,12 +38,12 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 @RequiredArgsConstructor
-@Log4j2 
+@Log4j2
 public class WebModuleContext {
 
     private final StringBuilder protectedPath = new StringBuilder();
@@ -51,7 +51,7 @@ public class WebModuleContext {
     @NonNull @Getter private final ServletContext servletContext;
     @NonNull @Getter private final IsisConfiguration configuration;
     @NonNull @Getter private final ServiceRegistry serviceRegistry;
-    
+
     private Can<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class WebModuleContext {
     public void addProtectedPath(String path) {
         if(protectedPath.length()>0) {
             protectedPath.append(",");
-        } 
+        }
         protectedPath.append(path);
     }
 
@@ -106,7 +106,7 @@ public class WebModuleContext {
             }
         } catch (ServletException e) {
             log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", webModule.getName()), e);
-        }  
+        }
     }
 
     private void shutdownListener(ServletContextEvent event, ServletContextListener listener) {

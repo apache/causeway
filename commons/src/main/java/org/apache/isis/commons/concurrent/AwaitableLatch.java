@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public final class AwaitableLatch {
 
-    private final CountDownLatch countDownLatch;  
+    private final CountDownLatch countDownLatch;
 
     public static AwaitableLatch unlocked() {
         return of(new CountDownLatch(0));

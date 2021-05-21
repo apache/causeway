@@ -31,21 +31,21 @@ class _JdoObjectIdEncoder implements ChainOfResponsibility.Handler<Object, Strin
 
     @NonNull private final Predicate<Object> filter;
     @NonNull private final Function<Object, String> keyStringifier;
-    
+
     @Override
     public boolean isHandling(final Object jdoOid) {
         return filter.test(jdoOid);
     }
-    
+
     @Override
     public String handle(final Object jdoOid) {
         return keyStringifier.apply(jdoOid);
     }
-    
+
     public static Predicate<Object> filter(Class<?> jdoKeyType) {
         return jdoOid->jdoKeyType.isAssignableFrom(jdoOid.getClass());
     }
-    
+
     public static Function<Object, String> stringifier(String token) {
         return jdoOid->token + JdoObjectIdSerializer.SEPARATOR + jdoOid;
     }

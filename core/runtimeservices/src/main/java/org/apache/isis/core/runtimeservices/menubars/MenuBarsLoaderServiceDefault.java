@@ -95,10 +95,10 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
             if(!menubarsLayoutXmlResource.exists()) {
                 return null;
             }
-            
+
             val source = menubarsLayoutXmlResource.getInputStream(); // throws if not found
-            final String xml = 
-                    _Strings.read(source, StandardCharsets.UTF_8); 
+            final String xml =
+                    _Strings.read(source, StandardCharsets.UTF_8);
             return xml;
         } catch (Exception e) {
             severeCannotLoad(menubarsLayoutXmlResource, e);
@@ -116,11 +116,11 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
             return;
         }
 
-        log.warn( 
+        log.warn(
                 "{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
                         menubarsLayoutXmlResource);
-        warnedOnce = true; 
+        warnedOnce = true;
     }
 
     private void severeCannotLoad(AbstractResource menubarsLayoutXmlResource, Exception cause) {

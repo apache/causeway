@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class CountHolder_explanation {
 
     private final CountHolder holder;       // <.>
-    
+
     public String prop() {
         return String.format(
                 "The collection shows the first %d fibonacci numbers",

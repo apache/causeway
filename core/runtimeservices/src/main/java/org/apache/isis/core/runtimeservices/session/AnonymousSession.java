@@ -26,12 +26,12 @@ final class AnonymousSession extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext INITIALISATION_CONTEXT = 
+    private static final ExecutionContext INITIALISATION_CONTEXT =
             ExecutionContext.ofUserWithSystemDefaults(UserMemento.system());
 
     public AnonymousSession() {
         super(INITIALISATION_CONTEXT, AuthenticationAbstract.DEFAULT_AUTH_VALID_CODE);
     }
-    
+
 
 }

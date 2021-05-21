@@ -49,15 +49,15 @@ import lombok.val;
 public enum ActionResultResponseType {
     OBJECT {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
-            val commonContext = model.getCommonContext();
+        public ActionResultResponse interpretResult(ActionModel actionModel, AjaxRequestTarget target, ManagedObject resultAdapter) {
+            val commonContext = actionModel.getCommonContext();
             val actualAdapter = determineActualAdapter(commonContext, resultAdapter); // intercepts collections
-            return toEntityPage(model, actualAdapter);
+            return toEntityPage(actionModel, actualAdapter);
         }
 
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter) {
-            final ActionResultResponse actionResultResponse = toEntityPage(model, targetAdapter);
+        public ActionResultResponse interpretResult(ActionModel actionModel, ManagedObject targetAdapter) {
+            final ActionResultResponse actionResultResponse = toEntityPage(actionModel, targetAdapter);
             return actionResultResponse;
         }
     },
@@ -65,9 +65,6 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel actionModel, AjaxRequestTarget target, ManagedObject resultAdapter) {
             val collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
-            // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
-            val actionModelCopy = actionModel.copy();
-            collectionModel.setActionHint(actionModelCopy);
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
@@ -151,7 +148,7 @@ public enum ActionResultResponseType {
     }
 
     private static ManagedObject determineActualAdapter(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isNotCollection()) {
@@ -169,7 +166,7 @@ public enum ActionResultResponseType {
     }
 
     private static ActionResultResponse toEntityPage(
-            final ActionModel model, 
+            final ActionModel model,
             final ManagedObject actualAdapter) {
 
         // this will not preserve the URL (because pageParameters are not copied over)
@@ -186,7 +183,7 @@ public enum ActionResultResponseType {
             final ActionModel model,
             final AjaxRequestTarget targetIfAny,
             final ManagedObject resultAdapter) {
-        
+
         ActionResultResponseType arrt = determineFor(resultAdapter, targetIfAny);
         return arrt.interpretResult(model, targetIfAny, resultAdapter);
     }
@@ -194,11 +191,11 @@ public enum ActionResultResponseType {
     private static ActionResultResponseType determineFor(
             final ManagedObject resultAdapter,
             AjaxRequestTarget targetIfAny) {
-        
+
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
         }
-        
+
         final ObjectSpecification resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
             if (resultSpec.getFacet(ValueFacet.class) != null) {

@@ -35,8 +35,8 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbstract {
 
     public static AuthenticationRequestLogonFixture of(final String name, final String ... roles) {
-        return new AuthenticationRequestLogonFixture(name, 
-                roles == null 
+        return new AuthenticationRequestLogonFixture(name,
+                roles == null
                     ? Collections.emptyList()
                     : _Lists.of(roles));
     }

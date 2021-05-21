@@ -23,19 +23,35 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
-
 import lombok.val;
 
-public class TypeExtractorMethodReturnTest {
+class TypeExtractorMethodReturnTest {
 
     @Test
-    public void shouldFindGenericTypes() throws Exception {
+    void ignoresVoidType() throws Exception {
+
+        class CustomerRepository {
+            @SuppressWarnings("unused")
+            public void findCustomers() {
+            }
+        }
+
+        final Class<?> clazz = CustomerRepository.class;
+        final Method method = clazz.getMethod("findCustomers");
+
+        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        assertEquals(0, classes.size());
+    }
+    
+    @Test
+    void shouldFindGenericTypes() throws Exception {
 
         class Customer {
         }
@@ -57,20 +73,28 @@ public class TypeExtractorMethodReturnTest {
         
     }
 
+    
     @Test
-    public void ignoresVoidType() throws Exception {
+    void shouldFindGenericTypes_thatUseAWildcard() throws Exception {
 
+        class Customer {
+        }
         class CustomerRepository {
             @SuppressWarnings("unused")
-            public void findCustomers() {
+            public List<? extends Customer> findCustomers() {
+                return null;
             }
         }
 
         final Class<?> clazz = CustomerRepository.class;
         final Method method = clazz.getMethod("findCustomers");
-
+        
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
-        assertEquals(0, classes.size());
+        
+        assertEquals(2, classes.size());
+        assertTrue(classes.contains(java.util.List.class));
+        assertTrue(classes.contains(Customer.class));
+        
     }
 
 }

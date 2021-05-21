@@ -64,7 +64,7 @@ import lombok.val;
 /**
  * Rreturns representations according to the
  * <a href="https://restfulobjects.org">Restful Objects</a> spec.
- * 
+ *
  * @since 1.x {@index}
  */
 @Service
@@ -216,10 +216,10 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
             if(collectionAdapters != null) {
                 final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
-                final String actionOwningType = actionOwningTypeFrom(objectAndActionInvocation);
+                final ObjectSpecification actionOwnerSpec = actionOwnerSpecFrom(objectAndActionInvocation);
                 final String actionId = actionIdFrom(objectAndActionInvocation);
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
-                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
+                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
                 adapter = ManagedObject.lazy(resourceContext.getSpecificationLoader(), list);
 
@@ -237,8 +237,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return responseBuilder(responseBuilder);
     }
 
-    private static String actionOwningTypeFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        return objectAndActionInvocation.getAction().getOnType().getLogicalTypeName();
+    private static ObjectSpecification actionOwnerSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
+        return objectAndActionInvocation.getAction().getOnType();
     }
 
     private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
@@ -268,7 +268,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     }
 
     private static String titleOf(final ManagedObject argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
+        return argumentAdapter!=null?argumentAdapter.titleString():"";
     }
 
     private static String abbreviated(final String str, final int maxLength) {
@@ -278,14 +278,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     private static DomainObjectList domainObjectListFrom(
             final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec,
-            final String actionOwningType,
+            final ObjectSpecification actionOwnerSpec,
             final String actionId,
             final String actionArguments) {
 
         final String title = titleFrom(collectionAdapters, elementSpec);
 
         final DomainObjectList list = new DomainObjectList(
-                title, elementSpec.getLogicalTypeName(), actionOwningType, actionId, actionArguments);
+                title, elementSpec.fqcn(), actionOwnerSpec.fqcn(), actionId, actionArguments);
         for (val adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }

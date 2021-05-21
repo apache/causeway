@@ -36,29 +36,29 @@ import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
- * 
+ *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
  * {@link ScalarModel} we have an adapter {@link AdapterForObjectReference}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
  * with {@link ScalarModel}.
- * 
+ *
  */
 public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType, 
+            ComponentType componentType,
             Class<?> componentClass) {
-        
+
         super(componentType, componentClass);
     }
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType, 
-            String name, 
+            ComponentType componentType,
+            String name,
             Class<?> componentClass) {
-        
+
         super(componentType, name, componentClass);
     }
 
@@ -68,17 +68,17 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        
+
         final ObjectSpecification spec;
-        
+
         if (model instanceof ObjectAdapterModel) {
-            spec = ((ObjectAdapterModel) model).getTypeOfSpecification();    
+            spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
         } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getTypeOfSpecification();    
+            spec = ((ScalarModel) model).getTypeOfSpecification();
         } else {
-            return ApplicationAdvice.DOES_NOT_APPLY; 
+            return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        
+
         return isScalarAndNotAValue(spec)
                 ? ApplicationAdvice.APPLIES
                 : ApplicationAdvice.DOES_NOT_APPLY;
@@ -86,16 +86,16 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        
+
         final ObjectAdapterModel objectAdapterModel;
-        
+
         if (model instanceof ObjectAdapterModel) {
-            objectAdapterModel = (ObjectAdapterModel) model;    
+            objectAdapterModel = (ObjectAdapterModel) model;
         } else if (model instanceof ScalarModel) {
             val scalarModel = (ScalarModel) model;
-            
+
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = new AdapterForObjectReference(scalarModel);  
+            objectAdapterModel = new AdapterForObjectReference(scalarModel);
             objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();
@@ -103,15 +103,15 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         return new EntityIconAndTitlePanel(id, objectAdapterModel);
     }
-    
+
     // -- HELPER
-    
+
     private boolean isScalarAndNotAValue(ObjectSpecification spec) {
         val isObject = spec.isNotCollection();
         val isValue = spec.containsFacet(ValueFacet.class);
         return isObject && !isValue;
     }
-    
-    
-    
+
+
+
 }

@@ -45,7 +45,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
             super.addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);
         }
-        
+
     }
 
 }

@@ -45,7 +45,7 @@ public class DomainObjectEntityChangePublishingVm_delete {
     public DomainObjectEntityChangePublishingVm_delete(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
-    
+
     public DomainObjectEntityChangePublishingVm act(
             @Nullable DomainObjectEntityChangePublishingEnabledJdo enabledJdo
             , @Nullable DomainObjectEntityChangePublishingDisabledJdo disabledJdo

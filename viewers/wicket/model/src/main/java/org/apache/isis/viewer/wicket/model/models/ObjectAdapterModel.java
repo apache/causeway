@@ -23,19 +23,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
-public interface ObjectAdapterModel 
+public interface ObjectAdapterModel
 extends HasRenderingHints, IModel<ManagedObject> {
 
     /**
-     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
-     * provides a context adapter to obtain the title.
+     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN}.
+     * Returns whether given {@code other} equals the context adapter (if any) in which case
+     * the title can be shortened.
      */
-    ObjectMemento getContextAdapterIfAny();
-    void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny);
+    boolean isContextAdapter(ManagedObject other);
 
     PageParameters getPageParameters();
     PageParameters getPageParametersWithoutUiHints();

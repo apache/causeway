@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsFirst;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -43,46 +43,46 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     @NonNull private String message;
 
     // -- FACTORIES
-    
+
     /**
-     * Collects a new ValidationFailure with given origin and message. 
+     * Collects a new ValidationFailure with given origin and message.
      */
     public static void raise(
             @NonNull SpecificationLoader specLoader,
-            @NonNull Identifier deficiencyOrigin, 
+            @NonNull Identifier deficiencyOrigin,
             @NonNull String deficiencyMessage) {
-        
+
         specLoader.addValidationFailure(ValidationFailure.of(deficiencyOrigin, deficiencyMessage));
     }
-    
+
     /**
-     * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message. 
+     * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message.
      */
     public static void raise(
-            @NonNull IdentifiedHolder facetHolder, 
+            @NonNull IdentifiedHolder facetHolder,
             @NonNull String deficiencyMessage) {
         raise(facetHolder.getSpecificationLoader(), facetHolder.getIdentifier(), deficiencyMessage);
     }
-    
+
     /**
      * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message
-     * (assembled from format and args). 
+     * (assembled from format and args).
      */
     public static void raiseFormatted(
-            @NonNull IdentifiedHolder facetHolder, 
-            @NonNull String messageFormat, 
+            @NonNull IdentifiedHolder facetHolder,
+            @NonNull String messageFormat,
             final Object ...args) {
         raise(facetHolder, String.format(messageFormat, args));
     }
-    
-    
+
+
     private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
             .<String>thenComparing(failure->failure.getOrigin().getMemberName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);
 
     // -- CONTRACT
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

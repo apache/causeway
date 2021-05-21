@@ -20,6 +20,7 @@ package demoapp.dom.services.extensions.secman.apptenancy.entities.seed;
 
 import javax.inject.Inject;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -29,6 +30,7 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdo;
 
+@Profile("demo-jdo")
 @Service
 public class TenantedJdoSeedService extends SeedServiceAbstract {
 

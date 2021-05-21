@@ -65,30 +65,30 @@ public class ClassSubstitutorRegistry {
         }
         return cache.computeIfAbsent(originalClass, this::findSubstitutionFor);
     }
-    
-    // -- HELPER 
-    
+
+    // -- HELPER
+
     private Substitution findSubstitutionFor(final Class<?> originalClass) {
-        
+
         return classSubstitutors.stream()
         .map(classSubstitutor->getSubstitutionElseWarn(classSubstitutor, originalClass))
         .filter(_Predicates.not(Substitution::isPassThrough))
         .findFirst()
         .orElse(Substitution.neverReplaceClass());
-         
+
     }
-    
+
     private Substitution getSubstitutionElseWarn(ClassSubstitutor substitutor, Class<?> originalClass) {
         val substitution = substitutor.getSubstitution(originalClass);
         if(substitution == null) {
             log.warn("ClassSubstitutor.getSubstitution(Class) must never return null! "
                     + "However, substitutor {} just did for class argument {}. "
-                    + "Pass-through was applied instead.", 
+                    + "Pass-through was applied instead.",
                     substitutor.getClass().getName(),
                     originalClass.getClass().getName());
             return Substitution.passThrough();
         }
         return substitution;
     }
-    
+
 }

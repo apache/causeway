@@ -43,14 +43,14 @@ public abstract class ContentNodeAbstract implements ContentNode {
     @Getter @Setter private boolean block;
     @Getter private final Map<String, Object> attributes = new HashMap<>();
     @Getter @Setter private String role;
-    @Getter private final List<String> roles = new ArrayList<>(); 
+    @Getter private final List<String> roles = new ArrayList<>();
     @Getter @Setter private String reftext;
-    
+
     @Override
     public String id() {
         return getId();
     }
-    
+
     @Override
     public String context() {
         return getContext();
@@ -152,7 +152,7 @@ public abstract class ContentNodeAbstract implements ContentNode {
     @Override
     public boolean setAttribute(Object name, Object value, boolean overwrite) {
         val key = (String)name;
-        return overwrite 
+        return overwrite
                 ? attributes.put(key, value)==null
                 : attributes.get(key)!=null
                     ? false
@@ -225,5 +225,5 @@ public abstract class ContentNodeAbstract implements ContentNode {
         return String.format("[normalize_web_path %s %s %b]", path, start, preserveUriTarget);
     }
 
-    
+
 }

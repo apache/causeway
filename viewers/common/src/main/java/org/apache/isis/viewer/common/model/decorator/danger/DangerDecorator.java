@@ -21,5 +21,5 @@ package org.apache.isis.viewer.common.model.decorator.danger;
 public interface DangerDecorator<T> {
 
     void decorate(T uiComponent);
-    
+
 }

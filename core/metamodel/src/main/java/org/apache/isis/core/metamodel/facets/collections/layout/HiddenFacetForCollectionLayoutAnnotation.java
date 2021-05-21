@@ -32,9 +32,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final Optional<CollectionLayout> collectionLayoutIfAny, 
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return collectionLayoutIfAny
                 .map(CollectionLayout::hidden)
                 .filter(Objects::nonNull)

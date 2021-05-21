@@ -23,7 +23,7 @@ import java.time.LocalDate;
 
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
-public class LocalDateValueFacetUsingSemanticsProviderFactory 
+public class LocalDateValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<LocalDate> {
 
     public LocalDateValueFacetUsingSemanticsProviderFactory() {

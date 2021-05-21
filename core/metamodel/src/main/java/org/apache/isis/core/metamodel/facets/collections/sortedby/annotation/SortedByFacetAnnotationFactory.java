@@ -32,10 +32,10 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 /**
- * There is no check that the value is a {@link Comparator}; 
+ * There is no check that the value is a {@link Comparator};
  * instead this is done via {@link #refineProgrammingModel(ProgrammingModel)}.
  */
-public class SortedByFacetAnnotationFactory 
+public class SortedByFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
@@ -54,7 +54,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
-            final Stream<OneToManyAssociation> objectCollections = 
+            final Stream<OneToManyAssociation> objectCollections =
                     objectSpec.streamCollections(MixedIn.EXCLUDED);
 
             objectCollections.forEach(objectCollection->{
@@ -62,13 +62,13 @@ implements MetaModelRefiner {
                 if(facet != null) {
                     final Class<? extends Comparator<?>> cls = facet.value();
                     if(!Comparator.class.isAssignableFrom(cls)) {
-                        
+
                         ValidationFailure.raiseFormatted(
                                 objectSpec,
                                 String.format(
                                     "%s#%s: is annotated with @SortedBy, "
                                     + "but the class specified '%s' is not a Comparator",
-                                    objectSpec.getIdentifier().getClassName(), 
+                                    objectSpec.getIdentifier().getClassName(),
                                     objectCollection.getId(),
                                     facet.value().getName()));
                     }

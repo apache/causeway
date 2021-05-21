@@ -50,7 +50,7 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = 
+            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet =
                     new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder());
             FacetUtil.addFacet(propertyFacet);
         }

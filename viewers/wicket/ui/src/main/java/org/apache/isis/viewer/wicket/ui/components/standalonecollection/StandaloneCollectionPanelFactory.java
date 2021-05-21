@@ -22,10 +22,12 @@ package org.apache.isis.viewer.wicket.ui.components.standalonecollection;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link StandaloneCollectionPanel}.
@@ -40,13 +42,13 @@ public class StandaloneCollectionPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof EntityCollectionModel);
+        return appliesIf(model instanceof EntityCollectionModelStandalone);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel actionModel = (EntityCollectionModel) model;
-        return new StandaloneCollectionPanel(id, actionModel);
+        val collectionModel = (EntityCollectionModelStandalone) model;
+        return new StandaloneCollectionPanel(id, collectionModel);
     }
 
 }

@@ -43,7 +43,7 @@ extends MetaModelVisitingValidatorAbstract {
 
     @Override
     public void validate(ObjectSpecification spec) {
-        
+
         if(spec.isManagedBean()) {
             return;
         }

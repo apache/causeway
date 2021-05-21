@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent 
-extends FacetAbstract 
+public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
+extends FacetAbstract
 implements CssClassFacet {
 
     public static Facet create(

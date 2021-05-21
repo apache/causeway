@@ -57,10 +57,10 @@ public class UiContextFxDefault implements UiContextFx {
     private final InteractionFactory isisInteractionFactory;
     @Getter(onMethod_ = {@Override})
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
-    
+
     @Setter(onMethod_ = {@Override})
     private Consumer<Node> newPageHandler;
-    
+
     @Setter(onMethod_ = {@Override})
     private Function<ManagedObject, Node> pageFactory;
 
@@ -69,7 +69,7 @@ public class UiContextFxDefault implements UiContextFx {
         log.info("about to render object {}", object);
         newPage(pageFor(object));
     }
-    
+
     @Override
     public void route(Supplier<ManagedObject> objectSupplier) {
         isisInteractionFactory.runAnonymous(()->{
@@ -77,37 +77,37 @@ public class UiContextFxDefault implements UiContextFx {
             route(object);
         });
     }
-    
+
     // -- DECORATORS
 
     @Getter(onMethod_ = {@Override})
     private final IconDecorator<Labeled, Labeled> iconDecoratorForLabeled;
     @Getter(onMethod_ = {@Override})
     private final IconDecorator<MenuItem, MenuItem> iconDecoratorForMenuItem;
-   
+
     @Getter(onMethod_ = {@Override})
     private final DisablingDecorator<Button> disablingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
     private final DisablingDecorator<Node> disablingDecoratorForFormField;
-    
+
     @Getter(onMethod_ = {@Override})
     private final PrototypingDecorator<Button, Node> prototypingDecoratorForButton;
     @Getter(onMethod_ = {@Override})
     private final PrototypingDecorator<Node, Node> prototypingDecoratorForFormField;
-    
+
     // -- HELPER
-    
+
     private void newPage(Node content) {
         if(newPageHandler!=null && content!=null) {
             newPageHandler.accept(content);
         }
     }
-    
+
     private Node pageFor(ManagedObject object) {
         return pageFactory!=null
                 ? pageFactory.apply(object)
                 : null;
     }
-    
-    
+
+
 }

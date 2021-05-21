@@ -41,7 +41,7 @@ import lombok.Synchronized;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -51,14 +51,14 @@ extends ModelAbstract<ManagedObject> {
     private static final long serialVersionUID = 1L;
 
     private ObjectMemento memento;
-    
+
     protected ManagedObjectModel(
             @NonNull IsisAppCommonContext commonContext) {
         this(commonContext, null);
     }
-    
+
     protected ManagedObjectModel(
-            @NonNull IsisAppCommonContext commonContext, 
+            @NonNull IsisAppCommonContext commonContext,
             @Nullable ObjectMemento initialMemento) {
 
         super(commonContext);
@@ -91,9 +91,9 @@ extends ModelAbstract<ManagedObject> {
             memento = super.getMementoService().mementoForObject(adapter);
         }
     }
-    
+
     public void setObjectCollection(final ManagedObject adapter) {
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);
             memento = null;
@@ -101,13 +101,13 @@ extends ModelAbstract<ManagedObject> {
         }
 
         super.setObject(adapter);
-        
+
         val pojos = adapter.getPojo();
         memento = super.getMementoService()
                 .mementoForPojos(_Casts.uncheckedCast(pojos), getLogicalElementType()
                         .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()));
     }
-    
+
     public final Bookmark asHintingBookmarkIfSupported() {
         return memento!=null
                 ? memento.asHintingBookmarkIfSupported()
@@ -119,13 +119,13 @@ extends ModelAbstract<ManagedObject> {
                 ? memento.asBookmarkIfSupported()
                 : null;
     }
-    
+
     public final String oidStringIfSupported() {
         return memento!=null
                 ? memento.toString()
                 : null;
     }
-    
+
     /**
      * free of side-effects, used for serialization
      * @implNote overriding this must be consistent with {@link #getTypeOfSpecification()}
@@ -134,25 +134,25 @@ extends ModelAbstract<ManagedObject> {
         return Optional.ofNullable(memento)
                 .map(ObjectMemento::getLogicalType);
     }
-    
-    private transient ObjectSpecification objectSpec;
+
+    private transient ObjectSpecification elementTypeSpec;
     private transient boolean isObjectSpecMemoized = false;
     /**
      * @implNote can be overridden by sub-models (eg {@link ScalarModel}) that know the type of
-     * the adapter without there being one. Overriding this must be consistent 
-     * with {@link #getLogicalElementType()} 
+     * the adapter without there being one. Overriding this must be consistent
+     * with {@link #getLogicalElementType()}
      */
     @Synchronized
     public ObjectSpecification getTypeOfSpecification() {
         if(!isObjectSpecMemoized) {
             val logicalType = getLogicalElementType().orElse(null);
-            objectSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
+            elementTypeSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
             isObjectSpecMemoized = true;
         }
-        return objectSpec;
+        return elementTypeSpec;
     }
 
-    
+
     public boolean hasAsRootPolicy() {
         return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
     }
@@ -171,13 +171,13 @@ extends ModelAbstract<ManagedObject> {
         return Optional.ofNullable(getTypeOfSpecification())
                 .map(objectSpec->objectSpec.getFacet(facetClass));
     }
-    
+
     public boolean isEmpty() {
         return memento == null;
     }
-    
+
     // -- CONTRACT
-    
+
     @Override
     public final int hashCode() {
         return Objects.hashCode(memento);
@@ -191,20 +191,20 @@ extends ModelAbstract<ManagedObject> {
         }
         return false;
     }
-    
+
     // -- DEPRECATIONS
-    
+
     @Deprecated //XXX we'de rather not expose this implementation detail
     ObjectMemento memento() {
         return memento;
     }
-    
+
     @Deprecated //XXX we'de rather not expose this implementation detail
     void memento(ObjectMemento memento) {
         val manageObject = super.getCommonContext().reconstructObject(memento);
         super.setObject(manageObject);
         this.memento = memento;
-        this.objectSpec = null; // invalidate
+        this.elementTypeSpec = null; // invalidate
     }
 
 

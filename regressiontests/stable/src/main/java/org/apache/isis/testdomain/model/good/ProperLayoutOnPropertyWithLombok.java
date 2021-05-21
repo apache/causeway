@@ -40,5 +40,5 @@ public class ProperLayoutOnPropertyWithLombok {
     @PropertyLayout(describedAs="java.time.LocalDate")
     @XmlElement @XmlJavaTypeAdapter(LocalDateToStringAdapter.class)
     @Getter @Setter private LocalDate javaLocalDate;
-    
+
 }

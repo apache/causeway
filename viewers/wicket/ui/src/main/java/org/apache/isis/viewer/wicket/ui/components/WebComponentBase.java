@@ -42,9 +42,9 @@ implements HasCommonContext {
     public WebComponentBase(final String id, final IModel<?> model) {
         super(id, model);
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient IsisAppCommonContext commonContext;
@@ -53,7 +53,7 @@ implements HasCommonContext {
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     public IsisConfiguration getIsisConfiguration() {
         return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
     }
@@ -61,14 +61,14 @@ implements HasCommonContext {
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
-    
+
 
     // -- HELPER
-    
+
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                 : getCommonContext().lookupServiceElseFail(type);
     }
-    
+
 }

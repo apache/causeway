@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
  * Only visible if the version can be cast to a long.
  * </p>
  *
- * @see Persistable_datanucleusIdLong
  * @see Persistable_datanucleusVersionTimestamp
  *
  * @since 2.0 {@index}
@@ -47,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
         named = "Version",
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, 
+        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.2"
         )
 @RequiredArgsConstructor

@@ -61,9 +61,9 @@ public class EmailServiceDefault implements EmailService {
             super(cause);
         }
     }
-    
+
     @Inject private IsisConfiguration configuration;
-    
+
     // -- INIT
 
     private boolean initialized;
@@ -245,6 +245,6 @@ public class EmailServiceDefault implements EmailService {
         return addresses != null && addresses.length > 0;
     }
 
-    
+
 
 }

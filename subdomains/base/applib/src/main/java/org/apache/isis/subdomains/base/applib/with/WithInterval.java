@@ -44,9 +44,11 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
      * A value of <tt>null</tt> implies that the parent's start date should be used. If
      * that is <tt>null</tt>, then implies 'the beginning of time'.
      */
+    @Override
     @Property(editing = Editing.DISABLED, optionality = Optionality.OPTIONAL)
     public LocalDate getStartDate();
 
+    @Override
     public void setStartDate(LocalDate startDate);
 
     /**

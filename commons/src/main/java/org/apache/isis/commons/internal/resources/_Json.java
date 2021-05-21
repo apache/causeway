@@ -48,14 +48,14 @@ public class _Json {
 
     // -- STREAM CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, final InputStream content) 
+    private static <T> T _readJson(final Class<T> clazz, final InputStream content)
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
     }
 
     /**
-     * Either deserialize JSON content from given JSON content InputStream into an instance of 
+     * Either deserialize JSON content from given JSON content InputStream into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -65,12 +65,12 @@ public class _Json {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, final InputStream content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final InputStream content)
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-        return mapper.readValue(content, listFactory);    
+        return mapper.readValue(content, listFactory);
     }
 
     /**
@@ -87,14 +87,14 @@ public class _Json {
 
     // -- STRING CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, final String content) 
+    private static <T> T _readJson(final Class<T> clazz, final String content)
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
     }
 
     /**
-     * Either deserialize JSON content from given JSON content String into an instance of 
+     * Either deserialize JSON content from given JSON content String into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -104,12 +104,12 @@ public class _Json {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, final String content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final String content)
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-        return mapper.readValue(content, listFactory);    
+        return mapper.readValue(content, listFactory);
     }
 
     /**
@@ -126,14 +126,14 @@ public class _Json {
 
     // -- FILE CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, final File content) 
+    private static <T> T _readJson(final Class<T> clazz, final File content)
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
     }
 
     /**
-     * Either deserialize JSON content from given JSON content File into an instance of 
+     * Either deserialize JSON content from given JSON content File into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -143,12 +143,12 @@ public class _Json {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, File content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, File content)
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-        return mapper.readValue(content, listFactory);    
+        return mapper.readValue(content, listFactory);
     }
 
     /**
@@ -164,14 +164,14 @@ public class _Json {
 
     // -- BYTE CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, final byte[] content) 
+    private static <T> T _readJson(final Class<T> clazz, final byte[] content)
             throws JsonParseException, JsonMappingException, IOException {
 
         return (T) new ObjectMapper().readValue(content, clazz);
     }
 
     /**
-     * Either deserialize JSON content from given JSON content byte[] into an instance of 
+     * Either deserialize JSON content from given JSON content byte[] into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
      * @param <T>
      * @param clazz
@@ -181,12 +181,12 @@ public class _Json {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, final byte[] content) 
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final byte[] content)
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-        return mapper.readValue(content, listFactory);    
+        return mapper.readValue(content, listFactory);
     }
 
     /**
@@ -199,23 +199,23 @@ public class _Json {
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readJsonList(clazz, content));
     }
-    
+
     // -- WRITING
 
     private static String _toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
         return objectMapper.writeValueAsString(pojo);
     }
-    
+
     public static Result<String> toString(ObjectMapper objectMapper, Object pojo) {
         return Result.of(()->_toString(objectMapper, pojo));
     }
-    
+
     private static String _toString(Object pojo) throws JsonProcessingException {
         val objectMapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT);
         return _toString(objectMapper, pojo);
     }
-        
+
     public static Result<String> toString(Object pojo) {
         return Result.of(()->_toString(pojo));
     }

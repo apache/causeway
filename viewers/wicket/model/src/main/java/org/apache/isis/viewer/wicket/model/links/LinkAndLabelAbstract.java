@@ -43,52 +43,52 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final ActionLinkUiComponentFactoryWkt uiComponentFactory;
-    
+
     /**
      * used when explicitly named (eg. menu bar layout file), otherwise {@code null}
      */
     @Getter private final String named;
-    
+
     /**
      * domain object that is the <em>Action's</em> holder or owner
      */
     @Getter private final ObjectUiModel actionHolder;
-    
+
     /**
      * framework internal <em>Action</em> model
      */
     @Getter private final ObjectAction objectAction;
-    
+
     // implements HasUiComponent<T>
-    @Getter(lazy = true) 
+    @Getter(lazy = true)
     private final AbstractLink uiComponent = uiComponentFactory.newActionLinkUiComponent(getActionUiMetaModel());
-    
+
     public ActionUiMetaModel getActionUiMetaModel() {
         return actionUiMetaModel.get();
     }
-    
+
     @Override
     public String toString() {
-        return Optional.ofNullable(named).orElse("") + 
+        return Optional.ofNullable(named).orElse("") +
                 " ~ " + objectAction.getIdentifier().getFullIdentityString();
     }
-    
+
     // -- SHORTCUTS
-    
+
     public String getLabel() {
         return getActionUiMetaModel().getLabel();
     }
-    
+
     // -- VISIBILITY
-    
+
     public boolean isVisible() {
         return isVisible(actionHolder.getManagedObject(), objectAction);
     }
-    
+
     private static boolean isVisible(
-            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ManagedObject actionHolder,
             @NonNull final ObjectAction objectAction) {
-        
+
         // check hidden
         if (actionHolder.getSpecification().isHidden()) {
             return false;
@@ -103,14 +103,14 @@ public abstract class LinkAndLabelAbstract implements Serializable {
         }
         return true;
     }
-    
-    
+
+
     // -- HELPER
-    
+
     private final _Lazy<ActionUiMetaModel> actionUiMetaModel = _Lazy.threadSafe(this::createActionUiMetaModel);
-    
+
     private ActionUiMetaModel createActionUiMetaModel() {
         return ActionUiMetaModel.of(actionHolder.getManagedObject(), objectAction);
     }
-    
+
 }

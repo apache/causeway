@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 
 /**
  * Provides reflective access to a field on a domain object that is used to
@@ -62,10 +63,16 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
 
 
     default String getCssClass(String prefix) {
-        final String ownerSpecId = getOnType().getLogicalTypeName().replace(".", "-");
+        final String ownerObjectType = getOnType().getLogicalTypeName().replace(".", "-");
         final String memberId = getIdentifier().getMemberName();
-        return prefix + ownerSpecId + "-" + memberId;
+        return prefix + ownerObjectType + "-" + memberId;
     }
 
+    /**
+     * Returns a serializable representation of this property.
+     */
+    default PropertyMemento getMemento() {
+        return PropertyMemento.forProperty(this);
+    }
 
 }

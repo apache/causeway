@@ -37,8 +37,8 @@ public class ProxyContextHandler {
     @NonNull private final ProxyCreator proxyCreator;
 
     public <T> T proxy(
-            T domainObject, 
-            ManagedObject adapter, 
+            T domainObject,
+            ManagedObject adapter,
             SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
@@ -52,8 +52,8 @@ public class ProxyContextHandler {
     }
 
     public <T> T mixinProxy(
-            T mixin, 
-            ManagedObject mixeeAdapter, 
+            T mixin,
+            ManagedObject mixeeAdapter,
             ManagedObject mixinAdapter,
             SyncControl syncControl) {
 
@@ -66,16 +66,16 @@ public class ProxyContextHandler {
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }
-    
-    
+
+
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
     public <T, E> Collection<E> proxy(
-            final Collection<E> collectionToProxy, 
-            final String collectionName, 
-            final DomainObjectInvocationHandler<T> handler, 
+            final Collection<E> collectionToProxy,
+            final String collectionName,
+            final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
@@ -91,9 +91,9 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, P, Q> Map<P, Q> proxy(
-            final Map<P, Q> collectionToProxy, 
-            final String collectionName, 
-            final DomainObjectInvocationHandler<T> handler, 
+            final Map<P, Q> collectionToProxy,
+            final String collectionName,
+            final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(

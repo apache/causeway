@@ -28,7 +28,7 @@ import org.apache.isis.persistence.jdo.spring.integration.PersistenceManagerFact
 /**
  * JDO-specific subclass of DataAccessResourceFailureException.
  * Converts JDO's JDODataStoreException and JDOFatalDataStoreException.
- * 
+ *
  * @see PersistenceManagerFactoryUtils#convertJdoAccessException
  */
 @SuppressWarnings("serial")

@@ -40,7 +40,7 @@ import javafx.scene.layout.HBox;
 public class PrototypingDecoratorForButton implements PrototypingDecorator<Button, Node> {
 
     private final PrototypingInfoPopupProvider prototypingInfoService;
-    
+
     @Override
     public Node decorate(Button uiButton, PrototypingUiModel prototypingUiModel) {
         val span = new HBox();
@@ -49,11 +49,11 @@ public class PrototypingDecoratorForButton implements PrototypingDecorator<Butto
         prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
         prototypingLabel.setOnMouseClicked(e->
             prototypingInfoService.showPrototypingPopup(prototypingUiModel));
-        
+
         uiButton.getStyleClass().add("button-prototyping");
-        
+
         return span;
     }
 
-    
+
 }

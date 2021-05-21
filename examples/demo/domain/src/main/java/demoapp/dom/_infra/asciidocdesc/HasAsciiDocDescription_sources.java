@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Property(snapshot = Snapshot.EXCLUDED)
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class HasAsciiDocDescription_sources {
 
     private final HasAsciiDocDescription hasAsciiDocDescription;

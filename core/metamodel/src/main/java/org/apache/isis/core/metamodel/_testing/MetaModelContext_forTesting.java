@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -60,6 +58,8 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
+import static java.util.Objects.requireNonNull;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
@@ -67,32 +67,32 @@ import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting implements MetaModelContext {
-    
+
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
         .build();
     }
-    
+
     private ServiceInjector serviceInjector;
-    private ServiceRegistry serviceRegistry; 
+    private ServiceRegistry serviceRegistry;
 
     @Builder.Default
-    private MetamodelEventService metamodelEventService = 
+    private MetamodelEventService metamodelEventService =
     MetamodelEventService.builder()
     .build();
-    
+
     @Builder.Default
     private IsisSystemEnvironment systemEnvironment = newIsisSystemEnvironment();
-    
+
     @Builder.Default
     private IsisConfiguration configuration = newIsisConfiguration();
-    
+
     private ObjectManager objectManager;
-    
+
     private WrapperFactory wrapperFactory;
 
     private SpecificationLoader specificationLoader;
-    
+
     private ProgrammingModel programmingModel;
 
     private AuthenticationContext authenticationContext;
@@ -110,22 +110,22 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private RepositoryService repositoryService;
 
     private FactoryService factoryService;
-    
+
     private MemberExecutorService memberExecutor;
 
     private TransactionService transactionService;
 
     private TransactionState transactionState;
-    
+
     private IsisBeanTypeClassifier isisBeanTypeClassifier;
-    
+
     private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     private Map<String, ManagedObject> serviceAdaptersById;
 
     @Singular
     private List<Object> singletons;
-    
+
     @Override
     public Stream<ManagedObject> streamServiceAdapters() {
 
@@ -142,14 +142,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceAdaptersById.get(serviceId);
     }
-    
+
     // -- LOOKUP
 
     @Override
     public <T> T getSingletonElseFail(Class<T> type) {
         return getSystemEnvironment().ioc().getSingletonElseFail(type);
     }
-    
+
     public Stream<Object> streamSingletons() {
 
         val fields = _Lists.of(
@@ -177,15 +177,15 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
     }
-    
-    
-    
+
+
+
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
         val env = new IsisSystemEnvironment();
         env.setUnitTesting(true);
         return env;
     }
-    
+
     private static IsisConfiguration newIsisConfiguration() {
         val properties = _Maps.<String, String>newHashMap();
         val config = new IsisConfiguration(new AbstractEnvironment() {
@@ -204,7 +204,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceRegistry;
     }
-    
+
     @Override
     public ServiceInjector getServiceInjector() {
         if(serviceInjector==null) {
@@ -221,7 +221,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return factoryService;
     }
 
-    
+
     @Override
     public TranslationService getTranslationService() {
         if(translationService==null) {
@@ -229,28 +229,28 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return translationService;
     }
-    
-    private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring = 
+
+    private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring =
             new IsisBeanFactoryPostProcessorForSpring();
-    
+
     public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
         if(isisBeanTypeClassifier==null) {
             isisBeanTypeClassifier = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeClassifier();
         }
         return isisBeanTypeClassifier;
     }
-    
+
     public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
         if(isisBeanTypeRegistry==null) {
             isisBeanTypeRegistry = new IsisBeanTypeRegistryDefault(Can.empty());
         }
         return isisBeanTypeRegistry;
     }
-    
+
     @Override
     public SpecificationLoader getSpecificationLoader() {
         if(specificationLoader==null) {
-            
+
             val configuration = requireNonNull(getConfiguration());
             val environment = requireNonNull(getSystemEnvironment());
             val serviceRegistry = requireNonNull(getServiceRegistry());
@@ -261,13 +261,13 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             val isisBeanTypeRegistry = requireNonNull(getIsisBeanTypeRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
-                    configuration, 
-                    environment, 
+                    configuration,
+                    environment,
                     serviceRegistry,
                     programmingModel,
                     isisBeanTypeClassifier,
                     isisBeanTypeRegistry);
-            
+
         }
         return specificationLoader;
     }
@@ -285,7 +285,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return objectManager;
     }
-    
+
     @Override
     public WrapperFactory getWrapperFactory() {
         if(wrapperFactory==null) {
@@ -297,25 +297,25 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {
         val properties = _Maps.<String, String>newHashMap();
         setup.accept(properties);
-        
+
         val currentConfigBackup = this.configuration;
         try {
-            
+
             this.configuration = new IsisConfiguration(new AbstractEnvironment() {
                 @Override
                 public String getProperty(String key) {
                     return properties.get(key);
                 }
             });
-            
+
             runnable.run();
         } finally {
             this.configuration = currentConfigBackup;
         }
-        
-         
-                
+
+
+
     }
-    
+
 
 }

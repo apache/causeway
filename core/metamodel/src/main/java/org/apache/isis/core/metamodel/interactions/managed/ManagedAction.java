@@ -41,34 +41,34 @@ import lombok.val;
 public final class ManagedAction extends ManagedMember {
 
     // -- FACTORIES
-    
+
     public static final ManagedAction of(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
             final @NonNull Where where) {
         return new ManagedAction(owner, action, where);
     }
-    
+
     public static final Optional<ManagedAction> lookupAction(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId,
             @NonNull final Where where) {
-        
+
         return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
-    
+
     // -- IMPLEMENTATION
-    
+
     @Getter private final ObjectAction action;
-    
+
     @Getter private final ActionInteractionHead interactionHead;
 
     private ManagedAction(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
             final @NonNull Where where) {
-        
+
         super(owner, where);
         this.action = action;
         this.interactionHead = action.interactionHead(owner);
@@ -81,37 +81,37 @@ public final class ManagedAction extends ManagedMember {
     public ParameterNegotiationModel startParameterNegotiation() {
         return getInteractionHead().defaults();
     }
-    
+
     @Override
     public ObjectAction getMetaModel() {
         return getAction();
     }
-    
+
     @Override
     public MemberType getMemberType() {
         return MemberType.ACTION;
     }
-    
+
     // -- INTERACTION
-    
+
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull Can<ManagedObject> actionParameters) {
-            
+
         // param validation is not our responsibility here
-        
+
         val action = getAction();
-        
+
         val head = action.interactionHead(getOwner());
-        
+
         val actionResult = action
                 .execute(head , actionParameters, InteractionInitiatedBy.USER);
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
             return _Either.left(ManagedObject.empty(action.getReturnType()));
         }
-        
+
         val resultPojo = actionResult.getPojo();
 
-        //TODO same logic is in wkt's ActionModel, ultimately we want wkt to use this (common) one 
+        //TODO same logic is in wkt's ActionModel, ultimately we want wkt to use this (common) one
         val resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
@@ -120,44 +120,44 @@ public final class ManagedAction extends ManagedMember {
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(actionResult);
-        
+
         // resolve injection-points for the result
         getServiceInjector().injectServicesInto(resultAdapter.getPojo());
-        
+
         //XXX are we sure in case of entities, that these are attached?
-        
+
         return _Either.left(resultAdapter);
-        
+
     }
-    
+
     // -- POJO WRAPPING
-    
+
     private ManagedObject toManagedObject(Object pojo) {
-        return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo); 
+        return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo);
     }
-    
+
     // -- ACTION RESULT ROUTING
-    
+
     private Can<RoutingService> getRoutingServices() {
         return routingServices.get();
     }
 
     private final _Lazy<Can<RoutingService>> routingServices = _Lazy.threadSafe(this::lookupRoutingServices);
-    
+
     private Can<RoutingService> lookupRoutingServices() {
         return getServiceRegistry().select(RoutingService.class);
     }
-    
+
     // -- SERVICES
-    
+
     private MetaModelContext mmc() {
         return getAction().getMetaModelContext();
     }
-    
+
     private ServiceInjector getServiceInjector() {
         return mmc().getServiceInjector();
     }
-    
+
     private ServiceRegistry getServiceRegistry() {
         return mmc().getServiceRegistry();
     }

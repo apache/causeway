@@ -54,9 +54,9 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class _Ints {
-    
+
     // -- RANGE
-    
+
     @Value(staticConstructor = "of")
     public static class Bound {
         int value;
@@ -64,33 +64,33 @@ public class _Ints {
         public static @NonNull Bound inclusive(int value) { return of(value, true); }
         public static @NonNull Bound exclusive(int value) { return of(value, true); }
     }
-    
+
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Range {
-        
+
         public static Range empty() {
             return new Range(null, null, true);
         }
-        
+
         public static Range of(
                 @NonNull Bound lowerBound,
                 @NonNull Bound upperBound) {
             return new Range(lowerBound, upperBound, false);
         }
-        
+
         private final Bound lowerBound;
         private final Bound upperBound;
         private final boolean empty;
         public boolean contains(int value) {
             if(empty) return false;
-            val isBelowLower = lowerBound.isInclusive() 
-                    ? value < lowerBound.getValue() 
-                    : value <= lowerBound.getValue();  
+            val isBelowLower = lowerBound.isInclusive()
+                    ? value < lowerBound.getValue()
+                    : value <= lowerBound.getValue();
             if(isBelowLower) {
                 return false;
             }
-            val isAboveUpper = upperBound.isInclusive() 
-                    ? value > upperBound.getValue() 
+            val isAboveUpper = upperBound.isInclusive()
+                    ? value > upperBound.getValue()
                     : value >= upperBound.getValue();
             if(isAboveUpper) {
                 return false;
@@ -99,7 +99,7 @@ public class _Ints {
         }
         /**
          * @param value
-         * @return the value or if not within range, the nearest integer to the value, that is within range   
+         * @return the value or if not within range, the nearest integer to the value, that is within range
          */
         public int bounded(int value) {
             if(empty) return value; // noop
@@ -108,7 +108,7 @@ public class _Ints {
             }
             final int nearestToLower = nearestToLower();
             final int nearestToUpper = nearestToUpper();
-            final int distanceToLower = value - nearestToLower; 
+            final int distanceToLower = value - nearestToLower;
             final int distanceToUpper = value - nearestToUpper;
             return (distanceToLower <= distanceToUpper)
                     ? nearestToLower
@@ -116,7 +116,7 @@ public class _Ints {
         }
         private int nearestToLower() {
             if(empty) throw _Exceptions.unsupportedOperation();
-            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;  
+            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;
         }
         private int nearestToUpper() {
             if(empty) throw _Exceptions.unsupportedOperation();
@@ -132,13 +132,13 @@ public class _Ints {
                 return Optional.empty();
             }
             return Optional.of(of(
-                    Bound.inclusive(Math.max(s1, s2)), 
+                    Bound.inclusive(Math.max(s1, s2)),
                     Bound.inclusive(Math.min(e1, e2))));
         }
         @Override
         public String toString() {
             if(empty) return "[]";
-            return String.format("%s%d,%d%S", 
+            return String.format("%s%d,%d%S",
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
         }
@@ -169,9 +169,9 @@ public class _Ints {
             };
         }
     }
-    
+
     // -- RANGE FACTORIES
-    
+
     /**
      * Range includes a and b.
      */
@@ -181,7 +181,7 @@ public class _Ints {
         }
         return Range.of(Bound.inclusive(a), Bound.inclusive(b));
     }
-    
+
     /**
      * Range includes a but not b.
      */
@@ -194,7 +194,7 @@ public class _Ints {
         }
         return Range.of(Bound.inclusive(a), Bound.exclusive(b));
     }
-    
+
     // -- PARSING
 
     /**
@@ -227,7 +227,7 @@ public class _Ints {
      * @param      radix   the radix to be used while parsing {@code s}.
      * @param      onFailure on parsing failure consumes the failure message
      * @return optionally the integer represented by the string argument in the specified radix
-     * 
+     *
      */
     public OptionalInt parseInt(final String s, final int radix, final Consumer<String> onFailure) {
         final long parseResult = parseIntElseLongMaxValue(s, radix, onFailure);
@@ -236,32 +236,32 @@ public class _Ints {
         }
         return OptionalInt.empty();
     }
-    
+
     // -- SHORTCUTS
-    
+
     public OptionalInt parseInt(final String s, final int radix) {
         return parseInt(s, radix, IGNORE_ERRORS);
     }
-    
+
     // -- LOW LEVEL HELPER
-    
+
     private static boolean isParseSuccess(long value) {
         return value!=Long.MAX_VALUE;
     }
 
     private static final Consumer<String> IGNORE_ERRORS = t->{};
-    
+
     /**
-     * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant 
+     * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
     private static long parseIntElseLongMaxValue(
-            @Nullable final String s, 
-            final int radix, 
+            @Nullable final String s,
+            final int radix,
             final Consumer<String> onFailure) {
-        
+
         requires(onFailure, "onFailure");
-        
+
         if (s == null) {
             onFailure.accept("null");
             return Long.MAX_VALUE;
@@ -323,9 +323,9 @@ public class _Ints {
             return Long.MAX_VALUE;
         }
     }
-    
+
     // -- ARRAY FLATTEN
-    
+
     public static int[] flatten(final @NonNull int[][] nested) {
         final int n = nested.length;
         final int stride = nested[0].length;
@@ -335,9 +335,9 @@ public class _Ints {
         }
         return flattened;
     }
-    
+
     // -- ARRAY PARTITION
-    
+
     public static int[][] partition(final @NonNull int[] flattened, final int stride) {
         final int n = flattened.length/stride;
         _Assert.assertEquals(flattened.length, n*stride, ()->"flattened.length must be divisible by stride");
@@ -347,50 +347,50 @@ public class _Ints {
         }
         return nested;
     }
-    
+
     // -- PRINTING
-    
+
     public static String rowForm(
             final @NonNull int[] array) {
         return rowForm(array, 8, Integer::toString);
     }
-    
+
     public static String rowForm(
-            final @NonNull int[] array, 
-            final int columnWidth, 
+            final @NonNull int[] array,
+            final int columnWidth,
             final @NonNull IntFunction<String> cellFormatter) {
-        
+
         final int m = array.length;
         val sb = new StringBuilder();
-        
+
         for(int j=0; j<m; ++j) {
             final int cellValue = array[j];
             val cellStringFull = cellFormatter.apply(cellValue);
             val cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
 
             // right align, at column end marker
-            final int spacesCount = columnWidth - cellStringTrimmed.length(); 
+            final int spacesCount = columnWidth - cellStringTrimmed.length();
             for(int k=0; k<spacesCount; ++k) {
                 sb.append(' ');
             }
             sb.append(cellStringTrimmed);
-        }   
+        }
         sb.append("\n");
-        
+
         return sb.toString();
     }
 
-    
+
     public static String tableForm(
             final @NonNull int[][] nested) {
         return tableForm(nested, 8, Integer::toString);
     }
-    
+
     public static String tableForm(
-            final @NonNull int[][] nested, 
-            final int columnWidth, 
+            final @NonNull int[][] nested,
+            final int columnWidth,
             final @NonNull IntFunction<String> cellFormatter) {
-        
+
         final int n = nested.length;
         val sb = new StringBuilder();
         for(int i=0; i<n; ++i) {
@@ -398,5 +398,5 @@ public class _Ints {
         }
         return sb.toString();
     }
-    
+
 }

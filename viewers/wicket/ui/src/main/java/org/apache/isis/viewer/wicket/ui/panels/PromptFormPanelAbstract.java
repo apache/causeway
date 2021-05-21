@@ -27,7 +27,7 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  */
-public abstract class PromptFormPanelAbstract<T, M extends IModel<T> & FormExecutorContext> 
+public abstract class PromptFormPanelAbstract<T, M extends IModel<T> & FormExecutorContext>
 extends PanelAbstract<T, M> {
 
     private static final long serialVersionUID = 1L;

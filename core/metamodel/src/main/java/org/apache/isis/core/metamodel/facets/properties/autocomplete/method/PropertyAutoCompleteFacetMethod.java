@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
-public class PropertyAutoCompleteFacetMethod 
-extends PropertyAutoCompleteFacetAbstract 
+public class PropertyAutoCompleteFacetMethod
+extends PropertyAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -83,10 +83,10 @@ implements ImperativeFacet {
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-        
+
         val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
-        
+
         return visiblePojos;
     }
 

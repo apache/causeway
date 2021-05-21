@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionVisibilityEvent}.
  */
-public class CollectionVisibilityContext 
+public class CollectionVisibilityContext
 extends VisibilityContext {
 
     public CollectionVisibilityContext(

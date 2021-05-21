@@ -56,7 +56,7 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
         if(Collection.class.isAssignableFrom(cls)) {
             return Substitution.replaceWith(Collection.class);
         }
-        
+
         return Substitution.passThrough(); // indifferent
     }
 }

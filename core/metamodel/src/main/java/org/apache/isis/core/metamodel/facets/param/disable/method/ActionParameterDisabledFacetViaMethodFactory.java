@@ -37,9 +37,9 @@ import lombok.val;
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
  */
-public class ActionParameterDisabledFacetViaMethodFactory 
+public class ActionParameterDisabledFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
-    
+
     private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
 
     public ActionParameterDisabledFacetViaMethodFactory() {
@@ -57,7 +57,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         }
 
         // attach ActionParameterDisabledFacet if disableNumMethod is found ...
-        
+
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
@@ -66,12 +66,12 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
                 .paramIndexToMethodNameProviders(namingConvention)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
-        
+
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            
+
             val disableMethod = searchResult.getSupportingMethod();
             val paramNum = searchResult.getParamIndex();
-            
+
             processMethodContext.removeMethod(disableMethod);
 
             if (facetedMethod.containsNonFallbackFacet(ActionParameterDisabledFacet.class)) {
@@ -79,18 +79,18 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
                 throw new MetaModelException(cls + " uses both old and new 'disable' syntax - "
                         + "must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
             val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getIdentifier());
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
-            
+
             super.addFacet(
                     new ActionParameterDisabledFacetViaMethod(
                             disableMethod, translationService, translationContext, ppmFactory, paramAsHolder));
         });
-        
+
     }
 
 }

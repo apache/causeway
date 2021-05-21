@@ -58,7 +58,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 

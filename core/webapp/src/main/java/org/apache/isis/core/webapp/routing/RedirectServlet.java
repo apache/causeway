@@ -50,7 +50,7 @@ public class RedirectServlet extends HttpServlet {
         } catch (Exception e) {
             log.error("failed to redirect request to {}", redirectTo, e);
         }
-        
+
     }
 
 }

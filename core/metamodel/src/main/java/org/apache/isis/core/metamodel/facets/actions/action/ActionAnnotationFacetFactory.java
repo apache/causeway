@@ -26,10 +26,11 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -64,7 +65,7 @@ extends FacetFactoryAbstract {
 
         val actionIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
-                        Action.class, 
+                        Action.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
 
@@ -81,7 +82,7 @@ extends FacetFactoryAbstract {
         processExecutionPublishing(processMethodContext, actionIfAny);
 
         processTypeOf(processMethodContext, actionIfAny);
-        processAssociateWith(processMethodContext, actionIfAny);
+        processChoicesFrom(processMethodContext, actionIfAny);
 
         processFileAccept(processMethodContext, actionIfAny);
     }
@@ -253,33 +254,37 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(typeOf=...)
-        TypeOfFacet typeOfFacet = actionIfAny
+        val typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
-                .orElse(null);
-
-        // infer from generic return type
-        if(typeOfFacet == null) {
-            val cls = processMethodContext.getCls();
-            typeOfFacet = TypeOfFacet.Util.inferFromMethodReturnType(facetedMethod, cls, method);
-        }
+                .<TypeOfFacet>map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
+                // else infer from generic type arg if any
+                .orElseGet(()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method).orElse(null));
 
         super.addFacet(typeOfFacet);
     }
 
-    void processAssociateWith(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
+    void processChoicesFrom(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
 
-        // check for @Action(associateWith=...)
+        // check for @Action(choicesFrom=...)
         actionIfAny.ifPresent(action->{
+            val choicesFrom = action.choicesFrom();
+            if(_Strings.isNotEmpty(choicesFrom)) {
+                super.addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
+                return;
+            }
+            @SuppressWarnings("deprecation")
             val associateWith = action.associateWith();
             if(_Strings.isNotEmpty(associateWith)) {
-                super.addFacet(new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
-                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+                super.addFacet(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
+                return;
             }
         });
+
+        FacetUtil.addIfNotAlreadyPresent(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {

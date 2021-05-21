@@ -57,12 +57,12 @@ public class ExceptionDetail {
     @XmlElementWrapper()
     @XmlElement(name="element")
     private List<String> stackTrace = _Lists.newArrayList();
-    
+
     @Getter private ExceptionDetail causedBy;
 
     public ExceptionDetail() {
     }
-    
+
     public ExceptionDetail(final Throwable ex) {
         this.className = ex.getClass().getName();
         this.message = ex.getMessage();

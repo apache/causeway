@@ -35,9 +35,9 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
     public ChoicesFacetEnum(final FacetHolder holder, final Class<?> enumClass) {
         super(holder);
-        
+
         final Object[] choices = enumClass.getEnumConstants();
-        
+
         val elementSpec = specForTypeElseFail(enumClass);
         this.choices = Can.ofArray(choices)
                 .map(choice->ManagedObject.of(elementSpec, choice));

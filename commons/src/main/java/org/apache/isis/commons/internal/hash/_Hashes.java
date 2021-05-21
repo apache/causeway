@@ -55,7 +55,7 @@ public final class _Hashes {
         SHA512("SHA-512"),
         ;
         private final String algorithmName;
-        
+
         public Optional<MessageDigest> getMessageDigest() {
             try {
                 return Optional.ofNullable(MessageDigest.getInstance(algorithmName));
@@ -63,21 +63,21 @@ public final class _Hashes {
                 return Optional.empty();
             }
         }
-        
+
     }
-    
+
     public static Optional<byte[]> digest(@NonNull Algorithm algorithm, @Nullable byte[] bytes) {
-        final int size = _NullSafe.size(bytes); 
+        final int size = _NullSafe.size(bytes);
         if(size==0) {
             return Optional.empty();
         }
         return algorithm.getMessageDigest()
         .map(md->digest(md, new ByteArrayInputStream(bytes), Math.max(size, 4096)));
     }
-    
-    
+
+
     // -- HELPER
-    
+
     @SneakyThrows
     private static byte[] digest(@NonNull MessageDigest md, @NonNull InputStream inputStream, int buffersize) {
         md.reset();
@@ -87,6 +87,6 @@ public final class _Hashes {
         }
         return md.digest();
     }
-    
+
 
 }

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface UUIDValueFacet extends Facet {
-    
+
     UUID uuidValue(ManagedObject object);
 
     ManagedObject createValue(UUID value);

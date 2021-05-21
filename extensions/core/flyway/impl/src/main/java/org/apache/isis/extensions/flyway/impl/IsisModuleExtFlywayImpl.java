@@ -18,14 +18,7 @@
  */
 package org.apache.isis.extensions.flyway.impl;
 
-import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 @Configuration
 public class IsisModuleExtFlywayImpl {

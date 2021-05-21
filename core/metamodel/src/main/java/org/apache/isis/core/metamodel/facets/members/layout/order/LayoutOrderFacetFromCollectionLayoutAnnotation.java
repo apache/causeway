@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class LayoutOrderFacetFromCollectionLayoutAnnotation 
+public class LayoutOrderFacetFromCollectionLayoutAnnotation
 extends LayoutOrderFacetAbstract {
 
     public static LayoutOrderFacetFromCollectionLayoutAnnotation create(
-            final Optional<CollectionLayout> actionLayoutIfAny, 
+            final Optional<CollectionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
-        
+
         return actionLayoutIfAny
                 .map(CollectionLayout::sequence)
                 .map(sequence -> new LayoutOrderFacetFromCollectionLayoutAnnotation(sequence, holder))

@@ -243,6 +243,7 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
         doc.getBlocks().addAll(blocks);
     }
 
+    @Override
     protected String inlineTag(
             final @NonNull JavadocInlineTag inlineTag,
             final @NonNull J2AdocUnit unit) {

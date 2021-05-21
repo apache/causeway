@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
 
-public class ExecutionPublishingPropertyFacetForPropertyAnnotation 
+public class ExecutionPublishingPropertyFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
 
     public static ExecutionPublishingFacet create(

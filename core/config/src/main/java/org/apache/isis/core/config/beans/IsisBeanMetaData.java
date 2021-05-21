@@ -29,5 +29,5 @@ public class IsisBeanMetaData {
     private final @NonNull Class<?> correspondingClass;
     private final @NonNull BeanSort beanSort;
     private final @NonNull String beanName;
-    
+
 }

@@ -52,24 +52,24 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     public ProgrammingModel getProgrammingModel() {
         return programmingModel.get();
     }
-    
+
     // -- HELPER
 
     @Inject private ServiceInjector serviceInjector;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
     @Inject private MetaModelContext metaModelContext;
-     
-    private _Lazy<ProgrammingModel> programmingModel = 
+
+    private _Lazy<ProgrammingModel> programmingModel =
             _Lazy.threadSafe(this::createProgrammingModel);
 
     private ProgrammingModel createProgrammingModel() {
-        
+
         log.info("About to create the ProgrammingModel.");
 
         val programmingModel = new ProgrammingModelFacetsJava8(serviceInjector);
 
-        // from all plugins out there, add their contributed FacetFactories, Validators 
+        // from all plugins out there, add their contributed FacetFactories, Validators
         // and PostProcessors to the programming model
         val metaModelRefiners = serviceRegistry.select(MetaModelRefiner.class);
         for (val metaModelRefiner : metaModelRefiners) {
@@ -78,26 +78,26 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
         // finalize the programming model (make it immutable)
         programmingModel.init(programmingModelInitFilter, metaModelContext);
-        
+
         if(log.isInfoEnabled()) {
-            
+
             val refinerCount = metaModelRefiners.size();
-            
+
             val facetFactoryCount = programmingModel.streamFactories().count();
             val validatorCount = programmingModel.streamValidators().count();
             val postProcessorCount = programmingModel.streamPostProcessors().count();
-            
-            
+
+
             log.info("Collected after asking {} refiners, and passing filter '{}':",
                     refinerCount,
                     programmingModelInitFilter.getClass());
-            
+
             log.info(" - {} facet-factories", facetFactoryCount);
             log.info(" - {} validators", validatorCount);
             log.info(" - {} post-processors", postProcessorCount);
-            
+
         }
-        
+
         return programmingModel;
     }
 

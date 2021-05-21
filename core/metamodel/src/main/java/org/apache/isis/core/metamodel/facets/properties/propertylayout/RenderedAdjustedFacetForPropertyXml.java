@@ -32,7 +32,7 @@ public class RenderedAdjustedFacetForPropertyXml extends RenderedAdjustedFacetAb
             return null;
         }
         final RenderDay renderDay = propertyLayout.getRenderDay();
-        return renderDay != null && renderDay == RenderDay.AS_DAY_BEFORE 
+        return renderDay != null && renderDay == RenderDay.AS_DAY_BEFORE
                 ? new RenderedAdjustedFacetForPropertyXml(holder) : null;
     }
 

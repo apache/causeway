@@ -66,13 +66,13 @@ public class EntityPage extends PageAbstract {
     private final String titleString;
 
     /**
-     * Called reflectively, in support of {@link BookmarkablePageLink} links. 
+     * Called reflectively, in support of {@link BookmarkablePageLink} links.
      * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
      */
     public static EntityPage bookmarked(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
-        
+
         val entityModel = createEntityModel(commonContext, pageParameters);
         return new EntityPage(pageParameters, entityModel);
     }
@@ -85,9 +85,9 @@ public class EntityPage extends PageAbstract {
      * @return An EntityModel for the requested OID
      */
     private static EntityModel createEntityModel(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             PageParameters parameters) {
-        
+
         String oid = EntityModel.oidStr(parameters);
         if (Strings.isEmpty(oid)) {
             throw new RestartResponseException(Application.get().getHomePage());
@@ -103,16 +103,16 @@ public class EntityPage extends PageAbstract {
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public EntityPage(
-            IsisAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
+
         this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter));
     }
 
     private static EntityModel newEntityModel(
             IsisAppCommonContext commonContext,
             ManagedObject adapter) {
-        
+
         val entityModel = EntityModel.ofAdapter(commonContext, adapter);
         return entityModel;
     }
@@ -121,7 +121,7 @@ public class EntityPage extends PageAbstract {
             final PageParameters pageParameters,
             final EntityModel entityModel,
             final String titleString) {
-        
+
         super(pageParameters, titleString, ComponentType.ENTITY);
 
         this.model = entityModel;
@@ -144,7 +144,7 @@ public class EntityPage extends PageAbstract {
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.remove(entityModel);
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -185,7 +185,7 @@ public class EntityPage extends PageAbstract {
         }
 
         if(titleString == null) {
-            final String titleStr = objectAdapter.titleString(null);
+            final String titleStr = objectAdapter.titleString();
             setTitle(titleStr);
         }
 

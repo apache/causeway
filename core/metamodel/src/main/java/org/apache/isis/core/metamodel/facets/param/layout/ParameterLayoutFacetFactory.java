@@ -40,9 +40,9 @@ public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
     }
 
     protected void addFacets(
-            ProcessParameterContext processParameterContext, 
+            ProcessParameterContext processParameterContext,
             Optional<ParameterLayout> parameterLayoutIfAny) {
-        
+
         val facetHolder = processParameterContext.getFacetHolder();
 
         super.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));

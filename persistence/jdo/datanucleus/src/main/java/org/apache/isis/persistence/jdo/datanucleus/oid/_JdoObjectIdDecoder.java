@@ -42,10 +42,10 @@ class _JdoObjectIdDecoder implements ChainOfResponsibility.Handler<JdoObjectIdDe
         final ObjectSpecification spec;
         final String distinguisher;
         final String keyStr;
-        
+
         boolean isApplicationIdentity() {
             val jdoPersistenceCapableFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
-            return jdoPersistenceCapableFacet != null 
+            return jdoPersistenceCapableFacet != null
                     && jdoPersistenceCapableFacet.getIdentityType() == IdentityType.APPLICATION;
         }
 
@@ -55,7 +55,7 @@ class _JdoObjectIdDecoder implements ChainOfResponsibility.Handler<JdoObjectIdDe
             return separatorIdx != -1
                 ? of(
                         spec,
-                        idStr.substring(0, separatorIdx), 
+                        idStr.substring(0, separatorIdx),
                         idStr.substring(separatorIdx + 1))
                 : of(spec, "", idStr);
         }
@@ -63,7 +63,7 @@ class _JdoObjectIdDecoder implements ChainOfResponsibility.Handler<JdoObjectIdDe
 
     @NonNull private final Predicate<JdoObjectIdDecodingRequest> filter;
     @NonNull private final Function<JdoObjectIdDecodingRequest, Object> parser;
-    
+
     @Override
     public boolean isHandling(JdoObjectIdDecodingRequest request) {
         return filter.test(request);
@@ -77,7 +77,7 @@ class _JdoObjectIdDecoder implements ChainOfResponsibility.Handler<JdoObjectIdDe
     public static Predicate<JdoObjectIdDecodingRequest> filter(@NonNull final String token) {
         return request->token.equals(request.getDistinguisher());
     }
-    
+
     public static Function<JdoObjectIdDecodingRequest, Object> parser(
             @NonNull final Function<String, ? extends Object> appIdFactory,
             @NonNull final BiFunction<Class<?>, String, Object> jdoObjectIdFactory) {

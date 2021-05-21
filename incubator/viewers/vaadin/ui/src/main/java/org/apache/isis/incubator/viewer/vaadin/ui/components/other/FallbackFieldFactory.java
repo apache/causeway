@@ -42,7 +42,7 @@ import lombok.val;
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerVaa {
-    
+
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;
 
     @Override
@@ -52,34 +52,34 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public Component handle(ComponentRequest request) {
-        
+
         val spec = request.getManagedFeature().getSpecification();
-        
+
         val debugUiModel = DebugUiModel.of("type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())
         .withProperty("ObjectFeature.identifier",  request.getManagedFeature().getIdentifier().toString());
-        
+
         val handlerInfo = uiComponentFactory.get().getRegisteredHandlers()
         .stream()
         .map(Class::getSimpleName)
         .map(handlerName->" • " + handlerName)
         .collect(Collectors.joining("\n"));
-        
+
         debugUiModel.withProperty("Handlers", handlerInfo);
-        
+
         spec.streamFacets()
         .forEach(facet -> {
             debugUiModel.withProperty(
-                    facet.facetType().getSimpleName(), 
+                    facet.facetType().getSimpleName(),
                     summarize(facet));
         });
-        
-        
+
+
         val uiField = new DebugField(request.getManagedFeature().getDisplayLabel());
         uiField.setValue(debugUiModel);
         return uiField;
     }
-    
+
     private String summarize(Facet facet) {
         val sb = new StringBuilder();
         sb.append(facet.getClass().getSimpleName());
@@ -87,7 +87,7 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
             val attributeMap = _Maps.<String, Object>newTreeMap();
             ((FacetAbstract)facet).appendAttributesTo(attributeMap);
             attributeMap.forEach((k, v)->{
-                sb.append("\n • ").append(k).append(": ").append(v);    
+                sb.append("\n • ").append(k).append(": ").append(v);
             });
         }
         return sb.toString();

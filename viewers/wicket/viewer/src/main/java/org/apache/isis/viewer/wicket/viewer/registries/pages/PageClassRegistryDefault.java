@@ -53,7 +53,7 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
 
     private final PageClassList pageClassList; // serializable
     private final Map<PageType, Class<? extends Page>> pagesByType = _Maps.newHashMap();
-    
+
     @Inject
     public PageClassRegistryDefault(PageClassList pageClassList) {
         this.pageClassList = pageClassList;

@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 
-public interface FormExecutorContext 
+public interface FormExecutorContext
 extends HasParentUiModel<EntityModel>, HasCommonContext {
 
     PromptStyle getPromptStyle();
@@ -34,5 +34,5 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
         return getPromptStyle().isInlineOrInlineAsIfEdit() &&
                 getInlinePromptContext() != null;
     }
-    
+
 }

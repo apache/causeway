@@ -36,7 +36,7 @@ public class HasAsciiDocDescription_description {
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
-    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES, 
+    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES,
             fieldSetId = "description", sequence = "1")
     public AsciiDoc prop() {
         return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");

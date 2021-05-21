@@ -87,10 +87,10 @@ final class _Comparators_SequenceCompare {
             val token2 = components2.nextToken();
 
             int componentCompare = 0;
-            
+
             val int1 = _Ints.parseInt(token1, 10);
             val int2 = _Ints.parseInt(token2, 10);
-            
+
             if(int1.isPresent() && int2.isPresent()) {
                 componentCompare = Integer.compare(int1.getAsInt(), int2.getAsInt());
             } else {

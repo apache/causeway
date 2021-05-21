@@ -38,6 +38,7 @@ extends UnitFormatterAbstract {
         super(j2aContext);
     }
 
+    @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
 
         final String javaSource = Snippets.javaSourceFor(unit);

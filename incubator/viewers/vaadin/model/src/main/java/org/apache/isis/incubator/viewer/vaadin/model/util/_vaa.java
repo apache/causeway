@@ -34,7 +34,7 @@ import lombok.experimental.UtilityClass;
 public class _vaa {
 
     // -- COMPONENT FACTORIES
-    
+
     public static <T extends Component> T add(HasComponents container, T component) {
         container.add(component);
         return component;
@@ -52,23 +52,23 @@ public class _vaa {
         component.addThemeVariants(ButtonVariant.LUMO_SMALL);
         return component;
     }
-    
+
     public static Button newButton(HasComponents container, String label, ComponentEventListener<ClickEvent<Button>> eventHandler) {
         val component = newButton(label);
         container.add(component);
         component.addClickListener(eventHandler);
         return component;
     }
-    
+
     // -- COMPONENT EVENTS
-    
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends Component> T setOnClick(
-            T component, 
+            T component,
             Runnable onClick) {
         ComponentUtil.addListener(component, ClickEvent.class,
                 (ComponentEventListener) e->onClick.run());
         return component;
     }
-    
+
 }

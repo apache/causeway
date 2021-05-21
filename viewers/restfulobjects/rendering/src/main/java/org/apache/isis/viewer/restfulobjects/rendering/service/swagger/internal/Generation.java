@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -173,7 +173,7 @@ class Generation {
         for (final ObjectSpecification objectSpec :  allSpecs) {
             objectSpec.streamAssociations(MixedIn.INCLUDED)
             .collect(Collectors.toList());
-            objectSpec.streamActions(MixedIn.INCLUDED)
+            objectSpec.streamAnyActions(MixedIn.INCLUDED)
             .collect(Collectors.toList());
         }
     }
@@ -761,7 +761,7 @@ class Generation {
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {
-        return objectSpec.getFacet(ObjectSpecIdFacet.class).value();
+        return objectSpec.getFacet(ObjectTypeFacet.class).value();
     }
 
     static StringProperty stringProperty() {

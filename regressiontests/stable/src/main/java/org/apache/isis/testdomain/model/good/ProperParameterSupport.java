@@ -31,14 +31,14 @@ import lombok.experimental.Accessors;
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperParameterSupport {
 
-    
+
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
         String p0;
         int p1;
         boolean p2;
     }
-    
+
     @Action
     public void act(
             String p0,
@@ -47,85 +47,85 @@ public class ProperParameterSupport {
     }
 
     // -- PARAM 0 (String)
-    
+
     @MemberSupport
     public String default0Act(Parameters p) {
         return null;
     }
-    
+
     @MemberSupport
     public Collection<String> choices0Act(Parameters p) {
         return null;
     }
-    
+
     @MemberSupport
     public Collection<String> autoComplete0Act(Parameters p, String search) {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hide0Act(Parameters p) {
         return false;
     }
-    
+
     @MemberSupport
     public String disable0Act(Parameters p) {
         return null;
     }
-    
+
     // -- PARAM 1 (int)
-    
+
     @MemberSupport
     public int default1Act(Parameters p) {
         return 0;
     }
-    
+
     @MemberSupport
     public int[] choices1Act(Parameters p) {
         return null;
     }
-    
+
     @MemberSupport
     public int[] autoComplete1Act(Parameters p, String search) {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hide1Act(Parameters p) {
         return false;
     }
-    
+
     @MemberSupport
     public String disable1Act(Parameters p) {
         return null;
     }
-    
+
     // -- PARAM 2 (boolean)
-    
+
     @MemberSupport
     public boolean default2Act(Parameters p) {
         return false;
     }
-    
+
     @MemberSupport
     public boolean[] choices2Act(Parameters p) {
         return null;
     }
-    
+
     @MemberSupport
     public boolean[] autoComplete2Act(Parameters p, String search) {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hide2Act(Parameters p) {
         return false;
     }
-    
+
     @MemberSupport
     public String disable2Act(Parameters p) {
         return null;
     }
-    
-    
+
+
 }

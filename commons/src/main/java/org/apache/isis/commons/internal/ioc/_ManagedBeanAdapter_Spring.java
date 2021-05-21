@@ -45,5 +45,5 @@ final class _ManagedBeanAdapter_Spring implements _ManagedBeanAdapter {
                 .map(Object::getClass)
                 .anyMatch(requiredType::isAssignableFrom);
     }
-    
+
 }

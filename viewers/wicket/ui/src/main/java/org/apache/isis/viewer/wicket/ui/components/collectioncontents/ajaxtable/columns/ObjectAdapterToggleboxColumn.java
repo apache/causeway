@@ -50,7 +50,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
     public ObjectAdapterToggleboxColumn(
             IsisAppCommonContext commonContext,
             OnSelectionHandler onSelectionHandler) {
-        
+
         super(commonContext, "");
         this.onSelectionHandler = onSelectionHandler;
     }
@@ -74,14 +74,14 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
             @Override
             public void onSubmit(AjaxRequestTarget target) {
                 val setToChecked = !this.isChecked();
-                
+
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
-                    
+
                     // smart update idiom: only toggle when needed
                     if(setToChecked == rowToggle.isChecked()) {
                         continue;
                     }
-                    
+
                     rowToggle.toggle(target);
                     target.add(rowToggle);
                 }
@@ -95,8 +95,8 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem, 
-            final String componentId, 
+            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final String componentId,
             final IModel<ManagedObject> rowModel) {
 
         cellItem.add(new CssClassAppender("togglebox-column"));
@@ -108,10 +108,10 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                
+
                 val entityModel = (EntityModel) rowModel;
                 val selectedAdapter = entityModel.getManagedObject();
-                
+
                 if(onSelectionHandler != null) {
                     onSelectionHandler.onSelected(this, selectedAdapter, target);
                 }

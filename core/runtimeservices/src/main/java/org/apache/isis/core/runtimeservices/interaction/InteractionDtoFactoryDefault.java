@@ -128,7 +128,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
-        
+
         final Bookmark targetBookmark = targetAdapter.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 

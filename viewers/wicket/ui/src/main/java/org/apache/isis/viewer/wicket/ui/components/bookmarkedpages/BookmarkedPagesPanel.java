@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -56,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
 
 import lombok.val;
 
-public class BookmarkedPagesPanel 
+public class BookmarkedPagesPanel
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
@@ -86,8 +85,6 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
-        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('.navbar.navbar-fixed-top').height()-5);"));
     }
 
     private void buildGui() {
@@ -137,8 +134,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             protected void populateItem(ListItem<BookmarkTreeNode> item) {
                 final BookmarkTreeNode node = item.getModelObject();
                 try {
-                    final PageType pageType = node.getPageType();
-                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
+                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
                     final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
 
@@ -184,9 +180,11 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
                     link.add(label);
                     item.add(link);
-                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
-                        item.add(new CssClassAppender("disabled"));
-                    }
+//XXX seems broken when there is only one bookmark entry;
+// an alternative idea would be to render the item differently eg. bold, but don't disable it
+//                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
+//                        item.add(new CssClassAppender("disabled"));
+//                    }
                     item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
                 } catch(ObjectNotFoundException ex) {
                     // ignore

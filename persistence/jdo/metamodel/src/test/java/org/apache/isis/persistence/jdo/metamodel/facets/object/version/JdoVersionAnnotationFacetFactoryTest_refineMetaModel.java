@@ -287,7 +287,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     private ValidationFailures processThenValidate(ObjectSpecification spec) {
         val specLoader = metaModelContext.getSpecificationLoader();
         specLoader.specForType(spec.getCorrespondingClass()).get(); // fail if empty
-        return specLoader.getValidationResult();
+        return specLoader.getOrAssessValidationResult();
     }
 
 }

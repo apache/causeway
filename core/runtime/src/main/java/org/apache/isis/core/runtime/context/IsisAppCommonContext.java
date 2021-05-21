@@ -44,7 +44,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -58,101 +58,101 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         webAppCommonContext.metaModelContext = metaModelContext;
         return webAppCommonContext;
     }
-    
+
     @Getter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    
+
     @Getter(lazy = true)
     private final WebAppContextPath webAppContextPath = lookupServiceElseFail(WebAppContextPath.class);
-    
+
     @Getter(lazy = true)
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
-    
+
     @Getter(lazy = true)
     private final InteractionTracker interactionTracker = lookupServiceElseFail(InteractionTracker.class);
-    
+
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
-    
+
     @Getter(lazy = true)
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
-    
+
     public Optional<MessageBroker> getMessageBroker() {
         return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
     }
-    
+
     // -- SHORTCUTS
-    
+
     public <T> Optional<T> lookupService(Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupService(serviceClass);
     }
-    
+
     public <T> T lookupServiceElseFail(Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
     }
-    
+
     public <T> T lookupServiceElseFallback(Class<T> serviceClass, Supplier<T> fallback) {
         return getMetaModelContext().getServiceRegistry().lookupService(serviceClass)
                 .orElseGet(fallback);
     }
-    
+
     public <T> T injectServicesInto(T pojo) {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
-    
+
     public ObjectMemento mementoFor(ManagedObject adapter) {
         return getMementoService().mementoForObject(adapter);
     }
-    
+
     public ObjectMemento mementoForParameter(@NonNull ManagedObject adapter) {
         return getMementoService().mementoForParameter(adapter);
     }
-    
+
     public ObjectMemento mementoForBookmark(Bookmark bookmark) {
         return getMementoService().mementoForBookmark(bookmark);
     }
-    
+
     public ManagedObject reconstructObject(ObjectMemento memento) {
         return getMementoService().reconstructObject(memento);
     }
-    
+
     // -- COMMON CONTEXT PROVIDER INTERFACE
-    
+
     public static interface Provider {
         IsisAppCommonContext getCommonContext();
     }
-    
+
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
-    
+
     public static interface HasCommonContext {
-        
+
         IsisAppCommonContext getCommonContext();
-        
+
         default IsisConfiguration getConfiguration() {
             return getCommonContext().getConfiguration();
         }
-        
+
         default ServiceRegistry getServiceRegistry() {
             return getCommonContext().getServiceRegistry();
         }
-        
+
         default SpecificationLoader getSpecificationLoader() {
             return getCommonContext().getSpecificationLoader();
         }
-        
+
         default ObjectMementoService getMementoService() {
             return getCommonContext().getMementoService();
         }
-        
+
         default ServiceInjector getServiceInjector() {
             return getCommonContext().getServiceInjector();
         }
-        
+
         default ObjectManager getObjectManager() {
             return getCommonContext().getObjectManager();
         }
-       
+
     }
-    
-    
+
+
 }

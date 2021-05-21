@@ -62,7 +62,7 @@ class ObjectBookmarker_builtinHandlers {
         public Bookmark handle(ManagedObject managedObject) {
             final String identifier = SERVICE_IDENTIFIER;
             return Bookmark.forLogicalTypeAndIdentifier(
-                    managedObject.getSpecification().getLogicalType(), 
+                    managedObject.getSpecification().getLogicalType(),
                     identifier);
         }
 

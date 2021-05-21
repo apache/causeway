@@ -42,12 +42,12 @@ public class _Graph<T> {
 
     private final Can<T> nodes;
     private final BiPredicate<T, T> relationPredicate;
-    
+
     public Stream<T> streamNeighbors(T a) {
         return nodes.stream()
         .filter(b->!a.equals(b))
         .filter(b->relationPredicate.test(a, b));
     }
-    
-    
+
+
 }

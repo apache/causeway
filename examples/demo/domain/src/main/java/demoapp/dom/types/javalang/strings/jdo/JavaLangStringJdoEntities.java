@@ -18,28 +18,23 @@
  */
 package demoapp.dom.types.javalang.strings.jdo;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaLangStringJdoEntities {
+public class JavaLangStringJdoEntities
+extends ValueHolderRepository<String, JavaLangStringJdo> {
 
-    public Optional<JavaLangStringJdo> find(final String readOnlyProperty) {
-        return repositoryService.firstMatch(JavaLangStringJdo.class, x -> Objects.equals(x.getReadOnlyProperty(), readOnlyProperty));
+    protected JavaLangStringJdoEntities() {
+        super(JavaLangStringJdo.class);
     }
 
-    public List<JavaLangStringJdo> all() {
-        return repositoryService.allInstances(JavaLangStringJdo.class);
+    @Override
+    protected JavaLangStringJdo newDetachedEntity(String value) {
+        return new JavaLangStringJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

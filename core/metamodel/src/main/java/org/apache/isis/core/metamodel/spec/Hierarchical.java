@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Collection;
+import org.apache.isis.commons.collections.Can;
 
 public interface Hierarchical {
 
@@ -33,7 +33,7 @@ public interface Hierarchical {
      * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
-    Collection<ObjectSpecification> interfaces();
+    Can<ObjectSpecification> interfaces();
 
     /**
      * Determines if this specification represents the same specification, or a
@@ -55,13 +55,13 @@ public interface Hierarchical {
      * Get the set of specifications for the subclasses of the class
      * represented by this specification
      */
-    Collection<ObjectSpecification> subclasses(Depth depth);
+    Can<ObjectSpecification> subclasses(Depth depth);
 
     /**
      * Get the specification for this specification's class's superclass.
      */
     ObjectSpecification superclass();
-    
+
     default boolean isTypeHierarchyRoot() {
         return superclass()==null;
     }

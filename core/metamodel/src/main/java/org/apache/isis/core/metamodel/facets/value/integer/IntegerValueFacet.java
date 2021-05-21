@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface IntegerValueFacet extends Facet {
-    
+
     Integer integerValue(ManagedObject object);
 
     ManagedObject createValue(Integer value);

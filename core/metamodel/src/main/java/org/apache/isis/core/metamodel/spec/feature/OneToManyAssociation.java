@@ -19,6 +19,15 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.core.metamodel.spec.feature.memento.CollectionMemento;
+
 public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeature {
+
+    /**
+     * Returns a serializable representation of this collection.
+     */
+    default CollectionMemento getMemento() {
+        return CollectionMemento.forCollection(this);
+    }
 
 }

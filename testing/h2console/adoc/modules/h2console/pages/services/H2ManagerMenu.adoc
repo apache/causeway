@@ -42,7 +42,7 @@ The following additional configuration is also required (all of this is present 
 [source,ini]
 .application.properties
 ----
-spring.datasource.platform=h2
+spring.sql.init.platform=h2
 spring.datasource.url=jdbc:h2:mem
 ----
 

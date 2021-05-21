@@ -21,5 +21,5 @@ package org.apache.isis.viewer.common.model;
 public interface HasUiMenuItem<T> {
 
     T getUiMenuItem();
-    
+
 }

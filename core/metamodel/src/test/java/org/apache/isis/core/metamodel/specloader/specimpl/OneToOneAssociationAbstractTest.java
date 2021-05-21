@@ -76,7 +76,9 @@ public class OneToOneAssociationAbstractTest {
             //            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
-        objectAssociation = new OneToOneAssociationDefault(facetedMethod, objectSpecification) {
+        objectAssociation = new OneToOneAssociationDefault(
+                facetedMethod.getIdentifier(),
+                facetedMethod, objectSpecification) {
 
             @Override
             public ManagedObject get(

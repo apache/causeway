@@ -79,8 +79,8 @@ public abstract class WebModuleAbstract implements WebModule {
      */
     protected ServletContextListener createListener(
             final Class<? extends ServletContextListener> listenerCls) throws ServletException {
-        
-        final ServletContextListener listener = 
+
+        final ServletContextListener listener =
                 _InstanceUtil.createInstance(listenerCls, ServletContextListener.class);
         serviceInjector.injectServicesInto(listener);
         return listener;

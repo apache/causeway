@@ -41,15 +41,15 @@ final class _Xray {
 
     static SequenceHandle enterActionInvocation(
             final @NonNull InteractionTracker iaTracker,
-            final @NonNull InteractionInternal interaction, 
+            final @NonNull InteractionInternal interaction,
             final @NonNull ObjectAction owningAction,
-            final @NonNull InteractionHead head, 
+            final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters) {
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
-        
+
         val participantLabel = owningAction.getIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = argumentAdapters.isEmpty()
                 ? "action invocation (no args)"
@@ -59,28 +59,28 @@ final class _Xray {
                         .map(ManagedObjects.UnwrapUtil::single)
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
-        
+
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
-    
+
     public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionTracker iaTracker,
-            final @NonNull InteractionInternal interaction, 
+            final @NonNull InteractionInternal interaction,
             final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull InteractionHead head, 
+            final @NonNull InteractionHead head,
             final @NonNull ManagedObject newValueAdapter) {
-        
+
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
-        
+
         val participantLabel = owningProperty.getIdentifier().getLogicalIdentityString("\n#");
-        val enteringLabel = String.format("property edit -> '%s'", 
+        val enteringLabel = String.format("property edit -> '%s'",
                 ManagedObjects.UnwrapUtil.single(newValueAdapter));
-        
+
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
-    
+
     private static SequenceHandle enterInvocation(
             final @NonNull InteractionTracker iaTracker,
             final InteractionInternal interaction,
@@ -88,48 +88,48 @@ final class _Xray {
             final String enteringLabel) {
 
         // val execution = interaction.getCurrentExecution(); // XXX why not populated?
-        
+
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
         handleIfAny.ifPresent(handle->{
-           
+
             handle.submit(sequenceData->{
-                
+
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
-                
+
                 val callee1 = handle.getCallees().getFirstOrFail();
                 val callee2 = handle.getCallees().getLastOrFail();
-                
+
                 sequenceData.enter(handle.getCaller(), callee1);
                 sequenceData.activate(callee1);
-                
+
                 sequenceData.enter(callee1, callee2, enteringLabel);
                 sequenceData.activate(callee2);
             });
-            
+
         });
-        
+
         return handleIfAny.orElse(null);
- 
+
     }
 
     static void exitInvocation(final @Nullable SequenceHandle handle) {
         if(handle==null) {
             return; // x-ray is not enabled
         }
-        
+
         handle.submit(sequenceData->{
-            
+
             val callee1 = handle.getCallees().getFirstOrFail();
             val callee2 = handle.getCallees().getLastOrFail();
-            
+
             sequenceData.exit(callee2, callee1);
             sequenceData.deactivate(callee2);
-            
+
             sequenceData.exit(callee1, handle.getCaller());
             sequenceData.deactivate(callee1);
-            
+
         });
-        
+
     }
 
 }

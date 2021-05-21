@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
-import static java.util.Objects.requireNonNull;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import static java.util.Objects.requireNonNull;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import lombok.val;
 class ServiceInjector_forTesting implements ServiceInjector {
 
     @NonNull private final MetaModelContext metaModelContext;
-    
+
     private ServiceInjector delegate;
 
     @Override

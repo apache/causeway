@@ -30,14 +30,14 @@ import lombok.extern.log4j.Log4j2;
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-    
+
     @Override
     public void onTargetRespond(final AjaxRequestTarget target) {
 
         if(log.isDebugEnabled()) {
             log.debug("RESPOND PHASE STARTED: resetting cache");
         }
-        
+
         queryResultsCacheProvider.get().onTransactionEnded();
     }
 

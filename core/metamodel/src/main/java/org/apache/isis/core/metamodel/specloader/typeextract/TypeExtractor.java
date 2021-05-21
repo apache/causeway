@@ -19,18 +19,17 @@
 package org.apache.isis.core.metamodel.specloader.typeextract;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Generics;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -53,20 +52,21 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodParameters(final Method ...methods) {
-        
+
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
             }
             acceptNonVoid(set::add, method.getParameterTypes());
-            visitParameterizedTypes(set::add, method.getGenericParameterTypes());
+            _Generics.streamGenericTypeArgumentsOfMethodParameterTypes(method)
+                .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     /**
      * Helper that finds all return types (including generic types) for the provided
      * {@link Method}.
@@ -83,64 +83,50 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodReturn(final Method ...methods) {
-        
+
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            visitParameterizedTypes(set::add, method.getGenericReturnType());
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     // -- VARIANTS
-    
+
     public static Stream<Class<?>> streamMethodReturn(final Iterable<Method> methods) {
         val set = _Sets.<Class<?>>newHashSet();
-        
+
         for(val method : methods) {
             if(method==null) {
                 continue;
             }
             acceptNonVoid(set::add, method.getReturnType());
-            visitParameterizedTypes(set::add, method.getGenericReturnType());
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                .forEach(set::add);
         }
-        
+
         return set.stream();
     }
-    
+
     // -- HELPER
-    
-    private static void visitParameterizedTypes(
-            final Consumer<Class<?>> onClass, 
-            final Type... genericTypes) {
-        
-        for (val genericType : genericTypes) {
-            if (genericType instanceof ParameterizedType) {
-                final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                final Type[] typeArguments = parameterizedType.getActualTypeArguments();
-                for (val type : typeArguments) {
-                    if (type instanceof Class) {
-                        acceptNonVoid(onClass, (Class<?>) type);
-                    }
-                }
+
+    private static void acceptNonVoid(
+            final Consumer<Class<?>> onClass,
+            final Class<?>... classes) {
+
+        for (val cls : classes) {
+            if(cls != void.class
+                    && cls != Void.class) {
+                onClass.accept(cls);
             }
         }
     }
-    
-    private static void acceptNonVoid(
-            final Consumer<Class<?>> onClass, 
-            final Class<?>... classes) {
-        for (val cls : classes) {
-            if(cls != void.class 
-                    && cls != Void.class) {
-                onClass.accept(cls);
-            }    
-        }
-    }
-    
+
 }

@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -64,15 +63,19 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    private final Identifier identifier;
-
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        super(mixinAction.getFacetedMethod(), mixinAction.getReturnType());
+        super(Identifier.actionIdentifier(
+                    LogicalType.eager(
+                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.getLogicalTypeName()),
+                    determineIdFrom(mixinAction),
+                    mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
+                mixinAction.getFacetedMethod(), mixinAction.getReturnType());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -103,17 +106,6 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
 
-
-        // calculate the identifier
-        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
-
-        identifier = Identifier.actionIdentifier(
-                LogicalType.eager(
-                        mixeeSpec.getCorrespondingClass(), 
-                        mixeeSpec.getLogicalTypeName()),
-                getId(), 
-                memberParameterClassNames);
     }
 
     @Override
@@ -125,7 +117,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where() == Where.ANYWHERE) {
+                originalFacet.where().isAlways()) {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
@@ -142,21 +134,6 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return getPublisherDispatchService().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public String getId() {
-        return determineIdFrom(this.mixinAction);
-    }
-
-    @Override
-    public String getOriginalId() {
-        return super.getId();
     }
 
     @Override

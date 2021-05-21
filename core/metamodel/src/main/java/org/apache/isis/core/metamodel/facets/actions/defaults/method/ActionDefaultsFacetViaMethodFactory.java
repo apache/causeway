@@ -66,7 +66,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
     }
 
     private static Method findDefaultsMethodReturning(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Class<?> returnType) {
 
         val cls = processMethodContext.getCls();

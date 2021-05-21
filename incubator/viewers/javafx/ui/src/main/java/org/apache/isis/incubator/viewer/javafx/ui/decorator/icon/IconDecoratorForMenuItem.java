@@ -41,7 +41,7 @@ import javafx.scene.image.ImageView;
 public class IconDecoratorForMenuItem implements IconDecorator<MenuItem, MenuItem> {
 
     private final IconService iconService;
-    
+
     @Override
     public MenuItem decorate(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
         // TODO honor icon position
@@ -54,7 +54,7 @@ public class IconDecoratorForMenuItem implements IconDecorator<MenuItem, MenuIte
         });
         return menuItem;
     }
-    
+
     private ImageView iconForImage(Image image) {
         return _fx.iconForImage(image, 16, 16);
     }

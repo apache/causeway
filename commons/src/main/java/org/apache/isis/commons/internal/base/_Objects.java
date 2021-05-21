@@ -42,9 +42,9 @@ public final class _Objects {
     /**
      * Compares two objects (nulls-first) in natural order.
      * <p>
-     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
-     * {@link Comparator#nullsFirst(Comparator)}. 
-     * @implNote this utility method does not produce objects on the heap   
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsFirst(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
@@ -55,7 +55,7 @@ public final class _Objects {
         if(Objects.equals(a, b)) {
             return 0;
         }
-        // at this point not both can be null, so which ever is null wins 
+        // at this point not both can be null, so which ever is null wins
         if(a==null) {
             return -1;
         }
@@ -71,24 +71,24 @@ public final class _Objects {
         }
         throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
     }
-    
+
     /**
      * Compares two objects (nulls-last) in natural order.
      * <p>
-     * @apiNote consider using {@link Comparator#naturalOrder()} combined with 
-     * {@link Comparator#nullsLast(Comparator)}. 
-     * @implNote this utility method does not produce objects on the heap   
+     * @apiNote consider using {@link Comparator#naturalOrder()} combined with
+     * {@link Comparator#nullsLast(Comparator)}.
+     * @implNote this utility method does not produce objects on the heap
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
      * @see Comparable#compareTo(Object)
-     * @throws UnsupportedOperationException if neither object is comparable 
+     * @throws UnsupportedOperationException if neither object is comparable
      */
     public static <T> int compareNullsLast(final @Nullable T a, final @Nullable T b) {
         if(Objects.equals(a, b)) {
             return 0;
         }
-        // at this point not both can be null, so which ever is null wins 
+        // at this point not both can be null, so which ever is null wins
         if(a==null) {
             return -1;
         }
@@ -107,16 +107,16 @@ public final class _Objects {
 
     /**
      * Compares two objects in natural order, both assumed to be non-null.
-     * 
-     * @apiNote consider using {@link Comparator#naturalOrder()}. 
+     *
+     * @apiNote consider using {@link Comparator#naturalOrder()}.
      * @implNote this utility method does not produce objects on the heap
-     * @implNote for performance reasons we don't check for non-null arguments on method entry   
-     * 
+     * @implNote for performance reasons we don't check for non-null arguments on method entry
+     *
      * @param a - nun-null
      * @param b - nun-null
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
      * @see Comparable#compareTo(Object)
-     * @throws UnsupportedOperationException if neither object is comparable or both are {@code null} 
+     * @throws UnsupportedOperationException if neither object is comparable or both are {@code null}
      */
     public static <T> int compareNonNull(final /*@NonNull*/ T a, final /*@NonNull*/ T b) {
         if (a instanceof Comparable<?>) {
@@ -127,17 +127,17 @@ public final class _Objects {
         }
         throw _Exceptions.unsupportedOperation("cannot compare objects if non of them is 'comparable'");
     }
-    
+
     // -- HELPER
-    
+
     private final static int negate(int x) {
         // guard against integer overflow
         if(x==Integer.MIN_VALUE) {
-            return 1; 
+            return 1;
         }
         /*sonar-ignore-on*/
         return -x;
         /*sonar-ignore-off*/
     }
-    
+
 }

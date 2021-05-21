@@ -48,12 +48,12 @@ import lombok.val;
 public class ActionDialog extends Dialog {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static ActionDialog forManagedAction(
-            @NonNull final UiComponentFactoryVaa uiComponentFactory, 
-            @NonNull final ManagedAction managedAction, 
+            @NonNull final UiComponentFactoryVaa uiComponentFactory,
+            @NonNull final ManagedAction managedAction,
             @NonNull final Predicate<Can<ManagedObject>> submitCallback) {
-        
+
         val actionDialog = new ActionDialog(uiComponentFactory, managedAction, submitCallback);
         return actionDialog;
     }
@@ -62,43 +62,43 @@ public class ActionDialog extends Dialog {
             final UiComponentFactoryVaa uiComponentFactory,
             final ManagedAction managedAction,
             final Predicate<Can<ManagedObject>> submitCallback) {
-        
+
         setDraggable(true);
         setModal(false);
         setResizable(true);
-        
+
         // Dialog Theme
-        
+
         getElement().getThemeList().add("action-dialog");
         setWidth("600px");
         setHeight("auto");
-        
+
         // Content
-        
+
         val actionForm = ActionForm.forManagedAction(uiComponentFactory, managedAction);
         val content = new Div(actionForm);
         content.addClassName("dialog-content");
 
         // Footer
-        
-        val footer = footer(managedAction, actionForm.getPendingArgs(), submitCallback); 
-        
+
+        val footer = footer(managedAction, actionForm.getPendingArgs(), submitCallback);
+
         // Header
-        
+
         val hidableComponents = Can.of(content, footer);
         val header = header(managedAction, hidableComponents);
-        
+
         // Add to Layout
-        
+
         add(header, content, footer);
     }
 
     // -- HELPER
-    
+
     private Component header(ManagedAction managedAction, Can<Component> hidableComponents) {
-        
+
         val resizeHandler = DialogResizeHandler.of(this, hidableComponents);
-        
+
         val title = new H2(managedAction.getName());
         title.addClassName("dialog-title");
 
@@ -108,33 +108,33 @@ public class ActionDialog extends Dialog {
 
         val header = new Header(title, minButton, maxButton, closeButton);
         header.getElement().getThemeList().add(Lumo.DARK);
-        
+
         // Button Themes
         Stream.of(minButton, maxButton, closeButton)
         .forEach(button->
             button.addThemeVariants(ButtonVariant.LUMO_CONTRAST, ButtonVariant.LUMO_TERTIARY));
-        
+
         // Button Events
         resizeHandler.bindMinimise(minButton);
         resizeHandler.bindMaximise(maxButton);
         closeButton.addClickListener(event -> close());
-        
+
         return header;
     }
-    
+
     private Component footer(
-            ManagedAction managedAction, 
+            ManagedAction managedAction,
             ParameterNegotiationModel pendingArgs,
             Predicate<Can<ManagedObject>> submitCallback) {
-        
+
         val okButton = new Button("Ok");
         val cancelButton = new Button("Cancel");
         val footer = new Footer(okButton, cancelButton);
-        
+
         // Button Themes
         okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        
+
         // Button Events
         okButton.addClickListener(event -> {
             //invoke the action and route to the result page
@@ -143,26 +143,26 @@ public class ActionDialog extends Dialog {
             } else {
                 //TODO handle validation feedback (vetos)
             }
-        }); 
+        });
         cancelButton.addClickListener(event -> close());
-        
+
         return footer;
     }
 
     // -- RESIZING
-    
+
     @RequiredArgsConstructor(staticName = "of")
     private static class DialogResizeHandler {
-    
+
         private static final String DOCK = "dock";
         private static final String FULLSCREEN = "fullscreen";
-        
+
         private boolean isDocked = false;
         private boolean isFullScreen = false;
-        
+
         private final Dialog dialog;
         private final Can<Component> hidableComponents;
-        
+
         private Button minButton;
         private Button maxButton;
 
@@ -170,12 +170,12 @@ public class ActionDialog extends Dialog {
             this.minButton = minButton;
             minButton.addClickListener(event -> minimise());
         }
-        
+
         public void bindMaximise(Button maxButton) {
             this.maxButton = maxButton;
             maxButton.addClickListener(event -> maximise());
         }
-        
+
         private void initialSize() {
             minButton.setIcon(VaadinIcon.ANGLE_DOWN.create());
             dialog.getElement().getThemeList().remove(DOCK);
@@ -200,7 +200,7 @@ public class ActionDialog extends Dialog {
             isFullScreen = false;
             hidableComponents.forEach(comp->comp.setVisible(!isDocked));
         }
-    
+
         private void maximise() {
             if (isFullScreen) {
                 initialSize();
@@ -216,7 +216,7 @@ public class ActionDialog extends Dialog {
             isFullScreen = !isFullScreen;
             isDocked = false;
         }
-        
+
     }
 
 }

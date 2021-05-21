@@ -31,7 +31,7 @@ import javax.swing.tree.TreePath;
 import lombok.val;
 
 final class _SwingUtil {
-    
+
     static JTable newTable(Object[][] tableData, String[] columnNames) {
         val table = new JTable(tableData, columnNames) {
             private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ final class _SwingUtil {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getModel().getRoot();
         setNodeExpandedState(tree, node, expanded);
     }
-    
+
     @SuppressWarnings("unchecked")
     static void setNodeExpandedState(JTree tree, DefaultMutableTreeNode node, boolean expanded) {
         for (Object treeNode : Collections.list(node.children())) {
@@ -68,5 +68,5 @@ final class _SwingUtil {
             tree.collapsePath(path);
         }
     }
-    
+
 }

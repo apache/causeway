@@ -30,7 +30,7 @@ public class InvalidOrphanedActionSupport {
     public boolean hideOrphaned() {
         return false;
     }
-    
+
     // [ISIS-2561] should be detected as an orphaned supporting method as well
     // with the reasoning, that if reserved prefixes are used with action names,
     // the @Action annotation becomes mandatory
@@ -38,5 +38,5 @@ public class InvalidOrphanedActionSupport {
         return null;
     }
 
-    
+
 }

@@ -32,7 +32,7 @@ class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHand
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
-        
+
         super(collectionToProxy, collectionName, handler, otma);
 
         try {

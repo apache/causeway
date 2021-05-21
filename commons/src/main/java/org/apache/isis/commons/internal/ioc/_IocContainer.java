@@ -58,10 +58,10 @@ public interface _IocContainer {
      * (i.e. multiple candidates found with none marked as primary)
      * @throws RuntimeException if instance creation failed
      */
-    <T> Optional<T> get(Class<T> requiredType);    
-    
+    <T> Optional<T> get(Class<T> requiredType);
+
     <T> Can<T> select(Class<T> requiredType);
-    
+
     /**
      * @param <T>
      * @param requiredType
@@ -85,9 +85,9 @@ public interface _IocContainer {
      */
     public default <T> T getSingletonElseFail(@Nullable Class<T> type) {
         _With.requires(type, "type");
-        
+
         val candidates = select(type);
-        
+
         switch (candidates.getCardinality()) {
         case ZERO:
             throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
@@ -106,12 +106,12 @@ public interface _IocContainer {
     }
 
     // -- FACTORIES
-    
+
     static _IocContainer spring(ApplicationContext springContext) {
         return _IocContainer_Spring.of(springContext);
     }
 
-    
+
 
 
 

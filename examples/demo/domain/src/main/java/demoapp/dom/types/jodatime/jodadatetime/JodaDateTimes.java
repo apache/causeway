@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,6 +27,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,11 +39,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdo;
-import demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeEntity;
 import demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples;
 import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 
@@ -48,7 +49,7 @@ import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JodaDateTimes", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JodaDateTimes implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +66,15 @@ public class JodaDateTimes implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JodaDateTimeJdo> getEntities() {
-        return entities.all();
+    public List<? extends JodaDateTimeEntity> getEntities() {
+        return entities!=null
+                ? entities.all()
+                : Collections.emptyList();
     }
 
-    @Inject
+    @Autowired(required = false)
     @XmlTransient
-    JodaDateTimeJdoEntities entities;
+    ValueHolderRepository<org.joda.time.DateTime, ? extends JodaDateTimeEntity> entities;
 
     @Inject
     @XmlTransient

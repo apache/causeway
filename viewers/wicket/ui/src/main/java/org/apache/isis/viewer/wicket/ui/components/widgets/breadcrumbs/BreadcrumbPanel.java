@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class BreadcrumbPanel 
+public class BreadcrumbPanel
 extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
@@ -71,7 +71,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getManagedObject().titleString(null);
+                return model.getManagedObject().titleString();
             }
 
 
@@ -80,14 +80,14 @@ extends PanelAbstract<Void, IModel<Void>> {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    
+
                     return Bookmark.parse(oidStr)
                     .map(Bookmark::stringify)
                     .orElseGet(()->{
                         breadcrumbModel.remove(choice);
                         return null;
                     });
-                    
+
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;
@@ -98,7 +98,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
                 final List<EntityModel> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
-                final List<EntityModel> checkedList = _Lists.filter(breadCrumbList, 
+                final List<EntityModel> checkedList = _Lists.filter(breadCrumbList,
                         new Predicate<EntityModel>() {
                             @Override
                             public boolean test(final EntityModel input) {
@@ -121,7 +121,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                 new AjaxFormComponentUpdatingBehavior("change"){
 
                     private static final long serialVersionUID = 1L;
-                    
+
                     private transient IsisAppCommonContext commonContext;
 
                     @Override
@@ -133,7 +133,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                             .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");
                                 String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
-                                target.appendJavaScript(feedbackMsg);    
+                                target.appendJavaScript(feedbackMsg);
                             });
                             breadcrumbModel.remove(oidStr);
                             return;
@@ -144,7 +144,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                     private IsisAppCommonContext getCommonContext() {
                         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
                     }
-                    
+
                 });
 
         final Settings settings = breadcrumbChoice.getSettings();

@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 
 import lombok.val;
 
-public class EntityChangePublishingFacetForDomainObjectAnnotation 
+public class EntityChangePublishingFacetForDomainObjectAnnotation
 extends EntityChangePublishingFacetAbstract {
 
     public static EntityChangePublishingFacet create(
@@ -39,8 +39,8 @@ extends EntityChangePublishingFacetAbstract {
             IsisConfiguration configuration,
             FacetHolder holder) {
 
-        val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED); 
-                
+        val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
+
         switch (publish) {
         case NOT_SPECIFIED:
         case AS_CONFIGURED:
@@ -58,7 +58,7 @@ extends EntityChangePublishingFacetAbstract {
             return null;
         case ENABLED:
             return new EntityChangePublishingFacetForDomainObjectAnnotation(holder);
-            
+
         default:
             throw _Exceptions.unmatchedCase(publish);
         }

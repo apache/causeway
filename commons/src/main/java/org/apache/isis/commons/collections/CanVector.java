@@ -26,20 +26,20 @@ import java.util.stream.IntStream;
 
 import lombok.NonNull;
 
-/** 
+/**
  * Represents a mutable, but fixed size vector of Can<T>.
  * <p>
  * Mutable meaning, that the vector elements can be replaced.
- * 
+ *
  * @since Jun 30, 2020
  */
 public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final int size;
     private final List<Can<T>> cans;
-    
+
     public CanVector(int size) {
         this.size = size;
         this.cans = new ArrayList<>(size);
@@ -50,7 +50,7 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
     public int size() {
         return size;
     }
-    
+
     @Override
     public Iterator<Can<T>> iterator() {
         return cans.iterator();
@@ -65,11 +65,11 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
     public Can<T> get(int index) {
         return cans.get(index);
     }
-    
+
     /**
      * Replaces the element at the specified position in this CanVector with the
      * specified element.
-     * 
+     *
      * @param index
      * @param can
      * @return self
@@ -84,7 +84,7 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
     public static <T> CanVector<T> empty() {
         return new CanVector<>(0);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {
@@ -94,11 +94,11 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
                 ? cans.equals(((CanVector<?>)obj).cans)
                 : false;
     }
-    
+
     @Override
     public int hashCode() {
         return cans.hashCode();
     }
-    
-    
+
+
 }

@@ -36,11 +36,11 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @Import({
-    
+
     SpringDataJpaTestModule.class,
-    
+
     MyService.class, // testing injection into entities
-    
+
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
     ,IsisModuleJpaEclipselink.class
@@ -52,6 +52,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingSpringDataJpa {
-    
+
 
 }

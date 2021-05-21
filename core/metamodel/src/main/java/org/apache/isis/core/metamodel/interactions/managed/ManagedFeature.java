@@ -31,31 +31,31 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface ManagedFeature {
 
     Identifier getIdentifier();
-    
+
     /**
-     * @return The feature's display name, as rendered with the UI. 
+     * @return The feature's display name, as rendered with the UI.
      */
     String getDisplayLabel();
-    
+
     /**
-     * @return The specification of the feature's underlying type. 
-     * For actions this is the specification of the action's return type. 
+     * @return The specification of the feature's underlying type.
+     * For actions this is the specification of the action's return type.
      */
     ObjectSpecification getSpecification();
-    
+
     /**
-     * @return The feature's underlying type. 
-     * For actions this is the action's return type. 
+     * @return The feature's underlying type.
+     * For actions this is the action's return type.
      */
     default Class<?> getCorrespondingClass() {
-        return getSpecification().getCorrespondingClass();    
+        return getSpecification().getCorrespondingClass();
     }
-    
+
     FacetHolder getMetaModel();
 
     /**
      * @param facetType
-     * @return Optionally the feature's facet of the specified {@code facetType} 
+     * @return Optionally the feature's facet of the specified {@code facetType}
      * (as per the type it reports from {@link Facet#facetType()}), based on existence.
      */
     default <T extends Facet> Optional<T> getFacet(@Nullable Class<T> facetType) {
@@ -63,10 +63,10 @@ public interface ManagedFeature {
                 ? Optional.ofNullable(getMetaModel().getFacet(facetType))
                 : Optional.empty();
     }
-    
+
     /**
      * @param facetType
-     * @return Whether there exists a facet for this feature, that is of the 
+     * @return Whether there exists a facet for this feature, that is of the
      * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
      */
     default <T extends Facet> boolean hasFacet(@Nullable Class<T> facetType) {
@@ -74,14 +74,14 @@ public interface ManagedFeature {
                 ? getMetaModel().getFacet(facetType)!=null
                 : false;
     }
-    
+
     default <T extends Facet> T getFacetElseFail(@Nullable Class<T> facetType) {
         return getFacet(facetType)
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("Feature %s has no such facet %s",
                                 getIdentifier(),
-                                facetType.getName()));    
+                                facetType.getName()));
     }
-    
-    
+
+
 }

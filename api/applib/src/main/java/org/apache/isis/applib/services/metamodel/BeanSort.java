@@ -18,6 +18,12 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import javax.enterprise.inject.Vetoed;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Top level object classification.
  * 
@@ -66,6 +72,15 @@ public enum BeanSort {
      * Container of objects.
      */
     COLLECTION,
+    /**
+     * A non concrete type, that is a placeholder for a its concrete implementer. 
+     */
+    ABSTRACT,
+    /**
+     * Type must not be added to the meta-model, eg. by means of 
+     * {@link Vetoed}, {@link Profile} or {@link Programmatic}
+     */
+    VETOED, 
     UNKNOWN;
 
     // -- SIMPLE PREDICATES
@@ -94,6 +109,13 @@ public enum BeanSort {
         return this == ENTITY;
     }
     
+    public boolean isAbstract() {
+        return this == ABSTRACT;
+    }
+    
+    public boolean isVetoed() {
+        return this == VETOED;
+    }
     
     public boolean isUnknown() {
         return this == UNKNOWN;
@@ -103,7 +125,8 @@ public enum BeanSort {
 
     public boolean isToBeIntrospected() {
 
-        if(isUnknown()) {
+        if(isVetoed()
+                || isUnknown()) {
             return false;
         }
         if(this == MANAGED_BEAN_NOT_CONTRIBUTING) {

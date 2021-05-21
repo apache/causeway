@@ -32,7 +32,7 @@ import lombok.ToString;
 public class SimpleBlock extends SimpleStructuralNode implements Block {
 
     @Getter private final List<String> lines = new ArrayList<>();
-    
+
     @Override
     @Deprecated
     public List<String> lines() {
@@ -64,17 +64,17 @@ public class SimpleBlock extends SimpleStructuralNode implements Block {
         }
         setLines(Arrays.asList(source.replace("\r", "").split("\n")));
     }
-    
+
     @Override
     public void setStyle(String style) {
         setAttribute("style", style, true);
         super.setStyle(style);
     }
-    
+
     @Override
     public void setTitle(String title) {
         setAttribute("title", title, true);
         super.setTitle(title);
     }
-    
+
 }

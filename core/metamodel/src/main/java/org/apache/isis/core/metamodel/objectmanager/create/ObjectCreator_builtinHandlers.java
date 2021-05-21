@@ -41,17 +41,17 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 final class ObjectCreator_builtinHandlers {
-    
+
     @Data @Log4j2
     public static class LegacyCreationHandler implements ObjectCreator.Handler {
-        
+
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ObjectCreator.Request objectCreateRequest) {
             return true;
@@ -59,20 +59,20 @@ final class ObjectCreator_builtinHandlers {
 
         @Override
         public ManagedObject handle(ObjectCreator.Request objectCreateRequest) {
-            
+
             val spec = objectCreateRequest.getObjectSpecification();
-            
+
             if (log.isDebugEnabled()) {
                 log.debug("creating instance of {}", spec);
             }
-            
+
             val pojo = instantiateAndInjectServices(spec);
             val adapter = ManagedObject.of(spec, pojo);
             return initializePropertiesAndDoCallback(adapter);
         }
-        
+
         //  -- HELPER
-        
+
         private Object instantiateAndInjectServices(ObjectSpecification spec) {
 
             val type = spec.getCorrespondingClass();
@@ -85,18 +85,18 @@ final class ObjectCreator_builtinHandlers {
             }
 
             try {
-                
+
                 val newInstance = type.newInstance();
                 metaModelContext.getServiceInjector().injectServicesInto(newInstance);
-                return newInstance;    
-                
+                return newInstance;
+
             } catch (IllegalAccessException | InstantiationException e) {
                 throw _Exceptions.unrecoverable(
                         "Failed to create instance of type " + spec.getFullIdentifier(), e);
             }
 
         }
-        
+
         private ManagedObject initializePropertiesAndDoCallback(ManagedObject adapter) {
 
             // initialize new object
@@ -133,25 +133,25 @@ final class ObjectCreator_builtinHandlers {
 
             return adapter;
         }
-        
+
         private void postLifecycleEventIfRequired(
                 ManagedObject adapter,
                 Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-            
+
             val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
             if(lifecycleEventFacet == null) {
                 return;
             }
-            
+
             val eventType = lifecycleEventFacet.getEventType();
             val instance = _InstanceUtil.createInstance(eventType);
             val pojo = adapter.getPojo();
             postEvent(_Casts.uncheckedCast(instance), pojo);
-            
+
         }
 
         private <T> void postEvent(AbstractLifecycleEvent<T> event, T pojo) {
-            
+
             metaModelContext.getServiceRegistry()
                 .lookupService(EventBusService.class)
                 .ifPresent(eventBusService->{
@@ -159,222 +159,8 @@ final class ObjectCreator_builtinHandlers {
                     eventBusService.post(event);
                 });
         }
-        
+
 
     }
-    
-
-    // -- NULL GUARD
-    
-//    @Data
-//    public static class GuardAgainstNull implements ObjectCreator.Handler {
-//        
-//        private MetaModelContext metaModelContext;
-//        
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            
-//            if(objectLoadRequest==null) {
-//                return true;
-//            }
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            if(spec == null) {
-//                // eg "NONEXISTENT:123"
-//                return true;
-//            }
-//
-//            return false;
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//            return null; // yes null
-//        }
-//
-//    }
-    
-    // -- MANAGED BEANS
-
-//    @Data
-//    public static class LoadService implements ObjectCreator.Handler {
-//        
-//        private MetaModelContext metaModelContext;
-//
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            return spec.isManagedBean();
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            val beanName = spec.getSpecId().asString();
-//            
-//            val servicePojo = metaModelContext.getServiceRegistry()
-//                .lookupRegisteredBeanById(beanName)
-//                .map(ManagedBeanAdapter::getInstance)
-//                .flatMap(Can::getFirst)
-//                .orElseThrow(()->_Exceptions.noSuchElement(
-//                        "loader: %s loading beanName %s", 
-//                        this.getClass().getName(), beanName));
-//            
-//            return ManagedObject.of(spec, servicePojo);
-//        }
-//
-//    }
-    
-    // -- VALUES
-    
-//    @Data
-//    public static class CreateValueDefault implements ObjectCreator.Handler {
-//
-//        private MetaModelContext metaModelContext;
-//        
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            return spec.isValue();
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//            
-//            // cannot load a value
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            throw _Exceptions.illegalArgument(
-//                    "cannot load a value, loader: %s loading ObjectSpecification %s", 
-//                        this.getClass().getName(), spec);
-//        }
-//
-//    }
-//
-//    // -- VIEW MODELS
-//    
-//    @Data
-//    public static class CreateViewModel implements ObjectCreator.Handler {
-//        
-//        private MetaModelContext metaModelContext;
-//
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            return spec.isViewModel();
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-//            if(viewModelFacet == null) {
-//                throw _Exceptions.illegalArgument(
-//                        "ObjectSpecification is missing a ViewModelFacet: %s", spec);
-//            }
-//            
-//            val memento = objectLoadRequest.getObjectIdentifier();
-//            final Object viewModelPojo;
-//            if(viewModelFacet.getRecreationMechanism().isInitializes()) {
-//                viewModelPojo = this.instantiateAndInjectServices(spec);
-//                viewModelFacet.initialize(viewModelPojo, memento);
-//            } else {
-//                viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), memento);
-//            }
-//            
-//            return ManagedObject.of(spec, viewModelPojo);
-//        }
-//        
-//        private Object instantiateAndInjectServices(ObjectSpecification spec) {
-//
-//            val type = spec.getCorrespondingClass();
-//            if (type.isArray()) {
-//                return Array.newInstance(type.getComponentType(), 0);
-//            }
-//
-//            if (Modifier.isAbstract(type.getModifiers())) {
-//                throw _Exceptions.illegalArgument("Cannot create an instance of an abstract class '%s', "
-//                        + "creator: %s creating ObjectSpecification %s", 
-//                        type, this.getClass().getName(), spec);
-//            }
-//
-//            final Object newInstance;
-//            try {
-//                newInstance = type.newInstance();
-//            } catch (final IllegalAccessException | InstantiationException e) {
-//                throw _Exceptions.illegalArgument("Failed to create instance of type '%s', "
-//                        + "creator: %s creating ObjectSpecification %s", 
-//                        type, this.getClass().getName(), spec);
-//            }
-//
-//            metaModelContext.getServiceInjector().injectServicesInto(newInstance);
-//            return newInstance;
-//        }
-//
-//    }
-//
-//    // -- ENTITIES
-//    
-//    @Data
-//    public static class CreateEntity implements ObjectCreator.Handler {
-//        
-//        private MetaModelContext metaModelContext;
-//
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            return spec.isEntity();
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//
-//            val spec = objectLoadRequest.getObjectSpecification();
-//            val entityFacet = spec.getFacet(EntityFacet.class);
-//            if(entityFacet==null) {
-//                throw _Exceptions.illegalArgument(
-//                        "ObjectSpecification is missing an EntityFacet: %s", spec);
-//            }
-//            
-//            val identifier = objectLoadRequest.getObjectIdentifier();
-//            val entityPojo = entityFacet.fetchByIdentifier(spec, identifier);
-//            
-//            metaModelContext.getServiceInjector().injectServicesInto(entityPojo);
-//            
-//            return ManagedObject.of(spec, entityPojo);
-//        }
-//
-//    }
-//    
-//    // -- UNKNOWN LOAD REQUEST
-//    
-//    @Data
-//    public static class CreateOther implements ObjectCreator.Handler {
-//        
-//        private MetaModelContext metaModelContext;
-//
-//        @Override
-//        public boolean isHandling(Request objectLoadRequest) {
-//            return true; // the last handler in the chain
-//        }
-//
-//        @Override
-//        public ManagedObject handle(Request objectLoadRequest) {
-//
-//            // unknown object load request
-//            
-//            throw _Exceptions.illegalArgument(
-//                    "unknown object create request, creator: %s creating from ObjectSpecification %s", 
-//                        this.getClass().getName(), objectLoadRequest.getObjectSpecification());
-//
-//        }
-//
-//    }
 
 }

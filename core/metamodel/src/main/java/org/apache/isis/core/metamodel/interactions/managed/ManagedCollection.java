@@ -35,32 +35,32 @@ import lombok.val;
 public final class ManagedCollection extends ManagedMember {
 
     // -- FACTORIES
-    
+
     public static final ManagedCollection of(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull OneToManyAssociation collection,
             final @NonNull Where where) {
         return new ManagedCollection(owner, collection, where);
     }
-    
+
     public static final Optional<ManagedCollection> lookupCollection(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId,
             @NonNull final Where where) {
-        
+
         return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
-    
+
     // -- IMPLEMENTATION
-    
+
     @Getter private final OneToManyAssociation collection;
-    
+
     private ManagedCollection(
-            final @NonNull ManagedObject owner, 
+            final @NonNull ManagedObject owner,
             final @NonNull OneToManyAssociation collection,
             final @NonNull Where where) {
-        
+
         super(owner, where);
         this.collection = collection;
     }
@@ -74,7 +74,7 @@ public final class ManagedCollection extends ManagedMember {
     public MemberType getMemberType() {
         return MemberType.COLLECTION;
     }
-    
+
     public ObjectSpecification getElementSpecification() {
         return getCollection().getSpecification();
     }
@@ -83,12 +83,12 @@ public final class ManagedCollection extends ManagedMember {
         return Optional.ofNullable(getCollection().get(getOwner(), InteractionInitiatedBy.USER))
                 .orElse(ManagedObject.empty(getElementSpecification()));
     }
-    
+
     // -- INTERACTION
-    
+
     /**
      * If visibility is vetoed, returns an empty Stream.
-     * @param interactionInitiatedBy 
+     * @param interactionInitiatedBy
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
     public Stream<ManagedObject> streamElements(InteractionInitiatedBy interactionInitiatedBy) {
@@ -104,6 +104,6 @@ public final class ManagedCollection extends ManagedMember {
         return streamElements(InteractionInitiatedBy.USER);
     }
 
-    
+
 
 }

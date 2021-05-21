@@ -47,8 +47,6 @@ import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
-import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin
@@ -112,10 +110,10 @@ public class ThemeChooser extends Panel {
         CookieUtils cookieUtils = new CookieUtils();
         String activeTheme = cookieUtils.load(ISIS_THEME_COOKIE_NAME);
         if (!Strings.isEmpty(activeTheme)) {
-            
+
             val isAvailable = getThemeSupport().getThemeProvider().available().stream()
                     .anyMatch(theme->activeTheme.equals(theme.name()));
-            
+
             if(isAvailable) {
                 setActiveTheme(activeTheme);
             }
@@ -130,8 +128,10 @@ public class ThemeChooser extends Panel {
             bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
         } else if (theme instanceof BootswatchTheme) {
             bootstrapSettings.setThemeProvider(new BootswatchThemeProvider((BootswatchTheme) theme));
+            /*
         } else if (theme instanceof VegibitTheme) {
             bootstrapSettings.setThemeProvider(new VegibitThemeProvider((VegibitTheme) theme));
+            */
         }
     }
 

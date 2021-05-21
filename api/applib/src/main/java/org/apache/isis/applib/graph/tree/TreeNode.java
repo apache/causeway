@@ -105,6 +105,17 @@ public interface TreeNode<T> extends Vertex<T> {
     }
 
     /**
+     * Expands this node and all its parents.
+     */
+    @Programmatic
+    public default void expand() {
+        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        streamHierarchyUp()
+            .map(TreeNode::getPositionAsPath)
+            .forEach(expandedPaths::add);
+    }
+
+    /**
      * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
      * @param treePaths
      */

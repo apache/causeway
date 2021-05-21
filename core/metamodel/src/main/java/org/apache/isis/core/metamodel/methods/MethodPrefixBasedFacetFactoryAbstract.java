@@ -37,7 +37,7 @@ import lombok.val;
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
-    
+
     @Getter(onMethod = @__(@Override))
     private final Can<String> prefixes;
 
@@ -49,46 +49,46 @@ implements MethodPrefixBasedFacetFactory {
     }
 
     public MethodPrefixBasedFacetFactoryAbstract(
-            @NonNull final ImmutableEnumSet<FeatureType> featureTypes, 
-            @NonNull final OrphanValidation orphanValidation, 
+            @NonNull final ImmutableEnumSet<FeatureType> featureTypes,
+            @NonNull final OrphanValidation orphanValidation,
             @NonNull final Can<String> prefixes) {
-        
+
         super(featureTypes);
         this.orphanValidation = orphanValidation;
         this.prefixes = prefixes;
     }
-    
+
     // -- SUPPORTING METHOD NAMING CONVENTIONS
 
     protected static final Can<String> getNamingConventionForActionSupport(
-            final ProcessMethodContext pmContext, 
+            final ProcessMethodContext pmContext,
             final String prefix) {
         val actionMethod = pmContext.getMethod();
         val isMixin = pmContext.isMixinMain();
         return MethodLiteralConstants.NAMING_ACTIONS
                 .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
     }
-    
+
     protected static final Can<IntFunction<String>> getNamingConventionForParameterSupport(
-            final ProcessMethodContext pmContext, 
+            final ProcessMethodContext pmContext,
             final String prefix) {
         val actionMethod = pmContext.getMethod();
         val isMixin = pmContext.isMixinMain();
         return MethodLiteralConstants.NAMING_PARAMETERS
                 .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
     }
-    
+
     protected static final Can<String> getNamingConventionForPropertyAndCollectionSupport(
-            final ProcessMethodContext pmContext, 
+            final ProcessMethodContext pmContext,
             final String prefix) {
         val actionMethod = pmContext.getMethod();
         val isMixin = pmContext.isMixinMain();
         return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
                 .map(naming->naming.getMemberSupportingMethodName(actionMethod, prefix, isMixin));
     }
-    
+
     // -- PROGRAMMING MODEL
-    
+
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
@@ -96,7 +96,7 @@ implements MethodPrefixBasedFacetFactory {
                 || getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
             return;
         }
-        
+
         val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
 
         programmingModel.addValidator(new MetaModelVisitingValidatorAbstract() {
@@ -108,13 +108,13 @@ implements MethodPrefixBasedFacetFactory {
 
             @Override
             public void validate(ObjectSpecification spec) {
-                
+
                 if(spec.isManagedBean()) {
                     return;
                 }
 
-                // as an optimization only checking declared members (skipping inherited ones)  
-                
+                // as an optimization only checking declared members (skipping inherited ones)
+
                 // ensure accepted actions do not have any of the reserved prefixes
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .forEach(objectAction -> {
@@ -143,7 +143,7 @@ implements MethodPrefixBasedFacetFactory {
                             ValidationFailure.raise(
                                     spec,
                                     String.format(
-                                            messageFormat, 
+                                            messageFormat,
                                             spec.getIdentifier().getClassName(),
                                             actionId,
                                             prefix,
@@ -157,15 +157,15 @@ implements MethodPrefixBasedFacetFactory {
     }
 
     protected boolean isPropertyOrMixinMain(ProcessMethodContext processMethodContext) {
-        return processMethodContext.isMixinMain() 
+        return processMethodContext.isMixinMain()
                 || (
                         processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
                         && processMethodContext.getFeatureType().isProperty()
                    );
     }
-    
+
     // -- HELPER
-    
+
     private static boolean isPrefixed(String actionId, String prefix) {
         return actionId.startsWith(prefix) && actionId.length() > prefix.length();
     }

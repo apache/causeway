@@ -44,8 +44,8 @@ import lombok.val;
 
 public class RecreatableObjectFacetFactory
 extends FacetFactoryAbstract
-implements 
-    MetaModelRefiner, 
+implements
+    MetaModelRefiner,
     PostConstructMethodCache {
 
     public RecreatableObjectFacetFactory(
@@ -55,8 +55,8 @@ implements
     }
 
     /**
-     * We simply attach all facets we can find; 
-     * the {@link #refineProgrammingModel(ProgrammingModel) meta-model validation} 
+     * We simply attach all facets we can find;
+     * the {@link #refineProgrammingModel(ProgrammingModel) meta-model validation}
      * will detect if multiple interfaces/annotations have
      * been attached.
      */
@@ -65,7 +65,7 @@ implements
 
         val facetHolder = processClassContext.getFacetHolder();
         val type = processClassContext.getCls();
-        
+
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
@@ -79,7 +79,7 @@ implements
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
                     facetHolder, postConstructMethodCache));
         }
-        
+
         // XmlRootElement annotation
         final XmlRootElement xmlRootElement = Annotations.getAnnotation(type, XmlRootElement.class);
         // handle with highest precedence
@@ -105,7 +105,7 @@ implements
             val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
             val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
             if(underlyingFacet == null) {
-                return;    
+                return;
             }
             if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
                 ValidationFailure.raiseFormatted(

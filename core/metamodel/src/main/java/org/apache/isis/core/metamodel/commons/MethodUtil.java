@@ -52,16 +52,16 @@ public class MethodUtil {
         final int modifiers = method.getModifiers();
         return Modifier.isPublic(modifiers);
     }
-    
+
     @UtilityClass
     public static class Predicates {
-        
+
         public static Predicate<Method> paramCount(final int n) {
             return method -> method.getParameterCount() == n;
         }
-        
+
         public static Predicate<Method> matchParamTypes(
-                final int paramIndexOffset, 
+                final int paramIndexOffset,
                 final Can<Class<?>> matchingParamTypes) {
             return method -> {
                 // check params (if required)
@@ -69,27 +69,27 @@ public class MethodUtil {
                 if(matchingParamTypes.isEmpty()) {
                     return true;
                 }
-                
+
                 if(method.getParameterCount()<(paramIndexOffset+matchingParamTypes.size())) {
                     return false;
                 }
-                
+
                 final Class<?>[] parameterTypes = method.getParameterTypes();
-                
+
                 for (int c = 0; c < matchingParamTypes.size(); c++) {
                     val left = parameterTypes[paramIndexOffset + c];
                     val right = matchingParamTypes.getElseFail(paramIndexOffset);
-                    
+
                     if(!Objects.equals(left, right)) {
                         return false;
                     }
                 }
-                
+
                 return true;
-                
+
             };
         }
-        
+
         /**
          * @param methodName
          * @param returnType
@@ -97,8 +97,8 @@ public class MethodUtil {
          * @return whether the method under test matches the given signature
          */
         public static Predicate<Method> signature(
-                final String methodName, 
-                final Class<?> returnType, 
+                final String methodName,
+                final Class<?> returnType,
                 final Class<?>[] paramTypes) {
 
             return method -> {
@@ -134,14 +134,14 @@ public class MethodUtil {
                         }
                     }
                 }
-                
+
                 return true;
             };
-            
+
         }
-        
+
         /**
-         * 
+         *
          * @param prefix
          * @param returnType
          * @param canBeVoid
@@ -150,9 +150,9 @@ public class MethodUtil {
          */
         public static Predicate<Method> prefixed(
                 String prefix, Class<?> returnType, CanBeVoid canBeVoid, int paramCount) {
-            
+
             return method -> {
-            
+
                 if (MethodUtil.isStatic(method)) {
                     return false;
                 }
@@ -166,18 +166,18 @@ public class MethodUtil {
                 if(!ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type)) {
                     return false;
                 }
-                
+
                 return true;
-                
+
             };
-            
+
         }
-        
+
         public static Predicate<Method> getter(Class<?> returnType) {
             return prefixed(MethodLiteralConstants.GET_PREFIX, returnType, CanBeVoid.FALSE, 0);
         }
-        
-        
+
+
     }
-    
+
 }

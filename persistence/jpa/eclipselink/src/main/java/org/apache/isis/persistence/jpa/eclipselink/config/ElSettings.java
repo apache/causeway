@@ -48,24 +48,24 @@ import lombok.val;
 @Primary
 @Qualifier("Eclipselink")
 @ConfigurationProperties(
-        prefix = "", 
+        prefix = "",
         ignoreUnknownFields = true)
 public class ElSettings {
-    
+
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
-    
+
     /** mapped by {@code eclipselink.*} */
-    @Getter @Setter 
-    private Map<String, String> eclipselink = Collections.emptyMap(); 
-    
+    @Getter @Setter
+    private Map<String, String> eclipselink = Collections.emptyMap();
+
     public Map<String, Object> asMap() {
         return map.get();
     }
-    
+
     // -- HELPER
-    
-    private final _Lazy<Map<String, Object>> map = _Lazy.threadSafe(this::createMap);  
-    
+
+    private final _Lazy<Map<String, Object>> map = _Lazy.threadSafe(this::createMap);
+
     protected Map<String, Object> createMap() {
         val jpaProps = new HashMap<String, Object>();
 
@@ -74,9 +74,9 @@ public class ElSettings {
 //        jpaProps.put(PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_DATABASE_SCHEMAS, "true");
         jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
         jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
-        
+
         // potentially overrides defaults from above
-        getEclipselink().forEach((k, v)->jpaProps.put("eclipselink." + k, v)); 
+        getEclipselink().forEach((k, v)->jpaProps.put("eclipselink." + k, v));
         return jpaProps;
     }
 

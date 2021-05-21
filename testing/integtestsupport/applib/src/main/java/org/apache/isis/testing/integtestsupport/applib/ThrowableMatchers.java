@@ -36,7 +36,7 @@ public class ThrowableMatchers {
      */
     public static TypeSafeMatcher<Throwable> causedBy(final Class<? extends Throwable> type) {
         return new TypeSafeMatcher<Throwable>() {
-            
+
             @Override
             protected boolean matchesSafely(final Throwable throwable) {
                 return _Exceptions.getCausalChain(throwable) // non null result
@@ -44,11 +44,11 @@ public class ThrowableMatchers {
                 .anyMatch(t->t.getClass().equals(type));
             }
 
-            @Override 
+            @Override
             public void describeTo(final Description description) {
                 description.appendText("Caused by " + type.getName());
             }
-            
+
         };
     }
 

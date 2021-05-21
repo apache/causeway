@@ -32,9 +32,9 @@ public final class PrismResources {
     @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
             //new WebjarsCssResourceReference("prism/1.16.0/themes/prism.css");
             new CssResourceReference(PrismResources.class, "css/prism1.20.css");
-    
+
     @Getter(lazy = true) private static final ResourceReference jsResourceReferenceWkt =
             //new WebjarsJavaScriptResourceReference("prism/1.16.0/components/prism-java.min.js");
             new JavaScriptResourceReference(PrismResources.class, "js/prism1.20.js");
-    
+
 }

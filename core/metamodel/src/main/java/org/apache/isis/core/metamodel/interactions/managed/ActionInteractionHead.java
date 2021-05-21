@@ -36,30 +36,30 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ActionInteractionHead 
-extends InteractionHead 
+public class ActionInteractionHead
+extends InteractionHead
 implements HasMetaModel<ObjectAction> {
 
     @Getter(onMethod = @__(@Override))
     @NonNull private final ObjectAction metaModel;
-    
+
     public static ActionInteractionHead of(
             @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner, 
+            @NonNull ManagedObject owner,
             @NonNull ManagedObject target) {
         return new ActionInteractionHead(objectAction, owner, target);
-    } 
-    
+    }
+
     protected ActionInteractionHead(
             @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner, 
+            @NonNull ManagedObject owner,
             @NonNull ManagedObject target) {
         super(owner, target);
         this.metaModel = objectAction;
     }
 
-    /**  
-     * Immutable tuple of ManagedObjects, each representing {@code null} and each holding 
+    /**
+     * Immutable tuple of ManagedObjects, each representing {@code null} and each holding
      * the corresponding parameter's {@code ObjectSpecification}.
      * <p>
      * The size of the tuple corresponds to the number of parameters.
@@ -70,8 +70,8 @@ implements HasMetaModel<ObjectAction> {
             ManagedObject.empty(objectActionParameter.getSpecification()))
         .collect(Can.toCan());
     }
-    
-    /**  
+
+    /**
      * Immutable tuple of ManagedObjects, wrapping the passed in argument pojos.
      * Nulls are allowed as arguments, but the list size must match the expected parameter count.
      * <p>
@@ -79,72 +79,72 @@ implements HasMetaModel<ObjectAction> {
      * @param pojoArgList - argument pojos
      */
     public Can<ManagedObject> getPopulatedParameterValues(@Nullable List<Object> pojoArgList) {
-        
+
         val params = getMetaModel().getParameters();
-        
+
         _Assert.assertEquals(params.size(), _NullSafe.size(pojoArgList));
-        
+
         if(params.isEmpty()) {
             return Can.empty();
         }
-        
+
         return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
             ManagedObject.of(objectActionParameter.getSpecification(), argPojo));
     }
-    
+
     public ParameterNegotiationModel model(
             @NonNull Can<ManagedObject> paramValues) {
         return ParameterNegotiationModel.of(this, paramValues);
     }
-    
+
     public ParameterNegotiationModel emptyModel() {
         return ParameterNegotiationModel.of(this, getEmptyParameterValues());
     }
-    
+
     /**
      * See step 1 'Fill in defaults' in
      * <a href="https://cwiki.apache.org/confluence/display/ISIS/ActionParameterNegotiation">
      * ActionParameterNegotiation (wiki)
-     * </a> 
+     * </a>
      */
     public ParameterNegotiationModel defaults() {
-        
+
         // first pass to calculate proposed fixed point
         // second pass to verify we have found a fixed point
-        final int maxIterations = 2;  
-        
+        final int maxIterations = 2;
+
         val params = getMetaModel().getParameters();
-        
-        // init defaults with empty pending-parameter values 
+
+        // init defaults with empty pending-parameter values
         val emptyModel = emptyModel();
         val initialDefaults = params
                 .map(param->param.getDefault(emptyModel));
-        
+
         // could be a fixed point search here, but we assume, params can only depend on params with lower index
-        
+
         Can<ManagedObject> old_pl, pl = initialDefaults;
         for(int i=0; i<maxIterations; ++i) {
             val ppm = model(pl);
             old_pl = pl;
             pl = params
                     .map(param->param.getDefault(ppm));
-            
+
             if(equals(old_pl, pl)) {
-                // fixed point found, return the latest iteration 
+                // fixed point found, return the latest iteration
                 return model(pl);
             }
-            
+
         }
-        
+
         log.warn("Cannot find an initial fixed point for action "
                 + "parameter defaults on action %s.", getMetaModel());
-        
+
         return model(pl);
-        
+
     }
-    
+
     // -- HELPER
-    
+
     private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {
         // equal length is guaranteed as used only local to this class
         val leftIt = left.iterator();
@@ -152,11 +152,11 @@ implements HasMetaModel<ObjectAction> {
             val leftPojo = leftIt.next().getPojo();
             val rightPojo = r.getPojo();
             if(!Objects.equals(leftPojo, rightPojo)){
-                return false;        
+                return false;
             }
         }
         return true;
     }
-    
+
 
 }

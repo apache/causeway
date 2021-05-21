@@ -37,26 +37,26 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
-    
+
     public ZonedDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(TemporalValueFacet.class,
                 TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
                 holder, ZonedDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);
-        
+
         val basicDateTimeNoMillis = "yyyyMMdd'T'HHmmssZ";
         val basicDateTime = "yyyyMMdd'T'HHmmss.SSSZ";
-        
+
         super.addNamedFormat("iso", basicDateTimeNoMillis);
         super.addNamedFormat("iso_encoding", basicDateTime);
-        
+
         super.updateParsers();
 
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-        
+
         val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getZonedDateTime().getFormat();
-        
+
         // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = formatterFirstOf(Can.of(
                 ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
@@ -64,10 +64,10 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
         .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
-        
+
         //TODO those FormatStyle based formatters potentially need additional zone information
         setTitleFormatter(formatter);
-        
+
     }
 
 

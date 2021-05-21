@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory 
+public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
 
     public EnumFacetUsingValueFacetUsingSemanticsProviderFactory() {
@@ -39,9 +39,9 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
             return;
         }
 
-        EnumValueSemanticsProvider<? extends Enum<?>> enumValueSemanticsProvider =  
+        EnumValueSemanticsProvider<? extends Enum<?>> enumValueSemanticsProvider =
                 new EnumValueSemanticsProvider<>(holder, _Casts.uncheckedCast(cls));
-        
+
         addFacets(_Casts.uncheckedCast(enumValueSemanticsProvider));
         super.addFacet(new ChoicesFacetEnum(holder, cls));
     }

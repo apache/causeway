@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 /**
  * @since 2.0
  */
-public interface InteractionInternal 
+public interface InteractionInternal
 extends Interaction {
 
     /**
@@ -75,8 +75,8 @@ extends Interaction {
             final ClockService clockService,
             final MetricsService metricsService,
             final Command command);
-    
-   
+
+
     /**
      * Numbers the executions (an action invocation or property edit) within
      * a given {@link Interaction}.
@@ -96,17 +96,17 @@ extends Interaction {
      * @see WrapperFactory
      */
     LongAdder getExecutionSequence();
-    
+
     /**
      * Framework internal use: generates sequence of numbers for executions.
      * @see #getExecutionSequence()
      */
     default int getThenIncrementExecutionSequence() {
-        final int counter = getExecutionSequence().intValue(); 
+        final int counter = getExecutionSequence().intValue();
         getExecutionSequence().increment();
         return counter;
     }
-    
+
     /**
      * Numbers the transactions within a given {@link Interaction}.
      *
@@ -121,16 +121,16 @@ extends Interaction {
      * @see org.apache.isis.applib.services.xactn.TransactionService
      */
     LongAdder getTransactionSequence();
-    
+
     /**
      * Framework internal use: generates sequence of numbers for transactions.
      * @see #getTransactionSequence()
      */
     default int getThenIncrementTransactionSequence() {
-        final int counter = getTransactionSequence().intValue(); 
+        final int counter = getTransactionSequence().intValue();
         getTransactionSequence().increment();
         return counter;
     }
-    
+
 
 }

@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 interface StructuralNodeVisitor {
 
     // - HEAD
-    
+
     /**
      * Callback for when a node is first visited.
      *
@@ -60,22 +60,22 @@ interface StructuralNodeVisitor {
         }
         if(node instanceof Block) {
             return blockHead((Block)node, depth);
-        }    
+        }
         throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
 
     // -- HEAD SPECIALISATIONS
-    
+
     default boolean documentHead(Document doc, int depth) { return true; }
 
     default boolean blockHead(Block block, int depth) { return true; }
 
     default boolean listHead(org.asciidoctor.ast.List list, int depth) { return true; }
-    
+
     default boolean listItemHead(ListItem listItem, int depth) { return true; }
 
     default boolean tableHead(Table table, int depth) { return true; }
-    
+
    // -- TAIL
 
     /**
@@ -105,21 +105,21 @@ interface StructuralNodeVisitor {
         if(node instanceof Block) {
             blockTail((Block)node, depth);
             return;
-        }    
+        }
         throw _Exceptions.unsupportedOperation("node type not supported %s", node.getClass());
     }
-    
+
     // -- TAIL SPECIALISATIONS
-    
+
     default void documentTail(Document doc, int depth) {}
 
     default void blockTail(Block block, int depth) {}
 
     default void listTail(org.asciidoctor.ast.List list, int depth) {}
-    
+
     default void listItemTail(ListItem listItem, int depth) {}
 
     default void tableTail(Table table, int depth) {}
-    
-    
+
+
 }

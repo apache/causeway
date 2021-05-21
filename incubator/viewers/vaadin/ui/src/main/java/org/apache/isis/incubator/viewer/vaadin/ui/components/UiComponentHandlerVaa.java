@@ -22,7 +22,7 @@ import com.vaadin.flow.component.Component;
 
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
-public interface UiComponentHandlerVaa 
+public interface UiComponentHandlerVaa
 extends UiComponentFactory.Handler<Component> {
 
 }

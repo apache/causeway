@@ -35,11 +35,11 @@ public class ActionForm extends FormLayout {
 
     @Getter
     private final ParameterNegotiationModel pendingArgs;
-    
+
     public static ActionForm forManagedAction(
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
             @NonNull final ManagedAction managedAction) {
-        
+
         val actionForm = new ActionForm(uiComponentFactory, managedAction);
         return actionForm;
     }
@@ -47,21 +47,21 @@ public class ActionForm extends FormLayout {
     protected ActionForm(
             final UiComponentFactoryVaa uiComponentFactory,
             final ManagedAction managedAction) {
-        
+
         pendingArgs = managedAction.startParameterNegotiation();
-        
+
         pendingArgs.getParamModels().forEach(paramModel->{
-            
+
             //val paramNr = paramModel.getParamNr(); // zero based
-            
+
             val request = ComponentRequest.of(paramModel);
-            
+
             //val labelAndPosition = uiComponentFactory.labelFor(request);
             val uiField = uiComponentFactory.parameterFor(request);
             super.add(uiField);
-            
+
         });
-        
+
     }
-    
+
 }

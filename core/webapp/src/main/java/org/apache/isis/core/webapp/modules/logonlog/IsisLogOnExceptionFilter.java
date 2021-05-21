@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class IsisLogOnExceptionFilter implements Filter {
-    
+
     //@Autowired private ExceptionRecognizerService exceptionRecognizerService;
 
     @Override
@@ -59,26 +59,26 @@ public class IsisLogOnExceptionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (Exception ex) {
-            
+
             if(ex instanceof IOException) {
                 val url = ((HttpServletRequest) request).getRequestURL().toString();
                 if(url.endsWith(".css")
                         || url.endsWith(".js")
                         || url.endsWith(".woff2")) {
                     throw ex; // don't log
-                }    
+                }
             }
-            
+
             if(ex instanceof IOException
                     || ex instanceof ServletException
                     || ex instanceof RuntimeException) {
                 logRequestUrl(request, ex);
             }
-            
+
             throw ex;
-        } 
+        }
     }
-    
+
     // -- HELPER
 
     private static void logRequestUrl(ServletRequest request, Exception e) {

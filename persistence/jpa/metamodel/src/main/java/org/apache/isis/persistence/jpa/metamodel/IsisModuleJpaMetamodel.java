@@ -32,10 +32,10 @@ import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
     // @Component's
     JpaProgrammingModel.class,
     //JpaMetamodelMenu.class,
-    
+
     // @Service's
 
 })
 public class IsisModuleJpaMetamodel {
-    
+
 }

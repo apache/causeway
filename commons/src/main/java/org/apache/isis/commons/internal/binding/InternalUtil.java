@@ -31,13 +31,13 @@ import org.apache.isis.commons.binding.Observable;
 import lombok.NonNull;
 
 abstract class InternalUtil<T> {
-    
+
     // -- WEAK LISTENING STUFF
-    
+
     static interface WeakListener {
         boolean isNoLongerReferenced();
     }
-    
+
     final static class WeakChangeListener<T> implements ChangeListener<T>, WeakListener {
 
         private final WeakReference<ChangeListener<T>> ref;
@@ -62,7 +62,7 @@ abstract class InternalUtil<T> {
         }
 
     }
-    
+
     final static class WeakInvalidationListener implements InvalidationListener, WeakListener {
 
         private final WeakReference<InvalidationListener> ref;
@@ -86,42 +86,42 @@ abstract class InternalUtil<T> {
             }
         }
     }
-    
+
 
     // -- LISTENER ADD/REMOVE
 
     static <T> InternalUtil<T> addListener(
-            @Nullable final InternalUtil<T> helper, 
-            @NonNull final Observable<T> observable, 
+            @Nullable final InternalUtil<T> helper,
+            @NonNull final Observable<T> observable,
             @NonNull final InvalidationListener listener) {
         observable.getValue(); // validate observable
         return (helper == null)
-                ? new SingleInvalidation<T>(observable, listener) 
+                ? new SingleInvalidation<T>(observable, listener)
                 : helper.addListener(listener);
     }
 
     static <T> InternalUtil<T> removeListener(
-            @Nullable final InternalUtil<T> helper, 
+            @Nullable final InternalUtil<T> helper,
             @NonNull final InvalidationListener listener) {
         return (helper == null)
-                ? null 
+                ? null
                 : helper.removeListener(listener);
     }
 
     static <T> InternalUtil<T> addListener(
-            @Nullable final InternalUtil<T> helper, 
-            @NonNull final Observable<T> observable, 
+            @Nullable final InternalUtil<T> helper,
+            @NonNull final Observable<T> observable,
             @NonNull final ChangeListener<? super T> listener) {
         return (helper == null)
-                ? new SingleChange<T>(observable, listener) 
+                ? new SingleChange<T>(observable, listener)
                 : helper.addListener(listener);
     }
 
     static <T> InternalUtil<T> removeListener(
-            @Nullable final InternalUtil<T> helper, 
+            @Nullable final InternalUtil<T> helper,
             @NonNull ChangeListener<? super T> listener) {
         return (helper == null)
-                ? null 
+                ? null
                 : helper.removeListener(listener);
     }
 
@@ -421,9 +421,9 @@ abstract class InternalUtil<T> {
             }
         }
     }
-    
+
     private static int trimListeners(int size, Object[] listeners) {
-        Predicate<Object> p = t -> t instanceof WeakListener 
+        Predicate<Object> p = t -> t instanceof WeakListener
                 && ((WeakListener)t).isNoLongerReferenced();
         int index = 0;
         for (; index < size; index++) {

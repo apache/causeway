@@ -44,4 +44,5 @@ import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
 })
 public class IsisModuleTestingFixturesApplib {
 
+    public static final String NAMESPACE = "isis.ext.fixtures";
 }

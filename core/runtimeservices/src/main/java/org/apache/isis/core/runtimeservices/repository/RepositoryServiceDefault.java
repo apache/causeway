@@ -70,8 +70,8 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Inject private WrapperFactory wrapperFactory;
     @Inject private TransactionService transactionService;
     @Inject private IsisConfiguration isisConfiguration;
-    @Inject private ObjectManager objectManager; 
-    
+    @Inject private ObjectManager objectManager;
+
     private boolean autoFlush;
 
     @PostConstruct
@@ -85,7 +85,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         val adapter = objectManager.adapt(unwrapped(object));
         return EntityUtil.getEntityState(adapter);
     }
-    
+
     @Override
     public <T> T detachedEntity(final @NonNull T entity) {
         return factoryService.detachedEntity(entity);
@@ -93,7 +93,7 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> T persist(final T domainObject) {
-        
+
         val adapter = objectManager.adapt(unwrapped(domainObject));
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
@@ -121,7 +121,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
         if(EntityUtil.isAttached(adapter)) {
-            EntityUtil.destroyInCurrentTransaction(adapter);   
+            EntityUtil.destroyInCurrentTransaction(adapter);
         }
     }
 
@@ -171,11 +171,11 @@ public class RepositoryServiceDefault implements RepositoryService {
                 .getSpecificationLoader()
                 .specForType(query.getResultType())
                 .orElse(null);
-        
+
         if(resultTypeSpec==null) {
             return Collections.emptyList();
         }
-        
+
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);
         return _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
@@ -234,7 +234,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     // -- HELPER
-    
+
     private static <T> Optional<T> firstInstanceElseEmpty(final List<T> instances) {
         return instances.size() == 0
                 ? Optional.empty()

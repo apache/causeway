@@ -34,4 +34,5 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 @ComponentScan
 public class IsisModuleExtHsqldbMgr {
 
+    public static final String NAMESPACE = "isis.ext.hsqldbMgr";
 }

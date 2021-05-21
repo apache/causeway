@@ -36,7 +36,6 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -184,6 +183,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
      * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external}
      * (eg as managed by keycloak).
      */
+    @Override
     public void invalidate() {
         if(this.authentication.getType() == Authentication.Type.EXTERNAL) {
             return;

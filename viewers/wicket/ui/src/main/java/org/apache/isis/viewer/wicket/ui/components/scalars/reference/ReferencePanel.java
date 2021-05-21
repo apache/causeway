@@ -158,7 +158,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         final IModel<ObjectMemento> model = select2.getModel();
-        
+
         return new IModel<String>() {
             private static final long serialVersionUID = 1L;
 
@@ -169,7 +169,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                     return null;
                 }
                 val adapter = ReferencePanel.super.getCommonContext().reconstructObject(memento);
-                return adapter != null ? adapter.titleString(null) : null;
+                return adapter != null ? adapter.titleString() : null;
             }
 
             @Override
@@ -250,12 +250,12 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         if(componentForRegular != null) {
 
             val scalarModel = getModel();
-            
+
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
             val component = componentFactory
                     .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), scalarModel);
-            
+
             componentForRegular.addOrReplace(component);
 
             boolean inlinePrompt = scalarModel.isInlinePrompt();
@@ -334,11 +334,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
-        
+
         val commonContext = super.getCommonContext();
-        
+
         val scalarModel = getModel();
-        
+
         if (scalarModel.hasChoices()) {
             val choices = scalarModel.getChoices(); // must not return detached entities
             val choiceMementos = choices.map(commonContext::mementoForParameter);
@@ -374,7 +374,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // called by EntityLinkSelect2Panel
     String getInput() {
         val pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
-        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
+        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "(no object)";
     }
 
     // //////////////////////////////////////
@@ -387,7 +387,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             ObjectMemento convertedInput = select2.getConvertedInput();
             select2.getModel().setObject(convertedInput);
 
-            val adapter = super.getCommonContext().reconstructObject(convertedInput); 
+            val adapter = super.getCommonContext().reconstructObject(convertedInput);
             getModel().setObject(adapter);
             getModel().clearPending();
         }

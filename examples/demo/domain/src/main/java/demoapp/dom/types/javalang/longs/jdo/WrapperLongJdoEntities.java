@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javalang.longs.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class WrapperLongJdoEntities {
+public class WrapperLongJdoEntities
+extends ValueHolderRepository<Long, WrapperLongJdo> {
 
-    public Optional<WrapperLongJdo> find(final Long readOnlyProperty) {
-        return repositoryService.firstMatch(WrapperLongJdo.class, x -> x.getReadOnlyProperty().equals(readOnlyProperty));
+    protected WrapperLongJdoEntities() {
+        super(WrapperLongJdo.class);
     }
 
-    public List<WrapperLongJdo> all() {
-        return repositoryService.allInstances(WrapperLongJdo.class);
+    @Override
+    protected WrapperLongJdo newDetachedEntity(Long value) {
+        return new WrapperLongJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

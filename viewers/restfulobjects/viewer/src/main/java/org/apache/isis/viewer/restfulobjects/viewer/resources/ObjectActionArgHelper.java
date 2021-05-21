@@ -48,9 +48,9 @@ public class ObjectActionArgHelper {
             final IResourceContext resourceContext,
             final ObjectAction action,
             final JsonRepresentation arguments) {
-        
+
         val jsonArgList = argListFor(action, arguments);
-        
+
         final List<_Either<ManagedObject, InteractionVeto>> argAdapters = _Lists.newArrayList();
         val parameters = action.getParameters();
         for (int i = 0; i < jsonArgList.size(); i++) {
@@ -58,19 +58,19 @@ public class ObjectActionArgHelper {
             final int argIndex = i;
             val paramMeta = parameters.getElseFail(argIndex);
             val paramSpec = paramMeta.getSpecification();
-            
+
             val objectOrVeto = Result.of(()->
-                    (paramMeta.isOptional() && argRepr == null) 
+                    (paramMeta.isOptional() && argRepr == null)
                     ? ManagedObject.empty(paramSpec)
                     : new JsonParserHelper(resourceContext, paramSpec)
                             .objectAdapterFor(argRepr))
             .<_Either<ManagedObject, InteractionVeto>>fold(
-                    _Either::left, 
+                    _Either::left,
                     exception->_Either.right(
                             InteractionVeto.actionParamInvalid(
-                                    String.format("exception when parsing paramNr %d [%s]: %s", 
+                                    String.format("exception when parsing paramNr %d [%s]: %s",
                                             argIndex, argRepr, exception))));
-            
+
             argAdapters.add(objectOrVeto);
         }
         return Can.ofCollection(argAdapters);

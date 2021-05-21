@@ -34,33 +34,33 @@ import lombok.Data;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 final class ObjectLoader_builtinHandlers {
 
     // -- NULL GUARD
-    
+
     @Data
     public static class GuardAgainstNull implements ObjectLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
-            
+
             if(objectLoadRequest==null) {
                 return true;
             }
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             if(spec == null) {
                 // eg "NONEXISTENT:123"
                 return true;
             }
-            
-            // we don't guard against the identifier being null, because, this is ok 
+
+            // we don't guard against the identifier being null, because, this is ok
             // for services and values
             return false;
         }
@@ -71,91 +71,91 @@ final class ObjectLoader_builtinHandlers {
         }
 
     }
-    
+
     // -- MANAGED BEANS
 
     @Data
     public static class LoadService implements ObjectLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isManagedBean();
         }
 
         @Override
         public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             val beanName = spec.getLogicalTypeName();
-            
+
             val servicePojo = metaModelContext.getServiceRegistry()
                 .lookupRegisteredBeanById(beanName)
                 .map(_ManagedBeanAdapter::getInstance)
                 .flatMap(Can::getFirst)
                 .orElseThrow(()->_Exceptions.noSuchElement(
-                        "loader: %s loading beanName %s", 
+                        "loader: %s loading beanName %s",
                         this.getClass().getName(), beanName));
-            
+
             return ManagedObject.of(spec, servicePojo);
         }
 
     }
-    
+
     // -- VALUES
-    
+
     @Data
     public static class LoadValue implements ObjectLoader.Handler {
 
         private MetaModelContext metaModelContext;
-        
+
         @Override
         public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isValue();
         }
 
         @Override
         public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
-            
+
             // cannot load a value
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             throw _Exceptions.illegalArgument(
-                    "cannot load a value, loader: %s loading ObjectSpecification %s", 
+                    "cannot load a value, loader: %s loading ObjectSpecification %s",
                         this.getClass().getName(), spec);
         }
 
     }
 
     // -- VIEW MODELS
-    
+
     @Data
     public static class LoadViewModel implements ObjectLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isViewModel();
         }
 
         @Override
         public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             val viewModelFacet = spec.getFacet(ViewModelFacet.class);
             if(viewModelFacet == null) {
                 throw _Exceptions.illegalArgument(
                         "ObjectSpecification is missing a ViewModelFacet: %s", spec);
             }
-            
+
             val memento = objectLoadRequest.getObjectIdentifier();
             final Object viewModelPojo;
             if(viewModelFacet.getRecreationMechanism().isInitializes()) {
@@ -164,10 +164,10 @@ final class ObjectLoader_builtinHandlers {
             } else {
                 viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), memento);
             }
-            
+
             return ManagedObject.of(spec, viewModelPojo);
         }
-        
+
         private Object instantiateAndInjectServices(ObjectSpecification spec) {
 
             val type = spec.getCorrespondingClass();
@@ -177,7 +177,7 @@ final class ObjectLoader_builtinHandlers {
 
             if (Modifier.isAbstract(type.getModifiers())) {
                 throw _Exceptions.illegalArgument("Cannot create an instance of an abstract class '%s', "
-                        + "loader: %s loading ObjectSpecification %s", 
+                        + "loader: %s loading ObjectSpecification %s",
                         type, this.getClass().getName(), spec);
             }
 
@@ -186,7 +186,7 @@ final class ObjectLoader_builtinHandlers {
                 newInstance = type.newInstance();
             } catch (final IllegalAccessException | InstantiationException e) {
                 throw _Exceptions.illegalArgument("Failed to create instance of type '%s', "
-                        + "loader: %s loading ObjectSpecification %s", 
+                        + "loader: %s loading ObjectSpecification %s",
                         type, this.getClass().getName(), spec);
             }
 
@@ -197,15 +197,15 @@ final class ObjectLoader_builtinHandlers {
     }
 
     // -- ENTITIES
-    
+
     @Data
     public static class LoadEntity implements ObjectLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
-            
+
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isEntity();
         }
@@ -219,20 +219,20 @@ final class ObjectLoader_builtinHandlers {
                 throw _Exceptions.illegalArgument(
                         "ObjectSpecification is missing an EntityFacet: %s", spec);
             }
-            
+
             val identifier = objectLoadRequest.getObjectIdentifier();
             val entity = entityFacet.fetchByIdentifier(spec, identifier);
-            
+
             return entity;
         }
 
     }
-    
+
     // -- UNKNOWN LOAD REQUEST
-    
+
     @Data
     public static class LoadOther implements ObjectLoader.Handler {
-        
+
         private MetaModelContext metaModelContext;
 
         @Override
@@ -244,9 +244,9 @@ final class ObjectLoader_builtinHandlers {
         public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
 
             // unknown object load request
-            
+
             throw _Exceptions.illegalArgument(
-                    "None of the registered ObjectLoaders knows how to load this object. (loader: %s loading %s)", 
+                    "None of the registered ObjectLoaders knows how to load this object. (loader: %s loading %s)",
                         this.getClass().getName(), objectLoadRequest);
 
         }

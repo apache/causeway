@@ -43,5 +43,5 @@ public class MarkupFieldFactory implements UiComponentHandlerVaa {
         uiField.setValue(request.getFeatureValue(org.apache.isis.applib.value.Markup.class).orElse(null));
         return uiField;
     }
-    
+
 }

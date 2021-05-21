@@ -66,14 +66,12 @@ public class EventSubscriberDemoImplementation {
             objectType = "demo.eventLogWriter")
     public static class EventLogWriter {
 
-        @Inject private EventLogEntryJdoRepository eventLogEntryJdoRepository;
+        @Inject private EventLogEntryRepository<? extends Object> eventLogEntryRepository;
 
         @Action // called asynchronously by above invocation
         public void storeEvent(UiButtonEvent event) {
 
-            val entry = EventLogEntryJdo.of(event);
-            eventLogEntryJdoRepository.add(entry);
-
+            eventLogEntryRepository.storeEvent(event);
         }
 
     }

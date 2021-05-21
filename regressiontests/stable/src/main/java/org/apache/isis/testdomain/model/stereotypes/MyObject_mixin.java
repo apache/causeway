@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 @Action
 @RequiredArgsConstructor
 public class MyObject_mixin {
-    
+
     private final MyObject holder;
-    
+
     public MyObject act() {
         return holder;
     }

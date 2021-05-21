@@ -36,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public interface ComponentFactoryRegistrar {
 
     public static class ComponentFactoryList implements Iterable<ComponentFactory> {
-        
+
         private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
 
         public void add(ComponentFactory componentFactory) {

@@ -41,8 +41,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     private final Class<?> choicesClass;
 
     public PropertyChoicesFacetViaMethod(
-            final Method method, 
-            final Class<?> choicesClass, 
+            final Method method,
+            final Class<?> choicesClass,
             final FacetHolder holder) {
 
         super(holder);
@@ -68,21 +68,21 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     public Can<ManagedObject> getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val elementSpec = specForTypeElseFail(((FacetedMethod) getFacetHolder()).getType());
         val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
-//XXX[ISIS-2383] debugging        
+//XXX[ISIS-2383] debugging
 //        if(elementSpec.isEntity()) {
 //            _NullSafe.streamAutodetect(optionPojos)
 //            .map(pojo->ManagedObject.of(elementSpec, pojo))
 //            .filter(adapter->!ManagedObjects.EntityUtil.isAttached(adapter))
 //            .forEach(detached->_Probe.errOut("non attached entity from choices method %s detected", method));
 //        }
-        
+
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, optionPojos, interactionInitiatedBy);
-        
+
         return visibleChoices;
     }
 

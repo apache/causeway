@@ -44,15 +44,15 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 public interface HasMetaModelContext {
 
     // -- INTERFACE
-    
+
     MetaModelContext getMetaModelContext();
-    
+
     // -- SHORTCUTS
-    
+
     default IsisSystemEnvironment getSystemEnvironment() {
         return getMetaModelContext().getSystemEnvironment();
     }
-    
+
     default IsisConfiguration getConfiguration() {
         return getMetaModelContext().getConfiguration();
     }
@@ -68,11 +68,11 @@ public interface HasMetaModelContext {
     default FactoryService getFactoryService() {
         return getMetaModelContext().getFactoryService();
     }
-    
+
     default MemberExecutorService getMemberExecutor() {
         return getMetaModelContext().getMemberExecutor();
     }
-    
+
     default SpecificationLoader getSpecificationLoader() {
         return getMetaModelContext().getSpecificationLoader();
     }
@@ -88,7 +88,7 @@ public interface HasMetaModelContext {
     default AuthenticationManager getAuthenticationManager() {
         return getMetaModelContext().getAuthenticationManager();
     }
-    
+
     default AuthenticationContext getAuthenticationContext() {
         return getMetaModelContext().getAuthenticationContext();
     }
@@ -100,7 +100,7 @@ public interface HasMetaModelContext {
     default Optional<ObjectSpecification> specForType(Class<?> type) {
         return getMetaModelContext().specForType(type);
     }
-    
+
     default ObjectSpecification specForTypeElseFail(Class<?> type) {
         return getMetaModelContext().specForTypeElseFail(type);
     }
@@ -124,19 +124,19 @@ public interface HasMetaModelContext {
     default WrapperFactory getWrapperFactory() {
         return getMetaModelContext().getWrapperFactory();
     }
-    
+
     // -- ADVANCED SHORTCUTS
 
     default ManagedObject lookupServiceAdapterById(String serviceId) {
         return getMetaModelContext().lookupServiceAdapterById(serviceId);
     }
-    
+
     default <T> T getSingletonElseFail(Class<T> type) {
         return getMetaModelContext().getSingletonElseFail(type);
     }
-    
+
     default Stream<ManagedObject> streamServiceAdapters() {
         return getMetaModelContext().streamServiceAdapters();
     }
-    
+
 }

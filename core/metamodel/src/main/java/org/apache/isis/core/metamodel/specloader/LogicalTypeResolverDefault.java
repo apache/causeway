@@ -24,11 +24,14 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
     private final Map<String, LogicalType> logicalTypeByName = _Maps.newConcurrentHashMap();
@@ -42,20 +45,40 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     public Optional<LogicalType> lookup(final @NonNull String logicalTypeName) {
         return Optional.ofNullable(logicalTypeByName.get(logicalTypeName));
     }
-    
+
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
-        if(hasUsableSpecId(spec)) {
-            logicalTypeByName.put(spec.getLogicalTypeName(), spec.getLogicalType());
+
+        // collect concrete classes (do not collect abstract or anonymous types or interfaces)
+        if(!spec.isAbstract()
+                && hasUsableObjectTypeFacet(spec)) {
+
+            val key = spec.getLogicalTypeName();
+
+            val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
+
+            if(previousMapping!=null) {
+
+                val msg = String.format("Overriding existing mapping\n"
+                        + "%s -> %s,\n"
+                        + "with\n "
+                        + "%s -> %s\n "
+                        + "This will result in the meta-model validation to fail.",
+                        key, previousMapping.getCorrespondingClass(),
+                        key, spec.getCorrespondingClass());
+
+                log.warn(msg);
+
+            }
         }
     }
-    
+
     // -- HELPER
-    
-    private boolean hasUsableSpecId(ObjectSpecification spec) {
-        // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
-        // don't have an ObjectSpecId; hence the guard.
-        return spec.containsNonFallbackFacet(ObjectSpecIdFacet.class);
+
+    private boolean hasUsableObjectTypeFacet(ObjectSpecification spec) {
+        // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+        // don't have an ObjectType; hence the guard.
+        return spec.containsNonFallbackFacet(ObjectTypeFacet.class);
     }
 
 }

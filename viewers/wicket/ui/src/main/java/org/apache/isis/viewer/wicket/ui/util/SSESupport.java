@@ -23,15 +23,15 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
  * Server-sent events.
- *  
- * @see <a href="https://www.w3schools.com/html/html5_serversentevents.asp">www.w3schools.com</a> 
- * 
- * 
+ *
+ * @see <a href="https://www.w3schools.com/html/html5_serversentevents.asp">www.w3schools.com</a>
+ *
+ *
  * @since 2.0
  */
 public class SSESupport {
 
-    private static final JavaScriptResourceReference SSE_SUPPORT_JS = 
+    private static final JavaScriptResourceReference SSE_SUPPORT_JS =
             new JavaScriptResourceReference(SSESupport.class, "SSESupport.js");
 
     /**

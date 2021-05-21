@@ -33,16 +33,16 @@ import lombok.val;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Package private mixin for _Context. 
+ * Package private mixin for _Context.
  * Provides a context for storing and retrieving thread local object references.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * 
+ *
  * @since 2.0
- * 
+ *
  */
 final class _Context_ThreadLocal {
 
@@ -63,7 +63,7 @@ final class _Context_ThreadLocal {
 
         val threadLocalMap = getOrCreateThreadLocalMap();
         threadLocalMap
-        .compute(type, (k, v) -> v == null 
+        .compute(type, (k, v) -> v == null
         ? Can.<T>ofSingleton(variant)
                 : Can.<T>concat(_Casts.uncheckedCast(v), variant));
 
@@ -88,7 +88,7 @@ final class _Context_ThreadLocal {
         }
         val bin = threadLocalMap.get(type);
         if(bin==null) {
-            return Can.empty();	
+            return Can.empty();
         }
         return _Casts.uncheckedCast(bin);
     }
@@ -118,18 +118,18 @@ final class _Context_ThreadLocal {
     //	/**
     //	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
     //	 */
-    //    private static final ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
+    //    private static final ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP =
     //    		InheritableThreadLocal.withInitial(HashMap::new);
 
     /**
      * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
      */
-    private static final ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY = 
+    private static final ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY =
             InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
 
 
     private static final _Multimaps.MapMultimap<ThreadKey, Class<?>, Can<?>> MAPS_BY_KEY =
-            _Multimaps.newConcurrentMapMultimap(); 
+            _Multimaps.newConcurrentMapMultimap();
 
     private static Map<Class<?>, Can<?>> getThreadLocalMap() {
         val key = THREAD_LOCAL_MAP_KEY.get(); // non-null

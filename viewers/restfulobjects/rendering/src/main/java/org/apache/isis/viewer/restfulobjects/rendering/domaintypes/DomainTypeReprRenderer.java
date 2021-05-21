@@ -18,16 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import java.util.stream.Stream;
-
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -94,29 +89,35 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private void addMembers() {
-        final JsonRepresentation membersList = JsonRepresentation.newArray();
-        representation.mapPut("members", membersList);
-        
-        objectSpecification.streamAssociations(MixedIn.EXCLUDED)
-        .forEach(association->{
-            if (association.isOneToOneAssociation()) {
-                final OneToOneAssociation property = (OneToOneAssociation) association;
-                final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
-                membersList.arrayAdd(linkBuilder.build());
-            } else if (association.isOneToManyAssociation()) {
-                final OneToManyAssociation collection = (OneToManyAssociation) association;
-                final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, collection);
-                membersList.arrayAdd(linkBuilder.build());
-            }
-        });
+        final JsonRepresentation membersMap = JsonRepresentation.newMap();
+        representation.mapPut("members", membersMap);
 
-        final Stream<ObjectAction> actions = objectSpecification.streamActions(MixedIn.INCLUDED);
+        objectSpecification.streamProperties(MixedIn.INCLUDED)
+        .forEach(property->
+            membersMap.mapPut(
+                    property.getId(),
+                    PropertyDescriptionReprRenderer
+                        .newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property)
+                        .build())
+        );
 
-        actions.forEach(action->{
-            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer
-                    .newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
-            membersList.arrayAdd(linkBuilder.build());            
-        });
+        objectSpecification.streamCollections(MixedIn.INCLUDED)
+        .forEach(collection->
+            membersMap.mapPut(
+                    collection.getId(),
+                    CollectionDescriptionReprRenderer
+                        .newLinkToBuilder(getResourceContext(), Rel.COLLECTION, objectSpecification, collection)
+                        .build())
+        );
+
+        objectSpecification.streamAnyActions(MixedIn.INCLUDED)
+        .forEach(action->
+            membersMap.mapPut(
+                    action.getId(),
+                    ActionDescriptionReprRenderer
+                        .newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action)
+                        .build())
+        );
 
     }
 

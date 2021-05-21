@@ -32,9 +32,9 @@ import org.apache.isis.core.runtime.memento.ObjectMemento;
  *
  */
 public interface ChoiceExt extends HasLogicalType {
-    
+
     void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices);
     Settings getSettings();
 
-    
+
 }

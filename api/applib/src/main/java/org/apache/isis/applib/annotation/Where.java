@@ -27,9 +27,9 @@ import org.apache.isis.applib.util.Enums;
  * Represents the location in the user interface where a class member is to be rendered.
  *
  * <p>
- * Used to control visibility (eg using the {@link Property#hidden()} annotation) and 
- * enablement (eg using the {@link Property#editing()} annotation) in different regions 
- * of the user interface. 
+ * Used to control visibility (eg using the {@link Property#hidden()} annotation) and
+ * enablement (eg using the {@link Property#editing()} annotation) in different regions
+ * of the user interface.
  *
  * <p>
  * The application programmer may use any of the values of this enum.  Some represent
@@ -39,9 +39,9 @@ import org.apache.isis.applib.util.Enums;
  * @see Action
  * @see Collection
  * @see Property
- * 
+ *
  * @since 1.x {@index}
- * 
+ *
  * @implNote This enum is also used internally within the framework. When rendering an element,
  * the framework developer should only use those values that represent concrete locations.
  */
@@ -184,12 +184,19 @@ public enum Where {
         return Enums.getFriendlyNameOf(this);
     }
 
+    public boolean isAlways() {
+        return this == EVERYWHERE
+                || this == ANYWHERE;
+    }
+
     public boolean inParentedTable() {
-        return this == PARENTED_TABLES || this == ALL_TABLES;
+        return this == PARENTED_TABLES
+                || this == ALL_TABLES;
     }
 
     public boolean inStandaloneTable() {
-        return this == STANDALONE_TABLES || this == ALL_TABLES;
+        return this == STANDALONE_TABLES
+                || this == ALL_TABLES;
     }
 
     /**
@@ -199,7 +206,9 @@ public enum Where {
      * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLES}; {@link #ANYWHERE} includes all others.
      */
     public boolean includes(Where context) {
-        return context == this;
+        return context == this
+                || (this.isAlways()
+                    && context.isAlways());
     }
 
 

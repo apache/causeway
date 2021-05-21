@@ -128,7 +128,9 @@
 				</property>
 			</activation>
 			<modules>
-				<module>examples/demo/wicket</module>
+				<module>examples/demo/wicket/common</module>
+				<module>examples/demo/wicket/jdo</module>
+				<module>examples/demo/wicket/jpa</module>
 				<!-- prerequisites ... -->
 				<module>examples/demo/web</module>
 			</modules>
@@ -147,7 +149,8 @@
 				<!-- prerequisites ... -->
 				<module>incubator/viewers/vaadin</module>
 				<module>examples/demo/web</module>
-				<module>examples/demo/wicket</module>
+				<module>examples/demo/wicket/common</module>
+				<module>examples/demo/wicket/jdo</module>
 			</modules>
 		</profile>
 

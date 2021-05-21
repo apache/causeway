@@ -19,7 +19,7 @@
 package org.apache.isis.core.config.environment;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */

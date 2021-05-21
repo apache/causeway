@@ -41,7 +41,7 @@ import lombok.val;
 public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
-            TO_STRING, 
+            TO_STRING,
             TITLE));
 
     public TitleFacetViaMethodsFactory() {

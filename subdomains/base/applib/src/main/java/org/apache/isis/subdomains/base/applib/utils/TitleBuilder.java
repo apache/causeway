@@ -87,6 +87,7 @@ public class TitleBuilder {
         return this;
     }
 
+    @Override
     public String toString() {
         return new StringBuilder()
                 .append(parentString)

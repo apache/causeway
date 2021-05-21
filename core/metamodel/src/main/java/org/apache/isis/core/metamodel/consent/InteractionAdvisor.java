@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
  * Used within {@link Allow} and {@link Veto}.
  */
 public interface InteractionAdvisor {
-    
+
     //boolean handles(InteractionContext ic);
 
     /**

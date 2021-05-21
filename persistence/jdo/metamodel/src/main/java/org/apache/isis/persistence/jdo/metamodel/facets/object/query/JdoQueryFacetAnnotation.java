@@ -31,7 +31,7 @@ implements JdoQueryFacet {
     public JdoQueryFacetAnnotation(
             final Query jdoNamedQuery,
             final FacetHolder holder) {
-        
+
         super(holder, Can.ofSingleton(jdoNamedQuery));
     }
 

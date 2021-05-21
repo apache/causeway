@@ -64,13 +64,13 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
     })
     public Response menuBars() {
-        
+
         val resourceContext = createResourceContext(
                 RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val serializationStrategy = resourceContext.getSerializationStrategy();
         val menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
-        
+
         final Response.ResponseBuilder builder;
         final MenuBars menuBars = menuBarsService.menuBars();
         addLinksForServiceActions(resourceContext, menuBars);
@@ -85,7 +85,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     void addLinksForServiceActions(final ResourceContext resourceContext, final MenuBars menuBars) {
         menuBars.visit(linksForServiceActionsAddingVisitor(resourceContext));
     }
-    
+
     // public ... for testing
     public static MenuBars.Visitor linksForServiceActionsAddingVisitor(final ResourceContext resourceContext) {
         return new MenuBars.Visitor() {

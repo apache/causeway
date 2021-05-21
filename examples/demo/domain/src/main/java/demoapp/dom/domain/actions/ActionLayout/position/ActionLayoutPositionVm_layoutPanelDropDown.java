@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty2"
 )
 @ActionLayout(
-        named = "Positioned on panel dropdown", 
+        named = "Positioned on panel dropdown",
         describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL_DROPDOWN/></cpt:property>",
         sequence = "3")
 @RequiredArgsConstructor

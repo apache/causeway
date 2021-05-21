@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.collections._Maps;
  * Instantiate using {@link FixtureScripts#newExecutionContext(String)}
  */
 public class FixtureResultList {
-    
+
     private final FixtureScripts fixtureScripts;
     private final FixtureScript.ExecutionContext executionContext;
 
@@ -136,6 +136,6 @@ public class FixtureResultList {
         }
         return _Casts.uncheckedCast(object);
     }
- 
+
 
 }

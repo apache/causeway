@@ -34,12 +34,12 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
 
-public class JdoVersionAnnotationFacetFactory 
+public class JdoVersionAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
-    
+
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public JdoVersionAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }

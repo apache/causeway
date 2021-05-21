@@ -43,7 +43,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
-    public TitleFacetViaTitleMethod(final Method method, final TranslationService translationService, 
+    public TitleFacetViaTitleMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
         this.method = method;
@@ -67,11 +67,11 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
 
     @Override
     public String title(final ManagedObject owningAdapter) {
-        
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
             return null;
         }
-        
+
         try {
             final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
             if(returnValue instanceof String) {
@@ -83,11 +83,11 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             }
             return null;
         } catch (final RuntimeException ex) {
-            
+
             val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
-            
+
             if(!isUnitTesting) {
-                log.warn("Title failure", ex);    
+                log.warn("Title failure", ex);
             }
             return "Failed Title";
         }

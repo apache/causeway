@@ -34,38 +34,38 @@ import javafx.stage.Stage;
 public class JavafxViewerApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
-    
+
     static Class<?>[] sources;
-    
+
     @Override
     public void init() throws Exception {
-        
-        final ApplicationContextInitializer<GenericApplicationContext> initializer = 
+
+        final ApplicationContextInitializer<GenericApplicationContext> initializer =
         ac->{
              ac.registerBean(Application.class, ()->JavafxViewerApplication.this);
              ac.registerBean(Parameters.class, this::getParameters);
              ac.registerBean(HostServices.class, this::getHostServices);
         };
-        
+
         this.springContext = new SpringApplicationBuilder()
         .sources(sources)
         .initializers(initializer)
         .run(getParameters().getRaw().toArray(_Constants.emptyStringArray));
     }
-    
-    
-    
+
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.springContext.publishEvent(new PrimaryStageReadyEvent(primaryStage));
     }
-    
+
     @Override
     public void stop() throws Exception {
         this.springContext.close();
         Platform.exit();
     }
-    
-    
+
+
 
 }

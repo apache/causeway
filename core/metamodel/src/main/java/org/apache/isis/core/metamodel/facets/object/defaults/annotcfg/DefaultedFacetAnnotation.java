@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUti
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 
     private static String providerName(final IsisConfiguration config, final Class<?> annotatedClass) {
-        
+
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
         if (!_Strings.isNullOrEmpty(providerName)) {
@@ -44,16 +44,16 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     }
 
     public DefaultedFacetAnnotation(
-            final IsisConfiguration config, 
-            final Class<?> annotatedClass, 
+            final IsisConfiguration config,
+            final Class<?> annotatedClass,
             final FacetHolder holder) {
-        
+
         this(providerName(config, annotatedClass), providerClass(annotatedClass), holder);
     }
 
     private DefaultedFacetAnnotation(
-            final String candidateProviderName, 
-            final Class<?> candidateProviderClass, 
+            final String candidateProviderName,
+            final Class<?> candidateProviderClass,
             final FacetHolder holder) {
 
         super(candidateProviderName, candidateProviderClass, holder);

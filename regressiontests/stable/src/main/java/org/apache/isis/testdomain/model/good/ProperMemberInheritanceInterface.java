@@ -28,44 +28,44 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 public interface ProperMemberInheritanceInterface {
-    
+
     default String title() {
         return "inherited title";
     }
-    
+
     default String iconName() {
         return "inherited icon";
     }
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     default void sampleAction() {
     }
-    
+
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
     default String getSampleProperty() {
         return null;
     }
-    
+
     @Collection
     @CollectionLayout(named = "foo", describedAs = "bar")
     default List<String> getSampleCollection() {
         return null;
     }
-        
+
     // -- OVERRIDING TESTS
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     default void sampleActionOverride() {
     }
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     default void sampleActionOverrideWithParam(String x) {
     }
-    
+
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
     default String getSamplePropertyOverride() {

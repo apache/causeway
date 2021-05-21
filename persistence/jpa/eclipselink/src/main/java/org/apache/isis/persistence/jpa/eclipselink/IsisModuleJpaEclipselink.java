@@ -84,9 +84,9 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
         return new EclipseLinkJpaVendorAdapter() {
-            
+
             private final EclipseLinkJpaDialect jpaDialect = eclipselinkJpaDialect();
-            
+
             @Override
             public EclipseLinkJpaDialect getJpaDialect() {
                 return jpaDialect;
@@ -146,48 +146,48 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
         return properties;
     }
-    
-    // -- 
-    
+
+    // --
+
     @SuppressWarnings("serial")
     private EclipseLinkJpaDialect eclipselinkJpaDialect() {
-        
-        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());    
-        
+
+        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());
+
         return new EclipseLinkJpaDialect() {
-            
+
             @Override
             public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
-                
+
                 if(ex instanceof DataAccessException) {
                     return (DataAccessException)ex; // has already been translated to Spring's hierarchy
                 }
-                
+
                 // if its eg. a DatabaseException, it might wrap a java.sql.SQLException
-                if(getJdbcExceptionTranslator() != null 
+                if(getJdbcExceptionTranslator() != null
                         && ex.getCause() instanceof SQLException) {
-                
+
                     //converts SQL exceptions to Spring's hierarchy
                     val translatedEx = getJdbcExceptionTranslator()
                             .translate(
                                     "JPA operation: " + ex.getMessage(),
-                                    extractSqlStringFromException(ex), 
+                                    extractSqlStringFromException(ex),
                                     (SQLException) ex.getCause());
-                    
+
                     if(translatedEx!=null) {
                         return translatedEx;
                     }
-                    
+
                 }
-                
+
                 // (null-able) converts javax.persistence exceptions to Spring's hierarchy
                 val translatedEx = super.translateExceptionIfPossible(ex);
-                
+
                 if((translatedEx==null
                         // JpaSystemException is just a generic fallback, try to be smarter
                         || JpaSystemException.class.equals(translatedEx.getClass()))
                         && getJdbcExceptionTranslator() != null) {
-                    
+
                     val translatedSqlEx = _Exceptions.streamCausalChain(ex)
                     .filter(nextEx->nextEx instanceof SQLException)
                     .map(SQLException.class::cast)
@@ -195,24 +195,24 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                     .map(nextEx->getJdbcExceptionTranslator()
                             .translate(
                                     "JPA operation: " + nextEx.getMessage(),
-                                    extractSqlStringFromException(nextEx), 
+                                    extractSqlStringFromException(nextEx),
                                     nextEx))
                     .findFirst()
                     .orElse(null);
-                    
+
                     if(translatedSqlEx!=null) {
                         return translatedSqlEx;
                     }
-                    
+
                 }
-                
+
                 // (null-able)
                 return translatedEx;
-                
+
             }
-            
-            // -- HELPER 
-            
+
+            // -- HELPER
+
             /*
              * Template method for extracting a SQL String from the given exception.
              * <p>Default implementation always returns {@code null}. Can be overridden in
@@ -228,10 +228,10 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                 return jdbcExceptionTranslator;
             }
 
-            
+
         };
     }
-    
+
     /**
      * Create an appropriate SQLExceptionTranslator for the given PersistenceManagerFactory.
      * <p>If a DataSource is found, creates a SQLErrorCodeSQLExceptionTranslator for the

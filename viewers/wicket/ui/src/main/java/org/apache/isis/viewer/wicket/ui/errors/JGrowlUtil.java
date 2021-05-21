@@ -29,16 +29,16 @@ import lombok.val;
 public class JGrowlUtil {
 
     private JGrowlUtil(){}
-    
+
     @RequiredArgsConstructor @Getter
     static enum MessageSeverity {
         INFO(3500),
         WARNING(0), // sticky
         DANGER(0) // sticky
         ;
-        
-        private final int delayMillis; 
-        
+
+        private final int delayMillis;
+
         public String cssClassSuffix() {
             return name().toLowerCase();
         }
@@ -50,7 +50,7 @@ public class JGrowlUtil {
         for (String info : messageBroker.drainMessages()) {
             addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, buf);
         }
-        
+
         for (String warning : messageBroker.drainWarnings()) {
             addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, buf);
         }
@@ -58,15 +58,15 @@ public class JGrowlUtil {
         messageBroker.drainApplicationError()
         .ifPresent(error->
             addJGrowlCall(error, MessageSeverity.DANGER, buf));
-        
+
         return buf.toString();
     }
 
     public static void addJGrowlCall(
-            final String origMsg, 
-            final MessageSeverity severity, 
+            final String origMsg,
+            final MessageSeverity severity,
             final StringBuilder buf) {
-        
+
         final CharSequence escapedMsg = escape(origMsg);
         buf.append("$.growl(\"")
         .append(escapedMsg)

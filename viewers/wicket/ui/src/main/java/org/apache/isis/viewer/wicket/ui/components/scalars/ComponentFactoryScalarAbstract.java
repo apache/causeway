@@ -35,7 +35,7 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
     public ComponentFactoryScalarAbstract(
             Class<?> componentClass,
             Class<?>... scalarTypes) {
-        
+
         super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
     }

@@ -428,15 +428,6 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             	<mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager">
                     <cpt:named>User Manager</cpt:named>
                 </mb3:serviceAction>
-<!--                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newLocalUser"> -->
-<!--                     <cpt:named>New Local User</cpt:named> -->
-<!--                 </mb3:serviceAction> -->
-<!--                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="allUsers"> -->
-<!--                     <cpt:named>All Users</cpt:named> -->
-<!--                 </mb3:serviceAction> -->
-<!--                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="newDelegateUser"> -->
-<!--                     <cpt:named>New Delegate User</cpt:named> -->
-<!--                 </mb3:serviceAction> -->
             </mb3:section>
         </mb3:menu>
     </mb3:secondary>
@@ -445,7 +436,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named/>
             <mb3:section>
                 <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
-                <mb3:serviceAction objectType="isis.applib.ConfigurationMenu" id="configuration"/>
+                <mb3:serviceAction objectType="isis.conf.ConfigurationMenu" id="configuration"/>
             </mb3:section><mb3:section>
 	            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout">
 	                <cpt:named>Logout</cpt:named>

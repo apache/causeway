@@ -29,7 +29,7 @@ import lombok.val;
 
 /**
  * Helper for MarkupComponents to reload a specified java-script reference, when rendering.
- * @implNote used by AsciiDoc and Markdown extensions 
+ * @implNote used by AsciiDoc and Markdown extensions
  */
 public class MarkupComponent_reloadJs {
 

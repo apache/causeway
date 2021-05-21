@@ -28,11 +28,11 @@ import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxV
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import demoapp.dom.DemoModule;
+import demoapp.dom.DemoModuleJdo;
 
 @SpringBootTest(
         classes = { 
-                DemoModule.class,
+                DemoModuleJdo.class,
                 DemoFxTestConfig_usingJdo.class,
                 
                 // INCUBATING

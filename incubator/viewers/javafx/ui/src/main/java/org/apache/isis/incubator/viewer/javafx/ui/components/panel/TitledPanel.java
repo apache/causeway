@@ -31,18 +31,18 @@ public class TitledPanel extends VBox {
 
     @Getter private final Label uiLabel;
     private FlowPane uiActionBar;
-    
+
     public TitledPanel(String label) {
         super();
         if(!_Strings.isEmpty(label)) {
             uiLabel = _fx.newLabel(getUiActionBar(), label);
-            _fx.h3(uiLabel);    
+            _fx.h3(uiLabel);
         } else {
             uiLabel = null;
         }
         super.setFillWidth(true);
     }
-    
+
     public FlowPane getUiActionBar() {
         if(uiActionBar==null) {
             uiActionBar = _fx.newFlowPane(this);
@@ -50,5 +50,5 @@ public class TitledPanel extends VBox {
         }
         return uiActionBar;
     }
-    
+
 }

@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ExecutionPublishingFacetAbstract 
+public abstract class ExecutionPublishingFacetAbstract
 extends FacetAbstract
 implements ExecutionPublishingFacet {
 

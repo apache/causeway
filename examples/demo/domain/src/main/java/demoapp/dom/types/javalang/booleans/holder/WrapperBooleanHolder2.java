@@ -31,7 +31,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES, 
+        hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")  // <.>
     default Boolean getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
@@ -42,7 +42,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES, 
+        hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
     default Boolean getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
@@ -64,7 +64,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES, 
+        hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
     default Boolean getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();

@@ -36,11 +36,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdo;
-import demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
 import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 
 @XmlRootElement(name = "Demo")
@@ -51,7 +49,7 @@ import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
         objectType = "demo.PrimitiveBooleans",
         editing=Editing.ENABLED
 )
-@Log4j2
+//@Log4j2
 public class PrimitiveBooleans implements HasAsciiDocDescription {
 
     public String title() {
@@ -69,13 +67,13 @@ public class PrimitiveBooleans implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<PrimitiveBooleanJdo> getEntities() {
+    public List<? extends PrimitiveBooleanEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    PrimitiveBooleanJdoEntities entities;
+    ValueHolderRepository<Boolean, ? extends PrimitiveBooleanEntity> entities;
 
 
 }

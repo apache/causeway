@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 /**
- * 
+ *
  * @since 2.0
  */
 public class NamedFacetForParameterUsingReflection extends NamedFacetAbstract {

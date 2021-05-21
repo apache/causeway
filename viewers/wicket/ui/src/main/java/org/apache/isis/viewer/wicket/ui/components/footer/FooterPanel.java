@@ -46,7 +46,7 @@ import lombok.val;
 /**
  * A panel for the default page footer
  */
-public class FooterPanel 
+public class FooterPanel
 extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;
@@ -77,57 +77,57 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     private void addCredits() {
-        
+
         val credits = super.getConfiguration().getViewer().getWicket().getCredit();
         val hasAnyCredits = !_NullSafe.isEmpty(credits);
-        
+
         val creditItems = new RepeatingView("creditItems");
         add(creditItems);
-        
+
         if(hasAnyCredits) {
-        
+
             val webAppContextPath = super.getWebAppContextPath();
-            
+
             _NullSafe.stream(credits)
             .forEach(credit->{
-                
+
                 val listItem = new WebMarkupContainer(creditItems.newChildId());
                 creditItems.add(listItem);
-                
+
                 val creditLink = newCreditLinkComponent(credit);
                 listItem.add(creditLink);
-    
+
                 val imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
-                
+
                 creditLink.add(new CreditImage("creditImage", imageUrl));
                 creditLink.add(new CreditName("creditName", credit.getName()));
-                
+
             });
         }
-        
+
         val creditsLabel = new Label("creditsLabel", "Credits: ");
         add(creditsLabel);
         creditsLabel.setVisibilityAllowed(hasAnyCredits);
     }
 
     private WebMarkupContainer newCreditLinkComponent(Credit credit) {
-        
+
         val creditLinkId = "creditLink";
 
         final WebMarkupContainer creditLink = (credit.getUrl() != null)
-                
+
                 ? new ExternalLink(creditLinkId, credit.getUrl()) {
                         private static final long serialVersionUID = 1L;
-        
+
                         @Override
                         protected void onComponentTag(ComponentTag tag) {
                             super.onComponentTag(tag);
                             tag.put("target", "_blank");
                         }
                     }
-        
+
                 : new BookmarkablePageLink<>(creditLinkId, HomePage.class);
-        
+
         return creditLink;
     }
 

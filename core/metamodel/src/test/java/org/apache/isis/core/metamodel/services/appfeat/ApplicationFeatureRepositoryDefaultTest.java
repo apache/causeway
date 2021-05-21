@@ -70,7 +70,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Mock OneToOneAssociation mockProp;
     @Mock OneToManyAssociation mockColl;
     @Mock ObjectAction mockAct;
-    
+
     ObjectAction mockActThatIsHidden;
 
     @Mock FactoryService mockFactoryService;
@@ -78,12 +78,12 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Mock SpecificationLoader mockSpecificationLoader;
 
     protected ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    
+
     @Before
     public void setUp() throws Exception {
 
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
-                /*configuration*/ null, 
+                /*configuration*/ null,
                 mockSpecificationLoader);
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
@@ -92,7 +92,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
     public static class Load extends ApplicationFeatureRepositoryDefaultTest {
 
         public static class Bar {}
-        
+
         private static ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
             return new ApplicationFeatureDefault(featId);
         }
@@ -131,8 +131,11 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
                 allowing(mockSpec).streamDeclaredActions(with(MixedIn.INCLUDED));
                 will(returnValue(actions.stream()));
-                
-                allowing(mockSpec).streamActions(with(MixedIn.INCLUDED));
+
+                allowing(mockSpec).streamAnyActions(with(MixedIn.INCLUDED));
+                will(returnValue(actions.stream()));
+
+                allowing(mockSpec).streamRuntimeActions(with(MixedIn.INCLUDED));
                 will(returnValue(actions.stream()));
 
                 allowing(mockProp).getId();
@@ -261,7 +264,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
         private static ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
             return new ApplicationFeatureDefault(featId);
         }
-        
+
         @Override
         @Before
         public void setUp() throws Exception {
@@ -290,7 +293,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
 
             // when
-            final ApplicationFeatureId applicationFeatureId = 
+            final ApplicationFeatureId applicationFeatureId =
                     applicationFeatureRepository.addClassParent(classFeatureId);
 
             // then

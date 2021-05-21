@@ -39,11 +39,11 @@ public interface ScalarModelWithMultiPending extends Serializable {
     public void setMultiPending(ArrayList<ObjectMemento> pending);
 
     public ScalarModel getScalarModel();
-    
+
     public static Model<ArrayList<ObjectMemento>> create(ScalarModel scalarModel) {
         return Factory.createModel(Factory.asScalarModelWithMultiPending(scalarModel));
     }
-    
+
 
     @Log4j2
     static class Factory {

@@ -18,41 +18,57 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
 
 public class GridLoaderServiceDefault_resourceNameFor_Test {
 
     private GridLoaderServiceDefault gridLoaderServiceDefault;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         gridLoaderServiceDefault = new GridLoaderServiceDefault();
     }
 
     @Test
-    public void when_default_exists() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo.class, null));
-        Assert.assertThat(s, is(equalTo("Foo.layout.xml")));
+    void when_default_exists() {
+        assertEquals(
+                "Foo.layout.xml",
+                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo.class, null)));
     }
 
     @Test
-    public void when_fallback_exists() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo2.class, null));
-        Assert.assertThat(s, is(equalTo("Foo2.layout.fallback.xml")));
+    void when_fallback_exists() {
+        assertEquals(
+                "Foo2.layout.fallback.xml",
+                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo2.class, null)));
     }
+
     @Test
-    public void when_default_and_fallback_both_exist() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo3.class, null));
-        Assert.assertThat(s, is(equalTo("Foo3.layout.xml")));
+    void when_default_and_fallback_both_exist() {
+        assertEquals(
+                "Foo3.layout.xml",
+                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo3.class, null)));
     }
+
     @Test
-    public void when_neither_exist() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo4.class, null));
-        Assert.assertNull(s);
+    void when_neither_exist() {
+        assertEquals(
+                (String)null,
+                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo4.class, null)));
     }
+
+    // -- HELPER
+
+    private String resourceNameFor(DomainClassAndLayout dcal) {
+        return gridLoaderServiceDefault.loadXml(dcal)
+        .map(xml->xml.getResourceName())
+        .orElse(null);
+    }
+
+
 }

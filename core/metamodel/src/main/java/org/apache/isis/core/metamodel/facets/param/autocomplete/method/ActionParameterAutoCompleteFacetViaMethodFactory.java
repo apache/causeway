@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class ActionParameterAutoCompleteFacetViaMethodFactory 
+public class ActionParameterAutoCompleteFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
@@ -53,7 +53,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         }
 
         // attach ActionParameterChoicesFacet if autoCompleteNumMethod is found ...
-        
+
         val namingConvention = getNamingConventionForParameterSupport(processMethodContext, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
@@ -65,11 +65,11 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            
+
             val autoCompleteMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();
             val paramType = searchResult.getParamType();
-            
+
             processMethodContext.removeMethod(autoCompleteMethod);
 
             if (facetedMethod.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class)) {
@@ -77,16 +77,16 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 throw new MetaModelException(cls + " uses both old and new autoComplete syntax - "
                         + "must use one or other");
             }
-            
+
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
-            
+
             super.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, ppmFactory, paramAsHolder));
         });
-        
+
     }
 
 }

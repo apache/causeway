@@ -41,7 +41,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     private static final long serialVersionUID = 1L;
 
     @Inject private transient ObjectManager objectManager;
-    
+
     /**
      * Converts string representation of {@link Bookmark} to
      * {@link ManagedObject}.
@@ -49,7 +49,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
         val oid = Bookmark.parseUrlEncoded(value).orElse(null);
-        
+
         return objectManager.getMetaModelContext()
         .loadObject(oid)
         .orElse(null);
@@ -60,15 +60,15 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-        
+
         if(!ManagedObjects.isIdentifiable(adapter)) {
             // eg. values don't have a Bookmark
             return null;
         }
-        
+
         return ManagedObjects.stringify(adapter)
                 .orElse(null);
     }
-    
+
 
 }

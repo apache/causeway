@@ -70,7 +70,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenString() {
-        allowingObjectSpecToReturnSpecIdFor(String.class);
+        allowingLogicalTypeReturnObjectTypeFor(String.class);
         allowingObjectAdapterToReturn("aString");
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -83,7 +83,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenBooleanWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Boolean.class);
+        allowingLogicalTypeReturnObjectTypeFor(Boolean.class);
         allowingObjectAdapterToReturn(Boolean.TRUE);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -95,7 +95,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenBooleanPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(boolean.class);
+        allowingLogicalTypeReturnObjectTypeFor(boolean.class);
         allowingObjectAdapterToReturn(true);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -107,7 +107,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenByteWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Byte.class);
+        allowingLogicalTypeReturnObjectTypeFor(Byte.class);
         allowingObjectAdapterToReturn(Byte.valueOf((byte)123));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -120,7 +120,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenBytePrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(byte.class);
+        allowingLogicalTypeReturnObjectTypeFor(byte.class);
         allowingObjectAdapterToReturn((byte)123);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -133,7 +133,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenShortWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Short.class);
+        allowingLogicalTypeReturnObjectTypeFor(Short.class);
         allowingObjectAdapterToReturn(Short.valueOf((short)12345));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -146,7 +146,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenShortPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(short.class);
+        allowingLogicalTypeReturnObjectTypeFor(short.class);
         allowingObjectAdapterToReturn((short)12345);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -159,7 +159,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenIntWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Integer.class);
+        allowingLogicalTypeReturnObjectTypeFor(Integer.class);
         allowingObjectAdapterToReturn(Integer.valueOf(12345678));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -172,7 +172,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenIntPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(int.class);
+        allowingLogicalTypeReturnObjectTypeFor(int.class);
         allowingObjectAdapterToReturn(12345678);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -185,7 +185,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenLongWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Long.class);
+        allowingLogicalTypeReturnObjectTypeFor(Long.class);
         allowingObjectAdapterToReturn(Long.valueOf(12345678901234L));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -198,7 +198,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenLongPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(long.class);
+        allowingLogicalTypeReturnObjectTypeFor(long.class);
         allowingObjectAdapterToReturn(12345678901234L);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -211,7 +211,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenFloatWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Float.class);
+        allowingLogicalTypeReturnObjectTypeFor(Float.class);
         allowingObjectAdapterToReturn(Float.valueOf((float)123.45));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -224,7 +224,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenFloatPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(Float.class);
+        allowingLogicalTypeReturnObjectTypeFor(Float.class);
         allowingObjectAdapterToReturn((float)123.45);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -237,7 +237,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenDoubleWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Double.class);
+        allowingLogicalTypeReturnObjectTypeFor(Double.class);
         allowingObjectAdapterToReturn(Double.valueOf(12345.6789));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -250,7 +250,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenDoublePrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(double.class);
+        allowingLogicalTypeReturnObjectTypeFor(double.class);
         allowingObjectAdapterToReturn(12345.6789);
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -263,7 +263,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenCharWrapper() {
-        allowingObjectSpecToReturnSpecIdFor(Character.class);
+        allowingLogicalTypeReturnObjectTypeFor(Character.class);
         allowingObjectAdapterToReturn(Character.valueOf('a'));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -276,7 +276,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenCharPrimitive() {
-        allowingObjectSpecToReturnSpecIdFor(char.class);
+        allowingLogicalTypeReturnObjectTypeFor(char.class);
         allowingObjectAdapterToReturn('a');
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -289,7 +289,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJavaUtilDate() {
-        allowingObjectSpecToReturnSpecIdFor(java.util.Date.class);
+        allowingLogicalTypeReturnObjectTypeFor(java.util.Date.class);
         allowingObjectAdapterToReturn(asDateTime("2014-04-25T12:34:45Z"));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -302,7 +302,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJavaSqlDate() {
-        allowingObjectSpecToReturnSpecIdFor(java.sql.Date.class);
+        allowingLogicalTypeReturnObjectTypeFor(java.sql.Date.class);
         allowingObjectAdapterToReturn(asSqlDate("2014-04-25"));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -315,7 +315,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJodaDateTime() {
-        allowingObjectSpecToReturnSpecIdFor(org.joda.time.DateTime.class);
+        allowingLogicalTypeReturnObjectTypeFor(org.joda.time.DateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.DateTime(asDateTime("2014-04-25T12:34:45Z")));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -328,7 +328,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJodaLocalDateTime() {
-        allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDateTime.class);
+        allowingLogicalTypeReturnObjectTypeFor(org.joda.time.LocalDateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDateTime(asDateTime("2014-04-25T12:34:45Z")));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -341,7 +341,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJodaLocalDate() {
-        allowingObjectSpecToReturnSpecIdFor(org.joda.time.LocalDate.class);
+        allowingLogicalTypeReturnObjectTypeFor(org.joda.time.LocalDate.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDate(2014,4,25));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, null, false);
@@ -354,7 +354,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenJavaSqlTimestamp() {
-        allowingObjectSpecToReturnSpecIdFor(java.sql.Timestamp.class);
+        allowingLogicalTypeReturnObjectTypeFor(java.sql.Timestamp.class);
         final long time = asDateTime("2014-04-25T12:34:45Z").getTime();
         allowingObjectAdapterToReturn(new Timestamp(time));
 
@@ -368,7 +368,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenBigInteger() {
-        allowingObjectSpecToReturnSpecIdFor(BigInteger.class);
+        allowingLogicalTypeReturnObjectTypeFor(BigInteger.class);
         allowingObjectAdapterToReturn(new BigInteger("12345678901234567890"));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, "big-integer(22)", false);
@@ -382,7 +382,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Test
     public void whenBigDecimal() {
-        allowingObjectSpecToReturnSpecIdFor(BigDecimal.class);
+        allowingLogicalTypeReturnObjectTypeFor(BigDecimal.class);
         allowingObjectAdapterToReturn(new BigDecimal("12345678901234567890.1234"));
 
         jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, mockObjectSpec, representation, "big-decimal(27,4)", false);
@@ -395,7 +395,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     }
 
 
-    private void allowingObjectSpecToReturnSpecIdFor(final Class<?> cls) {
+    private void allowingLogicalTypeReturnObjectTypeFor(final Class<?> cls) {
         context.checking(new Expectations() {
             {
                 allowing(mockObjectSpec).getCorrespondingClass();

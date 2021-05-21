@@ -43,23 +43,23 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     public ClassSubstitutorForDomainObjects(IsisBeanTypeRegistry isisBeanTypeRegistry) {
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;
     }
-    
+
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
-        
+
         val beanSort = isisBeanTypeRegistry.lookupIntrospectableType(cls)
         .map(IsisBeanMetaData::getBeanSort)
         .orElse(null);
-        
+
         if(beanSort!=null) {
-            if(beanSort.isEntity() 
+            if(beanSort.isEntity()
                     || beanSort.isViewModel()
                     || beanSort.isManagedBean()) {
                 return Substitution.neverReplaceClass();
-            }    
+            }
         }
-        
+
         return Substitution.passThrough(); // indifferent
     }
-    
+
 }

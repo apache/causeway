@@ -21,9 +21,9 @@ package org.apache.isis.viewer.common.model.decorator.tooltip;
 public interface TooltipDecorator<T> {
 
     void decorate(T uiComponent, TooltipUiModel tooltipUiModel);
-    
 
-    
-    
-    
+
+
+
+
 }

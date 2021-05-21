@@ -51,7 +51,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         UiComponentFactoryVaa.class,
         UiActionHandlerVaa.class,
         UiContextVaaDefault.class,
-        
+
         // Component Factories
         BlobFieldFactory.class,
         ClobFieldFactory.class,
@@ -61,8 +61,8 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         UuidFieldFactory.class,
         // last in chain
         FallbackFieldFactory.class,
-        
-        
+
+
 })
 @EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations
 public class IsisModuleIncViewerVaadinUi {

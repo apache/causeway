@@ -67,7 +67,7 @@ class IsisToWicketTreeAdapter {
         if(valueModel==null || valueModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        return new EntityTree(id, toITreeProvider(valueModel), 
+        return new EntityTree(id, toITreeProvider(valueModel),
                 toIModelRepresentingCollapseExpandState(valueModel));
     }
 
@@ -75,7 +75,7 @@ class IsisToWicketTreeAdapter {
         if(scalarModel==null || scalarModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        return new EntityTree(id, toITreeProvider(scalarModel), 
+        return new EntityTree(id, toITreeProvider(scalarModel),
                 toIModelRepresentingCollapseExpandState(scalarModel));
     }
 
@@ -239,16 +239,16 @@ class IsisToWicketTreeAdapter {
         private transient IsisAppCommonContext commonContext;
         private transient FactoryService factoryService;
         private transient Function<Object, ManagedObject> pojoToAdapter;
-        
+
 
         private TreeModelTreeAdapter(
-                IsisAppCommonContext commonContext, 
+                IsisAppCommonContext commonContext,
                 Class<? extends TreeAdapter> treeAdapterClass) {
-            
+
             this.treeAdapterClass = treeAdapterClass;
             init(commonContext);
         }
-        
+
         private void init(IsisAppCommonContext commonContext) {
             this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
@@ -310,13 +310,13 @@ class IsisToWicketTreeAdapter {
             return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
             wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
         }
-        
+
         // in case we were de-serialzed
         private void ensureInit() {
             if(commonContext!=null) return;
             init(CommonContextUtils.getCommonContext());
         }
-        
+
     }
 
     // -- WICKET'S TREE PROVIDER (FOR TREES OF TREE-MODEL NODES)
@@ -377,7 +377,7 @@ class IsisToWicketTreeAdapter {
         val commonContext = model.getCommonContext();
         val treeNode = (TreeNode) model.getObject().getPojo();
         val treeAdapterClass = treeNode.getTreeAdapterClass();
-        
+
         val wrappingTreeAdapter = new TreeModelTreeAdapter(commonContext, treeAdapterClass);
 
         return new TreeModelTreeProvider(
@@ -403,7 +403,7 @@ class IsisToWicketTreeAdapter {
             super(tModel);
             this.treePath = tModel.getTreePath();
             this.bookmark = ManagedObjects.bookmarkElseFail(tModel.getObject());
-                    
+
             this.hashCode = Objects.hash(bookmark.hashCode(), treePath.hashCode());
             this.commonContext = tModel.getCommonContext();
         }
@@ -461,7 +461,7 @@ class IsisToWicketTreeAdapter {
     @SuppressWarnings({ "rawtypes" })
     private static TreeExpansionModel toIModelRepresentingCollapseExpandState(
             ModelAbstract<ManagedObject> model) {
-        
+
         val treeNode = (TreeNode) model.getObject().getPojo();
         val treeState = treeNode.getTreeState();
         val commonContext = model.getCommonContext();
@@ -475,9 +475,9 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 648152234030889164L;
 
         public static TreeExpansionModel of(
-                IsisAppCommonContext commonContext, 
+                IsisAppCommonContext commonContext,
                 Set<TreePath> expandedTreePaths) {
-            
+
             return new TreeExpansionModel(commonContext, expandedTreePaths);
         }
 
@@ -505,9 +505,9 @@ class IsisToWicketTreeAdapter {
         private final Set<TreeModel> expandedNodes;
 
         private TreeExpansionModel(
-                IsisAppCommonContext commonContext, 
+                IsisAppCommonContext commonContext,
                 Set<TreePath> expandedTreePaths) {
-            
+
             this.expandedTreePaths = expandedTreePaths;
             this.expandedNodes = expandedTreePaths.stream()
                     .map(tPath->new TreeModel(commonContext, tPath))

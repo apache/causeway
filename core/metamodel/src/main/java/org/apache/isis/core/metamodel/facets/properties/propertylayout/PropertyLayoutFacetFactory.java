@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 import lombok.val;
 
-public class PropertyLayoutFacetFactory 
+public class PropertyLayoutFacetFactory
 extends FacetFactoryAbstract {
-    
+
     public PropertyLayoutFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
@@ -41,14 +41,14 @@ extends FacetFactoryAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
         val propertyLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
-                        PropertyLayout.class, 
+                        PropertyLayout.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), PropertyLayout.class));
 
         val cssClassFacet = CssClassFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(cssClassFacet);
-        
+
         val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
@@ -56,44 +56,44 @@ extends FacetFactoryAbstract {
         val hiddenFacet = HiddenFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-        
+
         val labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(labelAtFacet);
-        
+
         val layoutGroupFacet = LayoutGroupFacetFromPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(layoutGroupFacet);
-        
+
         val layoutOrderFacet = LayoutOrderFacetFromPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(layoutOrderFacet);
-        
+
         val multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(multiLineFacet);
-        
+
         val namedFacet = NamedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(namedFacet);
-        
+
         val promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, getConfiguration(), facetHolder);
         super.addFacet(promptStyleFacet);
-        
+
         val renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(renderedAdjustedFacet);
-        
+
         val typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(typicalLengthFacet);
-        
+
         val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(unchangingFacet);
-        
+
     }
-    
+
 
 }

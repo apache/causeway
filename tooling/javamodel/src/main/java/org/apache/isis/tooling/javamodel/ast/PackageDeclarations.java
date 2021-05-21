@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.NonNull;
 
 public final class PackageDeclarations {
-    
+
     public static Can<String> namespace(final @NonNull Optional<PackageDeclaration> pdOptional) {
         return pdOptional
         .map(PackageDeclaration::getNameAsString)

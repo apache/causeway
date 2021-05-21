@@ -39,13 +39,13 @@ import net.ftlines.wicket.fullcalendar.FullCalendar;
 import net.ftlines.wicket.fullcalendar.callback.ClickedEvent;
 
 final class FullCalendarWithEventHandling extends FullCalendar {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @SuppressWarnings("unused")
 	private final NotificationPanel feedback;
     private transient IsisAppCommonContext commonContext;
-    
+
 
     FullCalendarWithEventHandling(
             final String id,
@@ -67,7 +67,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         }
 
         val commonContext = getCommonContext();
-                
+
         final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
         final MetaModelContext metaModelContext = commonContext.getMetaModelContext();
         final ObjectManager objectManager = commonContext.getObjectManager();
@@ -78,10 +78,10 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
 
         final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
-        
+
         val pageParameters = entityModel.getPageParameters();
         if(pageParameters!=null) {
-            throw new RestartResponseException(EntityPage.class, pageParameters);    
+            throw new RestartResponseException(EntityPage.class, pageParameters);
         }
 
         // otherwise ignore

@@ -23,7 +23,7 @@ import org.apache.isis.commons.collections.Can;
 /**
  * @since 2.0
  */
-public interface _ManagedBeanAdapter { 
+public interface _ManagedBeanAdapter {
 
     String getId();
     Can<?> getInstance();

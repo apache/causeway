@@ -37,7 +37,7 @@ import lombok.Getter;
 
 /**
  * WebModule to log log-on exceptions.
- * 
+ *
  * @since 2.0
  */
 @Service

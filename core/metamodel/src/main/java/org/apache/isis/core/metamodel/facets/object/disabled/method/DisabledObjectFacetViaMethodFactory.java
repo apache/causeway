@@ -70,7 +70,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext.forMethod(method);
-        
+
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);

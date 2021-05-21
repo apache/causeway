@@ -26,14 +26,14 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class MetaModelValidatorAbstract 
-implements 
-    MetaModelValidator, 
+public abstract class MetaModelValidatorAbstract
+implements
+    MetaModelValidator,
     MetaModelContextAware {
 
     @Getter @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    
+
     protected IsisConfiguration getConfiguration() {
         return metaModelContext.getConfiguration();
     }

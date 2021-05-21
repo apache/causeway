@@ -74,9 +74,9 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
     protected Component createComponentForCompact() {
         final Component tree = createTreeComponent(ID_SCALAR_IF_COMPACT);
 
-        // adds the tree-theme behavior to the tree component 
-        //TODO [2088] not tested yet: if tree renders without applying the theme, behavior needs 
-        // to go to a container up the hierarchy 
+        // adds the tree-theme behavior to the tree component
+        //TODO [2088] not tested yet: if tree renders without applying the theme, behavior needs
+        // to go to a container up the hierarchy
         final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
         return tree.add(treeTheme);
     }
@@ -86,6 +86,6 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
     private Component createTreeComponent(String id) {
         return IsisToWicketTreeAdapter.adapt(id, getModel());
     }
-    
+
 
 }

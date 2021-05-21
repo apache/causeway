@@ -36,10 +36,12 @@ import org.apache.isis.applib.services.factory.FactoryService;
  *
  * @since 2.0 {@index}
  */
-@Named("isis.applib.ConfigurationMenu")
-@DomainService(objectType = "isis.applib.ConfigurationMenu")
+@Named(ConfigurationMenu.OBJECT_TYPE)
+@DomainService(objectType = ConfigurationMenu.OBJECT_TYPE)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class ConfigurationMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationMenu";
 
     public static abstract class ActionDomainEvent
             extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}

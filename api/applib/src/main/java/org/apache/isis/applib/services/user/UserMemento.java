@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -47,8 +48,10 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(objectType = "isis.applib.UserMemento")
+@DomainObject(objectType = UserMemento.OBJECT_TYPE)
 public final class UserMemento implements Serializable {
+
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".UserMemento";
 
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system");

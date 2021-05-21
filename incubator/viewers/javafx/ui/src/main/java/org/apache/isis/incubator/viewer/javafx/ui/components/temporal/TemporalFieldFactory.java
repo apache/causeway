@@ -60,9 +60,9 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
         val valueSpec = request.getFeatureTypeSpec();
         val converter = new TemporalConverterForLocalDateComponent(valueSpec);
         val feature = request.getManagedFeature();
-        
+
         uiComponent.setConverter(toJavaFxStringConverter(converter));
-        
+
         if(feature instanceof ManagedParameter) {
 
             val managedParameter = (ManagedParameter)feature;
@@ -95,6 +95,6 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
     // -- HELPER
 
-    
+
 
 }

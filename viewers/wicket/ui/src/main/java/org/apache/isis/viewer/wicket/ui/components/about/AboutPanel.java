@@ -38,7 +38,7 @@ import lombok.val;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class AboutPanel 
+public class AboutPanel
 extends PanelAbstract<String, AboutModel> {
 
     private static final long serialVersionUID = 1L;

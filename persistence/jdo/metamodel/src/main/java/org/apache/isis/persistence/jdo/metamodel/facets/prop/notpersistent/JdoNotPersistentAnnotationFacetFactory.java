@@ -29,9 +29,9 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
 
-public class JdoNotPersistentAnnotationFacetFactory 
+public class JdoNotPersistentAnnotationFacetFactory
 extends FacetFactoryAbstract {
-    
+
     @Inject @Setter private JdoFacetContext jdoFacetContext;
 
     public JdoNotPersistentAnnotationFacetFactory() {

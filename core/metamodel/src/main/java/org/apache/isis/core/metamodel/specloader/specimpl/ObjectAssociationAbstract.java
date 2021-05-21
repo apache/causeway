@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,11 +39,12 @@ implements ObjectAssociation {
     private final ObjectSpecification specification;
 
     public ObjectAssociationAbstract(
+            final Identifier identifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
             final ObjectSpecification specification) {
 
-        super(facetedMethod, featureType);
+        super(identifier, facetedMethod, featureType);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }

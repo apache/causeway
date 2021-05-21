@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetA
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
     public static CssClassFaFacet create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         class Annot {

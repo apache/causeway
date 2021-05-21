@@ -42,8 +42,8 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         val targetAdapter = model.getParentUiModel().getManagedObject();
 
         getComponentFactoryRegistry().addOrReplaceComponent(
-                this, 
-                ComponentType.ENTITY_ICON_AND_TITLE, 
+                this,
+                ComponentType.ENTITY_ICON_AND_TITLE,
                 EntityModel.ofAdapter(model.getCommonContext(), targetAdapter));
 
         final Label label = new Label(ID_PROPERTY_NAME, new IModel<String>() {

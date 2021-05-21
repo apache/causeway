@@ -29,19 +29,19 @@ public class InteractionDemo_biArgEnabled {
 
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
-    
+
     @MemberSupport
     public int act(int a, int b) {
         return a + b;
     }
-    
-    @MemberSupport 
-    public int defaultA(Parameters.BiInt p) {
+
+    @MemberSupport
+    public int defaultA(ParameterSamples.BiInt p) {
         return 5;
     }
-    
+
     @MemberSupport
-    public int[] choicesB(Parameters.BiInt p) {
+    public int[] choicesB(ParameterSamples.BiInt p) {
         return new int[] {1, 2, 3, 4};
     }
 }

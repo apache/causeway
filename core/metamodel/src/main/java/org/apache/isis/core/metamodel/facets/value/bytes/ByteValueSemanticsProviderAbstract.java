@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ByteValueSemanticsProviderAbstract 
-extends ValueSemanticsProviderAndFacetAbstract<Byte> 
+public abstract class ByteValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Byte>
 implements ByteValueFacet {
 
     private static Class<? extends Facet> type() {

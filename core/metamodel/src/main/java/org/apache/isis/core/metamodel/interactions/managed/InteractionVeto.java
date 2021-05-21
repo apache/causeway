@@ -42,49 +42,49 @@ public class InteractionVeto implements Serializable {
         NOT_FOUND,
         HIDDEN,
         READONLY,
-        INVALID, 
-        
+        INVALID,
+
         ACTION_NOT_SAFE,
-        ACTION_NOT_IDEMPOTENT, 
+        ACTION_NOT_IDEMPOTENT,
         ACTION_PARAM_INVALID,
     }
-    
+
     @NonNull private final VetoType vetoType;
     @NonNull private final Consent vetoConsent;
-    
+
     public static InteractionVeto notFound(
-            @NonNull MemberType memberType, 
+            @NonNull MemberType memberType,
             @Nullable String memberId) {
-        val reason = String.format("%s '%s' either does not exist, is disabled or is not visible", 
-                "" + memberId, 
+        val reason = String.format("%s '%s' either does not exist, is disabled or is not visible",
+                "" + memberId,
                 memberType.name().toLowerCase());
         return of(VetoType.NOT_FOUND, new Veto(reason));
     }
-    
+
     public static InteractionVeto hidden(@NonNull Consent vetoConsent) {
         return of(VetoType.HIDDEN, vetoConsent);
     }
-    
+
     public static InteractionVeto readonly(@NonNull Consent vetoConsent) {
         return of(VetoType.READONLY, vetoConsent);
     }
-    
+
     public static InteractionVeto invalid(@NonNull Consent vetoConsent) {
         return of(VetoType.INVALID, vetoConsent);
     }
-    
+
     public static InteractionVeto actionNotSafe(@NonNull ManagedAction action) {
-        val reason = String.format("Method not allowed; action '%s' does not have safe semantics", 
+        val reason = String.format("Method not allowed; action '%s' does not have safe semantics",
                 action.getId());
         return of(VetoType.ACTION_NOT_SAFE, new Veto(reason));
     }
-    
+
     public static InteractionVeto actionNotIdempotent(@NonNull ManagedAction action) {
-        val reason = String.format("Method not allowed; action '%s' does not have idempotent semantics", 
+        val reason = String.format("Method not allowed; action '%s' does not have idempotent semantics",
                 action.getId());
         return of(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
     }
-    
+
     public static InteractionVeto actionParamInvalid(@NonNull Consent vetoConsent) {
         return of(VetoType.ACTION_PARAM_INVALID, vetoConsent);
     }
@@ -92,11 +92,11 @@ public class InteractionVeto implements Serializable {
     public static InteractionVeto actionParamInvalid(@NonNull String reason) {
         return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
-    
+
     public String getReason() {
         return getVetoConsent().getReason();
     }
-    
+
     public String getDescription() {
         return getVetoConsent().getDescription();
     }
@@ -105,5 +105,5 @@ public class InteractionVeto implements Serializable {
     public String toString() {
         return getReason();
     }
-    
+
 }

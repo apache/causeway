@@ -18,27 +18,25 @@
  */
 package demoapp.dom.types.javamath.bigdecimals.jdo;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
 
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaMathBigDecimalJdoEntities {
+public class JavaMathBigDecimalJdoEntities
+extends ValueHolderRepository<BigDecimal, JavaMathBigDecimalJdo> {
 
-    public Optional<JavaMathBigDecimalJdo> find(final java.math.BigDecimal readOnlyProperty) {
-        return repositoryService.firstMatch(JavaMathBigDecimalJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected JavaMathBigDecimalJdoEntities() {
+        super(JavaMathBigDecimalJdo.class);
     }
 
-    public List<JavaMathBigDecimalJdo> all() {
-        return repositoryService.allInstances(JavaMathBigDecimalJdo.class);
+    @Override
+    protected JavaMathBigDecimalJdo newDetachedEntity(BigDecimal value) {
+        return new JavaMathBigDecimalJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

@@ -69,7 +69,7 @@ public interface CollectionFacet extends Facet {
 
     /**
      * @param collectionAdapter
-     * @return Stream of specified {@code collectionAdapter}'s elements 
+     * @return Stream of specified {@code collectionAdapter}'s elements
      * (typically the elements of a collection or array)
      * @since 2.0
      */
@@ -82,7 +82,7 @@ public interface CollectionFacet extends Facet {
     /**
      * Set the contents of the collection (POJO) as provided by the optional supplier.
      * <p>
-     * 
+     *
      * @param emptyCollectionPojoFactory empty collection or array factory
      * @param collectionSpec
      * @param elements
@@ -91,9 +91,9 @@ public interface CollectionFacet extends Facet {
      * @since 2.0
      */
     Object populatePojo(
-            Supplier<Object> emptyCollectionPojoFactory, 
-            ObjectSpecification collectionSpec, 
-            Stream<ManagedObject> elements, 
+            Supplier<Object> emptyCollectionPojoFactory,
+            ObjectSpecification collectionSpec,
+            Stream<ManagedObject> elements,
             int elementCount);
 
     /**
@@ -101,9 +101,9 @@ public interface CollectionFacet extends Facet {
      * {@link #getFacetHolder() holder}.
      */
     TypeOfFacet getTypeOfFacet();
-    
+
     // -- UTILS
-    
+
     public static Optional<CollectionFacet> lookup(@Nullable ManagedObject container) {
         if(container==null) {
             return Optional.empty();
@@ -117,13 +117,13 @@ public interface CollectionFacet extends Facet {
                 .map(collectionFacet->collectionFacet.size(container))
                 .orElse(0);
     }
-    
+
     public static Stream<ManagedObject> streamAdapters(@Nullable ManagedObject container) {
         return lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
     }
-    
+
     public static Object[] toArrayOfPojos(@Nullable ManagedObject container) {
         val elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
@@ -132,20 +132,20 @@ public interface CollectionFacet extends Facet {
 
     @UtilityClass
     public static class AutofitUtils {
-        
+
         /**
          * Copies the iterable into the specified type.
          */
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static Object collect(
-                final Stream<?> stream, 
+                final Stream<?> stream,
                 final Class<?> requiredType) {
-            
+
             requires(stream, "stream");
             requires(requiredType, "requiredType");
 
             Stream rawStream = stream;
-            
+
             val factoryIfAny = factoriesByType.get(requiredType);
             if(factoryIfAny!=null) {
                 Supplier rawFactory = factoryIfAny;
@@ -158,15 +158,15 @@ public interface CollectionFacet extends Facet {
                 Class<?> elementType = requiredType.getComponentType();
                 return rawStream.collect(_Arrays.toArray(elementType));
             }
-            
+
             // not recognized
             return null;
 
         }
 
-        
+
         // -- HELPER
-        
+
         private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = _With.hashMap(
                 map-> {
                     // specific list implementations
@@ -188,8 +188,8 @@ public interface CollectionFacet extends Facet {
                     map.put(Set.class, _Sets::newLinkedHashSet);
                     map.put(Collection.class, _Lists::newArrayList);
                 });
-        
+
     }
-    
+
 
 }

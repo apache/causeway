@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.excluding;
@@ -37,7 +38,7 @@ import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilte
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -46,32 +47,32 @@ import lombok.val;
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 
     @Inject private IsisConfiguration configuration;
-    
+
     private Predicate<ProgrammingModel.Marker[]> filterOnMarker = excludingNone();
-            
+
     @PostConstruct
     public void init() {
-        val isIgnoreDeprecated = 
+        val isIgnoreDeprecated =
                 configuration.getCore().getMetaModel().getProgrammingModel().isIgnoreDeprecated();
-        
-        this.filterOnMarker = isIgnoreDeprecated 
+
+        this.filterOnMarker = isIgnoreDeprecated
                 ? excluding(EnumSet.of(ProgrammingModel.Marker.DEPRECATED))
                         : excludingNone();
     }
 
     @Override
     public boolean acceptFactoryType(
-            Class<? extends FacetFactory> factoryType, 
+            Class<? extends FacetFactory> factoryType,
             ProgrammingModel.Marker[] markersIfAny) {
-        
+
         return filterOnMarker.test(markersIfAny);
     }
-    
+
     @Override
     public boolean acceptValidator(
             Class<? extends MetaModelValidator> validatorType,
             ProgrammingModel.Marker[] markersIfAny) {
-        
+
         return filterOnMarker.test(markersIfAny);
     }
 
@@ -79,7 +80,7 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
     public boolean acceptPostProcessor(
             Class<? extends ObjectSpecificationPostProcessor> postProcessorType,
             ProgrammingModel.Marker[] markersIfAny) {
-        
+
         return filterOnMarker.test(markersIfAny);
     }
 

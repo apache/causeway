@@ -45,7 +45,7 @@ final class _ChangingEntitiesFactory {
         if(entityChangeTracker.getChangeKindByEnlistedAdapter().isEmpty()) {
             return Optional.empty();
         }
-        
+
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted;
         // taking copy of the map avoids ConcurrentModificationException
@@ -100,7 +100,7 @@ final class _ChangingEntitiesFactory {
         objectsDto.setCreated(new OidsDto());
         objectsDto.setUpdated(new OidsDto());
         objectsDto.setDeleted(new OidsDto());
-        
+
         changeKindByEnlistedEntity.forEach((bookmark, kind)->{
             val oidDto = bookmark.toOidDto();
             if(oidDto==null) {

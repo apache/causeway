@@ -82,18 +82,18 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
-    
+
     // introduced (ISIS-1922) to handle render 'session refreshed' messages after session was expired
     private static enum SessionLifecyclePhase {
         DONT_CARE,
         EXPIRED,
         ACTIVE_AFTER_EXPIRED;
         static boolean isExpired(final RequestCycle requestCycle) {
-            return Session.exists() 
+            return Session.exists()
                     && SessionLifecyclePhase.EXPIRED == requestCycle.getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
         }
         static boolean isActiveAfterExpired() {
-            return Session.exists() 
+            return Session.exists()
                     && SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED == Session.get().getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
         }
         static void transferExpiredFlagToSession() {
@@ -104,17 +104,17 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);
         }
         static boolean isExpiryMessageTimeframeExpired() {
-            val sessionExpiryMessageTimeframe = 
+            val sessionExpiryMessageTimeframe =
                     (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
             return sessionExpiryMessageTimeframe==null
                     || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe);
         }
-        
+
     }
 
     public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
-            
+
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
             new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
@@ -132,7 +132,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             if (userHasSessionWithRememberMe(requestCycle)) {
                 requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.EXPIRED);
                 log.debug("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
-            } 
+            }
             log.debug("onBeginRequest out - session was not opened (because no Session)");
             return;
         }
@@ -158,7 +158,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     @Override
     public void onRequestHandlerResolved(final RequestCycle requestCycle, final IRequestHandler handler) {
 
-        log.debug("onRequestHandlerResolved in (handler: {}, hasSession: {})", 
+        log.debug("onRequestHandlerResolved in (handler: {}, hasSession: {})",
                 ()->handler.getClass().getName(),
                 ()->Session.exists() ? Session.get().hashCode() : "false");
 
@@ -166,13 +166,15 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if("org.apache.wicket.request.flow.ResetResponseException$ResponseResettingDecorator"
                     .equals(handler.getClass().getName())
                 && SessionLifecyclePhase.isExpired(requestCycle)) {
-            
+
             log.debug("Transferring the 'expired' flag into the current session.");
             SessionLifecyclePhase.transferExpiredFlagToSession();
-            
+
         } else if(handler instanceof RenderPageRequestHandler) {
 
-            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
+            // using side-effect free access to MM validation result
+            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+            .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
 
             if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
@@ -183,14 +185,14 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 }
                 throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
             }
-            
+
             if(SessionLifecyclePhase.isActiveAfterExpired()) {
-            
+
                 // we receive multiple requests after a session had expired and was reactivated;
                 // impossible to tell which one is the last that should then render the message;
                 // so we just render them on all requests, until the 1 second time frame since session creation
-                // has gone by, could result in the message displayed too often, 
-                // but thats better than no message displayed at all 
+                // has gone by, could result in the message displayed too often,
+                // but thats better than no message displayed at all
                 if(SessionLifecyclePhase.isExpiryMessageTimeframeExpired()) {
                     log.debug("clear the session's active-after-expired flag (expiry-message timeframe has expired");
                     SessionLifecyclePhase.clearExpiredFlag();
@@ -199,11 +201,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                         log.debug("render 'expired' message");
                         broker.addMessage(translate("You have been redirected to the home page "
                                 + "as your session expired (no recent activity)."));
-                    });    
+                    });
                 }
             }
         }
-        
+
         log.debug("onRequestHandlerResolved out");
 
     }
@@ -235,9 +237,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 }
             }
 
-            log.debug("onRequestHandlerExecuted: isisRequestCycle.onRequestHandlerExecuted threw {}", 
+            log.debug("onRequestHandlerExecuted: isisRequestCycle.onRequestHandlerExecuted threw {}",
                     ex.getClass().getName());
-            
+
             // shouldn't return null given that we're in a session ...
             throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
         }
@@ -272,8 +274,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         log.debug("onException {}", ex.getClass().getSimpleName());
 
-        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
-        if(validationResult.hasFailures()) {
+        // using side-effect free access to MM validation result
+        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+                .orElse(null);
+        if(validationResult!=null
+                && validationResult.hasFailures()) {
             val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
@@ -359,7 +364,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
         return getCommonContext().getTranslationService()
                 .translate(
-                		TranslationContext.forClassName(WebRequestCycleForIsis.class), 
+                		TranslationContext.forClassName(WebRequestCycleForIsis.class),
                 		text);
     }
 
@@ -373,23 +378,26 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     // special case handling for PageExpiredException, otherwise infinite loop
     private static final ExceptionRecognizerForType pageExpiredExceptionRecognizer =
             new ExceptionRecognizerForType(
-                    PageExpiredException.class, 
+                    PageExpiredException.class,
                     __->"Requested page is no longer available.");
 
     protected IRequestablePage errorPageFor(Exception ex) {
 
         val commmonContext = getCommonContext();
-        
+
         if(commmonContext==null) {
             log.warn("Unable to obtain the IsisAppCommonContext (no session?)");
-            return null; 
-        } 
-        
-        val validationResult = commmonContext.getSpecificationLoader().getValidationResult();
-        if(validationResult.hasFailures()) {
+            return null;
+        }
+
+        // using side-effect free access to MM validation result
+        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+                .orElse(null);
+        if(validationResult!=null
+                && validationResult.hasFailures()) {
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
         }
-        
+
         val exceptionRecognizerService = getCommonContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
 
@@ -401,8 +409,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         val exceptionModel = ExceptionModel.create(commmonContext, recognition, ex);
 
-        return isSignedIn() 
-                ? new ErrorPage(exceptionModel) 
+        return isSignedIn()
+                ? new ErrorPage(exceptionModel)
                 : newSignInPage(exceptionModel);
     }
 
@@ -448,15 +456,15 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
         return getWicketAuthenticatedWebSession().isSignedIn();
     }
-    
+
     private boolean userHasSessionWithRememberMe(RequestCycle requestCycle) {
         val containerRequest = requestCycle.getRequest().getContainerRequest();
-        
+
         if (containerRequest instanceof HttpServletRequest) {
             val cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
             val cookieKey = _Strings.nullToEmpty(
                     getCommonContext().getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
-            
+
             for (val cookie : cookies) {
                 if (cookieKey.equals(cookie.getName())) {
                     return true;

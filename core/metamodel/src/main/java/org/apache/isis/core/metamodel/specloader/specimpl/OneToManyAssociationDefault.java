@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -42,16 +43,19 @@ import lombok.val;
 public class OneToManyAssociationDefault
 extends ObjectAssociationAbstract implements OneToManyAssociation {
 
-    public OneToManyAssociationDefault(final FacetedMethod facetedMethod) {
-        this(facetedMethod, facetedMethod.getMetaModelContext()
-                .getSpecificationLoader().loadSpecification(facetedMethod.getType()));
+    public static OneToManyAssociationDefault forMethod(final FacetedMethod facetedMethod) {
+        return new OneToManyAssociationDefault(
+                facetedMethod.getIdentifier(),
+                facetedMethod,
+                facetedMethod.getMetaModelContext().getSpecificationLoader()
+                    .loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToManyAssociationDefault(
+            final Identifier identifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
-
-        super(facetedMethod, FeatureType.COLLECTION, objectSpec);
+        super(identifier, facetedMethod, FeatureType.COLLECTION, objectSpec);
     }
 
     @Override
@@ -106,7 +110,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     @Override
     public boolean isEmpty(
-            final ManagedObject parentAdapter, 
+            final ManagedObject parentAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?

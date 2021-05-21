@@ -36,18 +36,16 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdo;
-import demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javalang.characters.persistence.WrapperCharacterEntity;
 import demoapp.dom.types.javalang.characters.vm.WrapperCharacterVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class WrapperCharacters implements HasAsciiDocDescription {
 
     public String title() {
@@ -64,13 +62,13 @@ public class WrapperCharacters implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<WrapperCharacterJdo> getEntities() {
+    public List<? extends WrapperCharacterEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    WrapperCharacterJdoEntities entities;
+    ValueHolderRepository<Character, ? extends WrapperCharacterEntity> entities;
 
 
 }

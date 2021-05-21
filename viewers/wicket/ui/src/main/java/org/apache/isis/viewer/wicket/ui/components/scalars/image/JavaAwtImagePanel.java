@@ -53,18 +53,18 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);
-            
+
             addOrReplace(new NotificationPanel(
-                    ID_FEEDBACK, 
+                    ID_FEEDBACK,
                     wicketImage,
                     new ComponentFeedbackMessageFilter(wicketImage)));
-            
+
         } else {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
         }
-        
 
-        
+
+
     }
 
 }

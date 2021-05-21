@@ -37,26 +37,26 @@ import lombok.val;
 public class MenuUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @NonNull private final DomainServiceLayout.MenuBar menuBarSelect;
     @NonNull private final List<String> menuContributingServiceIds;
-    
+
     public String getCssClass() {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);
     }
-    
+
     public void buildMenuItems(
             final IsisAppCommonContext commonContext,
             final MenuVisitor menuBuilder) {
-        
+
         val menuBars = commonContext.getMenuBarsService().menuBars();
         val menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
-        
+
         MenuUiModel_buildMenuItems.buildMenuItems(
-                commonContext, 
+                commonContext,
                 menuBar,
                 menuBuilder);
-        
+
     }
 
 }

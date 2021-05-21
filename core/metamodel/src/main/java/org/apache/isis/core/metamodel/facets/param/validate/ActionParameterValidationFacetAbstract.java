@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 import lombok.val;
 
-public abstract class ActionParameterValidationFacetAbstract 
+public abstract class ActionParameterValidationFacetAbstract
 extends FacetAbstract
 implements ActionParameterValidationFacet {
 
@@ -46,7 +46,7 @@ implements ActionParameterValidationFacet {
         }
         val actionArgValidityContext = (ActionArgValidityContext) context;
         return invalidReason(
-                actionArgValidityContext.getTarget(), 
+                actionArgValidityContext.getTarget(),
                 actionArgValidityContext.getArgs(),
                 actionArgValidityContext.getProposed());
     }

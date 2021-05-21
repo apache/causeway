@@ -32,11 +32,11 @@ import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
- * 
+ *
  * @see <a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">cheatsheetseries.owasp.org</a>
  *
  * @since 2.0
@@ -50,32 +50,32 @@ public class _DocumentFactories {
         df.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // XML parsers should not be vulnerable to XXE attacks
         return df;
     }
-    
+
     public static DocumentBuilder documentBuilder() throws ParserConfigurationException {
         return documentBuilderFactory().newDocumentBuilder();
     }
-    
+
     public static TransformerFactory transformerFactory() {
         val tf = TransformerFactory.newInstance();
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML transformers should be secured
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); // XML transformers should be secured
         return tf;
     }
-    
+
     public static Transformer transformer() throws TransformerConfigurationException {
         return transformerFactory().newTransformer();
     }
-    
+
     public static XMLInputFactory xmlInputFactory() {
         val xmlInputFactory = XMLInputFactory.newInstance();
-        
+
         // disables DTDs entirely
         xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
         // disable external entities
         xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-        
+
         return xmlInputFactory;
     }
-   
-    
+
+
 }

@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> 
+public abstract class ValueSemanticsProviderAndFacetAbstract<T>
 extends FacetAbstract
 implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
@@ -157,7 +157,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         }
         return doParse(context, entry);
     }
-    
+
     public Optional<Exception> tryParseTextEntry(final Object context, final String entry) {
         try {
             parseTextEntry(context, entry);

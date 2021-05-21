@@ -35,11 +35,11 @@ import javafx.scene.control.MenuItem;
 public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
 
     private final UiContextFx uiContext;
-    
-    @Getter 
+
+    @Getter
     private final ManagedAction managedAction;
-    
-    @Getter(lazy = true, onMethod_ = {@Override}) 
+
+    @Getter(lazy = true, onMethod_ = {@Override})
     private final ActionUiMetaModel actionUiMetaModel = ActionUiMetaModel.of(getManagedAction());
 
 
@@ -47,7 +47,7 @@ public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
     public MenuItem createMenuUiComponent() {
         val actionMeta = getActionUiMetaModel();
         val menuItem = new MenuItem(actionMeta.getLabel());
-        
+
         return uiContext.getIconDecoratorForMenuItem()
                 .decorate(menuItem, actionMeta.getFontAwesomeUiModel());
     }
@@ -56,7 +56,7 @@ public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
     public Node createRegularUiComponent() {
         val actionMeta = getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
-        
+
         return uiContext.getIconDecoratorForLabeled()
                 .decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
     }

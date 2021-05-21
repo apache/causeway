@@ -48,7 +48,6 @@ import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel;
-import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
@@ -76,7 +75,6 @@ import lombok.extern.log4j.Log4j2;
     JdoDataNucleusProgrammingModel.class,
 
     // @Mixin's
-    Persistable_datanucleusIdLong.class,
     Persistable_datanucleusVersionLong.class,
     Persistable_datanucleusVersionTimestamp.class,
     Persistable_downloadJdoMetadata.class,
@@ -88,7 +86,7 @@ import lombok.extern.log4j.Log4j2;
 @EnableConfigurationProperties(DnSettings.class)
 @Log4j2
 public class IsisModuleJdoDatanucleus {
-    
+
     /**
      * Conveniently registers this dialect as a {@link PersistenceExceptionTranslator} with <i>Spring</i>.
      * @see PersistenceExceptionTranslator
@@ -99,9 +97,9 @@ public class IsisModuleJdoDatanucleus {
     public DnJdoDialect getDnJdoDialect(final DataSource dataSource) {
         return new DnJdoDialect(dataSource);
     }
-    
+
     @Qualifier("local-pmf-proxy")
-    @Bean 
+    @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
             final IsisConfiguration isisConfiguration,
             final DataSource dataSource,
@@ -110,9 +108,9 @@ public class IsisModuleJdoDatanucleus {
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
             final IsisBeanTypeRegistry beanTypeRegistry,
             final DnSettings dnSettings) {
-        
+
         _Assert.assertNotNull(dataSource, "a datasource is required");
-        
+
         autoCreateSchemas(dataSource, isisConfiguration);
 
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
@@ -135,9 +133,9 @@ public class IsisModuleJdoDatanucleus {
         lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
         return lpmfBean;
     }
-    
+
     @Qualifier("transaction-aware-pmf-proxy")
-    @Bean @Primary 
+    @Bean @Primary
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
@@ -180,16 +178,16 @@ public class IsisModuleJdoDatanucleus {
                         if(jdoDialect instanceof PersistenceExceptionTranslator) {
                             val translatedEx = ((PersistenceExceptionTranslator)jdoDialect)
                                     .translateExceptionIfPossible((RuntimeException)ex);
-                            
+
                             if(translatedEx!=null) {
                                 throw translatedEx;
                             }
-                            
+
                         }
-                        
+
                         if(ex instanceof JDOException) {
                             val translatedEx = jdoDialect.translateException((JDOException)ex);
-                            
+
                             if(translatedEx!=null) {
                                 throw translatedEx;
                             }
@@ -199,7 +197,7 @@ public class IsisModuleJdoDatanucleus {
             }
         };
     }
-    
+
     // -- HELPER
 
     /**
@@ -214,7 +212,7 @@ public class IsisModuleJdoDatanucleus {
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
-            log.info("About to create db schema(s) {} with template '{}'", 
+            log.info("About to create db schema(s) {} with template '{}'",
                     persistenceSchemaConf.getAutoCreateSchemas(),
                     persistenceSchemaConf.getCreateSchemaSqlTemplate());
 
@@ -233,7 +231,7 @@ public class IsisModuleJdoDatanucleus {
 
         return dataSource;
     }
-    
+
     private static PersistenceUnitMetaData createDefaultPersistenceUnit (
             final IsisBeanTypeRegistry beanTypeRegistry) {
         val pumd = new PersistenceUnitMetaData(
@@ -244,7 +242,7 @@ public class IsisModuleJdoDatanucleus {
         .forEach(pumd::addClassName);
         return pumd;
     }
-    
+
     private static void integrateWithApplicationLayer(
             final MetaModelContext metaModelContext,
             final EventBusService eventBusService,
@@ -253,7 +251,7 @@ public class IsisModuleJdoDatanucleus {
 
         // install JDO specific entity change listeners ...
 
-        val jdoLifecycleListener = 
+        val jdoLifecycleListener =
                 new JdoLifecycleListener(metaModelContext, eventBusService, entityChangeTrackerProvider);
         pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
 

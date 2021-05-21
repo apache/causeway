@@ -33,7 +33,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * Provides a generic (left-fold) reduction class.
  * <p>
  * Most intuitive example of a reduction is finding the
- * minimum value from a list of values. 
+ * minimum value from a list of values.
  * See {@code org.apache.isis.commons.internal.base.ReductionTest} for examples.
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>

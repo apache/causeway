@@ -50,7 +50,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     public void add(ValidationFailure validationFailure) {
         failures.add(validationFailure);
     }
-    
+
     public void add(ValidationFailures validationFailures) {
         addAll(validationFailures.getFailures());
     }
@@ -58,14 +58,14 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     public Set<ValidationFailure> getFailures() {
         return Collections.unmodifiableSet(failures);
     }
-    
+
     public ArrayList<String> getMessages() { // <-- ensure serializable result
         val messages = failures.stream() // already sorted
         .map(ValidationFailure::getMessage)
         .collect(Collectors.toCollection(ArrayList::new));
         return messages;
     }
-    
+
     /**
      * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
      */
@@ -86,11 +86,11 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     public Iterator<ValidationFailure> iterator() {
         return getFailures().iterator();
     }
-    
+
     public boolean hasFailures() {
         return !failures.isEmpty();
     }
-    
+
     public Optional<String> getAsLineNumberedString() {
         if (!hasFailures()) {
             return Optional.empty();

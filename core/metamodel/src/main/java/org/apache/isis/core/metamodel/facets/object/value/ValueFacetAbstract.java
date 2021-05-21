@@ -34,7 +34,9 @@ import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsing
 
 import lombok.val;
 
-public abstract class ValueFacetAbstract extends FacetAbstract implements ValueFacet {
+public abstract class ValueFacetAbstract
+extends FacetAbstract
+implements ValueFacet {
 
     public static Class<? extends Facet> type() {
         return ValueFacet.class;
@@ -46,7 +48,7 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
             return null;
         }
 
-        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass, 
+        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass,
                 new Class<?>[] { FacetHolder.class/*, ServiceInjector.class*/ }, new Object[] { holder });
     }
 
@@ -66,23 +68,23 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
     }
 
     public ValueFacetAbstract(
-            final Class<?> semanticsProviderClass, 
-            final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
+            final Class<?> semanticsProviderClass,
+            final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder) {
 
         this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder);
     }
 
     public ValueFacetAbstract(
-            final ValueSemanticsProvider<?> semanticsProvider, 
-            final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
+            final ValueSemanticsProvider<?> semanticsProvider,
+            final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder) {
 
         super(type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;
-        
+
         // note: we can't use the runtimeContext to inject dependencies into the
         // semanticsProvider,
         // because there won't be any PersistenceSession when initially building
@@ -100,8 +102,8 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
         // facets themselves reference this value's holder.
 
         val facetHolder = super.getFacetHolder();
-        
-        facetHolder.addFacet((Facet) this); // add just ValueFacet.class
+
+        facetHolder.addFacet(this); // add just ValueFacet.class
         // initially.
 
         // we used to add aggregated here, but this was wrong.
@@ -136,7 +138,7 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
             if (defaultsProvider != null) {
                 this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
-            
+
             // if the SemanticsProvider is a facet then add it as a contributing facet
             if(semanticsProvider instanceof Facet) {
                 this.addContributedFacet(((Facet) semanticsProvider));

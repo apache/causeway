@@ -31,24 +31,24 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.Jd
 
 import lombok.val;
 
-abstract class MetaModelVisitingValidatorForClauseAbstract 
+abstract class MetaModelVisitingValidatorForClauseAbstract
 extends MetaModelVisitingValidatorAbstract {
 
     final String clause;
 
     MetaModelVisitingValidatorForClauseAbstract(
             final String clause) {
-        
+
         this.clause = clause;
     }
 
     @Override
     public void validate(final ObjectSpecification objectSpec) {
-        
+
         if(objectSpec.isManagedBean()) {
             return;
         }
-        
+
         val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {
             return;
@@ -72,20 +72,20 @@ extends MetaModelVisitingValidatorAbstract {
         }
 
         val cls = objectSpec.getCorrespondingClass();
-        
+
         val fromSpecResult = Result.of(()->getSpecificationLoader()
                 .specForType(_Context.loadClass(typeNameFromClause))
                 .orElse(null));
-            
-        if(fromSpecResult.isFailure() 
+
+        if(fromSpecResult.isFailure()
                 || !fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                             "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
-                            cls.getName(), 
-                            clause, 
+                            cls.getName(),
+                            clause,
                             query)
                     );
             return;

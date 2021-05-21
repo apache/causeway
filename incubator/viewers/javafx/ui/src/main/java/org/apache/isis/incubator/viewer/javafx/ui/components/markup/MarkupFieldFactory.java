@@ -52,9 +52,9 @@ import netscape.javascript.JSException;
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class MarkupFieldFactory implements UiComponentHandlerFx {
-    
+
     private final HostServices hostServices;
-    
+
     @Override
     public boolean isHandling(ComponentRequest request) {
         return request.isFeatureTypeInstanceOf(HasHtml.class);
@@ -65,26 +65,26 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         val markupHtml = request.getFeatureValue(HasHtml.class)
                 .map(HasHtml::asHtml)
                 .orElse("");
-        
+
         return new WebViewFitContent(hostServices::showDocument, markupHtml);
     }
 
     // -- HELPER
-    
+
     /**
      * Unfortunately we have no simple means of auto-fitting a WebView, so we need a wrapper,
-     * that executes some JavaScript on the rendered content, do determine the preferred height. 
+     * that executes some JavaScript on the rendered content, do determine the preferred height.
      * <p>
      * @see <a href="https://stackoverflow.com/questions/25838965/size-javafx-webview-to-the-minimum-size-needed-by-the-document-body">autofitting (stackoverflow)</a>
      * @see <a href="https://stackoverflow.com/questions/15555510/javafx-stop-opening-url-in-webview-open-in-browser-instead">href handling (stackoverflow)</a>
-     *  
+     *
      * @since Jun 29, 2020
      */
     @Log4j2
     private static final class WebViewFitContent extends Region {
 
         /*sonar-ignore-on*/
-        
+
         private final Consumer<String> hrefHandler;
         private final WebView webview = new WebView();
         private final WebEngine webEngine = webview.getEngine();
@@ -92,7 +92,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         public WebViewFitContent(Consumer<String> hrefHandler, String content) {
 
             this.hrefHandler = hrefHandler;
-            
+
             webview.setPrefHeight(5);
 
             widthProperty().addListener((e, o, newWidth) -> {
@@ -117,7 +117,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
             setContent(content);
             getChildren().add(webview);
         }
-        
+
         @Override
         protected void layoutChildren() {
             layoutInArea(webview, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
@@ -148,7 +148,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
             }
         }
 
-        
+
         private void adjustHeight() {
             getContentHeight().ifPresent(contentHeight->webview.setPrefHeight(contentHeight + 20));
         }
@@ -167,8 +167,8 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
             }
             return OptionalInt.empty();
         }
-        
-        
+
+
 
         private String getHtml(String content) {
             return "<html><body>" +
@@ -176,8 +176,8 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
                     "</body></html>";
         }
         /*sonar-ignore-off*/
-        
+
     }
-    
+
 
 }

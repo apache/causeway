@@ -32,48 +32,48 @@ public interface ParameterUiModel extends ScalarUiModel {
     /** param meta model */
     @Override
     ObjectActionParameter getMetaModel();
-    
+
     /** param value */
     @NonNull
     ManagedObject getValue();
-    
+
     /** param value */
     void setValue(ManagedObject paramValue);
-    
+
     String getCssClass();
-    
+
     // -- PENDING PARAMETER MODEL
 
     ParameterNegotiationModel getPendingParameterModel();
     void setPendingParameterModel(ParameterNegotiationModel pendingArgs);
 
     // -- SHORTCUTS
-    
+
     /** param index */
     default int getNumber() {
         return getMetaModel().getNumber();
     }
-    
+
     @Override
     default int getAutoCompleteMinLength() {
         return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
     }
-    
+
     @Override
     default boolean hasChoices() {
         return getMetaModel().hasChoices();
     }
-    
+
     @Override
     default boolean hasAutoComplete() {
         return getMetaModel().hasAutoComplete();
     }
-    
+
     @Override
     default ManagedObject getDefault() {
         return getMetaModel().getDefault(getPendingParameterModel());
     }
-    
+
     @Override
     default Can<ManagedObject> getChoices() {
         return getMetaModel().getChoices(getPendingParameterModel(), InteractionInitiatedBy.USER);
@@ -87,7 +87,7 @@ public interface ParameterUiModel extends ScalarUiModel {
     default ActionInteractionHead getPendingParamHead() {
         return getMetaModel().getAction().interactionHead(getOwner());
     }
-    
+
 
 
 }

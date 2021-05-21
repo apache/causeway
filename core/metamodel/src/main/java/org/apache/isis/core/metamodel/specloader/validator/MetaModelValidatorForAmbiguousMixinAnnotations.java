@@ -30,16 +30,16 @@ public class MetaModelValidatorForAmbiguousMixinAnnotations {
     public static <A extends Annotation> void addValidationFailure(
             final FacetedMethod holder,
             final Class<A> annotationType) {
-        
+
         final String annotationLiteral = "@" + annotationType.getSimpleName();
-        
+
         ValidationFailure.raiseFormatted(
-                holder, 
+                holder,
                 "Annotation %s on both method and type level is not allowed, "
-                + "it must be one or the other. Found with mixin: %s", 
-                annotationLiteral, 
+                + "it must be one or the other. Found with mixin: %s",
+                annotationLiteral,
                 holder.getIdentifier().getFullIdentityString());
     }
 
-    
+
 }

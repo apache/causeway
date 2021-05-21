@@ -37,17 +37,17 @@ import javafx.scene.control.SeparatorMenuItem;
 @RequiredArgsConstructor(staticName = "of")
 @Log4j2
 public class MenuBuilderFx implements MenuVisitor {
-    
+
     private final UiContextFx uiContext;
     private final MenuBar menuBar;
     private final Consumer<ManagedAction> menuActionEventHandler;
-    
+
     private Menu currentTopLevelMenu = null;
 
     @Override
     public void addTopLevel(MenuItemDto menuDto) {
         log.debug("top level menu {}", menuDto.getName());
-        
+
         menuBar.getMenus()
         .add(currentTopLevelMenu = new Menu(menuDto.getName()));
     }
@@ -55,15 +55,15 @@ public class MenuBuilderFx implements MenuVisitor {
     @Override
     public void addSubMenu(MenuItemDto menuDto) {
         val managedAction = menuDto.getManagedAction();
-        
+
         log.debug("sub menu {}", menuDto.getName());
-        
+
         val actionUiModel = uiContext.getActionUiModelFactory().newActionUiModel(uiContext, managedAction);
         val menuItem = actionUiModel.createMenuUiComponent();
         menuItem.setOnAction(e->menuActionEventHandler.accept(managedAction));
         currentTopLevelMenu.getItems().add(menuItem);
     }
-    
+
     @Override
     public void addSectionSpacer() {
         log.debug("menu spacer");
@@ -77,5 +77,5 @@ public class MenuBuilderFx implements MenuVisitor {
         currentTopLevelMenu.getItems().add(menuItem);
         menuItem.setDisable(true);
     }
-    
+
 }

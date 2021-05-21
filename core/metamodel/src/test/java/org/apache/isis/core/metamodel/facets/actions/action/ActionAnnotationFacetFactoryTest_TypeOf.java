@@ -23,8 +23,6 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -33,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 
 import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -170,7 +169,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
+        Assert.assertEquals(TypeOfFacetInferredFromGenerics.class, facet.getClass());
         assertThat(facet.value(), classEqualTo(Order.class));
     }
 

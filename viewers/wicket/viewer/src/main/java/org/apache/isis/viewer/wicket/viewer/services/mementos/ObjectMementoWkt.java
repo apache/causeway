@@ -186,7 +186,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                         .map(spec->spec.getFacet(EncodableFacet.class))
                         .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                                 "logical type %s is expected to have a EncodableFacet", memento.logicalType));
-                
+
                 return encodableFacet.fromEncodedString(memento.encodableValue);
             }
 
@@ -232,7 +232,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
                 final Bookmark bookmark = Bookmark.parse(memento.persistentOidStr)
                         .orElseThrow(()->_Exceptions.illegalArgument(
-                                "cannot parse a bookmark from '%s'", 
+                                "cannot parse a bookmark from '%s'",
                                 memento.persistentOidStr));
                 try {
 
@@ -319,7 +319,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                 // nope
             }
         };
-        
+
         public abstract @Nullable ManagedObject recreateObject(
                 ObjectMementoWkt memento,
                 MetaModelContext mmc);
@@ -411,10 +411,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
-        
+
         this.cardinality = Cardinality.SCALAR;
         this.logicalType = spec.getLogicalType();
-        
+
         if(spec.isEncodeable()) {
             this.encodableValue = bookmark.getIdentifier();
             this.recreateStrategy = RecreateStrategy.ENCODEABLE;

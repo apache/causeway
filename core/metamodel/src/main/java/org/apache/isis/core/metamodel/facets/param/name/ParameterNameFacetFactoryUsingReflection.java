@@ -31,14 +31,14 @@ import lombok.val;
 
 /**
  * Uses JDK8+ reflection API to derive the parameter name from the code.
- * <p> 
- * For Java code compiled with {@code javac} requires to be compiled with the 
+ * <p>
+ * For Java code compiled with {@code javac} requires to be compiled with the
  * {@code -parameters} flag.
  * <p>
- * For Java code compiled with Eclipse requires to be compiled with the 
+ * For Java code compiled with Eclipse requires to be compiled with the
  * {@code Preferences>Java>Compiler} ... {@code Store information about method parameters}
  * flag set.
- * 
+ *
  * @since 2.0
  */
 public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstract {

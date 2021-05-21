@@ -64,12 +64,12 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(!isInvertedSemantics()) {
             val pojo = UnwrapUtil.single(adapter);
-            
+
             // special case string handling.
             if(pojo instanceof String) {
                 return _Strings.isEmpty((String)pojo);
             }
-            
+
             return pojo == null;
         } else {
             return false; // policy is not enforced

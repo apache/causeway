@@ -182,7 +182,8 @@ mvn -s $SETTINGS_XML \
 
 # now build the individual docker images
 if [ "$JIB_CMD" != "skip"  ]; then
-  buildDockerImage examples/demo/wicket
+  buildDockerImage examples/demo/wicket/jdo
+  buildDockerImage examples/demo/wicket/jpa
   buildDockerImage examples/demo/vaadin
 fi
 

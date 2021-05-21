@@ -34,12 +34,12 @@ public interface ObjectMementoService {
     ObjectMemento mementoForObject(ManagedObject adapter);
 
     ObjectMemento mementoForPojo(Object pojo);
-    
+
     ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
 
     ManagedObject reconstructObject(ObjectMemento memento);
 
     ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
-    
+
 
 }

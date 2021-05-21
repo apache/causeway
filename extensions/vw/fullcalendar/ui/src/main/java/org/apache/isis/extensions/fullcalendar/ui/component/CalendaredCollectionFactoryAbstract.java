@@ -47,10 +47,10 @@ public abstract class CalendaredCollectionFactoryAbstract extends ComponentFacto
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        
+
         final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
         final Class<?> correspondingClass = elementSpec.getCorrespondingClass();
-        
+
         return appliesIf(cls.isAssignableFrom(correspondingClass));
     }
 

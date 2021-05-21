@@ -36,28 +36,28 @@ import lombok.val;
 public interface ObjectLoader {
 
     ManagedObject loadObject(Request objectLoadRequest);
-    
+
     // -- REQUEST (VALUE) TYPE
-    
+
     @Value(staticConstructor = "of")
     public static class Request {
         ObjectSpecification objectSpecification;
         String objectIdentifier;
     }
-    
+
     // -- HANDLER
-    
-    static interface Handler 
-    extends 
-        MetaModelContextAware, 
+
+    static interface Handler
+    extends
+        MetaModelContextAware,
         ChainOfResponsibility.Handler<ObjectLoader.Request, ManagedObject> {
-        
+
     }
 
     // -- FACTORY
-    
+
     public static ObjectLoader createDefault(MetaModelContext metaModelContext) {
-        
+
         val chainOfHandlers = _Lists.of(
                 new ObjectLoader_builtinHandlers.GuardAgainstNull(),
                 new ObjectLoader_builtinHandlers.LoadService(),
@@ -65,16 +65,16 @@ public interface ObjectLoader {
                 new ObjectLoader_builtinHandlers.LoadViewModel(),
                 new ObjectLoader_builtinHandlers.LoadEntity(),
                 new ObjectLoader_builtinHandlers.LoadOther());
-        
+
         chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
-        
+
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
+
         return request -> chainOfRespo
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "ObjectLoader failed to handle request %s", request));
-        
+
     }
-    
+
 }

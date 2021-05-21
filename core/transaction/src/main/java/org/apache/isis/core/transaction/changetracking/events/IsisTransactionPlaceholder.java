@@ -19,7 +19,7 @@
 package org.apache.isis.core.transaction.changetracking.events;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */

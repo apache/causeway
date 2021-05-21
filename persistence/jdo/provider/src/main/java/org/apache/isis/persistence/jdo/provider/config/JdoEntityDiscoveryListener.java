@@ -29,5 +29,5 @@ public interface JdoEntityDiscoveryListener {
             PersistenceManagerFactory persistenceManagerFactory,
             Set<Class<?>> entityTypes,
             Map<String, String> dnSettings);
-    
+
 }

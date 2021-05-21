@@ -21,12 +21,12 @@ package org.apache.isis.core.transaction.changetracking.events;
 import lombok.Value;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 @Value(staticConstructor = "of")
 public class PostStoreEvent {
-    
+
     private final Object persistableObject;
 }

@@ -19,29 +19,27 @@
 package org.apache.isis.core.metamodel.specloader.postprocessor;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@RequiredArgsConstructor
 public class PostProcessor {
 
     private final ProgrammingModel programmingModel;
     private Can<ObjectSpecificationPostProcessor> postProcessors = Can.empty(); // populated at #init
 
-    public PostProcessor(ProgrammingModel programmingModel) {
-        this.programmingModel = programmingModel;
-    }
-
     public void init() {
         postProcessors = programmingModel.streamPostProcessors().collect(Can.toCan());
     }
-    
+
     public void shutdown() {
         postProcessors = null;
     }
-    
+
     public void postProcess(ObjectSpecification objectSpecification) {
 
         for (val postProcessor : postProcessors) {

@@ -34,8 +34,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
-import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
@@ -45,12 +45,14 @@ import lombok.Getter;
  */
 @DomainService(
     nature = NatureOfService.REST,
-    objectType = "isis.ext.commandReplayPrimary.CommandRetrievalService"
+    objectType = CommandRetrievalService.OBJECT_TYPE
 )
-@Named("isis.ext.commandReplayPrimary.CommandRetrievalService")
+@Named(CommandRetrievalService.OBJECT_TYPE)
 @Order(OrderPrecedence.MIDPOINT)
 //@Log4j2
 public class CommandRetrievalService {
+
+    public static final String OBJECT_TYPE = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalService";
 
     public static abstract class ActionDomainEvent
             extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<CommandRetrievalService> { }
@@ -75,7 +77,7 @@ public class CommandRetrievalService {
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsOnPrimaryFromDomainEvent.class, semantics = SemanticsOf.SAFE)
-    public List<CommandJdo> findCommandsOnPrimaryFrom(
+    public List<? extends CommandModel> findCommandsOnPrimaryFrom(
             @Nullable
             @ParameterLayout(named="Interaction Id")
             final UUID interactionId,
@@ -83,7 +85,7 @@ public class CommandRetrievalService {
             @ParameterLayout(named="Batch size")
             final Integer batchSize)
             throws NotFoundException {
-        final List<CommandJdo> commands = commandServiceRepository.findSince(interactionId, batchSize);
+        final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
         if(commands == null) {
             throw new NotFoundException(interactionId);
         }
@@ -93,8 +95,6 @@ public class CommandRetrievalService {
         return 25;
     }
 
-
-
-    @Inject CommandJdoRepository commandServiceRepository;
+    @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
 }
 

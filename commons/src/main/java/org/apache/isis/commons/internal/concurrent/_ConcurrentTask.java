@@ -28,7 +28,7 @@ import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -37,7 +37,7 @@ import lombok.val;
  * @since 2.0
  */
 public abstract class _ConcurrentTask<T> implements Runnable {
-    
+
     public static enum State {
         NOT_STARTED,
         STARTED,
@@ -46,7 +46,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
     }
 
     public abstract String getName();
-    
+
     @Getter private State status = State.NOT_STARTED;
     @Getter private long startedAtNanos;
     @Getter private long completedAtNanos;
@@ -57,14 +57,14 @@ public abstract class _ConcurrentTask<T> implements Runnable {
     protected synchronized void preCall() {
         if(startedAtNanos>0L) {
             val msg = String.format(
-                    "Cannot start task '%s' again, was already started before", 
+                    "Cannot start task '%s' again, was already started before",
                     getName());
             throw new IllegalStateException(msg);
         }
         startedAtNanos = System.nanoTime();
         status = State.STARTED;
     }
-    
+
     protected void postCall(T completedWith, Throwable failedWith) {
         if(failedWith!=null) {
             this.failedAtNanos = System.nanoTime();
@@ -76,12 +76,12 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             this.status = State.SUCCEEDED;
         }
     }
-    
+
     abstract T innerCall() throws Exception;
-    
+
     @Override
     public final void run() {
-     
+
         preCall();
         try {
             val completedWith = innerCall();
@@ -91,22 +91,22 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         }
 
     }
-    
+
     @Override
     public String toString() {
         return getName();
     }
-    
+
     // -- NAMING
-    
+
     public _ConcurrentTask<T> withName(String name) {
-        
+
         _With.requires(name, "name");
-        
+
         val delegate = this;
-        
+
         return new _ConcurrentTask<T>() {
-            
+
             @Override
             public T innerCall() throws Exception {
                 return delegate.innerCall();
@@ -116,19 +116,19 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             public String getName() {
                 return name;
             }
-            
+
         };
-        
+
     }
-    
+
     public _ConcurrentTask<T> withName(Supplier<String> nameSupplier) {
-        
+
         _With.requires(nameSupplier, "nameSupplier");
-        
+
         val delegate = this;
-        
+
         return new _ConcurrentTask<T>() {
-            
+
             @Override
             public T innerCall() throws Exception {
                 return delegate.innerCall();
@@ -138,20 +138,20 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             public String getName() {
                 return nameSupplier.get();
             }
-            
+
         };
-        
+
     }
-    
+
 
     // -- FACTORIES
-    
+
     public static _ConcurrentTask<Void> of(Runnable runnable) {
-        
+
         _With.requires(runnable, "runnable");
-        
+
         return new _ConcurrentTask<Void>() {
-            
+
             @Override
             public Void innerCall() throws Exception {
                 runnable.run();
@@ -162,16 +162,16 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             public String getName() {
                 return runnable.toString();
             }
-            
+
         };
     }
-    
+
     public static <X> _ConcurrentTask<X> of(Callable<X> callable) {
-        
+
         _With.requires(callable, "callable");
-        
+
         return new _ConcurrentTask<X>() {
-            
+
             @Override
             public X innerCall() throws Exception {
                 return callable.call();
@@ -181,7 +181,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             public String getName() {
                 return callable.toString();
             }
-            
+
         };
     }
 

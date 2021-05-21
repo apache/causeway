@@ -28,12 +28,12 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import lombok.val;
 
 /**
- * Responsibility: produce additional info when in prototyping mode 
+ * Responsibility: produce additional info when in prototyping mode
  * eg. render/response timing
  * <p>
- * currently used by the framework's NavigationToolbars to add a 
- * 'took seconds' label to bottom of data tables 
- * 
+ * currently used by the framework's NavigationToolbars to add a
+ * 'took seconds' label to bottom of data tables
+ *
  * @since 2.0
  */
 class PrototypingMessageProvider {
@@ -51,7 +51,7 @@ class PrototypingMessageProvider {
     private static IsisAppCommonContext commonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     private static boolean isPrototyping() {
         return commonContext().getSystemEnvironment().isPrototyping();
     }
@@ -63,7 +63,7 @@ class PrototypingMessageProvider {
         commonContext().getInteractionTracker().currentInteraction()
         .map(IsisInteraction.class::cast)
         .ifPresent(interaction->{
-            val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());    
+            val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));
         });
 

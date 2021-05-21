@@ -42,7 +42,7 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
-            
+
             final RequestCycle requestCycle = RequestCycle.get();
             requestCycle.setResponsePage(new VoidReturnPage(new VoidModel(commonContext)));
         }
@@ -52,7 +52,7 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
-            
+
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
@@ -69,7 +69,7 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
-            
+
             final RequestCycle requestCycle = RequestCycle.get();
             AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class).orElse(null);
 
@@ -87,16 +87,16 @@ public enum ActionResultResponseHandlingStrategy {
                     final Page page = target.getPage();
                     page.add(streamingBehavior);
                     CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
-                    scheduleJs(target, javascriptFor_sameWindow(callbackUrl), 10);    
+                    scheduleJs(target, javascriptFor_sameWindow(callbackUrl), 10);
                 } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy) {
-                    final RedirectRequestHandlerWithOpenUrlStrategy redirectHandler = 
+                    final RedirectRequestHandlerWithOpenUrlStrategy redirectHandler =
                             (RedirectRequestHandlerWithOpenUrlStrategy) requestHandler;
 
                     final String url = redirectHandler.getRedirectUrl();
                     final String fullUrl = expanded(requestCycle, url);
-                    
+
                     if(redirectHandler.getOpenUrlStrategy().isNewWindow()) {
-                        scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);                        
+                        scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);
                     } else {
                         scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
                     }
@@ -105,7 +105,7 @@ public enum ActionResultResponseHandlingStrategy {
                             "no logic implemented to handle IRequestHandler of type %s",
                             requestHandler.getClass().getName());
                 }
-                
+
             }
         }
     },
@@ -114,12 +114,12 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
-            
+
             final AjaxRequestTarget target = resultResponse.getTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
-            
+
             scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);
         }
     },
@@ -128,12 +128,12 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
-            
+
             final AjaxRequestTarget target = resultResponse.getTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
-            
+
             scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
         }
     };
@@ -164,17 +164,17 @@ public enum ActionResultResponseHandlingStrategy {
     private static String javascriptFor_newWindow(CharSequence url) {
         return "function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
     }
-    
+
     private static String javascriptFor_sameWindow(CharSequence url) {
         return "\"window.location.href='" + url + "'\"";
     }
-    
+
     private static void scheduleJs(AjaxRequestTarget target, String js, int millis) {
         // the timeout is needed to let Wicket release the channel
-        target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));        
+        target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));
     }
-    
-    
+
+
     /**
      * A special Ajax behavior that is used to stream the contents of a Lob after
      * an Ajax request.

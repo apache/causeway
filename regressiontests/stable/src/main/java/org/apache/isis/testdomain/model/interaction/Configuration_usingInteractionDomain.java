@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
 
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 Configuration_usingInteractionDomain.class
         })
 public class Configuration_usingInteractionDomain {

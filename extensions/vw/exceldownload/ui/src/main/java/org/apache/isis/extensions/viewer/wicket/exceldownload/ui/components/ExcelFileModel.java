@@ -92,30 +92,30 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                         : Where.STANDALONE_TABLES))
                 .collect(Can.toCan());
     }
-    
+
     private File createFile() throws IOException, FileNotFoundException {
         try(final Workbook wb = new XSSFWorkbook()) {
             String sheetName = model.getName();
             if(sheetName==null||sheetName.length()==0) sheetName = "Collection";
             final File tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
-            
+
             try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
                 final Sheet sheet = wb.createSheet(sheetName);
-        
+
                 val columnProperties = columnProperties();
-        
+
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
                 Row row = rowFactory.newRow();
-        
+
                 // header row
                 int i=0;
                 for (ObjectAssociation property : columnProperties) {
                     final Cell cell = row.createCell((short) i++);
                     cell.setCellValue(property.getName());
                 }
-        
+
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
-        
+
                 // detail rows
                 final List<ManagedObject> adapters = model.getObject();
                 for (val objectAdapter : adapters) {
@@ -126,12 +126,12 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                         setCellValue(objectAdapter, property, cell, dateCellStyle);
                     }
                 }
-        
+
                 // freeze panes
                 sheet.createFreezePane(0, 1);
-        
+
                 wb.write(fos);
-    
+
             }
             return tempFile;
         }
@@ -152,9 +152,9 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     }
 
     private void setCellValue(
-            final ManagedObject objectAdapter, 
-            final ObjectAssociation property, 
-            final Cell cell, 
+            final ManagedObject objectAdapter,
+            final ObjectAssociation property,
+            final Cell cell,
             CellStyle dateCellStyle) {
 
         val valueAdapter = property.get(objectAdapter);
@@ -167,33 +167,33 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
 
         // boolean
-        if(valueAsObj instanceof Boolean) { 
+        if(valueAsObj instanceof Boolean) {
             boolean value = (Boolean) valueAsObj;
             cell.setCellValue(value);
             return;
-        } 
+        }
 
         // date
         if(valueAsObj instanceof Date) {
             Date value = (Date) valueAsObj;
             setCellValueForDate(cell, value, dateCellStyle);
             return;
-        } 
+        }
         if(valueAsObj instanceof LocalDate) {
             LocalDate value = (LocalDate) valueAsObj;
-            Date date = Util_TimeConversion.toDate(value); 
+            Date date = Util_TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
-        } 
+        }
         if(valueAsObj instanceof LocalDateTime) {
             LocalDateTime value = (LocalDateTime) valueAsObj;
             Date date = Util_TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
-        } 
+        }
         if(valueAsObj instanceof OffsetDateTime) {
             OffsetDateTime value = (OffsetDateTime) valueAsObj;
-            Date date = Util_TimeConversion.toDate(value); 
+            Date date = Util_TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
         }
@@ -208,39 +208,39 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             Float value = (Float) valueAsObj;
             setCellValueForDouble(cell, (double)value);
             return;
-        } 
+        }
         if(valueAsObj instanceof BigDecimal) {
             BigDecimal value = (BigDecimal) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
             return;
-        } 
+        }
         if(valueAsObj instanceof BigInteger) {
             BigInteger value = (BigInteger) valueAsObj;
             setCellValueForDouble(cell, value.doubleValue());
             return;
-        } 
+        }
         if(valueAsObj instanceof Long) {
             Long value = (Long) valueAsObj;
             setCellValueForDouble(cell, (double)value);
             return;
-        } 
+        }
         if(valueAsObj instanceof Integer) {
             Integer value = (Integer) valueAsObj;
             setCellValueForDouble(cell, (double)value);
             return;
-        } 
+        }
         if(valueAsObj instanceof Short) {
             Short value = (Short) valueAsObj;
             setCellValueForDouble(cell, (double)value);
             return;
-        } 
+        }
         if(valueAsObj instanceof Byte) {
             Byte value = (Byte) valueAsObj;
             setCellValueForDouble(cell, (double)value);
             return;
-        } 
+        }
 
-        final String objectAsStr = valueAdapter.titleString(null);
+        final String objectAsStr = valueAdapter.titleString();
         cell.setCellValue(objectAsStr);
         return;
     }

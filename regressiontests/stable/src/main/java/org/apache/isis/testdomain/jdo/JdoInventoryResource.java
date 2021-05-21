@@ -45,7 +45,7 @@ import lombok.val;
 public class JdoInventoryResource {
 
     @Inject private RepositoryService repository;
-    
+
     @Action
     public List<JdoProduct> listProducts() {
         return repository.allInstances(JdoProduct.class);
@@ -65,14 +65,14 @@ public class JdoInventoryResource {
 
     @Action
     public List<JdoBook> multipleBooks(
-            
+
             @ParameterLayout(named = "")
             int nrOfBooks
-            
+
             ) {
-        
+
         val books = _Lists.<JdoBook>newArrayList();
-        
+
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
@@ -80,21 +80,21 @@ public class JdoInventoryResource {
         }
         return books;
     }
-    
+
     @Action //TODO improve the REST client such that the param can be of type Book
-    public JdoBook storeBook(String newBook) throws JAXBException { 
+    public JdoBook storeBook(String newBook) throws JAXBException {
         JdoBook book = JdoBookDto.decode(newBook).toBook();
         return repository.persist(book);
     }
-    
+
     // -- NON - ENTITIES
-    
+
     @Action
     public String httpSessionInfo() {
-        
+
         // when running with basic-auth strategy, we don't want to create HttpSessions at all
-        
-        val servletRequestAttributes = 
+
+        val servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         val httpSession = servletRequestAttributes.getRequest().getSession(false);
         if(httpSession==null) {
@@ -102,10 +102,10 @@ public class JdoInventoryResource {
         }
         val sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
         .collect(Collectors.joining(","));
-        
+
         return String.format("http-session attribute names: {%s}", sessionAttributeNames);
     }
-    
+
     @Action
     public JdoBookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
@@ -115,14 +115,14 @@ public class JdoInventoryResource {
 
     @Action
     public List<JdoBookDto> multipleBooksAsDto(
-            
+
             @ParameterLayout(named = "")
             int nrOfBooks
-            
+
             ) {
-        
+
         val books = _Lists.<JdoBookDto>newArrayList();
-        
+
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
@@ -130,6 +130,6 @@ public class JdoInventoryResource {
         }
         return books;
     }
-    
+
 
 }

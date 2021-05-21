@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class ObjectMementoForEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter(onMethod_ = {@Override})
     @NonNull private LogicalType logicalType;
 
@@ -37,7 +37,7 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     public String asString() {
         return getLogicalTypeName();
     }
-    
+
     @Override
     public Bookmark asBookmarkIfSupported() {
         return null;

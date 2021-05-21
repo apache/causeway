@@ -34,7 +34,7 @@ class ParentChainDefault implements ParentChain {
         if(node==null) {
             return null;
         }
-        
+
         return specificationLoader.specForType(node.getClass())
         .map(spec->spec.getNavigableParent(node))
         .orElse(null);

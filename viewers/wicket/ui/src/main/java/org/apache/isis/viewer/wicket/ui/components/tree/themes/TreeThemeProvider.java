@@ -24,10 +24,10 @@ import org.apache.wicket.behavior.Behavior;
 public interface TreeThemeProvider {
 
     /**
-     * @param model - TODO yet just a draft, refine the type 
-     * @return tree-theme to use for given model 
+     * @param model - TODO yet just a draft, refine the type
+     * @return tree-theme to use for given model
      */
     public Behavior treeThemeFor(Object model);
-   
+
 
 }

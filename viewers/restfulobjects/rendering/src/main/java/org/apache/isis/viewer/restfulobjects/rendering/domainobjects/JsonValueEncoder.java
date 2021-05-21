@@ -65,18 +65,18 @@ import lombok.val;
 public class JsonValueEncoder {
 
     @Inject private SpecificationLoader specificationLoader;
-    
+
     @PostConstruct
     public void init() {
-        
+
         //XXX no lombok val here
         Function<Object, ManagedObject> pojoToAdapter = pojo ->
             ManagedObject.lazy(specificationLoader, pojo);
-        
+
         new JsonValueEncoder_Converters().asList(pojoToAdapter)
             .forEach(this::registerConverter);
     }
-    
+
     private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
 
     private void registerConverter(JsonValueConverter jvc) {
@@ -84,8 +84,8 @@ public class JsonValueEncoder {
     }
 
     public ManagedObject asAdapter(
-            final ObjectSpecification objectSpec, 
-            final JsonRepresentation argValueRepr, 
+            final ObjectSpecification objectSpec,
+            final JsonRepresentation argValueRepr,
             final String format) {
 
         if(argValueRepr == null) {
@@ -149,7 +149,7 @@ public class JsonValueEncoder {
             if (encodableFacet == null) {
                 throw _Exceptions.illegalArgument(
                         "objectSpec '%s' expected to have EncodableFacet "
-                        + "or a registered JsonValueConverter", 
+                        + "or a registered JsonValueConverter",
                         objectSpecification.getLogicalTypeName());
             }
             Object value = objectAdapter != null
@@ -163,12 +163,12 @@ public class JsonValueEncoder {
 
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final String format) {
-        
+
         requires(adapter, "adapter");
-        
+
         val objectSpec = adapter.getSpecification();
         val cls = objectSpec.getCorrespondingClass();
-        
+
         val jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {
             return jsonValueConverter.asObject(adapter, format);
@@ -199,9 +199,9 @@ public class JsonValueEncoder {
 //    ManagedObject adapterFor(Object pojo) {
 //        return objectAdapterProvider.adapterFor(pojo);
 //    }
-    
+
     // -- NESTED TYPE DECLARATIONS
-    
+
     public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
@@ -210,7 +210,7 @@ public class JsonValueEncoder {
 
         protected final String format;
         protected final String xIsisFormat;
-        
+
         @Getter private final Can<Class<?>> classes;
 
         public JsonValueConverter(String format, String xIsisFormat, Class<?>... classes) {
@@ -225,11 +225,11 @@ public class JsonValueEncoder {
         public abstract ManagedObject asAdapter(JsonRepresentation repr, String format);
 
         public Object appendValueAndFormat(
-                ManagedObject objectAdapter, 
-                String format, 
-                JsonRepresentation repr, 
+                ManagedObject objectAdapter,
+                String format,
+                JsonRepresentation repr,
                 boolean suppressExtensions) {
-            
+
             final Object value = unwrapAsObjectElseNullNode(objectAdapter);
             repr.mapPut("value", value);
             appendFormats(repr, this.format, this.xIsisFormat, suppressExtensions);
@@ -240,8 +240,8 @@ public class JsonValueEncoder {
             return objectAdapter.getPojo();
         }
     }
-    
-    
+
+
     /**
      * JUnit support
      */

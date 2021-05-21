@@ -31,24 +31,24 @@ public class SimpleAuthentication
 extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
-    
+
     // -- FACTORIES
 
-    public static SimpleAuthentication of( 
+    public static SimpleAuthentication of(
             final @NonNull UserMemento user,
             final @NonNull String validationCode) {
         return new SimpleAuthentication(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
     }
-    
-    public static SimpleAuthentication validOf( 
+
+    public static SimpleAuthentication validOf(
             final @NonNull UserMemento user) {
         return of(user, DEFAULT_AUTH_VALID_CODE);
     }
-    
+
     // -- CONSTRUCTOR
-    
+
     public SimpleAuthentication(
-            final @NonNull ExecutionContext executionContext, 
+            final @NonNull ExecutionContext executionContext,
             final @NonNull String validationCode) {
         super(executionContext, validationCode);
     }

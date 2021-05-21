@@ -25,19 +25,19 @@ import org.apache.isis.applib.value.OpenUrlStrategy;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class RedirectRequestHandlerWithOpenUrlStrategy 
+public class RedirectRequestHandlerWithOpenUrlStrategy
 extends RedirectRequestHandler {
 
     @Getter
     private final OpenUrlStrategy openUrlStrategy;
-    
+
     public RedirectRequestHandlerWithOpenUrlStrategy(
-            String redirectUrl, 
+            String redirectUrl,
             final @NonNull OpenUrlStrategy openUrlStrategy) {
         super(redirectUrl);
         this.openUrlStrategy = openUrlStrategy;
     }
-    
+
     public RedirectRequestHandlerWithOpenUrlStrategy(
             String redirectUrl) {
         this(redirectUrl, OpenUrlStrategy.NEW_WINDOW); // default

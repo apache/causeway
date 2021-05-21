@@ -23,25 +23,28 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder2;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleEntity;
+
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveDoubleJdo"
+        objectType = "demo.PrimitiveDoubleEntity"
 )
 public class PrimitiveDoubleJdo                                     // <.>
-        implements HasAsciiDocDescription, PrimitiveDoubleHolder2 {
+        extends PrimitiveDoubleEntity {
 
 //end::class[]
     public PrimitiveDoubleJdo(double initialValue) {

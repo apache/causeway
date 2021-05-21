@@ -39,7 +39,7 @@ final class TabUtil {
     static void createMenuTabs(MenuBarsServiceBS3 menuBarsService, Consumer<Tab> onTabCreated) {
         // onTabCreated.accept(TabUtil.createTab("Dashboard", DashboardView.class));
     }
-    
+
     static void selectTab(Tabs tabs, Class<? extends Component> viewClass) {
         String target = RouteConfiguration.forSessionScope().getUrl(viewClass);
         Optional<Component> tabToSelect = tabs.getChildren().filter(tab -> {
@@ -48,11 +48,11 @@ final class TabUtil {
         }).findFirst();
         tabToSelect.ifPresent(tab -> tabs.setSelectedTab((Tab) tab));
     }
-    
+
     static Tab createTab(String title, Class<? extends Component> viewClass) {
         return createTab(populateLink(new RouterLink(null, viewClass), title));
     }
-    
+
     // -- HELPER
 
     private static Tab createTab(Component content) {
@@ -65,7 +65,7 @@ final class TabUtil {
         a.add(title);
         return a;
     }
-    
-    
-    
+
+
+
 }

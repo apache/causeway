@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
 /**
@@ -36,13 +37,15 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isis.ext.h2Console.H2ManagerMenu"
+        objectType = H2ManagerMenu.OBJECT_TYPE
         )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class H2ManagerMenu {
+
+    public static final String OBJECT_TYPE = IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu";
 
     private final WebModuleH2Console webModule;
 

@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class DescribedAsFacetOnMemberFactory 
+public class DescribedAsFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
 

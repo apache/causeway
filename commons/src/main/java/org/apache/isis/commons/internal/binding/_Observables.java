@@ -26,7 +26,7 @@ import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
- * 
+ *
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -39,26 +39,26 @@ public class _Observables {
     public static class LazyObservable<T> extends _BindableAbstract<T> {
 
         private final _Lazy<T> lazyValue;
-        
+
         public LazyObservable(Supplier<T> factory) {
             this.lazyValue = _Lazy.threadSafe(factory);
         }
-        
+
         @Override
         public T getValue() {
             return lazyValue.get();
         }
-        
+
         public void invalidate() {
             lazyValue.clear();
             super.fireValueChanged();
         }
-                
+
     }
-    
+
     public static <T> LazyObservable<T> forFactory(Supplier<T> factory) {
         val bindable = new LazyObservable<T>(factory);
         return bindable;
     }
-    
+
 }

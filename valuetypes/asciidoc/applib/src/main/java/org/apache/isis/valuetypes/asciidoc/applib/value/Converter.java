@@ -27,10 +27,10 @@ import org.asciidoctor.SafeMode;
 final class Converter {
 
     /**
-     * For syntax highlighting to work, the client/browser needs to load specific 
-     * java-script and css. 
+     * For syntax highlighting to work, the client/browser needs to load specific
+     * java-script and css.
      * <p>
-     * 1) In your web-app's {@code scripts/application.js} include the bundled 
+     * 1) In your web-app's {@code scripts/application.js} include the bundled
      * {@code src/main/resources/prism1.14.js}.
      * <pre>
      * function includeJs(jsFilePath) {
@@ -39,7 +39,7 @@ final class Converter {
      *     js.src = jsFilePath;
      *     document.body.appendChild(js);
      * }
-     * 
+     *
      * includeJs("/scripts/prism1.14.js");
      * </pre>
      * <p>
@@ -48,7 +48,7 @@ final class Converter {
      * <pre>
      * {@code @import "prism.css"}.
      * </pre>
-     *  
+     *
      * @param adoc - formatted input to be converted to HTML
      */
     public static String adocToHtml(String adoc) {

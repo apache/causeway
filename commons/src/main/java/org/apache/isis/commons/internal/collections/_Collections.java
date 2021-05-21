@@ -20,8 +20,8 @@
 package org.apache.isis.commons.internal.collections;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +43,9 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
+import org.apache.isis.commons.internal.reflection._Generics;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -68,11 +70,11 @@ public final class _Collections {
      * @param cls
      * @return whether {@code cls} implements the java.util.Collection interface
      */
-    public static boolean isCollectionType(@Nullable final Class<?> cls) {
+    public static boolean isCollectionType(final @Nullable Class<?> cls) {
         return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
     }
 
-    public static boolean isCanType(@Nullable final Class<?> cls) {
+    public static boolean isCanType(final @Nullable Class<?> cls) {
         return cls!=null ? Can.class.isAssignableFrom(cls) : false;
     }
 
@@ -92,7 +94,7 @@ public final class _Collections {
      * or represents an array or is of type {@link Can}
      */
     public static boolean isCollectionOrArrayOrCanType(final Class<?> cls) {
-        return _Collections.isCollectionType(cls) 
+        return _Collections.isCollectionType(cls)
                 || _Arrays.isArrayType(cls)
                 || Can.class.isAssignableFrom(cls);
     }
@@ -106,7 +108,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> Collection<T> asUnmodifiableCollection(@Nullable final List<T> list) {
+    public static <T> Collection<T> asUnmodifiableCollection(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -119,7 +121,7 @@ public final class _Collections {
      *
      * @param list
      */
-    public static <T> List<T> asUnmodifiableList(@Nullable final List<T> list) {
+    public static <T> List<T> asUnmodifiableList(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -135,7 +137,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> Set<T> asUnmodifiableSet(@Nullable final List<T> list) {
+    public static <T> Set<T> asUnmodifiableSet(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -154,7 +156,7 @@ public final class _Collections {
      * @param list
      * @return null if {@code list} is null
      */
-    public static <T> SortedSet<T> asUnmodifiableSortedSet(@Nullable final List<T> list) {
+    public static <T> SortedSet<T> asUnmodifiableSortedSet(final @Nullable List<T> list) {
         if(list==null) {
             return null;
         }
@@ -273,83 +275,64 @@ public final class _Collections {
     // -- ELEMENT TYPE INFERENCE
 
     /**
-     * If the {@code collectionType} represents a collection then returns returns the inferred element type of the
-     * specified {@code genericType}
-     * @param collectionType
-     * @param genericType as associated with {@code collectionType} (as available for fields or method parameters)
-     * @return inferred type or null if inference fails
+     * Optionally returns the inferred element type for given {@code param}, based on whether
+     * it represents a collection and inference is possible.
      */
-    public static @Nullable Class<?> inferElementTypeIfAny(
-            @Nullable final Class<?> collectionType,
-            @Nullable final Type genericType) {
+    public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
+        val parameterType = param.getType();
 
-        if(collectionType == null || genericType==null) {
-            return null;
+        if (_Collections.isCollectionType(parameterType)
+                || _Collections.isCanType(parameterType)) {
+
+            return _Generics.streamGenericTypeArgumentsOfParameter(param)
+                    .findFirst();
         }
 
-        if(!isCollectionType(collectionType) && !isCanType(collectionType)) {
-            return null;
-        }
-
-        if(genericType instanceof ParameterizedType) {
-            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
-            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            if(actualTypeArguments.length == 1) {
-                // handle e.g. List<Sometype>
-                final Type actualTypeArgument = actualTypeArguments[0];
-                if(actualTypeArgument instanceof Class) {
-                    final Class<?> actualType = (Class<?>) actualTypeArgument;
-                    return actualType;
-                }
-                // also handle e.g. List<Sometype<T>>
-                if(actualTypeArgument instanceof ParameterizedType) {
-                    final Type innerParameterizedType = ((ParameterizedType) actualTypeArgument).getRawType();
-                    if(innerParameterizedType instanceof Class) {
-                        final Class<?> actualType = (Class<?>) innerParameterizedType;
-                        return actualType;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return Optional.empty();
     }
 
     /**
-     * @param collectionType
-     * @param genericType
-     * @return optionally the inferred element type, 
-     * based on whether parameter is a (collection or array) and has an infer-able element type
+     * Optionally returns the inferred element type for given {@code method}'s return type,
+     * based on whether
+     * it represents a collection and inference is possible.
      */
-    public static Optional<Class<?>> inferElementTypeFromArrayOrCollection(
-            @Nullable final Class<?> collectionType,
-            @Nullable final Type genericType) {
+    public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
 
-        val fromArray = Optional.ofNullable(_Arrays.inferComponentTypeIfAny(collectionType));
-        if(fromArray.isPresent()) {
-            return fromArray;
+        val returnType = method.getReturnType();
+
+        if (_Collections.isCollectionType(returnType)
+                || _Collections.isCanType(returnType)) {
+
+            return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+                    .findFirst();
         }
-        val fromCollection = Optional.ofNullable(_Collections.inferElementTypeIfAny(collectionType, genericType));
-        return fromCollection;
+
+        return Optional.empty();
     }
 
     /**
-     * If the {@code field} represents a collection then returns the inferred element type for this collection (if any).
-     *
-     * @param field
-     * @return inferred type or null if inference fails
+     * Optionally returns the inferred element type for given {@code field}, based on whether
+     * it represents a collection and inference is possible.
      */
-    public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Field field) {
-        if(field==null) {
-            return null;
+    public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
+
+        val fieldType = field.getType();
+
+        if (_Collections.isCollectionType(fieldType)
+                || _Collections.isCanType(fieldType)) {
+
+            return _Generics.streamGenericTypeArgumentsOfField(field)
+                    .findFirst();
         }
-        return inferElementTypeIfAny(field.getType(), field.getGenericType());
+
+        return Optional.empty();
     }
 
     // -- TO STRING
 
-    public static String toStringJoining(@Nullable Collection<?> collection, String delimiter) {
-        _With.requires(delimiter, "delimiter");
+    public static String toStringJoining(
+            final @Nullable Collection<?> collection,
+            final @NonNull String delimiter) {
         return _NullSafe.stream(collection)
                 .map(x->""+x)
                 .collect(Collectors.joining(delimiter));

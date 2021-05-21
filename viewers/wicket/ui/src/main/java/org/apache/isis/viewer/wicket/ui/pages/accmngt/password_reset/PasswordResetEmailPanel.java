@@ -83,7 +83,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
 
         form.add(signUpButton);
     }
-    
+
     private void passwordResetSubmit(final RequiredTextField<String> emailField) {
 
         String email = emailField.getModelObject();
@@ -91,7 +91,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         String confirmationUrl = super.getEmailVerificationUrlService().createVerificationUrl(PageType.PASSWORD_RESET, email);
 
         val passwordResetEvent = new PasswordResetEvent(
-                email, 
+                email,
                 confirmationUrl,
                 getIsisConfiguration().getViewer().getWicket().getApplication().getName());
 

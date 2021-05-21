@@ -34,64 +34,64 @@ import lombok.NonNull;
 import lombok.val;
 
 public class PropertyNegotiationModel implements ManagedValue {
-    
+
     @NonNull private final _BindableAbstract<ManagedObject> proposedValue;
     @NonNull private final LazyObservable<String> validation;
     @NonNull private final _BindableAbstract<String> searchArgument;
     @NonNull private final LazyObservable<Can<ManagedObject>> choices;
-    
+
     @NonNull private final ManagedProperty managedProperty;
-    
+
     PropertyNegotiationModel(ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
         val propMeta = managedProperty.getMetaModel();
-        
+
         validationFeedbackActive = _Bindables.forValue(false);
-        
+
         val currentValue = managedProperty.getPropertyValue();
         val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
             ? propMeta.getDefault(managedProperty.getOwner())
             : currentValue;
-        
+
         proposedValue = _Bindables.forValue(defaultValue);
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });
-        
+
         // has either autoComplete, choices, or none
         choices = propMeta.hasAutoComplete()
         ? _Observables.forFactory(()->
             propMeta.getAutoComplete(
                     managedProperty.getOwner(),
-                    getSearchArgument().getValue(), 
+                    getSearchArgument().getValue(),
                     InteractionInitiatedBy.USER))
-        : propMeta.hasChoices() 
+        : propMeta.hasChoices()
             ? _Observables.forFactory(()->
                 propMeta.getChoices(managedProperty.getOwner(), InteractionInitiatedBy.USER))
             : _Observables.forFactory(Can::empty);
 
-        // if has autoComplete, then activate the search argument        
+        // if has autoComplete, then activate the search argument
         searchArgument = _Bindables.forValue(null);
         if(propMeta.hasAutoComplete()) {
             searchArgument.addListener((e,o,n)->{
                 choices.invalidate();
             });
         }
-        
+
         // validate this parameter, but only when validationFeedback has been activated
         validation = _Observables.forFactory(()->
             isValidationFeedbackActive()
             ? managedProperty.checkValidity(getValue().getValue())
                     .map(InteractionVeto::getReason)
                     .orElse(null)
-            : (String)null); 
+            : (String)null);
     }
 
     @Override
     public ObjectSpecification getSpecification() {
         return managedProperty.getSpecification();
     }
-    
+
     @Override
     public Bindable<ManagedObject> getValue() {
         return proposedValue;
@@ -111,27 +111,27 @@ public class PropertyNegotiationModel implements ManagedValue {
     public Observable<Can<ManagedObject>> getChoices() {
         return choices;
     }
-    
+
     // -- VALIDATION
-    
+
     @NonNull private final _BindableAbstract<Boolean> validationFeedbackActive;
-    
+
     /**
      * Whether validation feedback is activated. Activates once user attempts to 'submit' an action.
      */
     @NonNull public Observable<Boolean> getObservableValidationFeedbackActive() {
         return validationFeedbackActive;
     }
-    
+
     private boolean isValidationFeedbackActive() {
         return validationFeedbackActive.getValue();
     }
-    
+
     public void invalidateChoicesAndValidation() {
         choices.invalidate();
         validation.invalidate();
     }
-    
+
     // -- SUBMISSION
 
     public void submit() {

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodalocaldatetime;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -38,19 +40,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdo;
-import demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities;
+import demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeEntity;
 import demoapp.dom.types.jodatime.jodalocaldatetime.vm.JodaLocalDateTimeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JodaLocalDateTimes", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JodaLocalDateTimes implements HasAsciiDocDescription {
 
     public String title() {
@@ -67,13 +67,15 @@ public class JodaLocalDateTimes implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JodaLocalDateTimeJdo> getEntities() {
-        return entities.all();
+    public List<? extends JodaLocalDateTimeEntity> getEntities() {
+        return entities!=null
+                ? entities.all()
+                : Collections.emptyList();
     }
 
-    @Inject
+    @Autowired(required = false)
     @XmlTransient
-    JodaLocalDateTimeJdoEntities entities;
+    ValueHolderRepository<org.joda.time.LocalDateTime, ? extends JodaLocalDateTimeEntity> entities;
 
     @Inject
     @XmlTransient

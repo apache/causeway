@@ -40,7 +40,7 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
 
     public ActionParameterHiddenFacetViaMethod(
             final Method method,
-            final Optional<Constructor<?>> ppmFactory, 
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
 
         super(holder);
@@ -64,13 +64,13 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
 
     @Override
     public boolean isHidden(
-            final ManagedObject owningAdapter, 
+            final ManagedObject owningAdapter,
             final Can<ManagedObject> argumentAdapters) {
-        
+
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
-        
+
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
         }

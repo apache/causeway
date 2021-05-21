@@ -31,45 +31,45 @@ import lombok.Getter;
 import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
-    
+
     public String title() {
         return "inherited title";
     }
-    
+
     public String iconName() {
         return "inherited icon";
     }
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     public void sampleAction() {
     }
-    
+
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter 
+    @Getter @Setter
     private String sampleProperty;
-    
+
     @Collection
     @CollectionLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter 
+    @Getter @Setter
     private List<String> sampleCollection;
-    
+
     // -- OVERRIDING TESTS
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     public void sampleActionOverride() {
     }
-    
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     public void sampleActionOverride(String x) {
     }
-    
+
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter 
+    @Getter @Setter
     private String samplePropertyOverride;
 
 }

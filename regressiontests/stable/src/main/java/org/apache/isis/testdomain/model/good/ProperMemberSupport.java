@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -36,15 +36,15 @@ import lombok.Setter;
 
 
 /**
- * 
+ *
  * <h1>Support Matrix</h1>
  * <pre>
  * Prefix     Obj Prop Coll Act Param
  * autoComplete    x             x
  * choices         x             x
  * default         x             x
- * disable     x   x    x    x   
- * hide            x    x    x   
+ * disable     x   x    x    x
+ * hide            x    x    x
  * validate        x         x   x
  * </pre>
  *
@@ -63,12 +63,12 @@ public class ProperMemberSupport {
     public String disableMyAction() {
         return null;
     }
-    
+
     @MemberSupport // variant with dependent args
     public String disable1MyAction(String p0) {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideMyAction() {
         return false;
@@ -78,12 +78,12 @@ public class ProperMemberSupport {
     public boolean hide1MyAction(String p0) {
         return false;
     }
-    
+
     @MemberSupport
     public String validateMyAction(String p0, String p1) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> autoComplete0MyAction(@MinLength(3) String search) {
         return null;
@@ -93,7 +93,7 @@ public class ProperMemberSupport {
     public Set<String> autoComplete1MyAction(@MinLength(3) String search) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> choices0MyAction() {
         return null;
@@ -103,13 +103,13 @@ public class ProperMemberSupport {
     public Set<String> choices1MyAction() {
         return null;
     }
-    
+
 // variant with dependent args
 //    @MemberSupport
 //    public Set<String> choices1MyAction(String p0) {
 //        return null;
 //    }
-    
+
     @MemberSupport
     public String default0MyAction() {
         return null;
@@ -129,7 +129,7 @@ public class ProperMemberSupport {
     public String validate1MyAction(String p1) {
         return null;
     }
-    
+
     // [ISIS-2561] should be detected as Action (despite the prefix, which normally suggests otherwise)
     @Action
     public String hideMe() {
@@ -146,12 +146,12 @@ public class ProperMemberSupport {
     public Set<String> autoCompleteMyProp(@MinLength(3) String search) {
         return null;
     }
-    
+
     @MemberSupport
     public Set<String> choicesMyProp() {
         return null;
     }
-    
+
     @MemberSupport
     public String defaultMyProp() {
         return "";
@@ -161,12 +161,12 @@ public class ProperMemberSupport {
     public String disableMyProp() {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideMyProp() {
         return false;
     }
-    
+
     @MemberSupport
     public String validateMyProp(String x) {
         return "think twice";
@@ -182,10 +182,77 @@ public class ProperMemberSupport {
     public String disableMyColl() {
         return null;
     }
-    
+
     @MemberSupport
     public boolean hideMyColl() {
         return false;
     }
 
+    // -- PROPER ACTION - NEW PARAMETER MODEL - XXX only supported with mixins yet
+/*
+    @Value @Accessors(fluent = true)
+    public static class Parameter {
+        List<String> a;
+        List<String> b;
+    }
+
+    public ProperMemberSupport act(List<String> a, List<String> b) {
+        return this;
+    }
+
+    @MemberSupport
+    public String disableAct() {
+        return null;
+    }
+
+    @MemberSupport
+    public boolean hideAct() {
+        return false;
+    }
+
+    @MemberSupport
+    public String validateAct(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> autoComplete0Act(Parameter params, @MinLength(3) String search) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> autoComplete1Act(Parameter params, @MinLength(3) String search) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> choices0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> choices1Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public List<String> default0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public List<String> default1Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public String validate0Act(Parameter params) {
+        return null;
+    }
+
+    @MemberSupport
+    public String validate1Act(Parameter params) {
+        return null;
+    }
+*/
 }

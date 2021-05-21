@@ -54,12 +54,12 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            IsisAppCommonContext commonContext, 
-            String id, 
-            IModel<T> model, 
-            Class<T> type, 
+            IsisAppCommonContext commonContext,
+            String id,
+            IModel<T> model,
+            Class<T> type,
             DateConverter<T> converter) {
-        
+
         super(id, model, type);
 
         DateTimeConfig config = new DateTimeConfig();
@@ -91,6 +91,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         config.minDate(datePickerMinDate);
         config.maxDate(datePickerMaxDate);
+        config.readonly(!this.isEnabled());
 
         this.config = config;
     }
@@ -131,16 +132,25 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         checkComponentTag(tag, "input");
         Attributes.set(tag, "type", "text");
+
+        Attributes.addClass(tag, "datetimepicker-input");
+        Attributes.set(tag, "data-toggle", "datetimepicker");
+        Attributes.set(tag, "data-target", getMarkupId());
+
+        Attributes.set(tag, "autocomplete", "off");
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/bootstrap-datetimepicker.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/fa-patch.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/tempusdominus-bootstrap-4.css")));
 
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment.js")));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/bootstrap-datetimepicker.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment-with-locales.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/tempusdominus-bootstrap-4.js")));
+
+        config.readonly(! isEnabled());
 
         response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
     }

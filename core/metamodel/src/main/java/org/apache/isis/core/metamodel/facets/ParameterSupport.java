@@ -41,38 +41,38 @@ import lombok.Value;
 import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
 public final class ParameterSupport {
-    
+
     @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
-        
+
         public static enum ReturnType {
             NON_SCALAR,
             TEXT,
-            BOOLEAN, 
+            BOOLEAN,
             SAME_AS_PARAMETER_TYPE,
         }
-        
+
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
-        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms; 
+        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnType returnType;
-        
+
         Class<?> additionalParamType;
-        
+
         @Getter(lazy = true)
         Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
-        
+
         Can<String> getSupporingMethodNameCandidates(final int paramNr) {
             return getParamIndexToMethodNameProviders()
                     .map(provider->provider.apply(paramNr));
         }
     }
-    
+
     @Value(staticConstructor = "of")
     public static class ParamSupportingMethodSearchResult {
         int paramIndex;
@@ -81,7 +81,7 @@ public final class ParameterSupport {
         Class<?> returnType;
         Optional<Constructor<?>> ppmFactory;
     }
-    
+
     @FunctionalInterface
     public static interface SearchFunction {
         void search(
@@ -89,7 +89,7 @@ public final class ParameterSupport {
                 int paramNum,
                 Consumer<ParamSupportingMethodSearchResult> onMethodFound);
     }
-    
+
     @RequiredArgsConstructor
     public static enum SearchAlgorithm
     implements SearchFunction {
@@ -98,6 +98,7 @@ public final class ParameterSupport {
         SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType)
         ;
         private final SearchFunction searchFunction;
+        @Override
         public void search(
                 final ParamSupportingMethodSearchRequest searchRequest,
                 final int paramNum,
@@ -107,34 +108,34 @@ public final class ParameterSupport {
     }
 
     public static void findParamSupportingMethods(
-            final ParamSupportingMethodSearchRequest searchRequest, 
+            final ParamSupportingMethodSearchRequest searchRequest,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
-        
+
         val actionMethod = searchRequest.getProcessMethodContext().getMethod();
         val paramCount = actionMethod.getParameterCount();
-        
+
         for (int i = 0; i < paramCount; i++) {
-            for (val searchAlgorithm : searchRequest.searchAlgorithms) { 
+            for (val searchAlgorithm : searchRequest.searchAlgorithms) {
                 val paramNum = i;
-                searchAlgorithm.search(searchRequest, paramNum, onMethodFound); 
+                searchAlgorithm.search(searchRequest, paramNum, onMethodFound);
             }
         }
-        
+
     }
 
     private static void findParamSupportingMethodWithPPMArg(
             final ParamSupportingMethodSearchRequest searchRequest,
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
-        
+
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
         val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
-                
+
         val paramType = paramTypes[paramIndex];
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
-        
+
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
@@ -163,32 +164,32 @@ public final class ParameterSupport {
         default:
 
         }
-        
+
     }
-    
+
     private static ParamSupportingMethodSearchResult toSearchResult(
             final int paramIndex,
             final Class<?> paramType,
             final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
         return ParamSupportingMethodSearchResult
-                .of(paramIndex, paramType, 
-                        supportingMethodAndPpmConstructor.getSupportingMethod(), 
+                .of(paramIndex, paramType,
+                        supportingMethodAndPpmConstructor.getSupportingMethod(),
                         supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
                         Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
     }
-    
+
     private static void singleArgBeingParamType(
             final ParamSupportingMethodSearchRequest searchRequest,
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
-        
+
         val processMethodContext = searchRequest.getProcessMethodContext();
         val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
         val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         val paramType = paramTypes[paramIndex];
         val singleArg = new Class<?>[]{paramType};
-        
+
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
@@ -218,7 +219,7 @@ public final class ParameterSupport {
         }
 
     }
-    
+
     /*
      * search successively for the supporting method, trimming number of param types each loop
      */
@@ -234,14 +235,14 @@ public final class ParameterSupport {
         val paramType = paramTypes[paramIndex];
         val additionalParamType = searchRequest.getAdditionalParamType();
         val additionalParamCount = additionalParamType!=null ? 1 : 0;
-        
-        int paramsConsideredCount = paramIndex + additionalParamCount; 
+
+        int paramsConsideredCount = paramIndex + additionalParamCount;
         while(paramsConsideredCount>=0) {
-        
+
             val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
-            
+
             final Method supportingMethod;
-            
+
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 supportingMethod = MethodFinder
@@ -270,7 +271,7 @@ public final class ParameterSupport {
             default:
                 supportingMethod = null;
             }
-            
+
             if(supportingMethod != null) {
                 onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
                 return;
@@ -279,40 +280,40 @@ public final class ParameterSupport {
             // remove last, and search again
             paramsConsideredCount--;
         }
-        
+
     }
-    
+
     private static ParamSupportingMethodSearchResult toSearchResult(
             final int paramIndex,
             final Class<?> paramType,
             final Method supportingMethod) {
         return ParamSupportingMethodSearchResult
-                .of(paramIndex, paramType, 
-                        supportingMethod, 
+                .of(paramIndex, paramType,
+                        supportingMethod,
                         supportingMethod.getReturnType(),
                         Optional.empty());
     }
-    
+
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
             @Nullable final Class<?> additionalParamType) {
 
         if(paramsConsidered>paramTypes.length) {
-            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d", 
+            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
                     paramsConsidered, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
-        
+
         val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
                         : paramTypes;
-                
+
         val withAdditional = additionalParamType!=null
                 ? _Arrays.combine(paramTypesConsidered, additionalParamType)
                         : paramTypesConsidered;
-                
+
         return withAdditional;
     }
-    
+
 }

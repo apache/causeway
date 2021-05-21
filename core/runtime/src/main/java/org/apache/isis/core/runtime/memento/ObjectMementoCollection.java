@@ -29,7 +29,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
@@ -38,11 +38,11 @@ public final class ObjectMementoCollection implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
-    private final ArrayList<ObjectMemento> container; 
+    private final ArrayList<ObjectMemento> container;
 
     @Getter(onMethod_ = {@Override})
     @NonNull private final LogicalType logicalType;
-    
+
     @Override
     public String asString() {
         return getContainer().toString();
@@ -56,7 +56,7 @@ public final class ObjectMementoCollection implements ObjectMemento {
     @Override
     public Bookmark asBookmarkIfSupported() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }    
+    }
 
     public ArrayList<ObjectMemento> unwrapList() {
         return getContainer();

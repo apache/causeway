@@ -32,14 +32,14 @@ public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandl
 
     @Override
     public void handleTestExecutionException(
-            final ExtensionContext extensionContext, 
+            final ExtensionContext extensionContext,
             final Throwable throwable) throws Throwable {
 
         val translatedException = _Helper.getExceptionRecognizerService(extensionContext)
         .flatMap(recService->recService.recognize(throwable))
         .<Throwable>map(recognition->new RecoverableException(
-                String.format("%s: %s", 
-                        recognition.getCategory().getFriendlyName(), 
+                String.format("%s: %s",
+                        recognition.getCategory().getFriendlyName(),
                         recognition.getReason()
                 ),
                 throwable))

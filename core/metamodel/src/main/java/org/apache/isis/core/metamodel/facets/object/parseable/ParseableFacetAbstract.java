@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ParseableFacetAbstract 
+public abstract class ParseableFacetAbstract
 extends FacetAbstract
 implements ParseableFacet {
 
@@ -79,7 +79,7 @@ implements ParseableFacet {
             final ManagedObject original,
             final String entryText,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         return parseableFacetUsingParser.parseTextEntry(original, entryText, interactionInitiatedBy);
     }
 

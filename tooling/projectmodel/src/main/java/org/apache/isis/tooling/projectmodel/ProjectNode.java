@@ -31,21 +31,21 @@ import lombok.val;
 @Data @Builder
 public class ProjectNode implements Comparable<ProjectNode> {
 
-    @EqualsAndHashCode.Exclude @ToString.Exclude 
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     private final ProjectNode parent;
-    
-    @EqualsAndHashCode.Exclude @ToString.Exclude 
+
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     private final TreeSet<ProjectNode> children = new TreeSet<ProjectNode>(
             (a,b)->a.getName().compareTo(b.getName()));
-    
-    @EqualsAndHashCode.Exclude @ToString.Exclude 
+
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     private final TreeSet<Dependency> dependencies = new TreeSet<Dependency>();
-    
+
     private final ArtifactCoordinates artifactCoordinates;
     private final String name;
     private final String description;
     private final File projectDirectory;
-    
+
     public void depthFirst(final @NonNull ProjectVisitor projectVisitor) {
         projectVisitor.accept(this);
         for(val child : getChildren()){
@@ -61,7 +61,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
         }
         return false;
     }
-    
+
     public boolean containsOrEquals(final @NonNull ProjectNode other) {
         if(this.getArtifactCoordinates().equals(other.getArtifactCoordinates())) {
             return true;
@@ -75,7 +75,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
     }
 
     // -- COMPARATOR
-    
+
     @Override
     public int compareTo(ProjectNode other) {
         if(this.contains(other)) {
@@ -86,7 +86,7 @@ public class ProjectNode implements Comparable<ProjectNode> {
         }
         return this.getArtifactCoordinates().compareTo(other.getArtifactCoordinates());
     }
-    
-   
-    
+
+
+
 }

@@ -37,18 +37,16 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdo;
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeEntity;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.vm.JavaTimeOffsetDateTimeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaTimeOffsetDateTimes", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaTimeOffsetDateTimes implements HasAsciiDocDescription {
 
     public String title() {
@@ -65,13 +63,13 @@ public class JavaTimeOffsetDateTimes implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaTimeOffsetDateTimeJdo> getEntities() {
+    public List<? extends JavaTimeOffsetDateTimeEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaTimeOffsetDateTimeJdoEntities entities;
+    ValueHolderRepository<java.time.OffsetDateTime, ? extends JavaTimeOffsetDateTimeEntity> entities;
 
 
 }

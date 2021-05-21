@@ -35,7 +35,7 @@ import lombok.Setter;
 public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter @Setter private transient IsisAppCommonContext commonContext;
 
     private final ComponentType componentType;
@@ -56,10 +56,10 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     }
 
     public ComponentFactoryAbstract(
-            ComponentType componentType, 
-            String name, 
+            ComponentType componentType,
+            String name,
             Class<?> componentClass) {
-        
+
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();
         if(componentClass != null && ComponentFactory.class.isAssignableFrom(componentClass)) {

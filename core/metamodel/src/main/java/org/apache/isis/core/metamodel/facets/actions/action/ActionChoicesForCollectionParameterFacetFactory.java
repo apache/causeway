@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -63,7 +63,7 @@ implements MetaModelRefiner {
         }
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
-            // as an optimization only checking declared members (skipping inherited ones)  
+            // as an optimization only checking declared members (skipping inherited ones)
             objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
                 if(objectAction instanceof ObjectActionMixedIn) {
@@ -83,7 +83,7 @@ implements MetaModelRefiner {
         });
 
     }
-    
+
     private static void validateActionParameter_whenCollection(
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction,
@@ -97,20 +97,20 @@ implements MetaModelRefiner {
             // from java.util.Collection but are not of
             // exact type List, Set, SortedSet or Collection.
             if(!collectionSemanticsFacet.value().isSupportedInterfaceForActionParameters()) {
-                
+
                 val messageFormat = "Collection action parameter found that is not exactly one "
                         + "of the following supported types: "
                         + "List, Set, SortedSet, Collection or Array.  "
                         + "Class: %s action: %s parameter %d";
-                
+
                 ValidationFailure.raise(
                         objectSpec,
                         String.format(
-                                messageFormat, 
-                                objectSpec.getFullIdentifier(), 
-                                objectAction.getName(), 
+                                messageFormat,
+                                objectSpec.getFullIdentifier(),
+                                objectAction.getName(),
                                 paramNum));
-                
+
                 return;
             }
         }
@@ -125,22 +125,22 @@ implements MetaModelRefiner {
         if(parameterSpec.containsNonFallbackFacet(AutoCompleteFacet.class)) {
             return;
         }
-        
+
         //TODO[2253] remove this hotfix once ISIS-2253 is fixed
-        if(paramNum==0 && objectAction.containsNonFallbackFacet(AssociatedWithFacet.class)) {
-            return; 
+        if(paramNum==0 && objectAction.containsNonFallbackFacet(ChoicesFromFacet.class)) {
+            return;
         }
-        
+
         val messageFormat = "Collection action parameter found without supporting "
                 + "choices or autoComplete facet.  "
                 + "Class: %s action: %s parameter %d";
-        
+
         ValidationFailure.raise(
-                objectSpec, 
+                objectSpec,
                 String.format(
                         messageFormat,
-                        objectSpec.getFullIdentifier(), 
-                        objectAction.getName(), 
+                        objectSpec.getFullIdentifier(),
+                        objectAction.getName(),
                         paramNum));
     }
 

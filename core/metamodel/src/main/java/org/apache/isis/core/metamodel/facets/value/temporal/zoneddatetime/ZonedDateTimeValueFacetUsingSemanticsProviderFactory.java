@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
-public class ZonedDateTimeValueFacetUsingSemanticsProviderFactory 
+public class ZonedDateTimeValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<ZonedDateTime> {
 
     public ZonedDateTimeValueFacetUsingSemanticsProviderFactory() {

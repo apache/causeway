@@ -22,17 +22,17 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -52,12 +52,12 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
         expectNoMethodsRemoved();
 
-        facetFactory.processObjectType(new ProcessObjectSpecIdContext(Customer.class, facetHolder));
+        facetFactory.processObjectType(new ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final ObjectTypeFacet facet = facetHolder.getFacet(ObjectTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectSpecIdFacetForDomainObjectAnnotation, is(true));
+        assertThat(facet instanceof ObjectTypeFacetForDomainObjectAnnotation, is(true));
         assertThat(facet.value(), is("CUS"));
 
     }

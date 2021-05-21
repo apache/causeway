@@ -45,7 +45,7 @@ public final class ClassExtensions {
     public static Object newInstance(final Class<?> type) {
         return ClassExtensions.newInstance(type, _Constants.emptyClasses, _Constants.emptyObjects);
     }
-    
+
     public static Object newInstance(final Class<?> extendee, final Class<?> constructorParamType, final Object constructorArg) {
         return ClassExtensions.newInstance(extendee, new Class[] { constructorParamType }, new Object[] { constructorArg });
     }
@@ -186,7 +186,7 @@ public final class ClassExtensions {
         }
         return Objects.equals(asWrappedIfNecessary(t1), asWrappedIfNecessary(t2));
     }
-    
+
     public static final class CommonSuperclassFinder {
 
         private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {

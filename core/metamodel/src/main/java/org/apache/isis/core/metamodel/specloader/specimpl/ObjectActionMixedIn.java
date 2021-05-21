@@ -62,15 +62,19 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    private final Identifier identifier;
-
     public ObjectActionMixedIn(
             final Class<?> mixinType,
             final String mixinMethodName,
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType) {
 
-        super(mixinAction.getFacetedMethod());
+        super(Identifier.actionIdentifier(
+                    LogicalType.eager(
+                            mixedInType.getCorrespondingClass(),
+                            mixedInType.getLogicalTypeName()),
+                    determineIdFrom(mixinAction),
+                    mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
+                mixinAction.getFacetedMethod());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -86,16 +90,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             String memberName = determineNameFrom(mixinAction);
             this.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
-
-        // calculate the identifier
-        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
-        identifier = Identifier.actionIdentifier(
-                LogicalType.eager(
-                        getOnType().getCorrespondingClass(),
-                        getOnType().getLogicalTypeName()),
-                getId(), 
-                memberParameterClassNames);
     }
 
     @Override
@@ -103,17 +97,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         val target = mixinAdapterFor(mixinType, owner);
         return InteractionHead.of(owner, target);
     }
-    
-    @Override
-    public String getId() {
-        return determineIdFrom(this.mixinAction);
-    }
 
     @Override
-    public String getOriginalId() {
-        return super.getId();
-    }
-
     public boolean hasMixinAction(final ObjectAction mixinAction) {
         return this.mixinAction == mixinAction;
     }
@@ -164,21 +149,13 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         final ManagedObject owner = head.getOwner();
         final ManagedObject target = mixinAdapterFor(mixinType, owner);
-        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(), 
+        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
                 "head has the wrong target (should be a mixin adapter, but is the owner adapter)");
-        
+
         setupCommand(head.getTarget(), arguments);
         return mixinAction.executeInternal(
                 head, arguments,
                 interactionInitiatedBy);
-    }
-
-    /* (non-Javadoc)
-     * @see ObjectMemberAbstract#getIdentifier()
-     */
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
     }
 
     @Override
@@ -186,6 +163,5 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return getSpecificationLoader().loadSpecification(mixinType);
 
     }
-
 
 }

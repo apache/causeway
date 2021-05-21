@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.commons;
 
 /**
- * Provides a mechanism to avoid infinite loops 
+ * Provides a mechanism to avoid infinite loops
  * whereby method A -&gt; method B -&gt; method C -&gt; method A and so on.
  */
 public final class Wormhole {

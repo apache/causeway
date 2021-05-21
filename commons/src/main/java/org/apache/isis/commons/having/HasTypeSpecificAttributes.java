@@ -33,5 +33,5 @@ public interface HasTypeSpecificAttributes {
 
     /** remove type specific attribute */
     void removeAttribute(Class<?> type);
-    
+
 }

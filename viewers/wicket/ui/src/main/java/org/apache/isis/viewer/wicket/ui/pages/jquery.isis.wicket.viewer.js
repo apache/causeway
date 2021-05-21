@@ -51,7 +51,7 @@ $(function() {
     $(window).on('resize', centerModals);
 
     var isisVeilTimeoutId;
-    
+
     var isisShowVeil = function() {
         if(isisVeilTimeoutId) {
             clearTimeout(isisVeilTimeoutId);
@@ -69,7 +69,7 @@ $(function() {
         isisVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);
-        
+
     };
 
     var isisHideVeil = function() {
@@ -105,7 +105,8 @@ $(function() {
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {
-            $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,select,div.cbx').filter(':visible:first').focus();
+            $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,div.cbx').filter(':visible:first').focus();
+            $('#'+elementId).find('.inputFormTable.parameters').find('select').filter(':visible:first').select2('open').select2('close');
         }, 0);
     });
 
@@ -129,20 +130,20 @@ $(function() {
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(jqEvent, attributes, jqXHR, status) {
         isisHideVeil(/*attributes, jqXHR, status*/);
     });
-    
 
-    
+
+
     /* only seem to work in non-modal situation */
     $('.buttons .okButton:not(.noVeil)').click(isisFadeInVeil);
     $('.buttons .ok:not(.noVeil)').click(isisFadeInVeil);
     $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisFadeInVeil);
 
-    $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
+    $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception')
         .livequery(function(){
             var x = $(this);
             $(this).animate({ "backgroundColor": "#FFF" }, 1000, "linear", function() {
                 $(x).css('background-color','').removeClass("reloaded-after-concurrency-exception");
-            }); 
+            });
         });
 
     /**
@@ -185,6 +186,16 @@ $(function() {
         }
     });
 
+	/* force hide popover on button click */
+
+	let hidePopover = function (e) {
+	    $(e.target).closest('[rel="popover"]').each(function () {
+	   		$(this).popover('hide');
+	    });
+	}
+
+	$(document, '.isis-component-with-tooltip').on('click', hidePopover);
+
 /*
     $('.editing .editable').parent().hover(function () {
         var inputEl = $(this).find("> .editable")
@@ -195,18 +206,76 @@ $(function() {
     });
 */
 
+    /*
+    Adapted from https://bootstrap-menu.com/detail-basic-hover.html
+    Ignoring mouseleave events if hovering over a popover that belongs to a menuitem.
+    The magic number in the window width predicate corresponds to the nav-bar collaps behavior
+    as used in Footer/HeaderPanel.html templates; see Bootstrap 4 ref. ...
+        navbar-expand = never collapses vertically (remains horizontal)
+        navbar-expand-sm = collapses below sm widths <576px
+        navbar-expand-md = collapses below md widths <768px
+        navbar-expand-lg = collapses below lg widths <992px
+        navbar-expand-xl = collapses below xl widths <1200px
+	*/
+	document.querySelectorAll('.navbar .nav-item, div.additionalLinkList').forEach(function(everyitem){
+		/*
+		   disabled for additional-action-links,
+           as it currently does not work consistently eg. with AJAX requests
+
+		   let autoShowSelector = 'a[data-toggle], button[data-toggle]';
+		*/
+		let autoShowSelector = 'a[data-toggle]';
+
+		everyitem.addEventListener('mouseover', function(e){
+			if(window.innerWidth<768){
+				return; // when collapsed is a no-op
+			}
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
+				let nextEl = el_link.nextElementSibling;
+				el_link.classList.add('show');
+				nextEl.classList.add('show');
+			})
+		});
+
+		everyitem.addEventListener('mouseleave', function(e){
+			if(window.innerWidth<768){
+				return; // when collapsed is a no-op
+			}
+			// do not hide the dropdown if hovering over a popover (tooltip) attached to the dropdown item
+			// The MouseEvent.relatedTarget read-only property is the secondary target for the mouse event,
+			// if there is one: That is, the EventTarget the pointing device entered to.
+			let relatedTarget = $(e.relatedTarget);
+			if(relatedTarget.hasClass('popover')
+					|| relatedTarget.hasClass('popover-body') // not strictly required, just an optimization
+					|| relatedTarget.parents('.popover').length>0) {
+				e.preventDefault();
+				return;
+			}
+			this.querySelectorAll(autoShowSelector)
+			.forEach(function(el_link){
+				let nextEl = el_link.nextElementSibling;
+				el_link.classList.remove('show');
+				nextEl.classList.remove('show');
+			})
+		});
+	});
+
+
 });
 
 /**
  * enables 'maxlength' to work as an attribute on 'textarea'
- * 
+ *
  * as per: see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
  */
-$(function() {  
-    $("textarea[maxlength]").bind('input propertychange', function() {  
-        var maxLength = $(this).attr('maxlength');  
-        if ($(this).val().length > maxLength) {  
-            $(this).val($(this).val().substring(0, maxLength));  
-        }  
-    })  
+$(function() {
+    $("textarea[maxlength]").bind('input propertychange', function() {
+        var maxLength = $(this).attr('maxlength');
+        if ($(this).val().length > maxLength) {
+            $(this).val($(this).val().substring(0, maxLength));
+        }
+    })
 });
+
+

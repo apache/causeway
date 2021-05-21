@@ -51,8 +51,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * collection of entity}s rendered using as a table of summary values with a
  * chart alongside.
  */
-public class CollectionContentsAsSummary 
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
+public class CollectionContentsAsSummary
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";
@@ -131,7 +131,7 @@ implements CollectionCountProvider {
             this.propertyName = propertyName;
             int nonNullCount = 0;
             for (val adapter : adapters) {
-                titles.add(adapter.titleString(null));
+                titles.add(adapter.titleString());
                 final ManagedObject valueAdapter =
                         numberAssociation.get(adapter, InteractionInitiatedBy.USER);
                 if (valueAdapter == null) {

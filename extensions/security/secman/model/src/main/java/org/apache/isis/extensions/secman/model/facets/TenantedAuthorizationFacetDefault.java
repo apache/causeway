@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.tenancy.spi.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 
 public class TenantedAuthorizationFacetDefault extends FacetAbstract implements TenantedAuthorizationFacet {
 
@@ -41,13 +41,13 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     }
 
     private final List<ApplicationTenancyEvaluator> evaluators;
-    private final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    private final ApplicationUserRepository applicationUserRepository;
     private final Provider<QueryResultsCache> queryResultsCacheProvider;
     private final UserService userService;
 
     public TenantedAuthorizationFacetDefault(
             final List<ApplicationTenancyEvaluator> evaluators,
-            final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository,
+            final ApplicationUserRepository applicationUserRepository,
             final Provider<QueryResultsCache> queryResultsCacheProvider,
             final UserService userService,
             final FacetHolder holder) {
@@ -65,7 +65,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
             return null;
         }
 
-        final Object domainObject = ic.getTarget().getPojo();
+        final Object domainObject = ic.getHead().getOwner().getPojo();
         final String userName = userService.currentUserNameElseNobody();
 
         final ApplicationUser applicationUser = findApplicationUser(userName);
@@ -90,7 +90,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
             return null;
         }
 
-        final Object domainObject = ic.getTarget().getPojo();
+        final Object domainObject = ic.getHead().getOwner().getPojo();
         final String userName = userService.currentUserNameElseNobody();
 
         final ApplicationUser applicationUser = findApplicationUser(userName);

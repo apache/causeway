@@ -333,9 +333,9 @@ class _ArraysTest {
      */
     @Test
     void testInferComponentTypeIfAny() {
-        assertEquals(null, _Arrays.inferComponentTypeIfAny(null));
-        assertEquals(int.class, _Arrays.inferComponentTypeIfAny(int[].class));
-        assertEquals(Integer.class, _Arrays.inferComponentTypeIfAny(Integer[].class));
+        assertEquals(null, _Arrays.inferComponentType(null).orElse(null));
+        assertEquals(int.class, _Arrays.inferComponentType(int[].class).orElse(null));
+        assertEquals(Integer.class, _Arrays.inferComponentType(Integer[].class).orElse(null));
     }
 
     /**

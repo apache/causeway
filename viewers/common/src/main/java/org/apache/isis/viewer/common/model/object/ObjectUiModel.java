@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 public interface ObjectUiModel {
 
     ManagedObject getManagedObject();
-    
+
     default boolean isVisible() {
         return ManagedObjects.VisibilityUtil
                 .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
@@ -86,7 +86,7 @@ public interface ObjectUiModel {
             return this.where;
         }
     }
-    
+
     public interface HasRenderingHints {
 
         /**
@@ -94,15 +94,15 @@ public interface ObjectUiModel {
          * My suspicion is that it amounts to more or less the same set of conditions.
          */
         boolean isInlinePrompt();
-        
+
         RenderingHint getRenderingHint();
         void setRenderingHint(RenderingHint renderingHint);
-        
+
         Mode getMode();
         void setMode(Mode mode);
-        
+
         // -- SHORTCUTS
-        
+
         default boolean isViewMode() {
             return getMode() == Mode.VIEW;
         }
@@ -122,5 +122,5 @@ public interface ObjectUiModel {
         }
 
     }
-    
+
 }

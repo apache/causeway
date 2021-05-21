@@ -33,35 +33,35 @@ public class InteractionNpmDemo_biArgEnabled {
 
     @SuppressWarnings("unused")
     private final InteractionNpmDemo holder;
-    
-    @Value @Accessors(fluent = true)            
-    public static class Parameters {      
+
+    @Value @Accessors(fluent = true)
+    public static class Parameters {
         int a;
         int b;
     }
-    
+
     @MemberSupport
     public int act(
-            
-            @Parameter(maxLength = 2) // setup so we can test for this facet 
+
+            @Parameter(maxLength = 2) // setup so we can test for this facet
             @ParameterLayout(describedAs = "first") // setup so we can test for this facet
             int a,
-            
+
             int b) {
-        
+
         return a + b;
     }
-    
+
     // -- PARAM 0
 
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
-    @MemberSupport 
-    public int defaultA(Parameters params) { 
+    @MemberSupport
+    public int defaultA(Parameters params) {
         return 5;
     }
-    
+
     // -- PARAM 1
-    
+
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
     @MemberSupport
     public int[] choicesB(Parameters params) {

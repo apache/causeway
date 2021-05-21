@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface MarkdownValueFacet extends Facet {
-    
+
     String markdownValue(ManagedObject object);
     ManagedObject createValue(ManagedObject object, String html);
 

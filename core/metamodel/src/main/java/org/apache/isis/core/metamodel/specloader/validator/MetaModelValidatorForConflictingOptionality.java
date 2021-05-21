@@ -34,16 +34,16 @@ public class MetaModelValidatorForConflictingOptionality {
             addFailure(facet, message);
         }
     }
-    
+
     // -- HELPER
 
     private static void addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             ValidationFailure.raiseFormatted(
-                    holder, 
-                    "%s : %s", 
-                    message, 
+                    holder,
+                    "%s : %s",
+                    message,
                     holder.getIdentifier().getFullIdentityString());
         }
     }

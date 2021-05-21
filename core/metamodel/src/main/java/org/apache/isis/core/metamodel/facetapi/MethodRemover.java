@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 
 /**
@@ -40,13 +41,13 @@ public interface MethodRemover {
     void removeMethods(
             Predicate<Method> removeIf,
             Consumer<Method> onRemoval);
-    
+
     /** variant with noop consumer */
     default void removeMethods(
             Predicate<Method> removeIf) {
         removeMethods(removeIf, removedMethod -> {});
     }
-    
+
     /**
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
@@ -57,14 +58,20 @@ public interface MethodRemover {
             String methodName,
             Class<?> returnType,
             Class<?>[] parameterTypes) {
-        
+
         removeMethods(MethodUtil.Predicates.signature(methodName, returnType, parameterTypes));
     }
 
     void removeMethod(Method method);
     
+    /**
+     * Returns a defensive copy of the current internal state.
+     * @apiNote introduced for debugging purposes
+     */
+    Can<Method> snapshot();
+
     // -- NOOP IMPLEMENTATION
-    
+
     public static final MethodRemover NOOP = new MethodRemover() {
 
         @Override
@@ -73,6 +80,11 @@ public interface MethodRemover {
 
         @Override
         public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        }
+
+        @Override
+        public Can<Method> snapshot() {
+            return Can.empty();
         }
 
     };

@@ -36,7 +36,6 @@ public enum PageType {
     HOME_AFTER_PAGETIMEOUT,
     ABOUT,
     ENTITY,
-    ACTION_PROMPT,
     STANDALONE_COLLECTION,
     VALUE,
     VOID_RETURN;

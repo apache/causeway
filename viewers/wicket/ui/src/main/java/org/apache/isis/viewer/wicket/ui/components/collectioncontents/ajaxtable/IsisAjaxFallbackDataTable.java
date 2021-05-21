@@ -62,7 +62,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
             final ObjectAdapterToggleboxColumn toggleboxColumn) {
-        
+
         super(id, columns, (ISortableDataProvider<T, S>)dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
         this.toggleboxColumn = toggleboxColumn;
@@ -85,7 +85,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         navigationToolbar = new IsisAjaxNavigationToolbar(this, this.toggleboxColumn);
 
         // implementation note: toolbars do decide for themselves, whether they are visible
-        addBottomToolbar(navigationToolbar); 
+        addBottomToolbar(navigationToolbar);
         addBottomToolbar(new NoRecordsToolbar(this));
         addBottomToolbar(new IsisTotalRecordsToolbar(this));
     }

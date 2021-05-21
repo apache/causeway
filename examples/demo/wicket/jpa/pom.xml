@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>demo-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>demo-wicket-jpa</artifactId>
+
+	<name>Demo - Wicket/JPA</name>
+
+	<packaging>jar</packaging>
+
+	<properties>
+		<maven.deploy.skip>true</maven.deploy.skip>
+		<sonar.skip>true</sonar.skip>
+		<spring.profiles.active>demo-jpa</spring.profiles.active> 
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+	</build>
+
+	<dependencies>
+
+		<!-- DEMO DOMAIN + WEB -->
+
+		<dependency>
+			<groupId>org.apache.isis.examples.apps</groupId>
+			<artifactId>demo-wicket-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- PERSISTENCE -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jpa</artifactId>
+			<type>pom</type>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+
+		<!-- running: mvn spring-boot:run -->
+		<profile>
+			<id>package-as-jar</id>
+			<activation>
+				<property>
+					<name>!skip-package-as-jar</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<requiresUnpack>
+								<dependency>
+									<groupId>org.asciidoctor</groupId>
+									<artifactId>asciidoctorj</artifactId>
+								</dependency>
+							</requiresUnpack>
+							<excludes>
+								<exclude>
+									<groupId>org.springframework.boot</groupId>
+									<artifactId>spring-boot-configuration-processor</artifactId>
+								</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+		<profile>
+			<id>deploy-to-docker-io</id>
+			<activation>
+				<property>
+					<name>!skip-docker</name>
+				</property>
+			</activation>
+			<properties>
+			</properties>
+			<dependencies>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<from>
+								<image>openjdk:15-alpine</image>
+							</from>
+							<container>
+								<jvmFlags>
+									<jvmFlag>-Xmx512m</jvmFlag>
+								</jvmFlags>
+								<mainClass>demoapp.webapp.wicket.jpa.DemoAppWicketJpa</mainClass>
+								<ports>
+									<port>8080</port>
+								</ports>
+							</container>
+							<to>
+								<image>docker.io/apacheisis/demo-wicket-jpa</image>
+								<tags>
+									<tag>${env.REVISION}</tag>
+								</tags>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>

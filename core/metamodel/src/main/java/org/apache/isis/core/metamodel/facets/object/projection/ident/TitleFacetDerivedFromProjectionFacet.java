@@ -40,7 +40,7 @@ public class TitleFacetDerivedFromProjectionFacet extends TitleFacetAbstract {
     @Override
     public String title(final ManagedObject targetAdapter) {
         val projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.titleString(null);
+        return projectedAdapter.titleString();
     }
 
     @Override

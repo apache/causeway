@@ -42,19 +42,19 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Dn5")
 @ConfigurationProperties(
-        prefix = "", 
+        prefix = "",
         ignoreUnknownFields = true)
 @Log4j2
 public class DnSettings {
 
     /** mapped by {@code datanucleus.*} */
-    @Getter @Setter 
-    private Map<String, String> datanucleus = Collections.emptyMap(); 
-    
+    @Getter @Setter
+    private Map<String, String> datanucleus = Collections.emptyMap();
+
     /** mapped by {@code javax.*} filtered later for {@code javax.jdo.*} */
-    @Getter @Setter 
+    @Getter @Setter
     private Map<String, String> javax = Collections.emptyMap();
-    
+
     private final Object lock = new Object();
     private Map<String, Object> properties;
 
@@ -62,25 +62,25 @@ public class DnSettings {
         synchronized(lock) {
             if(properties==null) {
                 properties = new HashMap<>();
-                
+
                 if(datanucleus!=null) {
                     datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
                 }
-                
+
                 if(javax!=null) {
                     javax.entrySet().stream()
                     .filter(e->e.getKey().startsWith("jdo."))
                     .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
                 }
-                
+
                 amendProperties(properties);
             }
         }
         return properties;
     }
-    
+
     private void amendProperties(final Map<String, Object> props) {
-        
+
         // add optional defaults if needed
 
         String connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
@@ -103,9 +103,9 @@ public class DnSettings {
                 log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
-        } 
-        
+        }
+
     }
-    
-    
+
+
 }

@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 
 import lombok.val;
 
-public abstract class RecreatableObjectFacetAbstract 
-extends FacetAbstract 
+public abstract class RecreatableObjectFacetAbstract
+extends FacetAbstract
 implements ViewModelFacet {
 
     private final PostConstructMethodCache postConstructMethodCache;
@@ -87,11 +87,11 @@ implements ViewModelFacet {
         if (getRecreationMechanism() == RecreationMechanism.INITIALIZES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
-        
+
         val viewModelPojo = _Strings.isNullOrEmpty(mementoStr)
                 ? ClassExtensions.newInstance(viewModelClass)
                 : doInstantiate(viewModelClass, mementoStr);
-                
+
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
         return viewModelPojo;
@@ -99,7 +99,7 @@ implements ViewModelFacet {
 
     /**
      * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
-     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES} 
+     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES}
      * (ignored otherwise).
      */
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
@@ -118,7 +118,7 @@ implements ViewModelFacet {
 
     /**
      * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
-     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES} 
+     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES}
      * (ignored otherwise).
      */
     protected void doInitialize(final Object viewModelPojo, final String mementoStr) {

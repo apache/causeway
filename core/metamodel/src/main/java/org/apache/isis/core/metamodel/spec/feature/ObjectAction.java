@@ -17,12 +17,13 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -36,13 +37,10 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -55,6 +53,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -117,8 +116,8 @@ public interface ObjectAction extends ObjectMember {
      * Invokes the action's method on the target object given the specified set
      * of parameters.
      *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  
-     * When a mixin action invokes its underlying mixedIn action, then will be populated 
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.
+     * When a mixin action invokes its underlying mixedIn action, then will be populated
      * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject execute(
@@ -187,7 +186,7 @@ public interface ObjectAction extends ObjectMember {
 
     ActionInteractionHead interactionHead(
             @NonNull ManagedObject actionOwner);
-    
+
     // -- Parameters (declarative)
 
     /**
@@ -202,6 +201,14 @@ public interface ObjectAction extends ObjectMember {
      * Implementations may build this array lazily or eagerly as required.
      */
     Can<ObjectActionParameter> getParameters();
+
+    /**
+     * Returns a {@link Stream} of {@link ObjectActionParameter} as per
+     * {@link #getParameters()}.
+     */
+    default Stream<ObjectActionParameter> streamParameters() {
+        return getParameters().stream();
+    }
 
     /**
      * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
@@ -254,17 +261,17 @@ public interface ObjectAction extends ObjectMember {
         final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
-    
-    // -- UTIL
-    
-    public static final class Util {
 
-        private Util() {
-        }
-        
-        private static boolean isPrototyping(ManagedObject adapter) {
-            return MetaModelContext.from(adapter).getSystemEnvironment().isPrototyping();
-        }
+    /**
+     * Returns a serializable representation of this action.
+     */
+    default ActionMemento getMemento() {
+        return ActionMemento.forAction(this);
+    }
+
+    // -- UTIL
+
+    public static final class Util {
 
         public static String nameFor(final ObjectAction objAction) {
             final String actionName = objAction.getName();
@@ -334,60 +341,33 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
-        public static List<ObjectAction> findTopLevel(
+        /**
+         * Returns a Stream of those to be rendered with the entity header panel.
+         */
+        public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
-            
-            val topLevelActions = _Lists.<ObjectAction>newArrayList();
-
-            addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(isPrototyping(adapter)) {
-                addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
-            }
-            return topLevelActions;
-        }
-
-        static void addTopLevelActions(
-                final ManagedObject adapter,
-                final ActionType actionType,
-                final List<ObjectAction> topLevelActions) {
 
             val spec = adapter.getSpecification();
 
-            spec.streamDeclaredActions(actionType, MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.memberOrderNotAssociationOf(spec))
-            .filter(ObjectAction.Predicates.dynamicallyVisible(adapter, 
-                    InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(ObjectAction.Predicates.excludeWizardActions(spec))
-            .forEach(topLevelActions::add);
-
+            return spec.streamRuntimeActions(MixedIn.INCLUDED)
+            .filter(Predicates
+                    .isSharingAnyLayoutGroupOf(spec.streamAssociations(MixedIn.INCLUDED))
+                    .negate())
+            .filter(Predicates
+                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE))
+            .filter(Predicates.isNotWizard(spec));
         }
 
-        public static List<ObjectAction> findForAssociation(
+        public static Stream<ObjectAction> findForAssociation(
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            val associatedActions = _Lists.<ObjectAction>newArrayList();
+            val spec = adapter.getSpecification();
 
-            addActions(adapter, ActionType.USER, association, associatedActions);
-            if(isPrototyping(adapter)) {
-                addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
-            }
-
-            Collections.sort(associatedActions, Comparators.byMemberOrderSequence(false));
-            return associatedActions;
-        }
-
-        static void addActions(
-                final ManagedObject adapter,
-                final ActionType type,
-                final ObjectAssociation association, final List<ObjectAction> associatedActions) {
-            
-            val objectSpecification = adapter.getSpecification();
-
-            objectSpecification.streamDeclaredActions(type, MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.actionIsAssociatedWith(association))
-            .filter(ObjectAction.Predicates.excludeWizardActions(objectSpecification))
-            .forEach(associatedActions::add);
+            return spec.streamRuntimeActions(MixedIn.INCLUDED)
+            .filter(Predicates.isSameLayoutGroupAs(association))
+            .filter(Predicates.isNotWizard(spec))
+            .sorted(Comparators.byMemberOrderSequence(false));
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
@@ -425,55 +405,90 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Predicates {
 
-        private Predicates() {
+        public static Predicate<ObjectAction> ofActionType(final ActionType type) {
+            return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static Predicate<ObjectAction> associatedWith(final ObjectAssociation objectAssociation) {
-            return new AssociatedWith(objectAssociation);
+        public static Predicate<ObjectAction> isSameLayoutGroupAs(
+                final @NonNull ObjectAssociation association) {
+
+            final String assocIdLower = association.getId();
+
+            return (ObjectAction objectAction) -> {
+
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
+                    return false;
+                }
+                val layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                    return false;
+                }
+                return layoutGroupId.equals(assocIdLower);
+            };
         }
 
-        public static Predicate<ObjectAction> associatedWithAndWithCollectionParameterFor(
-                final OneToManyAssociation collection) {
+        private static Predicate<? super ObjectAction> isSharingAnyLayoutGroupOf(
+                final @NonNull Stream<ObjectAssociation> streamOfAssociations) {
+
+            final Set<String> associationIds = streamOfAssociations
+                    .map(ObjectAssociation::getId)
+                    .collect(Collectors.toCollection(HashSet::new));
+
+            return (ObjectAction objectAction) -> {
+
+                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                if (layoutGroupFacet == null) {
+                    return false;
+                }
+                val layoutGroupId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                    return false;
+                }
+                return associationIds.contains(layoutGroupId);
+            };
+        }
+
+        public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
+                final @NonNull OneToManyAssociation collection) {
 
             final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
 
-            return new AssociatedWith(collection)
+            return new ChoicesFrom(collection)
                     .and(new HasParameterMatching(
                             new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
                             ));
         }
 
-        public static class AssociatedWith implements Predicate<ObjectAction> {
-            private final String memberId;
-            private final String memberName;
+        // -- HELPER
 
-            public AssociatedWith(final ObjectAssociation objectAssociation) {
-                this.memberId = objectAssociation.getId();
-                this.memberName = objectAssociation.getName();
+        private static class ChoicesFrom implements Predicate<ObjectAction> {
+            private final @NonNull String memberId;
+            private final @NonNull String memberName;
+
+            public ChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
+                this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
+                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
             }
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                val associatedWithFacet = objectAction.getFacet(AssociatedWithFacet.class);
-                if(associatedWithFacet == null) {
+                val choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
+                if(choicesFromFacet == null) {
                     return false;
                 }
-                val associatedMemberName = associatedWithFacet.value();
-                if (associatedMemberName == null) {
+                val choicesFromMemberName = choicesFromFacet.value();
+                if (choicesFromMemberName == null) {
                     return false;
                 }
-                val memberOrderNameLowerCase = associatedMemberName.toLowerCase();
-                return equalWhenLowerCase(memberName, memberOrderNameLowerCase) 
-                        || equalWhenLowerCase(memberId, memberOrderNameLowerCase);
+                val memberNameLowerCase = choicesFromMemberName.toLowerCase();
+                return Objects.equals(memberName, memberNameLowerCase)
+                        || Objects.equals(memberId, memberNameLowerCase);
             }
-            
-            private boolean equalWhenLowerCase(@Nullable String string, String lowerCaseString) {
-                return string != null && Objects.equals(string.toLowerCase(), lowerCaseString);
-            }
-            
+
         }
 
-        public static class HasParameterMatching implements Predicate<ObjectAction> {
+        private static class HasParameterMatching implements Predicate<ObjectAction> {
             private final Predicate<ObjectActionParameter> parameterPredicate;
             public HasParameterMatching(final Predicate<ObjectActionParameter> parameterPredicate) {
                 this.parameterPredicate = parameterPredicate;
@@ -486,26 +501,22 @@ public interface ObjectAction extends ObjectMember {
             }
         }
 
-        public static Predicate<ObjectAction> ofType(final ActionType type) {
-            return (ObjectAction oa) -> oa.getType() == type;
-        }
-
-        public static Predicate<ObjectAction> dynamicallyVisible(
+        private static Predicate<ObjectAction> dynamicallyVisible(
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            
+
             return (ObjectAction objectAction) -> {
                 final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                 return visible.isAllowed();
             };
         }
 
-        public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
-            return wizardActions(objectSpecification).negate();
+        private static Predicate<ObjectAction> isNotWizard(final ObjectSpecification objectSpecification) {
+            return isWizard(objectSpecification).negate();
         }
 
-        private static Predicate<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
+        private static Predicate<ObjectAction> isWizard(final ObjectSpecification objectSpecification) {
             return (ObjectAction input) -> {
                 if (objectSpecification == null) {
                     return false;
@@ -515,47 +526,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        public static Predicate<ObjectAction> actionIsAssociatedWith(ObjectAssociation association) {
-            final String assocName = association.getName();
-            final String assocId = association.getId();
-            return (ObjectAction objectAction) -> {
-                
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
-                val fieldSetId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(fieldSetId)) {
-                    return false;
-                }
-                return fieldSetId.equalsIgnoreCase(assocName) 
-                        || fieldSetId.equalsIgnoreCase(assocId);
-            };
-        }
 
-        public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
-
-            final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
-
-            adapterSpec.streamAssociations(MixedIn.INCLUDED)
-            .forEach(ass->{
-                associationNamesAndIds.add(_Strings.lower(ass.getName()));
-                associationNamesAndIds.add(_Strings.lower(ass.getId()));
-            });
-
-            return (ObjectAction objectAction) -> {
-                
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return true;
-                }
-                val fieldSetId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(fieldSetId)) {
-                    return true;
-                }
-                return !associationNamesAndIds.contains(fieldSetId.toLowerCase());
-            };
-        }
     }
 
 

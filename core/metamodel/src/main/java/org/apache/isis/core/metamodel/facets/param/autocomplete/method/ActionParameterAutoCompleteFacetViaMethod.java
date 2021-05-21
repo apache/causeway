@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
-public class ActionParameterAutoCompleteFacetViaMethod 
-extends ActionParameterAutoCompleteFacetAbstract 
+public class ActionParameterAutoCompleteFacetViaMethod
+extends ActionParameterAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
     private final Method method;
@@ -49,7 +49,7 @@ implements ImperativeFacet {
     public ActionParameterAutoCompleteFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
-            final Optional<Constructor<?>> ppmFactory, 
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
 
         super(holder);
@@ -90,14 +90,14 @@ implements ImperativeFacet {
                         ppmFactory.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
                 : ManagedObjects.InvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
-        
+
         if (collectionOrArray == null) {
             return Can.empty();
         }
         val elementSpec = specForTypeElseFail(choicesType);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, collectionOrArray, interactionInitiatedBy);
-        
+
         return visibleChoices;
     }
 

@@ -37,14 +37,14 @@ public final class MinLengthUtil {
             return MIN_LENGTH_DEFAULT;
         }
 
-        val lastParam = method.getParameters()[method.getParameterCount()-1]; 
-            
+        val lastParam = method.getParameters()[method.getParameterCount()-1];
+
         for(Annotation annotation: lastParam.getAnnotations()) {
             if(annotation instanceof MinLength) {
                 return ((MinLength) annotation).value();
             }
         }
-        
+
         return MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 

@@ -43,15 +43,15 @@ final class _Graphics {
     final static Color COLOR_LIGHTER_GREEN = new Color(0xd5, 0xe8, 0xd4);
     final static Color COLOR_DARKER_GREEN = new Color(0x82, 0xB3, 0x66);
     final static Color COLOR_DARKER_RED = new Color(0xB2, 0x00, 0x00);
-    
+
     final static BasicStroke STROKE_DEFAULT = new BasicStroke(1.0f);
-    final static BasicStroke STROKE_DASHED = new BasicStroke(1, 
-            BasicStroke.CAP_BUTT, 
-            BasicStroke.JOIN_ROUND, 
-            1.0f, 
+    final static BasicStroke STROKE_DASHED = new BasicStroke(1,
+            BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_ROUND,
+            1.0f,
             new float[] { 2f, 0f, 2f },
             2f);
-    
+
     static Optional<Font> lookupFont(String fontName, float size) {
         val ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         for (Font font : ge.getAllFonts()) {
@@ -61,13 +61,13 @@ final class _Graphics {
         }
         return Optional.empty();
     }
-    
+
     static void arrowHorizontal(Graphics2D g, int m0, int m1, int y) {
-        
+
         g.drawLine(m0, y, m1, y);
 
         // arrow head
-        
+
         final int dir = m1<m0 ? 1 : -1;
 
         val origStroke = g.getStroke();
@@ -78,24 +78,24 @@ final class _Graphics {
         }
         g.setStroke(origStroke);
     }
-    
+
     static void enableTextAntialiasing(Graphics2D g) {
-        
+
         g.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-        
+
         g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        
-        Map<?, ?> desktopHints = 
+
+        Map<?, ?> desktopHints =
                 (Map<?, ?>) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
 
         if (desktopHints != null) {
             g.setRenderingHints(desktopHints);
         }
     }
-    
+
     @Getter @RequiredArgsConstructor
     static class TextBlock {
         final String label; // multi-line text
@@ -104,11 +104,11 @@ final class _Graphics {
         final int xLeft; // top left anchor (x)
         int xRight;
         int width;
-        
+
         final int yTop; // top left anchor (y)
         int yBottom;
         int height;
-        
+
         int hPadding;
         int vPadding;
         int lineGap;
@@ -130,13 +130,13 @@ final class _Graphics {
             final int maxAdvance = lines.stream().mapToInt(metrics::stringWidth).max().orElse(0);
             width = maxAdvance + 2*hPadding;
             height = lines.size()*lineHeight + (lines.size()-1)*lineGap + 2*vPadding;
-            
+
             xRight = xLeft + width;
             yBottom = yTop + height;
-            
+
             return new Dimension(width, height);
         }
-        
+
         void render(Graphics2D g) {
             if(lines==null
                     || lines.isEmpty()) {
@@ -149,7 +149,7 @@ final class _Graphics {
                 baseLine.update(x->x + lineHeight + lineGap);
             });
         }
-        
+
     }
-    
+
 }

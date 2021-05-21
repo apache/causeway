@@ -49,7 +49,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
                 && (
                         request.isFeatureTypeEqualTo(LocalDate.class)
 //                        || request.isFeatureTypeEqualTo(java.sql.Date.class)
-                )); 
+                ));
     }
 
     @Override
@@ -57,43 +57,43 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
         val temporalCharacteristic = getTemporalCharacteristic(request);
         val offsetCharacteristic = getOffsetCharacteristic(request);
-        
+
         switch(temporalCharacteristic) {
         case DATE_ONLY:{
 
             val uiField = new DateField(request.getDisplayLabel());
             val managedFeature = request.getManagedFeature();
-            
+
             if(request.isFeatureTypeEqualTo(LocalDate.class)) {
                 BindingsVaa.bindFeature(uiField, managedFeature);
-                
+
             } else if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
-                
+
                 val converter = new LocalDateToDateConverter().chain(new DateToSqlDateConverter());
-                
+
                 BindingsVaa.bindFeatureWithConverter(uiField, managedFeature, converter, null);
-                
+
             } else {
                 throw _Exceptions.unmatchedCase(request.getFeatureType());
             }
-            
+
             return uiField;
 
-            }    
+            }
         case TIME_ONLY:{
-            // TODO ... 
-            }    
+            // TODO ...
+            }
         case DATE_TIME:{
             // TODO ...
-            }    
+            }
         default:
             throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }
-        
+
     }
-    
+
     // -- HELPER
-    
+
     private TemporalCharacteristic getTemporalCharacteristic(ComponentRequest request) {
         @SuppressWarnings("rawtypes")
         val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
@@ -108,7 +108,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         }
         throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
     }
-    
+
     private OffsetCharacteristic getOffsetCharacteristic(ComponentRequest request) {
         @SuppressWarnings("rawtypes")
         val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);

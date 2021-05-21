@@ -25,15 +25,15 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class StandaloneMarkupPanel 
+public class StandaloneMarkupPanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_STANDALONE_VALUE = "standaloneValue";
 
     public StandaloneMarkupPanel(
-            String id, 
-            ValueModel valueModel, 
+            String id,
+            ValueModel valueModel,
             MarkupComponentFactory markupComponentFactory) {
 
         super(id, valueModel);

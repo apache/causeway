@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -45,7 +44,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescr
 
 import lombok.val;
 
-public class ObjectPropertyReprRenderer 
+public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
     public ObjectPropertyReprRenderer(IResourceContext context) {
@@ -132,7 +131,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
 
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapterIfAny).withTitle(title);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = 
+                final DomainObjectReprRenderer renderer =
                         new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
                 renderer.with(valueAdapterIfAny);
                 if(mode.isEventSerialization()) {
@@ -192,12 +191,9 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
         if (usability().isVetoed()) {
             return;
         }
-        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
-        for (final String mutator : mutators.keySet()) {
-            final MutatorSpec mutatorSpec = mutators.get(mutator);
-            addLinkFor(mutatorSpec);
-        }
-        return;
+        objectMemberType.getMutators()
+            .values()
+            .forEach(this::addLinkFor);
     }
 
     // ///////////////////////////////////////////////////
@@ -215,7 +211,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     private Object propertyChoices() {
         val choiceAdapters = objectMember
                 .getChoices(objectAdapter, getInteractionInitiatedBy());
-        
+
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }

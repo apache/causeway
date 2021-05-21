@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ContributingFacetAbstract 
-extends FacetAbstract 
+public abstract class ContributingFacetAbstract
+extends FacetAbstract
 implements ContributingFacet {
 
     private final Contributing contributing;
@@ -54,7 +54,7 @@ implements ContributingFacet {
         return contributing;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("contributing", contributing);

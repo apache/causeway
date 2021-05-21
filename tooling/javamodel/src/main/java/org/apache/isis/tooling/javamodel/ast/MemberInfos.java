@@ -28,23 +28,23 @@ import guru.nidi.codeassert.model.MemberInfo;
 public final class MemberInfos {
 
     // -- PREDICATES
-    
+
     public static boolean isPublic(final @NonNull MemberInfo memberInfo) {
         return (memberInfo.getAccessFlags() & 1) == 1;
     }
-    
+
     public static String membersToMultilineString(final Stream<MemberInfo> memberInfoStream, final String delimiter) {
         return memberInfoStream
                 .filter(MemberInfos::isPublic)
                 .map(mInfo->delimiter + memberToString(mInfo))
                 .collect(Collectors.joining());
     }
-    
+
     // -- HELPER
-    
+
     private static String memberToString(final MemberInfo memberInfo) {
         return String.format("%s(...)", memberInfo.getName());
     }
-    
-    
+
+
 }

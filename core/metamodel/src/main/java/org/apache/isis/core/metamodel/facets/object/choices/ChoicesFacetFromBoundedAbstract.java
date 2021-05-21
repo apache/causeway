@@ -52,9 +52,9 @@ import lombok.val;
  */
 public abstract class ChoicesFacetFromBoundedAbstract
 extends FacetAbstract
-implements 
-    ChoicesFacet, 
-    DisablingInteractionAdvisor, 
+implements
+    ChoicesFacet,
+    DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
 
     public static Class<? extends Facet> type() {
@@ -111,12 +111,12 @@ implements
 
         val resulType = getObjectSpecification().getCorrespondingClass();
         val query = Query.allInstances(resulType);
-        
+
         val resultTypeSpec = specForType(resulType).orElse(null);
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = getObjectManager().queryObjects(queryRequest)
                 .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy));
-        
+
         return allMatching;
     }
 

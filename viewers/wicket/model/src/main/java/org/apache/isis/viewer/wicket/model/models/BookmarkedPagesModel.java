@@ -38,7 +38,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
 
     private transient PageParameters current;
-    
+
     public BookmarkedPagesModel(IsisAppCommonContext commonContext) {
         super(commonContext);
     }

@@ -114,10 +114,10 @@ implements MetaModelRefiner {
             .forEach(association->{
                 validateBigDecimalValueFacet(association);
             });
-            
+
         });
     }
-    
+
     private static void validateBigDecimalValueFacet(ObjectAssociation association) {
         BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
         if(facet == null) {
@@ -158,6 +158,6 @@ implements MetaModelRefiner {
     private static boolean notNullButNotEqual(Integer x, Integer y) {
         return x != null && y != null && !x.equals(y);
     }
-    
+
 
 }

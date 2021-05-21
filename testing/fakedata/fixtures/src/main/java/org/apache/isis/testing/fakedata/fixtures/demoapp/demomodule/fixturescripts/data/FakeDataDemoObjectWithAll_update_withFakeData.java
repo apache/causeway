@@ -160,7 +160,7 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         // updates
         final FakeDataDemoObjectWithAll fakeDataDemoObject = getFakeDataDemoObject();
-        
+
         wrap(fakeDataDemoObject).updateSomeBoolean(getSomeBoolean());
         wrap(fakeDataDemoObject).updateSomeBooleanWrapper(getSomeBoolean());
 

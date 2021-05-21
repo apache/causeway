@@ -27,8 +27,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFac
 import lombok.val;
 
 /**
- * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
- * {@link MarkupPanelFactories}, but specific to 
+ * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
+ * {@link MarkupPanelFactories}, but specific to
  * the {@link Markdown} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -49,7 +49,7 @@ public class MarkdownPanelFactoriesForWicket {
             return (id, model) -> {
                 val markupComponent = new org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownComponent(id, model);
                 markupComponent.setEnabled(false);
-                return markupComponent;    
+                return markupComponent;
             };
 
         }
@@ -70,7 +70,7 @@ public class MarkdownPanelFactoriesForWicket {
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
                 val markupComponent = new MarkdownComponent(id, model);
-                return markupComponent;    
+                return markupComponent;
             };
         }
 

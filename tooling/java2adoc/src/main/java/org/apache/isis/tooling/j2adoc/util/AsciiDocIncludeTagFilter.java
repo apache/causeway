@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._Text;
 import lombok.val;
 
 public final class AsciiDocIncludeTagFilter {
-    
+
     public static String read(File source) {
         return _Text.readLinesFromFile(source, StandardCharsets.UTF_8).stream()
         //.filter(line->!containsIncludeTag(line))
@@ -35,15 +35,15 @@ public final class AsciiDocIncludeTagFilter {
         .map(AsciiDocIncludeTagFilter::removeFootNoteReference)
         .collect(Collectors.joining("\n"));
     }
-    
+
     public static void removeAdocExampleTags(File source) {
         val fixedLines = _Text.readLinesFromFile(source, StandardCharsets.UTF_8)
         .filter(line->!isIncludeTagComment(line))
         .map(AsciiDocIncludeTagFilter::removeFootNoteReference);
-        
+
         _Text.writeLinesToFile(fixedLines, source, StandardCharsets.UTF_8);
     }
-    
+
     // -- HELPER
 
     private static boolean isIncludeTagComment(String line) {
@@ -58,7 +58,7 @@ public final class AsciiDocIncludeTagFilter {
     private static boolean isAllLineComment(String line) {
         return line.trim().startsWith("//");
     }
-    
+
     private static String removeFootNoteReference(String line) {
         if(!line.contains("// <")) {
             return line;
@@ -82,5 +82,5 @@ public final class AsciiDocIncludeTagFilter {
                 .replace("// <16>", "")
                 .stripTrailing();
     }
-    
+
 }

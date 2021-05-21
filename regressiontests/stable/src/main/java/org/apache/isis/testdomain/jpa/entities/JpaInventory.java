@@ -44,9 +44,9 @@ import lombok.ToString;
         objectType = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
 @NamedQuery(
-        name = "JpaInventory.findAffordableProducts", 
+        name = "JpaInventory.findAffordableProducts",
         query = "SELECT p FROM JpaInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
-@NoArgsConstructor(access = AccessLevel.PROTECTED) 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class JpaInventory {
 
@@ -59,7 +59,7 @@ public class JpaInventory {
     public String title() {
         return toString();
     }
-    
+
     @Id
     @GeneratedValue
     private Long id;

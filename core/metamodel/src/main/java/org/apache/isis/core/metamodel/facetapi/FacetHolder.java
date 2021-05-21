@@ -42,27 +42,27 @@ public interface FacetHolder extends HasMetaModelContext {
      * {@link Facet#facetType()}).
      */
     <T extends Facet> T getFacet(Class<T> facetType);
-    
+
     // -- LOOKUP
-    
+
     default <T extends Facet> Optional<T> lookupFacet(
             @NonNull final Class<T> facetType) {
         return Optional.ofNullable(getFacet(facetType));
     }
-    
+
     default <T extends Facet> Optional<T> lookupFacet(
-            @NonNull final Class<T> facetType, 
+            @NonNull final Class<T> facetType,
             @NonNull final Predicate<T> filter) {
         return lookupFacet(facetType).map(facet->filter.test(facet) ? facet : null);
     }
-    
+
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             @NonNull final Class<T> facetType) {
         return lookupFacet(facetType, _Predicates.not(Facet::isFallback));
     }
-    
+
     // -- CONTAINS
-    
+
     /**
      * Whether there is a facet registered of the specified type.
      */
@@ -90,7 +90,7 @@ public interface FacetHolder extends HasMetaModelContext {
     }
 
     Stream<Facet> streamFacets();
-    
+
     default <F extends Facet> Stream<F> streamFacets(Class<F> requiredType) {
         return streamFacets()
                 .filter(facet->requiredType.isAssignableFrom(facet.getClass()))
@@ -109,9 +109,9 @@ public interface FacetHolder extends HasMetaModelContext {
     void addFacet(Facet facet);
 
     /**
-     * Replaces any existing facet with the given one, while copying any underlying 
+     * Replaces any existing facet with the given one, while copying any underlying
      * facet from the existing to the given one.
-     * 
+     *
      * @param facet
      * @since 2.0
      */

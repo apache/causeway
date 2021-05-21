@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty2"
 )
 @ActionLayout(
-        named = "Positioned right", 
+        named = "Positioned right",
         describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=RIGHT/></cpt:property>",
         sequence = "4")
 @RequiredArgsConstructor

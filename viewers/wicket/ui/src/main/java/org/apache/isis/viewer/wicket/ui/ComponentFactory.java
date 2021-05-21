@@ -38,9 +38,9 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * {@link ComponentFactoryRegistry} (bootstrapped from the
  * <tt>IsisWicketApplication</tt>); various adapters make it easy to lookup
  * {@link Component}s from this registry.
- * 
- * @apiNote any implementing class (when used as a plugin) must also be 
- * discovered/managed by Spring, that is, 
+ *
+ * @apiNote any implementing class (when used as a plugin) must also be
+ * discovered/managed by Spring, that is,
  * it needs a direct- or meta-annotation of type {@link Component}
  */
 public interface ComponentFactory extends Serializable {

@@ -154,22 +154,22 @@ public final class _Plugin {
      * @param pluginFullyQualifiedClassName
      */
     public static <S> S load(
-            Class<S> pluginInterfaceClass, 
-            File classPath, 
+            Class<S> pluginInterfaceClass,
+            File classPath,
             String pluginFullyQualifiedClassName) {
 
         try {
 
             ClassLoader parentCL = pluginInterfaceClass.getClassLoader();
             URL[] urls = {classPath.toURI().toURL()};
-            
+
             try(URLClassLoader cl = URLClassLoader.newInstance(urls, parentCL)) {
                 Class<S> pluginClass = _Casts.uncheckedCast(
                         cl.loadClass(pluginFullyQualifiedClassName));
                 S plugin = pluginClass.newInstance();
 
                 _Context.putSingleton(pluginInterfaceClass, plugin);
-                
+
                 return plugin;
             }
 

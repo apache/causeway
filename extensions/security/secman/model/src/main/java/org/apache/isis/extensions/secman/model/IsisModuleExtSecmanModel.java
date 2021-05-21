@@ -18,17 +18,31 @@
  */
 package org.apache.isis.extensions.secman.model;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
+import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.spiimpl.ImpersonateMenuAdvisorForSecman;
+import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServiceForSecman;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanModel.class
-        })
+@Import({
+        // Module
+        IsisModuleExtSecmanApi.class,
+
+        // @Component
+        TenantedAuthorizationPostProcessor.Register.class,
+        TableColumnVisibilityServiceForSecman.class,
+        ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
+
+        SeedSecurityModuleService.class,
+
+})
 public class IsisModuleExtSecmanModel {
 
 }

@@ -49,7 +49,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 /**
- * 
+ *
  */
 @UtilityClass
 public class Decorators {
@@ -60,37 +60,37 @@ public class Decorators {
     @Getter(lazy = true) private final static Prototyping prototyping = new Prototyping();
     @Getter(lazy = true) private final static Confirm confirm = new Confirm();
     @Getter(lazy = true) private final static Danger danger = new Danger();
-    
-    
+
+
     @Getter(lazy = true) private final static IconDecoratorWkt icon = new IconDecoratorWkt();
     @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
-    
+
     // -- ADVANCED DECORATORS
-    
+
     @Getter(lazy = true) private final static ActionLink actionLink = new ActionLink();
-    
-    // -- BASIC DECORATOR CLASSES 
-    
+
+    // -- BASIC DECORATOR CLASSES
+
     public final static class Tooltip implements TooltipDecorator<Component> {
         @Override
         public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
             Tooltips.addTooltip(uiComponent, tooltipUiModel);
         }
     }
-    
+
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
         public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
-            
+
             val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
             getTooltip().decorate(uiComponent, tooltipUiModel);
-            
+
             uiComponent.add(new CssClassAppender("disabled"));
             uiComponent.setEnabled(false);
-            
+
         }
     }
-    
+
     public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
@@ -98,45 +98,45 @@ public class Decorators {
             return uiComponent;
         }
     }
-    
+
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
         public void decorate(Component uiComponent, ConfirmUiModel confirmUiModel) {
-            
+
             val confirmationConfig = new ConfirmationConfig()
                     .withTitle(confirmUiModel.getTitle())
                     .withBtnOkLabel(confirmUiModel.getOkLabel())
                     .withBtnCancelLabel(confirmUiModel.getCancelLabel())
                     .withBtnOkClass("btn btn-danger")
-                    .withBtnCancelClass("btn btn-default")
+                    .withBtnCancelClass("btn btn-secondary")
                     .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
-            
+
             uiComponent.add(new ConfirmationBehavior(confirmationConfig));
-            
+
             if(uiComponent instanceof Button) {
                 // ensure dialog ok buttons receive the danger style as well
                 // don't care if expressed twice
                 Decorators.getDanger().decorate(uiComponent);
             }
-            
+
         }
     }
-    
+
     public final static class Danger implements DangerDecorator<Component> {
         @Override
         public void decorate(Component uiComponent) {
-            //if(uiComponent instanceof Button) { 
+            //if(uiComponent instanceof Button) {
                 uiComponent.add(new CssClassAppender("btn-danger"));
             //}
         }
     }
-    
+
     public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
                 uiComponent.add(new CssClassFaBehavior(fontAwesome.get()));
-            } 
+            }
             return uiComponent;
         }
     }
@@ -150,9 +150,9 @@ public class Decorators {
             return uiComponent;
         }
     }
-    
+
     // -- ADVANCED DECORATOR CLASSES
-    
+
     public final static class ActionLink extends ActionUiDecorator<Component> {
 
         public ActionLink() {
@@ -167,64 +167,64 @@ public class Decorators {
                 final T uiComponent, // UI component #1
                 final LinkAndLabel actionUiModel,
                 final TranslationService translationService) {
-            
+
             val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
             val actionMeta = actionUiModel.getActionUiMetaModel();
-            
+
             actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
             });
-            
+
             if (!actionMeta.getDisableUiModel().isPresent()) {
 
                 if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
                     getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
                 }
-                
+
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isRequiresImmediateConfirmation()) {
-                    
+
                     val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, ConfirmUiModel.Placement.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
-                    
+
                 }
-                
+
             }
-            
+
             if (actionMeta.isPrototyping()) {
                 getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMeta));
             }
 
         }
-        
-        
+
+
         public void decorateMenuItem(
                 final Component uiComponent,
                 final LinkAndLabel actionUiModel,
                 final TranslationService translationService) {
-            
+
             addCssClassForAction(uiComponent, actionUiModel);
-            
+
             commonDecorateMenuItem(uiComponent, actionUiModel, translationService);
-            
+
             val actionMeta = actionUiModel.getActionUiMetaModel();
             val actionLinkUiComponent = actionUiModel.getUiComponent();
-            
+
             String cssClass = actionMeta.getCssClass();
             if (!_Strings.isNullOrEmpty(cssClass)) {
                 actionLinkUiComponent.add(new CssClassAppender(cssClass));
             }
-            
+
         }
-        
+
         private void addCssClassForAction(Component uiComponent, LinkAndLabel actionUiModel) {
             val actionMeta = actionUiModel.getActionUiMetaModel();
-            uiComponent.add(new CssClassAppender("isis-" 
+            uiComponent.add(new CssClassAppender("isis-"
                     + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
         }
-        
-        
+
+
     }
-    
+
 }

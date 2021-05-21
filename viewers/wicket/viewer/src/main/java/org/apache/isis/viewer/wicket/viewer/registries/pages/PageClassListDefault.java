@@ -35,7 +35,6 @@ import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
-import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
@@ -66,18 +65,11 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
         pageRegistry.registerPage(PageType.HOME_AFTER_PAGETIMEOUT, getHomePageClass());
-        pageRegistry.registerPage(PageType.ACTION_PROMPT, getActionPromptPageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
         pageRegistry.registerPage(PageType.VALUE, getValuePageClass());
         pageRegistry.registerPage(PageType.VOID_RETURN, getVoidReturnPageClass());
     }
 
-    /**
-     * For subclassing if required.
-     */
-    protected Class<? extends Page> getActionPromptPageClass() {
-        return ActionPromptPage.class;
-    }
 
     /**
      * For subclassing if required.

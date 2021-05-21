@@ -33,14 +33,14 @@ public class IsisAsciiDocConverter implements TypeConverter<AsciiDoc, String>{
     public String toDatastoreType(final AsciiDoc memberValue) {
         return memberValue != null
                 ? memberValue.asHtml()
-                        : null;
+                : null;
     }
 
     @Override
     public AsciiDoc toMemberType(final String datastoreValue) {
         return datastoreValue != null
                 ? AsciiDoc.valueOfHtml(datastoreValue)
-                        : null;
+                : null;
     }
 
 }

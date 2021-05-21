@@ -25,6 +25,8 @@ import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
+
 /**
  * Disable a property, collection or action.
  *
@@ -51,4 +53,10 @@ public interface DisabledFacet extends WhereValueFacet, DisablingInteractionAdvi
      * attached is <i>not</i> mandatory.
      */
     public boolean isInvertedSemantics();
+
+    // -- PREDICATES
+
+    static boolean isAlwaysDisabled(final @NonNull FacetHolder facetHolder) {
+        return WhereValueFacet.isAlways(facetHolder, DisabledFacet.class);
+    }
 }

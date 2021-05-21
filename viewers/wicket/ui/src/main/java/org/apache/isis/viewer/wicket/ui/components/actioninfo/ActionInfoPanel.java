@@ -30,7 +30,7 @@ import lombok.val;
 /**
  * Renders a panel providing summary information about an action.
  */
-public class ActionInfoPanel 
+public class ActionInfoPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

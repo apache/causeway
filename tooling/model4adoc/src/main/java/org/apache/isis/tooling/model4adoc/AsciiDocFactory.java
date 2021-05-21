@@ -68,7 +68,7 @@ public class AsciiDocFactory {
     public static Document doc() {
         return new SimpleDocument();
     }
-    
+
     /**
      * syntactic sugar
      */
@@ -77,7 +77,7 @@ public class AsciiDocFactory {
         documentBuilder.accept(doc);
         return doc;
     }
-    
+
     /**
      * syntactic sugar
      */
@@ -167,7 +167,7 @@ public class AsciiDocFactory {
         listingBlock.setStyle("listing");
         return listingBlock;
     }
-    
+
     public static Block sourceBlock(StructuralNode parent, @Nullable String language, @NonNull String source) {
         val sourceBlock = block(parent, source);
         sourceBlock.setStyle("source");
@@ -176,21 +176,21 @@ public class AsciiDocFactory {
         }
         return sourceBlock;
     }
-    
+
     public static Block diagramBlock(
-            StructuralNode parent, 
-            @NonNull String diagramType, 
-            @NonNull Can<String> diagramOptions, 
+            StructuralNode parent,
+            @NonNull String diagramType,
+            @NonNull Can<String> diagramOptions,
             @NonNull String source) {
-        
+
         val diagramBlock = block(parent, source);
-        
+
         _Strings.nonEmpty(diagramType)
             .ifPresent(diagramBlock::setStyle);
-        
+
         val attributes = diagramOptions.add(0, diagramType);
         val attributeIndex = _Refs.intRef(1);
-        
+
         // add options
         attributes.forEach(opt->{
             diagramBlock.setAttribute(""+attributeIndex.getValue(), opt, true);
@@ -211,9 +211,9 @@ public class AsciiDocFactory {
     public static ListItem callout(org.asciidoctor.ast.List parent, @NonNull String source) {
         return listItem(parent, source);
     }
-    
+
     // -- COLLAPSIBLE
-    
+
     public static Block collapsibleBlock(StructuralNode parent, @NonNull String source) {
         val collapsibleBlock = block(parent, source);
         collapsibleBlock.setStyle("example");
@@ -312,25 +312,25 @@ public class AsciiDocFactory {
 
         public static Block sourceBlock(
                 @NonNull Document doc,
-                @NonNull String languageAndOptions, 
-                @NonNull String source, 
+                @NonNull String languageAndOptions,
+                @NonNull String source,
                 @Nullable String title) {
-            
+
             val sourceBlock = AsciiDocFactory.sourceBlock(doc,
                     languageAndOptions,
-                    
+
                     _Text.normalize(_Text.getLines(source))
                     .stream()
                     .collect(Collectors.joining("\n")));
-            
+
             _Strings.nonEmpty(title)
                 .ifPresent(sourceBlock::setTitle);
 
             return sourceBlock;
         }
-        
+
         public static String asAdocSource() {
-            
+
             val doc = AsciiDocFactory.doc();
             return AsciiDocWriter.toString(doc);
         }
@@ -344,56 +344,56 @@ public class AsciiDocFactory {
 //        ----
         public static Block java(
                 @NonNull Document doc,
-                @NonNull String javaSource, 
+                @NonNull String javaSource,
                 @Nullable String title) {
             return sourceBlock(doc, "java", javaSource, title);
         }
 
         public static Block json(
                 @NonNull Document doc,
-                @NonNull String jsonSource, 
+                @NonNull String jsonSource,
                 @Nullable String title) {
             return sourceBlock(doc, "json", jsonSource, title);
         }
 
         public static Block xml(
                 @NonNull Document doc,
-                @NonNull String xmlSource, 
+                @NonNull String xmlSource,
                 @Nullable String title) {
             return sourceBlock(doc, "xml", xmlSource, title);
         }
-        
+
         public static Block yaml(
                 @NonNull Document doc,
-                @NonNull String yamlSource, 
+                @NonNull String yamlSource,
                 @Nullable String title) {
             return sourceBlock(doc, "yaml", yamlSource, title);
         }
 
     }
-    
+
     public static class DiagramFactory {
-        
+
         public static Block diagramBlock(
                 @NonNull Document doc,
-                @NonNull String diagramType, 
+                @NonNull String diagramType,
                 @NonNull Can<String> diagramOptions,
-                @NonNull String source, 
+                @NonNull String source,
                 @Nullable String title) {
-            
+
             val sourceBlock = AsciiDocFactory.diagramBlock(doc,
                     diagramType,
                     diagramOptions,
                     _Text.normalize(_Text.getLines(source))
                     .stream()
                     .collect(Collectors.joining("\n")));
-            
+
             _Strings.nonEmpty(title)
                 .ifPresent(sourceBlock::setTitle);
 
             return sourceBlock;
         }
-        
+
 //      [plantuml,c4-demo,png]
 //      ----
 //      @startuml
@@ -407,7 +407,7 @@ public class AsciiDocFactory {
                 @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "png"), plantumlSource, title);
         }
-        
+
         public static Block plantumlSvg(
                 @NonNull Document doc,
                 @NonNull String plantumlSource,
@@ -415,7 +415,7 @@ public class AsciiDocFactory {
                 @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "svg"), plantumlSource, title);
         }
-        
+
     }
 
 

@@ -37,20 +37,20 @@ import lombok.val;
 public interface FormUiModel extends HasTitle {
 
     ObjectAction getMetaModel();
-    
-    /** 
+
+    /**
      * Action's owner.
-     * 
+     *
      * @apiNote for mixins this is not the target to use on mixin actions
-     * instead the logic of resolving the target for action invocation is 
+     * instead the logic of resolving the target for action invocation is
      * encapsulated within the {@link ActionInteractionHead}
      */
     ManagedObject getOwner();
-    
+
     Stream<FormPendingParamUiModel> streamPendingParamUiModels();
 
     // -- USABILITY
-    
+
     default Consent getUsabilityConsent() {
         return getMetaModel().isUsable(
                 getOwner(),
@@ -59,7 +59,7 @@ public interface FormUiModel extends HasTitle {
     }
 
     // -- VISABILITY
-    
+
     default Consent getVisibilityConsent() {
         return getMetaModel().isVisible(
                 getOwner(),
@@ -68,33 +68,34 @@ public interface FormUiModel extends HasTitle {
     }
 
     // -- VALIDITY
-    
+
     default Consent getValidityConsent() {
-        
+
         val proposedArguments = streamPendingParamUiModels()
                 .map(FormPendingParamUiModel::getParamModel)
                 .map(ParameterUiModel::getValue)
                 .collect(Can.toCan());
-        
+
         _Assert.assertEquals(getMetaModel().getParameterCount(), proposedArguments.size());
-        
+
         val head = getMetaModel().interactionHead(getOwner());
-        
+
         return getMetaModel().isArgumentSetValid(
-                head, 
-                proposedArguments, 
+                head,
+                proposedArguments,
                 InteractionInitiatedBy.USER);
-        
+
     }
-    
+
     // -- HAS TITLE
-    
+
+    @Override
     default String getTitle() {
         val target = getOwner();
         val objectAction = getMetaModel();
 
         val buf = new StringBuilder();
-        
+
         streamPendingParamUiModels()
         .filter(argAndConsent->argAndConsent.getVisibilityConsent().isAllowed())
         .map(FormPendingParamUiModel::getParamModel)
@@ -105,13 +106,13 @@ public interface FormUiModel extends HasTitle {
             }
             buf.append(ManagedObjects.abbreviatedTitleOf(paramValue, 8, "..."));
         });
-        return target.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        return target.titleString() + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
     }
-    
+
     // -- SHORTCUTS
-    
+
     default boolean hasParameters() {
         return getMetaModel().getParameterCount() > 0;
     }
-    
+
 }

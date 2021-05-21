@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @CollectionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
 public class ProperMemberSupport_collection {
-    
+
     private final ProperMemberSupport holder;
 
     //@Action(semantics=SAFE)   // <-- inferred (required)
@@ -39,22 +39,22 @@ public class ProperMemberSupport_collection {
     public List<String> coll() {
         return Collections.singletonList(holder.toString());
     }
-    
-    // -- PROPERLY DECLARED SUPPORTING METHODS 
-    
+
+    // -- PROPERLY DECLARED SUPPORTING METHODS
+
     @MemberSupport
     public boolean hideColl() {
         return false;
     }
-    
+
     @MemberSupport
     public String disableColl() {
         return null;
     }
-    
+
     @MemberSupport //TODO not documented with the support-matrix, what to do here?
     public String validateColl() {
         return null;
     }
-    
+
 }

@@ -32,9 +32,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -61,11 +58,14 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInvalidDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL"
         })
@@ -76,112 +76,112 @@ import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValid
     IsisPresets.SilenceProgrammingModel
 })
 class DomainModelTest_usingBadDomain {
-    
+
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
-    
+
     private DomainModelValidator validator;
-    
+
     @BeforeEach
     void setup() {
         validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         assertThrows(DomainModelException.class, validator::throwIfInvalid);
     }
-    
-    
+
+
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
         assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
     }
-    
+
     @Test
     void ambiguousTitle_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(AmbiguousTitle.class)),
                 "conflict for determining a strategy for retrieval of title"));
     }
-    
+
     @Test
     void orphanedActionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
                 "InvalidOrphanedActionSupport#hideOrphaned: has annotation @MemberSupport, "
                 + "is assumed to support"));
-        
+
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
                 "InvalidOrphanedActionSupport#hideMe: "
                 + "is assumed to support a property, collection or action. "
                 + "Unmet constraint(s): unsupported method signature or orphaned "
                 + "(not associated with a member)"));
     }
-    
+
 
     @Test
     void orphanedPropertySupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
                 "InvalidOrphanedPropertySupport#hideMyProperty: has annotation @MemberSupport, "
                 + "is assumed to support"));
-        
+
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
                 "InvalidOrphanedPropertySupport#hideMe: "
                 + "is assumed to support a property, collection or action. "
                 + "Unmet constraint(s): unsupported method signature or orphaned "
                 + "(not associated with a member)"));
     }
-    
+
     @Test
     void orphanedCollectionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
                 "InvalidOrphanedCollectionSupport#hideMyCollection: has annotation @MemberSupport, "
                 + "is assumed to support"));
-        
+
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
                 "InvalidOrphanedCollectionSupport#hideMe: "
                 + "is assumed to support a property, collection or action. "
                 + "Unmet constraint(s): unsupported method signature or orphaned "
                 + "(not associated with a member)"));
     }
-    
+
     @Test
     void actionOverloading_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)),
                 "Action method overloading is not allowed"));
     }
-    
+
     @Test
     void logicalTypeNameClash_shouldFail() {
         assertTrue(
             validator.anyMatchesContaining(
-                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)), 
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)),
                     "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes:")
+                    + "mapped to multiple classes")
             || validator.anyMatchesContaining(
-                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)), 
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)),
                     "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes:"));
+                    + "mapped to multiple classes"));
     }
-    
-    
+
+
     @ParameterizedTest
     @MethodSource("provideAmbiguousMixins")
     void ambiguousMixinAnnotions_shouldFailValidation(
-            final Class<?> mixinClass, 
-            final Class<? extends Annotation> annotationType, 
+            final Class<?> mixinClass,
+            final Class<? extends Annotation> annotationType,
             final String mixinMethodName) {
-        
+
         final String annotationLiteral = "@" + annotationType.getSimpleName();
         assertTrue(validator.anyMatchesContaining(
-                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName), 
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName),
                 String.format("Annotation %s on both method and type level is not allowed", annotationLiteral)));
     }
-    
+
     private static Stream<Arguments> provideAmbiguousMixins() {
         return Stream.of(
           Arguments.of(AmbiguousMixinAnnotations.InvalidMixinA.class, Action.class, "act"),
@@ -192,24 +192,24 @@ class DomainModelTest_usingBadDomain {
           Arguments.of(AmbiguousMixinAnnotations.InvalidMixinCL.class, CollectionLayout.class, "coll")
         );
     }
-    
+
     // -- INCUBATING
-    
+
     @Test @Disabled("this case has no vaildation refiner yet")
     void invalidPropertyAnnotationOnAction_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)),
                 "TODO"));
     }
-    
+
 //    @Test
 //    void orphanedActionSupportNotEnforced_shouldFail() {
-//           
+//
 //        val validateDomainModel = new DomainModelValidator();
-//        
+//
 //        assertThrows(DomainModelException.class, validateDomainModel::run);
 //        assertTrue(validateDomainModel.anyMatchesContaining(
-//                OrphanedPrefixedAction.class, 
+//                OrphanedPrefixedAction.class,
 //                "is assumed to support"));
 //    }
 }

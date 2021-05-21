@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.Parameter;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -43,118 +41,49 @@ import lombok.val;
  */
 public interface TypeOfFacet extends SingleClassValueFacet {
 
-    public static class Util {
-        private Util(){}
-        
-        public static TypeOfFacet inferFromParameterType(
-                final FacetHolder holder,
-                final Class<?> parameterType,
-                final Type genericParameterType) {
-        
-            TypeOfFacet typeOfFacet = inferFromGenericParamType(holder, parameterType, genericParameterType);
-            
-            if(typeOfFacet == null ) {
-                if (_Arrays.isArrayType(parameterType)) {
-                    typeOfFacet = inferFromArrayType(holder, parameterType);
-                }
-            }
-            
-            return typeOfFacet;
-        }
-        
-        public static TypeOfFacet inferFromMethodReturnType(
-                final FacetHolder holder,
-                final Class<?> methodOwner,
-                final Method method) {
-            
-            // infer from return type
-            val returnType = method.getReturnType();
-            TypeOfFacet typeOfFacet = inferFromArrayType(holder, returnType);
+    // -- FACTORIES
 
-            // infer from generic return type
-            if(typeOfFacet == null) {
-                typeOfFacet = inferFromGenericReturnType(methodOwner, method, holder);
-            }
-            
-            return typeOfFacet;
-        }
-        
-
-        private static TypeOfFacet inferFromGenericReturnType(
-                final Class<?> cls,
-                final Method method,
-                final FacetHolder holder) {
-
-            final Class<?> methodReturnType = method.getReturnType();
-            if (!_Collections.isCollectionType(methodReturnType) && !_Collections.isCanType(methodReturnType)) {
-                return null;
-            }
-
-            final Type type = method.getGenericReturnType();
-            if (!(type instanceof ParameterizedType)) {
-                return null;
-            }
-
-            final ParameterizedType methodParameterizedType = (ParameterizedType) type;
-            final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
-
-            if (methodActualTypeArguments.length == 0) {
-                return null;
-            }
-
-            final Object methodActualTypeArgument = methodActualTypeArguments[0];
-            if (methodActualTypeArgument instanceof Class) {
-                final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-                return new TypeOfFacetInferredFromGenerics(actualType, holder);
-            }
-
-            if (methodActualTypeArgument instanceof TypeVariable) {
-
-                final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
-                final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
-
-                // try to match up with the actual type argument of the generic superclass.
-                final Type genericSuperclass = cls.getGenericSuperclass();
-                if(genericSuperclass instanceof ParameterizedType) {
-                    final ParameterizedType parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
-                    if(parameterizedTypeOfSuperclass.getRawType() == methodGenericClassDeclaration) {
-                        final Type[] genericSuperClassActualTypeArguments = parameterizedTypeOfSuperclass.getActualTypeArguments();
-                        // simplification: if there's just one, then use it.
-                        if(methodActualTypeArguments.length == 1) {
-                            final Type actualType = genericSuperClassActualTypeArguments[0];
-                            if(actualType instanceof Class) {
-                                // just being safe
-                                final Class<?> actualCls = (Class<?>) actualType;
-                                return new TypeOfFacetInferredFromGenerics(actualCls, holder);
-                            }
-                        }
-                    }
-                }
-                // otherwise, what to do?
-            }
-            return null;
-        }
-
-        private static TypeOfFacet inferFromArrayType(
-                final FacetHolder holder,
-                final Class<?> type) {
-
-            final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
-            return elementType != null
-                    ? new TypeOfFacetInferredFromArray(elementType, holder)
-                    : null;
-        }
-
-        private static TypeOfFacet inferFromGenericParamType(
-                final FacetHolder holder,
-                final Class<?> parameterType,
-                final Type genericParameterType) {
-
-            Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
-            
-            return elementType != null
-                    ? new TypeOfFacetInferredFromGenerics(elementType, holder)
-                    : null;
-        }
+    static TypeOfFacet inferredFromArray(
+            final FacetHolder holder,
+            final Class<?> elementType) {
+        return new TypeOfFacetInferredFromArray(elementType, holder);
     }
+
+    static TypeOfFacet inferredFromGenerics(
+            final FacetHolder holder,
+            final Class<?> elementType) {
+        return new TypeOfFacetInferredFromGenerics(elementType, holder);
+    }
+
+    static Optional<TypeOfFacet> inferFromParameterType(
+            final FacetHolder holder,
+            final Parameter param) {
+
+        val paramType = param.getType();
+
+        if (_Arrays.isArrayType(paramType)) {
+            return _Arrays.inferComponentType(paramType)
+                    .map(elementType->inferredFromArray(holder, elementType));
+        }
+
+        return _Collections.inferElementType(param)
+                .map(elementType->inferredFromGenerics(holder, elementType));
+    }
+
+    static Optional<TypeOfFacet> inferFromMethodReturnType(
+            final FacetHolder holder,
+            final Method method) {
+
+        val returnType = method.getReturnType();
+
+        if (_Arrays.isArrayType(returnType)) {
+            return _Arrays.inferComponentType(returnType)
+                    .map(elementType->inferredFromArray(holder, elementType));
+        }
+
+        return _Collections.inferElementType(method)
+                .map(elementType->inferredFromGenerics(holder, elementType));
+    }
+
+
 }

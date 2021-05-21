@@ -30,14 +30,14 @@ import org.apache.isis.schema.metamodel.v2.Property;
 import lombok.val;
 
 public class MMNodeFactory {
-    
+
     public static MMNode type(DomainClassDto domainClassDto, MMNode parentNode) {
         val node = new TypeNode();
         node.setDomainClassDto(domainClassDto);
         node.setParentNode(parentNode);
         return node;
     }
-    
+
     public static MMNode facet(Facet facet, FacetGroupNode parentNode) {
         val node = new FacetNode();
         node.setFacet(facet);
@@ -86,6 +86,6 @@ public class MMNodeFactory {
         node.setParentNode(parentNode);
         return node;
     }
-    
-    
+
+
 }

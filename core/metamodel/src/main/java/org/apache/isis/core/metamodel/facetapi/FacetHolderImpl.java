@@ -43,10 +43,10 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    
+
     private final Map<Class<? extends Facet>, Facet> facetsByType = _Maps.newHashMap();
     private final Object $lock = new Object();
-    
+
     @Override
     public boolean containsFacet(Class<? extends Facet> facetType) {
         synchronized($lock) {
@@ -74,17 +74,17 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Override
     public Stream<Facet> streamFacets() {
         synchronized($lock) {
-            return snapshot.get().values().stream(); // consumers should play nice and don't take too long  
+            return snapshot.get().values().stream(); // consumers should play nice and don't take too long
         }
     }
 
     @Override
     public int getFacetCount() {
         synchronized($lock) {
-            return snapshot.get().size();    
+            return snapshot.get().size();
         }
     }
-    
+
     @Override
     public void addOrReplaceFacet(Facet facet) {
         synchronized($lock) {
@@ -95,23 +95,23 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
                 val underlyingFacet = existingFacet.getUnderlyingFacet();
                 facet.setUnderlyingFacet(underlyingFacet);
             }
-            
+
             addFacet(facet);
         }
     }
 
     // -- HELPER
-    
+
     private final _Lazy<Map<Class<? extends Facet>, Facet>> snapshot = _Lazy.threadSafe(this::snapshot);
 
     // collect all facet information provided with the top-level facets (contributed facets and aliases)
     private Map<Class<? extends Facet>, Facet> snapshot() {
         val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
         facetsByType.values().forEach(topLevelFacet->{
-            
+
             snapshot.remap(
-                    topLevelFacet.facetType(), 
-                    Can.ofNullable(topLevelFacet.facetAliasType()), 
+                    topLevelFacet.facetType(),
+                    Can.ofNullable(topLevelFacet.facetAliasType()),
                     topLevelFacet);
 
             // honor contributed facets via recursive lookup
@@ -125,17 +125,17 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         parentFacet.forEachContributedFacet(child->{
             val added = addFacetOrKeepExisting(target, child);
             if(added) {
-                collectChildren(target, child); 
+                collectChildren(target, child);
             }
-        });        
+        });
     }
 
     private boolean addFacetOrKeepExisting(
             Map<Class<? extends Facet>, Facet> facetsByType,
             Facet facet) {
-        
+
         val existingFacet = facetsByType.get(facet.facetType());
-        
+
         val addOrKeep = whichPrecedesTheOther(existingFacet, facet);
         if(addOrKeep==facet) {
             facetsByType.put(facet.facetType(), facet);
@@ -143,12 +143,12 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         }
         return false;
     }
-    
+
     private void remove(Facet topLevelFacet) {
         snapshot.clear(); //invalidate
         facetsByType.remove(topLevelFacet.facetType());
     }
-    
+
     // also has side-effects (not really suggested by the naming)
     private Facet whichPrecedesTheOther(Facet existingFacet, Facet facet) {
         if (existingFacet == null || existingFacet.isFallback()) {

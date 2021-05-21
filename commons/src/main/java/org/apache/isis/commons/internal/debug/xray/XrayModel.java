@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.Value;
 
 public interface XrayModel {
-    
+
     MutableTreeNode getRootNode();
     default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
         return lookupNode(threadMemento.getId())
@@ -40,20 +40,20 @@ public interface XrayModel {
                         threadMemento.getLabel(),
                         threadMemento.getId()));
     }
-    
+
     MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
     default MutableTreeNode addContainerNode(MutableTreeNode parent, String name) {
         return addContainerNode(parent, name, UUID.randomUUID().toString());
     }
-    
+
     <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel);
 
     Optional<MutableTreeNode> lookupNode(String id);
-    
+
     void remove(MutableTreeNode node);
-    
+
     // -- DATA LOOKUP
-    
+
     default Optional<XrayDataModel.Sequence> lookupSequence(final @Nullable String sequenceId) {
         return _Strings.isNullOrEmpty(sequenceId)
                 ? Optional.empty()
@@ -61,31 +61,31 @@ public interface XrayModel {
                     .map(node->
                         (XrayDataModel.Sequence)((DefaultMutableTreeNode) node).getUserObject());
     }
-    
+
     // -- STACKS
-    
+
     Stack<MutableTreeNode> getNodeStack(String id);
-    
+
     // -- ID AND LABEL
-    
+
     abstract class HasIdAndLabel {
         public abstract String getId();
         public abstract String getLabel();
-        
+
         @Override
         public final String toString() {
             return getLabel();
         }
-        
+
     }
-    
+
     // -- THREAD UTIL
-    
+
     @Value(staticConstructor = "of")
     public static class ThreadMemento {
         private final String id;
         private final String label;
         private final String multilinelabel;
     }
-    
+
 }

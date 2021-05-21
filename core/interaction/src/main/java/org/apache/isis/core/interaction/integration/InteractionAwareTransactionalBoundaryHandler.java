@@ -52,14 +52,14 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @Log4j2
 public class InteractionAwareTransactionalBoundaryHandler {
-    
+
     private final Can<PlatformTransactionManager> txManagers;
-    
+
     @Inject
     public InteractionAwareTransactionalBoundaryHandler(List<PlatformTransactionManager> txManagers) {
         this.txManagers = Can.ofCollection(txManagers);
     }
-    
+
     // -- OPEN
 
     public void onOpen(final @NonNull IsisInteraction interaction) {
@@ -67,16 +67,16 @@ public class InteractionAwareTransactionalBoundaryHandler {
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
-        
+
         if(txManagers.isEmpty()) {
-            return; // nothing to do 
+            return; // nothing to do
         }
 
         val onCloseTasks = _Lists.<CloseTask>newArrayList(txManagers.size());
         interaction.putAttribute(Handle.class, new Handle(onCloseTasks));
-        
+
         txManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
-        
+
     }
 
     // -- CLOSE
@@ -86,14 +86,14 @@ public class InteractionAwareTransactionalBoundaryHandler {
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
-        
+
         if(txManagers.isEmpty()) {
-            return; // nothing to do 
+            return; // nothing to do
         }
 
         val onCloseTasks = Optional.ofNullable(interaction.getAttribute(Handle.class))
                 .map(Handle::getOnCloseTasks);
-        
+
         onCloseTasks
         .ifPresent(tasks->tasks.forEach(onCloseTask->{
 
@@ -107,17 +107,17 @@ public class InteractionAwareTransactionalBoundaryHandler {
                         onCloseTask.getOnErrorInfo(),
                         ex);
             }
-            
+
         }));
 
     }
-    
+
     // -- HELPER
-    
+
     private void newTransactionOrParticipateInExisting(
-            final PlatformTransactionManager txManager, 
+            final PlatformTransactionManager txManager,
             final Consumer<CloseTask> onCloseTaskCallback) {
-        
+
         val txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
@@ -128,19 +128,19 @@ public class InteractionAwareTransactionalBoundaryHandler {
             // we are participating in an exiting transaction (or testing), nothing to do
             return;
         }
-        
-        // we have created a new transaction, so need to provide a CloseTask 
-        
+
+        // we have created a new transaction, so need to provide a CloseTask
+
         onCloseTaskCallback.accept(new CloseTask(
                 txManager.getClass().getName(), // info to be used for display in case of errors
                 ()->{
-                 
+
                     if(txStatus.isRollbackOnly()) {
                         txManager.rollback(txStatus);
                     } else {
                         txManager.commit(txStatus);
                     }
-                    
+
                 }));
     }
 
@@ -149,11 +149,11 @@ public class InteractionAwareTransactionalBoundaryHandler {
         private final @NonNull String onErrorInfo;
         private final @NonNull ThrowingRunnable runnable;
     }
-    
+
     @Value
     private static class Handle {
         private final @NonNull List<CloseTask> onCloseTasks;
     }
-    
+
 
 }

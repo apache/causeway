@@ -24,6 +24,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
@@ -31,19 +33,20 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder3;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEntity;
+
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaSqlTimestampJdo"
+        objectType = "demo.JavaSqlTimestampEntity"
 )
 public class JavaSqlTimestampJdo                                          // <.>
-        implements HasAsciiDocDescription, JavaSqlTimestampHolder3 {
+        extends JavaSqlTimestampEntity {
 
 //end::class[]
     public JavaSqlTimestampJdo(java.sql.Timestamp initialValue) {

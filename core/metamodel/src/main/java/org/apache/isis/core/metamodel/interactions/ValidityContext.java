@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ValidityEvent}
  */
-public abstract class ValidityContext 
+public abstract class ValidityContext
 extends InteractionContext
 implements InteractionEventSupplier<ValidityEvent> {
 

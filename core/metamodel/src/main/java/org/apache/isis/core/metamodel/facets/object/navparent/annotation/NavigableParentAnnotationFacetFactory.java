@@ -93,7 +93,7 @@ implements MetaModelRefiner {
         try {
             super.addFacet(new NavigableParentFacetMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
-            log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}", 
+            log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
                     method, facetHolder, e);
         }
     }
@@ -111,7 +111,7 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
-                
+
             final Class<?> cls = spec.getCorrespondingClass();
 
             final List<Annotations.Evaluator<PropertyLayout>> evaluators =
@@ -152,7 +152,7 @@ implements MetaModelRefiner {
                 }
 
             }
-            
+
         });
 
     }

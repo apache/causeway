@@ -54,7 +54,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
  * Provides the <em>common context</em> for all implementing sub-classes.
  * @since 2.0
  */
-public class PanelBase<T> 
+public class PanelBase<T>
 extends GenericPanel<T>
 implements HasCommonContext {
 
@@ -75,20 +75,20 @@ implements HasCommonContext {
     private transient EmailVerificationUrlService emailVerificationUrlService;
     private transient PageNavigationService pageNavigationService;
     private transient HeaderUiModelProvider headerUiModelProvider;
-    
+
     protected PanelBase(String id) {
         this(id, null);
     }
-    
+
     public PanelBase(String id, @Nullable IModel<T> model) {
         super(id, model);
     }
-    
+
     @Override
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     public WicketViewerSettings getWicketViewerSettings() {
         return wicketViewerSettings = computeIfAbsent(WicketViewerSettings.class, wicketViewerSettings);
     }
@@ -96,7 +96,7 @@ implements HasCommonContext {
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
-    
+
     public IsisConfiguration getIsisConfiguration() {
         return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
     }
@@ -104,49 +104,49 @@ implements HasCommonContext {
     public PageClassRegistry getPageClassRegistry() {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
-    
+
     public ImageResourceCache getImageResourceCache() {
         return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
     }
-    
+
     public MetaModelContext getMetaModelContext() {
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
-    
+
     public InteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
-    
+
     public TranslationService getTranslationService() {
         return translationService = computeIfAbsent(TranslationService.class, translationService);
     }
-    
+
     public LocaleProvider getLocaleProvider() {
         return localeProvider = computeIfAbsent(LocaleProvider.class, localeProvider);
     }
-    
+
     protected TreeThemeProvider getTreeThemeProvider() {
         return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderDefault::new);
     }
-    
+
     protected EmailNotificationService getEmailNotificationService() {
         return emailNotificationService = computeIfAbsent(EmailNotificationService.class, emailNotificationService);
     }
-    
+
     protected EmailVerificationUrlService getEmailVerificationUrlService() {
         return emailVerificationUrlService = computeIfAbsent(EmailVerificationUrlService.class, emailVerificationUrlService);
     }
-    
+
     protected PageNavigationService getPageNavigationService() {
         return pageNavigationService = computeIfAbsent(PageNavigationService.class, pageNavigationService);
     }
-    
+
     protected MessageBroker getMessageBroker() {
         return getCommonContext().getMessageBroker()
         .orElseThrow(()->_Exceptions.illegalState(
                 "no MessageBroker available on current session"));
     }
-    
+
     protected HeaderUiModel getHeaderModel() {
         headerUiModelProvider = computeIfAbsent(HeaderUiModelProvider.class, headerUiModelProvider);
         return headerUiModelProvider.getHeader();
@@ -163,15 +163,15 @@ implements HasCommonContext {
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
-    
+
     // -- HELPER
-    
+
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                         : getCommonContext().lookupServiceElseFail(type);
     }
-    
+
     private <X> X computeIfAbsentOrFallback(Class<X> type, X existingIfAny, Supplier<X> fallback) {
         return existingIfAny!=null
                 ? existingIfAny

@@ -40,10 +40,10 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbed
 import lombok.val;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
-public class TabGroupPanel 
+public class TabGroupPanel
 extends AjaxBootstrapTabbedPanel<ITab>
 implements HasDynamicallyVisibleContent {
-    
+
     private static final long serialVersionUID = 1L;
 
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
@@ -64,7 +64,7 @@ implements HasDynamicallyVisibleContent {
         for (val bs3Tab : tablist) {
             val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
             val translateContext = TranslationContext.forTabIdentifier(entityModel.getTypeOfSpecification().getIdentifier());
-            
+
             String bs3TabName = bs3Tab.getName();
             String tabName = translationService.translate(translateContext, bs3TabName);
             tabs.add(new AbstractTab(Model.of(tabName)) {

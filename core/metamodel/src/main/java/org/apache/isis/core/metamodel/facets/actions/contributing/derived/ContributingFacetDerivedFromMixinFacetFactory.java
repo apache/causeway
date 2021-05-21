@@ -38,12 +38,12 @@ public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryA
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
+
         if(!processMethodContext.isMixinMain()) {
-            // skip processing if not mixin main 
+            // skip processing if not mixin main
             return;
         }
-        
+
         val method = processMethodContext.getMethod();
         val declaringClass = method.getDeclaringClass();
         val spec = getSpecificationLoader().loadSpecification(declaringClass);
@@ -52,19 +52,19 @@ public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryA
         if(mixinFacet == null || mixinFacet.isFallback()) {
             return;
         }
-        
+
         val facetedMethod = processMethodContext.getFacetHolder();
-        
-        //[1998] if @Action or @ActionLayout detected on type level infer:    
+
+        //[1998] if @Action or @ActionLayout detected on type level infer:
         //@ActionLayout(contributed=ACTION)
-        val isForceContributedAsAction = 
+        val isForceContributedAsAction =
                 processMethodContext.synthesizeOnType(Action.class).isPresent()
                 || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
 
         if(isForceContributedAsAction) {
             FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
-        } 
-        
+        }
+
     }
-    
+
 }

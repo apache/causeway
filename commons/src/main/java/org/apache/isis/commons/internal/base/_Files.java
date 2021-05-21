@@ -38,8 +38,8 @@ import lombok.val;
 public class _Files {
 
     /**
-     * Recursive file search, starting at {@code dir}, going deeper based on predicate 
-     * {@code dirFilter}, collecting files (not directories) based on predicate 
+     * Recursive file search, starting at {@code dir}, going deeper based on predicate
+     * {@code dirFilter}, collecting files (not directories) based on predicate
      * {@code fileFilter}.
      * @param dir
      * @param dirFilter
@@ -48,18 +48,18 @@ public class _Files {
      * @throws IOException
      */
     public static Set<File> searchFiles(
-            final File dir, 
-            final Predicate<File> dirFilter, 
+            final File dir,
+            final Predicate<File> dirFilter,
             final Predicate<File> fileFilter) throws IOException {
-        
+
         final Set<File> fileList = new HashSet<>();
         searchFiles(dir, dirFilter, fileFilter, fileList::add);
         return fileList;
     }
-    
+
     /**
-     * Recursive file search, starting at {@code dir}, going deeper based on predicate 
-     * {@code dirFilter}, consuming files (not directories) based on predicate 
+     * Recursive file search, starting at {@code dir}, going deeper based on predicate
+     * {@code dirFilter}, consuming files (not directories) based on predicate
      * {@code fileFilter}.
      * @param dir
      * @param dirFilter
@@ -68,11 +68,11 @@ public class _Files {
      * @throws IOException
      */
     public static void searchFiles(
-            final File dir, 
-            final Predicate<File> dirFilter, 
+            final File dir,
+            final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
             final Consumer<File> onFileFound) throws IOException {
-        
+
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
                 val file = path.toFile();
@@ -89,12 +89,12 @@ public class _Files {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param file
-     * @return optionally {@code file.getCanonicalPath()} based on whether {@code file} 
-     * is not {@code null} and the 'file I/O system' can handle this call without 
+     * @return optionally {@code file.getCanonicalPath()} based on whether {@code file}
+     * is not {@code null} and the 'file I/O system' can handle this call without
      * throwing an exception.
      */
     public static Optional<String> canonicalPath(@Nullable File file) {
@@ -107,13 +107,13 @@ public class _Files {
             return Optional.empty();
         }
     }
-    
+
     /**
-     * 
+     *
      * @param commonPath
      * @param absolutePath
-     * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix 
-     * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified. 
+     * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix
+     * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified.
      */
     public static String toRelativePath(@NonNull String commonPath, @NonNull String absolutePath) {
         if(absolutePath.startsWith(commonPath)) {
@@ -121,19 +121,19 @@ public class _Files {
         }
         return absolutePath;
     }
-    
+
     /**
-     * Deletes given {@link File}. This operation is ignored if the file is a directory or does not exist.  
+     * Deletes given {@link File}. This operation is ignored if the file is a directory or does not exist.
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows
     public static void deleteFile(@Nullable File file) {
-        if(file==null 
+        if(file==null
                 || !file.exists()
                 || file.isDirectory()) {
             return; // silently ignore if not an existing file
         }
         Files.delete(file.toPath());
     }
-    
+
 }

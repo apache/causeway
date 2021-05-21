@@ -36,18 +36,16 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdo;
-import demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 import demoapp.dom.types.javasql.javasqldate.vm.JavaSqlDateVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaSqlDates", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaSqlDates implements HasAsciiDocDescription {
 
     public String title() {
@@ -64,13 +62,13 @@ public class JavaSqlDates implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaSqlDateJdo> getEntities() {
+    public List<? extends JavaSqlDateEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaSqlDateJdoEntities entities;
+    ValueHolderRepository<java.sql.Date, ? extends JavaSqlDateEntity> entities;
 
 
 }

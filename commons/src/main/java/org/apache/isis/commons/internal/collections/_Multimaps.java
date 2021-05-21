@@ -71,30 +71,30 @@ public class _Multimaps {
          * @param value
          */
         public void putElement(K key, V value);
-        
+
         /**
          * Returns the List to which the specified key is mapped,
          * or a new List if this map contains no mapping for the key.
-         * <p> In the latter case the List is also put onto this map.  
+         * <p> In the latter case the List is also put onto this map.
          * @param key
          */
         public List<V> getOrElseNew(K key);
-        
+
         /**
          * Returns the List to which the specified key is mapped,
          * or an immutable empty List if this map contains no mapping for the key.
-         * <p> In the latter case the List is not put onto this map.  
+         * <p> In the latter case the List is not put onto this map.
          * @param key
          */
         default public List<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptyList());
         }
-        
+
         default public Stream<V> streamElements() {
             return values().stream()
                     .flatMap(Collection::stream);
         }
-        
+
     }
 
     /**
@@ -110,25 +110,25 @@ public class _Multimaps {
          * @param value
          */
         public void putElement(K key, V value);
-        
+
         /**
          * Returns the Set to which the specified key is mapped,
          * or a new Set if this map contains no mapping for the key.
-         * <p> In the latter case the Set is also put onto this map.  
+         * <p> In the latter case the Set is also put onto this map.
          * @param key
          */
         public Set<V> getOrElseNew(K key);
-        
+
         /**
          * Returns the Set to which the specified key is mapped,
          * or an immutable empty Set if this map contains no mapping for the key.
-         * <p> In the latter case the Set is not put onto this map.  
+         * <p> In the latter case the Set is not put onto this map.
          * @param key
          */
         default public Set<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptySet());
         }
-        
+
         default public Stream<V> streamElements() {
             return values().stream()
                     .flatMap(Collection::stream);
@@ -159,25 +159,25 @@ public class _Multimaps {
          * @return null if no such element exists
          */
         public V getElement(K1 key, K2 subkey);
-        
+
         /**
          * Returns the Map to which the specified key is mapped,
          * or a new Map if this map contains no mapping for the key.
-         * <p> In the latter case the Map is also put onto this map.  
+         * <p> In the latter case the Map is also put onto this map.
          * @param key
          */
         public Map<K2, V> getOrElseNew(K1 key);
-        
+
         /**
          * Returns the Map to which the specified key is mapped,
          * or an immutable empty Map if this map contains no mapping for the key.
-         * <p> In the latter case the Map not is put onto this map.  
+         * <p> In the latter case the Map not is put onto this map.
          * @param key
          */
         default public Map<K2, V> getOrElseEmpty(K1 key) {
             return getOrDefault(key, Collections.emptyMap());
         }
-        
+
         default public Stream<V> streamElements() {
             return values().stream()
                     .map(Map::values)
@@ -188,7 +188,7 @@ public class _Multimaps {
     public static <K, V> ListMultimap<K, V> newListMultimap(
             final Supplier<Map<K, List<V>>> mapFactory,
             final Supplier<List<V>> elementCollectionFactory){
-        
+
         _With.requires(mapFactory, "mapFactory");
         _With.requires(elementCollectionFactory, "elementCollectionFactory");
 
@@ -213,7 +213,7 @@ public class _Multimaps {
             public void putElement(K key, V value) {
                 getOrElseNew(key).add(value);
             }
-            
+
             @Override
             public List<V> getOrElseNew(K key) {
                 val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
@@ -226,7 +226,7 @@ public class _Multimaps {
     public static <K, V, S extends Set<V>> SetMultimap<K, V> newSetMultimap(
             final Supplier<? extends Map<K, S>> mapFactory,
             final Supplier<S> elementCollectionFactory){
-        
+
         _With.requires(mapFactory, "mapFactory");
         _With.requires(elementCollectionFactory, "elementCollectionFactory");
 
@@ -251,7 +251,7 @@ public class _Multimaps {
             public void putElement(K key, V value) {
                 getOrElseNew(key).add(value);
             }
-            
+
             @Override
             public Set<V> getOrElseNew(K key) {
                 val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
@@ -264,7 +264,7 @@ public class _Multimaps {
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(
             final Supplier<Map<K1, Map<K2, V>>> mapFactory,
             final Supplier<Map<K2, V>> elementMapFactory){
-        
+
         _With.requires(mapFactory, "mapFactory");
         _With.requires(elementMapFactory, "elementMapFactory");
 
@@ -295,7 +295,7 @@ public class _Multimaps {
                 final Map<K2, V> elementMap = delegate.get(key);
                 return elementMap!=null ? elementMap.get(subkey) : null;
             }
-            
+
             @Override
             public Map<K2, V> getOrElseNew(K1 key) {
                 val elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
@@ -306,22 +306,22 @@ public class _Multimaps {
     }
 
     // -- SHORTCUTS
-    
+
     /**
      * @return HashMap of Lists with given listFactory
      */
     public static <K, V> ListMultimap<K, V> newListMultimap(Supplier<List<V>> listFactory){
         return newListMultimap(HashMap<K, List<V>>::new, listFactory);
     }
-    
+
     /**
-     * 
+     *
      * @return HashMap of Sets with given setFactory
      */
     public static <K, V> SetMultimap<K, V> newSetMultimap(Supplier<Set<V>> setFactory){
         return newSetMultimap(HashMap<K, Set<V>>::new, setFactory);
     }
-    
+
     // -- CONVENIENT DEFAULTS
 
     /**
@@ -330,7 +330,7 @@ public class _Multimaps {
     public static <K, V> ListMultimap<K, V> newListMultimap(){
         return newListMultimap(HashMap<K, List<V>>::new, ArrayList::new);
     }
-    
+
     /**
      * @return ConcurrentHashMap of CopyOnWriteArrayList (fully concurrent)
      */
@@ -344,7 +344,7 @@ public class _Multimaps {
     public static <K, V> SetMultimap<K, V> newSetMultimap(){
         return newSetMultimap(HashMap<K, Set<V>>::new, HashSet::new);
     }
-    
+
     /**
      * @return ConcurrentHashMap of ConcurrentHashMap-key-sets (fully concurrent)
      */
@@ -359,7 +359,7 @@ public class _Multimaps {
      * @return TreeMap of TreeSets
      */
     public static <K, V> SetMultimap<K, V> newSortedSetMultimap(
-            @Nullable Comparator<K> keyComparator, 
+            @Nullable Comparator<K> keyComparator,
             @Nullable Comparator<V> elementComparator){
 
         final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<K, SortedSet<V>>(keyComparator);

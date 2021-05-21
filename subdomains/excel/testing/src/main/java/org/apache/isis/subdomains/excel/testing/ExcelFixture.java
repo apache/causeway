@@ -40,6 +40,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.subdomains.excel.applib.IsisModuleSubdomainsExcelApplib;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
@@ -50,16 +51,18 @@ import lombok.Setter;
 import lombok.val;
 
 /**
- * This class should be executed using 
- * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} 
+ * This class should be executed using
+ * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
  * (it has value semantics).
  *
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = "isis.sub.excel.ExcelFixture"
+        objectType = ExcelFixture.OBJECT_TYPE
 )
 public class ExcelFixture extends FixtureScript {
+
+    public final static String OBJECT_TYPE = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture";
 
     @Inject SpecificationLoader specLoader;
 

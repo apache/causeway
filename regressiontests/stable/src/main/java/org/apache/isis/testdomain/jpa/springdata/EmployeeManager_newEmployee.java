@@ -30,13 +30,13 @@ import lombok.val;
 public class EmployeeManager_newEmployee {
 
     @Inject private EmployeeRepository employeeRepo;
-    
+
     private final EmployeeManager holder;
-    
+
     public EmployeeManager act(String firstName, String lastName) {
-        val newEmployee = new Employee(firstName, lastName); 
+        val newEmployee = new Employee(firstName, lastName);
         employeeRepo.save(newEmployee);
         return holder;
     }
-    
+
 }

@@ -25,5 +25,5 @@ import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 public interface HasEnlistedEntityChanges {
 
     Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName);
-    
+
 }

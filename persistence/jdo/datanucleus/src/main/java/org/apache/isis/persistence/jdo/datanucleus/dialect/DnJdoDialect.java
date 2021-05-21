@@ -33,7 +33,7 @@ import lombok.val;
 /**
  * Vendor (<i>Datanucleus</i>) specific implementation of <i>Spring's</i> {@link JdoDialect}
  * interface.
- * 
+ *
  * @since 2.0 {@index}
  * @see JdoDialect
  */
@@ -45,9 +45,9 @@ public class DnJdoDialect extends DefaultJdoDialect {
 
     @Override
     public DataAccessException translateExceptionIfPossible(RuntimeException cause) {
-        
-        val translatedException = 
-                
+
+        val translatedException =
+
         Result.failure(cause)
 
         //XXX seems like a bug in DN, why do we need to unwrap this?
@@ -71,12 +71,12 @@ public class DnJdoDialect extends DefaultJdoDialect {
         .orElse(null);
 
         if(translatedException instanceof DataAccessException) {
-            return (DataAccessException) translatedException;    
+            return (DataAccessException) translatedException;
         }
-        
+
         // cannot translate
         return null;
-        
+
     }
-    
+
 }

@@ -37,7 +37,7 @@ import lombok.val;
 public class TertiaryActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
-    
+
     public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
         val subMenuItems = flatten(menuItems);
@@ -50,6 +50,6 @@ public class TertiaryActionsPanel extends MenuActionPanel {
         response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
     }
 
-    
+
 
 }

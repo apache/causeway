@@ -61,10 +61,10 @@ import lombok.val;
  * their backing model.
  *
  * <p>
- * Supports the concept of being 
- * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT} 
+ * Supports the concept of being
+ * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
  * (eg within a table) or
- * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#REGULAR regular} 
+ * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#REGULAR regular}
  * (eg within a form).
  * </p>
  *
@@ -72,8 +72,8 @@ import lombok.val;
  * This implementation is for panels that use a textfield/text area.
  * </p>
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> 
-extends ScalarPanelAbstract 
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
+extends ScalarPanelAbstract
 implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
@@ -238,15 +238,15 @@ implements TextFieldValueModel.ScalarModelProvider {
                     validatable.error(error);
                 }
             }
-            
+
             private ObjectManager objectManager() {
                 return getCommonContext().getObjectManager();
             }
-            
+
             private IsisAppCommonContext getCommonContext() {
                 return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
             }
-            
+
         });
     }
 
@@ -275,7 +275,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact} 
+     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact}
      * format.
      * <p>
      * This default implementation uses a {@link Label}, however it may be overridden if required.
@@ -322,10 +322,10 @@ implements TextFieldValueModel.ScalarModelProvider {
         // must be "live", for ajax updates.
         return _Casts.uncheckedCast(model);
     }
-    
+
     protected class ToStringConvertingModel<X> extends Model<String> {
         private static final long serialVersionUID = 1L;
-        
+
         @NonNull private final IConverter<X> converter;
 
         private ToStringConvertingModel(@NonNull IConverter<X> converter) {
@@ -341,7 +341,7 @@ implements TextFieldValueModel.ScalarModelProvider {
             return str;
         }
     }
-    
+
     protected ToStringConvertingModel<T> toStringConvertingModelOf(IConverter<T> converter) {
         return new ToStringConvertingModel<>(converter);
     }
@@ -386,7 +386,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         setTooltip(disableReason);
         target.ifPresent(ajax->{
             ajax.add(textField);
-            ajax.add(inlinePromptLink);    
+            ajax.add(inlinePromptLink);
         });
     }
 
@@ -397,7 +397,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         clearTooltip();
         target.ifPresent(ajax->{
             ajax.add(textField);
-            ajax.add(inlinePromptLink);    
+            ajax.add(inlinePromptLink);
         });
     }
 

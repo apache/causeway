@@ -157,11 +157,11 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private Object choicesFor(
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         val pendingArgs = param.getAction()
                 .interactionHead(objectAdapter)
                 .emptyModel();
-        
+
         val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
@@ -176,11 +176,11 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object defaultFor(final ObjectActionParameter param) {
-        
+
         val emptyPpm = param.getAction()
                 .interactionHead(objectAdapter)
                 .emptyModel();
-        
+
         val defaultAdapter = param.getDefault(emptyPpm);
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;

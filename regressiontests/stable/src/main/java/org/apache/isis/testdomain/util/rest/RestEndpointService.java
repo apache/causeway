@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class RestEndpointService {
-    
+
     private final Environment environment;
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
@@ -68,18 +68,18 @@ public class RestEndpointService {
         }
         return port;
     }
-    
+
     private static final String INVENTORY_RESOURCE = "services/testdomain.jdo.InventoryResource";
-    
+
     // -- NEW CLIENT
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
         return newClient(useRequestDebugLogging, Can.empty());
     }
-            
-    
+
+
     public RestfulClient newClient(
-            boolean useRequestDebugLogging, 
+            boolean useRequestDebugLogging,
             @NonNull Can<ClientConversationFilter> additionalFilters) {
 
         val restRootPath =
@@ -103,22 +103,22 @@ public class RestEndpointService {
 
         //debug
         //clientConfig.setUseRequestDebugLogging(true);
-        
+
         val client = RestfulClient.ofConfig(clientConfig);
 
         return client;
     }
-    
+
     // -- NEW REQUEST BUILDER
-    
+
     public Invocation.Builder newInvocationBuilder(RestfulClient client, String actionPath) {
         return client.request(actionPath, SuppressionType.ALL);
     }
-    
+
     // -- ENDPOINTS
 
     public ResponseDigest<JdoBook> getRecommendedBookOfTheWeek(RestfulClient client) {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
         val args = client.arguments()
                 .build();
@@ -128,9 +128,9 @@ public class RestEndpointService {
 
         return digest;
     }
-    
+
     public ResponseDigest<JdoBook> getMultipleBooks(RestfulClient client) throws JAXBException {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
@@ -141,10 +141,10 @@ public class RestEndpointService {
 
         return digest;
     }
-    
-    
+
+
     public ResponseDigest<JdoBook> storeBook(RestfulClient client, JdoBook newBook) throws JAXBException {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/storeBook/invoke");
         val args = client.arguments()
                 .addActionParameter("newBook", JdoBookDto.from(newBook).encode())
@@ -157,7 +157,7 @@ public class RestEndpointService {
     }
 
     public ResponseDigest<JdoBookDto> getRecommendedBookOfTheWeekAsDto(RestfulClient client) {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
         val args = client.arguments()
                 .build();
@@ -167,9 +167,9 @@ public class RestEndpointService {
 
         return digest;
     }
-    
+
     public ResponseDigest<JdoBookDto> getMultipleBooksAsDto(RestfulClient client) throws JAXBException {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
@@ -180,10 +180,10 @@ public class RestEndpointService {
 
         return digest;
     }
-    
-    
+
+
     public ResponseDigest<String> getHttpSessionInfo(RestfulClient client) {
-        
+
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
         val args = client.arguments()
                 .build();
@@ -193,8 +193,8 @@ public class RestEndpointService {
 
         return digest;
     }
-    
-    
+
+
     // -- HELPER
 
     private Integer port;

@@ -44,7 +44,7 @@ public class Dialogs {
 
         alert.showAndWait();
     }
-    
+
     public static void message(String title, String headerText, String contentText, Node contentNode){
         val alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(title);
@@ -53,19 +53,19 @@ public class Dialogs {
 
         alert.getDialogPane().setExpandableContent(contentNode);
         alert.getDialogPane().setExpanded(true);
-        
+
         alert.showAndWait();
     }
-    
+
     public static void warning(String title, String headerText, String contentText){
         val alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
-        
+
         alert.showAndWait();
     }
-    
+
     public static void error(String title, String headerText, String contentText, Exception ex){
         val alert = new Alert(AlertType.ERROR);
         alert.setTitle(title);
@@ -99,9 +99,9 @@ public class Dialogs {
 
         alert.showAndWait();
     }
-    
+
     /**
-     * 
+     *
      * @param title
      * @param headerText
      * @param contentText
@@ -110,20 +110,20 @@ public class Dialogs {
      * @return whether the dialog's question was confirmed
      */
     public static boolean confirm(
-            String title, 
-            String headerText, 
-            String contentText, 
-            String confirmLabel, 
+            String title,
+            String headerText,
+            String contentText,
+            String confirmLabel,
             String denyLabel){
-        
+
         val alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
-        
+
         val buttonTypeConfirm = new ButtonType(confirmLabel);
         val buttonTypeDeny = new ButtonType(denyLabel);
-        
+
         alert.getButtonTypes().setAll(buttonTypeConfirm, buttonTypeDeny);
 
         ButtonType result = alert.showAndWait()
@@ -137,6 +137,6 @@ public class Dialogs {
         }
 
     }
-    
+
 
 }

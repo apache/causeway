@@ -75,10 +75,10 @@ implements ImperativeFacet {
 
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
-            
+
             val autofittedObjectContainer = ManagedObjects.VisibilityUtil
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
-            
+
             if (autofittedObjectContainer != null) {
                 return autofittedObjectContainer;
             }

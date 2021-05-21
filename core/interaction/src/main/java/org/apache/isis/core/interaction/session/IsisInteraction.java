@@ -44,7 +44,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IsisInteraction 
+public class IsisInteraction
 implements InteractionInternal {
 
     public IsisInteraction(final @NonNull UUID interactionId) {
@@ -61,7 +61,7 @@ implements InteractionInternal {
     }
 
     @Getter private final long startedAtSystemNanos;
-    
+
     // -- INTERACTION ON CLOSE HANDLER
 
     @Setter private Runnable onClose;
@@ -77,9 +77,9 @@ implements InteractionInternal {
         }
         closed = true;
     }
-    
+
     // --
-    
+
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
 
     @Getter(onMethod_ = {@Override})
@@ -226,7 +226,7 @@ implements InteractionInternal {
 
     @Getter(onMethod_ = {@Override})
     private final LongAdder executionSequence = new LongAdder();
-    
+
     @Getter(onMethod_ = {@Override})
     private final LongAdder transactionSequence = new LongAdder();
 
@@ -258,6 +258,6 @@ implements InteractionInternal {
             attributes.remove(type);
         }
     }
-    
+
 
 }

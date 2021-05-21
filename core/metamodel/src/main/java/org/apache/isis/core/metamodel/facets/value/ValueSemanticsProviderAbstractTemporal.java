@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.facets.value.date.DateValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ValueSemanticsProviderAbstractTemporal<T> 
-extends ValueSemanticsProviderAndFacetAbstract<T> 
+public abstract class ValueSemanticsProviderAbstractTemporal<T>
+extends ValueSemanticsProviderAndFacetAbstract<T>
 implements DateValueFacet {
 
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";

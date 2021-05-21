@@ -39,11 +39,11 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 //@Configuration
 @Import({
-    
+
     JpaTestDomainModule.class,
-    
+
     MyService.class, // testing injection into entities
-    
+
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
     ,IsisModuleJpaEclipselink.class
@@ -55,6 +55,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
 })
 public class Configuration_usingJpa {
-    
+
 
 }

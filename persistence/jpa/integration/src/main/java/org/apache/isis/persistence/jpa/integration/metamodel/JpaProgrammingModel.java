@@ -28,15 +28,15 @@ import lombok.val;
 
 @Component
 public class JpaProgrammingModel implements MetaModelRefiner {
-    
+
     // @Inject private IsisConfiguration config;
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {
-        
+
         val step1 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
 
-        pm.addFactory(step1, JpaEntityFacetFactory.class, Marker.JPA);        
+        pm.addFactory(step1, JpaEntityFacetFactory.class, Marker.JPA);
     }
 
 }

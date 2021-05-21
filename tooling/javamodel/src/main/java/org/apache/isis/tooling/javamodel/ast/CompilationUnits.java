@@ -35,7 +35,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 public final class CompilationUnits {
-    
+
     @SneakyThrows
     public static CompilationUnit parse(final @NonNull File sourceFile) {
         return StaticJavaParser.parse(sourceFile);
@@ -46,15 +46,15 @@ public final class CompilationUnits {
         .map(primaryType->primaryType.isPublic())
         .orElse(false);
     }
-    
+
     public static <T> Stream<ImportDeclaration> streamImportDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
         return compilationUnit.getImports().stream();
     }
-    
+
     public static <T> Stream<AnyTypeDeclaration> streamTypeDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
-        
+
         return getPrimaryType(compilationUnit)
         .map(type->type
                 .findAll(TypeDeclaration.class)
@@ -62,46 +62,46 @@ public final class CompilationUnits {
                 .map(td->AnyTypeDeclaration.auto(td, compilationUnit)))
         .orElseGet(Stream::empty);
     }
-    
+
     public static <T> Stream<ClassOrInterfaceDeclaration> streamClassOrInterfaceDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
-        
+
         return getPrimaryType(compilationUnit)
         .map(type->type
                 .findAll(ClassOrInterfaceDeclaration.class)
                 .stream())
         .orElseGet(Stream::empty);
     }
-    
+
     public static <T> Stream<EnumDeclaration> streamEnumDeclarations(
             final @NonNull CompilationUnit compilationUnit) {
-        
+
         return getPrimaryType(compilationUnit)
         .map(type->type
                 .findAll(EnumDeclaration.class)
                 .stream())
         .orElseGet(Stream::empty);
     }
-    
+
     // -- HELPER
-    
+
     private static Optional<TypeDeclaration<?>> getPrimaryType(
             final @NonNull CompilationUnit compilationUnit) {
-        
+
         val type = compilationUnit.getPrimaryType()
                 .orElseGet(()->
                     compilationUnit.getTypes()
                     .getFirst()
                     .orElse(null));
-        
+
         if(type==null) {
-            System.err.println("could not find any type in CompilationUnit ...\n" + 
+            System.err.println("could not find any type in CompilationUnit ...\n" +
                     compilationUnit);
             return Optional.empty();
         }
-        
-        return Optional.of(type);        
+
+        return Optional.of(type);
     }
 
-    
+
 }

@@ -22,7 +22,6 @@
 
 	<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
 	<name>Apache Isis Val - Asciidoctor (persistence jdo DN5)</name>
-	<version>2.0.0-SNAPSHOT</version>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5</jar-plugin.automaticModuleName>

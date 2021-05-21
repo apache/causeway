@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -40,8 +39,10 @@ import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,7 @@ import lombok.val;
 public class JaxbServiceDefault extends Simple {
 
     private final ServiceInjector serviceInjector;
-    /*circular dependency, so use provider*/
-    private final Provider<MetaModelService> metaModelServiceProvider;
+    private final SpecificationLoader specificationLoader;
 
     @Override @SneakyThrows
     protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
@@ -66,8 +66,10 @@ public class JaxbServiceDefault extends Simple {
             val domainClass = domainObject.getClass();
             val domainObjectList = (DomainObjectList) domainObject;
             try {
-                val elementType = metaModelServiceProvider.get()
-                        .fromObjectType(domainObjectList.getElementObjectType());
+                val elementType = specificationLoader
+                        .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElse(null);
                 if (elementType!=null
                         && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
 

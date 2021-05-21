@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 Configuration_usingInvalidDomain_noActionEnforced.class
         })
 public class Configuration_usingInvalidDomain_noActionEnforced {

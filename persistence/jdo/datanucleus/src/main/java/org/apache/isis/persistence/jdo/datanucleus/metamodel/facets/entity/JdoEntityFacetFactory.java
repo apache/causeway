@@ -27,26 +27,26 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
 
 /**
- * Implements {@link ObjectSpecIdFacetFactory} only because
+ * Implements {@link ObjectTypeFacetFactory} only because
  * is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JdoEntityFacetFactory
 extends FacetFactoryAbstract
-implements ObjectSpecIdFacetFactory {
+implements ObjectTypeFacetFactory {
 
     public JdoEntityFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext processClassContext) {
+    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models

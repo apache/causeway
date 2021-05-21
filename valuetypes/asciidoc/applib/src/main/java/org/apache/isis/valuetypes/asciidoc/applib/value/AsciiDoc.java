@@ -58,6 +58,7 @@ public class AsciiDoc implements HasHtml, Serializable {
         return "AsciiDoc[length="+html.length()+"]";
     }
 
+    @Override
     public String asHtml() {
         return html;
     }

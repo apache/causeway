@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 
-public class BlobValueSemanticsProvider 
-extends ValueSemanticsProviderAndFacetAbstract<Blob> 
+public class BlobValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<Blob>
 implements BlobValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
@@ -95,7 +95,7 @@ implements BlobValueFacet {
 
     @Override
     protected String doEncode(final Blob blob) {
-        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" + 
+        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
         _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }
 

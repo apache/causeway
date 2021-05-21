@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 import lombok.val;
 
-public abstract class ActionParameterHiddenFacetAbstract 
-extends FacetAbstract 
+public abstract class ActionParameterHiddenFacetAbstract
+extends FacetAbstract
 implements ActionParameterHiddenFacet {
 
     public static Class<? extends Facet> type() {
@@ -46,9 +46,9 @@ implements ActionParameterHiddenFacet {
         }
         val actionArgVisibilityContext = (ActionArgVisibilityContext) context;
         return isHidden(
-                actionArgVisibilityContext.getTarget(), 
-                actionArgVisibilityContext.getArgs()) 
-                ? "Hidden" 
+                actionArgVisibilityContext.getTarget(),
+                actionArgVisibilityContext.getArgs())
+                ? "Hidden"
                         : null;
     }
 }

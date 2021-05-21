@@ -67,45 +67,45 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
-        
+
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         val entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
         if(!entityAnnotation.isPresent()) {
             return;
         }
-        
+
         val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val jpaEntityFacet = new JpaEntityFacet(facetHolder, cls, serviceRegistry);
-            
+
         addFacet(jpaEntityFacet);
     }
-    
-    // -- 
-    
+
+    // --
+
     public static class JpaEntityFacet
     extends FacetAbstract
     implements EntityFacet {
 
         private final Class<?> entityClass;
         private final ServiceRegistry serviceRegistry;
-        
+
         protected JpaEntityFacet(
                 final FacetHolder holder,
-                final Class<?> entityClass, 
+                final Class<?> entityClass,
                 final @NonNull ServiceRegistry serviceRegistry) {
-            
+
             super(EntityFacet.class, holder);
             this.entityClass = entityClass;
             this.serviceRegistry = serviceRegistry;
         }
-        
+
         @Override public boolean isDerived() { return false;}
         @Override public boolean isFallback() { return false;}
         @Override public boolean alwaysReplace() { return true;}
-        
-        // -- ENTITY FACET 
-        
+
+        // -- ENTITY FACET
+
         @Override
         public PersistenceStandard getPersistenceStandard() {
             return PersistenceStandard.JPA;
@@ -119,7 +119,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                         "The persistence layer cannot identify a pojo that is null (given type %s)",
                         spec.getCorrespondingClass().getName());
             }
-            
+
             if(!spec.isEntity()) {
                 throw _Exceptions.illegalArgument(
                         "The persistence layer does not recognize given type %s",
@@ -129,88 +129,88 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             val entityManager = getEntityManager();
             val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
             val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            
+
             if(primaryKey==null) {
                 throw _Exceptions.illegalArgument(
                         "The persistence layer does not recognize given object of type %s, "
                         + "meaning the object has no identifier that associates it with the persistence layer. "
-                        + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
+                        + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
                         pojo.getClass().getName());
             }
-            
+
             return getObjectIdSerializer().stringify(primaryKey);
 
         }
 
         @Override
         public ManagedObject fetchByIdentifier(
-                final @NonNull ObjectSpecification entitySpec, 
+                final @NonNull ObjectSpecification entitySpec,
                 final @NonNull String identifier) {
-            
+
             val primaryKey = getObjectIdSerializer().parse(identifier);
             val entityManager = getEntityManager();
             val entityPojo = entityManager.find(entityClass, primaryKey);
-            
+
             if (entityPojo == null) {
                 throw new ObjectNotFoundException(""+identifier);
             }
-            
+
             return ManagedObject.of(entitySpec, entityPojo);
         }
 
         @Override
         public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
-            
+
             val range = query.getRange();
-            
+
             if(query instanceof AllInstancesQuery) {
 
                 val queryFindAllInstances = (AllInstancesQuery<?>) query;
                 val queryEntityType = queryFindAllInstances.getResultType();
-                
+
                 // guard against misuse
                 if(!entityClass.isAssignableFrom(queryEntityType)) {
                     throw _Exceptions.unexpectedCodeReach();
                 }
 
                 val entityManager = getEntityManager();
-                
+
                 val cb = entityManager.getCriteriaBuilder();
                 val cr = cb.createQuery(entityClass);
 
                 cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
-                
+
                 val typedQuery = entityManager
                         .createQuery(cr);
-                
+
                 if(range.hasOffset()) {
                     typedQuery.setFirstResult(range.getStartAsInt());
                 }
                 if(range.hasLimit()) {
                     typedQuery.setMaxResults(range.getLimitAsInt());
                 }
-                
+
                 return Can.ofStream(
                     typedQuery.getResultStream()
                     .map(entity->ManagedObject.of(spec, entity)));
-                
+
             } else if(query instanceof NamedQuery) {
-                
+
                 val applibNamedQuery = (NamedQuery<?>) query;
                 val queryResultType = applibNamedQuery.getResultType();
-                
+
                 val entityManager = getEntityManager();
-                
+
                 val namedQuery = entityManager
                         .createNamedQuery(applibNamedQuery.getName(), queryResultType);
-                
+
                 if(range.hasOffset()) {
                     namedQuery.setFirstResult(range.getStartAsInt());
                 }
                 if(range.hasLimit()) {
                     namedQuery.setMaxResults(range.getLimitAsInt());
                 }
-                
+
                 applibNamedQuery
                     .getParametersByName()
                     .forEach((paramName, paramValue)->
@@ -219,9 +219,9 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 return Can.ofStream(
                         namedQuery.getResultStream()
                         .map(entity->ManagedObject.of(spec, entity)));
-                
+
             }
-            
+
             throw _Exceptions.unsupportedOperation(
                     "Support for Query of type %s not implemented.", query.getClass());
         }
@@ -231,14 +231,14 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             if(pojo==null) {
                 return; // nothing to do
             }
-            
+
             // guard against misuse
             if(!entityClass.isAssignableFrom(pojo.getClass())) {
                 throw _Exceptions.unexpectedCodeReach();
             }
-            
+
             val entityManager = getEntityManager();
-            
+
             log.debug("about to persist entity {}", pojo);
 
             entityManager.persist(pojo);
@@ -249,47 +249,47 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             if(pojo==null) {
                 return; // nothing to do
             }
-            
+
             // guard against misuse
             if(!entityClass.isAssignableFrom(pojo.getClass())) {
                 throw _Exceptions.unexpectedCodeReach();
             }
-            
+
             val entityManager = getEntityManager();
             entityManager.refresh(pojo);
         }
 
         @Override
         public void delete(ObjectSpecification spec, Object pojo) {
-            
+
             if(pojo==null) {
                 return; // nothing to do
             }
-            
+
             // guard against misuse
             if(!entityClass.isAssignableFrom(pojo.getClass())) {
                 throw _Exceptions.unexpectedCodeReach();
             }
-            
+
             val entityManager = getEntityManager();
             entityManager.remove(pojo);
         }
 
         @Override
         public EntityState getEntityState(Object pojo) {
-            
+
             if(pojo==null) {
                 return EntityState.NOT_PERSISTABLE;
             }
-            
+
             // guard against misuse
             if(!entityClass.isAssignableFrom(pojo.getClass())) {
                 //throw _Exceptions.unexpectedCodeReach();
                 return EntityState.NOT_PERSISTABLE;
             }
-            
+
             val entityManager = getEntityManager();
-            
+
             if(entityManager.contains(pojo)) {
                 return EntityState.PERSISTABLE_ATTACHED;
             }
@@ -298,9 +298,9 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             if(primaryKey == null) {
                 return EntityState.PERSISTABLE_DETACHED;
             }
-            
-            //XXX this find operation is potentially expensive, 
-            // compared to JDO, which does not require this extra step 
+
+            //XXX this find operation is potentially expensive,
+            // compared to JDO, which does not require this extra step
             return entityManager.find(entityClass, primaryKey)==null
                     ? EntityState.PERSISTABLE_DESTROYED
                     : EntityState.PERSISTABLE_DETACHED;
@@ -316,62 +316,62 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             getEntityManager().detach(pojo);
             return pojo;
         }
-        
+
         // -- JPA METAMODEL
-        
+
         private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel);
-        
+
         /** get the JPA meta-model associated with this (corresponding) entity*/
         private EntityType<?> getJpaEntityType() {
             return jpaEntityTypeRef.get().orElseThrow(_Exceptions::noSuchElement);
         }
-        
-        /** find the JPA meta-model associated with this (corresponding) entity*/ 
+
+        /** find the JPA meta-model associated with this (corresponding) entity*/
         private Optional<EntityType<?>> queryJpaMetamodel() {
             return getEntityManager().getMetamodel().getEntities()
             .stream()
             .filter(type->type.getJavaType().equals(entityClass))
             .findFirst();
         }
-        
+
         // -- OBJECT ID SERIALIZATION
-        
+
         private final _Lazy<JpaObjectIdSerializer<Object>> objectIdSerializerRef = _Lazy.threadSafe(this::createObjectIdSerializer);
-        
+
         protected JpaObjectIdSerializer<Object> getObjectIdSerializer() {
             return objectIdSerializerRef.get();
         }
-        
+
         protected JpaObjectIdSerializer<Object> createObjectIdSerializer() {
             val primaryKeyType = getJpaEntityType().getIdType().getJavaType();
             return _Casts.uncheckedCast(createJpaObjectIdSerializer(primaryKeyType, serviceRegistry));
         }
-        
+
         // -- DEPENDENCIES
-        
+
         protected JpaContext getJpaContext() {
             return serviceRegistry.lookupServiceElseFail(JpaContext.class);
         }
-        
+
         protected EntityManager getEntityManager() {
             return getJpaContext().getEntityManagerByManagedType(entityClass);
         }
-        
+
         protected PersistenceUnitUtil getPersistenceUnitUtil(EntityManager entityManager) {
             return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
         }
-        
+
     }
-    
+
     // -- HELPER - OBJECT ID SERIALIZATION
-    
+
 
     @SuppressWarnings("rawtypes")
     private static JpaObjectIdSerializer createJpaObjectIdSerializer(
             final @NonNull Class<?> primaryKeyType,
             final @NonNull ServiceRegistry serviceRegistry) {
-        
-        
+
+
         // not strictly required, but to have simpler entity URLs for simple primary-key types
         {
             if(primaryKeyType.equals(Long.class)
@@ -391,13 +391,13 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 return new ByteIdSerializer();
             }
         }
-        
+
         val codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
         val serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
         return new JpaObjectIdSerializerUsingMementos<>(primaryKeyType, codec, serializer);
     }
-    
-    
+
+
     @RequiredArgsConstructor
     private static abstract class JpaObjectIdSerializer<T> {
         @SuppressWarnings("unused")
@@ -405,7 +405,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         abstract String stringify(T id);
         abstract T parse(String stringifiedPrimaryKey);
     }
-    
+
     private static class LongIdSerializer extends JpaObjectIdSerializer<Long> {
         public LongIdSerializer() { super(Long.class); }
         @Override String stringify(Long id) { return id.toString(); }
@@ -426,31 +426,33 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override String stringify(Byte id) { return id.toString(); }
         @Override Byte parse(String stringifiedPrimaryKey) { return Byte.parseByte(stringifiedPrimaryKey); }
     }
-    
+
     private static class JpaObjectIdSerializerUsingMementos<T> extends JpaObjectIdSerializer<T> {
         private final UrlEncodingService codec;
         private final SerializingAdapter serializer;
-        
+
         public JpaObjectIdSerializerUsingMementos(
-                final @NonNull Class<T> primaryKeyType, 
+                final @NonNull Class<T> primaryKeyType,
                 final @NonNull UrlEncodingService codec,
                 final @NonNull SerializingAdapter serializer) {
             super(primaryKeyType);
             this.codec = codec;
             this.serializer = serializer;
         }
-       
+
+        @Override
         public String stringify(Object id) {
             return newMemento().put("id", id).asString();
         }
-        
+
+        @Override
         public T parse(final String stringifiedPrimaryKey) {
             if(_Strings.isEmpty(stringifiedPrimaryKey)) {
                 return null;
             }
             return _Casts.uncheckedCast(parseMemento(stringifiedPrimaryKey).get("id", Object.class));
         }
-       
+
         // -- HELPER
 
         private _Mementos.Memento newMemento(){
@@ -460,9 +462,9 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         private _Mementos.Memento parseMemento(String input){
             return _Mementos.parse(codec, serializer, input);
         }
-        
+
     }
-    
+
 
 
 }

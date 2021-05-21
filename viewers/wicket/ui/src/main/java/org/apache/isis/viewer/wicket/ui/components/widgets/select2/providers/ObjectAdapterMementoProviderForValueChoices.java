@@ -28,18 +28,18 @@ import lombok.Getter;
 import lombok.val;
 
 public class ObjectAdapterMementoProviderForValueChoices
-extends ObjectAdapterMementoProviderAbstract 
+extends ObjectAdapterMementoProviderAbstract
 implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter(onMethod = @__(@Override))
     private final Can<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForValueChoices(
             ScalarModel scalarModel,
             Can<ObjectMemento> choicesMementos) {
-        
+
         super(scalarModel);
         this.choiceMementos = choicesMementos;
     }
@@ -51,7 +51,7 @@ implements ObjectAdapterMementoProviderForChoices {
 
     @Override
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        
+
         return obtainMementos(null)
         .filter((ObjectMemento input) -> {
             val id = getIdValue(input);

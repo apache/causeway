@@ -18,27 +18,23 @@
  */
 package demoapp.dom.types.javautil.uuids.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class JavaUtilUuidJdoEntities {
+public class JavaUtilUuidJdoEntities
+extends ValueHolderRepository<java.util.UUID, JavaUtilUuidJdo> {
 
-    public Optional<JavaUtilUuidJdo> find(final java.util.UUID readOnlyProperty) {
-        return repositoryService.firstMatch(JavaUtilUuidJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected JavaUtilUuidJdoEntities() {
+        super(JavaUtilUuidJdo.class);
     }
 
-    public List<JavaUtilUuidJdo> all() {
-        return repositoryService.allInstances(JavaUtilUuidJdo.class);
+    @Override
+    protected JavaUtilUuidJdo newDetachedEntity(java.util.UUID value) {
+        return new JavaUtilUuidJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

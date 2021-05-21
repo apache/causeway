@@ -67,7 +67,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Inject private WrapperFactory wrapperFactory;
     @Inject private ObjectManager objectManager;
     @Inject private MetaModelContext mmc;
-    
+
     @Override
     public Optional<Object> lookup(final @Nullable BookmarkHolder bookmarkHolder) {
         if(bookmarkHolder == null) {
@@ -86,7 +86,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         try {
             return mmc.loadObject(bookmark)
                     .map(ManagedObject::getPojo);
-        } catch(ObjectNotFoundException ex) {   
+        } catch(ObjectNotFoundException ex) {
             return Optional.empty();
         }
     }
@@ -96,7 +96,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         if(domainObject == null) {
             return Optional.empty();
         }
-        val adapter = objectManager.adapt(unwrapped(domainObject)); 
+        val adapter = objectManager.adapt(unwrapped(domainObject));
         if(!ManagedObjects.isIdentifiable(adapter)){
             // eg values cannot be bookmarked
             return Optional.empty();
@@ -106,7 +106,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     }
 
     private Object unwrapped(Object domainObject) {
-        return wrapperFactory != null 
+        return wrapperFactory != null
                 ? wrapperFactory.unwrap(domainObject)
                 : domainObject;
     }
@@ -114,14 +114,14 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
     @Override
     public Optional<Bookmark> bookmarkFor(
-            final @Nullable Class<?> cls, 
+            final @Nullable Class<?> cls,
             final @Nullable String identifier) {
 
         if(_Strings.isNullOrEmpty(identifier)
                 || cls==null) {
             return Optional.empty();
         }
-        return specificationLoader.specForType(cls) 
+        return specificationLoader.specForType(cls)
                 .map(ObjectSpecification::getLogicalType)
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
@@ -180,7 +180,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         if(!Serializable.class.isAssignableFrom(cls)) {
             return false;
         }
-        // primitive ... boolean, byte, char, short, int, long, float, and double. 
+        // primitive ... boolean, byte, char, short, int, long, float, and double.
         if(cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
             return true;
         }
@@ -196,6 +196,6 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         }
         return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
     }
-    
+
 
 }

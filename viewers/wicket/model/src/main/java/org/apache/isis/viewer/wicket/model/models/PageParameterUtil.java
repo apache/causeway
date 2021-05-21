@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
@@ -50,20 +49,20 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PageParameterUtil {
-    
+
     public static ActionModel actionModelFor(
-            final IsisAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
-        
-        val entityModel = newEntityModelFrom(commonContext, pageParameters);
-        val actionMemento = newActionMementoFrom(commonContext, pageParameters);
-        val actionModel = ActionModel.of(entityModel, actionMemento);
+
+        val entityModel = entityModelFromPageParams(commonContext, pageParameters);
+        val action = actionFromPageParams(commonContext, pageParameters);
+        val actionModel = ActionModel.of(entityModel, action.getMemento());
         val mmc = commonContext.getMetaModelContext();
         setArgumentsIfPossible(mmc, actionModel, pageParameters);
         setContextArgumentIfPossible(mmc, actionModel, pageParameters);
         return actionModel;
     }
-    
+
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     /**
@@ -85,25 +84,25 @@ public class PageParameterUtil {
         }
         return pageParameters;
     }
-    
+
     public static PageParameters createPageParametersForAction(
-            ManagedObject adapter, 
+            ManagedObject adapter,
             ObjectAction objectAction,
             Can<ManagedObject> paramValues) {
-        
+
         val pageParameters = createPageParameters(adapter, objectAction);
-        
+
         // capture argument values
         for(val argumentAdapter: paramValues) {
             val encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
-        
+
         return pageParameters;
     }
-    
+
     // -- HELPERS
-    
+
     private static PageParameters createPageParameters(ManagedObject adapter, ObjectAction objectAction) {
 
         val pageParameters = PageParametersUtils.newPageParameters();
@@ -140,21 +139,26 @@ public class PageParameterUtil {
         return parseParamContext(paramContext);
     }
 
-    private static ActionMemento newActionMementoFrom(
+    private static ObjectAction actionFromPageParams(
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
         val specLoader = commonContext.getSpecificationLoader();
         val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
         val owningLogicalType = specLoader.lookupLogicalType(owningLogicalTypeName);
-        
+
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningLogicalType, actionType, actionNameParms, specLoader);
+
+        val action = specLoader
+                .specForLogicalTypeElseFail(owningLogicalType)
+                .getActionElseFail(actionNameParms, actionType);
+
+        return action;
     }
-    
+
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
-    
+
     static Optional<ParamNumAndOidString> parseParamContext(final String paramContext) {
         val matcher = KEY_VALUE_PATTERN.matcher(paramContext);
         if (!matcher.matches()) {
@@ -179,7 +183,7 @@ public class PageParameterUtil {
         return Optional.empty();
 
     }
-    
+
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
@@ -188,15 +192,15 @@ public class PageParameterUtil {
         // fallback (used for action sets)
         return objectAction.getId();
     }
-    
-    private static EntityModel newEntityModelFrom(
+
+    private static EntityModel entityModelFromPageParams(
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
         val memento = bookmarkFor(pageParameters)
         .map(commonContext::mementoForBookmark)
         .orElse(null);
-        
+
         return EntityModel.ofMemento(commonContext, memento);
     }
 
@@ -219,10 +223,10 @@ public class PageParameterUtil {
 
         return ManagedObjects.stringify(adapter).orElse(null);
     }
-    
+
     private @Nullable ManagedObject decodeArg(
             final @NonNull MetaModelContext mmc,
-            final ObjectSpecification objSpec, 
+            final ObjectSpecification objSpec,
             final String encoded) {
         if(NULL_ARG.equals(encoded)) {
             return null;
@@ -241,9 +245,9 @@ public class PageParameterUtil {
             return null;
         }
     }
-    
+
     private static void setArgumentsIfPossible(
-            final @NonNull MetaModelContext mmc, 
+            final @NonNull MetaModelContext mmc,
             final ActionModel actionModel,
             final PageParameters pageParameters) {
 
@@ -258,18 +262,18 @@ public class PageParameterUtil {
             .ifPresent(param->decodeAndSetArgument(mmc, actionModel, param, oidStrEncoded));
         }
     }
-    
+
     private static boolean setContextArgumentIfPossible(
-            final @NonNull MetaModelContext mmc, 
-            final ActionModel actionModel, 
+            final @NonNull MetaModelContext mmc,
+            final ActionModel actionModel,
             final PageParameters pageParameters) {
-        
+
         val paramNumAndOidString = parseParamContext(pageParameters)
                 .orElse(null);
         if(paramNumAndOidString==null) {
             return false;
         }
-        
+
         val action = actionModel.getMetaModel();
         val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
         if(!actionParamIfAny.isPresent()) {
@@ -281,14 +285,14 @@ public class PageParameterUtil {
         decodeAndSetArgument(mmc, actionModel, actionParam, oidStrEncoded);
         return true;
     }
-    
+
     private static void decodeAndSetArgument(
-            final @NonNull MetaModelContext mmc, 
-            final ActionModel actionModel, 
-            final ObjectActionParameter actionParam, 
+            final @NonNull MetaModelContext mmc,
+            final ActionModel actionModel,
+            final ObjectActionParameter actionParam,
             final String oidStrEncoded) {
         val paramValue = decodeArg(mmc, actionParam.getSpecification(), oidStrEncoded);
         actionModel.setParameterValue(actionParam, paramValue);
     }
-    
+
 }

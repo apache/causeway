@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.RecoverableException;
@@ -79,15 +80,22 @@ implements ObjectAction {
         return type;
     }
 
-    // -- fields
+    // -- FACTORY
+
+    public static ObjectActionDefault forMethod(final FacetedMethod facetedMethod) {
+        return new ObjectActionDefault(facetedMethod.getIdentifier(), facetedMethod);
+    }
+
+    // -- FIELDS
 
     private final _Lazy<Can<ObjectActionParameter>> parameters = _Lazy.threadSafe(this::determineParameters);
 
-    // -- constructors
+    // -- CONSTRUCTOR
 
-    public ObjectActionDefault(
+    protected ObjectActionDefault(
+            final Identifier identifier,
             final FacetedMethod facetedMethod) {
-        super(facetedMethod, FeatureType.ACTION);
+        super(identifier, facetedMethod, FeatureType.ACTION);
     }
 
     // -- ReturnType, OnType, Actions (set)
@@ -101,8 +109,7 @@ implements ObjectAction {
 
     @Override
     public ObjectSpecification getReturnType() {
-        final ActionInvocationFacet facet = getActionInvocationFacet();
-        return facet.getReturnType();
+        return getActionInvocationFacet().getReturnType();
     }
 
     /**

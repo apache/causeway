@@ -31,14 +31,14 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
- * 
+ *
  * @apiNote using raw-types here, to not further complicate generic type constraints on PanelAbstract
  */
-public abstract class PanelAbstract<T, M extends IModel<T>> 
+public abstract class PanelAbstract<T, M extends IModel<T>>
 extends PanelBase<T> {
 
     private static final long serialVersionUID = 1L;
-    
+
     private ComponentType componentType;
 
     public PanelAbstract(final ComponentType componentType) {
@@ -90,7 +90,7 @@ extends PanelBase<T> {
     public void permanentlyHide(final String... ids) {
         Components.permanentlyHide(this, ids);
     }
-    
+
     protected static void setVisible(@Nullable Component component, boolean visible) {
         if(component == null) {
             return;

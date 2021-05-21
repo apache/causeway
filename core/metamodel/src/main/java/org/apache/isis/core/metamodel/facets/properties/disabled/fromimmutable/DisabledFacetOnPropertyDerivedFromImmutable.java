@@ -37,9 +37,9 @@ public class DisabledFacetOnPropertyDerivedFromImmutable extends DisabledFacetAb
     private final Function<ManagedObject, String> reasonProvider;
 
     public DisabledFacetOnPropertyDerivedFromImmutable(
-            @NonNull final FacetHolder holder, 
+            @NonNull final FacetHolder holder,
             @NonNull final Function<ManagedObject, String> reasonProvider) {
-        
+
         super(Where.ANYWHERE, holder);
         this.reasonProvider = reasonProvider;
     }
@@ -54,7 +54,7 @@ public class DisabledFacetOnPropertyDerivedFromImmutable extends DisabledFacetAb
     public static DisabledFacetOnPropertyDerivedFromImmutable forImmutable(
             @NonNull final FacetedMethod facetedMethodFor,
             @NonNull final ImmutableFacet immutableFacet) {
-        
+
         return new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor, immutableFacet::disabledReason);
     }
 

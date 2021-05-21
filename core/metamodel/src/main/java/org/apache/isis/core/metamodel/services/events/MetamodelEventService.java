@@ -39,18 +39,18 @@ import org.apache.isis.applib.events.ui.TitleUiEvent;
 import lombok.Builder;
 
 /**
- * 
+ *
  * @since 2.0
  *
  */
-@Service 
+@Service
 @Named("isis.metamodel.MetamodelEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Builder //for JUnit Test support
 public class MetamodelEventService {
-    
+
     @Inject private ApplicationEventPublisher publisher;
 
     // -- METAMODEL UI EVENTS

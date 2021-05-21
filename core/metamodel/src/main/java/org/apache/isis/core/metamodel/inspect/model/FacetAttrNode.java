@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -35,35 +36,40 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isis.metamodel.FacetAttrNode")
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = FacetAttrNode.OBJECT_TYPE
+)
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class FacetAttrNode extends MMNode {
 
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".FacetAttrNode";
+
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private FacetAttr facetAttr;
-    
+
     @Override
     public String createTitle() {
-        return String.format("%s: %s", facetAttr.getName(), facetAttr.getValue());  
+        return String.format("%s: %s", facetAttr.getName(), facetAttr.getValue());
     }
-    
+
     @Override
     public String iconName() {
         return "";
     }
-    
+
     // -- TREE NODE STUFF
-    
-    @Getter @Setter @XmlTransient 
+
+    @Getter @Setter @XmlTransient
     private FacetNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
         return Stream.empty();
     }
-   
-    
+
+
 }
 

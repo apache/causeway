@@ -49,9 +49,8 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.dom.AccountType;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.Getter;
@@ -246,7 +245,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 val applicationUser = applicationUserRepository.findByUsername(username).orElse(null);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+            @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
 
@@ -258,7 +257,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 val applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+            @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
 

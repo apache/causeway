@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodalocaltime;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -38,19 +40,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdo;
-import demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities;
+import demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeEntity;
 import demoapp.dom.types.jodatime.jodalocaltime.vm.JodaLocalTimeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JodaLocalTimes", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JodaLocalTimes implements HasAsciiDocDescription {
 
     public String title() {
@@ -67,13 +67,15 @@ public class JodaLocalTimes implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JodaLocalTimeJdo> getEntities() {
-        return entities.all();
+    public List<? extends JodaLocalTimeEntity> getEntities() {
+        return entities!=null
+                ? entities.all()
+                : Collections.emptyList();
     }
 
-    @Inject
+    @Autowired(required = false)
     @XmlTransient
-    JodaLocalTimeJdoEntities entities;
+    ValueHolderRepository<org.joda.time.LocalTime, ? extends JodaLocalTimeEntity> entities;
 
     @Inject
     @XmlTransient

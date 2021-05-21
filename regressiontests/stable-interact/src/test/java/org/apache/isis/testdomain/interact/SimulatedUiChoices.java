@@ -26,17 +26,22 @@ import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
+import lombok.val;
 
 public class SimulatedUiChoices extends HasValueValidation {
 
     private final Bindable<Can<ManagedObject>> choiceBox = _Bindables.empty();
     private final Bindable<ManagedObject> selectedItem = _Bindables.empty();
-    
+
     @Getter private final LongAdder choiceBoxUpdateEventCount = new LongAdder();
     @Getter private final LongAdder selectedItemUpdateEventCount = new LongAdder();
-    
+
+    private ObjectSpecification valueSpecification;
+
+    @Override
     public void bind(ManagedValue managedValue) {
         choiceBox.bind(managedValue.getChoices());
         choiceBox.addListener((e,o,n)->{
@@ -44,26 +49,46 @@ public class SimulatedUiChoices extends HasValueValidation {
         });
         selectedItem.bindBidirectional(managedValue.getValue());
         super.bind(managedValue);
-        
+
         selectedItem.addListener((e,o,n)->{
             selectedItemUpdateEventCount.increment();
         });
+
+        valueSpecification = managedValue.getSpecification();
     }
-    
+
     public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
         bind(pendingArgs.getParamModels().getElseFail(paramNr));
     }
 
+    /**
+     * assuming the parameter is a scalar type
+     * @param choiceIndex
+     */
     public void simulateChoiceSelect(int choiceIndex) {
         selectedItem.setValue(choiceBox.getValue().getElseFail(choiceIndex));
     }
 
+    /**
+     * assuming the parameter is a non-scalar type
+     * @param choiceIndices
+     */
+    public void simulateMultiChoiceSelect(int ... choiceIndices) {
+        val newValuePojos = choiceBox.getValue()
+                .pickByIndex(choiceIndices)
+                .map(ManagedObject::getPojo);
+        val newValue = ManagedObject.of(
+                valueSpecification,
+                newValuePojos.toList());
+        selectedItem.setValue(newValue);
+    }
+
     public ManagedObject getValue() {
-        return selectedItem.getValue(); 
+        return selectedItem.getValue();
     }
-    
+
     public Can<ManagedObject> getChoices() {
-        return choiceBox.getValue(); 
+        return choiceBox.getValue();
     }
-    
+
 }

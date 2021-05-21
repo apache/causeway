@@ -34,7 +34,7 @@ import lombok.val;
 public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
 
     //private final static int TYPICAL_LENGTH = 48;
-    
+
     @Override
     public boolean isHandling(ComponentRequest request) {
         return request.isFeatureTypeAssignableFrom(AsciiDoc.class);
@@ -45,15 +45,15 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
         val uiField = new AsciiDocFieldVaa(request.getDisplayLabel());
         uiField.setValue(request.getFeatureValue(AsciiDoc.class).orElse(null));
 
-//not compatible with flexibly growing grids        
+//not compatible with flexibly growing grids
 //        final int typicalLength = request
 //            .getFeatureFacet(TypicalLengthFacet.class)
 //            .map(typicalLengthFacet->typicalLengthFacet.bounded(10, 10000, TYPICAL_LENGTH))
 //            .orElse(TYPICAL_LENGTH);
-//        
-//        uiField.setMaxWidth("" + typicalLength + "em");    
-        
+//
+//        uiField.setMaxWidth("" + typicalLength + "em");
+
         return uiField;
     }
-    
+
 }

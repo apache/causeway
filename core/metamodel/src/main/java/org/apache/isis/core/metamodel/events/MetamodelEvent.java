@@ -22,13 +22,13 @@ public enum MetamodelEvent {
         BEFORE_METAMODEL_LOADING,
         AFTER_METAMODEL_LOADED,
         ;
-	
+
 	public boolean isPreMetamodel() {
 		return this == BEFORE_METAMODEL_LOADING;
 	}
-	
+
 	public boolean isPostMetamodel() {
 		return this == AFTER_METAMODEL_LOADED;
 	}
-	
+
 }

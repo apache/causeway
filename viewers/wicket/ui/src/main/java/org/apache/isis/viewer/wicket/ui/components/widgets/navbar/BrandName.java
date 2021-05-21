@@ -31,7 +31,7 @@ public class BrandName extends LabelBase {
     private static final long serialVersionUID = 1L;
 
     private final BrandingUiModel branding;
-    
+
     /**
      * Constructor.
      *

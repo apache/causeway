@@ -41,7 +41,7 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     private ProjectionFacetFromProjectingProperty(
             final OneToOneAssociation projectingProperty,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.projectingProperty = projectingProperty;
     }

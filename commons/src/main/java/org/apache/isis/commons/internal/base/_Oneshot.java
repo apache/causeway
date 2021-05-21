@@ -36,7 +36,7 @@ public final class _Oneshot implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Object $lock = new Object[0]; // serializable lock
-    
+
     private int shotCount = 0;
 
     /**
@@ -48,7 +48,7 @@ public final class _Oneshot implements Serializable {
                 ++ shotCount;
                 return true;
             }
-            return false;    
+            return false;
         }
     }
 
@@ -60,5 +60,5 @@ public final class _Oneshot implements Serializable {
             shotCount = 0;
         }
     }
-    
+
 }

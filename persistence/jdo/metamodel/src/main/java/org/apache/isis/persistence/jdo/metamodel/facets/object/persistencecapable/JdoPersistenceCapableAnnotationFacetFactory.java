@@ -29,29 +29,29 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForJdoPersistenceCapableAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
 import lombok.val;
 
 /**
- * Implements {@link ObjectSpecIdFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
+ * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JdoPersistenceCapableAnnotationFacetFactory
 extends FacetFactoryAbstract
-implements ObjectSpecIdFacetFactory {
+implements ObjectTypeFacetFactory {
 
     @Inject @Setter private JdoFacetContext jdoFacetContext;
-    
+
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext processClassContext) {
+    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
@@ -71,29 +71,30 @@ implements ObjectSpecIdFacetFactory {
         if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
-        
+
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         val embeddedOnlyAttribute = annotation.embeddedOnly();
-        // Whether objects of this type can only be embedded, 
+        // Whether objects of this type can only be embedded,
         // hence have no ID that binds them to the persistence layer
         final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null; 
-        
+                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null;
+
         if(embeddedOnly) {
             // suppress
         } else {
-            
+
             final IdentityType annotationIdentityType = annotation.identityType();
             val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
                     annotationTableAttribute, annotationIdentityType, facetHolder);
             FacetUtil.addFacet(jdoPersistenceCapableFacet);
-            FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+            FacetUtil.addFacet(ObjectTypeFacetForJdoPersistenceCapableAnnotation
+                    .create(jdoPersistenceCapableFacet, cls, facetHolder));
         }
 
         return;
     }
-    
-    
+
+
 }

@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
@@ -42,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-public class AdditionalLinksPanel 
+public class AdditionalLinksPanel
 extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
     private static final long serialVersionUID = 1L;
@@ -56,23 +57,23 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
     public enum Style {
         INLINE_LIST {
             @Override
-            AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links) {
+            AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN {
             @Override
-            AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links) {
+            AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsDropDownPanel(id, links);
             }
         };
-        abstract AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links);
+        abstract AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links);
     }
 
     public static AdditionalLinksPanel addAdditionalLinks(
             final MarkupContainer markupContainer,
             final String id,
-            final List<LinkAndLabel> links,
+            final Can<LinkAndLabel> links,
             final Style style) {
         if(links.isEmpty()) {
             Components.permanentlyHide(markupContainer, id);
@@ -85,9 +86,9 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
     }
 
     protected AdditionalLinksPanel(
-            String id, 
-            List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
-        
+            String id,
+            Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
 
@@ -104,8 +105,8 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
         container.setOutputMarkupId(true);
 
         setOutputMarkupId(true);
-        
-        final ListView<LinkAndLabel> listView = 
+
+        final ListView<LinkAndLabel> listView =
                 new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, getModel()) {
 
             private static final long serialVersionUID = 1L;
@@ -117,16 +118,16 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 val link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public String getObject() {
-                        final ActionLink actionLink = (ActionLink) link;
-                        final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                        return first(reasonDisabledIfAny, actionMeta.getDescription());
-                    }
-                } 
-                : Model.of(actionMeta.getDescription());
-                
+                            private static final long serialVersionUID = 1L;
+                            @Override
+                            public String getObject() {
+                                return firstNonNull(
+                                        ((ActionLink) link).getReasonDisabledIfAny(),
+                                        actionMeta.getDescription());
+                            }
+                        }
+                        : Model.of(actionMeta.getDescription());
+
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
                 val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, actionMeta.getLabel());
@@ -138,10 +139,10 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 }
                 link.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
-                if (actionMeta.getSemantics().isAreYouSure()) { 
+                if (actionMeta.getSemantics().isAreYouSure()) {
                     if(actionMeta.getParameters().isNoParameters()) {
-                        val hasDisabledReason = link instanceof ActionLink 
-                                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
+                        val hasDisabledReason = link instanceof ActionLink
+                                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
                                 : false;
                         if (!hasDisabledReason) {
                             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
@@ -164,13 +165,13 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
                 item.addOrReplace(link);
             }
-            
+
         };
 
         container.addOrReplace(listView);
     }
 
-    private static String first(String... str) {
+    private static String firstNonNull(String... str) {
         for (String s : str) {
             if(s != null) return s;
         }

@@ -50,7 +50,7 @@ public final class _Bytes {
     private static final int BUFFER_SIZE = 16 * 1024; // 16k
 
     /**
-     * Reads the input stream into an array of byte, then closes the input (-stream). 
+     * Reads the input stream into an array of byte, then closes the input (-stream).
      * @param input
      * @return null if {@code input} is null
      * @throws IOException
@@ -62,7 +62,7 @@ public final class _Bytes {
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
-    
+
             int nRead;
             while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
                 bos.write(buffer, 0, nRead);
@@ -73,7 +73,7 @@ public final class _Bytes {
             input.close();
         }
     }
-    
+
     /**
      * Reads the input stream into an array of byte, but does not close the input (-stream).
      * @param input
@@ -87,7 +87,7 @@ public final class _Bytes {
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
-    
+
             int nRead;
             while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
                 bos.write(buffer, 0, nRead);
@@ -260,13 +260,13 @@ public final class _Bytes {
     public static final BytesOperator ofCompressedUrlBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
             .andThen(_Bytes::decompress);
-    
+
     public static final BytesOperator asBase64 = operator()
             .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));
 
     public static final BytesOperator ofBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes));
-    
+
     public static final BytesOperator asCompressedBase64 = operator()
             .andThen(_Bytes::compress)
             .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));
@@ -274,7 +274,7 @@ public final class _Bytes {
     public static final BytesOperator ofCompressedBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
-    
+
 
     // --
 

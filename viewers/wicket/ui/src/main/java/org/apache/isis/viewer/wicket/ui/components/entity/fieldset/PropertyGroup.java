@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
@@ -32,6 +33,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -41,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -77,12 +78,12 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         // the UI is only ever built once.
         childComponents = buildGui();
-        childScalarPanelAbstract2s = 
+        childScalarPanelAbstract2s =
                 _NullSafe.stream(childComponents)
                 .filter(ScalarPanelAbstract.class::isInstance)
                 .map(ScalarPanelAbstract.class::cast)
                 .collect(Collectors.toList());
-                
+
     }
 
     @Override
@@ -114,7 +115,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.addOrReplace(propertyRvContainer);
             final Component component = addPropertyToForm(getModel(), (OneToOneAssociation) association,
-                    propertyRvContainer, memberGroupActions);
+                    propertyRvContainer, memberGroupActions::add);
             childComponents.add(component);
         }
 
@@ -124,11 +125,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             panelHeading.setVisibilityAllowed(false);
         } else {
             panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, groupName));
-            final List<LinkAndLabel> actionsPanel = LinkAndLabel
-                    .positioned(memberGroupActions, ActionLayout.Position.PANEL);
-            final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
-                    .positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
-
+            final Can<LinkAndLabel> actionsPanel = LinkAndLabel
+                    .positioned(ActionLayout.Position.PANEL, memberGroupActions.stream());
+            final Can<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
+                    .positioned(ActionLayout.Position.PANEL_DROPDOWN, memberGroupActions.stream());
             AdditionalLinksPanel.addAdditionalLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                     actionsPanel,
@@ -172,7 +172,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         val oas = _NullSafe.stream(properties)
                 .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
-                .map(propertyLayoutData -> 
+                .map(propertyLayoutData ->
                     adapter.getSpecification()
                     .getAssociation(propertyLayoutData.getId())
                     .orElse(null)
@@ -180,29 +180,28 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
                 .filter(_NullSafe::isPresent)
                 .filter(objectAssociation -> {
                     val hiddenFacet = objectAssociation.getFacet(HiddenFacet.class);
-                    if(hiddenFacet != null && !hiddenFacet.isFallback()) {
+                    if(hiddenFacet != null) {
                         // static invisible.
-                        if(hiddenFacet.where() == Where.EVERYWHERE || hiddenFacet.where() == Where.OBJECT_FORMS) {
+                        if(hiddenFacet.where().isAlways()
+                                || hiddenFacet.where() == Where.OBJECT_FORMS) {
                             return false;
                         }
                     }
                     return true;
                 })
                 .collect(Collectors.toList());
-        
+
         return Collections.unmodifiableList(oas);
     }
 
     private Component addPropertyToForm(
             final EntityModel entityModel,
-            final OneToOneAssociation otoa,
+            final OneToOneAssociation property,
             final WebMarkupContainer container,
-            final List<LinkAndLabel> entityActions) {
-
-        final PropertyMemento pm = new PropertyMemento(otoa);
+            final Consumer<LinkAndLabel> onEntityAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
@@ -212,11 +211,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         }
 
         val adapter = entityModel.getManagedObject();
-        final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(adapter, otoa);
+        val associatedActions = ObjectAction.Util.findForAssociation(adapter, property);
 
-        entityActions.addAll(
-                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));
+        LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null)
+        .forEach(onEntityAction);
 
         return component;
     }

@@ -20,14 +20,14 @@
 version: "3.8"
 services:
   primary:
-    image: "apacheisis/demo-wicket:latest"
+    image: "apacheisis/demo-wicket-jdo:latest"
     environment:
       - PROTOTYPING=true
       - SPRING_PROFILES_ACTIVE=primary
     ports:
       - "8080:8080"
   secondary:
-    image: "apacheisis/demo-wicket:latest"
+    image: "apacheisis/demo-wicket-jdo:latest"
     environment:
       - PROTOTYPING=true
       - SPRING_PROFILES_ACTIVE=secondary

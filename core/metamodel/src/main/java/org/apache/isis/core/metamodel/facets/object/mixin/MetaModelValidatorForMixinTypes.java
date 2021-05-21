@@ -44,18 +44,18 @@ public class MetaModelValidatorForMixinTypes {
         val mixinContructors = _Reflect
                 .getPublicConstructors(candidateMixinType)
                 .filter(paramCount(1));
-        
+
         if(mixinContructors.getCardinality().isOne()) {
             return true; // happy case
         }
-        
+
         if(mixinContructors.getCardinality().isZero()) {
             ValidationFailure.raise(
                     facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     String.format(
                         "%s: annotated with %s annotation but does not have a public 1-arg constructor",
-                        candidateMixinType.getName(), 
+                        candidateMixinType.getName(),
                         annotation)
                     );
         } else {
@@ -64,7 +64,7 @@ public class MetaModelValidatorForMixinTypes {
                     Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     String.format(
                             "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",
-                            candidateMixinType.getName(), 
+                            candidateMixinType.getName(),
                             annotation,
                             mixinContructors.size())
                     );
@@ -72,5 +72,5 @@ public class MetaModelValidatorForMixinTypes {
         return false;
     }
 
-    
+
 }

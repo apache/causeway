@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class PropertyAccessorFacetViaAccessorFactory 
+public class PropertyAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
@@ -71,7 +71,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)) {
             return true;
         }
-        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX) 
+        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX)
                 && method.getReturnType() == boolean.class) {
             return true;
         }

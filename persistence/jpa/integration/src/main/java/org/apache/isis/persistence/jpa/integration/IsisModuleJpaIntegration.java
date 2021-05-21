@@ -33,16 +33,16 @@ import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsi
 
         // @Component's
         JpaProgrammingModel.class,
-        
+
         // @Service's
         JpaSupportServiceUsingSpring.class,
-        
+
 //        DataNucleusSettings.class,
 //        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
 //        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
 //        ExceptionRecognizerForJDOObjectNotFoundException.class,
 //        ExceptionRecognizerForJDODataStoreException.class,
-//        
+//
 //        IsisJdoSupportDN5.class,
 //        IsisPlatformTransactionManagerForJdo.class,
 //        JdoPersistenceLifecycleService.class,
