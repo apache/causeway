@@ -72,10 +72,14 @@ final class ManagedObjectInternalUtil {
     }
 
     static Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
-        return ManagedObjects.isIdentifiable(adapter)
-                ? objectManager(adapter)
-                        .map(objectManager->objectManager.bookmarkObject(adapter))
-                : Optional.empty();
+        return objectManager(adapter)
+                    .map(objectManager->objectManager.bookmarkObject(adapter));
+
+//TODO[2686] strictly forbid dummy UUID bookmark creation
+//        return ManagedObjects.isIdentifiable(adapter)
+//                ? objectManager(adapter)
+//                        .map(objectManager->objectManager.bookmarkObject(adapter))
+//                : Optional.empty();
     }
 
     // -- TITLE SUPPORT
