@@ -37,7 +37,7 @@ For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app define
 [source,properties]
 .app.properties
 ----
-spring.datasource.platform=h2
+spring.sql.init.platform=h2
 spring.datasource.url=jdbc:h2:mem:simple
 spring.datasource.driver-class-name=org.h2.Driver
 ----
@@ -47,7 +47,7 @@ spring.datasource.driver-class-name=org.h2.Driver
 [source,properties]
 .app.properties
 ----
-spring.datasource.platform=sqlserver
+spring.sql.init.platform=sqlserver
 spring.datasource.url=jdbc:sqlserver://localhost;databaseName=simpleapp
 spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring.datasource.username=simpleapp
