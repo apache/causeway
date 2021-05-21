@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDe
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
@@ -129,8 +128,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
 
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
         val prefixed_action = holderSpec.getActionElseFail("hideMe");
         assertNotNull(prefixed_action);
@@ -140,8 +138,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
 
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
-                        IntrospectionState.FULLY_INTROSPECTED);
+        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
         val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
@@ -183,7 +180,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
 
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class);
+        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
         val mx_openRestApi = holderSpec.getDeclaredAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
@@ -196,8 +193,7 @@ class DomainModelTest_usingGoodDomain {
     @MethodSource("provideProperMemberInheritanceTypes")
     void titleAndIconName_shouldBeInheritable(Class<?> type) {
 
-        val spec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.FULLY_INTROSPECTED);
+        val spec = specificationLoader.specForTypeElseFail(type);
 
         val titleFacet = spec.getFacet(TitleFacet.class);
         assertNotNull(titleFacet);
@@ -214,8 +210,7 @@ class DomainModelTest_usingGoodDomain {
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
 
-        val holderSpec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.FULLY_INTROSPECTED);
+        val holderSpec = specificationLoader.specForTypeElseFail(type);
 
         val action = holderSpec.getActionElseFail("sampleAction");
         assertNotNull(action);
@@ -246,8 +241,7 @@ class DomainModelTest_usingGoodDomain {
             return; // not implemented for interface that don't extend from others
         }
 
-        val holderSpec = specificationLoader.loadSpecification(type,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val holderSpec = specificationLoader.specForTypeElseFail(type);
 
         val super_action = holderSpec.getActionElseFail("sampleActionOverride");
         assertNotNull(super_action);
@@ -270,8 +264,7 @@ class DomainModelTest_usingGoodDomain {
             return; // not implemented for interface that don't extend from others
         }
 
-        val holderSpec = specificationLoader.loadSpecification(type,
-                        IntrospectionState.FULLY_INTROSPECTED);
+        val holderSpec = specificationLoader.specForTypeElseFail(type);
 
         val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
         assertNotNull(super_property);
@@ -290,8 +283,7 @@ class DomainModelTest_usingGoodDomain {
 
         // when using generic type (no wild-cards)
 
-        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
         val concreteColl = vmSpec.getCollectionElseFail("concreteColl");
         val concreteCollSpec = concreteColl.getSpecification();
@@ -326,8 +318,7 @@ class DomainModelTest_usingGoodDomain {
 
         // when using generic type (w/ wild-cards)
 
-        val vmSpec = specificationLoader.loadSpecification(ProperElementTypeVm.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
         val concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
         val concreteCollSpec = concreteColl.getSpecification();
@@ -360,8 +351,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void interfaces_shouldSupport_inheritedMembers() {
 
-        val i2Spec = specificationLoader.loadSpecification(ProperInterface2.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val i2Spec = specificationLoader.specForTypeElseFail(ProperInterface2.class);
 
         assertEquals(BeanSort.ABSTRACT, i2Spec.getBeanSort());
         assertHasProperty(i2Spec, "a");
@@ -375,8 +365,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void actionParamChoices_shouldBeAllowed_toBeDerivedFromChoicesFrom() {
 
-        val spec = specificationLoader.loadSpecification(ProperChoicesWhenChoicesFrom.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenChoicesFrom.class);
 
         val action = spec.getActionElseFail("appendACharacterToCandidates");
         val param0 = action.getParameters().getFirstOrFail();
