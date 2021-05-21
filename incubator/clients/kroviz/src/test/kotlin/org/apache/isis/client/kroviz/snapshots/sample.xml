@@ -1,0 +1,245 @@
+<bs3:grid xmlns:cpt="http://isis.apache.org/applib/layout/component"
+          xmlns:lnk="http://isis.apache.org/applib/layout/links"
+          xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject bookmarking="AS_ROOT">
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/element</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object"</lnk:type>
+                </cpt:link>
+            </cpt:domainObject>
+            <cpt:action bookmarking="NEVER" cssClassFa="far fa-fw fa-circle" cssClassFaPosition="LEFT" id="clearHints">
+                <cpt:named>Clear Hints</cpt:named>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/clearHints
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action bookmarking="NEVER" cssClassFa="fa fa-fw fa-bolt" cssClassFaPosition="LEFT" id="recentCommands">
+                <cpt:named>Recent Commands</cpt:named>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/recentCommands
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="4">
+            <bs3:row>
+                <bs3:col span="12">
+                    <bs3:tabGroup>
+                        <bs3:tab name="Identity">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Identity" id="identity"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Other">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true">
+                                        <cpt:property id="address" labelPosition="LEFT" typicalLength="25">
+                                            <cpt:named>Address</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/address
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property id="latitude" labelPosition="LEFT" typicalLength="25">
+                                            <cpt:named>Latitude</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/latitude
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property id="longitude" labelPosition="LEFT" typicalLength="25">
+                                            <cpt:named>Longitude</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/longitude
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property id="zoom" labelPosition="LEFT" typicalLength="9">
+                                            <cpt:named>Zoom</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/zoom
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property hidden="ALL_TABLES" id="description" labelPosition="NONE">
+                                            <cpt:named>Description</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/description
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property hidden="ALL_TABLES" id="sources" labelPosition="NONE">
+                                            <cpt:named>Sources</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/sources
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                    </cpt:fieldSet>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Metadata">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Metadata" id="metadata">
+                                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN">
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/downloadLayoutXml
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:action>
+                                        <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN">
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/downloadMetamodelXml
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:action>
+                                        <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN">
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/inspectMetamodel
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:action>
+                                        <cpt:action id="openRestApi" position="PANEL_DROPDOWN">
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/openRestApi
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:action>
+                                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN">
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/actions/rebuildMetamodel
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-action"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:action>
+                                        <cpt:property hidden="ALL_TABLES" id="objectType" typicalLength="25">
+                                            <cpt:named>Object Type</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/objectType
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                        <cpt:property hidden="ALL_TABLES" id="objectIdentifier" typicalLength="25">
+                                            <cpt:named>Object Identifier</cpt:named>
+                                            <cpt:link>
+                                                <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                                                <lnk:method>GET</lnk:method>
+                                                <lnk:href>
+                                                    http://localhost:8080/restful/objects/demo.CustomUiVm/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPGRlbW8uQ3VzdG9tVWlWbT4KICAgIDxhZGRyZXNzPk1hbHZlcm4sIFVLPC9hZGRyZXNzPgogICAgPGxhdGl0dWRlPjUyLjE5ODk0NDwvbGF0aXR1ZGU-CiAgICA8bG9uZ2l0dWRlPi0yLjI0MjY1NzEwNzkxMzA4ODY8L2xvbmdpdHVkZT4KICAgIDx6b29tPjE0PC96b29tPgo8L2RlbW8uQ3VzdG9tVWlWbT4K/properties/objectIdentifier
+                                                </lnk:href>
+                                                <lnk:type>
+                                                    application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                                                </lnk:type>
+                                            </cpt:link>
+                                        </cpt:property>
+                                    </cpt:fieldSet>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                    </bs3:tabGroup>
+                </bs3:col>
+            </bs3:row>
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Details" id="details"/>
+                </bs3:col>
+            </bs3:row>
+        </bs3:col>
+        <bs3:col span="8">
+            <bs3:tabGroup unreferencedCollections="true"/>
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>

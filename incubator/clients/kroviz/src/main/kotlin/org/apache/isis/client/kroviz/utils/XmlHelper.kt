@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.utils
 
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.asList
@@ -44,7 +45,7 @@ object XmlHelper {
 
     fun parseXml(xmlStr: String): Document {
         val p = DOMParser()
-        return p.parseFromString(xmlStr, "application/xml")
+        return p.parseFromString(xmlStr, Constants.xmlMimeType)
     }
 
     // Adopted from @link https://stackoverflow.com/questions/376373/pretty-printing-xml-with-javascript
@@ -69,7 +70,12 @@ object XmlHelper {
             formatted += padding + node + "\r\n"
             pad += indent
         }
-        return formatted.substring(1, formatted.length - 3);
+        return formatted.substring(0, formatted.length - 2);
+    }
+
+    fun xml2json(xml: String): String {
+        val json = XmlToJson.parseString(xml)
+        return JSON.stringify(json)
     }
 
 }

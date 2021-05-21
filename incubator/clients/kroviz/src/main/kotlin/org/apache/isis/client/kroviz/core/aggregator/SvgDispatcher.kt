@@ -19,17 +19,17 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.kv.MapPanel
+import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.UUID
 
-class SvgDispatcher(private val callBack: Any) : BaseAggregator() {
+class SvgDispatcher(val callBack: Any) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
         val response = logEntry.response
         when (callBack) {
             is UUID -> DomUtil.appendTo(callBack, response)
-            is MapPanel -> callBack.renderSvg(response)
+            is SvgPanel -> callBack.renderSvg(response)
             else -> {
             }
         }

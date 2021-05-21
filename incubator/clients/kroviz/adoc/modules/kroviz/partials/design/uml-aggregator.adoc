@@ -40,7 +40,7 @@ abstract class BaseAggregator {
 }
 
 IAggregator <|.. BaseAggregator
-BaseAggregator <|-- ListAggregator
+BaseAggregator <|-- CollectionAggregator
 BaseAggregator <|-- ObjectAggregator
 BaseAggregator --> BaseDisplayable : data
 
@@ -51,15 +51,15 @@ abstract class BaseDisplayable {
     +title()
 }
 
-class ListDM {
+class CollectionDM {
     list:List<Exposer>
 }
 
 BaseDisplayable -> Layout
-BaseDisplayable <|-- ListDM
+BaseDisplayable <|-- CollectionDM
 BaseDisplayable <|-- ObjectDM
 
-ObjectDM o-- ListDM
+ObjectDM o-- CollectionDM
 
 @enduml
 ----

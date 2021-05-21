@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core
 
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 /**
  * Keep track of connected server.

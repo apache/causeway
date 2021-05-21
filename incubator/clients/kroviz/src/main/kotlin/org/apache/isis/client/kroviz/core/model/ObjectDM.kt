@@ -47,10 +47,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val p = createPropertyFrom(m)
             addProperty(p)
         }
-        obj.getCollections().forEach { m ->
-            console.log("[ODM.addData] collection member")
-            console.log(m)
-        }
     }
 
     fun addResult(resultObject: ResultObject) {

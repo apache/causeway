@@ -18,12 +18,15 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.kv.UiManager
 import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
+import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
+import org.apache.isis.client.kroviz.utils.UUID
 
 /**
  * Keeps a log of remote invocations and the responses.
@@ -65,7 +68,7 @@ object EventStore {
 
     fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
         val entry = LogEntry(title = title, aggregator = aggregator)
-        entry.obj = panel
+        entry.panel = panel
         log(entry)
         updateStatus(entry)
     }
@@ -124,6 +127,13 @@ object EventStore {
 
     fun findBy(aggregator: BaseAggregator): LogEntry? {
         return log.firstOrNull { it.getAggregator() == aggregator }
+    }
+
+    fun findByDispatcher(uuid: UUID): LogEntry {
+        return log.first {
+            it.getAggregator() is SvgDispatcher
+                    && (it.getAggregator() as SvgDispatcher).callBack == uuid
+        }
     }
 
     fun findMenuBars(): LogEntry? {

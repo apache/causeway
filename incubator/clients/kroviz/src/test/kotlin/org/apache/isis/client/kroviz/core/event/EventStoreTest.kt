@@ -19,11 +19,11 @@
 package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.IntegrationTest
-import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import io.kvision.panel.VPanel
 import kotlin.test.*
@@ -37,7 +37,7 @@ class EventStoreTest : IntegrationTest() {
         if (isAppAvailable()) {
             // given
             EventStore.reset()
-            val obs = ListAggregator("test")
+            val obs = CollectionAggregator("test")
 
             //when
             val soList = ResourceSpecification(SO_LIST_ALL.url)
@@ -217,7 +217,7 @@ class EventStoreTest : IntegrationTest() {
         // given
         EventStore.reset()
         val method = Method.POST.operation
-        val url = Constants.plantUmlUrl
+        val url = Constants.krokiUrl
         val rs = ResourceSpecification(url)
         // when
         EventStore.start(rs, method, body = "first invocation")

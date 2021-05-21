@@ -18,9 +18,9 @@
  */
 package org.apache.isis.client.kroviz.utils
 
+import kotlinx.browser.document
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import kotlinx.browser.document
 
 external fun encodeURIComponent(encodedURI: String): String
 
@@ -29,8 +29,24 @@ external fun encodeURIComponent(encodedURI: String): String
  */
 object DomUtil {
 
-    fun appendTo(uuid: UUID, response: String) {
-        val svgDoc = ScalableVectorGraphic(response).document
+    fun appendTo(svg: ScalableVectorGraphic) {
+        val uuid = svg.uuid!!
+        val svgCode = svg.data
+        if (!hasChildren(uuid))
+            appendTo(uuid, svgCode)
+    }
+
+    private fun hasChildren(uuid: UUID): Boolean {
+        val element = getById(uuid.value)
+        return if (element == null) {
+            false
+        } else {
+            element.childElementCount > 0
+        }
+    }
+
+    fun appendTo(uuid: UUID, svgCode: String) {
+        val svgDoc = ScalableVectorGraphic(svgCode).document
         append(uuid, svgDoc, false)
     }
 

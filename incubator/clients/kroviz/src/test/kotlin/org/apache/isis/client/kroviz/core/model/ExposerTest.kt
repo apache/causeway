@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.handler.TObjectHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.JAVA_LANG_STRING_JDO
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.CFG_1
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
 import org.apache.isis.client.kroviz.to.TObject
@@ -28,6 +29,19 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class ExposerTest {
+
+    @Test
+    fun testParseJavaLangStringJdo() {
+        //given
+        val jsonStr = JAVA_LANG_STRING_JDO.str
+        //when
+        val to = TObjectHandler().parse(jsonStr) as TObject
+        //then
+        assertEquals("StringJDO entity: Hello", to.title)
+        assertEquals("demo.JavaLangStringJdo", to.domainType)
+        assertEquals("1", to.instanceId)
+    }
+
 
     @Test
     fun testConfiguration() {

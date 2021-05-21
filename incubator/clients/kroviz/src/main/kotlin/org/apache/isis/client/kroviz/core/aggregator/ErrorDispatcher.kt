@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HttpError
-import org.apache.isis.client.kroviz.ui.ErrorDialog
+import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 
 class ErrorDispatcher : BaseAggregator() {
 

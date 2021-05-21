@@ -32,7 +32,7 @@ enum class ActionSemantics(val type: String) {
 data class DomainType(
         override val links: List<Link>,
         val canonicalName: String,
-        val members: List<Link>,
+        val members: List<Link>,   // change to Map<String, Member>, once https://issues.apache.org/jira/browse/ISIS-2684 is fixed
         val typeActions: List<Link>,
         val extensions: Extensions
 ) : TransferObject, HasLinks

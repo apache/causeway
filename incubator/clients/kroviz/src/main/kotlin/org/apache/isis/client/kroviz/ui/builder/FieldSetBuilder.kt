@@ -18,13 +18,13 @@
  */
 package org.apache.isis.client.kroviz.ui.builder
 
+import io.kvision.form.FormPanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TypeMapper
 import org.apache.isis.client.kroviz.to.bs3.FieldSet
-import org.apache.isis.client.kroviz.ui.FormItem
-import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
-import org.apache.isis.client.kroviz.ui.kv.RoDisplay
-import io.kvision.form.FormPanel
+import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.core.FormPanelFactory
+import org.apache.isis.client.kroviz.ui.core.RoDisplay
 
 class FieldSetBuilder {
 
@@ -34,21 +34,17 @@ class FieldSetBuilder {
             tab: RoDisplay
     ): FormPanel<String>? {
 
-        console.log("[FSB.init]")
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
-        console.log("Layout-Properties: " + fieldSetLayout.propertyList.size)
 
         for (p in fieldSetLayout.propertyList) {
             val label = p.id
-
             val member = members.firstOrNull() { it.id == label }
-
             if (member != null) {
                 val memberType = TypeMapper().forType(member.type!!)
-
+                console.log("[FSB.init]")
+                console.log(memberType)
                 val size = maxOf(1, p.multiLine)
-
                 val fi = FormItem(
                         label = label,
                         type = memberType,
@@ -57,8 +53,6 @@ class FieldSetBuilder {
                         description = p.describedAs,
                         member = member,
                         dspl = tab)
-                console.log(fi)
-
                 items.add(fi)
             }
         }

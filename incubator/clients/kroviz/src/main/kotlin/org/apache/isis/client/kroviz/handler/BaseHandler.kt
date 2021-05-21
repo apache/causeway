@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.handler
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.ui.kv.Constants
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 /**
  * Handle responses to XmlHttpRequests asynchronously,
@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.ui.kv.Constants
  *
  * Implementing classes are responsible for:
  * @item creating Objects by parsing responses (JSON/XML),
- * @item creating/finding Aggregators (eg. ListAggregator, ObjectAggregator), and
+ * @item creating/finding Aggregators (eg. CollectionAggregator, ObjectAggregator), and
  * @item setting Objects and Aggregators into LogEntry.
  */
 abstract class BaseHandler {
