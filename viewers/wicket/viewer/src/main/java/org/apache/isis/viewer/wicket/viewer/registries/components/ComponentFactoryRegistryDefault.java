@@ -111,7 +111,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     private void ensureAllComponentTypesRegistered() {
         for (val componentType : ComponentType.values()) {
-            final Collection<ComponentFactory> componentFactories = componentFactoriesByType.get(componentType);
+            final Collection<ComponentFactory> componentFactories = componentFactoriesByType.getOrElseEmpty(componentType);
             if (componentFactories.isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
             }

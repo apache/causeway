@@ -115,10 +115,6 @@ public enum ComponentType {
      */
     STANDALONE_COLLECTION,
     /**
-     * Bookmarked link to invoke an action
-     */
-    ACTION_LINK,
-    /**
      * A collection of entities (the value of)
      */
     COLLECTION_CONTENTS,
