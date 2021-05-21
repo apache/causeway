@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         associateWith = "status",
-        named = "fa-lock-open",
+        cssClassFa = "fa-lock-open",
         sequence = "1"
 )
 @RequiredArgsConstructor
