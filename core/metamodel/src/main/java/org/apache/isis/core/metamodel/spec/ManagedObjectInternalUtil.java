@@ -65,20 +65,24 @@ final class ManagedObjectInternalUtil {
 
     };
 
-    static Optional<ObjectManager> objectManager(@Nullable ManagedObject adapter) {
+    static Optional<ObjectManager> objectManager(final @Nullable ManagedObject adapter) {
         return ManagedObjects.spec(adapter)
-        .map(ObjectSpecification::getMetaModelContext)
-        .map(MetaModelContext::getObjectManager);
+            .map(ObjectSpecification::getMetaModelContext)
+            .map(MetaModelContext::getObjectManager);
     }
 
-    static Optional<Bookmark> identify(@Nullable ManagedObject adapter) {
-        return objectManager(adapter)
-                .map(objectManager->objectManager.bookmarkObject(adapter));
+    static Optional<Bookmark> identify(final @Nullable ManagedObject adapter) {
+        return ManagedObjects.isIdentifiable(adapter)
+                ? objectManager(adapter)
+                        .map(objectManager->objectManager.bookmarkObject(adapter))
+                : Optional.empty();
     }
 
     // -- TITLE SUPPORT
 
-    static String titleString(@Nullable ManagedObject managedObject, @NonNull Predicate<ManagedObject> isContextAdapter) {
+    static String titleString(
+            final @Nullable ManagedObject managedObject,
+            final @NonNull Predicate<ManagedObject> isContextAdapter) {
 
         if(!ManagedObjects.isSpecified(managedObject)) {
             return "unspecified object";
