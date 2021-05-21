@@ -38,11 +38,11 @@ import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValid
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingValidDomain.class,
-                
-        }, 
+
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
@@ -54,28 +54,28 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 class DomainModelTest_jdoMixins {
-    
+
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
-   
+
     @Test
     void goodDomain_shouldPassValidation() {
         //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
-        
+
         val validateDomainModel = new DomainModelValidator(serviceRegistry);
         validateDomainModel.throwIfInvalid(); // should not throw
     }
-    
+
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
-        
+
         val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
-        
-        val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
-        assertNotNull(mx_datanucleusIdLong);
-        
+
+        val mx_datanucleusVersionLong = holderSpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
+        assertNotNull(mx_datanucleusVersionLong);
+
     }
-    
+
 
 }
