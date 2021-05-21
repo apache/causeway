@@ -132,7 +132,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return InteractionHead.of(mixedInAdapter, mixinAdapter);
+        return InteractionHead.mixin(mixedInAdapter, mixinAdapter);
     }
 
     private DisabledFacet disabledFacet() {

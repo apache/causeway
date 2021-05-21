@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
@@ -94,8 +93,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
     @Override
     protected InteractionHead headFor(final ManagedObject owner) {
-        val target = mixinAdapterFor(mixinType, owner);
-        return InteractionHead.of(owner, target);
+        return InteractionHead.mixin(
+                owner,
+                mixinAdapterFor(mixinType, owner));
     }
 
     @Override
@@ -150,9 +150,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         final ManagedObject owner = head.getOwner();
         final ManagedObject target = mixinAdapterFor(mixinType, owner);
         _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
-                "head has the wrong target (should be a mixin adapter, but is the owner adapter)");
+                "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
-        setupCommand(head.getTarget(), arguments);
+        setupCommand(head, arguments);
         return mixinAction.executeInternal(
                 head, arguments,
                 interactionInitiatedBy);

@@ -52,7 +52,7 @@ implements ObjectAssociation {
     }
 
     protected InteractionHead headFor(final ManagedObject ownerAdapter) {
-        return InteractionHead.simple(ownerAdapter);
+        return InteractionHead.regular(ownerAdapter);
     }
 
     @Override

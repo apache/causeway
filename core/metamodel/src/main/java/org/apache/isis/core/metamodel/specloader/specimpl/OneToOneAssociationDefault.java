@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
@@ -176,7 +177,7 @@ implements OneToOneAssociation {
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setupCommand(ownerAdapter, newReferencedAdapter);
+        setupCommand(InteractionHead.regular(ownerAdapter), newReferencedAdapter);
 
         if (newReferencedAdapter != null) {
             return setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
@@ -302,12 +303,12 @@ implements OneToOneAssociation {
      * Internal API
      */
     public void setupCommand(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final ManagedObject valueAdapterOrNull) {
 
-        setupCommand(targetAdapter, interactionId ->
+        setupCommand(head, interactionId ->
             getCommandDtoFactory()
-                .asCommandDto(interactionId, Can.ofSingleton(targetAdapter), this, valueAdapterOrNull));
+                .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
     }
 
 

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.command;
 import java.util.UUID;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -56,7 +57,7 @@ public interface CommandDtoFactory {
      */
     CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<ManagedObject> targetAdapters,
+            final Can<InteractionHead> targets,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters);
 
@@ -69,7 +70,7 @@ public interface CommandDtoFactory {
      */
     CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<ManagedObject> targetAdapters,
+            final Can<InteractionHead> targets,
             final OneToOneAssociation association,
             final ManagedObject valueAdapterOrNull);
 

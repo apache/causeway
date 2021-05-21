@@ -81,7 +81,7 @@ implements ParseableFacet {
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
-                            InteractionHead.simple(contextAdapter), identifier, entryAdapter, interactionInitiatedBy
+                            InteractionHead.regular(contextAdapter), identifier, entryAdapter, interactionInitiatedBy
                             );
             validate(parseValueContext);
         }

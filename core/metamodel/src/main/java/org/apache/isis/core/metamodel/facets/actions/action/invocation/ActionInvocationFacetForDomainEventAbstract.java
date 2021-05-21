@@ -151,12 +151,12 @@ implements ImperativeFacet {
     }
 
     private Object invokeMethodElseFromCache(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
-        final Object targetPojo = UnwrapUtil.single(targetAdapter);
+        final Object targetPojo = UnwrapUtil.single(head.getTarget());
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
@@ -212,11 +212,9 @@ implements ImperativeFacet {
     private final class DomainEventMemberExecutor
             implements InteractionInternal.MemberExecutor<ActionInvocation> {
 
-        private final Can<ManagedObject> argumentAdapters;
-        private final ManagedObject targetAdapter;
         private final ObjectAction owningAction;
-        private final ManagedObject mixinElseRegularAdapter;
-        private final ManagedObject mixedInAdapter;
+        private final InteractionHead head;
+        private final Can<ManagedObject> argumentAdapters;
 
         @SneakyThrows
         @Override
@@ -229,12 +227,9 @@ implements ImperativeFacet {
 
                 // update the current execution with the DTO (memento)
                 val invocationDto = getInteractionDtoServiceInternal()
-                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters);
+                .asActionInvocationDto(owningAction, head, argumentAdapters);
 
                 currentExecution.setDto(invocationDto);
-
-                val head = InteractionHead.mixedIn(targetAdapter, mixedInAdapter);
-
 
                 // ... post the executing event
                 //compiler: cannot use val here, because initializer expression does not have a representable type
@@ -252,9 +247,9 @@ implements ImperativeFacet {
                 currentExecution.setEvent(actionDomainEvent);
 
                 // invoke method
-                val resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
+                val resultPojo = invokeMethodElseFromCache(head, argumentAdapters);
                 ManagedObject resultAdapterPossiblyCloned =
-                        cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
+                        cloneIfViewModelCloneable(resultPojo, head.getTarget());
 
                 // ... post the executed event
 
@@ -267,7 +262,7 @@ implements ImperativeFacet {
                 final Object returnValue = actionDomainEvent.getReturnValue();
                 if(returnValue != resultPojo) {
                     resultAdapterPossiblyCloned =
-                            cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
+                            cloneIfViewModelCloneable(returnValue, head.getTarget());
                 }
                 return UnwrapUtil.single(resultAdapterPossiblyCloned);
 

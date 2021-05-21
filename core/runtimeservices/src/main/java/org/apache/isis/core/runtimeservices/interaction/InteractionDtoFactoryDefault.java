@@ -41,6 +41,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -77,7 +78,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
     @Override
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
@@ -86,8 +87,9 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         val interaction = interactionContextProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
-        final Bookmark targetBookmark = targetAdapter.getBookmark()
-                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
+        val owner = head.getOwner();
+        final Bookmark targetBookmark = owner.getBookmark()
+                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
 
         final String actionId = objectAction.getIdentifier().getMemberNameAndParameterClassNamesIdentityString();
         final String targetTitle = targetBookmark.toString() + ": " + actionId;

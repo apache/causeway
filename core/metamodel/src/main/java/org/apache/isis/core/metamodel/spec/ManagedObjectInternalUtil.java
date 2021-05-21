@@ -71,7 +71,7 @@ final class ManagedObjectInternalUtil {
             .map(MetaModelContext::getObjectManager);
     }
 
-    static Optional<Bookmark> identify(final @Nullable ManagedObject adapter) {
+    static Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
         return ManagedObjects.isIdentifiable(adapter)
                 ? objectManager(adapter)
                         .map(objectManager->objectManager.bookmarkObject(adapter))

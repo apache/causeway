@@ -210,7 +210,7 @@ public interface ManagedObject {
 
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<Bookmark>> bookmarkLazy =
-                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
+                _Lazy.threadSafe(()->ManagedObjectInternalUtil.bookmark(this));
 
         @Override
         public boolean isBookmarkMemoized() {
@@ -235,7 +235,7 @@ public interface ManagedObject {
 
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<Bookmark>> bookmarkLazy =
-                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));
+                _Lazy.threadSafe(()->ManagedObjectInternalUtil.bookmark(this));
 
         @Override
         public boolean isBookmarkMemoized() {

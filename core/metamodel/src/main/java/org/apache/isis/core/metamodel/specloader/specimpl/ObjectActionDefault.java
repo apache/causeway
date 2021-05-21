@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
@@ -231,7 +229,7 @@ implements ObjectAction {
     }
 
     protected InteractionHead headFor(final ManagedObject target) {
-        return InteractionHead.simple(target);
+        return InteractionHead.regular(target);
     }
 
     // -- visable, usable
@@ -398,7 +396,7 @@ implements ObjectAction {
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        setupCommand(head.getTarget(), argumentAdapters);
+        setupCommand(head, argumentAdapters);
 
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }
@@ -467,31 +465,6 @@ implements ObjectAction {
 
     }
 
-
-
-    private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
-
-    /**
-     * A horrible hack to be able to persist a number of adapters in the command object.
-     *
-     * <p>
-     *     What is really needed is to be able to invoke an action on a number of adapters all together.
-     * </p>
-     */
-    public static <T> T withTargetAdapters(final List<ManagedObject> adapters, final Callable<T> callable) {
-        commandTargetAdaptersHolder.set(adapters);
-        try {
-            return callable.call();
-        } catch (Exception e) {
-            throw new RecoverableException(e);
-        } finally {
-            commandTargetAdaptersHolder.remove();
-        }
-    }
-
-
-
-
     // -- choices
 
     @Override
@@ -558,10 +531,11 @@ implements ObjectAction {
      * {@link ObjectActionMixedIn mixed-in}.
      */
     public void setupCommand(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        setupCommand(targetAdapter, interactionId->commandDtoFor(interactionId, targetAdapter, argumentAdapters));
+        setupCommand(head,
+                interactionId->commandDtoFor(interactionId, head, argumentAdapters));
     }
 
     @Override
@@ -598,16 +572,11 @@ implements ObjectAction {
 
     private CommandDto commandDtoFor(
             final UUID interactionId,
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        val commandTargetAdapters =
-                commandTargetAdaptersHolder.get() != null
-                    ? Can.ofCollection(commandTargetAdaptersHolder.get())
-                    : Can.ofSingleton(targetAdapter);
-
         return getCommandDtoFactory()
-                .asCommandDto(interactionId, commandTargetAdapters, this, argumentAdapters);
+                .asCommandDto(interactionId, Can.ofSingleton(head), this, argumentAdapters);
     }
 
 }

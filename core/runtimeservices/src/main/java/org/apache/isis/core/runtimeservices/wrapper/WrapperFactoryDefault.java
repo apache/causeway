@@ -86,6 +86,7 @@ import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -365,7 +366,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val method = memberAndTarget.getMethod();
 
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
-        val targetList = Can.ofSingleton(targetAdapter);
+        val targetList = Can.ofSingleton(InteractionHead.regular(targetAdapter));
 
         CommandDto commandDto;
         switch (memberAndTarget.getType()) {

@@ -407,7 +407,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         val target = this.getMetaModel().realTargetAdapter(owner);
         val pendingArgs = getArgumentsAsParamModel();
 
-        val head = InteractionHead.of(owner, target);
+        val head = InteractionHead.mixin(owner, target);
 
         return argCache()
         .streamParamUiModels()

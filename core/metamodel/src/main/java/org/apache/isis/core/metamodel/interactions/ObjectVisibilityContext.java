@@ -43,7 +43,7 @@ implements ProposedHolder {
 
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy, where);
+                InteractionHead.regular(targetAdapter), identifier, interactionInitiatedBy, where);
     }
 
     @Override

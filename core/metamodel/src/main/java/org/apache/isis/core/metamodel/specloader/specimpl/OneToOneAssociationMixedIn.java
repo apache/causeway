@@ -109,9 +109,10 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
 
     @Override
-    protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
-        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return InteractionHead.of(mixedInAdapter, mixinAdapter);
+    protected InteractionHead headFor(final ManagedObject mixeeAdapter) {
+        return InteractionHead.mixin(
+                mixeeAdapter,
+                mixinAdapterFor(mixinType, mixeeAdapter));
     }
 
     private DisabledFacet disabledFacet() {

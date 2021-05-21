@@ -38,6 +38,7 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -73,11 +74,11 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<ManagedObject> targetAdapters,
+            final Can<InteractionHead> targets,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        final CommandDto dto = asCommandDto(interactionId, targetAdapters);
+        final CommandDto dto = asCommandDto(interactionId, targets);
 
         final ActionDto actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
@@ -91,11 +92,11 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<ManagedObject> targetAdapters,
+            final Can<InteractionHead> targets,
             final OneToOneAssociation property,
             final ManagedObject valueAdapterOrNull) {
 
-        final CommandDto dto = asCommandDto(interactionId, targetAdapters);
+        final CommandDto dto = asCommandDto(interactionId, targets);
 
         final PropertyDto propertyDto = new PropertyDto();
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
@@ -163,7 +164,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     // -- HELPER
 
-    private CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters) {
+    private CommandDto asCommandDto(final UUID interactionId, final Can<InteractionHead> targets) {
 
         val dto = new CommandDto();
         dto.setMajorVersion("2");
@@ -173,10 +174,10 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setUser(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().xmlGregorianCalendar());
 
-        for (val targetAdapter : targetAdapters) {
-            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
-            final OidsDto targets = CommandDtoUtils.targetsFor(dto);
-            targets.getOid().add(bookmark.toOidDto());
+        for (val targetHead : targets) {
+            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+            final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
+            targetOids.getOid().add(bookmark.toOidDto());
         }
         return dto;
     }

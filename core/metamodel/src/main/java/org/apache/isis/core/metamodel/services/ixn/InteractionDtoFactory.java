@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.ixn;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -62,7 +63,7 @@ public interface InteractionDtoFactory {
      */
     ActionInvocationDto asActionInvocationDto(
             ObjectAction objectAction,
-            ManagedObject targetAdapter,
+            InteractionHead head,
             Can<ManagedObject> argumentAdapters);
 
     /**

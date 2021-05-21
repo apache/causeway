@@ -40,7 +40,7 @@ implements ProposedHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         super(InteractionContextType.OBJECT_VALIDATE,
-                InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy);
+                InteractionHead.regular(targetAdapter), identifier, interactionInitiatedBy);
     }
 
     @Override

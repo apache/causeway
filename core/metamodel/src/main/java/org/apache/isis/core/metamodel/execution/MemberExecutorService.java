@@ -45,26 +45,21 @@ import lombok.NonNull;
  */
 public interface MemberExecutorService {
 
-    @Deprecated // just a refactoring step
     @FunctionalInterface
     interface ActionExecutorFactory {
         InteractionInternal.MemberExecutor<ActionInvocation> createExecutor(
-                Can<ManagedObject> argumentAdapters,
-                ManagedObject targetAdapter,
                 ObjectAction owningAction,
-                ManagedObject mixinElseRegularAdapter,
-                ManagedObject mixedInAdapter);
+                InteractionHead head,
+                Can<ManagedObject> argumentAdapters);
     }
 
-    @Deprecated // just a refactoring step
     @FunctionalInterface
     interface PropertyExecutorFactory {
         InteractionInternal.MemberExecutor<PropertyEdit> createExecutor(
-                ManagedObject newValueAdapter,
                 OneToOneAssociation owningProperty,
-                ManagedObject targetManagedObject,
-                InteractionInitiatedBy interactionInitiatedBy,
                 InteractionHead head,
+                ManagedObject newValueAdapter,
+                InteractionInitiatedBy interactionInitiatedBy,
                 EditingVariant editingVariant);
     }
 

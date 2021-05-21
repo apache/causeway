@@ -42,7 +42,7 @@ extends AccessContext {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         super(InteractionContextType.OBJECT_TITLE,
-                identifier, InteractionHead.simple(targetAdapter), interactionInitiatedBy);
+                identifier, InteractionHead.regular(targetAdapter), interactionInitiatedBy);
         this.title = title;
     }
 

@@ -206,7 +206,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
                     head = actionMixedIn.interactionHead(targetAdapter);
                 } else {
-                    head = InteractionHead.simple(targetAdapter);
+                    head = InteractionHead.regular(targetAdapter);
                 }
                 val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 

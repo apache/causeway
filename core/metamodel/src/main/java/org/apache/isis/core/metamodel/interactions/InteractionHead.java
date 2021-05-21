@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.interactions;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -34,6 +32,9 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Model that holds the objects involved with the interaction.
+ * That is a tuple of {regular-object, (same) regular-object}
+ * or {mixee, mixin}, based on whether a regular object or a mixee/mixin pair
+ * is represented.
  * @since 2.0
  */
 @Getter
@@ -50,23 +51,14 @@ public class InteractionHead {
      */
     @NonNull private final ManagedObject target;
 
-    /** factory with consistency checks */
-    public static InteractionHead of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
-        if(ManagedObjects.isSpecified(owner)
-                && owner.getSpecification().getBeanSort().isMixin()) {
-            throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
-        }
-        if(ManagedObjects.isSpecified(target)
-                && target.getSpecification().getBeanSort().isMixin()
-                && target.getPojo()==null) {
-            throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
-        }
-        return new InteractionHead(owner, target);
+    /** Regular case, when owner equals target. (no mixin) */
+    public static InteractionHead regular(ManagedObject owner) {
+        return InteractionHead.of(owner, owner);
     }
 
-    /** Simple case, when owner equals target. (no mixin) */
-    public static InteractionHead simple(ManagedObject owner) {
-        return InteractionHead.of(owner, owner);
+    /** Mixin case, when target is a mixin for the owner. */
+    public static InteractionHead mixin(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
+        return InteractionHead.of(owner, target);
     }
 
     /**
@@ -79,11 +71,20 @@ public class InteractionHead {
                 : Optional.of(getOwner());
     }
 
-    /** in support of legacy code, ultimately a target for refactoring */
-    public static InteractionHead mixedIn(@NonNull ManagedObject target, @Nullable ManagedObject mixedIn) {
-        return mixedIn==null
-                ? of(target, target)
-                : of(mixedIn, target);
+    // -- HELPER
+
+    /** factory with consistency checks */
+    private static InteractionHead of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
+        if(ManagedObjects.isSpecified(owner)
+                && owner.getSpecification().getBeanSort().isMixin()) {
+            throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
+        }
+        if(ManagedObjects.isSpecified(target)
+                && target.getSpecification().getBeanSort().isMixin()
+                && target.getPojo()==null) {
+            throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
+        }
+        return new InteractionHead(owner, target);
     }
 
 }

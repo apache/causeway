@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -240,11 +241,11 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
      */
     ManagedObject mixinAdapterFor(
             @NonNull final Class<?> mixinType,
-            @NonNull final ManagedObject mixedInAdapter) {
+            @NonNull final ManagedObject mixee) {
 
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);
-        val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixedInAdapter.getPojo()));
+        val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixee.getPojo()));
         return ManagedObject.of(spec, Objects.requireNonNull(mixinPojo));
     }
 
@@ -308,7 +309,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
     // -- command (setup)
 
     protected void setupCommand(
-            final ManagedObject managedObject,
+            final InteractionHead head,
             final Function<UUID, CommandDto> commandDtoFactory) {
 
         val command = getInteractionContext().currentInteractionElseFail().getCommand();

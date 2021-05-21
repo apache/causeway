@@ -142,8 +142,7 @@ implements MemberExecutorService {
                         targetClass);
         final InteractionInternal.MemberExecutor<ActionInvocation> memberExecution =
                 actionExecutorFactory.createExecutor(
-                        argumentAdapters, targetAdapter, owningAction,
-                        targetAdapter, mixedInAdapter);
+                        owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(memberExecution, actionInvocation, clockService, metricsService.get(), command);
@@ -214,8 +213,8 @@ implements MemberExecutorService {
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
         val executor = propertyExecutorFactory
-                .createExecutor(newValueAdapter, owningProperty, targetManagedObject,
-                        interactionInitiatedBy, head, editingVariant);
+                .createExecutor(owningProperty, head, newValueAdapter,
+                        interactionInitiatedBy, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService.get(), command);

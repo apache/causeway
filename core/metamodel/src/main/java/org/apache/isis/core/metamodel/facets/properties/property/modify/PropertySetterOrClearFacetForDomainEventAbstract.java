@@ -163,7 +163,7 @@ implements
                     doSetOrClearProperty(
                             style,
                             owningProperty,
-                            InteractionHead.simple(targetAdapter),
+                            InteractionHead.regular(targetAdapter),
                             newValueAdapter,
                             interactionInitiatedBy))
                 .optionalElseFail()
@@ -174,13 +174,10 @@ implements
     private final class DomainEventMemberExecutor
             implements InteractionInternal.MemberExecutor<PropertyEdit> {
 
-        private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;
-        private final ManagedObject targetManagedObject;
-        //private final PropertyEdit propertyEdit;
-//        private final Command command;
-        private final InteractionInitiatedBy interactionInitiatedBy;
         private final InteractionHead head;
+        private final ManagedObject newValueAdapter;
+        private final InteractionInitiatedBy interactionInitiatedBy;
         private final EditingVariant style;
 
         @Override
@@ -194,11 +191,11 @@ implements
                 // update the current execution with the DTO (memento)
                 val propertyEditDto =
                         PropertySetterOrClearFacetForDomainEventAbstract.this.getInteractionDtoServiceInternal().asPropertyEditDto(
-                                owningProperty, targetManagedObject, newValueAdapterMutatable);
+                                owningProperty, head.getOwner(), newValueAdapterMutatable);
                 currentExecution.setDto(propertyEditDto);
 
                 // ... post the executing event
-                val oldValuePojo = getterFacet.getProperty(targetManagedObject, interactionInitiatedBy);
+                val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
                 val newValuePojo = UnwrapUtil.single(newValueAdapterMutatable);
 
                 val propertyDomainEvent =
@@ -220,11 +217,11 @@ implements
 
                 // invoke method
                 style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
-                        targetManagedObject, newValueAdapterMutatable, interactionInitiatedBy);
+                        head.getTarget(), newValueAdapterMutatable, interactionInitiatedBy);
 
 
                 // reading the actual value from the target object, playing it safe...
-                val actualNewValue = getterFacet.getProperty(targetManagedObject, interactionInitiatedBy);
+                val actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
                 if (!Objects.equals(oldValuePojo, actualNewValue)) {
 
                     // ... post the executed event
@@ -236,7 +233,7 @@ implements
                 }
 
                 val targetManagedObjectPossiblyCloned =
-                        PropertySetterOrClearFacetForDomainEventAbstract.this.cloneIfViewModelCloneable(targetManagedObject);
+                        PropertySetterOrClearFacetForDomainEventAbstract.this.cloneIfViewModelCloneable(head.getTarget());
 
                 return targetManagedObjectPossiblyCloned.getPojo();
 
