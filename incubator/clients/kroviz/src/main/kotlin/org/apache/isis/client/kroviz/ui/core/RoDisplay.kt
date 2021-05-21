@@ -18,15 +18,15 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.model.ObjectDM
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.builder.LayoutBuilder
 import io.kvision.core.CssSize
 import io.kvision.core.FontStyle
 import io.kvision.core.FontWeight
 import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
 import io.kvision.panel.VPanel
+import org.apache.isis.client.kroviz.core.model.ObjectDM
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.builder.LayoutBuilder
 
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
@@ -34,12 +34,11 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
     private var objectPanel: VPanel
 
     init {
+        console.log("[RD.init] tObject / grid")
+        console.log(displayModel)
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
         val grid = displayModel.grid!!
-        console.log("[RD.init] tObject / grid")
-        console.log(tObject)
-        console.log(grid)
         objectPanel = LayoutBuilder().create(grid, tObject, this)
         objectPanel.width = CssSize(100, UNIT.perc)
         add(objectPanel)

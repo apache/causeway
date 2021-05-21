@@ -82,11 +82,11 @@ to.Service o-- to.Member
 interface Aggregator {
     update(logEntry)
 }
-class ListAggregator {
+class CollectionAggregator {
     -list:ObjectList
 }
-ListAggregator *-- ObjectList
-Aggregator <|.. ListAggregator
+CollectionAggregator *-- ObjectList
+Aggregator <|.. CollectionAggregator
 
 class NavigationAggregator
 Aggregator <|.. NavigationAggregator

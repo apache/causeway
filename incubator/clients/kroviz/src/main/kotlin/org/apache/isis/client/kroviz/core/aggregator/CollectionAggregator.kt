@@ -20,7 +20,8 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
@@ -33,29 +34,35 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
+class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
 
     init {
-        dpm = ListDM(actionTitle)
+        dpm = CollectionDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
 
         if (logEntry.state == EventState.DUPLICATE) {
-            console.log("[ListAggregator.update] TODO duplicates should not be propagated to handlers")
+            console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
         } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
                 is TObject -> handleObject(obj)
-                is Layout -> handleLayout(obj, dpm as ListDM)
+                is Layout -> handleLayout(obj, dpm as CollectionDM)
                 is Grid -> handleGrid(obj)
                 is Property -> handleProperty(obj)
+                is Collection -> handleCollection(obj)
                 else -> log(logEntry)
             }
 
-            if (dpm.canBeDisplayed()) {
-                UiManager.openListView(this)
+            if (parent == null) {
+                if (dpm.canBeDisplayed()) {
+                    UiManager.openListView(this)
+                }
+            } else {
+                console.log("[CA.opdate] can be displayed / parent = OA")
+                parent.update(logEntry, subType)
             }
         }
     }
@@ -70,17 +77,20 @@ class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleObject(obj: TObject) {
+        console.log("[CA.handleObject]")
+        console.log(obj)
         dpm.addData(obj)
         invokeLayoutLink(obj)
+//TODO        invokeIconLink(obj)
     }
 
 
     private fun handleGrid(grid: Grid) {
-        (dpm as ListDM).grid = grid
+        (dpm as CollectionDM).grid = grid
     }
 
     private fun handleProperty(p: Property) {
-        val dm = dpm as ListDM
+        val dm = dpm as CollectionDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
@@ -89,7 +99,14 @@ class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
         }
     }
 
-    override fun reset(): ListAggregator {
+    private fun handleCollection(collection: Collection) {
+        collection.value.forEach {
+            console.log(it)
+            RoXmlHttpRequest().invoke(it, this)
+        }
+    }
+
+    override fun reset(): CollectionAggregator {
         dpm.reset()
         return this
     }
@@ -101,8 +118,8 @@ class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun Property.isPropertyDescription(): Boolean {
-        val selfLink = this.links.find { l ->
-            l.relation() == Relation.SELF
+        val selfLink = this.links.find {
+            it.relation() == Relation.SELF
         }
         return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }

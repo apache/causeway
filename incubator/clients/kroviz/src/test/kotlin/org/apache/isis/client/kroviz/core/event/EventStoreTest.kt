@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.IntegrationTest
-import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
@@ -37,7 +37,7 @@ class EventStoreTest : IntegrationTest() {
         if (isAppAvailable()) {
             // given
             EventStore.reset()
-            val obs = ListAggregator("test")
+            val obs = CollectionAggregator("test")
 
             //when
             val soList = ResourceSpecification(SO_LIST_ALL.url)

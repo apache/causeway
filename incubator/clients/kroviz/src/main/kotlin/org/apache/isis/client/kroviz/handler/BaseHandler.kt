@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.ui.core.Constants
  *
  * Implementing classes are responsible for:
  * @item creating Objects by parsing responses (JSON/XML),
- * @item creating/finding Aggregators (eg. ListAggregator, ObjectAggregator), and
+ * @item creating/finding Aggregators (eg. CollectionAggregator, ObjectAggregator), and
  * @item setting Objects and Aggregators into LogEntry.
  */
 abstract class BaseHandler {

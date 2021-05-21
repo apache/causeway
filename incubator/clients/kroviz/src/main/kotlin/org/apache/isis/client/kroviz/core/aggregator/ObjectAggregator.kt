@@ -19,12 +19,14 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 
 /** sequence of operations:
  * (0) Menu Action              User clicks BasicTypes.String -> handled by ActionDispatcher
@@ -34,36 +36,46 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
 class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
+    var collectionMap = mutableMapOf<String, CollectionAggregator>()
 
     init {
         dpm = ObjectDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-        val obj = logEntry.getTransferObject()
-        when (obj) {
+        when (val obj = logEntry.getTransferObject()) {
             is TObject -> handleObject(obj)
             is ResultObject -> handleResultObject(obj)
             is Property -> handleProperty(obj)
-            is Collection -> handleCollection(obj)
             is Layout -> handleLayout(obj, dpm as ObjectDM)
             is Grid -> handleGrid(obj)
             is HttpError -> ErrorDialog(logEntry).open()
             else -> log(logEntry)
         }
 
-        if (dpm.canBeDisplayed()) {
+        if (dpm.canBeDisplayed() && collectionsCanBeDisplayed()) {
             UiManager.openObjectView(this)
+        }
+    }
+
+    private fun collectionsCanBeDisplayed(): Boolean {
+        if (collectionMap.isEmpty()) return true
+        return collectionMap.all {
+            val cdm = it.value.dpm as CollectionDM
+            cdm.parentedCollectionCanBeDisplayed()
         }
     }
 
     fun handleObject(obj: TObject) {
         // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
-        // Note that rel.self/href is identical in both cases and both are of type TObject. logEntry.url is different, though.
+        // Note that rel.self/href is identical and both are of type TObject. logEntry.url is different, though.
         if (obj.getProperties().size == 0) {
             invokeInstance(obj)
         } else {
             dpm.addData(obj)
+        }
+        if (collectionMap.size == 0) {
+            handleCollections(obj)
         }
         invokeLayoutLink(obj)
     }
@@ -79,13 +91,20 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         (dpm as ObjectDM).addResult(resultObject)
     }
 
-    fun handleCollection(obj: Collection) {
-        console.log(obj)
-        throw Throwable("[ObjectAggregator.handleCollection] not implemented yet")
-    }
-
     override fun getObject(): TObject? {
         return dpm.getObject()
+    }
+
+    private fun handleCollections(obj: TObject) {
+        console.log("[OA.handleCollections]")
+        obj.getCollections().forEach {
+            val key = it.id
+            val aggregator = CollectionAggregator(key, this)
+            collectionMap.put(key, aggregator)
+            console.log(key)
+            val link = it.links.first()
+            RoXmlHttpRequest().invoke(link, aggregator)
+        }
     }
 
     private fun handleProperty(property: Property) {

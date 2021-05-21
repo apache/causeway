@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.ui.core
 
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.utils.Utils
 import io.kvision.core.Container
 import io.kvision.core.CssSize
@@ -37,14 +37,14 @@ import io.kvision.utils.set
  * - attribute types (can only be determined at runtime) and
  * - accessor names
  */
-class RoTable(displayList: ListDM) : SimplePanel() {
+class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
     init {
-        title = Utils.extractTitle(displayList.title)
+        title = Utils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = displayList.data
+        val model = displayCollection.data
         val columns = ColumnFactory().buildColumns(
-                displayList,
+                displayCollection,
                 true)
         val options = TabulatorOptions(
                 movableColumns = true,

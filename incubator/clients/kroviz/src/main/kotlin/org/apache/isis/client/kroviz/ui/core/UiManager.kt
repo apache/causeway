@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
@@ -136,7 +136,7 @@ object UiManager {
     fun openListView(aggregator: BaseAggregator) {
         val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
-        val panel = RoTable(displayable as ListDM)
+        val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }

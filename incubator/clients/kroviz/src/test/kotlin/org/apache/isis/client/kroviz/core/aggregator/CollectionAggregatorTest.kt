@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
@@ -29,7 +29,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ListAggregatorTest : IntegrationTest() {
+class CollectionAggregatorTest : IntegrationTest() {
 
     //@Test
     // sometimes fails with:
@@ -38,7 +38,7 @@ class ListAggregatorTest : IntegrationTest() {
         if (isAppAvailable()) {
             // given
             EventStore.reset()
-            val obs = ListAggregator("test")
+            val obs = CollectionAggregator("test")
             // when
             mockResponse(FR_OBJECT, obs)
             mockResponse(FR_OBJECT_LAYOUT, obs)
@@ -49,7 +49,7 @@ class ListAggregatorTest : IntegrationTest() {
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 
             // then
-            val actObs = pLe.getAggregator() as ListAggregator
+            val actObs = pLe.getAggregator() as CollectionAggregator
             assertEquals(obs, actObs)  // 1
             assertEquals(pdLe.getAggregator(), layoutLe.getAggregator()) // 2 - trivial?
             // seems they are equal but not identical - changes on obs are not reflected in actObs !!!
@@ -65,7 +65,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertNotNull(descLink)  // 4
 
             // then
-            val dl = obs.dpm as ListDM
+            val dl = obs.dpm as CollectionDM
             val propertyLabels = dl.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
@@ -81,14 +81,14 @@ class ListAggregatorTest : IntegrationTest() {
         if (isAppAvailable()) {
             // given
             EventStore.reset()
-            val obs = ListAggregator("test")
+            val obs = CollectionAggregator("test")
             // when
             mockResponse(SO_LIST_ALL, obs)
             mockResponse(SO_0, obs)
             // then
             val ol = obs.dpm
             assertNotNull(ol)
-            assertEquals(1, (ol as ListDM).data.size)
+            assertEquals(1, (ol as CollectionDM).data.size)
         }
     }
 

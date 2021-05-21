@@ -19,18 +19,18 @@
 package org.apache.isis.client.kroviz.handler
 
 import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.to.ResultList
 import org.apache.isis.client.kroviz.to.TransferObject
 
 class ResultListHandler : BaseHandler() {
 
     override fun doHandle() {
-        logEntry.addAggregator(ListAggregator(logEntry.title))
+        logEntry.addAggregator(CollectionAggregator(logEntry.title))
         update()
     }
 
-    
+
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(ResultList.serializer(), response)
     }

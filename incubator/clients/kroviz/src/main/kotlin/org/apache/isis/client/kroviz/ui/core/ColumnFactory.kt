@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.ui.core
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.core.model.CollectionDM
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.tabulator.Align
@@ -50,7 +50,7 @@ class ColumnFactory {
     }
 
     fun buildColumns(
-            displayList: ListDM,
+            displayCollection: CollectionDM,
             withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
@@ -62,13 +62,13 @@ class ColumnFactory {
         val menu = buildMenu()
         columns.add(menu)
 
-        val model = displayList.data as List<dynamic>
+        val model = displayCollection.data as List<dynamic>
         if (model[0].hasOwnProperty("iconName") as Boolean) {
             val icon = buildLinkIcon()
             columns.add(icon)
         }
 
-        val propertyLabels = displayList.propertyDescriptionList
+        val propertyLabels = displayCollection.propertyDescriptionList
         for (pl in propertyLabels) {
             val id = pl.key
             val friendlyName = pl.value

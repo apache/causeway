@@ -18,11 +18,11 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
+import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TransferObject
-import io.kvision.state.observableListOf
 
-class ListDM(override val title: String) : DisplayModelWithLayout() {
+class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     var data = observableListOf<Exposer>()
     private var rawData = observableListOf<TransferObject>()
 
@@ -30,7 +30,7 @@ class ListDM(override val title: String) : DisplayModelWithLayout() {
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
-            data.add(exo)  //if exposer is not dynamised, data access in tables won't work   .dynamise()
+            data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
         }
     }
 
@@ -38,6 +38,15 @@ class ListDM(override val title: String) : DisplayModelWithLayout() {
         isRendered = false
         data = observableListOf()
         rawData = observableListOf()
+    }
+
+    // canBeDisplayed checks for grid AND layout - for parented collection there seems to be no layout
+    fun parentedCollectionCanBeDisplayed(): Boolean {
+        console.log("[CDM.parentedCollectionCanBeDisplayed]")
+        console.log(this)
+        val answer = grid != null
+        console.log(answer)
+        return answer
     }
 
 }
