@@ -31,6 +31,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
+import lombok.val;
+
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
@@ -122,17 +124,18 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private JsonRepresentation getTypeActions() {
-        JsonRepresentation typeActions = representation.getArray("typeActions");
+        JsonRepresentation typeActions = representation.getMap("typeActions");
         if (typeActions == null) {
-            typeActions = JsonRepresentation.newArray();
+            typeActions = JsonRepresentation.newMap();
             representation.mapPut("typeActions", typeActions);
         }
         return typeActions;
     }
 
     private void addTypeActions() {
-        getTypeActions().arrayAdd(linkToIsSubtypeOf());
-        getTypeActions().arrayAdd(linkToIsSupertypeOf());
+        val typeActions = getTypeActions();
+        typeActions.mapPut("isSubtypeOf", linkToIsSubtypeOf());
+        typeActions.mapPut("isSupertypeOf", linkToIsSupertypeOf());
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
