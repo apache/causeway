@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -31,7 +30,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -44,9 +42,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
@@ -54,7 +51,10 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  */
 public class CollectionPanel
 extends PanelAbstract<List<ManagedObject>, EntityCollectionModelParented>
-implements CollectionSelectorProvider, BulkActionsProvider {
+implements
+    CollectionSelectorProvider,
+    ToggledMementosProvider,
+    BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,8 +71,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
 
         val associatedActions = collectionModel.getAssociatedActions();
 
-        val toggledMementosProvider =
-                new MyToggledMementosProvider(collectionModel, this, this);
+        val toggledMementosProvider = this;
 
         val entityActionLinks = LinkAndLabelUtil
                 .asActionLinksForAdditionalLinksPanel(
@@ -158,44 +157,23 @@ implements CollectionSelectorProvider, BulkActionsProvider {
         return toggleboxColumn;
     }
 
+    // -- TOGGLED MEMENTOS PROVIDER
 
     @Override
-    public void configureBulkActions(final ObjectAdapterToggleboxColumn toggleboxColumn) {
+    public Can<ObjectMemento> getToggles() {
+        return getModel().getToggleMementosList();
     }
 
-    private static class MyToggledMementosProvider implements ToggledMementosProvider, Serializable {
-        private static final long serialVersionUID = 1L;
-        private final EntityCollectionModel collectionModel;
-        private final BulkActionsProvider bulkActionsProvider;
-        private final CollectionPanel collectionPanel;
+    @Override
+    public void clearToggles(final AjaxRequestTarget target) {
+        getModel().clearToggleMementosList();
 
-        MyToggledMementosProvider(
-                final EntityCollectionModel collectionModel,
-                final BulkActionsProvider bulkActionsProvider,
-                final CollectionPanel collectionPanel) {
-            this.collectionModel = collectionModel;
-            this.bulkActionsProvider = bulkActionsProvider;
-            this.collectionPanel = collectionPanel;
-        }
-
-        @Override
-        public Can<ObjectMemento> getToggles() {
-            return collectionModel.getToggleMementosList();
-        }
-
-        @Override
-        public void clearToggles(final AjaxRequestTarget target) {
-            collectionModel.clearToggleMementosList();
-
-            final ObjectAdapterToggleboxColumn toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
-            if(toggleboxColumn != null) {
-                toggleboxColumn.clearToggles();
-                target.add(collectionPanel);
-            }
+        final ObjectAdapterToggleboxColumn toggleboxColumn = getToggleboxColumn();
+        if(toggleboxColumn != null) {
+            toggleboxColumn.clearToggles();
+            target.add(this);
         }
     }
-
-
 
 
 }

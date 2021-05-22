@@ -24,7 +24,5 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 
 public interface BulkActionsProvider extends Serializable {
 
-    void configureBulkActions(ObjectAdapterToggleboxColumn toggleboxColumn);
-
     ObjectAdapterToggleboxColumn getToggleboxColumn();
 }

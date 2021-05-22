@@ -77,7 +77,6 @@ implements CollectionCountProvider {
 
     private IsisAjaxFallbackDataTable<ManagedObject, String> dataTable;
 
-
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
     }
@@ -102,7 +101,7 @@ implements CollectionCountProvider {
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }
-            bulkActionsProvider.configureBulkActions(toggleboxColumn);
+
         }
 
         val collectionModel = getModel();
