@@ -109,6 +109,14 @@ public class ObjectAndActionInvocation {
         return !elementAdapters.get().isEmpty();
     }
 
+    /**
+     * Returns the ObjectSpecification of the compile time return type of the associated action.
+     * (not inspecting the runtime type)
+     */
+    public ObjectSpecification getReturnTypeSpecification() {
+        return getAction().getReturnType();
+    }
+
     // -- HELPER
 
     private final _Lazy<Can<ManagedObject>> elementAdapters = _Lazy.threadSafe(this::initElementAdapters);

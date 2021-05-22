@@ -33,11 +33,13 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0
  */
 @UtilityClass
+@Log4j2
 final class ManagedObjectInternalUtil {
 
 
@@ -72,6 +74,13 @@ final class ManagedObjectInternalUtil {
     }
 
     static Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
+
+        if(!ManagedObjects.isIdentifiable(adapter)
+                && ManagedObjects.isSpecified(adapter)) {
+            log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
+                    adapter.getSpecification());
+        }
+
         return objectManager(adapter)
                     .map(objectManager->objectManager.bookmarkObject(adapter));
 
