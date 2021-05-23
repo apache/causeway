@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -146,7 +147,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
 
         val isisRequestCycle = IsisRequestCycle.next(
-                commonContext.lookupServiceElseFail(InteractionFactory.class));
+                commonContext.lookupServiceElseFail(InteractionFactory.class),
+                commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class)
+                );
 
         requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
 

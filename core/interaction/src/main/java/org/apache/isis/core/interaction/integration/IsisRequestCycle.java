@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.interaction.integration;
 
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  *
@@ -31,12 +34,20 @@ import lombok.RequiredArgsConstructor;
 public class IsisRequestCycle {
 
     private final InteractionFactory isisInteractionFactory;
+    private final ImpersonatedUserHolder impersonatedUserHolder;
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
 
-    public void onBeginRequest(Authentication authentication) {
+    public void onBeginRequest(final Authentication authentication) {
 
-        isisInteractionFactory.openInteraction(authentication);
+        val authenticationToUse = impersonatedUserHolder.getUserMemento()
+                .<Authentication>map(impersonatingUserMemento->
+                    SimpleAuthentication.of(
+                        impersonatingUserMemento,
+                        authentication.getValidationCode()))
+                .orElse(authentication);
+
+        isisInteractionFactory.openInteraction(authenticationToUse);
     }
 
     public void onRequestHandlerExecuted() {
