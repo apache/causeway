@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.user.ImpersonateMenu;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Same as {@link ImpersonateMenu#impersonateWithRoles(String, boolean, List)},
+ * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List)},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}
@@ -65,10 +65,8 @@ public class Object_impersonateWithRoles {
 
     public Object act(
             final String userName,
-            @ParameterLayout(named = "Use user's roles?", labelPosition = LabelPosition.RIGHT)
-            final boolean useUsersRoles,
             final List<String> roleNames) {
-        impersonateMenu.impersonateWithRoles(userName, useUsersRoles, roleNames);
+        impersonateMenu.impersonateWithRoles(userName, roleNames);
         return holder;
     }
 
@@ -84,16 +82,14 @@ public class Object_impersonateWithRoles {
         return impersonateMenu.choices0ImpersonateWithRoles();
     }
 
-    public List<String> choices2Act(
-            final String userName,
-            final boolean useUsersRoles) {
-        return impersonateMenu.choices2ImpersonateWithRoles(userName, useUsersRoles);
+    public List<String> choices1Act(
+            final String userName) {
+        return impersonateMenu.choices1ImpersonateWithRoles(userName);
     }
 
-    public List<String> default2Act(
-            final String userName,
-            final boolean useUsersRoles) {
-        return impersonateMenu.default2ImpersonateWithRoles(userName, useUsersRoles);
+    public List<String> default1Act(
+            final String userName) {
+        return impersonateMenu.default1ImpersonateWithRoles(userName);
     }
 
     @Inject ImpersonateMenu impersonateMenu;
