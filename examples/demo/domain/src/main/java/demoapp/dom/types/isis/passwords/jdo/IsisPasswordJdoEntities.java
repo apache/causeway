@@ -18,28 +18,25 @@
  */
 package demoapp.dom.types.isis.passwords.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Profile("demo-jdo")
 @Service
-public class IsisPasswordJdoEntities {
+public class IsisPasswordJdoEntities
+extends ValueHolderRepository<Password, IsisPasswordJdo> {
 
-    public Optional<IsisPasswordJdo> find(final Password readOnlyProperty) {
-        return repositoryService.firstMatch(IsisPasswordJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected IsisPasswordJdoEntities() {
+        super(IsisPasswordJdo.class);
     }
 
-    public List<IsisPasswordJdo> all() {
-        return repositoryService.allInstances(IsisPasswordJdo.class);
+    @Override
+    protected IsisPasswordJdo newDetachedEntity(Password value) {
+        return new IsisPasswordJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

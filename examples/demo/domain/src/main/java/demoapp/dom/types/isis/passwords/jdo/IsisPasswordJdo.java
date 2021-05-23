@@ -32,8 +32,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Password;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.passwords.holder.IsisPasswordHolder2;
+import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,10 +40,10 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisPasswordJdo"
+        objectType = "demo.IsisPasswordEntity"
 )
 public class IsisPasswordJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisPasswordHolder2 {
+        extends IsisPasswordEntity {
 
 //end::class[]
     public IsisPasswordJdo(Password initialValue) {

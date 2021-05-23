@@ -33,8 +33,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.LocalResourcePath;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
+import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,10 +41,10 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisLocalResourcePathJdo"
+        objectType = "demo.IsisLocalResourcePathEntity"
 )
 public class IsisLocalResourcePathJdo                                   // <.>
-        implements HasAsciiDocDescription, IsisLocalResourcePathHolder2 {
+        extends IsisLocalResourcePathEntity {
 
 //end::class[]
     public IsisLocalResourcePathJdo(LocalResourcePath initialValue) {

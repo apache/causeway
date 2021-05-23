@@ -18,28 +18,25 @@
  */
 package demoapp.dom.types.isisext.asciidocs.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Profile("demo-jdo")
 @Service
-public class IsisAsciiDocJdoEntities {
+public class IsisAsciiDocJdoEntities
+extends ValueHolderRepository<AsciiDoc, IsisAsciiDocJdo> {
 
-    public Optional<IsisAsciiDocJdo> find(final AsciiDoc readOnlyProperty) {
-        return repositoryService.firstMatch(IsisAsciiDocJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected IsisAsciiDocJdoEntities() {
+        super(IsisAsciiDocJdo.class);
     }
 
-    public List<IsisAsciiDocJdo> all() {
-        return repositoryService.allInstances(IsisAsciiDocJdo.class);
+    @Override
+    protected IsisAsciiDocJdo newDetachedEntity(AsciiDoc value) {
+        return new IsisAsciiDocJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

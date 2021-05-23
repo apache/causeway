@@ -34,8 +34,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder2;
+import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,10 +42,10 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisAsciiDocJdo"
+        objectType = "demo.IsisAsciiDocEntity"
 )
 public class IsisAsciiDocJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisAsciiDocHolder2 {
+        extends IsisAsciiDocEntity {
 
 //end::class[]
     public IsisAsciiDocJdo(AsciiDoc initialValue) {

@@ -16,27 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths.jdo;
+package demoapp.dom.types.isis.markups.persistence;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.Markup;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jdo")
 @Service
-public class IsisLocalResourcePathJdoEntities
-extends ValueHolderRepository<LocalResourcePath, IsisLocalResourcePathJdo> {
+public class IsisMarkupSeeding
+extends SeedServiceAbstract {
 
-    protected IsisLocalResourcePathJdoEntities() {
-        super(IsisLocalResourcePathJdo.class);
-    }
-
-    @Override
-    protected IsisLocalResourcePathJdo newDetachedEntity(LocalResourcePath value) {
-        return new IsisLocalResourcePathJdo(value);
+    @Inject
+    public IsisMarkupSeeding(ValueHolderRepository<Markup, ? extends IsisMarkupEntity> entities) {
+        super(entities);
     }
 
 }

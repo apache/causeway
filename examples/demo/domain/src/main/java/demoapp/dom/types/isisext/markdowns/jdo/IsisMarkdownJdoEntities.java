@@ -18,28 +18,25 @@
  */
 package demoapp.dom.types.isisext.markdowns.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Profile("demo-jdo")
 @Service
-public class IsisMarkdownJdoEntities {
+public class IsisMarkdownJdoEntities
+extends ValueHolderRepository<Markdown, IsisMarkdownJdo> {
 
-    public Optional<IsisMarkdownJdo> find(final Markdown readOnlyProperty) {
-        return repositoryService.firstMatch(IsisMarkdownJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected IsisMarkdownJdoEntities() {
+        super(IsisMarkdownJdo.class);
     }
 
-    public List<IsisMarkdownJdo> all() {
-        return repositoryService.allInstances(IsisMarkdownJdo.class);
+    @Override
+    protected IsisMarkdownJdo newDetachedEntity(Markdown value) {
+        return new IsisMarkdownJdo(value);
     }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

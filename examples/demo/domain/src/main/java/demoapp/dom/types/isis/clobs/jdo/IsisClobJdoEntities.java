@@ -18,31 +18,25 @@
  */
 package demoapp.dom.types.isis.clobs.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Clob;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class IsisClobJdoEntities {
+public class IsisClobJdoEntities
+extends ValueHolderRepository<Clob, IsisClobJdo> {
 
-    final RepositoryService repositoryService;
-
-    public Optional<IsisClobJdo> find(final Clob readOnlyProperty) {
-        return repositoryService.firstMatch(IsisClobJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected IsisClobJdoEntities() {
+        super(IsisClobJdo.class);
     }
 
-    public List<IsisClobJdo> all() {
-        return repositoryService.allInstances(IsisClobJdo.class);
+    @Override
+    protected IsisClobJdo newDetachedEntity(Clob value) {
+        return new IsisClobJdo(value);
     }
-
 
 }

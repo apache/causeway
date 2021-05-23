@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtImageEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,10 +42,9 @@ import lombok.Setter;
         objectType = "demo.JavaAwtImageJdo"
 )
 public class JavaAwtImageJdo                                          // <.>
-        implements HasAsciiDocDescription
+        extends JavaAwtImageEntity
 //end::class[]
 // label positions not yet supported
-//        , JavaAwtImageHolder2
 //tag::class[]
 {
 
@@ -68,6 +67,12 @@ public class JavaAwtImageJdo                                          // <.>
     private BufferedImage readOnlyProperty;
 
 //end::class[]
+
+    @Override // once JavaAwtImageHolder2 is implemented by this class, move this up to JavaAwtImageEntity
+    public java.awt.image.BufferedImage value() {
+        return getReadOnlyProperty();
+    }
+
 // editable properties not yet supported:
 //    @Property(editing = Editing.ENABLED)                          // <.>
 //    @PropertyLayout(group = "editable-properties", sequence = "1")

@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths.jdo;
+package demoapp.dom.types.isis.passwords.persistence;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.value.Password;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.types.isis.passwords.holder.IsisPasswordHolder2;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-
-@Profile("demo-jdo")
-@Service
-public class IsisLocalResourcePathJdoEntities
-extends ValueHolderRepository<LocalResourcePath, IsisLocalResourcePathJdo> {
-
-    protected IsisLocalResourcePathJdoEntities() {
-        super(IsisLocalResourcePathJdo.class);
-    }
+@DomainObject(
+        objectType = "demo.IsisPasswordEntity" // shared permissions with concrete sub class
+)
+public abstract class IsisPasswordEntity
+implements
+    HasAsciiDocDescription,
+    IsisPasswordHolder2,
+    ValueHolder<Password> {
 
     @Override
-    protected IsisLocalResourcePathJdo newDetachedEntity(LocalResourcePath value) {
-        return new IsisLocalResourcePathJdo(value);
+    public Password value() {
+        return getReadOnlyProperty();
     }
 
 }

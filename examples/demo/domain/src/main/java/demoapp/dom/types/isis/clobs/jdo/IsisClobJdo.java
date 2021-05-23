@@ -33,8 +33,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Clob;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.clobs.holder.IsisClobHolder2;
+import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,10 +41,10 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisClobJdo"
+        objectType = "demo.IsisClobEntity"
 )
 public class IsisClobJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisClobHolder2 {
+        extends IsisClobEntity {
 
 //end::class[]
     public IsisClobJdo(Clob initialValue) {

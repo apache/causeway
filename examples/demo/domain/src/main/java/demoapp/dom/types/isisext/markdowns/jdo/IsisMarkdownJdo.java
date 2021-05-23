@@ -34,8 +34,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder2;
+import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,10 +42,10 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisMarkdownJdo"
+        objectType = "demo.IsisMarkdownEntity"
 )
 public class IsisMarkdownJdo                                          // <.>
-        implements HasAsciiDocDescription, IsisMarkdownHolder2 {
+        extends IsisMarkdownEntity {
 
 //end::class[]
     public IsisMarkdownJdo(Markdown initialValue) {

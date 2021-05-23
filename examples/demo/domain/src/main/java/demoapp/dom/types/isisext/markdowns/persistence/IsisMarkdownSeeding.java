@@ -16,39 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.clobs.jdo;
+package demoapp.dom.types.isisext.markdowns.persistence;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class IsisClobJdoSeedService extends SeedServiceAbstract {
+public class IsisMarkdownSeeding
+extends SeedServiceAbstract {
 
-    public IsisClobJdoSeedService() {
-        super(IsisClobJdoEntityFixture::new);
+    @Inject
+    public IsisMarkdownSeeding(ValueHolderRepository<Markdown, ? extends IsisMarkdownEntity> entities) {
+        super(entities);
     }
 
-    static class IsisClobJdoEntityFixture extends FixtureScript {
-
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-            samples.stream()
-                    .map(IsisClobJdo::new)
-                    .forEach(domainObject -> {
-                        repositoryService.persist(domainObject);
-                        executionContext.addResult(this, domainObject);
-                    });
-        }
-
-        @Inject RepositoryService repositoryService;
-        @Inject Samples<Clob> samples;
-    }
 }

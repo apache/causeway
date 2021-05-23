@@ -16,27 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isis.localresourcepaths.jdo;
+package demoapp.dom.types.javaawt.images.persistence;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+@DomainObject(
+        objectType = "demo.JavaAwtImageEntity" // shared permissions with concrete sub class
+)
+public abstract class JavaAwtImageEntity
+implements
+    HasAsciiDocDescription,
+    //JavaAwtImageHolder2,
+    ValueHolder<java.awt.image.BufferedImage> {
 
-@Profile("demo-jdo")
-@Service
-public class IsisLocalResourcePathJdoEntities
-extends ValueHolderRepository<LocalResourcePath, IsisLocalResourcePathJdo> {
-
-    protected IsisLocalResourcePathJdoEntities() {
-        super(IsisLocalResourcePathJdo.class);
-    }
-
-    @Override
-    protected IsisLocalResourcePathJdo newDetachedEntity(LocalResourcePath value) {
-        return new IsisLocalResourcePathJdo(value);
-    }
+//    @Override
+//    public java.awt.image.BufferedImage value() {
+//        return getReadOnlyProperty();
+//    }
 
 }

@@ -18,31 +18,25 @@
  */
 package demoapp.dom.types.isis.markups.jdo;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Markup;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class IsisMarkupJdoEntities {
+public class IsisMarkupJdoEntities
+extends ValueHolderRepository<Markup, IsisMarkupJdo> {
 
-    final RepositoryService repositoryService;
-
-    public Optional<IsisMarkupJdo> find(final Markup readOnlyProperty) {
-        return repositoryService.firstMatch(IsisMarkupJdo.class, x -> x.getReadOnlyProperty() == readOnlyProperty);
+    protected IsisMarkupJdoEntities() {
+        super(IsisMarkupJdo.class);
     }
 
-    public List<IsisMarkupJdo> all() {
-        return repositoryService.allInstances(IsisMarkupJdo.class);
+    @Override
+    protected IsisMarkupJdo newDetachedEntity(Markup value) {
+        return new IsisMarkupJdo(value);
     }
-
 
 }
