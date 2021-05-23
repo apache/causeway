@@ -121,15 +121,9 @@ public class ImpersonateMenu {
     @ActionLayout(sequence = "100.2", cssClassFa = "fa-mask")
     public void impersonateWithRoles(
             final String userName,
-            @ParameterLayout(named = "Use user's roles?", labelPosition = LabelPosition.RIGHT)
-            final boolean useUsersRoles,
             final List<String> roleNames) {
 
-        val rolesToUse = useUsersRoles
-                ? impersonateMenuAdvisor().roleNamesFor(userName)
-                : roleNames;
-
-        this.userService.impersonateUser(userName, rolesToUse);
+        this.userService.impersonateUser(userName, roleNames);
         this.messageService.informUser("Now impersonating " + userName);
     }
     @MemberSupport public boolean hideImpersonateWithRoles() {
@@ -141,18 +135,10 @@ public class ImpersonateMenu {
     @MemberSupport public List<String> choices0ImpersonateWithRoles() {
         return impersonateMenuAdvisor().allUserNames();
     }
-    @MemberSupport public boolean default1ImpersonateWithRoles() {
-        return true;
-    }
-    @MemberSupport public boolean hide2ImpersonateWithRoles(final String userName, boolean useUsersRoles) {
-        return useUsersRoles;
-    }
-    @MemberSupport public List<String> choices2ImpersonateWithRoles(final String userName, boolean useUsersRoles) {
+    @MemberSupport public List<String> choices1ImpersonateWithRoles(final String userName) {
         return impersonateMenuAdvisor().allRoleNames();
     }
-    @MemberSupport public List<String> default2ImpersonateWithRoles(final String userName, boolean useUsersRoles) {
-        // TODO: this is never called, unfortunately; ISIS-2666
-        // TODO: and attempting to use Parameters fails; ISIS-2667
+    @MemberSupport public List<String> default1ImpersonateWithRoles(final String userName) {
         return impersonateMenuAdvisor().roleNamesFor(userName);
     }
 
