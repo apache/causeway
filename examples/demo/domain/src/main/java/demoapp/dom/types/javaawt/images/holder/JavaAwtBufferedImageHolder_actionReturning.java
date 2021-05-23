@@ -21,8 +21,6 @@ package demoapp.dom.types.javaawt.images.holder;
 import java.awt.image.BufferedImage;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
@@ -31,21 +29,15 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
+        semantics = SemanticsOf.SAFE,
+        hidden = Where.EVERYWHERE   // TODO: not yet supported
+    )
 @RequiredArgsConstructor
-public class JavaAwtImageHolder_updateReadOnlyProperty {
+public class JavaAwtBufferedImageHolder_actionReturning {
 
-    private final JavaAwtImageHolder holder;
+    private final JavaAwtBufferedImageHolder holder;
 
-    public JavaAwtImageHolder act(BufferedImage newValue) {
-        holder.setReadOnlyProperty(newValue);
-        return holder;
-    }
-    public BufferedImage default0Act() {
+    public BufferedImage act() {
         return holder.getReadOnlyProperty();
     }
 

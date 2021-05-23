@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.holder;
+package demoapp.dom.types.javaawt.images.persistence;
 
-import java.awt.image.BufferedImage;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import lombok.RequiredArgsConstructor;
+@DomainObject(
+        objectType = "demo.JavaAwtBufferedImageEntity" // shared permissions with concrete sub class
+)
+public abstract class JavaAwtBufferedImageEntity
+implements
+    HasAsciiDocDescription,
+    //JavaAwtBufferedImageHolder2,
+    ValueHolder<java.awt.image.BufferedImage> {
 
-
-//tag::class[]
-@Action(
-        semantics = SemanticsOf.SAFE,
-        hidden = Where.EVERYWHERE   // TODO: not yet supported
-    )
-@RequiredArgsConstructor
-public class JavaAwtImageHolder_actionReturning {
-
-    private final JavaAwtImageHolder holder;
-
-    public BufferedImage act() {
-        return holder.getReadOnlyProperty();
-    }
+//    @Override
+//    public java.awt.image.BufferedImage value() {
+//        return getReadOnlyProperty();
+//    }
 
 }
-//end::class[]

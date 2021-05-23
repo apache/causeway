@@ -16,27 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.jpa;
+package demoapp.dom.types.javaawt.images.persistence;
 
 import java.awt.image.BufferedImage;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jpa")
 @Service
-public class JavaAwtImageJpaEntities
-extends ValueHolderRepository<BufferedImage, JavaAwtImageJpa> {
+public class JavaAwtBufferedImageSeeding
+extends SeedServiceAbstract {
 
-    protected JavaAwtImageJpaEntities() {
-        super(JavaAwtImageJpa.class);
-    }
-
-    @Override
-    protected JavaAwtImageJpa newDetachedEntity(BufferedImage value) {
-        return new JavaAwtImageJpa(value);
+    @Inject
+    public JavaAwtBufferedImageSeeding(ValueHolderRepository<BufferedImage, ? extends JavaAwtBufferedImageEntity> entities) {
+        super(entities);
     }
 
 }

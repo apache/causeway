@@ -40,8 +40,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtImageEntity;
-import demoapp.dom.types.javaawt.images.vm.JavaAwtImageVm;
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
+import demoapp.dom.types.javaawt.images.vm.JavaAwtBufferedImageVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -56,21 +56,21 @@ public class JavaAwtBufferedImages implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaAwtImageVm openViewModel(BufferedImage initialValue) {
-        return new JavaAwtImageVm(initialValue);
+    public JavaAwtBufferedImageVm openViewModel(BufferedImage initialValue) {
+        return new JavaAwtBufferedImageVm(initialValue);
     }
     public BufferedImage default0OpenViewModel() {
         return samples.single();
     }
 
     @Collection
-    public List<? extends JavaAwtImageEntity> getEntities() {
+    public List<? extends JavaAwtBufferedImageEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<BufferedImage, ? extends JavaAwtImageEntity> entities;
+    ValueHolderRepository<BufferedImage, ? extends JavaAwtBufferedImageEntity> entities;
 
     @Inject
     @XmlTransient

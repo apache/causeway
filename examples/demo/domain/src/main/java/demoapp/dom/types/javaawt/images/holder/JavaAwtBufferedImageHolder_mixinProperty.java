@@ -16,27 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.jdo;
+package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.RequiredArgsConstructor;
 
-@Profile("demo-jdo")
-@Service
-public class JavaAwtImageJdoEntities
-extends ValueHolderRepository<BufferedImage, JavaAwtImageJdo> {
 
-    protected JavaAwtImageJdoEntities() {
-        super(JavaAwtImageJdo.class);
-    }
+//tag::class[]
+@Property()
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
+@RequiredArgsConstructor
+public class JavaAwtBufferedImageHolder_mixinProperty {
 
-    @Override
-    protected JavaAwtImageJdo newDetachedEntity(BufferedImage value) {
-        return new JavaAwtImageJdo(value);
+    private final JavaAwtBufferedImageHolder holder;
+
+    public BufferedImage prop() {
+        return holder.getReadOnlyProperty();
     }
 
 }
+//end::class[]

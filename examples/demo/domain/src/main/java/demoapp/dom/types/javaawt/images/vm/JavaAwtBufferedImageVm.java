@@ -42,19 +42,19 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.JavaAwtImageVm"
+        objectType = "demo.JavaAwtBufferedImageVm"
 )
 @lombok.NoArgsConstructor                                               // <.>
-public class JavaAwtImageVm
+public class JavaAwtBufferedImageVm
         implements HasAsciiDocDescription
 //end::class[]
 // label positions not yet supported
-//        , JavaAwtImageHolder2
+//        , JavaAwtBufferedImageHolder2
 //tag::class[]
 {
 
 //end::class[]
-    public JavaAwtImageVm(BufferedImage initialValue) {
+    public JavaAwtBufferedImageVm(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }

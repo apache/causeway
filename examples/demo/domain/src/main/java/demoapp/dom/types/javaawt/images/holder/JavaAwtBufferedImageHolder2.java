@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
-public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
+public interface JavaAwtBufferedImageHolder2 extends JavaAwtBufferedImageHolder {
 
     @Property                                               // <.>
     @PropertyLayout(

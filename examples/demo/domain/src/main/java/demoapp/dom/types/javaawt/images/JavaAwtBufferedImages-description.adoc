@@ -15,17 +15,17 @@ Some properties on these domain objects are mandatory, some optional.
 
 The entity and view model types both implement some common interfaces.
 
-=== JavaAwtImageHolder
+=== JavaAwtBufferedImageHolder
 
-The `JavaAwtImageHolder` interface is used to contribute a number of mixins to both types:
+The `JavaAwtBufferedImageHolder` interface is used to contribute a number of mixins to both types:
 
 [source,java]
 ----
-include::holder/JavaAwtImageHolder.java[tags=class]
+include::holder/JavaAwtBufferedImageHolder.java[tags=class]
 ----
 
-=== JavaAwtImageHolder2
+=== JavaAwtBufferedImageHolder2
 
-The `JavaAwtImageHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
+The `JavaAwtBufferedImageHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
 Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.

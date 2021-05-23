@@ -22,8 +22,6 @@ import java.awt.image.BufferedImage;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -34,24 +32,21 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyOptionalProperty",
+        associateWith = "readOnlyProperty",
         hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
 @RequiredArgsConstructor
-public class JavaAwtImageHolder_updateReadOnlyOptionalProperty {
+public class JavaAwtBufferedImageHolder_updateReadOnlyProperty {
 
-    private final JavaAwtImageHolder holder;
+    private final JavaAwtBufferedImageHolder holder;
 
-    public JavaAwtImageHolder act(
-            @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            BufferedImage newValue
-    ) {
-        holder.setReadOnlyOptionalProperty(newValue);
+    public JavaAwtBufferedImageHolder act(BufferedImage newValue) {
+        holder.setReadOnlyProperty(newValue);
         return holder;
     }
     public BufferedImage default0Act() {
-        return holder.getReadOnlyOptionalProperty();
+        return holder.getReadOnlyProperty();
     }
 
 }

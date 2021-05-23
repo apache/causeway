@@ -16,39 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.holder;
+package demoapp.dom.types.javaawt.images.jdo;
 
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
+@Profile("demo-jdo")
+@Service
+public class JavaAwtBufferedImageJdoEntities
+extends ValueHolderRepository<BufferedImage, JavaAwtBufferedImageJdo> {
 
-import demoapp.dom.types.Samples;
-
-
-//tag::class[]
-@Action(
-        semantics = SemanticsOf.SAFE,
-        hidden = Where.EVERYWHERE   // TODO: not yet supported
-)
-@RequiredArgsConstructor
-public class JavaAwtImageHolder_actionReturningCollection {
-
-    private final JavaAwtImageHolder holder;
-
-    public Collection<BufferedImage> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    protected JavaAwtBufferedImageJdoEntities() {
+        super(JavaAwtBufferedImageJdo.class);
     }
 
-    @Inject
-    Samples<BufferedImage> samples;
+    @Override
+    protected JavaAwtBufferedImageJdo newDetachedEntity(BufferedImage value) {
+        return new JavaAwtBufferedImageJdo(value);
+    }
+
 }
-//end::class[]

@@ -33,7 +33,7 @@ import demoapp.dom.types.isis.markups.jpa.IsisMarkupJpa;
 import demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpa;
 import demoapp.dom.types.isisext.asciidocs.jpa.IsisAsciiDocJpa;
 import demoapp.dom.types.isisext.markdowns.jpa.IsisMarkdownJpa;
-import demoapp.dom.types.javaawt.images.jpa.JavaAwtImageJpa;
+import demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpa;
 import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
 import demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpa;
@@ -81,7 +81,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         IsisAsciiDocJpa.class,
         IsisMarkdownJpa.class,
 
-        JavaAwtImageJpa.class,
+        JavaAwtBufferedImageJpa.class,
 
         JavaLangStringJpa.class,
 

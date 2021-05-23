@@ -16,42 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.samples;
+package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.resources._Resources;
-
-import lombok.SneakyThrows;
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
 
-@Service
-public class JavaAwtImagesSamples implements Samples<BufferedImage> {
 
-    @Override
-    public Stream<BufferedImage> stream() {
-        return Stream.of(
-                "apache-wicket.png", "byte-buddy.png", "datanucleus-logo.png",
-                "project-lombok.png", "resteasy_logo_600x.gif", "spring-boot-logo.png")
-                .map(this::loadImage);
-    }
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.SAFE,
+        hidden = Where.EVERYWHERE   // TODO: not yet supported
+)
+@RequiredArgsConstructor
+public class JavaAwtBufferedImageHolder_actionReturningCollection {
 
+    private final JavaAwtBufferedImageHolder holder;
 
-    @SneakyThrows
-    private BufferedImage loadImage(String name) {
-        val bytes = _Bytes.of(_Resources.load(JavaAwtImagesSamples.class, name ));
-        return javaAwtImageService.bytesToJavaAwtImage(bytes);
+    public Collection<BufferedImage> act() {
+        return samples.stream()
+                .collect(Collectors.toList());
     }
 
     @Inject
-    JavaAwtImageService javaAwtImageService;
-
+    Samples<BufferedImage> samples;
 }
+//end::class[]

@@ -21,7 +21,7 @@ package demoapp.dom.types.javaawt.images.holder;
 import java.awt.image.BufferedImage;
 
 //tag::class[]
-public interface JavaAwtImageHolder {
+public interface JavaAwtBufferedImageHolder {
 
     BufferedImage getReadOnlyProperty();
     void setReadOnlyProperty(BufferedImage c);

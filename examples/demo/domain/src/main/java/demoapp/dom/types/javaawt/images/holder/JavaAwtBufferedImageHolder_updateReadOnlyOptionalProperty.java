@@ -20,23 +20,38 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Property()
-@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyOptionalProperty",
+        hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
+)
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
 @RequiredArgsConstructor
-public class JavaAwtImageHolder_mixinProperty {
+public class JavaAwtBufferedImageHolder_updateReadOnlyOptionalProperty {
 
-    private final JavaAwtImageHolder holder;
+    private final JavaAwtBufferedImageHolder holder;
 
-    public BufferedImage prop() {
-        return holder.getReadOnlyProperty();
+    public JavaAwtBufferedImageHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)              // <.>
+            BufferedImage newValue
+    ) {
+        holder.setReadOnlyOptionalProperty(newValue);
+        return holder;
+    }
+    public BufferedImage default0Act() {
+        return holder.getReadOnlyOptionalProperty();
     }
 
 }

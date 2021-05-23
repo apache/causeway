@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtImageEntity;
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,22 +45,22 @@ import lombok.Setter;
 @Entity
 @Table(
       schema = "demo",
-      name = "JavaAwtImageJpa"
+      name = "JavaAwtBufferedImageJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaAwtImageEntity"
+      objectType = "demo.JavaAwtBufferedImageEntity"
 )
 @NoArgsConstructor
-public class JavaAwtImageJpa
-        extends JavaAwtImageEntity
+public class JavaAwtBufferedImageJpa
+        extends JavaAwtBufferedImageEntity
 //end::class[]
 // label positions not yet supported
 //tag::class[]
 {
 
 //end::class[]
-    public JavaAwtImageJpa(BufferedImage initialValue) {
+    public JavaAwtBufferedImageJpa(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
@@ -83,7 +83,7 @@ public class JavaAwtImageJpa
 
 //end::class[]
 
-    @Override // once JavaAwtImageHolder2 is implemented by this class, move this up to JavaAwtImageEntity
+    @Override // once JavaAwtBufferedImageHolder2 is implemented by this class, move this up to JavaAwtBufferedImageEntity
     public java.awt.image.BufferedImage value() {
         return getReadOnlyProperty();
     }

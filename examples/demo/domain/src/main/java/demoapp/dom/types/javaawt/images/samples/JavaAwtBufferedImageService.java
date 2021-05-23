@@ -31,10 +31,10 @@ import org.springframework.stereotype.Service;
 import lombok.SneakyThrows;
 
 @Service
-public class JavaAwtImageService {
+public class JavaAwtBufferedImageService {
 
     @SneakyThrows
-    public BufferedImage bytesToJavaAwtImage(byte[] bytes) {
+    public BufferedImage bytesToJavaAwtBufferedImage(byte[] bytes) {
         return ImageIO.read(new ByteArrayInputStream(bytes));
     }
 

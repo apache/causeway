@@ -43,11 +43,11 @@ import demoapp.dom.types.Samples;
 )
 @ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices", sequence = "2")
 @RequiredArgsConstructor
-public class JavaAwtImageHolder_updateReadOnlyPropertyWithChoices {
+public class JavaAwtBufferedImageHolder_updateReadOnlyPropertyWithChoices {
 
-    private final JavaAwtImageHolder holder;
+    private final JavaAwtBufferedImageHolder holder;
 
-    public JavaAwtImageHolder act(BufferedImage newValue) {
+    public JavaAwtBufferedImageHolder act(BufferedImage newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
