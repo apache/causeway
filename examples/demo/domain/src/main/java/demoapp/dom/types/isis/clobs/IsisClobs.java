@@ -37,19 +37,17 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.isis.clobs.jdo.IsisClobJdo;
-import demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities;
+import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
 import demoapp.dom.types.isis.clobs.vm.IsisClobVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisClobs", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class IsisClobs implements HasAsciiDocDescription {
 
     public String title() {
@@ -66,13 +64,13 @@ public class IsisClobs implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<IsisClobJdo> getEntities() {
+    public List<? extends IsisClobEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    IsisClobJdoEntities entities;
+    ValueHolderRepository<Clob, ? extends IsisClobEntity> entities;
 
     @Inject
     @XmlTransient

@@ -16,32 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javaawt.images.jdo;
+package demoapp.dom.types.javaawt.images.jpa;
 
 import java.awt.image.BufferedImage;
 
 import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import demoapp.dom.types.javaawt.images.persistence.JavaAwtImageEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        objectType = "demo.JavaAwtImageJdo"
+@Entity
+@Table(
+      schema = "demo",
+      name = "JavaAwtImageJpa"
 )
-public class JavaAwtImageJdo
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(
+      objectType = "demo.JavaAwtImageEntity"
+)
+@NoArgsConstructor
+public class JavaAwtImageJpa
         extends JavaAwtImageEntity
 //end::class[]
 // label positions not yet supported
@@ -49,18 +60,22 @@ public class JavaAwtImageJdo
 {
 
 //end::class[]
-    public JavaAwtImageJdo(BufferedImage initialValue) {
+    public JavaAwtImageJpa(BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
 
     // @Title not yet supported
     public String title() {
-        return "Image JDO entity";
+        return "Image JPA entity";
     }
 
     // @Title(prepend = "Image JDO entity: ")  // not yet supported
 //tag::class[]
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                   // <.>
     @Getter @Setter

@@ -37,19 +37,17 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdo;
-import demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities;
+import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 import demoapp.dom.types.isisext.markdowns.vm.IsisMarkdownVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisMarkdowns", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class IsisMarkdowns implements HasAsciiDocDescription {
 
     public String title() {
@@ -66,13 +64,13 @@ public class IsisMarkdowns implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<IsisMarkdownJdo> getEntities() {
+    public List<? extends IsisMarkdownEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    IsisMarkdownJdoEntities entities;
+    ValueHolderRepository<Markdown, ? extends IsisMarkdownEntity> entities;
 
     @Inject
     @XmlTransient

@@ -37,19 +37,17 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdo;
-import demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities;
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtImageEntity;
 import demoapp.dom.types.javaawt.images.vm.JavaAwtImageVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaAwtBufferedImages", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class JavaAwtBufferedImages implements HasAsciiDocDescription {
 
     public String title() {
@@ -66,13 +64,13 @@ public class JavaAwtBufferedImages implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<JavaAwtImageJdo> getEntities() {
+    public List<? extends JavaAwtImageEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    JavaAwtImageJdoEntities entities;
+    ValueHolderRepository<BufferedImage, ? extends JavaAwtImageEntity> entities;
 
     @Inject
     @XmlTransient

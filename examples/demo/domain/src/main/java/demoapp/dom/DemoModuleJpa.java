@@ -26,6 +26,14 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
 
+import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
+import demoapp.dom.types.isis.clobs.jpa.IsisClobJpa;
+import demoapp.dom.types.isis.localresourcepaths.jpa.IsisLocalResourcePathJpa;
+import demoapp.dom.types.isis.markups.jpa.IsisMarkupJpa;
+import demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpa;
+import demoapp.dom.types.isisext.asciidocs.jpa.IsisAsciiDocJpa;
+import demoapp.dom.types.isisext.markdowns.jpa.IsisMarkdownJpa;
+import demoapp.dom.types.javaawt.images.jpa.JavaAwtImageJpa;
 import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
 import demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpa;
@@ -64,6 +72,16 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
     IsisModuleExtCommandLogJpa.class,
 })
 @EntityScan(basePackageClasses = {
+
+        IsisBlobJpa.class,
+        IsisClobJpa.class,
+        IsisLocalResourcePathJpa.class,
+        IsisMarkupJpa.class,
+        IsisPasswordJpa.class,
+        IsisAsciiDocJpa.class,
+        IsisMarkdownJpa.class,
+
+        JavaAwtImageJpa.class,
 
         JavaLangStringJpa.class,
 

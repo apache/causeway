@@ -37,19 +37,17 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdo;
-import demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities;
+import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 import demoapp.dom.types.isis.localresourcepaths.vm.IsisLocalResourcePathVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisLocalResourcePaths", editing=Editing.ENABLED)
-@Log4j2
+//@Log4j2
 public class IsisLocalResourcePaths implements HasAsciiDocDescription {
 
     public String title() {
@@ -66,13 +64,13 @@ public class IsisLocalResourcePaths implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<IsisLocalResourcePathJdo> getEntities() {
+    public List<? extends IsisLocalResourcePathEntity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    IsisLocalResourcePathJdoEntities entities;
+    ValueHolderRepository<LocalResourcePath, ? extends IsisLocalResourcePathEntity> entities;
 
     @Inject
     @XmlTransient
