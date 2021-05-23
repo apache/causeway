@@ -86,6 +86,6 @@ public class IsisMarkdownJdo                                          // <.>
     private Markdown readWriteOptionalProperty;
 
     @Inject
-    private BookmarkService bookmarkService;
+    private transient BookmarkService bookmarkService;
 }
 //end::class[]
