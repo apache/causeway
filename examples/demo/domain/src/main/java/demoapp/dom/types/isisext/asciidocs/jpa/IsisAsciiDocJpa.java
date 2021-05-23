@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.context.annotation.Profile;
 
@@ -100,7 +101,7 @@ public class IsisAsciiDocJpa
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;
 
-    @Inject
-    private BookmarkService bookmarkService;
+    @Inject @Transient
+    private transient BookmarkService bookmarkService;
 }
 //end::class[]

@@ -26,7 +26,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 /**
  * @since 2.0 {@index}
  */
-@Converter
+@Converter(autoApply = true)
 public class IsisAsciiDocConverter implements AttributeConverter<AsciiDoc, String>{
 
     @Override

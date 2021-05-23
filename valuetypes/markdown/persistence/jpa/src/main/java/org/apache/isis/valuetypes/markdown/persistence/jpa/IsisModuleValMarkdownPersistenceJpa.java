@@ -18,10 +18,12 @@
  */
 package org.apache.isis.valuetypes.markdown.persistence.jpa;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
+import org.apache.isis.valuetypes.markdown.persistence.jpa.converters.IsisMarkdownConverter;
 
 /**
  * @since 2.0 {@index}
@@ -29,6 +31,11 @@ import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 @Configuration
 @Import({
     IsisModuleValMarkdownApplib.class
+})
+@EntityScan(basePackageClasses = {
+
+        // @Converter's
+        IsisMarkdownConverter.class
 })
 public class IsisModuleValMarkdownPersistenceJpa {
 }

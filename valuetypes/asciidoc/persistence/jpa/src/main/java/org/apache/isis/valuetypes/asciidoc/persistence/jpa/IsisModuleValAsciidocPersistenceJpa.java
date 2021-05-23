@@ -18,10 +18,12 @@
  */
 package org.apache.isis.valuetypes.asciidoc.persistence.jpa;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.isis.valuetypes.asciidoc.persistence.jpa.converters.IsisAsciiDocConverter;
 
 /**
  * @since 2.0 {@index}
@@ -29,6 +31,11 @@ import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 @Configuration
 @Import({
     IsisModuleValAsciidocApplib.class
+})
+@EntityScan(basePackageClasses = {
+
+        // @Converter's
+        IsisAsciiDocConverter.class
 })
 public class IsisModuleValAsciidocPersistenceJpa {
 }

@@ -26,6 +26,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -35,6 +37,7 @@ import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -67,12 +70,6 @@ public class JavaAwtBufferedImageJdo
     private BufferedImage readOnlyProperty;
 
 //end::class[]
-
-    @Override // once JavaAwtBufferedImageHolder2 is implemented by this class, move this up to JavaAwtBufferedImageEntity
-    public java.awt.image.BufferedImage value() {
-        return getReadOnlyProperty();
-    }
-
 // editable properties not yet supported:
 //    @Property(editing = Editing.ENABLED)                          // <.>
 //    @PropertyLayout(group = "editable-properties", sequence = "1")

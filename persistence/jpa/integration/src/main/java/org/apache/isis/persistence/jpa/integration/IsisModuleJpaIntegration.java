@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.integration;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -38,9 +39,6 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBuffere
         // @Service's
         JpaSupportServiceUsingSpring.class,
 
-        // @Converter's
-        JavaAwtBufferedImageByteArrayConverter.class,
-
 //        DataNucleusSettings.class,
 //        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
 //        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
@@ -57,6 +55,11 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBuffere
 //        Persistable_datanucleusVersionLong.class,
 //        Persistable_datanucleusVersionTimestamp.class,
 //        Persistable_downloadJdoMetadata.class,
+})
+@EntityScan(basePackageClasses = {
+
+        // @Converter's
+        JavaAwtBufferedImageByteArrayConverter.class
 })
 public class IsisModuleJpaIntegration {
 

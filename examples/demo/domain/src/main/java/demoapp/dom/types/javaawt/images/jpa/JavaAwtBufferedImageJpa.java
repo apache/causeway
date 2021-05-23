@@ -85,12 +85,6 @@ public class JavaAwtBufferedImageJpa
     private BufferedImage readOnlyProperty;
 
 //end::class[]
-
-    @Override // once JavaAwtBufferedImageHolder2 is implemented by this class, move this up to JavaAwtBufferedImageEntity
-    public java.awt.image.BufferedImage value() {
-        return getReadOnlyProperty();
-    }
-
 // editable properties not yet supported:
 //    @Property(editing = Editing.ENABLED)                          // <.>
 //    @PropertyLayout(group = "editable-properties", sequence = "1")
@@ -117,3 +111,5 @@ public class JavaAwtBufferedImageJpa
 //tag::class[]
 }
 //end::class[]
+
+

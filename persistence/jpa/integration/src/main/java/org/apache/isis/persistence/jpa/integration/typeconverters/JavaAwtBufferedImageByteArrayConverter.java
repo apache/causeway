@@ -11,8 +11,9 @@ import org.apache.isis.commons.internal.image._Images;
 /**
  * @since 2.0 {@index}
  */
-@Converter
-public class JavaAwtBufferedImageByteArrayConverter implements AttributeConverter<BufferedImage, byte[]> {
+@Converter(autoApply = true)
+public class JavaAwtBufferedImageByteArrayConverter
+implements AttributeConverter<BufferedImage, byte[]> {
 
     @Override
     public byte[] convertToDatabaseColumn(BufferedImage memberValue) {

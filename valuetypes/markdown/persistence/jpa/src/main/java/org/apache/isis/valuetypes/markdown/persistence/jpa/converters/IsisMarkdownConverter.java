@@ -26,7 +26,7 @@ import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 /**
  * @since 2.0 {@index}
  */
-@Converter
+@Converter(autoApply = true)
 public class IsisMarkdownConverter implements AttributeConverter<Markdown, String>{
 
     @Override

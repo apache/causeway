@@ -18,10 +18,13 @@
  */
 package demoapp.dom.types.javaawt.images.persistence;
 
+import java.awt.image.BufferedImage;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.types.javaawt.images.holder.JavaAwtBufferedImageHolder2;
 
 @DomainObject(
         objectType = "demo.JavaAwtBufferedImageEntity" // shared permissions with concrete sub class
@@ -29,12 +32,36 @@ import demoapp.dom._infra.values.ValueHolder;
 public abstract class JavaAwtBufferedImageEntity
 implements
     HasAsciiDocDescription,
-    //JavaAwtBufferedImageHolder2,
+    JavaAwtBufferedImageHolder2,
     ValueHolder<java.awt.image.BufferedImage> {
 
-//    @Override
-//    public java.awt.image.BufferedImage value() {
-//        return getReadOnlyProperty();
-//    }
+    @Override
+    public java.awt.image.BufferedImage value() {
+        return getReadOnlyProperty();
+    }
+
+    // -- TODO R/W SUPPORT (actually implement in sub classes)
+
+    @Override
+    public BufferedImage getReadWriteProperty() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setReadWriteProperty(BufferedImage c) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public BufferedImage getReadWriteOptionalProperty() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setReadWriteOptionalProperty(BufferedImage c) {
+        // TODO Auto-generated method stub
+    }
 
 }
