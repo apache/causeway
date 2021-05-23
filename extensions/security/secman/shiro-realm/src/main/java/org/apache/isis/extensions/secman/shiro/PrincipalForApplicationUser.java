@@ -103,10 +103,6 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
 
     /**
      * When wrapped by ShiroHttpServletRequest.ObjectPrincipal, the principal's name is derived by calling toString().
-     *
-     *  TODO: this should probably implement java.security.Principal so that it doesn't get wrapped in a
-     *  ShiroHttpServletRequest.ObjectPrincipal.  Such a change would need some testing to avoid regressions, though.
-     *
      */
     @Override
     public String toString() {

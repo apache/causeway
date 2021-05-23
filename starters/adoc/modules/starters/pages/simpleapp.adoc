@@ -19,7 +19,7 @@ These modules can depend on each other, but Maven will to ensure that dependenci
 In this way your application will be a "modular monolith"; said another way it will prevent your application from degenerating into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud[big ball of mud].
 See also the discussion <<structure-of-the-app,below>>.
 
-The application also includes examples of unit tests, integration tests and BDD (cucumber) specs.
+The application also includes examples of unit tests and integration tests.
 You'll find these in their own Maven modules (`simpleapp-...-module-simple-tests` and `simpleapp-...-webapp-tests`).
 Normally we recommend that tests should be in the same Maven module as the code that they exercise.
 The simpleapp doesn't do it this way just to give you the option to exclude them while initially prototyping/exploring a domain.
@@ -48,15 +48,16 @@ If using JPA as the ORM, the equivalent process to enhancement is performed at r
 
 Create a new directory, and `cd` into that directory.
 
-To build the app from the latest stable release, then run the following command:
+To build the app from the latest stable release:
 
+* if using JDO as the ORM:
++
 include::simpleapp-script-jdo.adoc[]
 
-to use JDO for the ORM, or:
-
+if using JPA as the ORM:
++
 include::simpleapp-script-jpa.adoc[]
 
-to use JPA as the ORM.
 
 
 This should only take a few seconds to download, compile and run.
@@ -859,52 +860,12 @@ JQuery is available by default.
 Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Isis automatically.
 
 
+[#integration-tests]
 === webapp-test's src/test/java
 
-Under `src/test/java` we have different sets of tests.
-We'll inspect each in turn.
-
-IMPORTANT: the naming convention -- with `Test`, `IntegTest` and `IntegBddSpecs` suffixes -- is important, because the Maven surefire plugin is configured to run multiple times, one `<execution>` for each suffix.
-
-==== BDD Specs
-
-The simplapp starter app includes support for xref:testing:specsupport:about.adoc[BDD (Cucumber)] specifications.
-These reside under `domain.webapp.bdd`:
-
-[source]
-----
-src/test/java
-  domainapp/
-    webapp/
-      bdd/
-        glue/
-          SimpleObjectsStepDef.java                     <.>
-        specs/
-          SimpleObjectSpec_listAllAndCreate.feature     <.>
-        RunIntegBddSpecs.java                           <.>
-----
-<.> defines the step definitions (or "glue") which describes how to interact with the application. +
-This class inherits from `WebAppIntegTestAbstract`, the base class for integration tests, described in the <<integration-tests,next section>>.
-<.> the feature file, discussed below.
-<.> boilerplate used to run the BDD Cucumber tests using JUni5 4.x.
-
-There is just one feature file: `SimpleObjectSpec_listAllAndCreate.feature`, which is pretty simple:
-
-[source,feature]
-----
-Feature: List and Create New Simple Objects
-
-  Scenario: Existing simple objects can be listed and new ones created
-    Given there are initially 3 simple objects
-    When  I create a new simple object
-    Then  there are 4 simple objects
-----
-
-The set up of the 3 initial objects is part of the step definitions.
+Under `src/test/java` we have a number of integration tests,
 
 
-[#integration-tests]
-==== Integration Tests
 
 The integration tests are in `domainapp.application.integtests`:
 
@@ -917,21 +878,16 @@ src/
         webapp/
           integtests/
             metamodel/
-              lockdown/
-                approved/
-                  ...
-                current/
-                  ...
-                LockDownMetaModel_IntegTest.java    <.>
+              SwaggerExport_IntegTest.java          <.>
               ValidateDomainModel_IntegTest.java    <.>
             smoke/
               Smoke_IntegTest.java                  <.>
             ApplicationIntegTestAbstract.java       <.>
 ----
 
-<.> Uses approval tests to verify that the metamodel is unchanged between releases of Apache Isis.
+<.> Exports the Swagger definition file.
 +
-Discussed in more detail below.
+This could then be used to automate generation of client stubs in various languages.
 
 <.> Bootstraps the app and runs the metamodel validators to check that there are not metamodel errors.
 +
@@ -942,47 +898,17 @@ This can also be done simply when running the application, but performing the ch
 <.> Base class used to bootstrap all integration tests for this module.
 It is very similar to the base class used to bootstrap the integration tests for the simple module xref:simpleapp.adoc#simplemoduleintegtestabstract[], but referencing `ApplicationModule` rather than `SimpleModule`.
 
-The purpose of the metamodel lockdown tests is to capture regressions in Apache Isis itself whenever it is updated.
+[IMPORTANT]
+====
+The naming convention of tests classes is important, because the starter parent pom xref:parent-pom:about.adoc#surefire-configuration[configures the Maven surefire plugin] to execute multiple times, based on test class suffix.
 
-Normally the metamodel of the application will evolve all of the time, so the metamodel lockdown tests are disabled by default and only enabled with `-Dmetamodel.lockdown`.
-If you want to capture the current metamodel, then enable and they will likely fail.
-The new export of the metamodel will be in `current` and can simply be approved (by copying over to the `approved` directory.
+The suffixes are: `Test` (unit tests, if any) and `IntegTest` (integ tests, if any).
 
-However, if you are upgrading Apache Isis then you may want to check that the metamodel being built by the next version of Apache Isis is the same as previous.
-In this case, update Apache Isis (by updating the `<version> of the parent pom) and run the lockdown tests to check for differences.
+// for 2.0.0-M6, change to:
+//
+// The suffixes are: `Test` (unit tests, if any), `IntegTest` (integ tests, if any) and `IntegBddSpecs` (BDD cucumber specs, if any) respectively.
+====
 
-
-
-==== Unit Tests
-
-The integration tests are in `domainapp.application.unittests`:
-
-[source]
-----
-src/test/java
-  domainapp/
-    webapp/
-       unittests/
-         mavendeps/
-           lockdown/
-             approved/
-               ...
-             current/
-               ...
-             LockDownMavenDeps_Test.java                <!--1-->
-       util/
-         CurrentVsApprovedApprovalTextWriter.java       <!--2-->
-----
-<1> lock down test to check the transitive set of dependencies used by the application
-<2> utility class used by the lock down tests (unit tests and integ tests).
-
-The maven dependency lock down tests are disabled by default, only enabled using `-Dmavendeps.lockdown`.
-The `pom.xml` is configured to run the Maven `dependency:tree` and `dependency:list` goals, capturing the current dependencies.
-These are compared to the approved versions.
-
-Any time the Apache Isis version is updated, run these tests using `-Dmavendeps.lockdown` to capture and approve the new versions.
-
-TIP: The Maven dependency lock down tests are useful to capture any accidental changes to the dependency tree, so consider enabling them all of the time.
 
 === Root module's pom.xml
 

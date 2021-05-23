@@ -10,8 +10,8 @@ Optional SPI interface to be implemented by a domain service, providing an alter
 ----
 interface ApplicationTenancyEvaluator {
   boolean handles(Class<?> cls)     // <.>
-  String hides(Object domainObject, ApplicationUser applicationUser)
-  String disables(Object domainObject, ApplicationUser applicationUser)
+  String hides(Object domainObject, ApplicationUser applicationUser)     // <.>
+  String disables(Object domainObject, ApplicationUser applicationUser)     // <.>
 }
 ----
 
@@ -19,6 +19,16 @@ interface ApplicationTenancyEvaluator {
 +
 --
 Whether this evaluator can determine the tenancy of the specified domain entity (such as `ToDoItem` ) being interacted with (the "what").
+--
+<.> xref:#hides__Object_ApplicationUser[hides(Object, ApplicationUser)]
++
+--
+Whether this domain object should not be visible to the specified xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] .
+--
+<.> xref:#disables__Object_ApplicationUser[disables(Object, ApplicationUser)]
++
+--
+Whether the object members of this domain object should be disabled/read-only for the specified xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] .
 --
 
 == Members
@@ -29,3 +39,23 @@ Whether this evaluator can determine the tenancy of the specified domain entity 
 Whether this evaluator can determine the tenancy of the specified domain entity (such as `ToDoItem` ) being interacted with (the "what").
 
 This method is also called to determine if the evaluator is also able to determine the tenancy of the security module's own xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] , ie the "who" is doing the interacting. If the evaluator does not handle the class, then the fallback behaviour is to invoke _ApplicationUser#getAtPath()_ } on the xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] and use the path from that.
+
+[#hides__Object_ApplicationUser]
+=== hides(Object, ApplicationUser)
+
+Whether this domain object should not be visible to the specified xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] .
+
+The domain object will be one that is handled by this evaluator, in other words that _#handles(Class)_ was previously called and the evaluator returned `true` .
+
+A non-null return value means that the object should be hidden.
+
+[#disables__Object_ApplicationUser]
+=== disables(Object, ApplicationUser)
+
+Whether the object members of this domain object should be disabled/read-only for the specified xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] .
+
+The domain object will be one that is handled by this evaluator, in other words that _#handles(Class)_ was previously called and the evaluator returned `true` .
+
+This method is only called after _#hides(Object, ApplicationUser)_ and only if that method returned `false` .
+
+A non-null return value means that the object should be disabled, and is used as the reason why the object member is disabled.

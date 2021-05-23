@@ -108,6 +108,9 @@ public class JaxRsClientDefault implements JaxRsClient {
     /**
      * Optional hook, eg allow timeouts to be set:
      *
+     * <p>
+     *     for example:
+     * </p>
      * <pre>
      *  HTTPConduit conduit = WebClient.getConfig(webTarget).getHttpConduit();
      *  conduit.getClient().setConnectionTimeout(1000 * 3);

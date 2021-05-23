@@ -118,4 +118,4 @@ Normally for entities this is done using `Bs3GridPanelFactory`, this being the f
 You could, though, register your own `ComponentFactory` for entities that is targeted at a particular class of entity - some sort of object representing a dashboard, for example.
 It can use the `EntityModel` provided to it to determine the class of the entity, checking if it is of the appropriate type.
 
-The link:https://demo-wicket.isis.incode.work[demo app] includes an example of this technique (`Featured > Where in the World`).
+The demo app (link:https://demo-wicket.jdo.isis.incode.work[jdo] or link:https://demo-wicket.jpa.isis.incode.work[jpa]) includes an example of this technique (`Featured > Where in the World`).

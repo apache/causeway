@@ -1042,12 +1042,7 @@ Artifact: demo-web
 Type: jar
 Directory: /examples/demo/web
 ----
-|.Components
-****
-demoapp.web._infra.utils.ThereCanBeOnlyOne +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.examples.apps:demo-domain:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-command-replay-primary:jar:<managed> +
@@ -1067,12 +1062,7 @@ Artifact: demo-wicket
 Type: jar
 Directory: /examples/demo/wicket
 ----
-|.Components
-****
-demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-pdfjs-ui:jar:<managed> +
@@ -3825,7 +3815,7 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5752,24 +5742,7 @@ Artifact: isis-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Components
-****
-o.a.i.testdomain.applayer.ApplicationLayerTestFactory +
-o.a.i.testdomain.applayer.ApplicationLayerTestFactory$PreCommitListener +
-o.a.i.testdomain.applayer.publishing.CommandSubscriberForTesting +
-o.a.i.testdomain.applayer.publishing.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.applayer.publishing.ExecutionSubscriberForTesting +
-o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
 org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
@@ -6115,30 +6088,7 @@ Artifact: isis-viewer-javafx-ui
 Type: jar
 Directory: /incubator/viewers/javafx/ui
 ----
-|.Components
-****
-o.a.i.incubator.viewer.javafx.ui.components.UiComponentFactoryFx +
-o.a.i.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.number.NumberFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.text.TextFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton +
-o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider +
-o.a.i.incubator.viewer.javafx.ui.main.MainViewFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiActionHandlerFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiBuilderFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiContextFxDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +
@@ -6252,23 +6202,7 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Components
-****
-o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
-o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
-o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +

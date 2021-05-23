@@ -9,15 +9,15 @@ To get started with a new application, download one of the two starter apps.
 
 The helloworld app is a very minimal app, intended just as a starting point to learn what the framework is all about.
 
-The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip, either:
+The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip:
 
+* use JDO as the ORM, use:
++
 include::helloworld-script-jdo.adoc[]
 
-to use JDO for the ORM, or:
-
+* to use JPA as the ORM, use:
++
 include::helloworld-script-jpa.adoc[]
-
-to use JPA as the ORM.
 
 
 TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:helloworld.adoc[here]*.
@@ -28,18 +28,19 @@ TIP: A much more complete explanation of the structure of the app (and how to us
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
 It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport:about.adoc[BDD (Cucumber)] specs.
 
-The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip, either:
+The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip:
 
+* to use JDO as the ORM, use:
++
 include::simpleapp-script-jdo.adoc[]
 
-to use JDO for the ORM, or:
-
+* to use JPA for the ORM, use:
++
 include::simpleapp-script-jpa.adoc[]
 
-to use JPA as the ORM.
 
 
-TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:helloworld.adoc[here]*.
+TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:simpleapp.adoc[here]*.
 
 
 == Updating to Newer Versions
@@ -56,3 +57,5 @@ For both apps you can bump to newer versions of the framework just by updating t
 </parent>
 ----
 <1> update as required.
+
+Check the release notes/migration notes for details on new features and of any breaking changes.

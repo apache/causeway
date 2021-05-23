@@ -58,3 +58,26 @@ For the `isis-testing-xxx` modules (fixture scripts, unit test support, integ te
 * `o.a.i.legacy:isis-legacy`
 
 These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Isis (the reference to the parent POM).
+
+
+== Surefire Configuration
+
+The parent pom configuresthe Maven surefire plugin to execute multiple times, based on test class suffix.
+The suffixes are:
+
+* `Test` (unit tests, if any)
++
+this will explicitly _exclude_ any integration tests, though, as defined by ...
+
+* `IntegTest` (integ tests, if any)
+
+// for 2.0.0-M6, add:
+//* `IntegBddSpecs` (BDD specs, if any)
+
+[NOTE]
+====
+in 2.0.0-M5 there is a bug in that the `default-test` (default) execution is also implicitly configured, meaning that unit tests and integ tests are executed twice, and BDD specs (if any)are executed once.
+
+This has been fixed for the next milestone, with a separate execution defined for BDD specs.
+====
+

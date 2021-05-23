@@ -3,6 +3,8 @@
 
 Setup the Restful Client with Basic-Auth:Synchronous example:Asynchronous example:Maven Setup:
 
+For example:
+
 ----
 
 RestfulClientConfig clientConfig = new RestfulClientConfig();

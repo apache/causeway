@@ -1,4 +1,4 @@
-= DataNucleus
+= DataNucleus Configuration
 :page-role: -toc -narrow
 
 

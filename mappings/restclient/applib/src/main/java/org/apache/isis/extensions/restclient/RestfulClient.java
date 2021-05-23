@@ -44,6 +44,11 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Setup the Restful Client with Basic-Auth:
+ *
+ * <p>
+ *     For example:
+ * </p>
+ *
  * <blockquote><pre>
 RestfulClientConfig clientConfig = new RestfulClientConfig();
 clientConfig.setRestfulBase("http://localhost:8080/helloworld/restful/");
