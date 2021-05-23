@@ -41,15 +41,17 @@ commands:
       Bypass: "org.apache.isis.security:isis-security-bypass.*"
       Keycloak: "org.apache.isis.security:isis-security-keycloak.*"
       Shiro: "org.apache.isis.security:isis-security-shiro.*"
+      Spring: "org.apache.isis.security:isis-security-spring.*"
 
       Viewer: org.apache.isis.viewer
+      "Common": "org.apache.isis.viewer:isis-viewer-common.*"
       "Restful Objects": "org.apache.isis.viewer:isis-viewer-restfulobjects.*"
       Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
 
       Valuetypes: org.apache.isis.valuetypes.*
       "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
       "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
-      "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
+      "SSE": "org.apache.isis.valuetypes:isis-valuetypes-sse.*"
 
       Mappings: org.apache.isis.mappings
       #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
@@ -62,7 +64,6 @@ commands:
       "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
       "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
       #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
-      "Core: Model Annotation": "org.apache.isis.extensions:isis-extensions-modelannotation.*"
       "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
       #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"
       "Security: Secman": "org.apache.isis.security:isis-extensions-secman.*"
@@ -92,8 +93,6 @@ commands:
       "Kroviz Client": "org.apache.isis.incubator.clients:isis-client-kroviz.*"
       "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
       "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
-
-      Legacy: org.apache.isis.legacy.*
 
   index:
 

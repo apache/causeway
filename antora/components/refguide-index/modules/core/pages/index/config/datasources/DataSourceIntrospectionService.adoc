@@ -9,7 +9,7 @@ For a given _Spring_ context, makes information about configured data-sources av
 .DataSourceIntrospectionService.java
 ----
 class DataSourceIntrospectionService {
-  Stream<DataSourceInfo> streamDataSourceInfos()
+  Can<DataSourceInfo> getDataSourceInfos()
 }
 ----
 

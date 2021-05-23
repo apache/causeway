@@ -7,6 +7,7 @@
 .IsisModuleExtHsqldbMgr.java
 ----
 class IsisModuleExtHsqldbMgr {
+  public static final String NAMESPACE;
 }
 ----
 

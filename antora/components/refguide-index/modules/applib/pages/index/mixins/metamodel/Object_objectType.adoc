@@ -12,6 +12,7 @@ The object type is also accessible from the _org.apache.isis.applib.services.boo
 ----
 class Object_objectType {
   String prop()
+  boolean hideProp()
 }
 ----
 

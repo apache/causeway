@@ -9,6 +9,7 @@ Simply provides a UI in order to access the configuration properties available f
 .ConfigurationMenu.java
 ----
 class ConfigurationMenu {
+  public static final String OBJECT_TYPE;
   ConfigurationMenu(FactoryService factoryService)
   ConfigurationViewmodel configuration()
 }

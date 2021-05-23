@@ -7,7 +7,8 @@
 .CommandReplayOnPrimaryService.java
 ----
 class CommandReplayOnPrimaryService {
-  List<CommandJdo> findCommands(final UUID interactionId, final Integer batchSize)     // <.>
+  public static final String OBJECT_TYPE;
+  List<? extends CommandModel> findCommands(final UUID interactionId, final Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
   Clob downloadCommands(final UUID interactionId, final Integer batchSize, final String filenamePrefix)     // <.>
   Integer default1DownloadCommands()

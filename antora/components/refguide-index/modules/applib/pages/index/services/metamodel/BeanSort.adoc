@@ -16,6 +16,8 @@ enum BeanSort {
   MIXIN     // <.>
   VALUE     // <.>
   COLLECTION     // <.>
+  ABSTRACT     // <.>
+  VETOED     // <.>
   UNKNOWN
   boolean isManagedBean()
   boolean isMixin()
@@ -23,6 +25,8 @@ enum BeanSort {
   boolean isValue()
   boolean isCollection()
   boolean isEntity()
+  boolean isAbstract()
+  boolean isVetoed()
   boolean isUnknown()
   boolean isToBeIntrospected()
   boolean isWrappingSupported()
@@ -63,6 +67,16 @@ Immutable, serializable object.
 +
 --
 Container of objects.
+--
+<.> xref:#ABSTRACT[ABSTRACT]
++
+--
+A non concrete type, that is a placeholder for a its concrete implementer.
+--
+<.> xref:#VETOED[VETOED]
++
+--
+Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
 --
 
 == Members
@@ -113,3 +127,13 @@ Immutable, serializable object.
 === COLLECTION
 
 Container of objects.
+
+[#ABSTRACT]
+=== ABSTRACT
+
+A non concrete type, that is a placeholder for a its concrete implementer.
+
+[#VETOED]
+=== VETOED
+
+Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]

@@ -9,6 +9,7 @@ Layout hints for actions.
 .ActionLayout.java
 ----
 @interface ActionLayout {
+  String associateWith() default "";     // <.>
   BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>
   String cssClass() default "";     // <.>
   String cssClassFa() default "";     // <.>
@@ -25,6 +26,11 @@ Layout hints for actions.
 }
 ----
 
+<.> xref:#associateWith[associateWith]
++
+--
+Associates this action with a property or collection, specifying its id.
+--
 <.> xref:#bookmarking[bookmarking]
 +
 --
@@ -92,6 +98,15 @@ The order of this member relative to other members in the same (layout) group, g
 --
 
 == Members
+
+[#associateWith]
+=== associateWith
+
+Associates this action with a property or collection, specifying its id.
+
+To specify the layout order use _ActionLayout#sequence()_ .
+
+For example `@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")` 
 
 [#bookmarking]
 === bookmarking

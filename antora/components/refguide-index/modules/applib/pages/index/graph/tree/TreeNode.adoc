@@ -22,6 +22,7 @@ interface TreeNode<T> {
   TreeState getTreeState()     // <.>
   boolean isExpanded(TreePath treePath)
   void expand(TreePath... treePaths)     // <.>
+  void expand()     // <.>
   void collapse(TreePath... treePaths)     // <.>
   TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
   Iterator<TreeNode<T>> iteratorHierarchyUp()
@@ -39,6 +40,11 @@ interface TreeNode<T> {
 +
 --
 Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
+--
+<.> xref:#expand__[expand()]
++
+--
+Expands this node and all its parents.
 --
 <.> xref:#collapse__TreePath[collapse(TreePath)]
 +
@@ -61,6 +67,11 @@ Convenient shortcut.
 === expand(TreePath)
 
 Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
+
+[#expand__]
+=== expand()
+
+Expands this node and all its parents.
 
 [#collapse__TreePath]
 === collapse(TreePath)

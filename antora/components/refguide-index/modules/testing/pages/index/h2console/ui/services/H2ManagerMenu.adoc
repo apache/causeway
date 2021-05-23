@@ -7,6 +7,7 @@
 .H2ManagerMenu.java
 ----
 class H2ManagerMenu {
+  public static final String OBJECT_TYPE;
   H2ManagerMenu(final WebModuleH2Console webModule)
   LocalResourcePath openH2Console()
   boolean hideOpenH2Console()

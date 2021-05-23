@@ -24,6 +24,7 @@ enum Where {
   NOWHERE     // <.>
   NOT_SPECIFIED     // <.>
   String getFriendlyName()
+  boolean isAlways()
   boolean inParentedTable()
   boolean inStandaloneTable()
   boolean includes(Where context)     // <.>

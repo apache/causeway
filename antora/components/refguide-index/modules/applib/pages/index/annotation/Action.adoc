@@ -10,6 +10,7 @@ Groups together all domain-specific metadata for an invokable action on a domain
 ----
 @interface Action {
   String associateWith() default "";     // <.>
+  String choicesFrom() default "";     // <.>
   Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
   Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class;     // <.>
@@ -23,6 +24,18 @@ Groups together all domain-specific metadata for an invokable action on a domain
 ----
 
 <.> xref:#associateWith[associateWith]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use { _#choicesFrom()_ instead
+====
+
+Associates this action with a property or collection, specifying its id.
+--
+<.> xref:#choicesFrom[choicesFrom]
 +
 --
 Associates this action with a property or collection, specifying its id.
@@ -77,6 +90,24 @@ For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguid
 
 [#associateWith]
 === associateWith
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use { _#choicesFrom()_ instead
+====
+
+Associates this action with a property or collection, specifying its id.
+
+To specify the layout order use _ActionLayout#sequence()_ .
+
+For example `@Action(associateWith="items") @ActionLayout(sequence="2.1")` 
+
+If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
+
+[#choicesFrom]
+=== choicesFrom
 
 Associates this action with a property or collection, specifying its id.
 

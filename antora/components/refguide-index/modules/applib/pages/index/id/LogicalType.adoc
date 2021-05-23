@@ -51,7 +51,7 @@ Canonical name of the corresponding class.
 <.> xref:#getLogicalTypeName__[getLogicalTypeName()]
 +
 --
-Returns the (unique) logical-type-name, as per the _ObjectSpecIdFacet_ .
+Returns the logical-type-name (unique amongst non-abstract classes), as per the _ObjectTypeFacet_ .
 --
 <.> xref:#getLogicalTypeSimpleName__[getLogicalTypeSimpleName()]
 +
@@ -94,11 +94,11 @@ Canonical name of the corresponding class.
 [#getLogicalTypeName__]
 === getLogicalTypeName()
 
-Returns the (unique) logical-type-name, as per the _ObjectSpecIdFacet_ .
+Returns the logical-type-name (unique amongst non-abstract classes), as per the _ObjectTypeFacet_ .
 
 This will typically be the value of the _DomainObject#objectType()_ annotation attribute. If none has been specified then will default to the fully qualified class name (with _ClassSubstitutorRegistry class name substituted_ if necessary to allow for runtime bytecode enhancement.
 
-The _ObjectSpecification_ can be retrieved using _SpecificationLoader#lookupBySpecIdElseLoad(String)_ } passing the logical-type-name as argument.
+The _ObjectSpecification_ can be retrieved using _SpecificationLoader#specForLogicalTypeName(String)_ } passing the logical-type-name as argument.
 
 [#getLogicalTypeSimpleName__]
 === getLogicalTypeSimpleName()

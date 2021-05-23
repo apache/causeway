@@ -279,6 +279,14 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 
 
 |
+[[isis.viewer.wicket.j-query-version]]
+isis.viewer.wicket.j-query-version
+
+|  3
+| Which major JQuery version the _Wicket Viewer_ should use, default is 3. @see org.apache.wicket.resource.JQueryResourceReference
+
+
+|
 [[isis.viewer.wicket.live-reload-url]]
 isis.viewer.wicket.live-reload-url
 

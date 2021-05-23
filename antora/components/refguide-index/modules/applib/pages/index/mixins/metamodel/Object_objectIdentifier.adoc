@@ -12,6 +12,7 @@ The object identifier is also accessible from the _org.apache.isis.applib.servic
 ----
 class Object_objectIdentifier {
   String prop()
+  boolean hideProp()
 }
 ----
 

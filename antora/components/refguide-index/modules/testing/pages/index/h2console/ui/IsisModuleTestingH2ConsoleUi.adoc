@@ -7,6 +7,7 @@
 .IsisModuleTestingH2ConsoleUi.java
 ----
 class IsisModuleTestingH2ConsoleUi {
+  public static final String NAMESPACE;
 }
 ----
 

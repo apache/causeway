@@ -1,14 +1,38 @@
 = TableColumnOrderForCollectionTypeAbstract
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Convenience implementation of xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] that ignores requests for the order of any types other than that _#getCollectionType() type specified in the constructor_ .
+
 == API
 
 [source,java]
 .TableColumnOrderForCollectionTypeAbstract.java
 ----
 class TableColumnOrderForCollectionTypeAbstract<T> {
-  List<String> orderParented(final Object parent, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)
-  List<String> orderStandalone(final Class<?> collectionType, final List<String> propertyIds)
+  List<String> orderParented(final Object parent, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)     // <.>
+  List<String> orderStandalone(final Class<?> collectionType, final List<String> propertyIds)     // <.>
 }
 ----
 
+<.> xref:#orderParented__Object_String_Class_List[orderParented(Object, String, Class, List)]
++
+--
+Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
+--
+<.> xref:#orderStandalone__Class_List[orderStandalone(Class, List)]
++
+--
+Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderStandalone(List)_ .
+--
+
+== Members
+
+[#orderParented__Object_String_Class_List]
+=== orderParented(Object, String, Class, List)
+
+Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
+
+[#orderStandalone__Class_List]
+=== orderStandalone(Class, List)
+
+Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderStandalone(List)_ .

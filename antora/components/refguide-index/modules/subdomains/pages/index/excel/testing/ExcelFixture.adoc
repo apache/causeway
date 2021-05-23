@@ -9,6 +9,7 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 .ExcelFixture.java
 ----
 class ExcelFixture {
+  public final static String OBJECT_TYPE;
   ExcelFixture(final URL excelResource, final Class<?>... classes)
   ExcelFixture(final URL excelResource, final List<Class<?>> classes)
   ExcelFixture(final Blob upload, final Class<?>... classes)

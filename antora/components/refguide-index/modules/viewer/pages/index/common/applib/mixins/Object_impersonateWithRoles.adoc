@@ -9,12 +9,12 @@ Same as _ImpersonateMenu#impersonateWithRoles(String, boolean, List)_ , but impl
 .Object_impersonateWithRoles.java
 ----
 class Object_impersonateWithRoles {
-  Object act(final String userName, final List<String> roleNames)
+  Object act(final String userName, final boolean useUsersRoles, final List<String> roleNames)
   boolean hideAct()
   String disableAct()
   List<String> choices0Act()
-  List<String> choices1Act()
-  List<String> default1Act(String userName)
+  List<String> choices2Act(final String userName, final boolean useUsersRoles)
+  List<String> default2Act(final String userName, final boolean useUsersRoles)
 }
 ----
 

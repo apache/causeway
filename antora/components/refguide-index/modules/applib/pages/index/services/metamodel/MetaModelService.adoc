@@ -9,8 +9,8 @@ This service provides a formal API into the framework's metamodel.
 .MetaModelService.java
 ----
 interface MetaModelService {
-  Class<?> fromObjectType(final String objectType)     // <.>
-  String toObjectType(final Class<?> domainType)     // <.>
+  Optional<LogicalType> lookupLogicalTypeByName(final String objectType)     // <.>
+  Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType)     // <.>
   void rebuild(final Class<?> domainType)     // <.>
   DomainModel getDomainModel()     // <.>
   BeanSort sortOf(Class<?> domainType, Mode mode)     // <.>
@@ -20,15 +20,15 @@ interface MetaModelService {
 }
 ----
 
-<.> xref:#fromObjectType__String[fromObjectType(String)]
+<.> xref:#lookupLogicalTypeByName__String[lookupLogicalTypeByName(String)]
 +
 --
-Provides a reverse lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
+Provides a lookup by objectType of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 --
-<.> xref:#toObjectType__Class[toObjectType(Class)]
+<.> xref:#lookupLogicalTypeByClass__Class[lookupLogicalTypeByClass(Class)]
 +
 --
-Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 --
 <.> xref:#rebuild__Class[rebuild(Class)]
 +
@@ -63,15 +63,15 @@ Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
 == Members
 
-[#fromObjectType__String]
-=== fromObjectType(String)
+[#lookupLogicalTypeByName__String]
+=== lookupLogicalTypeByName(String)
 
-Provides a reverse lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
+Provides a lookup by objectType of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 
-[#toObjectType__Class]
-=== toObjectType(Class)
+[#lookupLogicalTypeByClass__Class]
+=== lookupLogicalTypeByClass(Class)
 
-Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 
 [#rebuild__Class]
 === rebuild(Class)

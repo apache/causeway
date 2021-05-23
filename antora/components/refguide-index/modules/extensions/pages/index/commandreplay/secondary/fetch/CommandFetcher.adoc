@@ -7,11 +7,11 @@
 .CommandFetcher.java
 ----
 class CommandFetcher {
-  List<CommandDto> fetchCommand(final CommandJdo previousHwmIfAny)     // <.>
+  List<CommandDto> fetchCommand(final CommandModel previousHwmIfAny)     // <.>
 }
 ----
 
-<.> xref:#fetchCommand__CommandJdo[fetchCommand(CommandJdo)]
+<.> xref:#fetchCommand__CommandModel[fetchCommand(CommandModel)]
 +
 --
 Replicates a single command.
@@ -19,7 +19,7 @@ Replicates a single command.
 
 == Members
 
-[#fetchCommand__CommandJdo]
-=== fetchCommand(CommandJdo)
+[#fetchCommand__CommandModel]
+=== fetchCommand(CommandModel)
 
 Replicates a single command.

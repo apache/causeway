@@ -9,6 +9,7 @@ Immutable serializable value held by xref:refguide:applib:index/services/user/Us
 .RoleMemento.java
 ----
 class RoleMemento {
+  public static final String OBJECT_TYPE;
   RoleMemento(final String name)     // <.>
   RoleMemento(final String name, final String description)     // <.>
   String title()

@@ -9,6 +9,7 @@ Immutable serializable value holding details about a user and its roles.
 .UserMemento.java
 ----
 class UserMemento {
+  public static final String OBJECT_TYPE;
   UserMemento(final String name, final Stream<RoleMemento> roles)     // <.>
   UserMemento system()     // <.>
   UserMemento ofName(final String name)     // <.>

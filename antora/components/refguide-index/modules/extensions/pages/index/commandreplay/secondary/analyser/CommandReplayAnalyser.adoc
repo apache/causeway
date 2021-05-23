@@ -7,13 +7,13 @@
 .CommandReplayAnalyser.java
 ----
 interface CommandReplayAnalyser {
-  String analyzeReplay(final CommandJdo commandJdo)     // <.>
+  String analyzeReplay(final CommandModel commandJdo)     // <.>
 }
 ----
 
-<.> xref:#analyzeReplay__CommandJdo[analyzeReplay(CommandJdo)]
+<.> xref:#analyzeReplay__CommandModel[analyzeReplay(CommandModel)]
 
 == Members
 
-[#analyzeReplay__CommandJdo]
-=== analyzeReplay(CommandJdo)
+[#analyzeReplay__CommandModel]
+=== analyzeReplay(CommandModel)

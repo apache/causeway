@@ -8,7 +8,7 @@
 ----
 class CommandReplayAnalyserResult {
   void init()
-  String analyzeReplay(final CommandJdo commandJdo)
+  String analyzeReplay(final CommandModel commandModel)
 }
 ----
 

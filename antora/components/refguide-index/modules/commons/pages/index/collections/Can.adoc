@@ -48,11 +48,13 @@ interface Can<T> {
   void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
   Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
+  Can<T> addUnique(T element)     // <.>
   Can<T> addAll(Can<T> other)
   Can<T> add(int index, T element)     // <.>
   Can<T> replace(int index, T element)
   Can<T> remove(int index)     // <.>
   Can<T> remove(T element)
+  Can<T> pickByIndex(int... indices)     // <.>
   int indexOf(T element)     // <.>
   boolean isEqualTo(final Can<?> other)     // <.>
   boolean startsWith(final Can<?> other)     // <.>
@@ -189,6 +191,11 @@ Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its
 --
 Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
 --
+<.> xref:#addUnique__T[addUnique(T)]
++
+--
+Adds the specified element to the list if it is not already present.
+--
 <.> xref:#add__int_T[add(int, T)]
 +
 --
@@ -198,6 +205,11 @@ Inserts the specified element at the specified position in this list (optional o
 +
 --
 Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
+--
+<.> xref:#pickByIndex__int[pickByIndex(int)]
++
+--
+Given _n_ indices, returns an equivalent of(where nulls are being ignored)
 --
 <.> xref:#indexOf__T[indexOf(T)]
 +
@@ -364,6 +376,11 @@ Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its
 
 Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
 
+[#addUnique__T]
+=== addUnique(T)
+
+Adds the specified element to the list if it is not already present.
+
 [#add__int_T]
 === add(int, T)
 
@@ -373,6 +390,21 @@ Inserts the specified element at the specified position in this list (optional o
 === remove(int)
 
 Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
+
+[#pickByIndex__int]
+=== pickByIndex(int)
+
+Given _n_ indices, returns an equivalent of(where nulls are being ignored)
+
+----
+
+Can.of(
+    this.get(indices[0]).orElse(null),
+    this.get(indices[1]).orElse(null),
+    ...
+    this.get(indices[n-1]).orElse(null)
+)
+----
 
 [#indexOf__T]
 === indexOf(T)

@@ -11,13 +11,13 @@ There are some similarities to _org.apache.isis.core.metamodel.services.command.
 .InteractionDtoFactory.java
 ----
 interface InteractionDtoFactory {
-  ActionInvocationDto asActionInvocationDto(ObjectAction objectAction, ManagedObject targetAdapter, Can<ManagedObject> argumentAdapters)     // <.>
+  ActionInvocationDto asActionInvocationDto(ObjectAction objectAction, InteractionHead head, Can<ManagedObject> argumentAdapters)     // <.>
   PropertyEditDto asPropertyEditDto(OneToOneAssociation property, ManagedObject targetAdapter, ManagedObject newValueAdapterIfAny)     // <.>
   ActionInvocationDto updateResult(ActionInvocationDto actionInvocationDto, ObjectAction objectAction, Object resultPojo)     // <.>
 }
 ----
 
-<.> xref:#asActionInvocationDto__ObjectAction_ManagedObject_Can[asActionInvocationDto(ObjectAction, ManagedObject, Can)]
+<.> xref:#asActionInvocationDto__ObjectAction_InteractionHead_Can[asActionInvocationDto(ObjectAction, InteractionHead, Can)]
 +
 --
 Called by the framework when invoking an action, to create an _ActionInvocationDto_ capturing the details of the action invocation (target, arguments etc).
@@ -35,8 +35,8 @@ Called by the framework to attach the result of an action invocation to the afor
 
 == Members
 
-[#asActionInvocationDto__ObjectAction_ManagedObject_Can]
-=== asActionInvocationDto(ObjectAction, ManagedObject, Can)
+[#asActionInvocationDto__ObjectAction_InteractionHead_Can]
+=== asActionInvocationDto(ObjectAction, InteractionHead, Can)
 
 Called by the framework when invoking an action, to create an _ActionInvocationDto_ capturing the details of the action invocation (target, arguments etc).
 

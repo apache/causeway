@@ -7,19 +7,19 @@
 .CommandReplayAnalysisService.java
 ----
 class CommandReplayAnalysisService {
-  void analyse(final CommandJdo commandJdo)     // <.>
+  void analyse(final CommandModel commandModel)     // <.>
 }
 ----
 
-<.> xref:#analyse__CommandJdo[analyse(CommandJdo)]
+<.> xref:#analyse__CommandModel[analyse(CommandModel)]
 +
 --
-if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
+if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the administrator fixes the issue.
 --
 
 == Members
 
-[#analyse__CommandJdo]
-=== analyse(CommandJdo)
+[#analyse__CommandModel]
+=== analyse(CommandModel)
 
-if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
+if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the administrator fixes the issue.

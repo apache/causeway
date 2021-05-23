@@ -9,6 +9,7 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 .ExcelFixture2.java
 ----
 class ExcelFixture2 {
+  public final static String OBJECT_TYPE;
   boolean equals(final Object o)
   int hashCode()
 }

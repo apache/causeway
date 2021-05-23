@@ -7,7 +7,7 @@
 .CommandJdo_replayQueue.java
 ----
 class CommandJdo_replayQueue {
-  List<CommandJdo> coll()
+  List<? extends CommandModel> coll()
   boolean hideColl()
 }
 ----
