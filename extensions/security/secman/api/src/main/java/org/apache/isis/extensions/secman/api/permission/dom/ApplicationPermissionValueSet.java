@@ -82,8 +82,8 @@ public class ApplicationPermissionValueSet implements Serializable {
      * </pre>
      *
      * <p>
-     *     Note that {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermissionRule#ALLOW allow} rule
-     *     is ordered before {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermissionRule#VETO veto} rule
+     *     Note that {@link org.apache.isis.extensions.security.manager.jdo.permission.dom.ApplicationPermissionRule#ALLOW allow} rule
+     *     is ordered before {@link org.apache.isis.extensions.security.manager.jdo.permission.dom.ApplicationPermissionRule#VETO veto} rule
      *     meaning that it is checked first and therefore also takes precedence.
      * </p>
      */
