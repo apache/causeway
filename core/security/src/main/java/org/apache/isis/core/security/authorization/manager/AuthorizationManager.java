@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.security.authorization.manager;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,8 +36,12 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.Authorizor;
 
+import lombok.val;
+
 /**
  * Authorizes the user in the current session view and use members of an object.
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.security.AuthorizationManager")
@@ -44,11 +50,22 @@ import org.apache.isis.core.security.authorization.Authorizor;
 @Qualifier("Default")
 public class AuthorizationManager {
 
+    private final List<Authorizor> authorizors;
     private final Authorizor authorizor;
 
     @Inject
-    public AuthorizationManager(Authorizor authorizor) {
-        this.authorizor = authorizor;
+    public AuthorizationManager(
+            final List<Authorizor> authorizors,
+            @org.springframework.lang.Nullable final AuthorizorChooser authorizorChooser) {
+        this.authorizors = authorizors;
+        val authorizorPrecedenceChooserToUse = authorizorChooser != null
+                ? authorizorChooser
+                : new AuthorizorChooser() {
+                    @Override public Authorizor chooseFrom(final List<Authorizor> authorizors) {
+                        return authorizors.get(0);
+                    }
+                };
+        this.authorizor = authorizorPrecedenceChooserToUse.chooseFrom(authorizors);
     }
 
     /**

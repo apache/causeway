@@ -39,7 +39,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
  */
 @Service
 @Named("isis.ext.secman.AuthorizorSecman")
-@Order(OrderPrecedence.EARLY)
+@Order(OrderPrecedence.EARLY - 10) // before shiro
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 

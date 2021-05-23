@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.secman.api.authorizor.AuthorizorSecman;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModels;
 import org.apache.isis.extensions.secman.api.feature.dom.ApplicationNamespace;
@@ -87,6 +88,8 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
 @Configuration
 @Import({
         ApplicationFeatureChoices.class,
+
+        AuthorizorSecman.class,
 
         // @DomainService
         ApplicationFeatureViewModels.class,
