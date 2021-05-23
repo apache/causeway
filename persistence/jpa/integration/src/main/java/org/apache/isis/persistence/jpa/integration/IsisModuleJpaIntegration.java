@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModel;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
+import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
 
 @Configuration
 @Import({
@@ -36,6 +37,9 @@ import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsi
 
         // @Service's
         JpaSupportServiceUsingSpring.class,
+
+        // @Converter's
+        JavaAwtBufferedImageByteArrayConverter.class,
 
 //        DataNucleusSettings.class,
 //        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
@@ -50,7 +54,6 @@ import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsi
 //        JdoMetamodelMenu.class,
 //
 //        // @Mixin's
-//        Persistable_datanucleusIdLong.class,
 //        Persistable_datanucleusVersionLong.class,
 //        Persistable_datanucleusVersionTimestamp.class,
 //        Persistable_downloadJdoMetadata.class,

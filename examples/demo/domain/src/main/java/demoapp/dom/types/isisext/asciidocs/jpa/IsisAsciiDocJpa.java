@@ -19,11 +19,14 @@
 package demoapp.dom.types.isisext.asciidocs.jpa;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
@@ -75,25 +78,25 @@ public class IsisAsciiDocJpa
     }
 
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false", jdbcType = "CLOB")                // <.>
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)     // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false", jdbcType = "CLOB")
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                    // <.>
+    @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)      // <.>
     @Getter @Setter
     private AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
+    @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;
 

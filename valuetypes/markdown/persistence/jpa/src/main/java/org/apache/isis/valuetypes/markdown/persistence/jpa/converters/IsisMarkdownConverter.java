@@ -19,12 +19,14 @@
 package org.apache.isis.valuetypes.markdown.persistence.jpa.converters;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 /**
  * @since 2.0 {@index}
  */
+@Converter
 public class IsisMarkdownConverter implements AttributeConverter<Markdown, String>{
 
     @Override

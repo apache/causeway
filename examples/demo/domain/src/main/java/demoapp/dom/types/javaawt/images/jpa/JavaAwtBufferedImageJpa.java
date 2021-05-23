@@ -20,7 +20,8 @@ package demoapp.dom.types.javaawt.images.jpa;
 
 import java.awt.image.BufferedImage;
 
-import javax.jdo.annotations.Column;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
 
 import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
@@ -70,14 +72,15 @@ public class JavaAwtBufferedImageJpa
         return "Image JPA entity";
     }
 
-    // @Title(prepend = "Image JDO entity: ")  // not yet supported
+    // @Title(prepend = "Image JPA entity: ")  // not yet supported
 //tag::class[]
     @Id
     @GeneratedValue
     private Long id;
 
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                   // <.>
+    @Column(nullable = false)                                   // <.>
+    @Convert(converter = JavaAwtBufferedImageByteArrayConverter.class)
     @Getter @Setter
     private BufferedImage readOnlyProperty;
 
@@ -91,14 +94,15 @@ public class JavaAwtBufferedImageJpa
 // editable properties not yet supported:
 //    @Property(editing = Editing.ENABLED)                          // <.>
 //    @PropertyLayout(group = "editable-properties", sequence = "1")
-//    @Column(allowsNull = "false")
+//    @Column(nullable = false)
 //    @Getter @Setter
 //    private BufferedImage readWriteProperty;
 
 //tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                    // <.>
+    @Column(nullable = true)                                        // <.>
+    @Convert(converter = JavaAwtBufferedImageByteArrayConverter.class)
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
 
@@ -106,7 +110,7 @@ public class JavaAwtBufferedImageJpa
 // editable properties not yet supported:
 //    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
 //    @PropertyLayout(group = "optional-properties", sequence = "2")
-//    @Column(allowsNull = "true")
+//    @Column(nullable = true)
 //    @Getter @Setter
 //    private BufferedImage readWriteOptionalProperty;
 

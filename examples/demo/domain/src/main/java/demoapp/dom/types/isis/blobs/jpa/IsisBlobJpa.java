@@ -18,8 +18,6 @@
  */
 package demoapp.dom.types.isis.blobs.jpa;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Persistent;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -70,47 +68,47 @@ public class IsisBlobJpa
 
     @Title(prepend = "Blob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {              // <.>
-            @Column(name = "readOnlyProperty_name"),
-            @Column(name = "readOnlyProperty_mimetype"),
-            @Column(name = "readOnlyProperty_bytes")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {              // <.>
+//            @Column(name = "readOnlyProperty_name"),
+//            @Column(name = "readOnlyProperty_mimetype"),
+//            @Column(name = "readOnlyProperty_bytes")
+//    })
     @Getter @Setter
     private Blob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readWriteProperty_name"),
-            @Column(name = "readWriteProperty_mimetype"),
-            @Column(name = "readWriteProperty_bytes")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readWriteProperty_name"),
+//            @Column(name = "readWriteProperty_mimetype"),
+//            @Column(name = "readWriteProperty_bytes")
+//    })
     @Getter @Setter
     private Blob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readOnlyOptionalProperty_name",
-                    allowsNull = "true"),                           // <.>
-            @Column(name = "readOnlyOptionalProperty_mimetype",
-                    allowsNull = "true"),
-            @Column(name = "readOnlyOptionalProperty_bytes",
-                    allowsNull = "true")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readOnlyOptionalProperty_name",
+//                    allowsNull = "true"),                           // <.>
+//            @Column(name = "readOnlyOptionalProperty_mimetype",
+//                    allowsNull = "true"),
+//            @Column(name = "readOnlyOptionalProperty_bytes",
+//                    allowsNull = "true")
+//    })
     @Getter @Setter
     private Blob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readWriteOptionalProperty_name",
-                    allowsNull = "true"),
-            @Column(name = "readWriteOptionalProperty_mimetype",
-                    allowsNull = "true"),
-            @Column(name = "readWriteOptionalProperty_bytes",
-                    allowsNull = "true")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readWriteOptionalProperty_name",
+//                    allowsNull = "true"),
+//            @Column(name = "readWriteOptionalProperty_mimetype",
+//                    allowsNull = "true"),
+//            @Column(name = "readWriteOptionalProperty_bytes",
+//                    allowsNull = "true")
+//    })
     @Getter @Setter
     private Blob readWriteOptionalProperty;
 

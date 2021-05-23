@@ -18,8 +18,6 @@
  */
 package demoapp.dom.types.isis.clobs.jpa;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Persistent;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -70,53 +68,53 @@ public class IsisClobJpa
 
     @Title(prepend = "Clob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {              // <.>
-            @Column(name = "readOnlyProperty_name"),
-            @Column(name = "readOnlyProperty_mimetype"),
-            @Column(name = "readOnlyProperty_chars"
-                    , jdbcType = "CLOB"
-            )
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {              // <.>
+//            @Column(name = "readOnlyProperty_name"),
+//            @Column(name = "readOnlyProperty_mimetype"),
+//            @Column(name = "readOnlyProperty_chars"
+//                    , jdbcType = "CLOB"
+//            )
+//    })
     @Getter @Setter
     private Clob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readWriteProperty_name"),
-            @Column(name = "readWriteProperty_mimetype"),
-            @Column(name = "readWriteProperty_chars"
-                    , jdbcType = "CLOB"
-            )
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readWriteProperty_name"),
+//            @Column(name = "readWriteProperty_mimetype"),
+//            @Column(name = "readWriteProperty_chars"
+//                    , jdbcType = "CLOB"
+//            )
+//    })
     @Getter @Setter
     private Clob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readOnlyOptionalProperty_name",
-                    allowsNull = "true"),                           // <.>
-            @Column(name = "readOnlyOptionalProperty_mimetype",
-                    allowsNull = "true"),
-            @Column(name = "readOnlyOptionalProperty_chars"
-                    , jdbcType = "CLOB"
-                    , allowsNull = "true")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readOnlyOptionalProperty_name",
+//                    allowsNull = "true"),                           // <.>
+//            @Column(name = "readOnlyOptionalProperty_mimetype",
+//                    allowsNull = "true"),
+//            @Column(name = "readOnlyOptionalProperty_chars"
+//                    , jdbcType = "CLOB"
+//                    , allowsNull = "true")
+//    })
     @Getter @Setter
     private Clob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Persistent(defaultFetchGroup="false", columns = {
-            @Column(name = "readWriteOptionalProperty_name"
-                    , allowsNull = "true"),                           // <.>
-            @Column(name = "readWriteOptionalProperty_mimetype"
-                    , allowsNull = "true"),
-            @Column(name = "readWriteOptionalProperty_bytes"
-                    , jdbcType = "CLOB"
-                    , allowsNull = "true")
-    })
+//    @Persistent(defaultFetchGroup="false", columns = {
+//            @Column(name = "readWriteOptionalProperty_name"
+//                    , allowsNull = "true"),                           // <.>
+//            @Column(name = "readWriteOptionalProperty_mimetype"
+//                    , allowsNull = "true"),
+//            @Column(name = "readWriteOptionalProperty_bytes"
+//                    , jdbcType = "CLOB"
+//                    , allowsNull = "true")
+//    })
     @Getter @Setter
     private Clob readWriteOptionalProperty;
 
