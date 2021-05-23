@@ -3600,12 +3600,12 @@ skinparam rectangle<<23>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3685,12 +3685,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5765,23 +5765,7 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Components
-****
-o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
-o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
-o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +

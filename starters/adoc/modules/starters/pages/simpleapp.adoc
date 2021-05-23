@@ -48,15 +48,16 @@ If using JPA as the ORM, the equivalent process to enhancement is performed at r
 
 Create a new directory, and `cd` into that directory.
 
-To build the app from the latest stable release, then run the following command:
+To build the app from the latest stable release:
 
+* if using JDO as the ORM:
++
 include::simpleapp-script-jdo.adoc[]
 
-to use JDO for the ORM, or:
-
+if using JPA as the ORM:
++
 include::simpleapp-script-jpa.adoc[]
 
-to use JPA as the ORM.
 
 
 This should only take a few seconds to download, compile and run.

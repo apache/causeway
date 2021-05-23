@@ -12,7 +12,7 @@ Domain objects that take part in such a navigable-tree-structure need to declare
 
 == Screenshots
 
-The following screenshot (from the link:https://demo-wicket.isis.incode.work/[demo app]) shows the navigation links below the top menu bar.
+The following screenshot (from the link:https://demo-wicket.jdo.isis.incode.work/[demo app]) shows the navigation links below the top menu bar.
 
 image::where-am-i/hello_grey_bg.png[width="720px"]
 

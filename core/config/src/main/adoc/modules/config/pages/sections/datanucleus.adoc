@@ -1,4 +1,4 @@
-= DataNucleus
+= DataNucleus Configuration
 :page-role: -toc -narrow
 
 
@@ -11,6 +11,14 @@ include::../section-hooks/datanucleus~pre.adoc[]
 |Property
 |Default
 |Description
+|
+[[datanucleus]]
+datanucleus
+
+| 
+| null
+
+
 |
 [[datanucleus.cache.level2.mode]]
 datanucleus.cache.level2.mode
