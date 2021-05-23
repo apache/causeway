@@ -238,6 +238,7 @@
 				<skipTests>false</skipTests>
 				<skipUTs>${skipTests}</skipUTs>
 				<skipITs>${skipTests}</skipITs>
+                <skipBDDs>${skipTests}</skipBDDs>
 				<surefire-plugin.argLine></surefire-plugin.argLine>
 			</properties>
 
@@ -295,6 +296,31 @@
 										<argLine>${surefire-plugin.argLine}</argLine>
 									</configuration>
 								</execution>
+                                <execution>
+                                    <id>bdd-specs</id>
+                                    <phase>integration-test</phase>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                    <configuration>
+                                        <skipTests>${skipBDDs}</skipTests>
+                                        <includes>
+                                            <include>**/*Spec*.java</include>
+                                        </includes>
+                                        <excludes>
+                                            <exclude>**/*Test.java</exclude>
+                                            <exclude>**/*Testing.java</exclude>
+                                            <exclude>**/*IntegTest*.java</exclude>
+                                            <exclude>**/*Abstract*.java</exclude>
+                                        </excludes>
+                                        <useFile>true</useFile>
+                                        <printSummary>true</printSummary>
+                                        <reportsDirectory>${project.build.directory}/surefire-bddspecs-reports</reportsDirectory>
+                                        <forkCount>1</forkCount>
+                                        <reuseForks>true</reuseForks>
+                                        <argLine>${surefire-plugin.argLine}</argLine>
+                                    </configuration>
+                                </execution>
 							</executions>
 						</plugin>
 						<plugin>
@@ -311,6 +337,10 @@
 								</execution>
 								<execution>
 									<id>integration-test</id>
+                                    <phase>integration-test</phase>
+                                </execution>
+                                <execution>
+                                    <id>bdd-specs</id>
 									<phase>integration-test</phase>
 								</execution>
 							</executions>
