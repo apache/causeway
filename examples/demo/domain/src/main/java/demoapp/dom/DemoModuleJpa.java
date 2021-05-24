@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
 
+import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
 import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
 import demoapp.dom.types.isis.clobs.jpa.IsisClobJpa;
@@ -118,6 +119,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         WrapperByteJpa.class,
 
         TenantedJpa.class,
+        WrapperFactoryJpa.class,
 
 })
 public class DemoModuleJpa {

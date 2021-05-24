@@ -2,3 +2,7 @@
 
 CAUTION: TODO - to document
 
+[source,java]
+----
+include::WrapperFactoryJdo.java[tags=class]
+----

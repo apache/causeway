@@ -27,11 +27,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm;
 import demoapp.dom.services.core.messageservice.MessageServiceDemoVm;
-import demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdo;
-import demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 import demoapp.dom.services.core.xmlSnapshotService.XmlSnapshotParentVm;
 import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServicesMenu {
 
-    final WrapperFactoryJdoEntities wrapperFactoryJdoEntities;
+    final ValueHolderRepository<String, ? extends WrapperFactoryEntity> wrapperFactoryEntities;
     final FactoryService factoryService;
 
 
@@ -66,8 +66,8 @@ public class ServicesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-gift", describedAs = "Formal object interactions + async")
-    public WrapperFactoryJdo wrapperFactory(){
-        return wrapperFactoryJdoEntities.first().orElse(null);
+    public WrapperFactoryEntity wrapperFactory(){
+        return wrapperFactoryEntities.first().orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

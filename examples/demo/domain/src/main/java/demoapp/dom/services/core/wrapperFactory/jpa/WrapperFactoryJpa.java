@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory.jdo;
+package demoapp.dom.services.core.wrapperFactory.jpa;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
@@ -37,23 +38,30 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Entity
+@Table(
+  schema = "demo",
+  name = "WrapperFactoryJpa"
+)
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         nature=Nature.ENTITY
         , objectType = "demo.WrapperFactoryEntity"
         , editing = Editing.DISABLED
 )
-public class WrapperFactoryJdo
+@NoArgsConstructor
+public class WrapperFactoryJpa
         extends WrapperFactoryEntity {
 
     @Inject transient WrapperFactory wrapperFactory;
@@ -62,7 +70,7 @@ public class WrapperFactoryJdo
     // ...
 //end::class[]
 
-    public WrapperFactoryJdo(String initialValue) {
+    public WrapperFactoryJpa(String initialValue) {
         this.propertyAsync = initialValue;
         this.propertyAsyncMixin = initialValue;
     }
@@ -70,6 +78,10 @@ public class WrapperFactoryJdo
     public String title() {
         return "WrapperFactory";
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
 //tag::property[]
     @Property()
@@ -92,7 +104,7 @@ public class WrapperFactoryJdo
         , associateWith = "propertyAsync"
         , sequence = "1"
     )
-    public WrapperFactoryJdo updatePropertyAsync(final String value) {
+    public WrapperFactoryJpa updatePropertyAsync(final String value) {
         val control = AsyncControl.returningVoid().withSkipRules();
         val wrapperFactoryJdo = this.wrapperFactory.asyncWrap(this, control);
         wrapperFactoryJdo.setPropertyAsync(value);
@@ -115,10 +127,10 @@ public class WrapperFactoryJdo
         , associateWith = "propertyAsyncMixin"
         , sequence = "1"
     )
-    public WrapperFactoryJdo updatePropertyUsingAsyncWrapMixin(final String value) {
-        val control = AsyncControl.returning(WrapperFactoryJdo.class).withSkipRules();
+    public WrapperFactoryJpa updatePropertyUsingAsyncWrapMixin(final String value) {
+        val control = AsyncControl.returning(WrapperFactoryJpa.class).withSkipRules();
         val mixin = this.wrapperFactory.asyncWrapMixin(WrapperFactoryEntity_updatePropertyAsyncMixin.class, this, control);
-        WrapperFactoryJdo act = (WrapperFactoryJdo) mixin.act(value);
+        WrapperFactoryJpa act = (WrapperFactoryJpa) mixin.act(value);
         return this;
     }
     public String default0UpdatePropertyUsingAsyncWrapMixin() {
