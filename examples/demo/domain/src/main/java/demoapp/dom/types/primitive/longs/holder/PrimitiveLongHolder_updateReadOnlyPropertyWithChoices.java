@@ -28,17 +28,18 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
-
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty"
+        semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices", sequence = "2")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update with choices"
+        , associateWith = "readOnlyProperty"
+        , sequence = "2")
 @RequiredArgsConstructor
 public class PrimitiveLongHolder_updateReadOnlyPropertyWithChoices {
 
