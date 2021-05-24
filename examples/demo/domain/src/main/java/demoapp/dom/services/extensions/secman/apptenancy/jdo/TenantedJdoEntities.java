@@ -16,29 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman.apptenancy.entities;
-
-import java.util.List;
-
-import javax.inject.Inject;
+package demoapp.dom.services.extensions.secman.apptenancy.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class TenantedJdoEntities {
+public class TenantedJdoEntities
+extends ValueHolderRepository<String, TenantedJdo> {
 
-    final RepositoryService repositoryService;
-
-    public List<TenantedJdo> all() {
-        return repositoryService.allInstances(TenantedJdo.class);
+    protected TenantedJdoEntities() {
+        super(TenantedJdo.class);
     }
 
+    @Override
+    protected TenantedJdo newDetachedEntity(String value) {
+        return new TenantedJdo(value);
+    }
 
 }

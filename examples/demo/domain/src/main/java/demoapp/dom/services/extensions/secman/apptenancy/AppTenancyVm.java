@@ -27,8 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.springframework.context.annotation.Profile;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -38,10 +36,9 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdo;
-import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
-@Profile("demo-jdo")
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType()
@@ -56,16 +53,18 @@ public class AppTenancyVm implements HasAsciiDocDescription {
         return "Tenancy demo";
     }
 
-    public List<TenantedJdo> getTenantedEntities() {
-        return tenantedJdoEntities.all();
+    public List<? extends TenantedEntity> getTenantedEntities() {
+        return tenantedEntities.all();
     }
 
 //tag::hideRegex[]
     public String getHideRegex() {
         return applicationTenancyEvaluatorForDemo.getHideRegex();
     }
-    @Action(associateWith = "hideRegex")
-    @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
+    @Action()
+    @ActionLayout(
+            associateWith = "hideRegex",
+            promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     public AppTenancyVm updateHideRegex(
             @Parameter(optionality = Optionality.OPTIONAL)
             String regex) {
@@ -81,8 +80,10 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     public String getDisableRegex() {
         return applicationTenancyEvaluatorForDemo.getDisableRegex();
     }
-    @Action(associateWith = "disableRegex")
-    @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
+    @Action()
+    @ActionLayout(
+            associateWith = "disableRegex",
+            promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     public AppTenancyVm updateDisableRegex(
             @Parameter(optionality = Optionality.OPTIONAL)
             String regex) {
@@ -96,7 +97,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
 
 
     @Inject @XmlTransient
-    TenantedJdoEntities tenantedJdoEntities;
+    ValueHolderRepository<String, ? extends TenantedEntity> tenantedEntities;
 
     @Inject @XmlTransient
     ApplicationTenancyEvaluatorForDemo applicationTenancyEvaluatorForDemo;

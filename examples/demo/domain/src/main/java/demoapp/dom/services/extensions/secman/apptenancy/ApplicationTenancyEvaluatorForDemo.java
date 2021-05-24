@@ -20,18 +20,15 @@ package demoapp.dom.services.extensions.secman.apptenancy;
 
 import java.util.regex.Pattern;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.secman.api.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.val;
 
-import demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdo;
-
-@Profile("demo-jdo")
 //tag::class[]
 @Service
 public class ApplicationTenancyEvaluatorForDemo
@@ -39,7 +36,7 @@ public class ApplicationTenancyEvaluatorForDemo
 
     @Override
     public boolean handles(Class<?> cls) {                                          // <.>
-        return TenantedJdo.class.isAssignableFrom(cls);
+        return TenantedEntity.class.isAssignableFrom(cls);
     }
 
     @Override
@@ -47,10 +44,12 @@ public class ApplicationTenancyEvaluatorForDemo
         if(hidePattern == null) {
             return null;
         }
-        val tenantedJdo = (TenantedJdo) domainObject;
-        val name = tenantedJdo.getName();
+        val tenantedEntity = (TenantedEntity) domainObject;
+        val name = tenantedEntity.getName();
 
-        return hidePattern.matcher(name).matches() ? "any non-null value will hide" : null;
+        return hidePattern.matcher(name).matches()
+                ? "any non-null value will hide"
+                : null;
     }
 
     @Override
@@ -58,17 +57,21 @@ public class ApplicationTenancyEvaluatorForDemo
         if(disablePattern == null) {
             return null;
         }
-        val tenantedJdo = (TenantedJdo) domainObject;
-        val name = tenantedJdo.getName();
+        val tenantedEntity = (TenantedEntity) domainObject;
+        val name = tenantedEntity.getName();
 
-        return disablePattern.matcher(name).matches() ? String.format("disabled, because name matches '%s'", disablePattern) : null;
+        return disablePattern.matcher(name).matches()
+                ? String.format("disabled, because name matches '%s'", disablePattern)
+                : null;
     }
 
     @Getter
     private String hideRegex;
     public void setHideRegex(String hideRegex) {
         this.hideRegex = hideRegex;
-        this.hidePattern = hideRegex != null ? Pattern.compile(hideRegex) : null;
+        this.hidePattern = hideRegex != null
+                ? Pattern.compile(hideRegex)
+                : null;
     }
     private Pattern hidePattern;
 
@@ -76,7 +79,9 @@ public class ApplicationTenancyEvaluatorForDemo
     private String disableRegex;
     public void setDisableRegex(String disableRegex) {
         this.disableRegex = disableRegex;
-        this.disablePattern = disableRegex != null ? Pattern.compile(disableRegex) : null;
+        this.disablePattern = disableRegex != null
+                ? Pattern.compile(disableRegex)
+                : null;
     }
     private Pattern disablePattern;
 

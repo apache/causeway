@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman.apptenancy.entities;
+package demoapp.dom.services.extensions.secman.apptenancy.jdo;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -27,12 +27,14 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +42,11 @@ import lombok.Setter;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-public class TenantedJdo {
+@DomainObject(
+        objectType = "demo.TenantedEntity"
+)
+public class TenantedJdo
+        extends TenantedEntity {
 
     public TenantedJdo(String name) {
         this.name = name;
@@ -52,8 +58,8 @@ public class TenantedJdo {
     @Getter @Setter
     private String name;
 
-    @Action(associateWith = "name", semantics = SemanticsOf.SAFE)
-    @ActionLayout(sequence = "1")
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(associateWith = "name", sequence = "1")
     public TenantedJdo updateName(final String name) {
         this.name = name;
         return this;
