@@ -148,6 +148,20 @@ IMPORTANT: This role grants regular users the ability to logout (among other thi
 See <<delegate-realms,below>> to configure for a delegate realm.
 
 
+== Configuration
+
+Add the database schema used by the SecMan entities to the configuration file:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: isisExtensionsSecman
+----
+
+
 [#default-roles]
 == Default Roles
 
