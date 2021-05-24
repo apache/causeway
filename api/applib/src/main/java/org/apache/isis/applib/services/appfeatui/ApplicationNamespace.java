@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.feature.dom;
+package org.apache.isis.applib.services.appfeatui;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -25,21 +25,25 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
+/**
+ * @since 2.x  {@index}
+ */
 @DomainObject(
         objectType = ApplicationNamespace.OBJECT_TYPE
 )
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationNamespace";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationNamespace";
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 

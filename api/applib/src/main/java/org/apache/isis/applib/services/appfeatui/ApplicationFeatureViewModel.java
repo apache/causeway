@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.feature.dom;
+package org.apache.isis.applib.services.appfeatui;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,9 +28,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.Parameter;
@@ -50,9 +49,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,21 +57,22 @@ import lombok.val;
 
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
+ *
+ * @since 2.x  {@index}
  */
 @DomainObject(
         objectType = ApplicationFeatureViewModel.OBJECT_TYPE
 )
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationFeatureViewModel";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}
-    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<S, T> {}
-    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleExtSecmanApi.ActionDomainEvent<S> {}
+    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.PropertyDomainEvent<S, T> {}
+    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.CollectionDomainEvent<S, T> {}
+    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleApplib.ActionDomainEvent<S> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
 
     // -- constructors
@@ -334,27 +331,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return factory.viewModel(cls, parentId.asEncodedString());
     }
 
-
-    // -- permissions (collection)
-
-    @Collection(
-            domainEvent = Permissions.DomainEvent.class
-    )
-    @CollectionLayout(
-            defaultView = "table",
-            sequence = "10"
-    )
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Permissions {
-
-        class DomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
-    }
-
-    @Permissions
-    public java.util.Collection<? extends ApplicationPermission> getPermissions() {
-        return applicationPermissionRepository.findByFeatureCached(getFeatureId());
-    }
 
 
     // -- parentPackage (property, programmatic, for packages & classes only)

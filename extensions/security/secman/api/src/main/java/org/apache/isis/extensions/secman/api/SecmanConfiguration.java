@@ -141,6 +141,7 @@ public class SecmanConfiguration {
             IsisModuleCoreSecurity.NAMESPACE,
             IsisModuleApplib.NAMESPACE_SUDO,
             IsisModuleApplib.NAMESPACE_CONF,
+            IsisModuleApplib.NAMESPACE_FEAT,
             IsisModuleExtSecmanApi.NAMESPACE
     };
 

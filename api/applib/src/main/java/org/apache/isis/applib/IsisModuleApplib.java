@@ -30,6 +30,13 @@ import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
+import org.apache.isis.applib.services.appfeatui.ApplicationFeatureMenu;
+import org.apache.isis.applib.services.appfeatui.ApplicationNamespace;
+import org.apache.isis.applib.services.appfeatui.ApplicationType;
+import org.apache.isis.applib.services.appfeatui.ApplicationTypeAction;
+import org.apache.isis.applib.services.appfeatui.ApplicationTypeCollection;
+import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
+import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
@@ -69,6 +76,15 @@ import org.apache.isis.schema.IsisModuleSchema;
         Object_openRestApi.class,
         Object_rebuildMetamodel.class,
 
+        // -- ViewModels
+        // TODO: not sure we need to register view models?
+        ApplicationNamespace.class,
+        ApplicationType.class,
+        ApplicationTypeAction.class,
+        ApplicationTypeCollection.class,
+        ApplicationTypeMember.class,
+        ApplicationTypeProperty.class,
+
         // @DomainObject(s)
         ConfigurationProperty.class,
         DomainObjectList.class,
@@ -80,6 +96,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         LayoutServiceMenu.class,
         ImpersonateMenu.class,
         MetaModelServiceMenu.class,
+        ApplicationFeatureMenu.class,
 
         // @Service(s)
         CommandDtoProcessorServiceIdentity.class,
@@ -96,7 +113,8 @@ public class IsisModuleApplib {
 
     public static final String NAMESPACE = "isis.applib";
     public static final String NAMESPACE_CONF = "isis.conf";    // for configuration; to minimize the risk of granting perms accidentally
-    public static final String NAMESPACE_SUDO = "isis.sudo";    // for configuration; to minimize the risk of granting perms accidentally
+    public static final String NAMESPACE_SUDO = "isis.sudo";    // for impersonation
+    public static final String NAMESPACE_FEAT = "isis.feat";    // for app features
 
     // -- UI EVENT CLASSES
 

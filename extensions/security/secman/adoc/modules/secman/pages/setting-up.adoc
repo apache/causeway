@@ -188,6 +188,10 @@ Access the configuration properties (from the tertiary menu))
 
 * Available only in prototype mode:
 
+** `IsisAppFeatureRoleAndPermissions.ROLE_NAME`
++
+Browse the application features + permissions (from the "Prototyping" menu).
+
 ** `IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
 +
 Download the JDO metamodel (from the "Prototyping" menu).
