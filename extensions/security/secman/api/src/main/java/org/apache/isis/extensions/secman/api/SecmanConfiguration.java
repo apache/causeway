@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
@@ -138,6 +139,8 @@ public class SecmanConfiguration {
     @NonNull
     final String[] adminStickyNamespacePermissions = new String[]{
             IsisModuleCoreSecurity.NAMESPACE,
+            IsisModuleApplib.NAMESPACE_SUDO,
+            IsisModuleApplib.NAMESPACE_CONF,
             IsisModuleExtSecmanApi.NAMESPACE
     };
 
