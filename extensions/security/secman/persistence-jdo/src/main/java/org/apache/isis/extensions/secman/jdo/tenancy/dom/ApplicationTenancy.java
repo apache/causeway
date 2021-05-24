@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jdo.tenancy.dom;
 
-import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -41,10 +40,6 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.util.Equality;
-import org.apache.isis.applib.util.Hashing;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 
 
@@ -88,9 +83,10 @@ import org.apache.isis.commons.internal.base._Casts;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationTenancy
-    implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
+    extends org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
+
 
     // -- NAME
 
@@ -160,40 +156,5 @@ public class ApplicationTenancy
         getChildren().remove(applicationTenancy);
     }
 
-
-    // -- CONTRACT
-
-    private static final Equality<ApplicationTenancy> equality =
-            ObjectContracts.checkEquals(ApplicationTenancy::getPath);
-
-    private static final Hashing<ApplicationTenancy> hashing =
-            ObjectContracts.hashing(ApplicationTenancy::getPath);
-
-    private static final ToString<ApplicationTenancy> toString =
-            ObjectContracts.toString("path", ApplicationTenancy::getPath)
-            .thenToString("name", ApplicationTenancy::getName);
-
-    private static final Comparator<ApplicationTenancy> comparator =
-            Comparator.comparing(ApplicationTenancy::getPath);
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy other) {
-        return comparator.compare(this, (ApplicationTenancy) other);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        return equality.equals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
-    }
 
 }
