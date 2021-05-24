@@ -87,4 +87,6 @@ public interface ApplicationPermissionRepository {
             String featureFqn);
 
     List<ApplicationPermission> findByUser(ApplicationUser applicationUser);
+
+    List<ApplicationPermission> findByRole(ApplicationRole applicationRole);
 }

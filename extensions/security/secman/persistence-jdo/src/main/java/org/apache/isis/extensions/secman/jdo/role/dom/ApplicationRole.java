@@ -84,11 +84,10 @@ import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissio
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-    implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
+    extends org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
 
     // -- NAME
@@ -138,49 +137,5 @@ public class ApplicationRole
         getUsers().add(applicationUser);
     }
 
-
-    // -- PERMISSIONS
-
-    @Override
-    @Permissions
-    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
-        return applicationPermissionRepository.findByRole(this);
-    }
-
-
-    // -- equals, hashCode, compareTo, toString
-
-    private static final Comparator<ApplicationRole> comparator =
-            Comparator.comparing(ApplicationRole::getName);
-
-    private static final Equality<ApplicationRole> equality =
-            ObjectContracts.checkEquals(ApplicationRole::getName);
-
-    private static final Hashing<ApplicationRole> hashing =
-            ObjectContracts.hashing(ApplicationRole::getName);
-
-    private static final ToString<ApplicationRole> toString =
-            ObjectContracts.toString("name", ApplicationRole::getName);
-
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.role.dom.ApplicationRole other) {
-        return comparator.compare(this, (ApplicationRole)other);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return equality.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
-    }
 
 }
