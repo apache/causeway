@@ -32,31 +32,31 @@ import lombok.val;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyAsync"
 )
 @ActionLayout(
     named = "Mixin Update Property"
+    , associateWith = "propertyAsync"
     , sequence = "2"
 )
 @RequiredArgsConstructor
-public class WrapperFactoryJdo_mixinUpdatePropertyAsync {
+public class WrapperFactoryEntity_mixinUpdatePropertyAsync {
 
     @Inject WrapperFactory wrapperFactory;
 
     // ...
 //end::class[]
 
-    private final WrapperFactoryJdo wrapperFactoryJdo;
+    private final WrapperFactoryEntity wrapperFactoryEntity;
 
 //tag::class[]
-    public WrapperFactoryJdo act(final String value) {
+    public WrapperFactoryEntity act(final String value) {
         val control = AsyncControl.returningVoid().withSkipRules();
-        val wrapped = this.wrapperFactory.asyncWrap(this.wrapperFactoryJdo, control);
+        val wrapped = this.wrapperFactory.asyncWrap(this.wrapperFactoryEntity, control);
         wrapped.setPropertyAsync(value);
-        return this.wrapperFactoryJdo;
+        return this.wrapperFactoryEntity;
     }
     public String default0Act() {
-        return wrapperFactoryJdo.getPropertyAsync();
+        return wrapperFactoryEntity.getPropertyAsync();
     }
 }
 //end::class[]

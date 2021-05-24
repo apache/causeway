@@ -18,36 +18,30 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain._commands.ExposePersistedCommands;
 
-//tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyAsyncMixin"
+@DomainObject(
+        objectType = "demo.WrapperFactoryEntity" // shared permissions with concrete sub class
 )
-@ActionLayout(
-    named = "Update Property Async"
-    , describedAs = "Mixin that Updates 'property async mixin' directly"
-    , sequence = "2"
-)
-@RequiredArgsConstructor
-public class WrapperFactoryJdo_updatePropertyAsyncMixin {
-    // ...
-//end::class[]
+public abstract class WrapperFactoryEntity
+implements
+    HasAsciiDocDescription,
+    ExposePersistedCommands,
+    ValueHolder<String> {
 
-    private final WrapperFactoryJdo wrapperFactoryJdo;
+    public abstract String getPropertyAsync();
+    public abstract void setPropertyAsync(String value);
 
-//tag::class[]
-    public WrapperFactoryJdo act(final String value) {
-        wrapperFactoryJdo.setPropertyAsyncMixin(value);
-        return wrapperFactoryJdo;
+    public abstract String getPropertyAsyncMixin();
+    public abstract void setPropertyAsyncMixin(String value);
+
+    @Override
+    public String value() {
+        return getPropertyAsync();
     }
-    public String default0Act() {
-        return wrapperFactoryJdo.getPropertyAsyncMixin();
-    }
+
 }
-//end::class[]

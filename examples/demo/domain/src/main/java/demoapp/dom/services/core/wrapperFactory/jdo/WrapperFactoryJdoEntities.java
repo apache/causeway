@@ -16,36 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory;
+package demoapp.dom.services.core.wrapperFactory.jdo;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
-
+@Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class WrapperFactoryJdoEntities {
+public class WrapperFactoryJdoEntities
+extends ValueHolderRepository<String, WrapperFactoryJdo> {
 
-    final RepositoryService repositoryService;
-
-    public Optional<WrapperFactoryJdo> find(final String value) {
-        return repositoryService.firstMatch(WrapperFactoryJdo.class, x -> Objects.equals(x.getPropertyAsync(), value));
+    protected WrapperFactoryJdoEntities() {
+        super(WrapperFactoryJdo.class);
     }
 
-    public List<WrapperFactoryJdo> all() {
-        return repositoryService.allInstances(WrapperFactoryJdo.class);
-    }
-
-    public WrapperFactoryJdo first() {
-        return all().stream().findFirst().get();
+    @Override
+    protected WrapperFactoryJdo newDetachedEntity(String value) {
+        return new WrapperFactoryJdo(value);
     }
 
 }

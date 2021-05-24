@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory;
+package demoapp.dom.services.core.wrapperFactory.jdo;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,12 +38,13 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -51,10 +54,10 @@ import lombok.val;
         , editing = Editing.DISABLED
 )
 public class WrapperFactoryJdo
-        implements HasAsciiDocDescription, ExposePersistedCommands {
+        extends WrapperFactoryEntity {
 
-    @Inject WrapperFactory wrapperFactory;
-    @Inject FactoryService factoryService;
+    @Inject transient WrapperFactory wrapperFactory;
+    @Inject transient FactoryService factoryService;
 
     // ...
 //end::class[]
@@ -83,10 +86,10 @@ public class WrapperFactoryJdo
 //tag::async[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "propertyAsync"
     )
     @ActionLayout(
         describedAs = "@Action()"
+        , associateWith = "propertyAsync"
         , sequence = "1"
     )
     public WrapperFactoryJdo updatePropertyAsync(final String value) {
@@ -100,23 +103,26 @@ public class WrapperFactoryJdo
     }
 //end::async[]
 
+//end::class[]
+    @SuppressWarnings("unused")
+//tag::class[]
 //tag::async[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "propertyAsyncMixin"
     )
     @ActionLayout(
         describedAs = "Calls the 'updatePropertyAsync' (mixin) action asynchronously"
+        , associateWith = "propertyAsyncMixin"
         , sequence = "1"
     )
     public WrapperFactoryJdo updatePropertyUsingAsyncWrapMixin(final String value) {
         val control = AsyncControl.returning(WrapperFactoryJdo.class).withSkipRules();
-        val mixin = this.wrapperFactory.asyncWrapMixin(WrapperFactoryJdo_updatePropertyAsyncMixin.class, this, control);
-        WrapperFactoryJdo act = mixin.act(value);
+        val mixin = this.wrapperFactory.asyncWrapMixin(WrapperFactoryEntity_updatePropertyAsyncMixin.class, this, control);
+        WrapperFactoryJdo act = (WrapperFactoryJdo) mixin.act(value);
         return this;
     }
     public String default0UpdatePropertyUsingAsyncWrapMixin() {
-        return new WrapperFactoryJdo_updatePropertyAsyncMixin(this).default0Act();
+        return new WrapperFactoryEntity_updatePropertyAsyncMixin(this).default0Act();
     }
 //end::async[]
 

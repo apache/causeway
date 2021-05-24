@@ -27,11 +27,10 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import demoapp.dom.types.Samples;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
@@ -54,6 +53,10 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
     }
 
     protected abstract E newDetachedEntity(T value);
+
+    public Optional<E> first() {
+        return all().stream().findFirst();
+    }
 
     // -- SEEDING SUPPORT
 
