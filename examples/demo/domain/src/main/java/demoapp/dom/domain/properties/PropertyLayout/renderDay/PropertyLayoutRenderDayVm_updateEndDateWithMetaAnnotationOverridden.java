@@ -31,10 +31,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "endDateUsingMetaAnnotationButOverridden"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "endDateUsingMetaAnnotationButOverridden"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden {
 

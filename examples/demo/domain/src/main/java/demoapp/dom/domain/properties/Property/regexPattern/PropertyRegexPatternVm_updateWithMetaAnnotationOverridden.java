@@ -29,10 +29,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "emailAddressPropertyUsingMetaAnnotationButOverridden"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "emailAddressPropertyUsingMetaAnnotationButOverridden"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
 

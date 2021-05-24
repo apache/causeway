@@ -29,10 +29,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.SAFE,
-    associateWith = "tree"
+    semantics = SemanticsOf.SAFE
 )
-@ActionLayout(cssClassFa="fa-sitemap", position = ActionLayout.Position.PANEL)
+@ActionLayout(
+        cssClassFa="fa-sitemap",
+        position = ActionLayout.Position.PANEL,
+        associateWith = "tree")
 @RequiredArgsConstructor
 public class FileNodeVm_returnsTree {
 

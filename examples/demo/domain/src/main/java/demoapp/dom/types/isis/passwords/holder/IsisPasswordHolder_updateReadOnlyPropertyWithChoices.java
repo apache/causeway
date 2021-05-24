@@ -29,17 +29,19 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
-
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty"
+        semantics = SemanticsOf.IDEMPOTENT
+
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices", sequence = "2")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update with choices"
+        , associateWith = "readOnlyProperty"
+        , sequence = "2")
 @RequiredArgsConstructor
 public class IsisPasswordHolder_updateReadOnlyPropertyWithChoices {
 

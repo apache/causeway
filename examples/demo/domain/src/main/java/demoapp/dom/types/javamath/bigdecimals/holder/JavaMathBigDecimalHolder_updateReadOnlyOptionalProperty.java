@@ -27,13 +27,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyOptionalProperty"
+        semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update"
+        , associateWith = "readOnlyOptionalProperty"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class JavaMathBigDecimalHolder_updateReadOnlyOptionalProperty {
 

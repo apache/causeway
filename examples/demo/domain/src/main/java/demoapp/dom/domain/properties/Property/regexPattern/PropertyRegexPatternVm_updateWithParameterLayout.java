@@ -29,10 +29,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "emailAddressPropertyUsingAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "emailAddressPropertyUsingAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyRegexPatternVm_updateWithParameterLayout {
 

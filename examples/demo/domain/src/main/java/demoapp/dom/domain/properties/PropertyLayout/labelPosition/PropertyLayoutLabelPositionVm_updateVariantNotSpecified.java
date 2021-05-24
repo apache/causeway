@@ -29,10 +29,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyLabelPositionNotSpecified"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "propertyLabelPositionNotSpecified"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_updateVariantNotSpecified {
 

@@ -28,14 +28,16 @@ import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
         hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update"
+        , associateWith = "readOnlyProperty"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class JavaAwtBufferedImageHolder_updateReadOnlyProperty {
 

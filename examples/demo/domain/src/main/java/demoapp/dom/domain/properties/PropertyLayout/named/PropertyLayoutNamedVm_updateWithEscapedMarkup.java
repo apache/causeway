@@ -28,10 +28,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingEscapedMarkup"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "propertyUsingEscapedMarkup"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyLayoutNamedVm_updateWithEscapedMarkup {
 

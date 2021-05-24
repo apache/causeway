@@ -26,13 +26,15 @@ import org.apache.isis.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty"
+        semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update"
+        , associateWith = "readOnlyProperty"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class IsisClobHolder_updateReadOnlyProperty {
 
