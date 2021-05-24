@@ -85,12 +85,12 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             switch (accountType) {
             case DELEGATED:
                 applicationUser = applicationUserRepository
-                    .newDelegateUser(username, ApplicationUserStatus.ENABLED);
+                    .newDelegateUser(username, ApplicationUserStatus.UNLOCKED);
                 break;
             case LOCAL:
                 final Password pwd = new Password(password);
                 applicationUser = applicationUserRepository
-                        .newLocalUser(username, pwd, ApplicationUserStatus.ENABLED);
+                        .newLocalUser(username, pwd, ApplicationUserStatus.UNLOCKED);
                 applicationUser.setEmailAddress(emailAddress);
             }
 

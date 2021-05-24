@@ -62,7 +62,7 @@ import lombok.val;
  */
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
-    private static final String SECMAN_ENABLE_DELEGATED_USERS = "isis.ext.secman.enableDelegatedUsers";
+    private static final String SECMAN_UNLOCK_DELEGATED_USERS = "isis.ext.secman.unlockDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
@@ -122,10 +122,10 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 
             _Assert.assertNotNull(newPrincipal);
 
-            if(configBean.isAutoEnableIfDelegatedAndAuthenticated()) {
+            if(configBean.isAutoUnlockIfDelegatedAndAuthenticated()) {
                 principal = newPrincipal;
             } else {
-                _Assert.assertTrue(newPrincipal.isDisabled(), "As configured in " + SECMAN_ENABLE_DELEGATED_USERS + ", Auto-created user accounts must be initially disabled!");
+                _Assert.assertTrue(newPrincipal.isLocked(), "As configured in " + SECMAN_UNLOCK_DELEGATED_USERS + ", auto-created user accounts are initially locked!");
                 throw disabledAccountException(username); // default behavior after user auto-creation
             }
         }
@@ -134,7 +134,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
             throw credentialsException();
         }
 
-        if (principal.isDisabled()) {
+        if (principal.isLocked()) {
             throw disabledAccountException(principal.getUsername());
         }
 

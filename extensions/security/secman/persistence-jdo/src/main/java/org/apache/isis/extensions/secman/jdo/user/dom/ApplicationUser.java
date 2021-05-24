@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.jdo.user.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Element;
@@ -30,7 +29,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.Join;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Queries;
@@ -44,21 +42,15 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
 
 import lombok.val;
 
@@ -113,30 +105,9 @@ import lombok.val;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 public class ApplicationUser
-    implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+    extends org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
-
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private UserService userService;
-    /**
-     * Optional service, if configured then is used to evaluate permissions within
-     * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
-     * else will fallback to a default implementation.
-     */
-    @Inject private PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private SecmanConfiguration configBean;
-
-
-    // -- NAME
-
-    @Name
-    @NotPersistent
-    @Override
-    public String getName() {
-        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.getName();
-    }
 
 
     // -- USERNAME
@@ -154,7 +125,6 @@ public class ApplicationUser
 
 
     // -- FAMILY NAME
-
 
     @Column(allowsNull = "true", length = FamilyName.MAX_LENGTH)
     private String familyName;
@@ -252,7 +222,6 @@ public class ApplicationUser
 
     // -- AT PATH
 
-
     @Column(allowsNull="true")
     private String atPath;
 
@@ -285,7 +254,6 @@ public class ApplicationUser
 
     // -- STATUS
 
-
     @Column(allowsNull = "false")
     private ApplicationUserStatus status;
 
@@ -315,25 +283,6 @@ public class ApplicationUser
         this.encryptedPassword = encryptedPassword;
     }
 
-    public boolean hideEncryptedPassword() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(this);
-    }
-
-
-    // -- HAS PASSWORD
-
-    @HasPassword
-    @Override
-    public boolean isHasPassword() {
-        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.isHasPassword();
-    }
-
-    @Override
-    public boolean hideHasPassword() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(this);
-    }
-
-
 
     // ROLES
 
@@ -347,70 +296,6 @@ public class ApplicationUser
     public SortedSet<ApplicationRole> getRoles() {
         return _Casts.uncheckedCast(roles);
     }
-
-
-    // -- PERMISSION SET
-
-    // short-term caching
-    private transient ApplicationPermissionValueSet cachedPermissionSet;
-
-    @Override
-    @Programmatic
-    public ApplicationPermissionValueSet getPermissionSet() {
-        if(cachedPermissionSet != null) {
-            return cachedPermissionSet;
-        }
-        val permissions = applicationPermissionRepository.findByUser(this);
-        return cachedPermissionSet =
-                new ApplicationPermissionValueSet(
-                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
-                        permissionsEvaluationService);
-    }
-
-
-    // -- HELPERS
-
-
-    @Programmatic
-    @Override
-    public String getAdminRoleName() {
-        return configBean.getAdminRoleName();
-    }
-
-    @Programmatic
-    @Override
-    public UserMemento currentUser() {
-        return userService.currentUserElseFail();
-    }
-
-
-    // -- equals, hashCode, compareTo, toString
-    private static final String propertyNames = "username";
-
-    private static final ObjectContract<ApplicationUser> contract =
-            ObjectContracts.parse(ApplicationUser.class, propertyNames);
-
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser other) {
-        return contract.compare(this, (ApplicationUser) other);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return contract.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return contract.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return contract.toString(this);
-    }
-
 
 
 }

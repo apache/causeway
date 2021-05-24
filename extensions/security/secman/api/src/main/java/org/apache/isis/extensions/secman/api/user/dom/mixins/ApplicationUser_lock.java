@@ -55,16 +55,16 @@ public class ApplicationUser_lock {
 
     @MemberSupport
     public ApplicationUser act() {
-        target.setStatus(ApplicationUserStatus.DISABLED);
+        target.setStatus(ApplicationUserStatus.LOCKED);
         return target;
     }
 
     @MemberSupport
     public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {
-            return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
+            return String.format("Cannot lock the '%s' user.", configBean.getAdminUserName());
         }
-        return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
+        return target.getStatus() == ApplicationUserStatus.LOCKED ? "Status is already set to LOCKED": null;
     }
 
 }

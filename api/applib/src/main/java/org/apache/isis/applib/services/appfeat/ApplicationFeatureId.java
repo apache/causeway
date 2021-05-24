@@ -50,16 +50,16 @@ import lombok.val;
 /**
  * Value type representing a namespace, type or member.
  * <p>
- * This value is {@link Comparable}, the implementation of which considers 
- * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace}, 
+ * This value is {@link Comparable}, the implementation of which considers
+ * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
  * {@link #getTypeSimpleName() type simple name} and {@link #getMemberName() member name}.
- * 
+ *
  * @since 1.x revised for 2.0 {@index}
  */
 @Value
-public class ApplicationFeatureId 
+public class ApplicationFeatureId
 implements
-    Comparable<ApplicationFeatureId>, 
+    Comparable<ApplicationFeatureId>,
     Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,11 +71,11 @@ implements
     // -- FACTORY METHODS
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
-        
+
         val logicalTypeName = identifier.getLogicalTypeName();
-        
+
         if(identifier.getType().isClass()) {
-            return newType(logicalTypeName); 
+            return newType(logicalTypeName);
         }
         if(identifier.getType().isPropertyOrCollection()) {
             return newMember(logicalTypeName, identifier.getMemberName());
@@ -83,11 +83,11 @@ implements
         // its an action
         return newMember(logicalTypeName, identifier.getMemberNameAndParameterClassNamesIdentityString());
     }
-    
+
     public static ApplicationFeatureId newFeature(
-            final @NonNull ApplicationFeatureSort featureSort, 
+            final @NonNull ApplicationFeatureSort featureSort,
             final @NonNull String qualifiedName) {
-        
+
         switch (featureSort) {
         case NAMESPACE:
             return newNamespace(qualifiedName);
@@ -100,10 +100,10 @@ implements
     }
 
     public static ApplicationFeatureId newFeature(
-            final @NonNull  String namespace, 
+            final @NonNull  String namespace,
             final @Nullable String logicalTypeSimpleName,
             final @Nullable String memberName) {
-        
+
         if(logicalTypeSimpleName == null) {
             return newNamespace(namespace);
         }
@@ -147,9 +147,9 @@ implements
         featureId.memberName = memberName;
         return featureId;
     }
-    
+
     // -- FACTORY HELPERS
-    
+
     private static void initType(final ApplicationFeatureId featureId, final String fullyQualifiedName) {
         final int i = fullyQualifiedName.lastIndexOf(".");
         if(i != -1) {
@@ -160,15 +160,15 @@ implements
             featureId.typeSimpleName = fullyQualifiedName;
         }
 
-        // guard against empty namespace; there should be a meta-model validator that already catched that 
+        // guard against empty namespace; there should be a meta-model validator that already catched that
         if(_Strings.isEmpty(featureId.namespace)) {
             throw _Exceptions.illegalArgument(
                     "fullyQualifiedName '%s' must include a non-empty namespace", fullyQualifiedName);
         }
-        
+
         featureId.memberName = null;
     }
-    
+
     // -- CONSTRUCTOR
 
     private ApplicationFeatureId(final ApplicationFeatureSort sort) {
@@ -176,7 +176,7 @@ implements
     }
 
     // -- TITLE
-    
+
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -188,9 +188,9 @@ implements
     }
 
     // -- PROPERTIES
-    
+
     @Getter final @NonNull ApplicationFeatureSort sort;
-    
+
     /**
      * The {@link ApplicationFeatureId id} of the member's logical type.
      */
@@ -199,16 +199,16 @@ implements
         final String logicalTypeName = this.getNamespace() + "." + getTypeSimpleName();
         return newType(logicalTypeName);
     }
-    
+
     // -- PROPERTIES - NON UI
-    
-    @Programmatic 
+
+    @Programmatic
     @Getter private String namespace;
 
-    @Programmatic 
+    @Programmatic
     @Getter private String typeSimpleName;
 
-    @Programmatic 
+    @Programmatic
     @Getter private String memberName;
 
     @Programmatic
@@ -244,7 +244,7 @@ implements
      */
     @Programmatic
     public ApplicationFeatureId getParentNamespaceFeatureId() {
-        
+
         _Assert.assertFalse(sort.isMember());
 
         if(sort.isType()) {
@@ -275,7 +275,7 @@ implements
             newFeature(ApplicationFeatureSort.valueOf(sort), fqn))
         .orElseThrow(()->_Exceptions.illegalArgument("cannot parse feature-id '%s'", stringified));
     }
-    
+
     @Programmatic
     public String asEncodedString() {
         return _Strings.base64UrlEncode(stringify());
@@ -291,7 +291,7 @@ implements
     // -- pathIds, parentIds
 
     private transient Can<ApplicationFeatureId> pathIds;
-    
+
     @Programmatic @Synchronized
     public Can<ApplicationFeatureId> getPathIds() {
         if(pathIds==null) {
@@ -321,7 +321,7 @@ implements
     }
 
     private static void visitSelfAndParents(
-            final ApplicationFeatureId featureId, 
+            final ApplicationFeatureId featureId,
             final Consumer<ApplicationFeatureId> onNext) {
         if(featureId != null) {
             onNext.accept(featureId);
@@ -386,17 +386,34 @@ implements
     }
 
     // -- WITHERS
-    
+
     /**
      * Returns a new instance that is a clone of this, except for the namespace,
-     * which is taken from the argument. 
+     * which is taken from the argument.
      * @param namespace
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
-        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName()); 
+        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName());
     }
 
 
-
-
+    /**
+     * For action members, returns a variant of the featureId that strips off the parameter types.
+     *
+     * <p>
+     *     This is for use cases where distinguishing between overloaded versions of an action (which is itself strongly discouraged)
+     *     is unimportant.  One example is the permissions management of SecMan.
+     * </p>
+     * @return
+     */
+    public ApplicationFeatureId asNonOverloaded() {
+        if (getSort() == ApplicationFeatureSort.MEMBER) {
+            val memberName = this.getMemberName();
+            val paramAt = memberName.indexOf('(');
+            if(paramAt != -1) {
+                return newFeature(this.getNamespace(), this.getTypeSimpleName(), memberName.substring(0, paramAt));
+            }
+        }
+        return this;
+    }
 }

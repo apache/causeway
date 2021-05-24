@@ -48,13 +48,13 @@ public class ApplicationUser_unlock {
 
     @MemberSupport
     public ApplicationUser act() {
-        target.setStatus(ApplicationUserStatus.ENABLED);
+        target.setStatus(ApplicationUserStatus.UNLOCKED);
         return target;
     }
 
     @MemberSupport
     public String disableAct() {
-        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
+        return target.getStatus() == ApplicationUserStatus.UNLOCKED ? "Status is already set to UNLOCKED": null;
     }
 
 }

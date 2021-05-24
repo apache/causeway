@@ -30,6 +30,8 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
 
+import lombok.val;
+
 /**
  * A serializable value object representing a set of (anonymized)
  * {@link ApplicationPermissionValue permission}s.
@@ -144,9 +146,10 @@ public class ApplicationPermissionValueSet implements Serializable {
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
 
-        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
-            final Collection<ApplicationPermissionValue> permissionValues = permissionsByFeature.get(pathId);
-            final Evaluation evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
+        val featureIdNonOverloaded = featureId.asNonOverloaded();
+        for (val pathId : featureIdNonOverloaded.getPathIds()) {
+            val permissionValues = permissionsByFeature.get(pathId);
+            val evaluation = permissionsEvaluationService.evaluate(featureIdNonOverloaded, mode, permissionValues);
             if(evaluation != null) {
                 return evaluation;
             }

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jpa.permission.dom;
 
-import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -32,17 +31,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
@@ -102,14 +97,15 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
         bookmarking = BookmarkPolicy.AS_CHILD
 )
 public class ApplicationPermission
-implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
-
-    @Inject private transient ApplicationFeatureRepository featureRepository;
+    extends org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
 
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Version
+    private Long version;
 
 
     // -- ROLE
@@ -163,8 +159,6 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
     }
 
 
-
-
     // -- FEATURE SORT
 
     @Column(nullable = false)
@@ -197,43 +191,5 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
         this.featureFqn = featureFqn;
     }
 
-
-    // FIND FEATURE
-
-    @Override
-    @Programmatic
-    public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
-        return featureRepository.findFeature(featureId);
-    }
-
-
-    // -- CONTRACT
-
-    private static final ObjectContract<ApplicationPermission> contract	=
-            ObjectContracts.contract(ApplicationPermission.class)
-            .thenUse("role", ApplicationPermission::getRole)
-            .thenUse("featureSort", ApplicationPermission::getFeatureSort)
-            .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
-            .thenUse("mode", ApplicationPermission::getMode);
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
-        return contract.compare(this, (ApplicationPermission)other);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        return contract.equals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return contract.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return contract.toString(this);
-    }
 
 }

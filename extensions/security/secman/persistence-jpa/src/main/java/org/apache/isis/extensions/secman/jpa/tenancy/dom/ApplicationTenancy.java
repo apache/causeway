@@ -18,13 +18,13 @@
  */
 package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
-import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,14 +33,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.util.Equality;
-import org.apache.isis.applib.util.Hashing;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 
 
@@ -80,7 +77,11 @@ import org.apache.isis.commons.internal.base._Casts;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationTenancy
-    implements org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
+    extends org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
+
+
+    @Version
+    private Long version;
 
 
     // -- NAME
@@ -118,7 +119,6 @@ public class ApplicationTenancy
 
     // -- PARENT
 
-
     @ManyToOne
     @JoinColumn(name="parentPath", nullable = true)
     private ApplicationTenancy parent;
@@ -152,40 +152,5 @@ public class ApplicationTenancy
         getChildren().remove(applicationTenancy);
     }
 
-
-    // -- CONTRACT
-
-    private static final Equality<ApplicationTenancy> equality =
-            ObjectContracts.checkEquals(ApplicationTenancy::getPath);
-
-    private static final Hashing<ApplicationTenancy> hashing =
-            ObjectContracts.hashing(ApplicationTenancy::getPath);
-
-    private static final ToString<ApplicationTenancy> toString =
-            ObjectContracts.toString("path", ApplicationTenancy::getPath)
-            .thenToString("name", ApplicationTenancy::getName);
-
-    private static final Comparator<ApplicationTenancy> comparator =
-            Comparator.comparing(ApplicationTenancy::getPath);
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy other) {
-        return comparator.compare(this, (ApplicationTenancy)other);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        return equality.equals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
-    }
 
 }

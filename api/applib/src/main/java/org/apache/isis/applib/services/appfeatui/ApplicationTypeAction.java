@@ -16,21 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.feature.dom;
+package org.apache.isis.applib.services.appfeatui;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
+/**
+ * @since 2.x  {@index}
+ */
 @DomainObject(
         objectType = ApplicationTypeAction.OBJECT_TYPE
 )
@@ -39,7 +42,7 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 )
 public class ApplicationTypeAction extends ApplicationTypeMember {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTypeAction";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 

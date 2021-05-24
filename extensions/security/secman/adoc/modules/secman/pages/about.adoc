@@ -3,9 +3,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The primary purpose of SecMan is provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member
+SecMan provides an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member
 
-This authorization is implemented using domain entities, whch means that authorizations/permissions can theybe administered from within your Apache Isis application.
+This authorization is implemented using domain entities, which means that authorizations/permissions can they be administered from within your Apache Isis application.
 Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 The domain model is explained in more detail <<domain-model,below>>.
 
@@ -17,7 +17,7 @@ This guide explains these concepts in more detail, and describes how to configur
 
 == Users, Roles and Permissions
 
-As described in the introduction, the primary purpose of SecMan is provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member:
+As described in the introduction, the primary purpose of SecMan is to provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member:
 
 * the logged-in user is represented as an xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication]
 
@@ -42,7 +42,7 @@ This is usually specified using xref:refguide:applib:index/annotation/DomainObje
 +
 These consist of the portion of the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] up to but excluding the local type name, for example `myapp.customer`.
 
-Permissions are inferred: a permission granted at the type level implies a permission for all of the object members of the type, and a permission granted to a namespace implies a permission for all of the object members of all of the object types within that namespace.
+Permissions are inferred: a permission granted at the type level implies a permission to all the object members of the type, and a permission granted to a namespace implies a permission to all the object members of all the object types within that namespace.
 
 Multipart namespaces also imply a hierarchy and permissions can be inferred through that hierarchy.
 For example the `myapp.customer` namespace has a parent `myapp` namespace.
@@ -72,15 +72,15 @@ SecMan's users, roles and permissions are entities, but application features are
 
 Thus:
 
-* a user (represented by xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser]) can belong to many roles (xref:refguide:extensions:index/secman/api/role/ApplicationRole.adoc[ApplicationRole])
-* a role in turn holds a set of permissions (xref:refguide:extensions:index/secman/api/permission/ApplicationPermission.adoc[ApplicationPermission]).
+* a user (represented by xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser]) can belong to many roles (xref:refguide:extensions:index/secman/api/role/dom/ApplicationRole.adoc[ApplicationRole])
+* a role in turn holds a set of permissions (xref:refguide:extensions:index/secman/api/permission/dom/ApplicationPermission.adoc[ApplicationPermission]).
 Each such permission is either an ``ALLOW`` or a ``VETO`` to an application feature, represented by a fully qualified name
 * this resolves to an xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] (from the core metamodel).
 That feature will be either a namespace, a type or a member.
 +
 The core metamodel also provides xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature] (each being identified with an xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] that makes it easier to navigate around the application feature hierarchy.
 
-The domain model also shows the xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] interface and xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] entity.
+The domain model also shows the xref:refguide:extensions:index/secman/api/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] interface and xref:refguide:extensions:index/secman/api/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entity.
 These are to support multitenancy, discussed in the section <<Multitenancy,below>>.
 
 
@@ -89,13 +89,13 @@ These are to support multitenancy, discussed in the section <<Multitenancy,below
 In addition to users, roles and permissions, SecMan also supports link:https://en.wikipedia.org/wiki/Multitenancy[multitenancy].
 The idea is that the ownership of domain objects is logically partitioned into tenants; one tenant cannot see or access the data owned by another tenant.
 
-Implementing multitenancy requires that both data and the user is "tagged" in some way, and that these tags are compared against each other to determine if the user has access to the tagged data.
-This is represented in the domain model through the xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI interface.
+Implementing multitenancy requires that both data and user is "tagged" in some way, and that these tags are compared against each other to determine if the user has access to the tagged data.
+This is represented in the domain model through the xref:refguide:extensions:index/secman/api/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI interface.
 The idea is that the application provides its own implementation of this interface, that performs the evaluation of whether the current user can view the domain object or not (and if they can, whether the domain object members are disabled/read-only).
 
 One simple implementation is to tag domain objects with a "path", and similarly to store a "path" for each application user.
-The idea behind the xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] is simply to name these tenancies; its `atPath` property is intended to be a primary key.
-The xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] entity also has an `atPath` property.
+The idea behind the xref:refguide:extensions:index/secman/api/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] is simply to name these tenancies; its `atPath` property is intended to be a primary key.
+The xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser] entity also has an `atPath` property.
 We could therefore use this "atPath" to represent a country, eg "/GBR", "/ITA", "/FRA", "/BEL" and so on.
 
 For example, the example below uses implements the rule that a user can always view an object within (above or below) their place in the path "hierarchy", and can edit any object "under" them in the hierarchy:
@@ -132,7 +132,7 @@ public class ApplicationTenancyEvaluatorUsingAtPath implements ApplicationTenanc
     }
 }
 ----
-<.> SecMan provides the xref:refguide:extensions:index/secman/api/tenancy/HasAtPath.adoc[HasAtPath] interface to standardize the way in which domain objects expose their "tag" (atPath) to the evaluator.
+<.> SecMan provides the xref:refguide:extensions:index/secman/api/tenancy/dom/HasAtPath.adoc[HasAtPath] interface to standardize the way in which domain objects expose their "tag" (atPath) to the evaluator.
 <.> can view all objects (above and below) within the user's hierarchy
 +
 For example:
@@ -189,9 +189,9 @@ More complex implementations are possible: ultimately the "atPath" properties ar
 For example, to allow a user to be able to access objects from multiple countries, we could use a format such as "/ITA;/BEL".
 The implementation would parse the string and allow access for any country.
 
-For this reason, the xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser]'s `atPath` property is _not_ a foreign key to the xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] entity.
+For this reason, the xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser]'s `atPath` property is _not_ a foreign key to the xref:refguide:extensions:index/secman/api/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entity.
 
-TIP: Another implementation of xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:demo:about.adoc[Demo App]..
+TIP: Another implementation of xref:refguide:extensions:index/secman/api/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:demo:about.adoc[Demo App]..
 
 
 .Apache Isis' multi-tenancy is only skin deep
@@ -234,14 +234,14 @@ Thus:
 * The `AuthenticatorShiro` calls to the Shiro Security Manager to obtain the authenticated principal.
 * The Shiro Security Manager uses the `shiro.ini` configuration file to look up the realm to perform the authentication; in this case we configure it to use Secman's realm (xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm]).
 * Secman's realm implementation queries the database and uses this to create an instance of `PrincipalForApplicationUser`, where the `Principal` interface is Shiro's representation of an authenticated user.
-The `PrincipalForApplicationUser` is backed by xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser], which all of the permissions to object members for this particular user.
+The `PrincipalForApplicationUser` is backed by xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser], which all of the permissions to object members for this particular user.
 * to render a page, the Apache Isis viewer uses configured `Authorizor`, in this case
 Secman's own xref:refguide:extensions:index/secman/api/authorizor/AuthorizorSecman.adoc[AuthorizorSecman].
-This looks up the current xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser] (which will already reside in-memory) and renders the page according to which object members are visible or not.
+This looks up the current xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser] (which will already reside in-memory) and renders the page according to which object members are visible or not.
 
 
-The above configuration allows Secman to be used to authenticate users; the password is stored as an (typically) encrypted property of the xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser].
-These are called "local" users, as per the xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser]'s `accountType` property.
+The above configuration allows Secman to be used to authenticate users; the password is stored as an (typically) encrypted property of the xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser].
+These are called "local" users, as per the xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser]'s `accountType` property.
 
 Secman's xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanShiroRealm.adoc[Realm implementation] also allows a "delegate" realm to be configured.
 In such cases the authentication of "delegated" users is performed by the delegate realm rather than locally.
@@ -264,8 +264,8 @@ The `encryption-jbcrypt` module provides an implementation using the link:https:
 
 SecMan consists of a number of Maven submodules:
 
-* the API module (`isis-extensions-secman-api`) defines a set of interfaces for the xref:refguide:extensions:index/secman/api/user/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/api/role/ApplicationRole.adoc[ApplicationRole],
-xref:refguide:extensions:index/secman/api/permission/ApplicationPermission.adoc[ApplicationPermission] and xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] entities.
+* the API module (`isis-extensions-secman-api`) defines a set of interfaces for the xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/api/role/dom/ApplicationRole.adoc[ApplicationRole],
+xref:refguide:extensions:index/secman/api/permission/dom/ApplicationPermission.adoc[ApplicationPermission] and xref:refguide:extensions:index/secman/api/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entities.
 
 * the two persistence modules (`isis-extensions-secman-persistence-jpa` and `isis-extensions-secman-persistence-jdo`) provide concrete implementations of the APIs for JPA and JDO respectively.
 As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] and xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] persistence mechanisms respectively; use one or the other.

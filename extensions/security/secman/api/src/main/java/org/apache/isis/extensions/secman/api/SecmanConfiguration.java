@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
@@ -105,7 +106,9 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String adminRoleName = "secman-admin";
+    final String adminRoleName = ADMIN_ROLE_DEFAULT_NAME;
+
+    public static String ADMIN_ROLE_DEFAULT_NAME = "isis-ext-secman-admin";
 
     /**
      * The set of namespaces to which the {@link #getAdminRoleName() admin role}
@@ -136,6 +139,9 @@ public class SecmanConfiguration {
     @NonNull
     final String[] adminStickyNamespacePermissions = new String[]{
             IsisModuleCoreSecurity.NAMESPACE,
+            IsisModuleApplib.NAMESPACE_SUDO,
+            IsisModuleApplib.NAMESPACE_CONF,
+            IsisModuleApplib.NAMESPACE_FEAT,
             IsisModuleExtSecmanApi.NAMESPACE
     };
 
@@ -169,21 +175,26 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String regularUserRoleName = "secman-regular-user";
+    final String regularUserRoleName = REGULAR_USER_ROLE_DEFAULT_NAME;
 
+    public static String REGULAR_USER_ROLE_DEFAULT_NAME = "isis-ext-secman-user";
 
 
     /**
-     * Delegated users, on first successful logon, are auto-created but disabled (by default).
+     * Delegated users, on first successful logon, are auto-created but locked (by default).
      * <p>
      * This option allows to override this behavior, such that authenticated
-     * users are also auto-enabled.
+     * users are also auto-unlocked.
      * <p>
-     * default: false
+     *
+     * <p>
+     * BE AWARE THAT if any users are auto-created unlocked, then the set of roles that
+     * they are given should be highly restricted !!!
+     * </p>
      */
     @Getter
     @Builder.Default
-    final boolean autoEnableIfDelegatedAndAuthenticated = false;
+    final boolean autoUnlockIfDelegatedAndAuthenticated = false;
 
 
     // -- UTILITIES

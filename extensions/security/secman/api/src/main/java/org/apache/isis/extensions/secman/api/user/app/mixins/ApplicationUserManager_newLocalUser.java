@@ -85,8 +85,8 @@ extends ApplicationUserManager_newLocalUserAbstract {
           final ApplicationRole initialRole,
 
           @Parameter(optionality = Optionality.OPTIONAL)
-          @ParameterLayout(named = "Enabled?")
-          final Boolean enabled,
+          @ParameterLayout(named = "Unlocked?")
+          final Boolean unlocked,
 
           @Parameter(optionality = Optionality.OPTIONAL)
           @ParameterLayout(named = "Email Address")
@@ -95,7 +95,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
         ApplicationUser user = applicationUserRepository.findByUsername(username).orElse(null);
         if (user == null) {
             user = applicationUserRepository
-                    .newLocalUser(username, password, ApplicationUserStatus.parse(enabled));
+                    .newLocalUser(username, password, ApplicationUserStatus.parse(unlocked));
         }
         if (initialRole != null) {
             applicationRoleRepository.addRoleToUser(initialRole, user);

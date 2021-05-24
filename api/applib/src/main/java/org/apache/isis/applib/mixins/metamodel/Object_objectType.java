@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -74,7 +75,7 @@ public class Object_objectType {
         return bookmark.getObjectType();
     }
 
-    public boolean hideProp() {
+    @MemberSupport public boolean hideProp() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return !metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED).isEntity();
     }

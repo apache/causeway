@@ -22,11 +22,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
@@ -64,11 +66,16 @@ public class Object_impersonate {
         return holder;
     }
 
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return impersonateMenu.hideImpersonate();
     }
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return impersonateMenu.disableImpersonate();
+    }
+    @MemberSupport public String default0Act() {
+        return holder instanceof HasUsername
+                ? ((HasUsername)holder).getUsername()
+                : null;
     }
 
     @Inject ImpersonateMenu impersonateMenu;

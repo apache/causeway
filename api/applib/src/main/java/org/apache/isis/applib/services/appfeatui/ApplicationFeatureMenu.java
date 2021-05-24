@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.feature.dom;
+package org.apache.isis.applib.services.appfeatui;
 
 import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -35,34 +36,38 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
+/**
+ * @since 2.x  {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ApplicationFeatureViewModels.OBJECT_TYPE
+        objectType = ApplicationFeatureMenu.OBJECT_TYPE
 )
 @DomainServiceLayout(
-        named="Security",
+        named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-public class ApplicationFeatureViewModels  {
+public class ApplicationFeatureMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationFeatureViewModels";
+    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
 
     public static abstract class PropertyDomainEvent<T>
-    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}
+    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeatureMenu, T> {}
 
     public static abstract class CollectionDomainEvent<T>
-    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationFeatureViewModels, T> {}
+    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeatureMenu, T> {}
 
     public static abstract class ActionDomainEvent
-    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationFeatureViewModels> {}
+    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeatureMenu> {}
+
 
     // -- ICON NAME
 
     public String iconName() {
         return "applicationFeature";
     }
+
 
     // -- ALL PACKAGES
 
@@ -79,7 +84,8 @@ public class ApplicationFeatureViewModels  {
         return asViewModels(featureRepository.allNamespaces(), ApplicationNamespace.class);
     }
 
-    // -- ALL CLASSES
+
+    // -- ALL TYPES
 
     public static class AllTypesDomainEvent extends ActionDomainEvent {}
 
@@ -93,6 +99,7 @@ public class ApplicationFeatureViewModels  {
     public List<ApplicationType> allTypes() {
         return asViewModels(featureRepository.allTypes(), ApplicationType.class);
     }
+
 
     // -- ALL ACTIONS
 
@@ -109,6 +116,7 @@ public class ApplicationFeatureViewModels  {
         return asViewModels(featureRepository.allActions(), ApplicationTypeAction.class);
     }
 
+
     // -- ALL PROPERTIES
 
     public static class AllPropertiesDomainEvent extends ActionDomainEvent {}
@@ -123,6 +131,7 @@ public class ApplicationFeatureViewModels  {
     public List<ApplicationTypeProperty> allProperties() {
         return asViewModels(featureRepository.allProperties(), ApplicationTypeProperty.class);
     }
+
 
     // -- ALL COLLECTIONS
 

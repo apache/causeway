@@ -50,7 +50,7 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModel;
+import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;

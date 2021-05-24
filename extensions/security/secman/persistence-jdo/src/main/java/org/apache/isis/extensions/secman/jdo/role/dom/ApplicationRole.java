@@ -18,12 +18,9 @@
  */
 package org.apache.isis.extensions.secman.jdo.role.dom;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -41,13 +38,8 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.util.Equality;
-import org.apache.isis.applib.util.Hashing;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
 
 
 @PersistenceCapable(
@@ -84,11 +76,10 @@ import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissio
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-    implements org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
+    extends org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
 
     // -- NAME
@@ -138,49 +129,5 @@ public class ApplicationRole
         getUsers().add(applicationUser);
     }
 
-
-    // -- PERMISSIONS
-
-    @Override
-    @Permissions
-    public List<org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission> getPermissions() {
-        return applicationPermissionRepository.findByRole(this);
-    }
-
-
-    // -- equals, hashCode, compareTo, toString
-
-    private static final Comparator<ApplicationRole> comparator =
-            Comparator.comparing(ApplicationRole::getName);
-
-    private static final Equality<ApplicationRole> equality =
-            ObjectContracts.checkEquals(ApplicationRole::getName);
-
-    private static final Hashing<ApplicationRole> hashing =
-            ObjectContracts.hashing(ApplicationRole::getName);
-
-    private static final ToString<ApplicationRole> toString =
-            ObjectContracts.toString("name", ApplicationRole::getName);
-
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.role.dom.ApplicationRole other) {
-        return comparator.compare(this, (ApplicationRole)other);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return equality.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
-    }
 
 }

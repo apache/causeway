@@ -22,6 +22,7 @@ import javax.jdo.JDOHelper;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -60,10 +61,10 @@ public class Persistable_datanucleusVersionTimestamp {
 
     public java.sql.Timestamp prop() {
         final Object version = JDOHelper.getVersion(persistable);
-        return version != null && version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;
+        return version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;
     }
 
-    public boolean hideProp() {
+    @MemberSupport public boolean hideProp() {
         return prop() == null;
     }
 

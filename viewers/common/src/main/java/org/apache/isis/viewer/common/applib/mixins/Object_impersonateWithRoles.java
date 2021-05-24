@@ -24,14 +24,17 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List)},
@@ -68,24 +71,34 @@ public class Object_impersonateWithRoles {
         return holder;
     }
 
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return impersonateMenu.hideImpersonateWithRoles();
     }
 
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return impersonateMenu.disableImpersonateWithRoles();
     }
 
-    public List<String> choices0Act() {
+    @MemberSupport public List<String> choices0Act() {
         return impersonateMenu.choices0ImpersonateWithRoles();
     }
 
-    public List<String> choices1Act(
+    @MemberSupport public String default0Act() {
+        if (holder instanceof HasUsername) {
+            val username = ((HasUsername) holder).getUsername();
+            if (choices0Act().contains(username)) {
+                return username;
+            }
+        }
+        return null;
+    }
+
+    @MemberSupport public List<String> choices1Act(
             final String userName) {
         return impersonateMenu.choices1ImpersonateWithRoles(userName);
     }
 
-    public List<String> default1Act(
+    @MemberSupport public List<String> default1Act(
             final String userName) {
         return impersonateMenu.default1ImpersonateWithRoles(userName);
     }

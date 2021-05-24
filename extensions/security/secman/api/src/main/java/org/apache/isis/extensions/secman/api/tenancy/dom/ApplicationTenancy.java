@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -32,6 +33,10 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
+import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 /**
@@ -40,25 +45,25 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 @DomainObject(
         objectType = ApplicationTenancy.OBJECT_TYPE
 )
-public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
+public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
-    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
 
-    String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
-    String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
-    String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
-
+    public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
+    public static final String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
+    public static final String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
 
 
     // -- DOMAIN EVENTS
 
-    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
-    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
-    abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
+
 
     // -- MODEL
 
-    default String title() {
+    public String title() {
         return getName();
     }
 
@@ -84,7 +89,7 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Name {
+    public @interface Name {
         int MAX_LENGTH = 120;
         int TYPICAL_LENGTH = 20;
 
@@ -92,8 +97,8 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     }
 
     @Name
-    String getName();
-    void setName(String name);
+    public abstract String getName();
+    public abstract void setName(String name);
 
 
     // -- PATH
@@ -108,19 +113,18 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Path {
+    public @interface Path {
         int MAX_LENGTH = 255;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Path
-    String getPath();
-    void setPath(String path);
+    public abstract String getPath();
+    public abstract void setPath(String path);
 
 
     // -- PARENT
-
 
     @Property(
             domainEvent = Parent.DomainEvent.class,
@@ -133,13 +137,13 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Parent {
+    public @interface Parent {
         class DomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
     }
 
     @Parent
-    ApplicationTenancy getParent();
-    void setParent(ApplicationTenancy parent);
+    public abstract ApplicationTenancy getParent();
+    public abstract void setParent(ApplicationTenancy parent);
 
 
 
@@ -153,12 +157,48 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Children {
+    public @interface Children {
         class DomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
     }
 
     @Children
-    Collection<ApplicationTenancy> getChildren();
+    public abstract Collection<ApplicationTenancy> getChildren();
 
+
+
+    // -- CONTRACT
+
+    private static final Equality<ApplicationTenancy> equality =
+            ObjectContracts.checkEquals(ApplicationTenancy::getPath);
+
+    private static final Hashing<ApplicationTenancy> hashing =
+            ObjectContracts.hashing(ApplicationTenancy::getPath);
+
+    private static final ToString<ApplicationTenancy> toString =
+            ObjectContracts.toString("path", ApplicationTenancy::getPath)
+                    .thenToString("name", ApplicationTenancy::getName);
+
+    private static final Comparator<ApplicationTenancy> comparator =
+            Comparator.comparing(ApplicationTenancy::getPath);
+
+    @Override
+    public int compareTo(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy other) {
+        return comparator.compare(this, (ApplicationTenancy) other);
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        return equality.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return hashing.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return toString.toString(this);
+    }
 
 }

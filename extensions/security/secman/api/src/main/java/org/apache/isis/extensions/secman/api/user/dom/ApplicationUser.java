@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -38,11 +40,21 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
+import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.HasAtPath;
 
@@ -54,35 +66,62 @@ import lombok.val;
 @DomainObject(
         objectType = ApplicationUser.OBJECT_TYPE
 )
-public interface ApplicationUser
-        extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
+public abstract class ApplicationUser
+        implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
-    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUser";
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUser";
+
+    @Inject private transient ApplicationUserRepository applicationUserRepository;
+    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private transient UserService userService;
+    @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
+    @Inject private transient SecmanConfiguration configBean;
+
+    protected ApplicationUserRepository getApplicationUserRepository() {
+        return applicationUserRepository;
+    }
+
+    protected ApplicationPermissionRepository getApplicationPermissionRepository() {
+        return applicationPermissionRepository;
+    }
+
+    protected UserService getUserService() {
+        return userService;
+    }
+
+    /**
+     * Optional service, if configured then is used to evaluate permissions within
+     * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
+     * else will fallback to a default implementation.
+     */
+    protected PermissionsEvaluationService getPermissionsEvaluationService() {
+        return permissionsEvaluationService;
+    }
+
+    protected SecmanConfiguration getConfigBean() {
+        return configBean;
+    }
 
     // -- CONSTANTS
 
-    String NAMED_QUERY_FIND_BY_USERNAME = "ApplicationUser.findByUsername";
-    String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS = "ApplicationUser.findByEmailAddress";
-    String NAMED_QUERY_FIND = "ApplicationUser.find";
-    String NAMED_QUERY_FIND_BY_ATPATH = "ApplicationUser.findByAtPath";
+    public static final String NAMED_QUERY_FIND_BY_USERNAME = "ApplicationUser.findByUsername";
+    public static final String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS = "ApplicationUser.findByEmailAddress";
+    public static final String NAMED_QUERY_FIND = "ApplicationUser.find";
+    public static final String NAMED_QUERY_FIND_BY_ATPATH = "ApplicationUser.findByAtPath";
 
     // -- DOMAIN EVENTS
 
-    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
-    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
 
     // -- MODEL
 
-    /**
-     * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
-     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
-     */
-    default String title() {
+    public String title() {
         return getName();
     }
 
-    default String iconName() {
-        return getStatus().isEnabled() ? "enabled" : "disabled";
+    public String iconName() {
+        return getStatus().isUnlocked() ? "unlocked" : "locked";
     }
 
 
@@ -99,12 +138,12 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Name {
+    public @interface Name {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Name
-    default String getName() {
+    public String getName() {
         final StringBuilder buf = new StringBuilder();
         if(getFamilyName() != null) {
             if(getKnownAs() != null) {
@@ -142,7 +181,7 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Username {
+    public @interface Username {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
@@ -150,8 +189,8 @@ public interface ApplicationUser
 
     @Override
     @Username
-    String getUsername();
-    void setUsername(String username);
+    public abstract String getUsername();
+    public abstract void setUsername(String username);
 
 
     // -- FAMILY NAME
@@ -176,15 +215,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface FamilyName {
+    public @interface FamilyName {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @FamilyName
-    String getFamilyName();
-    void setFamilyName(String familyName);
+    public abstract String getFamilyName();
+    public abstract void setFamilyName(String familyName);
 
 
     // -- GIVEN NAME
@@ -209,15 +248,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface GivenName {
+    public @interface GivenName {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @GivenName
-    String getGivenName();
-    void setGivenName(String givenName);
+    public abstract String getGivenName();
+    public abstract void setGivenName(String givenName);
 
 
     // -- KNOWN AS
@@ -242,15 +281,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface KnownAs {
+    public @interface KnownAs {
         int MAX_LENGTH = 120;
 
         class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @KnownAs
-    String getKnownAs();
-    void setKnownAs(String knownAs);
+    public abstract String getKnownAs();
+    public abstract void setKnownAs(String knownAs);
 
 
     // -- EMAIL ADDRESS
@@ -272,15 +311,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface EmailAddress {
+    public @interface EmailAddress {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @EmailAddress
-    String getEmailAddress();
-    void setEmailAddress(String emailAddress);
+    public abstract String getEmailAddress();
+    public abstract void setEmailAddress(String emailAddress);
 
 
     // -- PHONE NUMBER
@@ -303,15 +342,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface PhoneNumber {
+    public @interface PhoneNumber {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @PhoneNumber
-    String getPhoneNumber();
-    void setPhoneNumber(String phoneNumber);
+    public abstract String getPhoneNumber();
+    public abstract void setPhoneNumber(String phoneNumber);
 
 
     // -- FAX NUMBER
@@ -336,15 +375,15 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface FaxNumber {
+    public @interface FaxNumber {
         int MAX_LENGTH = 120;
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @FaxNumber
-    String getFaxNumber();
-    void setFaxNumber(String faxNumber);
+    public abstract String getFaxNumber();
+    public abstract void setFaxNumber(String faxNumber);
 
 
     // -- AT PATH
@@ -366,14 +405,14 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface AtPath {
+    public @interface AtPath {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Override
     @AtPath
-    String getAtPath();
-    void setAtPath(String atPath);
+    public abstract String getAtPath();
+    public abstract void setAtPath(String atPath);
 
 
     // -- ACCOUNT TYPE
@@ -388,13 +427,13 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface AccountType {
+    public @interface AccountType {
         class DomainEvent extends PropertyDomainEvent<AccountType> {}
     }
 
     @AccountType
-    org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType();
-    void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType);
+    public abstract org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType();
+    public abstract void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType);
 
 
     // -- STATUS
@@ -409,13 +448,13 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Status {
+    public @interface Status {
         class DomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
     }
 
     @Status
-    ApplicationUserStatus getStatus();
-    void setStatus(ApplicationUserStatus disabled);
+    public abstract ApplicationUserStatus getStatus();
+    public abstract void setStatus(ApplicationUserStatus disabled);
 
 
     // -- ENCRYPTED PASSWORD
@@ -425,12 +464,16 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface EncryptedPassword {
+    public @interface EncryptedPassword {
     }
 
     @EncryptedPassword
-    String getEncryptedPassword();
-    void setEncryptedPassword(String encryptedPassword);
+    public abstract String getEncryptedPassword();
+    public abstract void setEncryptedPassword(String encryptedPassword);
+
+    public boolean hideEncryptedPassword() {
+        return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
+    }
 
 
     // -- HAS PASSWORD
@@ -446,16 +489,18 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface HasPassword {
+    public @interface HasPassword {
         class DomainEvent extends PropertyDomainEvent<Boolean> {}
     }
 
     @HasPassword
-    default boolean isHasPassword() {
+    public boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
     }
 
-    boolean hideHasPassword();
+    public boolean hideHasPassword() {
+        return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
+    }
 
 
     // ROLES
@@ -469,24 +514,37 @@ public interface ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Roles {
+    public @interface Roles {
         class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
     }
 
     @Roles
-    Set<ApplicationRole> getRoles();
+    public abstract Set<ApplicationRole> getRoles();
 
 
     // -- PERMISSION SET
 
+    // short-term caching
+    private transient ApplicationPermissionValueSet cachedPermissionSet;
+
     @Programmatic
-    ApplicationPermissionValueSet getPermissionSet();
+    public ApplicationPermissionValueSet getPermissionSet() {
+        if(cachedPermissionSet != null) {
+            return cachedPermissionSet;
+        }
+        val permissions = getApplicationPermissionRepository().findByUser(this);
+        return cachedPermissionSet =
+                new ApplicationPermissionValueSet(
+                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
+                        getPermissionsEvaluationService());
+    }
+
 
 
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     @Programmatic
-    default boolean isForSelfOrRunAsAdministrator() {
+    public boolean isForSelfOrRunAsAdministrator() {
         val currentUser = currentUser();
         val currentUserName = currentUser.getName();
         // is for self?
@@ -512,18 +570,50 @@ public interface ApplicationUser
         return false;
     }
 
-    @Programmatic
-    String getAdminRoleName();
-
-    @Programmatic
-    UserMemento currentUser();
-
 
     // -- HELPERS
 
     @Programmatic
-    default boolean isLocalAccount() {
+    public boolean isLocalAccount() {
         return getAccountType() == org.apache.isis.extensions.secman.api.user.dom.AccountType.LOCAL;
+    }
+
+    @Programmatic
+    private String getAdminRoleName() {
+        return getConfigBean().getAdminRoleName();
+    }
+
+    @Programmatic
+    private UserMemento currentUser() {
+        return getUserService().currentUserElseFail();
+    }
+
+
+    // -- equals, hashCode, compareTo, toString
+    private static final String propertyNames = "username";
+
+    private static final ObjectContracts.ObjectContract<ApplicationUser> contract =
+            ObjectContracts.parse(ApplicationUser.class, propertyNames);
+
+
+    @Override
+    public int compareTo(final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser other) {
+        return contract.compare(this, (ApplicationUser) other);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return contract.equals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return contract.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return contract.toString(this);
     }
 
 }

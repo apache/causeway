@@ -24,8 +24,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -66,7 +64,7 @@ public class ApplicationUser_duplicate {
         return applicationUserRepository
                 .newUser(username, target.getAccountType(), user->{
 
-                    user.setStatus(ApplicationUserStatus.DISABLED);
+                    user.setStatus(ApplicationUserStatus.LOCKED);
                     user.setEmailAddress(emailAddress);
 
                     for (ApplicationRole role : target.getRoles()) {

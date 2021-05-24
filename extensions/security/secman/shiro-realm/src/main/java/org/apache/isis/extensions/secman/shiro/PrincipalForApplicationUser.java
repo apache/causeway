@@ -67,7 +67,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
         if(applicationUser == null) {
             return null;
         }
-        val username = applicationUser.getName();
+        val username = applicationUser.getUsername();
         val encryptedPassword = applicationUser.getEncryptedPassword();
         val accountType = applicationUser.getAccountType();
         val roles = applicationUser.getRoles()
@@ -87,8 +87,8 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     @Getter(value = AccessLevel.PUBLIC)  private final Set<String> roles;
     @Getter(value = AccessLevel.PACKAGE) private final ApplicationPermissionValueSet permissionSet;
 
-    public boolean isDisabled() {
-        return getStatus() == ApplicationUserStatus.DISABLED;
+    public boolean isLocked() {
+        return getStatus() == ApplicationUserStatus.LOCKED;
     }
 
     @Override

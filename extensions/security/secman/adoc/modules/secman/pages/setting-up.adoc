@@ -74,11 +74,9 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
         ...
         IsisModuleSecurityShiro.class,                  // <.>
         ...
-        IsisModuleExtSecmanApi.class,                   // <.>
-        IsisModuleExtSecmanModel.class,
-        IsisModuleExtSecmanPersistenceJpa.class,
-        IsisModuleExtSecmanRealmShiro.class,
-        IsisModuleExtSecmanEncryptionJbcrypt.class,
+        IsisModuleExtSecmanPersistenceXxx.class,        // <.>
+        IsisModuleExtSecmanRealmShiro.class,            // <.>
+        IsisModuleExtSecmanEncryptionJbcrypt.class,     // <.>
 
         IsisModuleTestingFixturesApplib.class,          // <.>
         ...
@@ -86,10 +84,15 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 public class AppManifest {
 }
 ----
+
 <.> enable Shiro for security.
 +
 Ensure that no other `IsisModuleSecurityXxx` module is imported.
-<.> SecMan dependencies
+
+<.> specify either `IsisModuleExtSecmanPersistenceJdo` or `IsisModuleExtSecmanPersistenceJpa`, as required
+<.> enable Shiro integration (so that Shiro delegates to Secman for authentication)
+<.> use Jbcrypt to encrypt locally-held password
+
 <.> fixture script support
 
 
@@ -108,9 +111,9 @@ public class AppManifest {
     @Bean
     public SecmanConfiguration secmanConfiguration() {
         return SecmanConfiguration.builder()
-                .adminUserName("sven").adminPassword("pass")      // <.>
-                .adminRoleName("isis-ext-secman-admin-role")      // <.>
-                .regularUserRoleName("isis-ext-secman-user-role") // <.>
+                .adminUserName("sven").adminPassword("pass")     // <.>
+                // .adminRoleName("isis-ext-secman-admin")       // <.>
+                // .regularUserRoleName("isis-ext-secman-user")  // <.>
                 .build();
     }
 
@@ -131,10 +134,13 @@ public class AppManifest {
     }
 }
 ----
+
 <.> indicates the security super-user and password
 <.> indicates the name of the role granted to this security super-user.
-This can be any name.
+This can be any name; if not overridden will default to `SecmanConfiguration.DEFAULT_ADMIN_ROLE_NAME`
+
 <.> indicates the name of the role that should be granted to regular users of the application.
+This can be any name; if not overridden will default to `SecmanConfiguration.DEFAULT_REGULAR_USER_ROLE_NAME`
 +
 IMPORTANT: This role grants regular users the ability to logout (among other things).
 <.> indicates that only local users are supported (no delegate realm is in used).
@@ -142,82 +148,81 @@ IMPORTANT: This role grants regular users the ability to logout (among other thi
 See <<delegate-realms,below>> to configure for a delegate realm.
 
 
+== Configuration
 
-== Shiro Realm
+Add the database schema used by the SecMan entities to the configuration file:
 
-SecMan's Shiro realm is configured using the `shiro.ini` file:
-
-[source,ini]
-.shiro.ini
+[source,yaml]
+.application.yml
 ----
-[main]
-
-authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
-isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
-
-securityManager.authenticator.authenticationStrategy = $authenticationStrategy
-securityManager.realms = $isisModuleSecurityRealm
-
-[users]
-[roles]
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: isisExtensionsSecman
 ----
 
-The `[users]` and `[roles]` sections are required but are unused.
 
+[#default-roles]
+== Default Roles
 
-[#delegate-realms]
-== Delegate Realms
+With SecMan enabled, it will automatically set up a security super-user (as described <<configure-services,above>>) and a regular role.
+It also defines a number of other roles to provide access to specific features of the framework (or its extensions).
+These are summarised here:
 
-If a delegate realm is to be used, then there are two changes required.
+* Available in both production and prototype mode
 
-* first, in the `AppManifest`:
+** `SecmanConfiguration#getAdminRoleName()`
 +
-[source,java]
-.AppManifest.java
-----
-@Bean
-public SecurityRealmService securityRealmService() {
-    return new SecurityRealmService() {
-        @Override
-        public SecurityRealm getCurrentRealm() {
-            return () -> EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
-        }
-    };
-}
-----
+Admin permissions for Secman itself.
+This is the role granted to the security super-user, and whose exact name is configured using .
+This role should therefore be extremely tightly locked down.
 
-* second, specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the semcan realm.
+** `SecmanConfiguration#getRegularUserRoleName()`
 +
-For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
+Regular user permissions for Secman.
+This should be granted to all users (in particular, it includes the ability to logout!)
+
+** `IsisConfigurationRoleAndPermissions.ROLE_NAME`
 +
-[source,ini]
-.shiro.ini
-----
-[main]
+Access the configuration properties (from the tertiary menu))
 
-...
-ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
-ldapRealm.xxx=...                                                            #<.>
-ldapRealm.yyy=...
+* Available only in prototype mode:
 
-isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+** `IsisAppFeatureRoleAndPermissions.ROLE_NAME`
++
+Browse the application features + permissions (from the "Prototyping" menu).
 
-...
-----
-<.> instantiate the LDAP realm
-<.> configure the LDAP realm as required
-<.> specify the LDAP realm as the delegate realm for SecMan's own realm.
+** `IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
++
+Download the JDO metamodel (from the "Prototyping" menu).
+
+** `IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME`
++
+Access the h2 console (from the "Prototyping" menu)
+
+** `IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME`
++
+Access the swagger UI (from the "Prototyping" menu)
+
+** `IsisSudoImpersonateRoleAndPermissions.ROLE_NAME`
++
+Impersonate other users (from the "Prototyping" menu, and mixins)
+
+The full list can be found by searching for subclasses of `AbstractRoleAndPermissionsFixtureScript`.
 
 
+== Creating Users
 
+Creating regular applications users in production use can be done manually by the security super-user, or can be done programmatically through xref:refguide:extensions:index/secman/api/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository].
+This will return an xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/api/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
 
 == Seed Users and Roles
 
-With SecMan enabled, it will automatically set up a security super-user (as described <<configure-services,above>>) and a regular role.
+If prototyping with an in-memory database then you will most likely want to set up some fixture scripts to automatically set up application users.
 
-Creating regular applications users thereafter can be done manually, but if prototyping with an in-memory database then you will most likely want to set up some fixure scripts to automatically set up application users.
+SecMan provides the `AbstractRoleAndPermissionsFixtureScript` and `AbstractUserAndRolesFixtureScript` convenience fixture scripts
+to inherit from.
 
-SecMan provides a number of convenience fixture scripts to inherit from.
 For example, these scripts can be used to set up access to the domain objects in the xref:docs:starters:helloworld.adoc[HelloWorld] starter app:
 
 * to set up a "user-rw" role with access to everything under the "hello" namespace:
@@ -271,18 +276,99 @@ public class RoleAndPerms__NoDelete extends AbstractRoleAndPermissionsFixtureScr
 * to set up a user "joe" with the "user-rw" and "no-delete" role:
 +
 [source,java]
-.UserToRole__bob_UserRw.java
+.UserToRole__joe_UserRw_but_NoDelete.java
 ----
-public class UserToRole__bob_UserRw extends AbstractUserAndRolesFixtureScript {
+public class UserToRole__joe_UserRw_but_NoDelete
+        extends AbstractUserAndRolesFixtureScript {
 
-    public UserToRole__bob_UserRw() {
-        super("joe", "pass", "bob@world.com",
-                "/ITA",
-                AccountType.LOCAL,
-                Can.of(
-                   RoleAndPerms__UserRw.ROLE_NAME,
-                   RoleAndPerms__NoDelete.ROLE_NAME
-                ));
+    public UserToRole__joe_UserRw_but_NoDelete_or_isis2619Prop() {
+        super(
+          "joe", "pass",                                               // <.>
+          "joe@italy.com",                                             // <.>
+          "/ITA",                                                      // <.>
+          AccountType.LOCAL,                                           // <.>
+          Can.of(
+            RoleAndPerms__UserRw.ROLE_NAME                             // <.>
+            , RoleAndPerms__NoDelete.ROLE_NAME                         // <5>
+            , SecmanConfiguration.DEFAULT_REGULAR_USER_ROLE_NAME       // <.>
+            , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME             // <.>
+            , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME  // <7>
+          ));
     }
 }
 ----
+<.> username and password
+<.> email address
+<.> application tenancy
+<.> local account (rather than delegated, see <<delegate-realms,below>>)
+<.> application-specific roles
+<.> regular user access (always required)
+<.> specific access to framework features, see <<default-roles,above>>
+
+
+== Shiro Realm
+
+SecMan's Shiro realm is configured using the `shiro.ini` file:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+
+authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
+
+securityManager.authenticator.authenticationStrategy = $authenticationStrategy
+securityManager.realms = $isisModuleSecurityRealm
+
+[users]
+[roles]
+----
+
+The `[users]` and `[roles]` sections are required but are unused.
+
+[#delegate-realms]
+== Delegate Realms
+
+If a delegate realm is to be used, then there are two changes required.
+
+* first, in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Bean
+public SecurityRealmService securityRealmService() {
+    return new SecurityRealmService() {
+        @Override
+        public SecurityRealm getCurrentRealm() {
+            return () -> EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
+        }
+    };
+}
+----
+
+* second, specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the Secman realm.
++
+For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
++
+[source,ini]
+.shiro.ini
+----
+[main]
+
+...
+ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
+ldapRealm.xxx=...                                                            #<.>
+ldapRealm.yyy=...
+
+isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+
+...
+----
+<.> instantiate the LDAP realm
+<.> configure the LDAP realm as required
+<.> specify the LDAP realm as the delegate realm for SecMan's own realm.
+
+
+

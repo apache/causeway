@@ -22,14 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.api.authorizor.AuthorizorSecman;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureChoices;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationFeatureViewModels;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationNamespace;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationType;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationTypeAction;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationTypeCollection;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationTypeMember;
-import org.apache.isis.extensions.secman.api.feature.dom.ApplicationTypeProperty;
+import org.apache.isis.extensions.secman.api.feature.api.ApplicationFeatureChoices;
+import org.apache.isis.extensions.secman.api.feature.contributions.ApplicationFeatureViewModel_permissions;
 import org.apache.isis.extensions.secman.api.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.api.permission.app.mixins.ApplicationOrphanedPermissionManager_relocateSelected;
 import org.apache.isis.extensions.secman.api.permission.dom.mixins.ApplicationPermission_allow;
@@ -92,7 +86,6 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
         AuthorizorSecman.class,
 
         // @DomainService
-        ApplicationFeatureViewModels.class,
         ApplicationOrphanedPermissionManager.class,
         ApplicationPermissionMenu.class,
         ApplicationRoleMenu.class,
@@ -104,13 +97,6 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
 
         // -- ViewModels
         // TODO: not sure we need to register view models?
-
-        ApplicationNamespace.class,
-        ApplicationType.class,
-        ApplicationTypeAction.class,
-        ApplicationTypeCollection.class,
-        ApplicationTypeMember.class,
-        ApplicationTypeProperty.class,
         ApplicationUserManager.class,
         UserPermissionViewModel.class,
         ApplicationOrphanedPermissionManager.class,
@@ -165,8 +151,14 @@ import org.apache.isis.extensions.secman.api.user.menu.MeService;
         ApplicationUser_updatePassword.class,
         ApplicationUser_updatePhoneNumber.class,
         ApplicationUser_updateUsername.class,
+
+        // ApplicationFeatureViewModel
+        ApplicationFeatureViewModel_permissions.class,
+
+        // HasUsername
         HasUsername_open.class,
 
+        // ApplicationUserManager
         ApplicationUserManager_allUsers.class,
         ApplicationUserManager_newDelegateUser.class,
         ApplicationUserManager_newLocalUser.class,

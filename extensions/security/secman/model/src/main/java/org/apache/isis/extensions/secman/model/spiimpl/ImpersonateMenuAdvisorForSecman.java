@@ -41,7 +41,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     public List<String> allUserNames() {
         return this.applicationUserRepository.allUsers()
                 .stream()
-                .filter(x -> x.getStatus() == ApplicationUserStatus.ENABLED)
+                .filter(x -> x.getStatus() == ApplicationUserStatus.UNLOCKED)
                 .map(ApplicationUser::getName)
                 .collect(Collectors.toList());
     }

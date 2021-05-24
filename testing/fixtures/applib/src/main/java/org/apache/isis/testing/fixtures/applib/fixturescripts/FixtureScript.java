@@ -49,6 +49,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
@@ -723,9 +724,14 @@ public abstract class FixtureScript {
     final List<FixtureResult> run(
             final String parameters,
             final FixtureScripts fixtureScripts) {
-        executionContext = fixtureScripts.newExecutionContext(parameters);
-        executionContext.executeChildIfNotAlready(this);
-        return executionContext.getResults();
+        try {
+            executionContext = fixtureScripts.newExecutionContext(parameters);
+            executionContext.executeChildIfNotAlready(this);
+            return executionContext.getResults();
+        } catch(Exception ex) {
+            log.error(this.getQualifiedName(), ex);
+            throw ex;
+        }
     }
 
 
