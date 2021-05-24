@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -63,10 +64,10 @@ public class Object_stopImpersonating {
         return holder;
     }
 
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return impersonateMenu.hideStopImpersonating();
     }
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return impersonateMenu.disableStopImpersonating();
 
     }

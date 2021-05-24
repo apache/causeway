@@ -101,8 +101,7 @@ public class Object_downloadMetamodelXml {
     /**
      * Defaults to the simple name of the domain object's class.
      */
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getClass().getSimpleName();
     }
 
