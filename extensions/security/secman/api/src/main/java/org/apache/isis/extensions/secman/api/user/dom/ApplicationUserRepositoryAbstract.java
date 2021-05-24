@@ -179,7 +179,7 @@ implements ApplicationUserRepository {
 
     @Override
     public void enable(ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.ENABLED) {
+        if(user.getStatus() != ApplicationUserStatus.UNLOCKED) {
              factoryService.mixin(ApplicationUser_unlock.class, user)
              .act();
         }
@@ -187,7 +187,7 @@ implements ApplicationUserRepository {
 
     @Override
     public void disable(ApplicationUser user) {
-        if(user.getStatus() != ApplicationUserStatus.DISABLED) {
+        if(user.getStatus() != ApplicationUserStatus.LOCKED) {
             factoryService.mixin(ApplicationUser_lock.class, user)
             .act();
         }
@@ -211,9 +211,7 @@ implements ApplicationUserRepository {
         if(user.getAccountType().equals(AccountType.LOCAL)) {
         	// keep null when is set for status in accept() call above
         } else {
-			user.setStatus(configBean.isAutoEnableIfDelegatedAndAuthenticated()
-			        ?  ApplicationUserStatus.ENABLED
-	                :  ApplicationUserStatus.DISABLED);
+			user.setStatus(ApplicationUserStatus.LOCKED);
         }
         repository.persistAndFlush(user);
         eventBusService.post(UserCreatedEvent.of(user));

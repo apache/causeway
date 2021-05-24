@@ -21,16 +21,16 @@ package org.apache.isis.extensions.secman.api.user.dom;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
- * Whether the user's account is enabled or disabled.
+ * Whether the user's account is locked or unlocked.
  *
  * @since 2.0 {@index}
  */
 public enum ApplicationUserStatus {
-    ENABLED,
-    DISABLED;
+    UNLOCKED,
+    LOCKED;
 
-    public static ApplicationUserStatus parse(final Boolean enabled) {
-        return enabled != null && enabled ? ENABLED : DISABLED;
+    public static ApplicationUserStatus parse(final Boolean unlocked) {
+        return unlocked != null && unlocked ? UNLOCKED : LOCKED;
     }
 
     @Override
@@ -38,8 +38,8 @@ public enum ApplicationUserStatus {
         return StringExtensions.capitalize(name());
     }
 
-    public boolean isEnabled() {
-        return this == ENABLED;
+    public boolean isUnlocked() {
+        return this == UNLOCKED;
     }
 
 }

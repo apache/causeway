@@ -125,7 +125,7 @@ public abstract class ApplicationUser
     }
 
     public String iconName() {
-        return getStatus().isEnabled() ? "enabled" : "disabled";
+        return getStatus().isUnlocked() ? "unlocked" : "locked";
     }
 
 

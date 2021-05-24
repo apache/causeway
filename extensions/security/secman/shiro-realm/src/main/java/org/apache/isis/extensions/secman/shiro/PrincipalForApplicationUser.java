@@ -87,8 +87,8 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     @Getter(value = AccessLevel.PUBLIC)  private final Set<String> roles;
     @Getter(value = AccessLevel.PACKAGE) private final ApplicationPermissionValueSet permissionSet;
 
-    public boolean isDisabled() {
-        return getStatus() == ApplicationUserStatus.DISABLED;
+    public boolean isLocked() {
+        return getStatus() == ApplicationUserStatus.LOCKED;
     }
 
     @Override

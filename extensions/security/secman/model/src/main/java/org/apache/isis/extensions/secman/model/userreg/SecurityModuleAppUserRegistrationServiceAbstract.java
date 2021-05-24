@@ -58,7 +58,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
         final String username = userDetails.getUsername();
         final String emailAddress = userDetails.getEmailAddress();
         final ApplicationUser applicationUser = (ApplicationUser) applicationUserRepository
-                .newLocalUser(username, password, ApplicationUserStatus.ENABLED);
+                .newLocalUser(username, password, ApplicationUserStatus.UNLOCKED);
 
         if(_Strings.isNotEmpty(emailAddress)) {
             applicationUser.setEmailAddress(emailAddress);

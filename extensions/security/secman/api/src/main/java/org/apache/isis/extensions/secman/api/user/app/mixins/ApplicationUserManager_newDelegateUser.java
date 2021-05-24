@@ -75,13 +75,13 @@ public class ApplicationUserManager_newDelegateUser {
           final ApplicationRole initialRole,
 
           @Parameter(optionality = Optionality.OPTIONAL)
-          @ParameterLayout(named = "Enabled?")
-          final Boolean enabled
+          @ParameterLayout(named = "Unlocked?")
+          final Boolean unlocked
 
             ) {
 
         final ApplicationUser user = applicationUserRepository
-                .newDelegateUser(username, ApplicationUserStatus.parse(enabled));
+                .newDelegateUser(username, ApplicationUserStatus.parse(unlocked));
 
         if (initialRole != null) {
             applicationRoleRepository.addRoleToUser(initialRole, user);

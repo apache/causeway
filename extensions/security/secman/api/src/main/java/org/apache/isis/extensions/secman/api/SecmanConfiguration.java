@@ -106,9 +106,9 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String adminRoleName = DEFAULT_ADMIN_ROLE_NAME;
+    final String adminRoleName = ADMIN_ROLE_DEFAULT_NAME;
 
-    public static String DEFAULT_ADMIN_ROLE_NAME = "isis-ext-secman-admin";
+    public static String ADMIN_ROLE_DEFAULT_NAME = "isis-ext-secman-admin";
 
     /**
      * The set of namespaces to which the {@link #getAdminRoleName() admin role}
@@ -174,22 +174,26 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String regularUserRoleName = DEFAULT_REGULAR_USER_ROLE_NAME;
+    final String regularUserRoleName = REGULAR_USER_ROLE_DEFAULT_NAME;
 
-    public static String DEFAULT_REGULAR_USER_ROLE_NAME = "isis-ext-secman-user";
+    public static String REGULAR_USER_ROLE_DEFAULT_NAME = "isis-ext-secman-user";
 
 
     /**
-     * Delegated users, on first successful logon, are auto-created but disabled (by default).
+     * Delegated users, on first successful logon, are auto-created but locked (by default).
      * <p>
      * This option allows to override this behavior, such that authenticated
-     * users are also auto-enabled.
+     * users are also auto-unlocked.
      * <p>
-     * default: false
+     *
+     * <p>
+     * BE AWARE THAT if any users are auto-created unlocked, then the set of roles that
+     * they are given should be highly restricted !!!
+     * </p>
      */
     @Getter
     @Builder.Default
-    final boolean autoEnableIfDelegatedAndAuthenticated = false;
+    final boolean autoUnlockIfDelegatedAndAuthenticated = false;
 
 
     // -- UTILITIES
