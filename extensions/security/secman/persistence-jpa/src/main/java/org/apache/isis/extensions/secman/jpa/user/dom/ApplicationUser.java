@@ -38,6 +38,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -107,33 +108,15 @@ import lombok.val;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationUser
-    implements org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
-
-    @Inject private transient ApplicationUserRepository applicationUserRepository;
-    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private transient UserService userService;
-    /**
-     * Optional service, if configured then is used to evaluate permissions within
-     * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
-     * else will fallback to a default implementation.
-     */
-    @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private transient SecmanConfiguration configBean;
+    extends org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
 
 
     @Id
     @GeneratedValue
     private Long id;
 
-
-    // -- NAME
-
-    @Name
-    @Transient
-    @Override
-    public String getName() {
-        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.getName();
-    }
+    @Version
+    private Long version;
 
 
     // -- USERNAME
@@ -151,7 +134,6 @@ public class ApplicationUser
 
 
     // -- FAMILY NAME
-
 
     @Column(nullable = true, length = FamilyName.MAX_LENGTH)
     private String familyName;
@@ -312,25 +294,6 @@ public class ApplicationUser
         this.encryptedPassword = encryptedPassword;
     }
 
-    public boolean hideEncryptedPassword() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(this);
-    }
-
-
-    // -- HAS PASSWORD
-
-    @HasPassword
-    @Override
-    public boolean isHasPassword() {
-        return org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.super.isHasPassword();
-    }
-
-    @Override
-    public boolean hideHasPassword() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(this);
-    }
-
-
 
     // ROLES
 
@@ -346,70 +309,6 @@ public class ApplicationUser
     public Set<ApplicationRole> getRoles() {
         return _Casts.uncheckedCast(roles);
     }
-
-
-    // -- PERMISSION SET
-
-    // short-term caching
-    private transient ApplicationPermissionValueSet cachedPermissionSet;
-    @Override
-    @Programmatic
-    public ApplicationPermissionValueSet getPermissionSet() {
-        if(cachedPermissionSet != null) {
-            return cachedPermissionSet;
-        }
-        val permissions = applicationPermissionRepository.findByUser(this);
-        return cachedPermissionSet =
-                new ApplicationPermissionValueSet(
-                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
-                        permissionsEvaluationService);
-    }
-
-
-    // -- HELPERS
-
-
-    @Programmatic
-    @Override
-    public String getAdminRoleName() {
-        return configBean.getAdminRoleName();
-    }
-
-    @Programmatic
-    @Override
-    public UserMemento currentUser() {
-        return userService.currentUserElseFail();
-    }
-
-
-    // -- equals, hashCode, compareTo, toString
-    private static final String propertyNames = "username";
-
-    private static final ObjectContract<ApplicationUser> contract =
-            ObjectContracts.parse(ApplicationUser.class, propertyNames);
-
-
-    @Override
-    public int compareTo(final org.apache.isis.extensions.secman.api.user.dom.ApplicationUser other) {
-
-        return contract.compare(this, (ApplicationUser)other);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return contract.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return contract.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return contract.toString(this);
-    }
-
 
 
 }

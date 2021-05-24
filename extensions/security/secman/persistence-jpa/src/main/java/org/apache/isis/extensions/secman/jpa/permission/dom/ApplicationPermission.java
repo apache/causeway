@@ -214,6 +214,7 @@ implements org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermi
             .thenUse("role", ApplicationPermission::getRole)
             .thenUse("featureSort", ApplicationPermission::getFeatureSort)
             .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
+            .thenUse("rule", ApplicationPermission::getRule)
             .thenUse("mode", ApplicationPermission::getMode);
 
     @Override

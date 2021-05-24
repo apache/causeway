@@ -19,11 +19,13 @@
 package org.apache.isis.extensions.secman.api.permission.dom;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 
 /**
  * @since 2.0 {@index}
@@ -83,4 +85,6 @@ public interface ApplicationPermissionRepository {
             ApplicationPermissionMode mode,
             ApplicationFeatureSort sort,
             String featureFqn);
+
+    List<ApplicationPermission> findByUser(ApplicationUser applicationUser);
 }
