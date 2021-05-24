@@ -81,6 +81,16 @@ public class Object_impersonateWithRoles {
         return impersonateMenu.choices0ImpersonateWithRoles();
     }
 
+    @MemberSupport public String default0Act() {
+        if (holder instanceof HasUsername) {
+            val username = ((HasUsername) holder).getUsername();
+            if (choices0Act().contains(username)) {
+                return username;
+            }
+        }
+        return null;
+    }
+
     @MemberSupport public List<String> choices1Act(
             final String userName) {
         return impersonateMenu.choices1ImpersonateWithRoles(userName);

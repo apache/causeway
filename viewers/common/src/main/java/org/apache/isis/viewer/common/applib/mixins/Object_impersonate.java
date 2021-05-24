@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,11 @@ public class Object_impersonate {
     }
     @MemberSupport public String disableAct() {
         return impersonateMenu.disableImpersonate();
+    }
+    @MemberSupport public String default0Act() {
+        return holder instanceof HasUsername
+                ? ((HasUsername)holder).getUsername()
+                : null;
     }
 
     @Inject ImpersonateMenu impersonateMenu;
