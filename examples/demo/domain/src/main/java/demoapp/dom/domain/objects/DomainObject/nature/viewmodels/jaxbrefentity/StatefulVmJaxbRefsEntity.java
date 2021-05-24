@@ -75,8 +75,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @XmlElement(required = false)
     private ChildJdo favoriteChild = null;
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT, associateWith = "favoriteChild")
-    @ActionLayout(sequence = "1")
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(associateWith = "favoriteChild", sequence = "1")
     public StatefulVmJaxbRefsEntity changeFavoriteChild(ChildJdo newFavorite) {
         favoriteChild = newFavorite;
         return this;
@@ -97,7 +97,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 //end::class[]
 
     //XXX[ISIS-2384] potentially fails with NPE
-    @Action(associateWith = "children")
+    @Action(choicesFrom = "children")
     public StatefulVmJaxbRefsEntity suffixSelected(List<ChildJdo> children) {
         for(ChildJdo child : children) {
             child.setName(child.getName() + ", Jr");
@@ -106,8 +106,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
     //XXX shortcut for debugging
-    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
-    @ActionLayout(sequence = "2")
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(associateWith = "children", sequence = "2")
     public StatefulVmJaxbRefsEntity addAll() {
         Objects.requireNonNull(childJdoEntities,
                 "ViewModel must have its injections points resolved, before any actions can be invoked.");
@@ -132,7 +132,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @XmlElement(name = "child")
     private List<ChildJdo> children = new ArrayList<>();
 
-    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @Action(choicesFrom = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(sequence = "1")
     public StatefulVmJaxbRefsEntity addChild(final ChildJdo child) {
         children.add(child);
@@ -142,7 +142,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
 
-    @Action(associateWith = "children", semantics = SemanticsOf.IDEMPOTENT)
+    @Action(choicesFrom = "children", semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(sequence = "2")
     public StatefulVmJaxbRefsEntity removeChild(final ChildJdo child) {
         children.remove(child);

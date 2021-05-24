@@ -26,19 +26,17 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
-
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText"
 )
 @ActionLayout(
     promptStyle = PromptStyle.INLINE_AS_IF_EDIT
     , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
+    , associateWith = "controlText"
     , sequence = "1"
 )
 @RequiredArgsConstructor

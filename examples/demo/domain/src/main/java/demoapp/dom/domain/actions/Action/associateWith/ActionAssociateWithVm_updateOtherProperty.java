@@ -23,15 +23,13 @@ import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
-@Action(
-    associateWith = "otherProperty"                             // <.>
-)
+@Action
 @ActionLayout(
     describedAs =
             "@Action(associateWith = \"favorites\") " +
             "@ActionLayout(sequence = \"1\")"
+    , associateWith = "otherProperty"                           // <.>
     , sequence = "2"                                            // <.>
 )
 @RequiredArgsConstructor

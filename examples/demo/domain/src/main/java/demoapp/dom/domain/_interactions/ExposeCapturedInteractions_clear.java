@@ -21,15 +21,16 @@ package demoapp.dom.domain._interactions;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "interactions"
-)
+    semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(
+    associateWith = "interactions")
 @RequiredArgsConstructor
 public class ExposeCapturedInteractions_clear {
     // ...

@@ -25,8 +25,10 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import lombok.RequiredArgsConstructor;
 
 // tag::class[]
-@Action(associateWith = "number")
-@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+@Action()
+@ActionLayout(
+        promptStyle = PromptStyle.DIALOG_SIDEBAR
+        , associateWith = "number")
 @RequiredArgsConstructor
 public class NumberConstantJdo_updateNumber {
 

@@ -27,11 +27,11 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty4"
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE_AS_IF_EDIT/></cpt:property>",
+        associateWith = "readOnlyProperty4",
         sequence = "1")
 @RequiredArgsConstructor
 public class ActionLayoutPromptStyleVm_layoutInlineAsIfEdit {

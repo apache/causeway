@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @ActionRestrictToPrototypingMetaAnnotation  // <.>
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "propertyForMetaAnnotations"
 )
 @ActionLayout(
     describedAs =
         "@ActionRestrictToPrototypingMetaAnnotation"
+    , associateWith = "propertyForMetaAnnotations"
     , sequence = "2"
 )
 @RequiredArgsConstructor

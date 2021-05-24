@@ -24,16 +24,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE     // <.>
-    , associateWith = "propertyForIdempotentAreYouSure"
+
 )
 @ActionLayout(
     named = "Set to Value (Mixin)"
     , describedAs =
         "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
+    , associateWith = "propertyForIdempotentAreYouSure"
     , sequence = "2"
 )
 @RequiredArgsConstructor

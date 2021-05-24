@@ -27,13 +27,13 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1"
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         position = ActionLayout.Position.PANEL_DROPDOWN,
         named = "Positioned on panel in dropdown",
         describedAs = "position = PANEL_DROPDOWN",
+        associateWith = "readOnlyProperty1",
         sequence = "3")
 @RequiredArgsConstructor
 public class ActionLayoutPositionVm_annotatedPanelDropDown {

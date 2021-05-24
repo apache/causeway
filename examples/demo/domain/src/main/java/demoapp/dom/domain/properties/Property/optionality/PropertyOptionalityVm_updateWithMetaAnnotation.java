@@ -27,12 +27,12 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "propertyUsingMetaAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyOptionalityVm_updateWithMetaAnnotation {
 

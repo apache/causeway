@@ -37,8 +37,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
+@Action(choicesFrom = "items")
 @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-@Action(associateWith="items")
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_bulkAction {
 

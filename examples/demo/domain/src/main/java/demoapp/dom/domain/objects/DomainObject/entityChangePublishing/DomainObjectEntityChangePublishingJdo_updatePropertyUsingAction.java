@@ -19,15 +19,16 @@
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyUpdatedByAction"
-)
+    semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(
+    associateWith = "propertyUpdatedByAction")
 public class DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction implements HasAsciiDocDescription {
     // ...
 //end::class[]

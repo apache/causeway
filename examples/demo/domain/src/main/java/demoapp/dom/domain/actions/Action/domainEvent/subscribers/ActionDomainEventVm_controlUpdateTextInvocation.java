@@ -25,17 +25,18 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlUpdateText"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, sequence = "1")
+@ActionLayout(
+    promptStyle = PromptStyle.INLINE
+    , associateWith = "controlUpdateText"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class ActionDomainEventVm_controlUpdateTextInvocation {
 

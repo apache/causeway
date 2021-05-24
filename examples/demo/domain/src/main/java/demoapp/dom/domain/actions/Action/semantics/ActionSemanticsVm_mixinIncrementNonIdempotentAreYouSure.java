@@ -24,15 +24,14 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
-    , associateWith = "propertyForNonIdempotentAreYouSure"
 )
 @ActionLayout(
     named = "Increment (Mixin)"
     , describedAs = "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+    , associateWith = "propertyForNonIdempotentAreYouSure"
     , sequence = "2"
 )
 @RequiredArgsConstructor

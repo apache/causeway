@@ -106,12 +106,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 //tag::action-associateWith-property[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "text"                // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(associateWith = \"text\") " +
             "@ActionLayout(sequence = \"1\")"
+        , associateWith = "text"                // <.>
         , sequence = "1"           // <.>
     )
     public ActionAssociateWithVm updateText(final String text) {
@@ -126,7 +126,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 //tag::action-associateWith-children-1[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "children"        // <.>
+        , choicesFrom = "children"          // <.>
     )
     @ActionLayout(
         describedAs =
@@ -145,7 +145,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 //tag::action-associateWith-children-2[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "children"        // <.>
+        , choicesFrom = "children"         // <.>
     )
     @ActionLayout(
         describedAs =
@@ -163,7 +163,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 //tag::action-associateWith-children-3[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "children"        // <.>
+            , choicesFrom = "children"          // <.>
     )
     @ActionLayout(
         describedAs =

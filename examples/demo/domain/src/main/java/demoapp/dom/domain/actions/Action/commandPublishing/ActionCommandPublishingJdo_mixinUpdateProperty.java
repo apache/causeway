@@ -27,11 +27,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @Action(
     commandPublishing = Publishing.ENABLED        // <.>
     , semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "property"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs = "@Action(command = ENABLED)"
+    , associateWith = "property"
     , sequence = "2"
 )
 public class ActionCommandPublishingJdo_mixinUpdateProperty {

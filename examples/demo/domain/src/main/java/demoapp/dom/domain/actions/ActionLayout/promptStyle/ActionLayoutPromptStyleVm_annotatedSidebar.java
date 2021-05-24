@@ -28,13 +28,13 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1"
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         promptStyle = PromptStyle.DIALOG_SIDEBAR,
         named = "sidebar",
         describedAs = "promptStyle = DIALOG_SIDEBAR",
+        associateWith = "readOnlyProperty1",
         sequence = "3")
 @RequiredArgsConstructor
 public class ActionLayoutPromptStyleVm_annotatedSidebar {

@@ -28,12 +28,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "otherText"
     // no hidden attribute              // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action()"
+    , associateWith = "otherText"
     , sequence = "1"
 )
 @RequiredArgsConstructor

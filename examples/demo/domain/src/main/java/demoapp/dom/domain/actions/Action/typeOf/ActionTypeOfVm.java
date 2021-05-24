@@ -35,11 +35,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -71,7 +70,7 @@ public class ActionTypeOfVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.SAFE
             , typeOf = ActionTypeOfChildVm.class     // <.>
-            , associateWith = "children"
+            , choicesFrom = "children"
     )
     @ActionLayout(
         describedAs =
@@ -88,7 +87,7 @@ public class ActionTypeOfVm implements HasAsciiDocDescription {
 //tag::action-no-annotation[]
     @Action(
             semantics = SemanticsOf.SAFE
-            , associateWith = "children"
+            , choicesFrom = "children"
     )
     @ActionLayout(
         describedAs =

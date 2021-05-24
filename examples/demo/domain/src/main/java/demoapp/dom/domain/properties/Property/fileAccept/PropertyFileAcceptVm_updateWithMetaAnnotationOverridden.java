@@ -28,10 +28,11 @@ import org.apache.isis.applib.value.Blob;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+        associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
 

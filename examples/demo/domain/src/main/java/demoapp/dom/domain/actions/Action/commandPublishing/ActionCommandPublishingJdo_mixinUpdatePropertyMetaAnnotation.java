@@ -28,11 +28,11 @@ import lombok.RequiredArgsConstructor;
 @ActionCommandPublishingEnabledMetaAnnotation     // <.>
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyMetaAnnotated"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs = "@ActionPublishingEnabledMetaAnnotation"
+    , associateWith = "propertyMetaAnnotated"
     , sequence = "2"
 )
 @RequiredArgsConstructor

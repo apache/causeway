@@ -96,12 +96,12 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
 //tag::action-no-annotation[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "propertyNoAnnotation"
             // no restrictTo attribute              // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action()"
+        , associateWith = "propertyNoAnnotation"
         , sequence = "1"
     )
     public ActionRestrictToVm updateNoAnnotation(final String text) {
@@ -115,13 +115,13 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
 
 //tag::action-restrict-to-prototyping[]
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "propertyForPrototyping"
-            , restrictTo = RestrictTo.PROTOTYPING // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+        , restrictTo = RestrictTo.PROTOTYPING         // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+        , associateWith = "propertyForPrototyping"
         , sequence = "1"
     )
     public ActionRestrictToVm updateRestrictToPrototyping(final String text) {
@@ -135,13 +135,13 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
 
 //tag::action-restrict-to-no-restrictions[]
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "propertyForNoRestrictions"
-            , restrictTo = RestrictTo.NO_RESTRICTIONS      // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+        , restrictTo = RestrictTo.NO_RESTRICTIONS      // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(restrictTo = RestrictTo.NO_RESTRICTIONS)"
+        , associateWith = "propertyForNoRestrictions"
         , sequence = "1"
     )
     public ActionRestrictToVm updateRestrictToNoRestrictions(final String text) {
@@ -156,12 +156,12 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
 //tag::action-meta-annotated[]
     @ActionRestrictToPrototypingMetaAnnotation      // <.>
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "propertyForMetaAnnotations"
+        semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
         describedAs =
             "@ActionRestrictToPrototypingMetaAnnotation"
+        , associateWith = "propertyForMetaAnnotations"
         , sequence = "1"
     )
     public ActionRestrictToVm updateMetaAnnotated(final String text) {
@@ -176,14 +176,14 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
 //tag::action-meta-annotated-overridden[]
     @ActionRestrictToNoRestrictionsMetaAnnotation   // <.>
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "propertyForMetaAnnotationsOverridden"
-            , restrictTo = RestrictTo.PROTOTYPING   // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+        , restrictTo = RestrictTo.PROTOTYPING   // <.>
     )
     @ActionLayout(
         describedAs =
             "@ActionRestrictToNoRestrictionsMetaAnnotation " +
             "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+        , associateWith = "propertyForMetaAnnotationsOverridden"
         , sequence = "1"
     )
     public ActionRestrictToVm updateMetaAnnotatedOverridden(final String text) {

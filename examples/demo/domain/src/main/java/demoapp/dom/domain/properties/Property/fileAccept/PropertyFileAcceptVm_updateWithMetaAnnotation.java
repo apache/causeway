@@ -28,10 +28,11 @@ import org.apache.isis.applib.value.Blob;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "pdfPropertyUsingMetaAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+        associateWith = "pdfPropertyUsingMetaAnnotation"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithMetaAnnotation {
 

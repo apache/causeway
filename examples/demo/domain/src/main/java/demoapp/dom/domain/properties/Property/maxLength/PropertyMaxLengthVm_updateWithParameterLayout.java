@@ -27,10 +27,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "propertyUsingAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyMaxLengthVm_updateWithParameterLayout {
 

@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.Action.semantics;
 
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
-
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -38,6 +36,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
@@ -136,12 +136,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 
 //tag::action-no-annotation[]
     @Action(
-        associateWith = "propertyNoAnnotation"
         // no semantics attribute              // <.>
     )
     @ActionLayout(
         named = "Increment by Amount",
         describedAs = "@Action()"
+        , associateWith = "propertyNoAnnotation"
         , sequence = "1"
     )
     public ActionSemanticsVm incrementByAmountNoAnnotation(final int amount) {
@@ -156,12 +156,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-safe[]
     @Action(
         semantics = SemanticsOf.SAFE            // <.>
-        , associateWith = "propertyForSafe"
     )
     @ActionLayout(
         named = "Report",
         describedAs =
             "@Action(semantics = SemanticsOf.SAFE)"
+        , associateWith = "propertyForSafe"
         , sequence = "1"
     )
     public ActionSemanticsVm reportPropertyForSafe() {
@@ -175,11 +175,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-safe-and-request-cacheable-caller[]
     @Action(
         semantics = SemanticsOf.SAFE
-        , associateWith = "propertyForSafeAndRequestCacheable"
     )
     @ActionLayout(
         named = "Report"
         , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
+        , associateWith = "propertyForSafeAndRequestCacheable"
         , sequence = "1"
     )
     public ActionSemanticsVm reportPropertyForSafeAndRequestCacheable() {
@@ -211,11 +211,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-idempotent[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT              // <.>
-        , associateWith = "propertyForIdempotent"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+        , associateWith = "propertyForIdempotent"
         , sequence = "1"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotent(final int value) {
@@ -230,11 +230,11 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-idempotent-are-you-sure[]
     @Action(
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE              // <.>
-        , associateWith = "propertyForIdempotent"
     )
     @ActionLayout(
         named = "Set to Value",
         describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
+        , associateWith = "propertyForIdempotent"
         , sequence = "1"
     )
     public ActionSemanticsVm setToValuePropertyForIdempotentAreYouSure(final int value) {
@@ -249,12 +249,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-non-idempotent[]
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT      // <.>
-        , associateWith = "propertyForNonIdempotent"
     )
     @ActionLayout(
         named = "Increment by Amount"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT)"
+        , associateWith = "propertyForNonIdempotent"
         , sequence = "1"
     )
     public ActionSemanticsVm incrementByAmountPropertyForNonIdempotent(final int amount) {
@@ -269,12 +269,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 //tag::action-semantics-non-idempotent-are-you-sure[]
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
-        , associateWith = "propertyForNonIdempotentAreYouSure"
     )
     @ActionLayout(
         named = "Increment"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+        , associateWith = "propertyForNonIdempotentAreYouSure"
         , sequence = "1"
     )
     public ActionSemanticsVm incrementPropertyForNonIdempotentAreYouSure() {
@@ -285,12 +285,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
 
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
-        , associateWith = "propertyForNonIdempotentAreYouSure"
     )
     @ActionLayout(
         named = "Increment by Amount"
         , describedAs =
             "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+        , associateWith = "propertyForNonIdempotentAreYouSure"
         , sequence = "2"
     )
     public ActionSemanticsVm incrementByAmountPropertyForNonIdempotentAreYouSure(final int amount) {
@@ -306,12 +306,12 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @ActionSemanticsIdempotentMetaAnnotation      // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
-        , associateWith = "propertyForMetaAnnotations"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs =
             "@ActionSemanticsIdempotentMetaAnnotation"
+        , associateWith = "propertyForMetaAnnotations"
         , sequence = "1"
     )
     public ActionSemanticsVm setToValueMetaAnnotated(final int value) {
@@ -327,13 +327,13 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     @ActionSemanticsSafeMetaAnnotation              // <.>
     @Action(
         semantics = SemanticsOf.IDEMPOTENT      // <.>
-        , associateWith = "propertyForMetaAnnotationsOverridden"
     )
     @ActionLayout(
         named = "Set to Value"
         , describedAs =
             "@ActionSemanticsSafeMetaAnnotation " +
             "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+        , associateWith = "propertyForMetaAnnotationsOverridden"
         , sequence = "1"
     )
     public ActionSemanticsVm setToValueMetaAnnotatedOverridden(final int val) {

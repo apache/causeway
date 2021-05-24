@@ -27,15 +27,14 @@ import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
     semantics = SemanticsOf.SAFE            // <.>
-    , associateWith = "propertyForSafe"
 )
 @ActionLayout(
     named = "Report (Mixin)"
     , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
+    , associateWith = "propertyForSafe"
     , sequence = "2"
 )
 @RequiredArgsConstructor

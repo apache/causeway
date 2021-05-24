@@ -28,10 +28,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "customerAgePropertyUsingMetaAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "customerAgePropertyUsingMetaAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
 

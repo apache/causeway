@@ -28,11 +28,11 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "propertyNoAnnotation"
     // no restrictTo attribute              // <.>
 )
 @ActionLayout(
     describedAs = "@Action()"
+    , associateWith = "propertyNoAnnotation"
     , sequence = "2"
 )
 @RequiredArgsConstructor

@@ -21,15 +21,16 @@ package demoapp.dom.domain._changes;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "changes"
-)
+    semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(
+    associateWith = "changes")
 public class ExposeCapturedChanges_clear {
     // ...
 //end::class[]

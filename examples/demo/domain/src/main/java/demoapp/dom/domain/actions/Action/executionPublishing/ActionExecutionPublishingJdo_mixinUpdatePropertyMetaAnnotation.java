@@ -26,11 +26,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @ActionExecutionPublishingEnabledMetaAnnotation     // <.>
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyMetaAnnotated"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs = "@ActionPublishingEnabledMetaAnnotation"
+    , associateWith = "propertyMetaAnnotated"
     , sequence = "2"
 )
 public class ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotation {

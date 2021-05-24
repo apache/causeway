@@ -24,18 +24,17 @@ import java.util.Objects;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Action(
-    associateWith = "favorites"                                 // <.>
+    choicesFrom = "favorites"                                   // <.>
 )
 @ActionLayout(
     describedAs =
-            "@Action(associateWith = \"favorites\") " +
+            "@Action(choicesFrom = \"favorites\") " +
             "@ActionLayout(sequence = \"3\")"
     , sequence = "3"                                            // <.>
 )

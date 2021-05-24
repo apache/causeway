@@ -24,16 +24,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1"
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         position = ActionLayout.Position.BELOW,
         named = "Positioned below",
         describedAs = "position = BELOW",
+        associateWith = "readOnlyProperty1",
         sequence = "1")
 @RequiredArgsConstructor
 public class ActionLayoutPositionVm_annotatedBelow {

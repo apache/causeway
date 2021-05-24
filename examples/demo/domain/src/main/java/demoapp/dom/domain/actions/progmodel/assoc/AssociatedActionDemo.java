@@ -36,11 +36,10 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -64,8 +63,8 @@ public class AssociatedActionDemo implements HasAsciiDocDescription {
 
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
 
+    @Action(choicesFrom = "items")
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    @Action(associateWith="items")
     public AssociatedActionDemo doSomethingWithItems(
 
             // bulk selection

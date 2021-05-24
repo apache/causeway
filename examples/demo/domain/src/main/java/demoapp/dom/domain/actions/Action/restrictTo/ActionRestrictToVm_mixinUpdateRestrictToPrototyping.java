@@ -29,12 +29,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "propertyForPrototyping"
     , restrictTo = RestrictTo.PROTOTYPING       // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+    , associateWith = "propertyForPrototyping"
     , sequence = "2"
 )
 @RequiredArgsConstructor

@@ -28,14 +28,14 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "readOnlyProperty3"
+    semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
     describedAs =
         "<cpt:property id=\"...\">" +
             "<cpt:action id=\"...\" promptStyle = DIALOG/>" +
         "</cpt:property>",
+    associateWith = "readOnlyProperty3",
     sequence = "2")
 @RequiredArgsConstructor
 @DomainObjectLayout()

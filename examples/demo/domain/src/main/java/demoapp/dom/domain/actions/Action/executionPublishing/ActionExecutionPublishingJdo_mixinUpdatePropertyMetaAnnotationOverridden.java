@@ -28,13 +28,13 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @Action(
     executionPublishing = Publishing.ENABLED       // <.>
     , semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyMetaAnnotatedOverridden"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs =
         "@ActionPublishingDisabledMetaAnnotation " +
         "@Action(publishing = ENABLED)"
+    , associateWith = "propertyMetaAnnotatedOverridden"
     , sequence = "2"
 )
 public class ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden {

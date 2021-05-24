@@ -19,11 +19,15 @@
 package demoapp.dom.domain.objects.other.mixins;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Action(associateWith = "count")        // <.>
+@Action
+@ActionLayout(
+        associateWith = "count")        // <.>
+
 @RequiredArgsConstructor                // <.>
 public class CountHolder_updateCount {
 

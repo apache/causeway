@@ -29,12 +29,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "propertyForNoRestrictions"
     , restrictTo = RestrictTo.NO_RESTRICTIONS     // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(restrictTo = RestrictTo.NO_RESTRICTIONS)"
+    , associateWith = "propertyForNoRestrictions"
     , sequence = "2"
 )
 @RequiredArgsConstructor

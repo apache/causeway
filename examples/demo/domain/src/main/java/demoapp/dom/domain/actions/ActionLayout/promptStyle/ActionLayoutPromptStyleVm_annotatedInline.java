@@ -28,13 +28,13 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty1"
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE,
         named = "Inline",
         describedAs = "promptStyle = INLINE",
+        associateWith = "readOnlyProperty1",
         sequence = "1")
 @RequiredArgsConstructor
 public class ActionLayoutPromptStyleVm_annotatedInline {

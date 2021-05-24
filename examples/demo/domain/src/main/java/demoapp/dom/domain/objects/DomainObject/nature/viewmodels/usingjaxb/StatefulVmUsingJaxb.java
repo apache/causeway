@@ -85,7 +85,7 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 //end::child[]
 
 //tag::addChild[]
-    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @Action(choicesFrom = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(sequence = "1")
     public StatefulVmUsingJaxb addChild(final String name) {
         val child = new Child();
@@ -94,7 +94,7 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
         return this;
     }
 
-    @Action(associateWith = "children", semantics = SemanticsOf.IDEMPOTENT)
+    @Action(choicesFrom = "children", semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(sequence = "2")
     public StatefulVmUsingJaxb removeChild(final Child child) {
         children.remove(child);

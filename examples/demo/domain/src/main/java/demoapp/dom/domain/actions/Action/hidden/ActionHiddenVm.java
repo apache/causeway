@@ -75,12 +75,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
 //tag::action-no-annotation[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "text"
             // no hidden attribute              // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action()"
+        , associateWith = "text"
         , sequence = "1"
     )
     public ActionHiddenVm updateTextNoAnnotation(final String text) {
@@ -94,13 +94,13 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
 
 //tag::action-hidden-nowhere[]
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "text"
-            , hidden = Where.NOWHERE            // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+        , hidden = Where.NOWHERE               // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.NOWHERE)"
+        , associateWith = "text"
         , sequence = "2"
     )
     public ActionHiddenVm updateTextAndHiddenNowhere(final String text) {
@@ -114,13 +114,13 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
 
 //tag::action-but-hidden-on-forms[]
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "text"
-            , hidden = Where.OBJECT_FORMS       // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+        , hidden = Where.OBJECT_FORMS       // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.OBJECT_FORMS)"
+        , associateWith = "text"
         , sequence = "3"
     )
     public ActionHiddenVm updateTextButHiddenOnForms(final String text) {
@@ -134,13 +134,14 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
 
 //tag::action-but-hidden-everywhere[]
     @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            , associateWith = "text"
-            , hidden = Where.EVERYWHERE         // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+
+        , hidden = Where.EVERYWHERE         // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(hidden = Where.EVERYWHERE)"
+        , associateWith = "text"
         , sequence = "4"
     )
     public ActionHiddenVm updateTextButHiddenEverywhere(final String text) {

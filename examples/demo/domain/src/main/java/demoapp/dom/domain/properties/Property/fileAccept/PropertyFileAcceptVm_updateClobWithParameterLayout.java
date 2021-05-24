@@ -29,10 +29,11 @@ import org.apache.isis.applib.value.Clob;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "txtPropertyUsingAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+        associateWith = "txtPropertyUsingAnnotation"
+        , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateClobWithParameterLayout {
 

@@ -24,18 +24,17 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @ActionSemanticsSafeMetaAnnotation                          // <.>
 @Action(
     semantics = SemanticsOf.IDEMPOTENT                      // <.>
-    , associateWith = "propertyForMetaAnnotationsOverridden"
 )
 @ActionLayout(
     named = "Set to Value (Mixin)"
     , describedAs =
         "@ActionSemanticsSafeMetaAnnotation " +
         "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+    , associateWith = "propertyForMetaAnnotationsOverridden"
     , sequence = "2"
 )
 @RequiredArgsConstructor

@@ -26,15 +26,14 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlChildren"
+    , choicesFrom = "controlChildren"
 )
 @ActionLayout(
     promptStyle = PromptStyle.INLINE_AS_IF_EDIT

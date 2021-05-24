@@ -23,15 +23,14 @@ import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 
-
 //tag::class[]
 @Action(
-    associateWith = "propertyNoAnnotation"
     // no semantics attribute              // <.>
 )
 @ActionLayout(
     named = "Increment (Mixin)"
     , describedAs = "@Action()"
+    , associateWith = "propertyNoAnnotation"
     , sequence = "2"
 )
 @RequiredArgsConstructor

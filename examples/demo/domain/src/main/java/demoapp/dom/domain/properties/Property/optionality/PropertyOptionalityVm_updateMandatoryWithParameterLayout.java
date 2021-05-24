@@ -28,10 +28,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Action(
-    semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "mandatoryPropertyUsingAnnotation"
+    semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(
+    associateWith = "mandatoryPropertyUsingAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
 public class PropertyOptionalityVm_updateMandatoryWithParameterLayout {
 

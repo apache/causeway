@@ -28,11 +28,11 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT  // <.>
-    , associateWith = "propertyForNonIdempotent"
 )
 @ActionLayout(
     named = "Increment by Amount (Mixin)"
     , describedAs = "@Action(semantics = SemanticsOf.NON_IDEMPOTENT)"
+    , associateWith = "propertyForNonIdempotent"
     , sequence = "4"
 )
 @RequiredArgsConstructor

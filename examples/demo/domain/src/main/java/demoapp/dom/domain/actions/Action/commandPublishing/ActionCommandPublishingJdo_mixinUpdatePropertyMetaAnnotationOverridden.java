@@ -30,13 +30,13 @@ import lombok.RequiredArgsConstructor;
 @Action(
     commandPublishing = Publishing.ENABLED            // <.>
     , semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyMetaAnnotatedOverridden"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs =
         "@ActionCommandDisabledMetaAnnotation " +
         "@Action(command = ENABLED)"
+    , associateWith = "propertyMetaAnnotatedOverridden"
     , sequence = "2"
 )
 @RequiredArgsConstructor

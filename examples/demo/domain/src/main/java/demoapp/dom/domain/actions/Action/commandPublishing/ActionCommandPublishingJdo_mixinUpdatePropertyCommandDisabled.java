@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     commandPublishing = Publishing.DISABLED       // <.>
     , semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "propertyCommandDisabled"
 )
 @ActionLayout(
     named = "Mixin Update Property"
     , describedAs = "@Action(command = DISABLED)"
+    , associateWith = "propertyCommandDisabled"
     , sequence = "2"
 )
 @RequiredArgsConstructor

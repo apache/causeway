@@ -30,13 +30,13 @@ import lombok.RequiredArgsConstructor;
 @ActionRestrictToNoRestrictionsMetaAnnotation   // <.>
 @Action(
     semantics = SemanticsOf.SAFE
-    , associateWith = "propertyForMetaAnnotationsOverridden"
     , restrictTo = RestrictTo.PROTOTYPING       // <.>
 )
 @ActionLayout(
     describedAs =
         "@ActionRestrictToNoRestrictionsMetaAnnotation " +
         "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+    , associateWith = "propertyForMetaAnnotationsOverridden"
     , sequence = "2"
 )
 @RequiredArgsConstructor

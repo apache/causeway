@@ -72,11 +72,11 @@ public class ActionDomainEventVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , domainEvent = UpdateTextDomainEvent.class             // <.>
-            , associateWith = "text"
     )
     @ActionLayout(
         describedAs =
             "@Action(domainEvent = UpdateTextDomainEvent.class)"
+        , associateWith = "text"
         , sequence = "1"
     )
     public ActionDomainEventVm updateText(final String text) {
