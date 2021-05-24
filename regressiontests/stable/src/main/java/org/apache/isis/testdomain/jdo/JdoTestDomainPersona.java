@@ -108,7 +108,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
                     if(svenUser==null) {
                         svenUser = applicationUserRepository
-                                .newDelegateUser(username, ApplicationUserStatus.ENABLED);
+                                .newDelegateUser(username, ApplicationUserStatus.UNLOCKED);
                         applicationRoleRepository.addRoleToUser(regularUserRole, svenUser);
 
                     } else {
