@@ -116,10 +116,6 @@ public abstract class ApplicationUser
 
     // -- MODEL
 
-    /**
-     * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
-     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
-     */
     public String title() {
         return getName();
     }

@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -35,8 +37,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
+import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
@@ -78,29 +82,28 @@ import lombok.experimental.UtilityClass;
 @DomainObject(
         objectType = ApplicationPermission.OBJECT_TYPE
 )
-public interface ApplicationPermission extends Comparable<ApplicationPermission> {
+public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
-    String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermission";
+    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermission";
 
-    String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
-    String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
-    String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
-    String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
-    String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
+    public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
+    public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
+    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
+    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
+    public static final String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
 
+
+    @Inject transient ApplicationFeatureRepository featureRepository;
 
     // -- DOMAIN EVENTS
 
-    abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
-    abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
+
 
     // -- MODEL
 
-    /**
-     * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
-     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
-     */
-    default String title() {
+    public String title() {
         val buf = new StringBuilder();
         buf.append(getRole().getName()).append(":")  // admin:
         .append(" ").append(getRule().toString()) // Allow|Veto
@@ -149,13 +152,13 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Role {
-        class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
+    public @interface Role {
+        public static class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
     }
 
     @Role
-    ApplicationRole getRole();
-    void setRole(ApplicationRole applicationRole);
+    public abstract ApplicationRole getRole();
+    public abstract void setRole(ApplicationRole applicationRole);
 
 
     // -- RULE
@@ -170,13 +173,13 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Rule {
+    public @interface Rule {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
     }
 
     @Rule
-    ApplicationPermissionRule getRule();
-    void setRule(ApplicationPermissionRule rule);
+    public abstract ApplicationPermissionRule getRule();
+    public abstract void setRule(ApplicationPermissionRule rule);
 
 
     // -- MODE
@@ -191,15 +194,13 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Mode {
+    public @interface Mode {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
     }
 
     @Mode
-    default ApplicationPermissionMode getMode() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
-    void setMode(ApplicationPermissionMode changing);
+    public abstract ApplicationPermissionMode getMode();
+    public abstract void setMode(ApplicationPermissionMode mode);
 
 
     // -- SORT
@@ -218,14 +219,14 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface Sort {
+    public @interface Sort {
         int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
 
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @Sort
-    default String getSort() {
+    public String getSort() {
         final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
                 ? getFeatureSort()
                 : getMemberSort().orElse(null);
@@ -247,8 +248,8 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
      * @see #getFeatureFqn()
      */
     @Programmatic
-    ApplicationFeatureSort getFeatureSort();
-    void setFeatureSort(ApplicationFeatureSort featureSort);
+    public abstract ApplicationFeatureSort getFeatureSort();
+    public abstract void setFeatureSort(ApplicationFeatureSort featureSort);
 
 
     // -- FQN
@@ -274,34 +275,28 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface FeatureFqn {
+    public @interface FeatureFqn {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
 
     @FeatureFqn
-    String getFeatureFqn();
-    void setFeatureFqn(String featureFqn);
+    public abstract String getFeatureFqn();
+    public abstract void setFeatureFqn(String featureFqn);
 
 
     // -- FIND FEATURE
 
     @Programmatic
-    ApplicationFeature findFeature(ApplicationFeatureId featureId);
+    public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
+        return featureRepository.findFeature(featureId);
+    }
 
-
-    // -- MEMBER SORT
-
-    @Programmatic
-    default Optional<ApplicationMemberSort> getMemberSort() {
+    private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
                 .flatMap(ApplicationFeature::getMemberSort);
     }
 
-
-    // -- FEATURE ID
-
-    @Programmatic
-    default Optional<ApplicationFeature> getFeature() {
+    private Optional<ApplicationFeature> getFeature() {
         return asFeatureId()
                 .map(this::findFeature);
     }
@@ -310,29 +305,57 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     // -- HELPER
 
     @Programmatic
-    default Optional<ApplicationFeatureId> asFeatureId() {
+    Optional<ApplicationFeatureId> asFeatureId() {
         return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
 
-    @UtilityClass
-    public static final class Functions {
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
-                new Function<ApplicationPermission, ApplicationPermissionValue>() {
-                    @Override
-                    public ApplicationPermissionValue apply(ApplicationPermission input) {
-                        return new ApplicationPermissionValue(
-                                input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
-                                input.getRule(),
-                                input.getMode());
-                    }
-                };
+
+    // -- CONTRACT
+
+    private static final ObjectContracts.ObjectContract<ApplicationPermission> contract	=
+            ObjectContracts.contract(ApplicationPermission.class)
+                    .thenUse("role", ApplicationPermission::getRole)
+                    .thenUse("featureSort", ApplicationPermission::getFeatureSort)
+                    .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
+                    .thenUse("mode", ApplicationPermission::getMode);
+
+    @Override
+    public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
+        return contract.compare(this, (ApplicationPermission)other);
     }
 
-    class DefaultComparator implements Comparator<ApplicationPermission> {
+    @Override
+    public boolean equals(final Object other) {
+        return contract.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return contract.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return contract.toString(this);
+    }
+
+
+    public static class DefaultComparator implements Comparator<ApplicationPermission> {
         @Override
         public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
             return Objects.compare(o1, o2, Comparator.naturalOrder());
         }
     }
+
+    @UtilityClass
+    public static final class Functions {
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
+                input -> new ApplicationPermissionValue(
+                        input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                        input.getRule(),
+                        input.getMode());
+    }
+
+
 }

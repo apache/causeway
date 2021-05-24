@@ -18,12 +18,9 @@
  */
 package org.apache.isis.extensions.secman.jpa.role.dom;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -40,13 +37,8 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.util.Equality;
-import org.apache.isis.applib.util.Hashing;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 @Entity
@@ -82,8 +74,6 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
         )
 public class ApplicationRole
     extends org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
-
-
 
     @Id
     @GeneratedValue
