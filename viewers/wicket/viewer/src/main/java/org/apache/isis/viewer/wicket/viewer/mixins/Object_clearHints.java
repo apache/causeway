@@ -63,12 +63,12 @@ import lombok.val;
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
+        executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
         cssClassFa = "fa-circle",
         position = ActionLayout.Position.PANEL,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "400.1"
 )
 @RequiredArgsConstructor

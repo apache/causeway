@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -45,12 +46,12 @@ import lombok.val;
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "750.1"
 )
 @RequiredArgsConstructor
@@ -61,6 +62,7 @@ public class Object_openRestApi {
 
     private final Object holder;
 
+    @MemberSupport
     public LocalResourcePath act() {
         val bookmark = bookmarkService.bookmarkForElseFail(holder);
         val objType = bookmark.getObjectType();

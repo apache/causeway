@@ -32,10 +32,9 @@ import lombok.val;
 
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = CommandJdo_openTargetObject.ActionDomainEvent.class,
-    associateWith = "target"
+    domainEvent = CommandJdo_openTargetObject.ActionDomainEvent.class
 )
-@ActionLayout(named = "Open", sequence="1")
+@ActionLayout(named = "Open", associateWith = "target", sequence="1")
 @RequiredArgsConstructor
 public class CommandJdo_openTargetObject {
 
@@ -43,7 +42,6 @@ public class CommandJdo_openTargetObject {
             extends IsisModuleExtCommandLogJdo.ActionDomainEvent<CommandJdo_openTargetObject> { }
 
     private final CommandJdo commandJdo;
-
 
     public Object act() {
         val targetBookmark = bookmarkService.lookup(commandJdo.getTarget()).orElse(null);

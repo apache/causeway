@@ -21,11 +21,13 @@ package org.apache.isis.testdomain.jpa.springdata;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Action(associateWith = "allEmployees")
+@Action
+@ActionLayout(associateWith = "allEmployees")
 @RequiredArgsConstructor
 public class EmployeeManager_newEmployee {
 

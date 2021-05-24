@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(associateWith = "allEmployees")
+@Action(choicesFrom = "allEmployees")
 @RequiredArgsConstructor
 public class EmployeeManager_deleteEmployee {
 

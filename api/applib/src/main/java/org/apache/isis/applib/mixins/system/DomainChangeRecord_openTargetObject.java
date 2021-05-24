@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -38,18 +39,15 @@ import lombok.RequiredArgsConstructor;
  *
  * @since v2.0 {@index}
  */
-@Action(
-        semantics = SemanticsOf.SAFE
-        , associateWith = "target")
-@ActionLayout(named = "Open", sequence = "1")
+@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(named = "Open", associateWith = "target", sequence = "1")
 @RequiredArgsConstructor
 public class DomainChangeRecord_openTargetObject {
 
     private final DomainChangeRecord domainChangeRecord;
 
-    @Action(semantics = SemanticsOf.SAFE, associateWith = "target")
-    @ActionLayout(named = "Open", sequence = "1")
-    public Object openTargetObject() {
+    @MemberSupport
+    public Object act() {
         try {
             return bookmarkService != null
                     ? bookmarkService.lookup(domainChangeRecord.getTarget()).orElse(null)
@@ -63,11 +61,13 @@ public class DomainChangeRecord_openTargetObject {
         }
     }
 
-    public boolean hideOpenTargetObject() {
+    @MemberSupport
+    public boolean hideAct() {
         return domainChangeRecord.getTarget() == null;
     }
 
-    public String disableOpenTargetObject() {
+    @MemberSupport
+    public String disableAct() {
         final Object targetObject = domainChangeRecord.getTarget();
         if (targetObject == null) {
             return null;

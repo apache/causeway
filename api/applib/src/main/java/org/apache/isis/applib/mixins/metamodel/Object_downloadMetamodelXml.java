@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -51,12 +52,12 @@ import lombok.val;
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-download",
         position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2"
 )
 @RequiredArgsConstructor
@@ -67,6 +68,7 @@ public class Object_downloadMetamodelXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
+    @MemberSupport
     public Object act(
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
@@ -99,6 +101,7 @@ public class Object_downloadMetamodelXml {
     /**
      * Defaults to the simple name of the domain object's class.
      */
+    @MemberSupport
     public String default0Act() {
         return holder.getClass().getSimpleName();
     }

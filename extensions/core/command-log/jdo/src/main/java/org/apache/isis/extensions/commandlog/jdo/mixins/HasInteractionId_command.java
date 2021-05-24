@@ -43,10 +43,9 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
     semantics = SemanticsOf.SAFE
-    , domainEvent = HasInteractionId_command.ActionDomainEvent.class,
-    associateWith = "interactionId"
+    , domainEvent = HasInteractionId_command.ActionDomainEvent.class
 )
-@ActionLayout(sequence="1")
+@ActionLayout(associateWith = "interactionId", sequence="1")
 @RequiredArgsConstructor
 public class HasInteractionId_command {
 

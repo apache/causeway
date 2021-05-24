@@ -46,12 +46,12 @@ import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-bolt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "900.1"
 )
 public class Object_recentCommands {

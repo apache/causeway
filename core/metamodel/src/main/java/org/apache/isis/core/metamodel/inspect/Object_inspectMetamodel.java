@@ -44,12 +44,12 @@ import lombok.val;
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-sitemap",
         position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2.1"
 )
 @RequiredArgsConstructor

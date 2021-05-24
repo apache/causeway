@@ -42,12 +42,12 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "850.3"
 )
 @RequiredArgsConstructor

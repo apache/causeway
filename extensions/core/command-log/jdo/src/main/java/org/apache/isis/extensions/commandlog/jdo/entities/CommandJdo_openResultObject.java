@@ -27,23 +27,21 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = CommandJdo_openResultObject.ActionDomainEvent.class,
-    associateWith = "result"
+    domainEvent = CommandJdo_openResultObject.ActionDomainEvent.class
 )
-@ActionLayout(named = "Open", sequence="1")
+@ActionLayout(named = "Open", associateWith = "result", sequence="1")
+@RequiredArgsConstructor
 public class CommandJdo_openResultObject {
 
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogJdo.ActionDomainEvent<CommandJdo_openResultObject> { }
 
     private final CommandJdo commandJdo;
-    public CommandJdo_openResultObject(CommandJdo commandJdo) {
-        this.commandJdo = commandJdo;
-    }
 
     public Object act() {
         val targetBookmark = bookmarkService.lookup(commandJdo.getResult()).orElse(null);

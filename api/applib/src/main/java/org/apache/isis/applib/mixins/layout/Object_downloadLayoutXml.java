@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -46,12 +47,12 @@ import lombok.val;
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-download",
         position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.1"
 )
 @RequiredArgsConstructor
@@ -62,6 +63,7 @@ public class Object_downloadLayoutXml {
 
     private final Object holder;
 
+    @MemberSupport
     public Object act(
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
@@ -76,6 +78,7 @@ public class Object_downloadLayoutXml {
     /**
      * Defaults to the (simple) name of the domain object's class, with a <code>.layout</code> suffix
      */
+    @MemberSupport
     public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
@@ -84,6 +87,7 @@ public class Object_downloadLayoutXml {
      * Default style is {@link Style#NORMALIZED}.
      * @return
      */
+    @MemberSupport
     public Style default1Act() {
         return Style.NORMALIZED;
     }

@@ -38,10 +38,9 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandModel_exclude.ActionDomainEvent.class,
-    associateWith = "executeIn"
+    domainEvent = CommandModel_exclude.ActionDomainEvent.class
 )
-@ActionLayout(sequence = "2")
+@ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandModel_exclude {

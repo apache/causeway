@@ -38,10 +38,9 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
     domainEvent = CommandJdo_retry.ActionDomainEvent.class,
-    commandPublishing = Publishing.DISABLED,
-    associateWith = "executeIn"
+    commandPublishing = Publishing.DISABLED
 )
-@ActionLayout(sequence = "1")
+@ActionLayout(associateWith = "executeIn", sequence = "1")
 @RequiredArgsConstructor
 public class CommandJdo_retry {
 

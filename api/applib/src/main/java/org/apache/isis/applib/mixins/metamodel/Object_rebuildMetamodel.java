@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -42,12 +43,12 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-sync",
         position = ActionLayout.Position.PANEL,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.1"
 )
 @RequiredArgsConstructor
@@ -58,6 +59,7 @@ public class Object_rebuildMetamodel {
 
     private final Object holder;
 
+    @MemberSupport
     public Object act() {
         metaModelService.rebuild(holder.getClass());
         return holder;
