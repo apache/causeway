@@ -105,7 +105,9 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String adminRoleName = "secman-admin";
+    final String adminRoleName = DEFAULT_ADMIN_ROLE_NAME;
+
+    public static String DEFAULT_ADMIN_ROLE_NAME = "isis-ext-secman-admin";
 
     /**
      * The set of namespaces to which the {@link #getAdminRoleName() admin role}
@@ -169,8 +171,9 @@ public class SecmanConfiguration {
     @Getter
     @Builder.Default
     @NonNull
-    final String regularUserRoleName = "secman-regular-user";
+    final String regularUserRoleName = DEFAULT_REGULAR_USER_ROLE_NAME;
 
+    public static String DEFAULT_REGULAR_USER_ROLE_NAME = "isis-ext-secman-user";
 
 
     /**
