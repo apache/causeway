@@ -30,9 +30,11 @@ import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List)},
