@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.shiro;
 
-import java.util.EnumSet;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
@@ -46,8 +45,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.SecurityRealm;
-import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
@@ -60,7 +57,7 @@ import lombok.val;
 /**
  * @since 2.0 {@index}
  */
-public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
+public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
     private static final String SECMAN_UNLOCK_DELEGATED_USERS = "isis.ext.secman.unlockDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
@@ -164,13 +161,6 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
         return principals.oneByType(PrincipalForApplicationUser.class);
     }
 
-    @Override
-    public EnumSet<SecurityRealmCharacteristic> getCharacteristics() {
-        if(hasDelegateAuthenticationRealm()) {
-            return EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
-        }
-        return EnumSet.noneOf(SecurityRealmCharacteristic.class);
-    }
 
     // -- HELPER
 
