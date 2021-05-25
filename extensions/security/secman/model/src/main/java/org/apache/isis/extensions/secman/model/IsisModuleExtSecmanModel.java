@@ -26,6 +26,7 @@ import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostP
 import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.spiimpl.ImpersonateMenuAdvisorForSecman;
 import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServiceForSecman;
+import org.apache.isis.extensions.secman.model.userreg.UserRegistrationServiceForSecman;
 
 /**
  * @since 2.0 {@index}
@@ -35,10 +36,11 @@ import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServ
         // Module
         IsisModuleExtSecmanApi.class,
 
-        // @Component
+        // @Component or @Service
         TenantedAuthorizationPostProcessor.Register.class,
         TableColumnVisibilityServiceForSecman.class,
         ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
+        UserRegistrationServiceForSecman.class,
 
         SeedSecurityModuleService.class,
 

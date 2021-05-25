@@ -10,28 +10,6 @@ Rather, the implementation will depend on the security mechanism being used.
 
 === SecMan
 
-If you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`.
-You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
-This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application.
-Without any role such user will be able only to see/use the logout link of the application.
-
-For example:
-
-[source,java]
-----
-@Service
-public class AppUserRegistrationService
-        extends SecurityModuleAppUserRegistrationServiceAbstract {
-
-    protected ApplicationRole getInitialRole() {
-        return applicationRoles.findRoleByName("regular-user");
-    }
-    protected Set<ApplicationRole> getAdditionalInitialRoles() {
-        return Collections.singleton(
-            applicationRoles.findRoleByName("self-registered-user"));
-    }
-
-    @Inject ApplicationRoles applicationRoles;
-}
-----
+If you have configured your app to use the xref:security:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an implementation (`UserRegistrationServiceForSecman`) of this `UserRegistrationService`.
+This can be configured to set up initial roles; see xref:security:secman:setting-up.adoc#user-registration-aka-sign-up[secman docs] for details.
 

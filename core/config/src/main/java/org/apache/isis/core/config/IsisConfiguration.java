@@ -2947,7 +2947,26 @@ public class IsisConfiguration {
             }
         }
 
+        private final Secman secman = new Secman();
+        @Data
+        public static class Secman {
 
+            private final UserRegistration userRegistration = new UserRegistration();
+            @Data
+            public static class UserRegistration {
+                /**
+                 * The set of roles that users registering with the app are granted
+                 * automatically.
+                 *
+                 * <p>
+                 *     If using the wicket viewer, also requires
+                 *     {@link Viewer.Wicket#isSuppressSignUp() isis.viewer.wicket.suppress-signup} to be set
+                 *     <code>false</code>, along with any other of its other prereqs.
+                 * </p>
+                 */
+                private final List<String> initialRoleNames = new ArrayList<>();
+            }
+        }
     }
 
     private static List<String> listOf(final String ...values) {

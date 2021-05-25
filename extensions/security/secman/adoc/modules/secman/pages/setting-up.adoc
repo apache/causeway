@@ -371,4 +371,24 @@ isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.
 <.> specify the LDAP realm as the delegate realm for SecMan's own realm.
 
 
+[#user-registration-aka-sign-up]
+== User registration (aka Sign-up)
+
+Secman provides an implementation of the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService] SPI.
+This means, if the viewer supports it (eg the Wicket viewer's xref:vw::features/user-registration.adoc[sign-up support]), then end-users can sign-up to create an account via email.
+The Secman implementation sets up the user with appropriate initial roles.
+
+The exact roles to setup are specified using configuration property:
+
+[source,yaml]
+.application.yaml
+----
+isis:
+    extensions:
+        secman:
+            user-registration:
+                initial-roles:
+                    - "self-registered-user-role"
+                    - "regular-user-role"
+----
 
