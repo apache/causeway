@@ -26,11 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -39,6 +34,11 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
+
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.val;
 
@@ -70,7 +70,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
-            assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
         }
     }
 
@@ -84,7 +84,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
         }
     }
 
@@ -98,7 +98,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberName(), is("foo"));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
         }
 
         @Test
@@ -109,7 +109,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberName(), is("foo"));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
         }
 
     }
@@ -265,7 +265,7 @@ public class ApplicationFeatureIdTest {
             assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
-            assertThat(parentPackageId.getMemberName(), is(nullValue()));
+            assertThat(parentPackageId.getMemberLogicalName(), is(nullValue()));
         }
 
         @Test
@@ -300,15 +300,15 @@ public class ApplicationFeatureIdTest {
             assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
-            assertThat(parentPackageId.getMemberName(), is(nullValue()));
+            assertThat(parentPackageId.getMemberLogicalName(), is(nullValue()));
         }
 
         @Test
         public void givenClassInRootPackage() throws Exception {
-            
+
             // expect
             expectedException.expect(IllegalArgumentException.class);
-            
+
             // when
             ApplicationFeatureId.newType("Bar");
         }
@@ -342,7 +342,7 @@ public class ApplicationFeatureIdTest {
             assertThat(parentClassId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(parentClassId.getNamespace(), is("com.mycompany"));
             assertThat(parentClassId.getTypeSimpleName(), is("Bar"));
-            assertThat(parentClassId.getMemberName(), is(nullValue()));
+            assertThat(parentClassId.getMemberLogicalName(), is(nullValue()));
         }
 
         @Test
@@ -437,7 +437,7 @@ public class ApplicationFeatureIdTest {
         public void members() throws Exception {
             feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
 
-            assertThat(feature1.toString(), 
+            assertThat(feature1.toString(),
                     is(equalTo("ApplicationFeatureId{sort=MEMBER, "
                     + "namespace=com.mycompany, typeSimpleName=Bar, memberName=b}")));
         }
@@ -446,7 +446,7 @@ public class ApplicationFeatureIdTest {
         public void classes() throws Exception {
             feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
-            assertThat(feature1.toString(), 
+            assertThat(feature1.toString(),
                     is(equalTo("ApplicationFeatureId{sort=TYPE, namespace=com.mycompany, typeSimpleName=B}")));
         }
 
@@ -454,7 +454,7 @@ public class ApplicationFeatureIdTest {
         public void packages() throws Exception {
             feature1 = ApplicationFeatureId.newNamespace("com.b");
 
-            assertThat(feature1.toString(), 
+            assertThat(feature1.toString(),
                     is(equalTo("ApplicationFeatureId{sort=NAMESPACE, namespace=com.b}")));
         }
     }
@@ -548,8 +548,8 @@ public class ApplicationFeatureIdTest {
 
         public static class GET_MEMBER_NAME extends FunctionsTest {
 
-            private Function<ApplicationFeatureId, String> func = 
-                    ApplicationFeatureId::getMemberName;
+            private Function<ApplicationFeatureId, String> func =
+                    ApplicationFeatureId::getMemberLogicalName;
 
             @Test
             public void whenNull() throws Exception {

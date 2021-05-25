@@ -86,7 +86,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
 
-        final String id = facetedMethod.getIdentifier().getMemberName();
+        final String id = facetedMethod.getIdentifier().getMemberLogicalName();
         String defaultName = StringExtensions.asNaturalName2(id);
 
         super.addFacet(new NamedFacetDefault(defaultName, facetedMethod));

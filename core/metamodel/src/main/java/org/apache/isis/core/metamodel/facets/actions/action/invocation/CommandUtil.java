@@ -81,7 +81,7 @@ public class CommandUtil {
     private static String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
         final String objectType = onType.getLogicalTypeName();
-        final String localId = objectMember.getIdentifier().getMemberName();
+        final String localId = objectMember.getIdentifier().getMemberLogicalName();
         return objectType + "#" + localId;
     }
 

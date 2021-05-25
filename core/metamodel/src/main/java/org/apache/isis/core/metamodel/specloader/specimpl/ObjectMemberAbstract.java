@@ -90,7 +90,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     @Override
     public final String getId() {
-        return getIdentifier().getMemberName();
+        return getIdentifier().getMemberLogicalName();
     }
 
     @Override

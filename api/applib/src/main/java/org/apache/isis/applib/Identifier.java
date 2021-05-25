@@ -38,15 +38,15 @@ import lombok.val;
 /**
  * Combines {@link LogicalType} and member identification (from properties, collections or actions),
  * to a fully qualified <i>feature</i> identifier.
- * <p> 
- * For {@link Identifier}(s) of type {@link Identifier.Type#CLASS} member information is 
- * left empty.   
- *  
+ * <p>
+ * For {@link Identifier}(s) of type {@link Identifier.Type#CLASS} member information is
+ * left empty.
+ *
  * @since 1.x revised for 2.0 {@index}
  * @see LogicalType
  */
-public class Identifier 
-implements 
+public class Identifier
+implements
     Comparable<Identifier>,
     HasLogicalType,
     HasTranslationContext,
@@ -73,20 +73,20 @@ implements
     public static Identifier propertyOrCollectionIdentifier(
             final LogicalType typeIdentifier,
             final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(), 
+        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
                 Type.PROPERTY_OR_COLLECTION);
     }
 
     public static Identifier actionIdentifier(
             final LogicalType typeIdentifier,
-            final String actionName, 
+            final String actionName,
             final Class<?>... parameterClasses) {
         return actionIdentifier(typeIdentifier, actionName, classNamesOf(parameterClasses));
     }
 
     public static Identifier actionIdentifier(
             final LogicalType typeIdentifier,
-            final String actionName, 
+            final String actionName,
             final Can<String> parameterClassNames) {
         return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
     }
@@ -94,20 +94,20 @@ implements
     // -- INSTANCE FIELDS
 
     @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
-    
+
     @Getter private final String className;
-    
-    @Getter private final String memberName;
-    
+
+    @Getter private final String memberLogicalName;
+
     @Getter private final Can<String> memberParameterClassNames;
-    
+
     @Getter private final Type type;
-    
+
     /**
-     * Fully qualified Identity String. (class-name + member-name + param-class-names)
+     * Fully qualified Identity String. (class-name + member-logical-name + param-class-names)
      */
     @Getter private final String fullIdentityString;
-    
+
     /**
      * Member Identity String (class omitted), including parameters if any.
      */
@@ -123,39 +123,39 @@ implements
 
     private Identifier(
             final LogicalType logicalType,
-            final String memberName, 
-            final Can<String> memberParameterClassNames, 
+            final String memberLogicalName,
+            final Can<String> memberParameterClassNames,
             final Type type) {
-        
+
         this.logicalType = logicalType;
         this.className = logicalType.getClassName();
-        this.memberName = memberName;
+        this.memberLogicalName = memberLogicalName;
         this.memberParameterClassNames = memberParameterClassNames;
         this.type = type;
-         
-        this.memberNameAndParameterClassNamesIdentityString =
-                memberName + (type.isAction() 
-                        ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")" 
-                        : "");
-        
-        this.translationContext = TranslationContext.ofName(
-                className + "#" + memberName + (type.isAction() ? "()" : ""));
 
-        this.fullIdentityString = _Strings.isEmpty(memberName) 
+        this.memberNameAndParameterClassNamesIdentityString =
+                memberLogicalName + (type.isAction()
+                        ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")"
+                        : "");
+
+        this.translationContext = TranslationContext.ofName(
+                className + "#" + memberLogicalName + (type.isAction() ? "()" : ""));
+
+        this.fullIdentityString = _Strings.isEmpty(memberLogicalName)
                 ? className
                 : className + "#" + memberNameAndParameterClassNamesIdentityString;
     }
 
     // -- LOGICAL ID
-    
+
     public String getLogicalIdentityString(final @NonNull String delimiter) {
-        return getLogicalTypeName() 
-                + delimiter 
+        return getLogicalTypeName()
+                + delimiter
                 + memberNameAndParameterClassNamesIdentityString;
     }
-    
+
     // -- NATURAL NAMES
-    
+
     public String getClassNaturalName() {
         val className = getClassName();
         val isolatedName = className.substring(className.lastIndexOf('.') + 1);
@@ -163,7 +163,7 @@ implements
     }
 
     public String getMemberNaturalName() {
-        return naturalName(memberName);
+        return naturalName(memberLogicalName);
     }
 
     public Can<String> getMemberParameterClassNaturalNames() {
@@ -189,8 +189,8 @@ implements
     }
 
     public boolean isEqualTo(final Identifier other) {
-        return Objects.equals(this.className, other.className) 
-                && Objects.equals(this.memberName, other.memberName) 
+        return Objects.equals(this.className, other.className)
+                && Objects.equals(this.memberLogicalName, other.memberLogicalName)
                 && this.memberParameterClassNames.equals(other.memberParameterClassNames);
     }
 
@@ -205,14 +205,14 @@ implements
     }
 
     // -- HELPER
-    
+
     private static Can<String> classNamesOf(final Class<?>[] parameterClasses) {
         return Can.ofArray(parameterClasses)
         .map(Class::getName);
     }
-    
+
     private static final char SPACE = ' ';
-    
+
     /*
      * Returns a word spaced version of the specified name, so there are spaces
      * between the words, where each word starts with a capital letter. E.g.,
@@ -240,16 +240,16 @@ implements
             nextCharacter = name.charAt(pos);
 
             if (previousCharacter != SPACE) {
-                if (Character.isUpperCase(character) 
+                if (Character.isUpperCase(character)
                         && !Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
-                if (Character.isUpperCase(character) 
-                        && Character.isLowerCase(nextCharacter) 
+                if (Character.isUpperCase(character)
+                        && Character.isLowerCase(nextCharacter)
                         && Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
-                if (Character.isDigit(character) 
+                if (Character.isDigit(character)
                         && !Character.isDigit(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
@@ -259,10 +259,10 @@ implements
         naturalName.append(nextCharacter);
         return naturalName.toString();
     }
-    
+
     private static Can<String> naturalNames(final Can<String> names) {
         return names.map(Identifier::naturalName);
     }
-    
+
 }
 

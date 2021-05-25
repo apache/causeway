@@ -128,7 +128,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
             case MEMBER:
                 buf.append(featureId.getTypeSimpleName())
                 .append("#")
-                .append(featureId.getMemberName());   // com.mycompany.Bar#foo
+                .append(featureId.getMemberLogicalName());   // com.mycompany.Bar#foo
                 break;
             }
 
@@ -322,7 +322,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @Override
     public int compareTo(final org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission other) {
-        return contract.compare(this, (ApplicationPermission)other);
+        return contract.compare(this, other);
     }
 
     @Override

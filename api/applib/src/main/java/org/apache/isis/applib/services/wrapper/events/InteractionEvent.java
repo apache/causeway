@@ -24,7 +24,7 @@ import org.apache.isis.applib.events.EventObjectBase;
 import org.apache.isis.commons.collections.Can;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i>
  * represents an interaction with a domain object or a particular feature
  * (property, collection, action) of a domain object.
  *
@@ -85,13 +85,13 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
     }
 
     /**
-     * Convenience method that returns the {@link Identifier#getMemberName()
+     * Convenience method that returns the {@link Identifier#getMemberLogicalName()
      * member name} of the {@link #getIdentifier() identifier}.
      *
      * @see #getIdentifier
      */
     public String getMemberName() {
-        return identifier.getMemberName();
+        return identifier.getMemberLogicalName();
     }
 
     /**

@@ -112,7 +112,7 @@ implements HasDynamicallyVisibleContent {
 
         val collectionMetaModel = collectionModel.getMetaModel();
 
-        CssClassAppender.appendCssClassTo(div, collectionModel.getIdentifier().getMemberName());
+        CssClassAppender.appendCssClassTo(div, collectionModel.getIdentifier().getMemberLogicalName());
         CssClassAppender.appendCssClassTo(div, collectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
 
         val objectAdapter = getModel().getObject();

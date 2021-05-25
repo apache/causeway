@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsFirst;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -78,7 +78,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
 
     private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
-            .<String>thenComparing(failure->failure.getOrigin().getMemberName(), nullsFirst(naturalOrder()))
+            .<String>thenComparing(failure->failure.getOrigin().getMemberLogicalName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);
 
     // -- CONTRACT

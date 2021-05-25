@@ -24,11 +24,11 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.LogicalType;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 
 public class FeatureTypeTest_identifierFor {
 
@@ -59,7 +59,7 @@ public class FeatureTypeTest_identifierFor {
         final Method method = SomeDomainClass.class.getMethod("getABigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
                 LogicalType.fqcn(SomeDomainClass.class), method);
-        assertThat(identifierFor.getMemberName(), is("ABigDecimal")); // very
+        assertThat(identifierFor.getMemberLogicalName(), is("ABigDecimal")); // very
         // odd
         // compared
         // to
@@ -82,7 +82,7 @@ public class FeatureTypeTest_identifierFor {
         final Method method = SomeDomainClass.class.getMethod("getAnotherBigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
                 LogicalType.fqcn(SomeDomainClass.class), method);
-        assertThat(identifierFor.getMemberName(), is("anotherBigDecimal"));
+        assertThat(identifierFor.getMemberLogicalName(), is("anotherBigDecimal"));
     }
 
 }

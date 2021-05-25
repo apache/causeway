@@ -285,7 +285,7 @@ implements FacetHolder {
                         MixedIn.INCLUDED)
                     .filter(action->
                         id.equals(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                                || id.equals(action.getIdentifier().getMemberName())
+                                || id.equals(action.getIdentifier().getMemberLogicalName())
                     )
                     .findFirst();
     }

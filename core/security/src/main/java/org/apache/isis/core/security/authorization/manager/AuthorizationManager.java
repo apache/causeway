@@ -106,7 +106,7 @@ public class AuthorizationManager {
             return true;
         }
         // no-op if is visibility context check at object-level
-        if (identifier.getMemberName().equals("")) {
+        if (identifier.getMemberLogicalName().equals("")) {
             return true;
         }
         if(containsSudoSuperuserRole(authentication)) {

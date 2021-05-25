@@ -22,12 +22,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
 import lombok.val;
 
@@ -60,11 +60,11 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void givenPackage() throws Exception {
 
-            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany"); 
+            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
-            assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
 
         }
         @Test
@@ -74,17 +74,17 @@ public class ApplicationFeatureTypeTest {
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
 
         }
         @Test
         public void givenMember() throws Exception {
 
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
-            
+
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberName(), is("foo"));
+            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
         }
         @Test
         public void givenMemberMalformed() throws Exception {

@@ -68,7 +68,7 @@ public class CollectionMemento implements Serializable {
         if (collection == null) {
             collection = specLoader.get()
                     .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
-                    .getCollectionElseFail(getIdentifier().getMemberName());
+                    .getCollectionElseFail(getIdentifier().getMemberLogicalName());
         }
         return collection;
     }
@@ -77,7 +77,7 @@ public class CollectionMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberName();
+        return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberLogicalName();
     }
 
 }

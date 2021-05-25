@@ -134,7 +134,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Bookmark targetBookmark = targetAdapter.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
-        final String propertyId = property.getIdentifier().getMemberName();
+        final String propertyId = property.getIdentifier().getMemberLogicalName();
         final String targetTitle = targetBookmark.toString() + ": " + propertyId;
 
         final String currentUser = userService.currentUserNameElseNobody();

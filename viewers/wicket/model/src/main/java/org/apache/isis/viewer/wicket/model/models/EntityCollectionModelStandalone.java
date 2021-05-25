@@ -97,7 +97,7 @@ extends EntityCollectionModelAbstract {
     public String getName() {
         return getTypeOfSpecification().lookupFacet(PluralFacet.class)
                 .map(PluralFacet::value)
-                .orElse(getIdentifier().getMemberName());
+                .orElse(getIdentifier().getMemberLogicalName());
     }
 
     @Override

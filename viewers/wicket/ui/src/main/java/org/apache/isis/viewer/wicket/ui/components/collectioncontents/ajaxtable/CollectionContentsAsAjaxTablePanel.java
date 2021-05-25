@@ -252,7 +252,7 @@ implements CollectionCountProvider {
             parentObject.isPresent()
                 ? tableColumnOrderService.orderParented(
                         parentObject.get().getPojo(),
-                        collectionModel.getIdentifier().getMemberName(),
+                        collectionModel.getIdentifier().getMemberLogicalName(),
                         elementType,
                         propertyIdsInOrder)
 

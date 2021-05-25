@@ -211,7 +211,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(spec == null) {
             return null;
         }
-        final ObjectMember objectMemberIfAny = spec.getMember(featureId.getMemberName()).orElse(null);
+        final ObjectMember objectMemberIfAny = spec.getMember(featureId.getMemberLogicalName()).orElse(null);
         if (objectMemberIfAny == null) {
             return null;
         }

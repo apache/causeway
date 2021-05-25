@@ -52,9 +52,9 @@ import lombok.val;
  * <p>
  * This value is {@link Comparable}, the implementation of which considers
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
- * {@link #getTypeSimpleName() type simple name} and {@link #getMemberName() member name}.
+ * {@link #getTypeSimpleName() type simple name} and {@link #getMemberLogicalName() member-logical-name}.
  * <p>
- * If the represented member is an <i>action</i>, then {@link #getMemberName() member name}
+ * If the represented member is an <i>action</i>, then {@link #getMemberLogicalName() member-logical-name}
  * must <b>not</b> include any parameter list or parentheses.
  * Consequently method overloading is not supported.
  * <p>
@@ -85,7 +85,7 @@ implements
         if(identifier.getType().isClass()) {
             return newType(logicalTypeName);
         }
-        return newMember(logicalTypeName, identifier.getMemberName());
+        return newMember(logicalTypeName, identifier.getMemberLogicalName());
     }
 
     public static ApplicationFeatureId newFeature(
@@ -122,7 +122,7 @@ implements
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
         featureId.namespace = namespace;
         featureId.typeSimpleName = null;
-        featureId.memberName = null;
+        featureId.memberLogicalName = null;
         return featureId;
     }
 
@@ -132,10 +132,10 @@ implements
         return featureId;
     }
 
-    public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
+    public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName) {
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         initType(featureId, logicalTypeName);
-        initMember(featureId, memberName);
+        initMember(featureId, memberLogicalName);
         return featureId;
     }
 
@@ -170,11 +170,11 @@ implements
                     "fullyQualifiedName '%s' must include a non-empty namespace", fullyQualifiedName);
         }
 
-        featureId.memberName = null;
+        featureId.memberLogicalName = null;
     }
 
-    private static void initMember(final ApplicationFeatureId featureId, final @Nullable String memberName) {
-        featureId.memberName = stripOffParamsIfAny(memberName); // just in case
+    private static void initMember(final ApplicationFeatureId featureId, final @Nullable String memberLogicalName) {
+        featureId.memberLogicalName = stripOffParamsIfAny(memberLogicalName); // just in case
     }
 
     private static String stripOffParamsIfAny(final @Nullable String name) {
@@ -237,7 +237,7 @@ implements
      * {@code null} if not a member
      */
     @Programmatic
-    @Getter private String memberName;
+    @Getter private String memberLogicalName;
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -246,8 +246,8 @@ implements
         if(getTypeSimpleName() != null) {
             buf.append(".").append(getTypeSimpleName());
         }
-        if(getMemberName() != null) {
-            buf.append("#").append(getMemberName());
+        if(getMemberLogicalName() != null) {
+            buf.append("#").append(getMemberLogicalName());
         }
         return buf.toString();
     }
@@ -366,7 +366,7 @@ implements
     private static final Comparator<ApplicationFeatureId> byTypeSimpleName =
             comparing(ApplicationFeatureId::getTypeSimpleName, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byMemberName =
-            comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
+            comparing(ApplicationFeatureId::getMemberLogicalName, nullsFirst(naturalOrder()));
 
     private static final Comparator<ApplicationFeatureId> comparator =
             Comparator.nullsFirst(bySort)
@@ -378,19 +378,19 @@ implements
             ObjectContracts.checkEquals(ApplicationFeatureId::getSort)
             .thenCheckEquals(ApplicationFeatureId::getNamespace)
             .thenCheckEquals(ApplicationFeatureId::getTypeSimpleName)
-            .thenCheckEquals(ApplicationFeatureId::getMemberName);
+            .thenCheckEquals(ApplicationFeatureId::getMemberLogicalName);
 
     private static final Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getSort)
             .thenHashing(ApplicationFeatureId::getNamespace)
             .thenHashing(ApplicationFeatureId::getTypeSimpleName)
-            .thenHashing(ApplicationFeatureId::getMemberName);
+            .thenHashing(ApplicationFeatureId::getMemberLogicalName);
 
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("sort", ApplicationFeatureId::getSort)
             .thenToString("namespace", ApplicationFeatureId::getNamespace)
             .thenToStringOmitIfAbsent("typeSimpleName", ApplicationFeatureId::getTypeSimpleName)
-            .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
+            .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberLogicalName);
 
 
     @Override
@@ -421,7 +421,7 @@ implements
      * @param namespace
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
-        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName());
+        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberLogicalName());
     }
 
 }

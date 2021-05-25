@@ -157,7 +157,7 @@ implements
 
     @Override
     public String getName() {
-        return getIdentifier().getMemberName();
+        return getIdentifier().getMemberLogicalName();
     }
 
     @Override
