@@ -18,30 +18,46 @@
  */
 package org.apache.isis.extensions.secman.model.userreg;
 
-import java.util.Set;
+import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 /**
- * An abstract implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
- * with a single abstract method for the initial role of newly created local users
+ * An implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
+ * to allow users to be automatically created with the configured initial
+ * role(s).
  *
  * @since 2.0 {@index}
  */
-public abstract class SecurityModuleAppUserRegistrationServiceAbstract implements UserRegistrationService {
+@Service
+@Named("isis.ext.secman.UserRegistrationServiceForSecman")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("SecMan")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class UserRegistrationServiceForSecman implements UserRegistrationService {
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    private final ApplicationUserRepository applicationUserRepository;
+    private final ApplicationRoleRepository applicationRoleRepository;
+    private final IsisConfiguration isisConfiguration;
 
     @Override
     public boolean usernameExists(final String username) {
@@ -53,27 +69,21 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
             final UserDetails userDetails) {
 
         final Password password = new Password(userDetails.getPassword());
-        final ApplicationRole initialRole = getInitialRole();
 
         final String username = userDetails.getUsername();
         final String emailAddress = userDetails.getEmailAddress();
-        final ApplicationUser applicationUser = (ApplicationUser) applicationUserRepository
+        final ApplicationUser applicationUser = applicationUserRepository
                 .newLocalUser(username, password, ApplicationUserStatus.UNLOCKED);
 
         if(_Strings.isNotEmpty(emailAddress)) {
             applicationUser.setEmailAddress(emailAddress);
         }
-        if(initialRole!=null) {
-            applicationRoleRepository.addRoleToUser(initialRole, applicationUser);
-        }
 
-        final Set<ApplicationRole> additionalRoles = getAdditionalInitialRoles();
-        if(additionalRoles != null) {
-            for (final ApplicationRole additionalRole : additionalRoles) {
-                applicationRoleRepository.addRoleToUser(additionalRole, applicationUser);
-            }
-        }
-
+        isisConfiguration.getExtensions().getSecman().getUserRegistration().getInitialRoleNames().stream()
+                .map(applicationRoleRepository::findByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(role -> applicationRoleRepository.addRoleToUser(role, applicationUser));
     }
 
     @Override
@@ -83,23 +93,12 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Override
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
-        boolean passwordUpdated = false;
-        final ApplicationUser user = applicationUserRepository.findByEmailAddress(emailAddress)
-                .orElse(null);
-        if (user != null) {
-            passwordUpdated = applicationUserRepository.updatePassword(user, password);;
-        }
-        return passwordUpdated;
+        return applicationUserRepository.findByEmailAddress(emailAddress)
+                .map(user -> {
+                    val passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
+                    return passwordWasUpdated;
+                })
+                .orElse(false);
     }
-
-    /**
-     * @return The role to use for newly created local users
-     */
-    protected abstract ApplicationRole getInitialRole();
-
-    /**
-     * @return Additional roles for newly created local users
-     */
-    protected abstract Set<ApplicationRole> getAdditionalInitialRoles();
 
 }

@@ -29,8 +29,6 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
-import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.app.ApplicationUserManager;
@@ -40,7 +38,6 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class
@@ -59,7 +56,6 @@ public class ApplicationUserManager_newDelegateUser {
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
-    @Inject private SecurityRealmService securityRealmService;
 
     private final ApplicationUserManager target;
 
@@ -91,11 +87,6 @@ public class ApplicationUserManager_newDelegateUser {
     }
 
     @MemberSupport
-    public boolean hideAct() {
-        return hasNoDelegateAuthenticationRealm();
-    }
-
-    @MemberSupport
     public ApplicationRole default1Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
@@ -103,13 +94,5 @@ public class ApplicationUserManager_newDelegateUser {
     }
 
 
-    // -- HELPER
-
-    private boolean hasNoDelegateAuthenticationRealm() {
-        val realm = securityRealmService.getCurrentRealm();
-        return realm == null
-                || !realm.getCharacteristics()
-                .contains(SecurityRealmCharacteristic.DELEGATING);
-    }
 
 }
