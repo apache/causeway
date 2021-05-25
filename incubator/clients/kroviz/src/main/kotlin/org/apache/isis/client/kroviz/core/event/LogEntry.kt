@@ -36,7 +36,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
     SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
-    DUPLICATE("DUPLICATE", "fas fa-link", ButtonStyle.OUTLINESUCCESS),
+    DUPLICATE("DUPLICATE", "fas fa-stop-circle", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
     MISSING("MISSING", "fas fa-bug", ButtonStyle.OUTLINEDANGER)

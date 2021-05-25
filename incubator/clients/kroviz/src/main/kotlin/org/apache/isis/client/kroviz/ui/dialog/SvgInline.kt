@@ -52,7 +52,7 @@ class SvgInline : Command() {
         val url = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Trajans-Column-lower-animated.svg"
         val link = Link(href = url, method = Method.GET.operation)
         val agr = SvgDispatcher(callBack)
-        RoXmlHttpRequest().invokeAnonymous(link, agr)
+        RoXmlHttpRequest().invokeNonREST(link, agr)
     }
 
 }

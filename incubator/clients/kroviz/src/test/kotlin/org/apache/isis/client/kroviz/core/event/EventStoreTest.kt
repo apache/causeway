@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
+import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
@@ -25,10 +26,41 @@ import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.XmlHelper
-import io.kvision.panel.VPanel
 import kotlin.test.*
 
 class EventStoreTest : IntegrationTest() {
+
+    @Test
+    fun testFindPlantuml() {
+        // given
+        val url1 = Constants.krokiUrl + "plantuml"
+        val rs1 = ResourceSpecification(url1)
+        val body1 = "oans"
+        val url2 = Constants.krokiUrl + "plantuml"
+        val rs2 = ResourceSpecification(url2)
+        val body2 = "zwoa"
+
+        // when
+        EventStore.reset()
+        EventStore.start(rs1, Method.POST.operation, body = body1)
+        EventStore.start(rs2, Method.POST.operation, body = body2)
+
+        // then
+        assertEquals(2, EventStore.log.size) //1
+        console.log("[EST.testFindPlantuml]")
+
+        val le1 = EventStore.findBy(rs1, body1)
+        assertNotNull(le1)  //2
+        console.log("le1: ")
+        console.log(le1)
+
+        val le2 = EventStore.findBy(rs2, body2)
+        assertNotNull(le2)  //3
+        console.log("le2: ")
+        console.log(le2)
+
+        assertFalse(le1 === le2)  //4
+    }
 
     //@Test
     // sometimes fails with:
@@ -50,13 +82,13 @@ class EventStoreTest : IntegrationTest() {
             mockResponse(SO_LAYOUT_XML, obs)
 
             // then
-            val soListLe = EventStore.find(soList)!!
+            val soListLe = EventStore.findBy(soList)!!
             assertEquals(Constants.subTypeJson, soListLe.subType) // 1
 
-            val leJson = EventStore.find(rsJson)!!
+            val leJson = EventStore.findBy(rsJson)!!
             assertEquals(Constants.subTypeJson, leJson.subType) // 2
 
-            val leXml = EventStore.find(rsXml)!!
+            val leXml = EventStore.findBy(rsXml)!!
             assertEquals(Constants.subTypeXml, leXml.subType) // 3
             assertTrue(XmlHelper.isXml(leXml.response)) // 4
 
@@ -93,12 +125,12 @@ class EventStoreTest : IntegrationTest() {
 
         // Entries with the same key can be written, but when updated or retrieved the first (oldest) entry should be used
         //when
-        val le2 = EventStore.find(selfSpec)!!
+        val le2 = EventStore.findBy(selfSpec)!!
         //then
         assertEquals(myFirst, le2.request)  //2
         assertEquals(selfStr.length, le2.response.length)  //3
         //when
-        val leU = EventStore.find(upSpec)!!
+        val leU = EventStore.findBy(upSpec)!!
         //then
         assertEquals(myFirst, leU.request)  //4
         assertEquals(upStr.length, leU.response.length)  //5
@@ -120,10 +152,10 @@ class EventStoreTest : IntegrationTest() {
         EventStore.add(h2Spec)
         EventStore.addView(i2, agg, VPanel())
 
-        val le1 = EventStore.find(h1Spec)!!
+        val le1 = EventStore.findBy(h1Spec)!!
         assertEquals(h1, le1.url)   //1
 
-        val le2 = EventStore.find(h2Spec)!!
+        val le2 = EventStore.findBy(h2Spec)!!
         assertEquals(h2, le2.url)   //2
 
         val le3 = EventStore.findView(i2)
@@ -151,7 +183,7 @@ class EventStoreTest : IntegrationTest() {
         EventStore.add(ResourceSpecification(ol2))
         EventStore.add(ResourceSpecification(ol3))
 
-        val le1 = EventStore.find(ol1Spec)
+        val le1 = EventStore.findBy(ol1Spec)
         assertNotNull(le1)  //1
 
         val le2 = EventStore.findExact(ol9Spec)
@@ -161,7 +193,7 @@ class EventStoreTest : IntegrationTest() {
         assertNotNull(le3)  //3
         assertEquals(ol1, le3.url)  //4
 
-        val le4 = EventStore.find(ol9Spec)
+        val le4 = EventStore.findBy(ol9Spec)
         assertEquals(le3, le4)      //5
 
         val olxSpec = ResourceSpecification(olx)
@@ -177,7 +209,7 @@ class EventStoreTest : IntegrationTest() {
         EventStore.add(p1Spec)
         EventStore.add(p2Spec)
         EventStore.add(p3Spec)
-        val le6 = EventStore.find(p3Spec)
+        val le6 = EventStore.findBy(p3Spec)
         assertNotNull(le6)          //7
         assertEquals(le6.url, p1)   //8
 
@@ -187,7 +219,7 @@ class EventStoreTest : IntegrationTest() {
         val pNotesSpec = ResourceSpecification(pNotes)
         EventStore.add(pNameSpec)
         EventStore.add(pNotesSpec)
-        val le7 = EventStore.find(pNotesSpec)
+        val le7 = EventStore.findBy(pNotesSpec)
         assertNotNull(le7)            //9
         assertEquals(le7.url, pNotes) //10
     }
@@ -204,7 +236,7 @@ class EventStoreTest : IntegrationTest() {
         EventStore.add(ol1Spec)
         EventStore.add(ol2Spec)
 
-        val le1 = EventStore.find(ol1Spec)
+        val le1 = EventStore.findBy(ol1Spec)
         assertNotNull(le1)  //1
 
         val le2 = EventStore.findEquivalent(ol2Spec)
@@ -226,7 +258,7 @@ class EventStoreTest : IntegrationTest() {
         // then
         val currentSize: Int = EventStore.log.size
         assertEquals(2, currentSize)  //1
-        val le = EventStore.find(rs)!!
+        val le = EventStore.findBy(rs)!!
         assertEquals("first response", le.response)
     }
 
@@ -242,8 +274,8 @@ class EventStoreTest : IntegrationTest() {
         EventStore.reset()
         EventStore.add(rs1)
         EventStore.add(rs2)
-        val le1 = EventStore.find(rs1)
-        val le2 = EventStore.find(rs2)
+        val le1 = EventStore.findBy(rs1)
+        val le2 = EventStore.findBy(rs2)
 
         //then
         assertEquals(2, EventStore.log.size)

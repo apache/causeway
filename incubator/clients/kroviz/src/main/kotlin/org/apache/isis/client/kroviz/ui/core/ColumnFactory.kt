@@ -100,7 +100,7 @@ class ColumnFactory {
         val b = Button(text = "", icon = iconName, style = ButtonStyle.LINK).onClick {
             UiManager.displayModel(tObject)
         }
-        val logEntry = EventStore.find(tObject)!!
+        val logEntry = EventStore.findBy(tObject)!!
         b.setDragDropData(Constants.stdMimeType, logEntry.url)
         return b
     }

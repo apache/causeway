@@ -155,7 +155,7 @@ object UiManager {
     fun displayModel(tObject: TObject) {
         val aggregator = ObjectAggregator(tObject.title)
         linkLayout(tObject, aggregator)
-        val logEntry = EventStore.find(tObject)!!
+        val logEntry = EventStore.findBy(tObject)!!
         logEntry.addAggregator(aggregator)
         aggregator.update(logEntry, Constants.subTypeJson)
         aggregator.handleObject(tObject)
@@ -166,7 +166,7 @@ object UiManager {
             it.relation() == Relation.OBJECT_LAYOUT
         }
         val reSpec = ResourceSpecification(layoutLink!!.href)
-        val logEntry = EventStore.find(reSpec)
+        val logEntry = EventStore.findBy(reSpec)
         logEntry!!.addAggregator(aggregator)
     }
 

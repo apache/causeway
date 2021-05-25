@@ -39,8 +39,7 @@ object UmlUtils {
         val link = Link(href = Constants.krokiUrl, method = Method.POST.operation, args = args)
         val agr = SvgDispatcher(callBack)
 
-
-        RoXmlHttpRequest().invokeAnonymous(link, agr)
+        RoXmlHttpRequest().invokeNonREST(link, agr)
     }
 
     fun generateJsonDiagram(pumlCode: String, callBack: Any) {

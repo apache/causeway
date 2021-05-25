@@ -78,7 +78,7 @@ class SequenceDiagramTest {
         val rootRs = ResourceSpecification(RESTFUL.url)
 
         // when
-        val rootLogEntry = EventStore.find(rootRs)
+        val rootLogEntry = EventStore.findBy(rootRs)
         // then
         assertNotNull(rootLogEntry)  //1
 

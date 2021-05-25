@@ -65,11 +65,11 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
             //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
-            val getLogEntry = EventStore.find(reSpec)!!
+            val getLogEntry = EventStore.findBy(reSpec)!!
             getLogEntry.setReload()
 
             val putLink = Link(method = Method.PUT.operation, href = href)
-            val logEntry = EventStore.find(reSpec)
+            val logEntry = EventStore.findBy(reSpec)
             val aggregator = logEntry?.getAggregator()!!
             RoXmlHttpRequest().invoke(putLink, aggregator)
 

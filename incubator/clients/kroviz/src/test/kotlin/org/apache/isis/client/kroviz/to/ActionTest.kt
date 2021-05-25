@@ -64,7 +64,7 @@ class ActionTest : IntegrationTest() {
             console.log(json)
             RoXmlHttpRequest().invoke(link, ActionDispatcher())
             val urlSpec = ResourceSpecification(url)
-            val le = EventStore.find(urlSpec)!!
+            val le = EventStore.findBy(urlSpec)!!
             console.log(EventStore.log)
             console.log(le)
             assertTrue(!le.isError())

@@ -44,7 +44,7 @@ class CollectionAggregatorTest : IntegrationTest() {
             mockResponse(FR_OBJECT_LAYOUT, obs)
             mockResponse(FR_OBJECT_PROPERTY, obs)
             val reSpec = ResourceSpecification(FR_OBJECT_PROPERTY.url)
-            val pLe = EventStore.find(reSpec)!!
+            val pLe = EventStore.findBy(reSpec)!!
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 

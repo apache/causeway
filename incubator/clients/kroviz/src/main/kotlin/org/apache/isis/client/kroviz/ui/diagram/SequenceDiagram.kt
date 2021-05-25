@@ -56,7 +56,7 @@ object SequenceDiagram {
         var code = "$source -> $target $NL"
 
         val rs = ResourceSpecification(childUrl)
-        val childLE = EventStore.find(rs)
+        val childLE = EventStore.findBy(rs)
         if (childLE != null) {
             code += iterateOverChildren(childLE)
         }

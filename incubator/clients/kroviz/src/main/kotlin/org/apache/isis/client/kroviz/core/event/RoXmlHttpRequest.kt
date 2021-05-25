@@ -43,7 +43,7 @@ class RoXmlHttpRequest {
     }
 
     private fun processCached(rs: ResourceSpecification) {
-        val le = EventStore.find(rs)!!
+        val le = EventStore.findBy(rs)!!
         le.retrieveResponse()
         getHandlerChain().handle(le)
         EventStore.cached(rs)
@@ -68,9 +68,9 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", "application/$subType;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/$subType")
 
-        val rs = buildResourceSpecificationAndSetupHandler(url, subType, xhr)
-
         val body = buildBody(link, aggregator)
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
+
         when {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
@@ -92,15 +92,15 @@ class RoXmlHttpRequest {
         }
     }
 
-    fun invokeAnonymous(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
+    fun invokeNonREST(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
         val rs = ResourceSpecification(link.href)
         when {
             EventStore.isCached(rs, link.method) -> processCached(rs)
-            else -> processAnonymous(link, aggregator, subType)
+            else -> processNonREST(link, aggregator, subType)
         }
     }
 
-    private fun processAnonymous(link: Link, aggregator: BaseAggregator?, subType: String) {
+    private fun processNonREST(link: Link, aggregator: BaseAggregator?, subType: String) {
         val method = link.method
         val url = link.href
 
@@ -109,10 +109,10 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
         xhr.setRequestHeader("Accept", Constants.svgMimeType)
 
-        val rs = buildResourceSpecificationAndSetupHandler(url, subType, xhr)
-
         val body = Utils.argumentsAsList(link)
         xhr.send(body)
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
+
         EventStore.start(rs, method, body, aggregator)
     }
 
@@ -125,7 +125,7 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
         xhr.setRequestHeader("Accept", Constants.svgMimeType)
 
-        val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, xhr)
+        val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode, xhr)
 
         xhr.send(pumlCode)
         EventStore.start(rs, method, pumlCode, agr)
@@ -134,21 +134,22 @@ class RoXmlHttpRequest {
     private fun buildResourceSpecificationAndSetupHandler(
             url: String,
             subType: String,
+            body: String,
             xhr: XMLHttpRequest): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
-        xhr.onload = { _ -> handleResult(rs, xhr) }
-        xhr.onerror = { _ -> handleError(rs, xhr) }
-        xhr.ontimeout = { _ -> handleError(rs, xhr) }
+        xhr.onload = { _ -> handleResult(rs, body, xhr) }
+        xhr.onerror = { _ -> handleError(rs, body, xhr) }
+        xhr.ontimeout = { _ -> handleError(rs, body, xhr) }
         return rs
     }
 
-    private fun handleResult(rs: ResourceSpecification, xhr: XMLHttpRequest) {
+    private fun handleResult(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
         val responseText = xhr.responseText
-        val logEntry: LogEntry? = EventStore.end(rs, responseText)
+        val logEntry: LogEntry? = EventStore.end(rs, body, responseText)
         if (logEntry != null) getHandlerChain().handle(logEntry)
     }
 
-    private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {
+    private fun handleError(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
         val responseText = xhr.responseText
         EventStore.fault(rs, responseText)
     }

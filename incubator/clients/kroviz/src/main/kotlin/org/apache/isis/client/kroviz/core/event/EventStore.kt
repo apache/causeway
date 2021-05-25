@@ -25,7 +25,6 @@ import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UUID
 
 /**
@@ -83,7 +82,7 @@ object EventStore {
     }
 
     fun end(reSpec: ResourceSpecification, response: String): LogEntry? {
-        val entry: LogEntry? = find(reSpec)
+        val entry: LogEntry? = findBy(reSpec)
         if (entry != null) {
             entry.response = response
             entry.setSuccess()
@@ -92,15 +91,27 @@ object EventStore {
         return entry
     }
 
+    fun end(reSpec: ResourceSpecification, pumlCode: String, response: String): LogEntry? {
+        val entry: LogEntry? = findBy(reSpec, pumlCode)
+        if (entry != null) {
+            entry.response = response
+            entry.setSuccess()
+            updateStatus(entry)
+        }
+        return entry
+    }
+
+
     fun fault(reSpec: ResourceSpecification, fault: String) {
-        val entry: LogEntry? = find(reSpec)
+        val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
         updateStatus(entry)
     }
 
     fun cached(reSpec: ResourceSpecification): LogEntry {
-        val entry: LogEntry? = find(reSpec)
+        val entry: LogEntry? = findBy(reSpec)
         entry!!.setCached()
+        updateStatus(entry)
         return entry
     }
 
@@ -111,7 +122,7 @@ object EventStore {
     /**
      * Answers the first matching entry.
      */
-    fun find(reSpec: ResourceSpecification): LogEntry? {
+    fun findBy(reSpec: ResourceSpecification): LogEntry? {
         return if (reSpec.isRedundant()) {
             findEquivalent(reSpec)
         } else {
@@ -119,7 +130,15 @@ object EventStore {
         }
     }
 
-    fun find(tObject: TObject): LogEntry? {
+    fun findBy(reSpec: ResourceSpecification, body: String): LogEntry? {
+        return log.firstOrNull() {
+            it.url == reSpec.url
+                    && it.subType == reSpec.subType
+                    && it.request == body
+        }
+    }
+
+    fun findBy(tObject: TObject): LogEntry? {
         return log.firstOrNull() {
             it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
         }
@@ -164,7 +183,7 @@ object EventStore {
     }
 
     fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
-        val le = find(reSpec)
+        val le = findBy(reSpec)
         return when {
             le == null -> false
             le.hasResponse() && le.method == method && le.subType == reSpec.subType -> true
