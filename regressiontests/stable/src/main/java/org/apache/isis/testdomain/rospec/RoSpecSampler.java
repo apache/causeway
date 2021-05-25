@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.REST,
-        objectType = "testdomain.RoSpecSampler")
+        logicalTypeName = "testdomain.RoSpecSampler")
 public class RoSpecSampler {
 
     // -- VOID

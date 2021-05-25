@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 //@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
 @DomainObject(
-        objectType = "testdomain.jdo.Book",
+        logicalTypeName = "testdomain.jdo.Book",
         entityChangePublishing = Publishing.ENABLED)
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(

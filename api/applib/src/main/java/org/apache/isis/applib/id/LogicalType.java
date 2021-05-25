@@ -131,7 +131,7 @@ implements
 
     /**
      * Returns the logical-type-name (unique amongst non-abstract classes), as per the
-     * {@link ObjectTypeFacet}.
+     * {@link LogicalTypeFacet}.
      *
      * <p>
      * This will typically be the value of the {@link DomainObject#logicalTypeName()} annotation attribute.

@@ -51,7 +51,7 @@ import lombok.ToString;
         strategy=javax.jdo.annotations.IdGeneratorStrategy.INCREMENT,
         column="id")
 @DomainObject(
-        objectType = "testdomain.jdo.Product"
+        logicalTypeName = "testdomain.jdo.Product"
         )
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

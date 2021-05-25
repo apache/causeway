@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(
-        objectType = "isis.sub.excel.DemoFixture_extending_ExcelFixture2"
+        logicalTypeName = "isis.sub.excel.DemoFixture_extending_ExcelFixture2"
 )
 public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
 

@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.Nature;
 @XmlRootElement(name = "InteractionNpmDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.InteractionNpmDemo", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.InteractionNpmDemo", editing=Editing.ENABLED)
 public class InteractionNpmDemo {
 
 }

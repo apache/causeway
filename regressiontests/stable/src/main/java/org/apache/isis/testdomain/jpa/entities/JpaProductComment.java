@@ -37,7 +37,7 @@ import lombok.Setter;
 
 @Entity
 @DomainObject(
-        objectType = "testdomain.jpa.ProductComment")
+        logicalTypeName = "testdomain.jpa.ProductComment")
 public class JpaProductComment implements OnUpdatedByAndAt {
 
     @Id

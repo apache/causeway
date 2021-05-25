@@ -47,7 +47,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(
-        objectType = "libExcelFixture.ExcelUploadRowHandler4ToDoItem",
+        logicalTypeName = "libExcelFixture.ExcelUploadRowHandler4ToDoItem",
         nature = Nature.VIEW_MODEL
 )
 @XmlRootElement(name = "BulkUpdateLineItemForDemoToDoItem")

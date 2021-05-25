@@ -60,7 +60,7 @@ import lombok.val;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "libExcelFixture.BulkUpdateManagerForDemoToDoItem"
+        logicalTypeName = "libExcelFixture.BulkUpdateManagerForDemoToDoItem"
 )
 @DomainObjectLayout(
         named ="Import/export manager",

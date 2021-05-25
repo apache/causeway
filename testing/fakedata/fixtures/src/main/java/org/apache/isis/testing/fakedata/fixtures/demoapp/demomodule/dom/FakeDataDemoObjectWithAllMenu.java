@@ -35,7 +35,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
+        logicalTypeName = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
 )
 @DomainServiceLayout(named = "Demo")
 public class FakeDataDemoObjectWithAllMenu {

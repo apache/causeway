@@ -533,7 +533,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class ObjectType extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(objectType = "CUS")
+        @DomainObject(logicalTypeName = "CUS")
         class CustomerWithDomainObjectAndObjectTypeSet {
         }
 

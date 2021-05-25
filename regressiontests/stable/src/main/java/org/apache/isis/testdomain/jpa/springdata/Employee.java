@@ -32,7 +32,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@DomainObject(objectType = "testdomain.jpa.springdata.Employee")
+@DomainObject(logicalTypeName = "testdomain.jpa.springdata.Employee")
 @Getter @Setter @ToString @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employee {

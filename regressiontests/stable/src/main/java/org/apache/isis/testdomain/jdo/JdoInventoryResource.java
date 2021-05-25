@@ -41,7 +41,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.REST,
-        objectType = "testdomain.jdo.InventoryResource")
+        logicalTypeName = "testdomain.jdo.InventoryResource")
 public class JdoInventoryResource {
 
     @Inject private RepositoryService repository;

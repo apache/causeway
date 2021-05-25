@@ -41,7 +41,7 @@ import lombok.ToString;
 
 @Entity
 @DomainObject(
-        objectType = "testdomain.jdo.Inventory",
+        logicalTypeName = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts",

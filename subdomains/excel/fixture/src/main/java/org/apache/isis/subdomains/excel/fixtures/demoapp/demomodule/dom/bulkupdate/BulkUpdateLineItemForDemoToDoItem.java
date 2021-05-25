@@ -51,7 +51,7 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "libExcelFixture.BulkUpdateLineItemForDemoToDoItem"
+        logicalTypeName = "libExcelFixture.BulkUpdateLineItemForDemoToDoItem"
 )
 @DomainObjectLayout(
         named = "Bulk update line item",

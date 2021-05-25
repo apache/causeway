@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.user.UserService;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "libExcelFixture.ExcelDemoToDoItemMenu"
+        logicalTypeName = "libExcelFixture.ExcelDemoToDoItemMenu"
 )
 public class ExcelDemoToDoItemMenu {
 

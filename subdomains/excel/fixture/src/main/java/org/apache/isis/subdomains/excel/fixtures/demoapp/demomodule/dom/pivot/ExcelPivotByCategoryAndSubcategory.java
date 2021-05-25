@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(
-        objectType = "libExcelFixture.ExcelPivotByCategoryAndSubcategory",
+        logicalTypeName = "libExcelFixture.ExcelPivotByCategoryAndSubcategory",
         nature = Nature.VIEW_MODEL
 )
 public class ExcelPivotByCategoryAndSubcategory {

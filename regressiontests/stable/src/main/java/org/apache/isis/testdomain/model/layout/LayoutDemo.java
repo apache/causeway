@@ -36,7 +36,7 @@ import lombok.Setter;
 @XmlRootElement(name = "LayoutDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.LayoutDemo", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.LayoutDemo", editing=Editing.ENABLED)
 public class LayoutDemo {
 
     @Property

@@ -26,7 +26,7 @@ public class InvalidLogicalTypeNameClash {
 
     // logical type name clash: should fail validation
     @DomainObject(nature = Nature.VIEW_MODEL,
-            objectType = "isis.testdomain.InvalidLogicalTypeNameClash")
+            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
     public static class VariantA {
 
         @Action
@@ -38,7 +38,7 @@ public class InvalidLogicalTypeNameClash {
 
     // logical type name clash: should fail validation
     @DomainObject(nature = Nature.VIEW_MODEL,
-            objectType = "isis.testdomain.InvalidLogicalTypeNameClash")
+            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
     public static  class VariantB {
 
         @Action

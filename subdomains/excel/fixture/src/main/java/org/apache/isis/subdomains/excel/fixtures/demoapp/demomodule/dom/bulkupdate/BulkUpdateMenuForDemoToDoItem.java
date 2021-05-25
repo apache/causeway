@@ -37,7 +37,7 @@ import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcateg
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "libExcelFixture.BulkUpdateMenuForDemoToDoItem"
+        logicalTypeName = "libExcelFixture.BulkUpdateMenuForDemoToDoItem"
 )
 @DomainServiceLayout(named = "Excel")
 public class BulkUpdateMenuForDemoToDoItem {

@@ -21,7 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 
-@DomainObject(objectType = "isis.testdomain.ProperInterface2")
+@DomainObject(logicalTypeName = "isis.testdomain.ProperInterface2")
 public interface ProperInterface2 
 extends ProperInterface {
 

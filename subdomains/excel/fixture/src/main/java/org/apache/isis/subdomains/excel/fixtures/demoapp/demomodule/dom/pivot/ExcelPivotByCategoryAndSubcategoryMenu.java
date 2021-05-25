@@ -35,7 +35,7 @@ import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDem
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu"
+        logicalTypeName = "libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu"
 )
 @DomainServiceLayout(
         named = "Excel"

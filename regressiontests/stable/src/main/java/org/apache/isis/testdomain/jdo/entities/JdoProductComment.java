@@ -35,7 +35,7 @@ import lombok.Setter;
 @PersistenceCapable
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
 @DomainObject(
-        objectType = "testdomain.jdo.ProductComment")
+        logicalTypeName = "testdomain.jdo.ProductComment")
 public class JdoProductComment implements OnUpdatedByAndAt {
 
     @Property @Column(allowsNull = "false")

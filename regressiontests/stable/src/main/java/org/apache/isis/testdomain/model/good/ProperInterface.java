@@ -21,7 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 
-@DomainObject(objectType = "isis.testdomain.ProperInterface")
+@DomainObject(logicalTypeName = "isis.testdomain.ProperInterface")
 public interface ProperInterface {
 
     // -- read/write exemplar

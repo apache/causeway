@@ -18,9 +18,6 @@
  */
 package org.apache.isis.testdomain.interact;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +32,9 @@ import javax.xml.bind.annotation.XmlType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -68,7 +68,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
-    @DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.CommandResult")
+    @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.CommandResult")
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class CommandResult {
@@ -82,7 +82,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
-    @DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.CommandArgDemo")
+    @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.CommandArgDemo")
     public static class CommandArgDemo {
 
         @Action

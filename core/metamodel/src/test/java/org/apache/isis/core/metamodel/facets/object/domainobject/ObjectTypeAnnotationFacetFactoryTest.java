@@ -46,7 +46,7 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     @Test
     public void objectTypeAnnotationPickedUpOnClass() {
 
-        @DomainObject(objectType = "CUS")
+        @DomainObject(logicalTypeName = "CUS")
         class Customer {
         }
 

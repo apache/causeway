@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DiscriminatorValue("Book")
 @DomainObject(
-        objectType = "testdomain.jpa.Book",
+        logicalTypeName = "testdomain.jpa.Book",
         entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)

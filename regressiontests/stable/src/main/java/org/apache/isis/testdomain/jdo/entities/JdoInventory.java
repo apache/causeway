@@ -42,7 +42,7 @@ import lombok.ToString;
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
 @Version(strategy= VersionStrategy.DATE_TIME, column="version")
 @DomainObject(
-        objectType = "testdomain.jdo.Inventory",
+        logicalTypeName = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
 
 @NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString

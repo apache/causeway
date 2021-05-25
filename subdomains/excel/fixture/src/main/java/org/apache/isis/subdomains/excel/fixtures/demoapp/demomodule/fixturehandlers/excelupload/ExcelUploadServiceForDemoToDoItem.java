@@ -37,7 +37,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "libExcelFixture.ExcelUploadServiceForDemoToDoItem"
+        logicalTypeName = "libExcelFixture.ExcelUploadServiceForDemoToDoItem"
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,

@@ -53,7 +53,7 @@ import lombok.ToString;
         name="product_type",
         discriminatorType = DiscriminatorType.STRING)
 @DomainObject(
-        objectType = "testdomain.jpa.Product")
+        logicalTypeName = "testdomain.jpa.Product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
