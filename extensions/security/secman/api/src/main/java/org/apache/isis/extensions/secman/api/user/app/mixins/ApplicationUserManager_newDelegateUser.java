@@ -91,11 +91,6 @@ public class ApplicationUserManager_newDelegateUser {
     }
 
     @MemberSupport
-    public boolean hideAct() {
-        return hasNoDelegateAuthenticationRealm();
-    }
-
-    @MemberSupport
     public ApplicationRole default1Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
