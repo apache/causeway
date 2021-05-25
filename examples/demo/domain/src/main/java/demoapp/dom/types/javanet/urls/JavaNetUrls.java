@@ -46,7 +46,7 @@ import demoapp.dom.types.javanet.urls.vm.JavaNetUrlVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaNetUrls", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaNetUrls", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaNetUrls implements HasAsciiDocDescription {
 

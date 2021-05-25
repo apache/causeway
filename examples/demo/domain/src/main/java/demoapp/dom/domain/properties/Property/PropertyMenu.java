@@ -52,7 +52,7 @@ import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternV
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PropertyMenu")
 //@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {

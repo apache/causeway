@@ -46,7 +46,7 @@ import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDom
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.CollectionDomainEventVm",
+    logicalTypeName = "demo.CollectionDomainEventVm",
     editing = Editing.ENABLED
 )
 //tag::class[]

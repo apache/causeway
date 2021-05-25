@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javalang.strings.JavaLangStrings;
 import demoapp.dom.types.javalang.voids.JavaLangVoids;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaLangTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaLangTypesMenu")
 @DomainObjectLayout(named="JavaLangTypes")
 @Log4j2
 public class JavaLangTypesMenu {

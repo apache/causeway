@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.shorts.persistence.WrapperShortEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperShortEntity"
+      logicalTypeName = "demo.WrapperShortEntity"
 )
 @NoArgsConstructor
 public class WrapperShortJpa

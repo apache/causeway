@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.DependentArgsActionMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.DependentArgsActionMenu")
 @DomainObjectLayout(named="Associated Action")
 public class DependentArgsActionMenu {
 

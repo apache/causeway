@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.javaawt.images.JavaAwtBufferedImages;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaAwtTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaAwtTypesMenu")
 @DomainObjectLayout(named="JavaAwtTypes")
 //@Log4j2
 public class JavaAwtTypesMenu {

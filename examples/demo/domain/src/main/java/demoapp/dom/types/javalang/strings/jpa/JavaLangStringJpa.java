@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-        objectType = "demo.JavaLangStringEntity"
+        logicalTypeName = "demo.JavaLangStringEntity"
 )
 @NoArgsConstructor
 public class JavaLangStringJpa

@@ -45,7 +45,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.vm.JavaTimeOffsetDateTi
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaTimeOffsetDateTimes", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaTimeOffsetDateTimes", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaTimeOffsetDateTimes implements HasAsciiDocDescription {
 

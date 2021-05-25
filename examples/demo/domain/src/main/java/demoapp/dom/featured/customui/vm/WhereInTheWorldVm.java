@@ -41,7 +41,7 @@ import demoapp.dom.featured.customui.latlng.Zoom;
 @XmlRootElement(name = "demo.CustomUiVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.CustomUiVm")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.CustomUiVm")
 public class WhereInTheWorldVm implements HasAsciiDocDescription, Serializable {
 
     @Title

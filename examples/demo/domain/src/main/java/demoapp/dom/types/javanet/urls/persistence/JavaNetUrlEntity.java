@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder2;
 
 @DomainObject(
-        objectType = "demo.JavaNetUrlEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaNetUrlEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaNetUrlEntity
 implements

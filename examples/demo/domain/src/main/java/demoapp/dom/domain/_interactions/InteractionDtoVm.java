@@ -41,7 +41,7 @@ import lombok.val;
 
 //tag::class[]
 @DomainObject(
-    objectType = "demo.InteractionDtoVm"
+    logicalTypeName = "demo.InteractionDtoVm"
     , nature = Nature.VIEW_MODEL
 )
 @NoArgsConstructor

@@ -41,7 +41,7 @@ import lombok.Setter;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , objectType = "demo.PropertyPublishingJdo"
+        , logicalTypeName = "demo.PropertyPublishingJdo"
         , editing = Editing.ENABLED
 )
 public class PropertyExecutionPublishingJdo

@@ -37,7 +37,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinVm")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.MixinVm")
 public class MixinVm implements HasAsciiDocDescription, CountHolder {
 
     public String title() {

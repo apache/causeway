@@ -35,7 +35,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tab")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tab")
 public class TabDemo implements HasAsciiDocDescription {
 
     public String title() {

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.EventBusServiceDemoVm")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm")
 public class EventBusServiceDemoVm implements HasAsciiDocDescription {
 
     @Inject private EventLogEntryJdoRepository repository;

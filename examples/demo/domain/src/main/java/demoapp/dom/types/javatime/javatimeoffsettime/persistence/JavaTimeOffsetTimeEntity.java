@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
 
 @DomainObject(
-        objectType = "demo.JavaTimeOffsetTimeEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaTimeOffsetTimeEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaTimeOffsetTimeEntity
 implements

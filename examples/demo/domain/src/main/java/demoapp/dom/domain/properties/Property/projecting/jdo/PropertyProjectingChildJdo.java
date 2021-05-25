@@ -40,7 +40,7 @@ import lombok.Setter;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , objectType = "demo.PropertyProjectingChildJdo"
+        , logicalTypeName = "demo.PropertyProjectingChildJdo"
         , editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

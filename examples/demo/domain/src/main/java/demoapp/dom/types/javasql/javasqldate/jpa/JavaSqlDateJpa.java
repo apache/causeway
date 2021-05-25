@@ -50,7 +50,7 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaSqlDateEntity"
+      logicalTypeName = "demo.JavaSqlDateEntity"
 )
 @NoArgsConstructor
 public class JavaSqlDateJpa

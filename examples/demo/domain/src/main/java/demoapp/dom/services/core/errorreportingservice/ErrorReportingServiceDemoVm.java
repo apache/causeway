@@ -34,7 +34,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.ErrorReportingServiceDemoVm", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.ErrorReportingServiceDemoVm", editing=Editing.ENABLED)
 public class ErrorReportingServiceDemoVm implements HasAsciiDocDescription {
 
     public String title() {

@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.DomainService;
 
 import lombok.val;
 
-@DomainService(objectType = "demo.MixinMenu")
+@DomainService(logicalTypeName = "demo.MixinMenu")
 public class MixinMenu {
 
     @Action

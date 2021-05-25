@@ -50,7 +50,7 @@ import lombok.val;
 @XmlAccessorType(XmlAccessType.FIELD)                       // <.>
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demo.StatefulVmUsingJaxb"
+        , logicalTypeName = "demo.StatefulVmUsingJaxb"
 )
 public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 
@@ -70,7 +70,7 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
     @XmlAccessorType(XmlAccessType.FIELD)
     @DomainObject(
             nature=Nature.VIEW_MODEL
-            , objectType = "demo.StatefulViewModelUsingJaxb.Child")
+            , logicalTypeName = "demo.StatefulViewModelUsingJaxb.Child")
     @Data
     public static class Child {
         @Title

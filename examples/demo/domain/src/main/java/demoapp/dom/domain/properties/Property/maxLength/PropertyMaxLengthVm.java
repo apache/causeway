@@ -40,7 +40,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyMaxLengthVm",
+        logicalTypeName = "demo.PropertyMaxLengthVm",
         editing = Editing.ENABLED
 )
 public class PropertyMaxLengthVm implements HasAsciiDocDescription {

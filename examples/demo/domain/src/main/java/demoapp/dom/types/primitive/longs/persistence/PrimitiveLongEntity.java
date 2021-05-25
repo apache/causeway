@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.longs.holder.PrimitiveLongHolder2;
 
 @DomainObject(
-        objectType = "demo.PrimitiveLongEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.PrimitiveLongEntity" // shared permissions with concrete sub class
 )
 public abstract class PrimitiveLongEntity
 implements

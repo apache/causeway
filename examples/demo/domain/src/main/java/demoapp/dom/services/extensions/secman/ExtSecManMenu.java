@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyVm;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ExtSecManMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ExtSecManMenu")
 @DomainObjectLayout(named="SecMan")
 @Log4j2
 public class ExtSecManMenu {

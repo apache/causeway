@@ -53,7 +53,7 @@ import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tooltip")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tooltip")
 public class DescribedAsVm implements HasAsciiDocDescription {
 
     public String title() {

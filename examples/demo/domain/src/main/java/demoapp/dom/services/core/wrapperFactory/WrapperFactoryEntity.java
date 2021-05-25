@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain._commands.ExposePersistedCommands;
 
 @DomainObject(
-        objectType = "demo.WrapperFactoryEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperFactoryEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperFactoryEntity
 implements

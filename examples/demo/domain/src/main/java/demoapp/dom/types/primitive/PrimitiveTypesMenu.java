@@ -36,7 +36,7 @@ import demoapp.dom.types.primitive.ints.PrimitiveInts;
 import demoapp.dom.types.primitive.longs.PrimitiveLongs;
 import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.PrimitiveTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PrimitiveTypesMenu")
 @DomainObjectLayout(named="PrimitiveTypes")
 @Log4j2
 public class PrimitiveTypesMenu {

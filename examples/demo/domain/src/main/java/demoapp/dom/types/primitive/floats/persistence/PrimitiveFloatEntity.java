@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder2;
 
 @DomainObject(
-        objectType = "demo.PrimitiveFloatEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.PrimitiveFloatEntity" // shared permissions with concrete sub class
 )
 public abstract class PrimitiveFloatEntity
 implements

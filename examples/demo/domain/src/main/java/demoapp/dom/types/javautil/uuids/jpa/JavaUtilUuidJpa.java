@@ -50,7 +50,7 @@ import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaUtilUuidEntity"
+      logicalTypeName = "demo.JavaUtilUuidEntity"
 )
 @NoArgsConstructor
 public class JavaUtilUuidJpa

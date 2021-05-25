@@ -41,7 +41,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature= Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveBooleanVm"
+        logicalTypeName = "demo.PrimitiveBooleanVm"
 )
 @lombok.NoArgsConstructor                                               // <.>
 public class PrimitiveBooleanVm

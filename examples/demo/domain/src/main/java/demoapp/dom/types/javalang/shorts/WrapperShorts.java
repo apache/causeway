@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.shorts.vm.WrapperShortVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperShorts", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.WrapperShorts", editing=Editing.ENABLED)
 //@Log4j2
 public class WrapperShorts implements HasAsciiDocDescription {
 

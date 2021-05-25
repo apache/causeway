@@ -43,7 +43,7 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaSqlTimestampEntity"
+        logicalTypeName = "demo.JavaSqlTimestampEntity"
 )
 public class JavaSqlTimestampJdo                                          // <.>
         extends JavaSqlTimestampEntity {

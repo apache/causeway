@@ -40,7 +40,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyEditingVm",
+        logicalTypeName = "demo.PropertyEditingVm",
         editing = Editing.DISABLED              // <.>
 )
 public class PropertyEditingVm implements HasAsciiDocDescription {

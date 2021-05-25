@@ -51,7 +51,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaAwtBufferedImageEntity"
+      logicalTypeName = "demo.JavaAwtBufferedImageEntity"
 )
 @NoArgsConstructor
 public class JavaAwtBufferedImageJpa

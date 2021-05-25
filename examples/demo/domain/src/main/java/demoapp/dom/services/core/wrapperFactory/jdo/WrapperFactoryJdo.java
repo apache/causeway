@@ -50,7 +50,7 @@ import lombok.val;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , objectType = "demo.WrapperFactoryEntity"
+        , logicalTypeName = "demo.WrapperFactoryEntity"
         , editing = Editing.DISABLED
 )
 public class WrapperFactoryJdo

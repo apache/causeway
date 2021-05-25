@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.CollectionMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.CollectionMenu")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CollectionMenu {

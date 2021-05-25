@@ -56,7 +56,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.IsisMarkupEntity"
+      logicalTypeName = "demo.IsisMarkupEntity"
 )
 @NoArgsConstructor
 public class IsisMarkupJpa

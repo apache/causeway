@@ -57,7 +57,7 @@ import lombok.val;
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         nature=Nature.ENTITY
-        , objectType = "demo.WrapperFactoryEntity"
+        , logicalTypeName = "demo.WrapperFactoryEntity"
         , editing = Editing.DISABLED
 )
 @NoArgsConstructor

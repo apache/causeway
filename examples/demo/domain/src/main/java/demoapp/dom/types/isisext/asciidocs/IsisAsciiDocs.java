@@ -46,7 +46,7 @@ import demoapp.dom.types.isisext.asciidocs.vm.IsisAsciiDocVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisAsciiDocs", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisAsciiDocs", editing=Editing.ENABLED)
 //@Log4j2
 public class IsisAsciiDocs implements HasAsciiDocDescription {
 

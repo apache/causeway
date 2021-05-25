@@ -45,7 +45,7 @@ import lombok.NoArgsConstructor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.ActionTypeOfVm"
+    logicalTypeName = "demo.ActionTypeOfVm"
 )
 @NoArgsConstructor
 //tag::class-collections-children[]

@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.characters.persistence.WrapperCharacterEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperCharacterEntity"
+      logicalTypeName = "demo.WrapperCharacterEntity"
 )
 @NoArgsConstructor
 public class WrapperCharacterJpa

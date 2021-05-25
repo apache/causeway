@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.shorts.holder.WrapperShortHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperShortEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperShortEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperShortEntity
 implements

@@ -43,7 +43,7 @@ import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperDoubleEntity"
+        logicalTypeName = "demo.WrapperDoubleEntity"
 )
 public class WrapperDoubleJdo                                          // <.>
         extends WrapperDoubleEntity {

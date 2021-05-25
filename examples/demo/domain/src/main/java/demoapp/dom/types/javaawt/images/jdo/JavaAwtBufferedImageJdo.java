@@ -42,7 +42,7 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaAwtBufferedImageEntity"
+        logicalTypeName = "demo.JavaAwtBufferedImageEntity"
 )
 public class JavaAwtBufferedImageJdo
         extends JavaAwtBufferedImageEntity

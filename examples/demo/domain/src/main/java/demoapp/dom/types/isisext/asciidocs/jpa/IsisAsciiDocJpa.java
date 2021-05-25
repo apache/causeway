@@ -56,7 +56,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.IsisAsciiDocEntity"
+      logicalTypeName = "demo.IsisAsciiDocEntity"
 )
 @NoArgsConstructor
 public class IsisAsciiDocJpa

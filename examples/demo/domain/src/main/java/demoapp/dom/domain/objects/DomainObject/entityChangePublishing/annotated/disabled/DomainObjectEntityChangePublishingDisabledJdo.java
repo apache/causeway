@@ -40,7 +40,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
     nature=Nature.ENTITY
-    , objectType = "demo.DomainObjectAuditingDisabledJdo"
+    , logicalTypeName = "demo.DomainObjectAuditingDisabledJdo"
     , entityChangePublishing = Publishing.DISABLED           // <.>
     , bounding = Bounding.BOUNDED
 )

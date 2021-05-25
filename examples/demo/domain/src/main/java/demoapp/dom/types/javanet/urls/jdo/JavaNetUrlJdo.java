@@ -43,7 +43,7 @@ import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaNetUrlEntity"
+        logicalTypeName = "demo.JavaNetUrlEntity"
 )
 public class JavaNetUrlJdo                                          // <.>
         extends JavaNetUrlEntity {

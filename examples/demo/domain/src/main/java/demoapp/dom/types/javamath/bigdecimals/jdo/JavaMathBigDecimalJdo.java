@@ -43,7 +43,7 @@ import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEnti
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaMathBigDecimalEntity"
+        logicalTypeName = "demo.JavaMathBigDecimalEntity"
 )
 public class JavaMathBigDecimalJdo                                          // <.>
         extends JavaMathBigDecimalEntity {

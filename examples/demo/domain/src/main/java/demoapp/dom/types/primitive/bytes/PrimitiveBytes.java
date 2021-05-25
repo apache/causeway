@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveBytes",
+        logicalTypeName = "demo.PrimitiveBytes",
         editing=Editing.ENABLED
 )
 //@Log4j2

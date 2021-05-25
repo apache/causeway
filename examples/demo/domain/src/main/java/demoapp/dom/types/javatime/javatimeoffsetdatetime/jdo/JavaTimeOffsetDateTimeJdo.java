@@ -43,7 +43,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOff
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaTimeOffsetDateTimeEntity"
+        logicalTypeName = "demo.JavaTimeOffsetDateTimeEntity"
 )
 public class JavaTimeOffsetDateTimeJdo                                          // <.>
         extends JavaTimeOffsetDateTimeEntity {

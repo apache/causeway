@@ -32,7 +32,7 @@ import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
 import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.IsisTypesMenu")
 @DomainObjectLayout(named="Isis Types")
 //@Log4j2
 public class IsisTypesMenu {

@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.longs.vm.PrimitiveLongVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveLongs",
+        logicalTypeName = "demo.PrimitiveLongs",
         editing=Editing.ENABLED
 )
 //@Log4j2

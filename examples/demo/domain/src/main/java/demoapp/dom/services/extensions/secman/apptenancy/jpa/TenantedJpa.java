@@ -50,7 +50,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-    objectType = "demo.TenantedEntity"
+    logicalTypeName = "demo.TenantedEntity"
 )
 @NoArgsConstructor
 public class TenantedJpa

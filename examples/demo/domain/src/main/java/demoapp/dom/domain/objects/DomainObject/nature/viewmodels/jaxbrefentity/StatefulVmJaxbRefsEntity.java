@@ -54,7 +54,7 @@ import lombok.val;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demo.StatefulViewModelJaxbRefsEntity"
+        , logicalTypeName = "demo.StatefulViewModelJaxbRefsEntity"
 )
 public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 

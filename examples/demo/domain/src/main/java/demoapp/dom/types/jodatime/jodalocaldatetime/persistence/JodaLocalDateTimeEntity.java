@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder3;
 
 @DomainObject(
-        objectType = "demo.JodaLocalDateTimeEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JodaLocalDateTimeEntity" // shared permissions with concrete sub class
 )
 public abstract class JodaLocalDateTimeEntity
 implements

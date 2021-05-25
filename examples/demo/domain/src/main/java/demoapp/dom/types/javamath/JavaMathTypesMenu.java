@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaMathTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaMathTypesMenu")
 @DomainObjectLayout(named="JavaMathTypes")
 @Log4j2
 public class JavaMathTypesMenu {

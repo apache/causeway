@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javatime.javatimelocaldate.holder.JavaTimeLocalDateHolder3;
 
 @DomainObject(
-        objectType = "demo.JavaTimeLocalDateEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaTimeLocalDateEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaTimeLocalDateEntity
 implements

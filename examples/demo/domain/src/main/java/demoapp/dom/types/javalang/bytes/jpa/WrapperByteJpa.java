@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.bytes.persistence.WrapperByteEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperByteEntity"
+      logicalTypeName = "demo.WrapperByteEntity"
 )
 @NoArgsConstructor
 public class WrapperByteJpa

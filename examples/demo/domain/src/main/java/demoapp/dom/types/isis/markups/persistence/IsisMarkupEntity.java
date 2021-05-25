@@ -26,7 +26,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder2;
 
 @DomainObject(
-        objectType = "demo.IsisMarkupEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.IsisMarkupEntity" // shared permissions with concrete sub class
 )
 public abstract class IsisMarkupEntity
 implements

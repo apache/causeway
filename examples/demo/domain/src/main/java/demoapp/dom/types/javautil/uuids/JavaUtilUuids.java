@@ -45,7 +45,7 @@ import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaUtilUuids", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaUtilUuids", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaUtilUuids implements HasAsciiDocDescription {
 

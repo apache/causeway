@@ -34,7 +34,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.DomainObjectEntityChangePublishingVm"
+        logicalTypeName = "demo.DomainObjectEntityChangePublishingVm"
 )
 public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription {
 

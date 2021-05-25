@@ -50,7 +50,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.IsisLocalResourcePathEntity"
+      logicalTypeName = "demo.IsisLocalResourcePathEntity"
 )
 @NoArgsConstructor
 public class IsisLocalResourcePathJpa

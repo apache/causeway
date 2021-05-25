@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.DependentArgsDemoItem")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.DependentArgsDemoItem")
 @Named("depargs.DemoItem")
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")

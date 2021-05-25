@@ -36,7 +36,7 @@ import demoapp.dom.types.javalang.integers.WrapperIntegers;
 import demoapp.dom.types.javalang.longs.WrapperLongs;
 import demoapp.dom.types.javalang.shorts.WrapperShorts;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaLangWrapperTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaLangWrapperTypesMenu")
 @DomainObjectLayout(named="JavaLangWrapperTypes")
 @Log4j2
 public class JavaLangWrapperTypesMenu {

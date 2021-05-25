@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.JavaUtilUuidVm"
+        logicalTypeName = "demo.JavaUtilUuidVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilUuidVm

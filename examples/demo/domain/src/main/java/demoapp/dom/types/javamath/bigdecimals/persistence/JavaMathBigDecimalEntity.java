@@ -27,7 +27,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javamath.bigdecimals.holder.JavaMathBigDecimalHolder2;
 
 @DomainObject(
-        objectType = "demo.JavaMathBigDecimalEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaMathBigDecimalEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaMathBigDecimalEntity
 implements

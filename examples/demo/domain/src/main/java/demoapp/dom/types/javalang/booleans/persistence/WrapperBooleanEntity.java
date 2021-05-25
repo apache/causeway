@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperBooleanEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperBooleanEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperBooleanEntity
 implements

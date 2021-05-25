@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.doubles.vm.WrapperDoubleVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperDoubles", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.WrapperDoubles", editing=Editing.ENABLED)
 //@Log4j2
 public class WrapperDoubles implements HasAsciiDocDescription {
 

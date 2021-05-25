@@ -43,7 +43,7 @@ import demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDat
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaTimeLocalDateEntity"
+        logicalTypeName = "demo.JavaTimeLocalDateEntity"
 )
 public class JavaTimeLocalDateJdo                                          // <.>
         extends JavaTimeLocalDateEntity {

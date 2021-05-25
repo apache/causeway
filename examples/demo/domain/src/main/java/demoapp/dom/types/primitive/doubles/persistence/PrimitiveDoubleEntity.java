@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder2;
 
 @DomainObject(
-        objectType = "demo.PrimitiveDoubleEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.PrimitiveDoubleEntity" // shared permissions with concrete sub class
 )
 public abstract class PrimitiveDoubleEntity
 implements

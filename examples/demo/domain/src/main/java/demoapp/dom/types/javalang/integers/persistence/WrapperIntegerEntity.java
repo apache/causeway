@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperIntegerEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperIntegerEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperIntegerEntity
 implements

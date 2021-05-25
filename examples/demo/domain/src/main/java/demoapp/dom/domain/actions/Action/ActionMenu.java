@@ -43,7 +43,7 @@ import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
 import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionMenu")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 

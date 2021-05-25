@@ -29,7 +29,7 @@ import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
 
 // tag::class[]
-@DomainService(objectType = "demo.ActionDomainEventControlService")
+@DomainService(logicalTypeName = "demo.ActionDomainEventControlService")
 class ActionDomainEventControlService {
 
     ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;         // <.>

@@ -36,7 +36,7 @@ import demoapp.dom.types.jodatime.jodalocaldate.JodaLocalDates;
 import demoapp.dom.types.jodatime.jodalocaldatetime.JodaLocalDateTimes;
 import demoapp.dom.types.jodatime.jodalocaltime.JodaLocalTimes;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JodaTimeTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JodaTimeTypesMenu")
 @DomainObjectLayout(named="JodaTimeTypes")
 //@Log4j2
 public class JodaTimeTypesMenu {

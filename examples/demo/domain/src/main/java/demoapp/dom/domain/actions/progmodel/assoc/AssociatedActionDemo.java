@@ -44,7 +44,7 @@ import lombok.val;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AssociatedAction", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AssociatedAction", editing=Editing.ENABLED)
 @NoArgsConstructor
 public class AssociatedActionDemo implements HasAsciiDocDescription {
 

@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.TabMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.TabMenu")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class TabMenu {
 

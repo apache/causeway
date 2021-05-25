@@ -50,7 +50,7 @@ import demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaUtilDateEntity"
+      logicalTypeName = "demo.JavaUtilDateEntity"
 )
 @NoArgsConstructor
 public class JavaUtilDateJpa

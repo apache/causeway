@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
 import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.IsisExtTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.IsisExtTypesMenu")
 @DomainObjectLayout(named="IsisExtTypes")
 @Log4j2
 public class IsisExtTypesMenu {

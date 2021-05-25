@@ -46,7 +46,7 @@ import demoapp.dom.types.isis.passwords.vm.IsisPasswordVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisPasswords", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisPasswords", editing=Editing.ENABLED)
 //@Log4j2
 public class IsisPasswords implements HasAsciiDocDescription {
 

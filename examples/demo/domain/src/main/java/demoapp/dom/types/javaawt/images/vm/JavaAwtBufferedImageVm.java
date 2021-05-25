@@ -42,7 +42,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.JavaAwtBufferedImageVm"
+        logicalTypeName = "demo.JavaAwtBufferedImageVm"
 )
 @lombok.NoArgsConstructor                                               // <.>
 public class JavaAwtBufferedImageVm

@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZone
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaTimeZonedDateTimeEntity"
+      logicalTypeName = "demo.JavaTimeZonedDateTimeEntity"
 )
 @NoArgsConstructor
 public class JavaTimeZonedDateTimeJpa

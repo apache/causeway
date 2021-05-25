@@ -41,7 +41,7 @@ import demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveFloatEntity"
+        logicalTypeName = "demo.PrimitiveFloatEntity"
 )
 public class PrimitiveFloatJdo                                      // <.>
         extends PrimitiveFloatEntity {

@@ -48,7 +48,7 @@ import demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.PrimitiveFloatEntity"
+      logicalTypeName = "demo.PrimitiveFloatEntity"
 )
 @NoArgsConstructor
 public class PrimitiveFloatJpa

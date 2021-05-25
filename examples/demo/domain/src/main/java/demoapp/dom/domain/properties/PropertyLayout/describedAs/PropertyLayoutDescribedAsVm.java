@@ -41,7 +41,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyLayoutDescribedAsVm",
+        logicalTypeName = "demo.PropertyLayoutDescribedAsVm",
         editing = Editing.ENABLED
 )
 public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {

@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.message.MessageService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MessageServiceDemoVm")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.MessageServiceDemoVm")
 public class MessageServiceDemoVm implements HasAsciiDocDescription {
 
     @Inject private MessageService messageService;

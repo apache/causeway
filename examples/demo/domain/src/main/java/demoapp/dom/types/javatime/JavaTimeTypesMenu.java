@@ -32,7 +32,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes
 import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
 import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaTimeTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaTimeTypesMenu")
 @DomainObjectLayout(named="JavaTimeTypes")
 //@Log4j2
 public class JavaTimeTypesMenu {

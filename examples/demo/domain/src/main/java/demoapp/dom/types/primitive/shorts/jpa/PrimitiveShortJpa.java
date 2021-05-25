@@ -48,7 +48,7 @@ import demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.PrimitiveShortEntity"
+      logicalTypeName = "demo.PrimitiveShortEntity"
 )
 @NoArgsConstructor
 public class PrimitiveShortJpa

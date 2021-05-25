@@ -45,7 +45,7 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demo.SecManVm"
+        , logicalTypeName = "demo.SecManVm"
 )
 public class AppTenancyVm implements HasAsciiDocDescription {
 

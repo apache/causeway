@@ -35,7 +35,7 @@ import lombok.extern.log4j.Log4j2;
  * REST endpoint to allow for remote application shutdown
  *
  */
-@DomainService(nature = NatureOfService.REST, objectType = "demo.LineBreaker")
+@DomainService(nature = NatureOfService.REST, logicalTypeName = "demo.LineBreaker")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class LineBreaker {

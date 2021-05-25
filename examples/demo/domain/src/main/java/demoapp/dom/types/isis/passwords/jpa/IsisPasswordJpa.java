@@ -50,7 +50,7 @@ import lombok.Setter;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.IsisPasswordEntity"
+      logicalTypeName = "demo.IsisPasswordEntity"
 )
 @NoArgsConstructor
 public class IsisPasswordJpa

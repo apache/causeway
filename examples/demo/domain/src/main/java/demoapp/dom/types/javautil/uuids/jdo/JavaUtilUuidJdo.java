@@ -43,7 +43,7 @@ import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaUtilUuidEntity"
+        logicalTypeName = "demo.JavaUtilUuidEntity"
 )
 public class JavaUtilUuidJdo                                          // <.>
         extends JavaUtilUuidEntity {

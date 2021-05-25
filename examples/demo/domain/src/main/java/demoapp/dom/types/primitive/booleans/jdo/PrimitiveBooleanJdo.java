@@ -41,7 +41,7 @@ import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveBooleanEntity"
+        logicalTypeName = "demo.PrimitiveBooleanEntity"
 )
 public class PrimitiveBooleanJdo                                        // <.>
         extends PrimitiveBooleanEntity {

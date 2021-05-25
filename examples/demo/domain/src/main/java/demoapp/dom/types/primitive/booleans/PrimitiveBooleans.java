@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveBooleans",
+        logicalTypeName = "demo.PrimitiveBooleans",
         editing=Editing.ENABLED
 )
 //@Log4j2

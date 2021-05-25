@@ -26,7 +26,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.blobs.holder.IsisBlobHolder2;
 
 @DomainObject(
-        objectType = "demo.IsisBlobEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.IsisBlobEntity" // shared permissions with concrete sub class
 )
 public abstract class IsisBlobEntity
 implements

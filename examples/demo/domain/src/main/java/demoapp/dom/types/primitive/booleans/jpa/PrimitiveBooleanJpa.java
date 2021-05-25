@@ -48,7 +48,7 @@ import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.PrimitiveBooleanEntity"
+      logicalTypeName = "demo.PrimitiveBooleanEntity"
 )
 @NoArgsConstructor
 public class PrimitiveBooleanJpa

@@ -41,7 +41,7 @@ import demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveDoubleEntity"
+        logicalTypeName = "demo.PrimitiveDoubleEntity"
 )
 public class PrimitiveDoubleJdo                                     // <.>
         extends PrimitiveDoubleEntity {

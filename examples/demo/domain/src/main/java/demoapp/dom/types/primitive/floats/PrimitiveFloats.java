@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.floats.vm.PrimitiveFloatVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveFloats",
+        logicalTypeName = "demo.PrimitiveFloats",
         editing=Editing.ENABLED
 )
 //@Log4j2

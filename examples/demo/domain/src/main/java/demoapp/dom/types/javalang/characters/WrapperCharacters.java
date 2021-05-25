@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.characters.vm.WrapperCharacterVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperCharacters", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.WrapperCharacters", editing=Editing.ENABLED)
 //@Log4j2
 public class WrapperCharacters implements HasAsciiDocDescription {
 

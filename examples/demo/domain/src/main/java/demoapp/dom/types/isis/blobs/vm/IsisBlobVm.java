@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.IsisBlobVm"
+        logicalTypeName = "demo.IsisBlobVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisBlobVm

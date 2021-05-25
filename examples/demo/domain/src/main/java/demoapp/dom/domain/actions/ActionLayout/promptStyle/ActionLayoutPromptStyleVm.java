@@ -42,7 +42,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionLayoutPromptStyleVm"
+        logicalTypeName = "demo.ActionLayoutPromptStyleVm"
 )
 public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 

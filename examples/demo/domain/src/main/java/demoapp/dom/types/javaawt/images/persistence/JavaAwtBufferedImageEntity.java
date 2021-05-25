@@ -27,7 +27,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javaawt.images.holder.JavaAwtBufferedImageHolder2;
 
 @DomainObject(
-        objectType = "demo.JavaAwtBufferedImageEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaAwtBufferedImageEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaAwtBufferedImageEntity
 implements

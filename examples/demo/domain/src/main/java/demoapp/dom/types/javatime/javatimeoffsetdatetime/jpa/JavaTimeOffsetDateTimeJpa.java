@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOff
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaTimeOffsetDateTimeEntity"
+      logicalTypeName = "demo.JavaTimeOffsetDateTimeEntity"
 )
 @NoArgsConstructor
 public class JavaTimeOffsetDateTimeJpa

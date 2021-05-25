@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder2;
 
 @DomainObject(
-        objectType = "demo.PrimitiveBooleanEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.PrimitiveBooleanEntity" // shared permissions with concrete sub class
 )
 public abstract class PrimitiveBooleanEntity
 implements

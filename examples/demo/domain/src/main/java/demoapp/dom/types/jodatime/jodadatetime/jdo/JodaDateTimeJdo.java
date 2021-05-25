@@ -43,7 +43,7 @@ import demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JodaDateTimeEntity"
+        logicalTypeName = "demo.JodaDateTimeEntity"
 )
 public class JodaDateTimeJdo                                          // <.>
         extends JodaDateTimeEntity {

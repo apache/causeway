@@ -42,7 +42,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyRegexPatternVm",
+        logicalTypeName = "demo.PropertyRegexPatternVm",
         editing = Editing.ENABLED
 )
 public class PropertyRegexPatternVm implements HasAsciiDocDescription {

@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaLangVoids", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaLangVoids", editing=Editing.ENABLED)
 @Log4j2
 public class JavaLangVoids implements HasAsciiDocDescription {
 

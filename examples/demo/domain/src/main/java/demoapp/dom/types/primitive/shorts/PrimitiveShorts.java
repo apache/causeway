@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.shorts.vm.PrimitiveShortVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PrimitiveShorts",
+        logicalTypeName = "demo.PrimitiveShorts",
         editing=Editing.ENABLED
 )
 //@Log4j2

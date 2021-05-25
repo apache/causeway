@@ -50,7 +50,7 @@ import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaNetUrlEntity"
+      logicalTypeName = "demo.JavaNetUrlEntity"
 )
 @NoArgsConstructor
 public class JavaNetUrlJpa

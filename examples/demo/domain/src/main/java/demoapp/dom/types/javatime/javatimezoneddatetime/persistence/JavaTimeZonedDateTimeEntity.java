@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder3;
 
 @DomainObject(
-        objectType = "demo.JavaTimeZonedDateTimeEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaTimeZonedDateTimeEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaTimeZonedDateTimeEntity
 implements

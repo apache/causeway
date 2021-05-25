@@ -30,7 +30,7 @@ import org.apache.isis.applib.value.Markup;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.AsyncActionMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.AsyncActionMenu")
 @DomainObjectLayout(named="Async Actions")
 public class AsyncActionMenu {
 

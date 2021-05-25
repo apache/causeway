@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 
 // tag::class[]
-@DomainService(objectType = "demo.CollectionDomainEventControlService")
+@DomainService(logicalTypeName = "demo.CollectionDomainEventControlService")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 class CollectionDomainEventControlService {
 

@@ -33,7 +33,7 @@ import lombok.Setter;
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.DISABLED,
-        objectType = "demo.FibonacciNumberVm"
+        logicalTypeName = "demo.FibonacciNumberVm"
 )
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")

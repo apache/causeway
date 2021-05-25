@@ -49,7 +49,7 @@ import demoapp.dom.types.jodatime.jodalocaltime.vm.JodaLocalTimeVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JodaLocalTimes", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JodaLocalTimes", editing=Editing.ENABLED)
 //@Log4j2
 public class JodaLocalTimes implements HasAsciiDocDescription {
 

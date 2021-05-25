@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.strings.holder.JavaLangStringHolder2;
 
 @DomainObject(
-        objectType = "demo.JavaLangStringEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaLangStringEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaLangStringEntity
 implements

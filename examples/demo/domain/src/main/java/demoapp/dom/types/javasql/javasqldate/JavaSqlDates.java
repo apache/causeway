@@ -44,7 +44,7 @@ import demoapp.dom.types.javasql.javasqldate.vm.JavaSqlDateVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaSqlDates", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaSqlDates", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaSqlDates implements HasAsciiDocDescription {
 

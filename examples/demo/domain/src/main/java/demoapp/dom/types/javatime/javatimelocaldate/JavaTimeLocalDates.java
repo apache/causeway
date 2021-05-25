@@ -44,7 +44,7 @@ import demoapp.dom.types.javatime.javatimelocaldate.vm.JavaTimeLocalDateVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaTimeLocalDates", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaTimeLocalDates", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaTimeLocalDates implements HasAsciiDocDescription {
 

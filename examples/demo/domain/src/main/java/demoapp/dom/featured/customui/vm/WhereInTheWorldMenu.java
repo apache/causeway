@@ -34,7 +34,7 @@ import lombok.val;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.WhereInTheWorldMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.WhereInTheWorldMenu")
 public class WhereInTheWorldMenu {
 
 //tag::action[]

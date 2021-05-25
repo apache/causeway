@@ -42,7 +42,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
 @DomainObject(
         nature=Nature.ENTITY
-        , objectType = "demo.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo"
+        , logicalTypeName = "demo.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo"
         , entityChangePublishing = Publishing.ENABLED         // <.>
         , bounding = Bounding.BOUNDED
 )

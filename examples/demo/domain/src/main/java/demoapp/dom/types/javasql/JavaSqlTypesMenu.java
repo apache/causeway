@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javasql.javasqldate.JavaSqlDates;
 import demoapp.dom.types.javasql.javasqltimestamp.JavaSqlTimestamps;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaSqlTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaSqlTypesMenu")
 @DomainObjectLayout(named="JavaSqlTypes")
 @Log4j2
 public class JavaSqlTypesMenu {

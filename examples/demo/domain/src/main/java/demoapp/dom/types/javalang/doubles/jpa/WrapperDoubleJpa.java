@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperDoubleEntity"
+      logicalTypeName = "demo.WrapperDoubleEntity"
 )
 @NoArgsConstructor
 public class WrapperDoubleJpa

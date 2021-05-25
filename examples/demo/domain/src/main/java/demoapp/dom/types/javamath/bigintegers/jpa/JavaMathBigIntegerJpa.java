@@ -50,7 +50,7 @@ import demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerEnti
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaMathBigIntegerEntity"
+      logicalTypeName = "demo.JavaMathBigIntegerEntity"
 )
 @NoArgsConstructor
 public class JavaMathBigIntegerJpa

@@ -50,7 +50,7 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaSqlTimestampEntity"
+      logicalTypeName = "demo.JavaSqlTimestampEntity"
 )
 @NoArgsConstructor
 public class JavaSqlTimestampJpa

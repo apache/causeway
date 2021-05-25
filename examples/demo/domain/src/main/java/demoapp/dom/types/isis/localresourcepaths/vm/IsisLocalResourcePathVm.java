@@ -44,7 +44,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.IsisLocalResourcePathVm"
+        logicalTypeName = "demo.IsisLocalResourcePathVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisLocalResourcePathVm

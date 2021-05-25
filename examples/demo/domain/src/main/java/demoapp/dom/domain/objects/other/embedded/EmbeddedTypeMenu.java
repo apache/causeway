@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 
 @Profile("demo-jdo")
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.EmbeddedTypeMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.EmbeddedTypeMenu")
 @RequiredArgsConstructor
 public class EmbeddedTypeMenu {
 

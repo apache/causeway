@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperBooleanEntity"
+      logicalTypeName = "demo.WrapperBooleanEntity"
 )
 @NoArgsConstructor
 public class WrapperBooleanJpa

@@ -40,7 +40,7 @@ import lombok.ToString;
 import lombok.val;
 
 @XmlRootElement(name="FileNode")
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.FileNode")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.FileNode")
 @ToString
 @NoArgsConstructor
 public class FileNodeVm implements HasAsciiDocDescription {

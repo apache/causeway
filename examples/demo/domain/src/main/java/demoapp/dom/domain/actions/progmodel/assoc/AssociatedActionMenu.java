@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.AssociatedActionMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.AssociatedActionMenu")
 @DomainObjectLayout(named="Associated Action")
 public class AssociatedActionMenu {
 

@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperDoubleEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperDoubleEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperDoubleEntity
 implements

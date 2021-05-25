@@ -43,7 +43,7 @@ import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperFloatEntity"
+        logicalTypeName = "demo.WrapperFloatEntity"
 )
 public class WrapperFloatJdo                                          // <.>
         extends WrapperFloatEntity {

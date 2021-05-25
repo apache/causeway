@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.floats.holder.WrapperFloatHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperFloatEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperFloatEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperFloatEntity
 implements

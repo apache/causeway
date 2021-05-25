@@ -48,7 +48,7 @@ import demoapp.dom.types.primitive.chars.persistence.PrimitiveCharEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.PrimitiveCharEntity"
+      logicalTypeName = "demo.PrimitiveCharEntity"
 )
 @NoArgsConstructor
 public class PrimitiveCharJpa

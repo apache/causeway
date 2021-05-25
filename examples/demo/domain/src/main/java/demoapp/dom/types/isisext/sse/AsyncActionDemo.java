@@ -46,7 +46,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncAction", editing=Editing.DISABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AsyncAction", editing=Editing.DISABLED)
 public class AsyncActionDemo implements HasAsciiDocDescription {
 
     @XmlTransient

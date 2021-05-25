@@ -39,7 +39,7 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 
 @Profile("demo-jpa")
 @Entity
-@DomainObject(objectType = "demo.EventLogEntryJpa")
+@DomainObject(logicalTypeName = "demo.EventLogEntryJpa")
 public class EventLogEntryJpa {
 
     public static EventLogEntryJpa of(UiButtonEvent even) {

@@ -32,7 +32,7 @@ import demoapp.dom._infra.resources.AsciiDocReaderService;
 //tag::class[]
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.Homepage"
+    logicalTypeName = "demo.Homepage"
 )
 @HomePage                                                       // <.>
 public class DemoHomePage

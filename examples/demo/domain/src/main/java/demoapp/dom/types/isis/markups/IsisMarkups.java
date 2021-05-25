@@ -46,7 +46,7 @@ import demoapp.dom.types.isis.markups.vm.IsisMarkupVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisMarkups", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisMarkups", editing=Editing.ENABLED)
 //@Log4j2
 public class IsisMarkups implements HasAsciiDocDescription {
 

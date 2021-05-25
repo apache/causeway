@@ -46,7 +46,7 @@ import demoapp.dom.types.isis.localresourcepaths.vm.IsisLocalResourcePathVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisLocalResourcePaths", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisLocalResourcePaths", editing=Editing.ENABLED)
 //@Log4j2
 public class IsisLocalResourcePaths implements HasAsciiDocDescription {
 

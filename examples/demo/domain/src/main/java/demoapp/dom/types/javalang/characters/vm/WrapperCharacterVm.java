@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.WrapperCharacterVm"
+        logicalTypeName = "demo.WrapperCharacterVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperCharacterVm

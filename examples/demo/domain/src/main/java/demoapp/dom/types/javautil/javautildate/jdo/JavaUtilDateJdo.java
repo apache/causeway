@@ -43,7 +43,7 @@ import demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaUtilDateEntity"
+        logicalTypeName = "demo.JavaUtilDateEntity"
 )
 public class JavaUtilDateJdo                                          // <.>
         extends JavaUtilDateEntity {

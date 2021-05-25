@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperFloatEntity"
+      logicalTypeName = "demo.WrapperFloatEntity"
 )
 @NoArgsConstructor
 public class WrapperFloatJpa

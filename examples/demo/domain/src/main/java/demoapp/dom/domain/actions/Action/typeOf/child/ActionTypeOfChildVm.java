@@ -40,7 +40,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionTypeOfChildVm"
+        logicalTypeName = "demo.ActionTypeOfChildVm"
 )
 @NoArgsConstructor
 public class ActionTypeOfChildVm implements HasAsciiDocDescription {

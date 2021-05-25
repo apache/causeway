@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.JavaMathBigDecimalVm"
+        logicalTypeName = "demo.JavaMathBigDecimalVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaMathBigDecimalVm

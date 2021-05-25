@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import demoapp.dom._infra.values.ValueHolder;
 
 @DomainObject(
-        objectType = "demo.TenantedEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.TenantedEntity" // shared permissions with concrete sub class
 )
 public abstract class TenantedEntity
 implements ValueHolder<String>{

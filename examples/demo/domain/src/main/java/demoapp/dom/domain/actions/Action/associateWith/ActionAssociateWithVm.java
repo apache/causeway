@@ -50,7 +50,7 @@ import lombok.val;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.ActionAssociateWithVm"
+    logicalTypeName = "demo.ActionAssociateWithVm"
 )
 @NoArgsConstructor
 //tag::class-properties[]

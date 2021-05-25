@@ -44,7 +44,7 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisLocalResourcePathEntity"
+        logicalTypeName = "demo.IsisLocalResourcePathEntity"
 )
 public class IsisLocalResourcePathJdo                                   // <.>
         extends IsisLocalResourcePathEntity {

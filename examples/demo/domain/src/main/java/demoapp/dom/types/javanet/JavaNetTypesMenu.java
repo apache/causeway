@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.javanet.urls.JavaNetUrls;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaNetTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaNetTypesMenu")
 @DomainObjectLayout(named="JavaNetTypes")
 @Log4j2
 public class JavaNetTypesMenu {

@@ -41,7 +41,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.ActionAssociateWithChildVm"
+        logicalTypeName = "demo.ActionAssociateWithChildVm"
 )
 @NoArgsConstructor
 public class ActionAssociateWithChildVm implements HasAsciiDocDescription {

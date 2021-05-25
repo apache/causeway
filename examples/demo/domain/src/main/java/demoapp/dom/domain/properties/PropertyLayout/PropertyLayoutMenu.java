@@ -47,7 +47,7 @@ import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRep
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
 import demoapp.dom.types.Samples;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyLayoutMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PropertyLayoutMenu")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class PropertyLayoutMenu {

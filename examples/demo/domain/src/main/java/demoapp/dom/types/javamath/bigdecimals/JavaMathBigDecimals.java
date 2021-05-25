@@ -46,7 +46,7 @@ import demoapp.dom.types.javamath.bigdecimals.vm.JavaMathBigDecimalVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaMathBigDecimals", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaMathBigDecimals", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaMathBigDecimals implements HasAsciiDocDescription {
 

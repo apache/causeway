@@ -43,7 +43,7 @@ import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaLangStringEntity"
+        logicalTypeName = "demo.JavaLangStringEntity"
 )
 public class JavaLangStringJdo                                                  // <.>
         extends JavaLangStringEntity {

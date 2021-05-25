@@ -43,7 +43,7 @@ import demoapp.dom.types.javalang.bytes.persistence.WrapperByteEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperByteEntity"
+        logicalTypeName = "demo.WrapperByteEntity"
 )
 public class WrapperByteJdo                                          // <.>
         extends WrapperByteEntity {

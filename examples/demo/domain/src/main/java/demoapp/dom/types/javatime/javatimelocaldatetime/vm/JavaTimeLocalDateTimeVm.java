@@ -45,7 +45,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.JavaTimeLocalDateTimeVm"
+        logicalTypeName = "demo.JavaTimeLocalDateTimeVm"
 )
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeLocalDateTimeVm

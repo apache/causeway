@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.longs.vm.WrapperLongVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.WrapperLongs", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.WrapperLongs", editing=Editing.ENABLED)
 //@Log4j2
 public class WrapperLongs implements HasAsciiDocDescription {
 

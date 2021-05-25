@@ -32,7 +32,7 @@ import lombok.val;
 
 import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.DescribedAsMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.DescribedAsMenu")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class DescribedAsMenu {
 

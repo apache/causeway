@@ -41,7 +41,7 @@ import demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.PrimitiveByteEntity"
+        logicalTypeName = "demo.PrimitiveByteEntity"
 )
 public class PrimitiveByteJdo                                       // <.>
         extends PrimitiveByteEntity {

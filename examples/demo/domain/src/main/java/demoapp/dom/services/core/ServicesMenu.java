@@ -37,7 +37,7 @@ import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ServicesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ServicesMenu")
 //@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServicesMenu {

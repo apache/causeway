@@ -29,7 +29,7 @@ import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncDemoTask", editing=Editing.DISABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AsyncDemoTask", editing=Editing.DISABLED)
 @RequiredArgsConstructor(staticName="of")
 public class DemoTask implements SseSource {
 

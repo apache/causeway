@@ -43,7 +43,7 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaSqlDateEntity"
+        logicalTypeName = "demo.JavaSqlDateEntity"
 )
 public class JavaSqlDateJdo                                             // <.>
         extends JavaSqlDateEntity {

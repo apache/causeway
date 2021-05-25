@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDat
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.JavaTimeLocalDateEntity"
+      logicalTypeName = "demo.JavaTimeLocalDateEntity"
 )
 @NoArgsConstructor
 public class JavaTimeLocalDateJpa

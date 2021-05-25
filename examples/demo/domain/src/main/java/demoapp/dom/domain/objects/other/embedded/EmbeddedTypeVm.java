@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Nature;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 // tag::class[]
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.EmbeddedTypeVm")
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EmbeddedTypeVm")
 public class EmbeddedTypeVm implements HasAsciiDocDescription {
 
     // ...

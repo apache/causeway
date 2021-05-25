@@ -43,7 +43,7 @@ import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.WrapperBooleanEntity"
+        logicalTypeName = "demo.WrapperBooleanEntity"
 )
 public class WrapperBooleanJdo                                          // <.>
         extends WrapperBooleanEntity {

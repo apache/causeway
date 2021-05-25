@@ -43,7 +43,7 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.TenantedEntity"
+        logicalTypeName = "demo.TenantedEntity"
 )
 public class TenantedJdo
         extends TenantedEntity {

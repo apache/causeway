@@ -45,7 +45,7 @@ import demoapp.dom.types.javalang.strings.vm.JavaLangStringVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.JavaLangStrings", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaLangStrings", editing=Editing.ENABLED)
 //@Log4j2
 public class JavaLangStrings implements HasAsciiDocDescription {
 

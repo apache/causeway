@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder2;
 
 @DomainObject(
-        objectType = "demo.WrapperByteEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.WrapperByteEntity" // shared permissions with concrete sub class
 )
 public abstract class WrapperByteEntity
 implements

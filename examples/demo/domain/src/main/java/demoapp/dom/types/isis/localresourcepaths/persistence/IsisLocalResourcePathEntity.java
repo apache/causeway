@@ -26,7 +26,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
 
 @DomainObject(
-        objectType = "demo.IsisLocalResourcePathEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.IsisLocalResourcePathEntity" // shared permissions with concrete sub class
 )
 public abstract class IsisLocalResourcePathEntity
 implements

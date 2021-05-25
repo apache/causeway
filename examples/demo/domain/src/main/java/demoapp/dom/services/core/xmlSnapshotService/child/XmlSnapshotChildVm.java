@@ -41,7 +41,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.XmlSnapshotChildVm"
+        logicalTypeName = "demo.XmlSnapshotChildVm"
 )
 @NoArgsConstructor
 public class XmlSnapshotChildVm implements HasAsciiDocDescription {

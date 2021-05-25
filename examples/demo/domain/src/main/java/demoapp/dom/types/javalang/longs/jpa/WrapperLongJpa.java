@@ -50,7 +50,7 @@ import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-      objectType = "demo.WrapperLongEntity"
+      logicalTypeName = "demo.WrapperLongEntity"
 )
 @NoArgsConstructor
 public class WrapperLongJpa

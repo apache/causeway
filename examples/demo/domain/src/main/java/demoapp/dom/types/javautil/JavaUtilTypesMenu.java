@@ -30,7 +30,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javautil.javautildate.JavaUtilDates;
 import demoapp.dom.types.javautil.uuids.JavaUtilUuids;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.JavaUtilTypesMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaUtilTypesMenu")
 @DomainObjectLayout(named="JavaUtilTypes")
 @Log4j2
 public class JavaUtilTypesMenu {

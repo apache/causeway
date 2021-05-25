@@ -43,7 +43,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZone
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.JavaTimeZonedDateTimeEntity"
+        logicalTypeName = "demo.JavaTimeZonedDateTimeEntity"
 )
 public class JavaTimeZonedDateTimeJdo                                          // <.>
         extends JavaTimeZonedDateTimeEntity {

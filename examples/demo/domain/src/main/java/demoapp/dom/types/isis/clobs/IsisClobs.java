@@ -46,7 +46,7 @@ import demoapp.dom.types.isis.clobs.vm.IsisClobVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.IsisClobs", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisClobs", editing=Editing.ENABLED)
 //@Log4j2
 public class IsisClobs implements HasAsciiDocDescription {
 

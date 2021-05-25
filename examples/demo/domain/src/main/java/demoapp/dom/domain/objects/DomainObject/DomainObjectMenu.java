@@ -33,7 +33,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectMenu")
+@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.DomainObjectMenu")
 //@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectMenu {

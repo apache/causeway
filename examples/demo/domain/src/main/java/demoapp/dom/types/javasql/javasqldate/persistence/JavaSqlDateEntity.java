@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder3;
 
 @DomainObject(
-        objectType = "demo.JavaSqlDateEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.JavaSqlDateEntity" // shared permissions with concrete sub class
 )
 public abstract class JavaSqlDateEntity
 implements

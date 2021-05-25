@@ -46,7 +46,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyProjectingVm",
+        logicalTypeName = "demo.PropertyProjectingVm",
         editing = Editing.ENABLED
 )
 @NoArgsConstructor

@@ -45,7 +45,7 @@ import lombok.Setter;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demo.IsisMarkdownEntity"
+        logicalTypeName = "demo.IsisMarkdownEntity"
 )
 public class IsisMarkdownJdo                                          // <.>
         extends IsisMarkdownEntity {

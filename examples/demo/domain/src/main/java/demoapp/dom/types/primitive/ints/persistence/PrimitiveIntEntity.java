@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.ints.holder.PrimitiveIntHolder2;
 
 @DomainObject(
-        objectType = "demo.PrimitiveIntEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.PrimitiveIntEntity" // shared permissions with concrete sub class
 )
 public abstract class PrimitiveIntEntity
 implements

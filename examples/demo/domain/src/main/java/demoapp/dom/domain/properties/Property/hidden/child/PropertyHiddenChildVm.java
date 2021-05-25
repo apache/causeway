@@ -43,7 +43,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyHiddenChildVm"
+        logicalTypeName = "demo.PropertyHiddenChildVm"
 )
 @NoArgsConstructor
 public class PropertyHiddenChildVm implements HasAsciiDocDescription {

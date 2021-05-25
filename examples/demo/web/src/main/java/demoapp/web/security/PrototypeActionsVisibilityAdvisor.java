@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.inspect.Object_inspectMetamodel;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "demo.PrototypeActionsVisibilityAdvisor"
+        logicalTypeName = "demo.PrototypeActionsVisibilityAdvisor"
 )
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class PrototypeActionsVisibilityAdvisor {
