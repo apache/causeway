@@ -64,7 +64,7 @@ public class ApplicationFeatureTypeTest {
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is(nullValue()));
 
         }
         @Test
@@ -74,7 +74,7 @@ public class ApplicationFeatureTypeTest {
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is(nullValue()));
 
         }
         @Test
@@ -84,7 +84,7 @@ public class ApplicationFeatureTypeTest {
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is("foo"));
         }
         @Test
         public void givenMemberMalformed() throws Exception {

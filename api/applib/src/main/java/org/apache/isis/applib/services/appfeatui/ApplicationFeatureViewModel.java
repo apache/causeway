@@ -284,7 +284,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
      */
     @MemberName
     public String getMemberName() {
-        return getFeatureId().getMemberLogicalName();
+        return getFeatureId().getLogicalMemberName();
     }
 
     public boolean hideMemberName() {

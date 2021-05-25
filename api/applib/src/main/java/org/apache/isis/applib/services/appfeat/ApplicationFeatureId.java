@@ -52,9 +52,9 @@ import lombok.val;
  * <p>
  * This value is {@link Comparable}, the implementation of which considers
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
- * {@link #getTypeSimpleName() type simple name} and {@link #getMemberLogicalName() member-logical-name}.
+ * {@link #getTypeSimpleName() type simple name} and {@link #getLogicalMemberName() member-logical-name}.
  * <p>
- * If the represented member is an <i>action</i>, then {@link #getMemberLogicalName() member-logical-name}
+ * If the represented member is an <i>action</i>, then {@link #getLogicalMemberName() member-logical-name}
  * must <b>not</b> include any parameter list or parentheses.
  * Consequently method overloading is not supported.
  * <p>
@@ -122,7 +122,7 @@ implements
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
         featureId.namespace = namespace;
         featureId.typeSimpleName = null;
-        featureId.memberLogicalName = null;
+        featureId.logicalMemberName = null;
         return featureId;
     }
 
@@ -170,11 +170,11 @@ implements
                     "fullyQualifiedName '%s' must include a non-empty namespace", fullyQualifiedName);
         }
 
-        featureId.memberLogicalName = null;
+        featureId.logicalMemberName = null;
     }
 
     private static void initMember(final ApplicationFeatureId featureId, final @Nullable String memberLogicalName) {
-        featureId.memberLogicalName = stripOffParamsIfAny(memberLogicalName); // just in case
+        featureId.logicalMemberName = stripOffParamsIfAny(memberLogicalName); // just in case
     }
 
     private static String stripOffParamsIfAny(final @Nullable String name) {
@@ -237,7 +237,7 @@ implements
      * {@code null} if not a member
      */
     @Programmatic
-    @Getter private String memberLogicalName;
+    @Getter private String logicalMemberName;
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -246,8 +246,8 @@ implements
         if(getTypeSimpleName() != null) {
             buf.append(".").append(getTypeSimpleName());
         }
-        if(getMemberLogicalName() != null) {
-            buf.append("#").append(getMemberLogicalName());
+        if(getLogicalMemberName() != null) {
+            buf.append("#").append(getLogicalMemberName());
         }
         return buf.toString();
     }
@@ -366,7 +366,7 @@ implements
     private static final Comparator<ApplicationFeatureId> byTypeSimpleName =
             comparing(ApplicationFeatureId::getTypeSimpleName, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byMemberName =
-            comparing(ApplicationFeatureId::getMemberLogicalName, nullsFirst(naturalOrder()));
+            comparing(ApplicationFeatureId::getLogicalMemberName, nullsFirst(naturalOrder()));
 
     private static final Comparator<ApplicationFeatureId> comparator =
             Comparator.nullsFirst(bySort)
@@ -378,19 +378,19 @@ implements
             ObjectContracts.checkEquals(ApplicationFeatureId::getSort)
             .thenCheckEquals(ApplicationFeatureId::getNamespace)
             .thenCheckEquals(ApplicationFeatureId::getTypeSimpleName)
-            .thenCheckEquals(ApplicationFeatureId::getMemberLogicalName);
+            .thenCheckEquals(ApplicationFeatureId::getLogicalMemberName);
 
     private static final Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getSort)
             .thenHashing(ApplicationFeatureId::getNamespace)
             .thenHashing(ApplicationFeatureId::getTypeSimpleName)
-            .thenHashing(ApplicationFeatureId::getMemberLogicalName);
+            .thenHashing(ApplicationFeatureId::getLogicalMemberName);
 
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("sort", ApplicationFeatureId::getSort)
             .thenToString("namespace", ApplicationFeatureId::getNamespace)
             .thenToStringOmitIfAbsent("typeSimpleName", ApplicationFeatureId::getTypeSimpleName)
-            .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberLogicalName);
+            .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getLogicalMemberName);
 
 
     @Override
@@ -421,7 +421,7 @@ implements
      * @param namespace
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
-        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberLogicalName());
+        return newFeature(namespace, this.getTypeSimpleName(), this.getLogicalMemberName());
     }
 
 }

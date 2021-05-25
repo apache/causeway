@@ -128,7 +128,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
             case MEMBER:
                 buf.append(featureId.getTypeSimpleName())
                 .append("#")
-                .append(featureId.getMemberLogicalName());   // com.mycompany.Bar#foo
+                .append(featureId.getLogicalMemberName());   // com.mycompany.Bar#foo
                 break;
             }
 

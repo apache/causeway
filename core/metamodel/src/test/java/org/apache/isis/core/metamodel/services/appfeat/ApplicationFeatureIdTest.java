@@ -70,7 +70,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is(nullValue()));
         }
     }
 
@@ -84,7 +84,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is(nullValue()));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is(nullValue()));
         }
     }
 
@@ -98,7 +98,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is("foo"));
         }
 
         @Test
@@ -109,7 +109,7 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getSort(), is(ApplicationFeatureSort.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
-            assertThat(applicationFeatureId.getMemberLogicalName(), is("foo"));
+            assertThat(applicationFeatureId.getLogicalMemberName(), is("foo"));
         }
 
     }
@@ -265,7 +265,7 @@ public class ApplicationFeatureIdTest {
             assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
-            assertThat(parentPackageId.getMemberLogicalName(), is(nullValue()));
+            assertThat(parentPackageId.getLogicalMemberName(), is(nullValue()));
         }
 
         @Test
@@ -300,7 +300,7 @@ public class ApplicationFeatureIdTest {
             assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
-            assertThat(parentPackageId.getMemberLogicalName(), is(nullValue()));
+            assertThat(parentPackageId.getLogicalMemberName(), is(nullValue()));
         }
 
         @Test
@@ -342,7 +342,7 @@ public class ApplicationFeatureIdTest {
             assertThat(parentClassId.getSort(), is(ApplicationFeatureSort.TYPE));
             assertThat(parentClassId.getNamespace(), is("com.mycompany"));
             assertThat(parentClassId.getTypeSimpleName(), is("Bar"));
-            assertThat(parentClassId.getMemberLogicalName(), is(nullValue()));
+            assertThat(parentClassId.getLogicalMemberName(), is(nullValue()));
         }
 
         @Test
@@ -549,7 +549,7 @@ public class ApplicationFeatureIdTest {
         public static class GET_MEMBER_NAME extends FunctionsTest {
 
             private Function<ApplicationFeatureId, String> func =
-                    ApplicationFeatureId::getMemberLogicalName;
+                    ApplicationFeatureId::getLogicalMemberName;
 
             @Test
             public void whenNull() throws Exception {
