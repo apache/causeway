@@ -43,8 +43,6 @@ class CollectionTest : IntegrationTest() {
 
         val valueList = collection.value
         assertEquals(2, valueList.size)
-
-        assertEquals("Immutable", collection.disabledReason)
     }
 
 }

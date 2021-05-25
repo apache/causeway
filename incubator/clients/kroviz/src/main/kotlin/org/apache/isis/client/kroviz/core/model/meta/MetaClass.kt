@@ -32,9 +32,9 @@ class MetaClass(val domainType: DomainType) {
         val pkgName = cn.replace(".$name", "")
         pkg = MetaPackage(pkgName)
 
-        domainType.members.forEach { m ->
-            val member = m.value
-            val name = member.id
+        domainType.members.forEach {
+            val member = it.value
+            val name = member.name()
             when {
                 member.isProperty() -> properties.add(MetaProperty(name))
                 member.isAction() -> actions.add(MetaAction(name))

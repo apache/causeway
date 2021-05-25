@@ -85,11 +85,11 @@ object ClassDiagram {
         val pkg = cn.replace(".$cls", "")
         var pumlCode = "$Q@startuml$NL package $pkg {$NL" +
                 "class $cls$NL"
-        domainType.members.forEach { m ->
-            val member = m.value
-            val name = member.id
+        domainType.members.forEach {
+            val link = it.value
+            val name = link.name()
             pumlCode += when {
-                member.isProperty() -> "$cls : $name$NL"
+                link.isProperty() -> "$cls : $name$NL"
                 else -> {
                     "$cls : $name()$NL"
                 }

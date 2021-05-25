@@ -25,8 +25,8 @@ import kotlinx.serialization.Serializable
 data class DomainType(
         override val links: List<Link>,
         val canonicalName: String,
-        val members: Map<String, Member>,
-        val typeActions: List<Link>,
+        val members: Map<String, Link>,
+        val typeActions: Map<String, Link>,
         val extensions: Extensions
 ) : TransferObject, HasLinks {
 

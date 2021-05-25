@@ -60,6 +60,10 @@ data class Link(val rel: String = "",
         return relation() == Relation.PROPERTY
     }
 
+    fun isAction(): Boolean {
+        return relation() == Relation.ACTION
+    }
+
     fun name(): String {
         return href.split("/").last()
     }

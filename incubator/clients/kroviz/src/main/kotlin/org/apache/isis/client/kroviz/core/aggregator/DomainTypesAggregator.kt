@@ -59,16 +59,11 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         } else {
             dpm.addData(obj)
             val propertyList = obj.members.filter {
-                it.value.memberType == MemberType.PROPERTY.type
+                it.value.isProperty()
             }
             (dpm as DiagramDM).incNumberOfProperties(propertyList.size)
-            propertyList.forEach { p ->
-                val links = p.value.links
-                links.forEach {
-                    if (it.isProperty()) {
-                        invoke(it, this)
-                    }
-                }
+            propertyList.forEach {
+                invoke(it.value, this)
             }
         }
     }
