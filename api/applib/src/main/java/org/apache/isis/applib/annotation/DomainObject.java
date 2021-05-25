@@ -37,6 +37,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
  * Domain semantics for domain objects (entities and view models;
@@ -164,17 +165,29 @@ public @interface DomainObject {
             default Nature.NOT_SPECIFIED;
 
     /**
-     * Provides a unique abbreviation for the object type's, eg
-     * &quot;customer.Customer&quot; for Customer.
+     * Synonym for {@link #logicalTypeName()}.
      *
-     * <p>
-     * This value, if specified, is used in the serialized form of the object's OID.  An OID is
-     * used by the framework to unique identify an object over time (same concept as a URN).
-     * </p>
+     * @deprecated use {@link #logicalTypeName()} instead
      *
-     * @see DomainService#objectType()
+     * @see #logicalTypeName()
      */
     String objectType()
+            default "";
+
+    /**
+     * The logical name of this object's type, that uniquely and fully qualifies it.
+     * The logical name is analogous to - but independent of - the actual fully qualified class name.
+     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
+     * <p>
+     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
+     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
+     * (same concept as a URN).
+     * Otherwise, if not specified, the fully qualified class name is used instead.
+     * </p>
+     *
+     * @see DomainService#logicalTypeName()
+     */
+    String logicalTypeName()
             default "";
 
 

@@ -71,10 +71,10 @@ public interface TableColumnOrderService {
      * </p>
      *
      * @param parent
-     * @param collectionId
+     * @param collectionId - the logical member name that identifies the collection
+     *      within its domain object type
      * @param collectionType
      * @param propertyIds
-     * @return
      */
     List<String> orderParented(
             final Object parent,
@@ -92,8 +92,8 @@ public interface TableColumnOrderService {
      * </p>
      *
      * @param collectionType
-     * @param propertyIds
-     * @return
+     * @param propertyIds - the logical member names that identify the properties
+     *      within their domain object type
      */
     List<String> orderStandalone(
             final Class<?> collectionType,

@@ -35,11 +35,11 @@ import lombok.NonNull;
 public interface BookmarkService {
 
     /**
-     * Optionally returns the {@link Bookmark} for the given domain object, 
+     * Optionally returns the {@link Bookmark} for the given domain object,
      * based on whether can create a bookmark for it.
      *
      * <p>
-     * <b>Note</b>: Not every domain object is bookmark-able: 
+     * <b>Note</b>: Not every domain object is bookmark-able:
      * only entities, view models and services (NOT values or collections)
      * </p>
      *
@@ -49,12 +49,15 @@ public interface BookmarkService {
     Optional<Bookmark> bookmarkFor(@Nullable Object domainObject);
 
     /**
-     * Optionally returns a {@link Bookmark} created from the constituent parts, 
+     * Optionally returns a {@link Bookmark} created from the constituent parts,
      * based on whether can create a bookmark from these.
+     * <p>
+     * With constituent parts a {@code type} and an {@code identifier} that uniquely
+     * identifies an instance of this type.
      *
      * @return - {@link Bookmark} for provided class and identifier
      */
-    Optional<Bookmark> bookmarkFor(@Nullable Class<?> cls, @Nullable String identifier);
+    Optional<Bookmark> bookmarkFor(@Nullable Class<?> type, @Nullable String identifier);
 
     /**
      * @see #lookup(Bookmark)
@@ -73,7 +76,7 @@ public interface BookmarkService {
     Optional<Object> lookup(@Nullable Bookmark bookmark);
 
     // -- SHORTCUTS
-    
+
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
@@ -81,7 +84,7 @@ public interface BookmarkService {
         return lookup(bookmark)
                 .map(t->cls.cast(t));
     }
-    
+
     /**
      * As per {@link #bookmarkFor(Object)}, but requires that a non-null {@link Bookmark} is returned.
      *

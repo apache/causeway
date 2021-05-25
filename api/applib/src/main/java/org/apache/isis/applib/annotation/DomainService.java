@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+
 /**
  * Indicates that the class should be automatically recognized as a domain service.
  *
@@ -63,18 +65,30 @@ public @interface DomainService {
             default NatureOfService.VIEW;
 
     /**
-     * Provides a unique abbreviation for the object type's, eg
-     * &quot;customer.CustomerService&quot; for CustomerService.
+     * Synonym for {@link #logicalTypeName()}.
      *
-     * <p>
-     * This value, if specified, is used in the serialized form of the object's
-     * OID.  An OID is used by the framework to unique identify an object over
-     * time (same concept as a URN).
-     * </p>
+     * @deprecated use {@link #logicalTypeName()} instead
      *
-     * @see DomainObject#objectType()
+     * @see #logicalTypeName()
      */
     String objectType()
             default "";
+
+    /**
+     * The logical name of this object's type, that uniquely and fully qualifies it.
+     * The logical name is analogous to - but independent of - the actual fully qualified class name.
+     * eg. {@code sales.CustomerService} for a class 'org.mycompany.services.CustomerService'
+     * <p>
+     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
+     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
+     * (same concept as a URN).
+     * Otherwise, if not specified, the fully qualified class name is used instead.
+     * </p>
+     *
+     * @see DomainObject#logicalTypeName()
+     */
+    String logicalTypeName()
+            default "";
+
 
 }
