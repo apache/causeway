@@ -53,6 +53,14 @@ import lombok.val;
  * This value is {@link Comparable}, the implementation of which considers
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
  * {@link #getTypeSimpleName() type simple name} and {@link #getMemberName() member name}.
+ * <p>
+ * If the represented member is an <i>action</i>, then {@link #getMemberName() member name}
+ * must <b>not</b> include any parameter list or parentheses.
+ * Consequently method overloading is not supported.
+ * <p>
+ * If there is a member name clash involving an <i>action</i> and an <i>association</i>,
+ * then consequently any permissions defined automatically apply to both and one cannot separate
+ * these.
  *
  * @since 1.x revised for 2.0 {@index}
  */
@@ -77,11 +85,7 @@ implements
         if(identifier.getType().isClass()) {
             return newType(logicalTypeName);
         }
-        if(identifier.getType().isPropertyOrCollection()) {
-            return newMember(logicalTypeName, identifier.getMemberName());
-        }
-        // its an action
-        return newMember(logicalTypeName, identifier.getMemberNameAndParameterClassNamesIdentityString());
+        return newMember(logicalTypeName, identifier.getMemberName());
     }
 
     public static ApplicationFeatureId newFeature(
@@ -131,7 +135,7 @@ implements
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         initType(featureId, logicalTypeName);
-        featureId.memberName = memberName;
+        initMember(featureId, memberName);
         return featureId;
     }
 
@@ -144,7 +148,7 @@ implements
         val logicalTypeName = fullyQualifiedName.substring(0, i);
         val memberName = fullyQualifiedName.substring(i + 1);
         initType(featureId, logicalTypeName);
-        featureId.memberName = memberName;
+        initMember(featureId, memberName);
         return featureId;
     }
 
@@ -167,6 +171,21 @@ implements
         }
 
         featureId.memberName = null;
+    }
+
+    private static void initMember(final ApplicationFeatureId featureId, final @Nullable String memberName) {
+        featureId.memberName = memberNameForSignature(memberName); // just in case
+    }
+
+    // strips off the parameter types
+    private static String memberNameForSignature(final @Nullable String memberSiganture) {
+        if(_Strings.isEmpty(memberSiganture)) {
+            return memberSiganture;
+        }
+        final int paramListStartIndex = memberSiganture.indexOf('(');
+        return paramListStartIndex>-1
+                ? memberSiganture.substring(0, paramListStartIndex)
+                : memberSiganture;
     }
 
     // -- CONSTRUCTOR
@@ -208,6 +227,16 @@ implements
     @Programmatic
     @Getter private String typeSimpleName;
 
+    /**
+     * Logical (simple) name of the member (in case of actions not including the parameter list).
+     * Consequently method overloading is not supported.
+     * <p>
+     * If there is a member name clash involving an <i>action</i> and an <i>association</i>,
+     * then consequently any permissions defined automatically apply to both and one cannot separate
+     * these.
+     * <p>
+     * {@code null} if not a member
+     */
     @Programmatic
     @Getter private String memberName;
 
@@ -396,24 +425,4 @@ implements
         return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName());
     }
 
-
-    /**
-     * For action members, returns a variant of the featureId that strips off the parameter types.
-     *
-     * <p>
-     *     This is for use cases where distinguishing between overloaded versions of an action (which is itself strongly discouraged)
-     *     is unimportant.  One example is the permissions management of SecMan.
-     * </p>
-     * @return
-     */
-    public ApplicationFeatureId asNonOverloaded() {
-        if (getSort() == ApplicationFeatureSort.MEMBER) {
-            val memberName = this.getMemberName();
-            val paramAt = memberName.indexOf('(');
-            if(paramAt != -1) {
-                return newFeature(this.getNamespace(), this.getTypeSimpleName(), memberName.substring(0, paramAt));
-            }
-        }
-        return this;
-    }
 }

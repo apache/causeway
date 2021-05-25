@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.api.permission.dom;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -146,10 +145,9 @@ public class ApplicationPermissionValueSet implements Serializable {
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
 
-        val featureIdNonOverloaded = featureId.asNonOverloaded();
-        for (val pathId : featureIdNonOverloaded.getPathIds()) {
+        for (val pathId : featureId.getPathIds()) {
             val permissionValues = permissionsByFeature.get(pathId);
-            val evaluation = permissionsEvaluationService.evaluate(featureIdNonOverloaded, mode, permissionValues);
+            val evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
             if(evaluation != null) {
                 return evaluation;
             }
@@ -182,8 +180,5 @@ public class ApplicationPermissionValueSet implements Serializable {
                 "values=" + values +
                 '}';
     }
-
-
-
 
 }

@@ -5,7 +5,7 @@
 
 SecMan provides an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member
 
-This authorization is implemented using domain entities, which means that authorizations/permissions can they be administered from within your Apache Isis application.
+This authorization is implemented using domain entities, which means that authorizations/permissions can then be administered from within your Apache Isis application.
 Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 The domain model is explained in more detail <<domain-model,below>>.
 

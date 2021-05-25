@@ -147,7 +147,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         val olafUser = applicationUserRepository.findByUsername(username).orElse(null);
         assertNotNull(olafUser);
         assertNotNull(olafUser.getStatus());
-        assertFalse(olafUser.getStatus().isEnabled());
+        assertFalse(olafUser.getStatus().isUnlocked());
     }
 
     @Test
