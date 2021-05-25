@@ -33,13 +33,14 @@ class MetaClass(val domainType: DomainType) {
         pkg = MetaPackage(pkgName)
 
         domainType.members.forEach { m ->
-            val memberName = m.name()
+            val member = m.value
+            val name = member.id
             when {
-                m.isProperty() -> properties.add(MetaProperty(memberName))
-                m.isAction() -> actions.add(MetaAction(memberName))
+                member.isProperty() -> properties.add(MetaProperty(name))
+                member.isAction() -> actions.add(MetaAction(name))
                 else -> {
                     console.log("[MetaClass.init] unexpected member type")
-                    console.log(memberName)
+                    console.log(name)
                 }
             }
         }

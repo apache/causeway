@@ -26,7 +26,7 @@ data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String,
                 val type: String = "",
-        //IMPROVE RO SPEC? "args" should be changed to "arguments" - RO spec or SimpleApp?
+        //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
                 val args: Map<String, Argument> = emptyMap(),
         /* arguments can either be:
          * -> empty Map {}
@@ -58,10 +58,6 @@ data class Link(val rel: String = "",
 
     fun isProperty(): Boolean {
         return relation() == Relation.PROPERTY
-    }
-
-    fun isAction(): Boolean {
-        return relation() == Relation.ACTION
     }
 
     fun name(): String {
