@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeMalformedValidator;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
@@ -99,7 +99,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
         IsisSchemaMetaModelRefiner.class,
         IsisSchemaValueTypeProvider.class,
-        ObjectTypeMalformedValidator.class,
+        LogicalTypeMalformedValidator.class,
 
 })
 public class IsisModuleCoreMetamodel {

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
+package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
 import java.util.Collections;
 
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -64,7 +64,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
     public void process(final ProcessObjectTypeContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         // don't trash existing facet
-        if(facetHolder.containsNonFallbackFacet(ObjectTypeFacet.class)) {
+        if(facetHolder.containsNonFallbackFacet(LogicalTypeFacet.class)) {
             return;
         }
         val cls = processClassContext.getCls();
@@ -81,7 +81,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         // now a no-op.
     }
 
-    private static ObjectTypeFacet createObjectTypeFacet(
+    private static LogicalTypeFacet createObjectTypeFacet(
             final FacetHolder facetHolder,
             final Class<?> substitutedClass) {
 
@@ -89,11 +89,11 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         val isService = serviceId!=null;
 
         if (isService) {
-            return new ObjectTypeFacetDerivedFromIoCNamingStrategy(
+            return new LogicalTypeFacetDerivedFromIoCNamingStrategy(
                     LogicalType.eager(substitutedClass, serviceId),
                     facetHolder);
         }
-        return new ObjectTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
+        return new LogicalTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {
@@ -120,8 +120,8 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
                 return;
             }
 
-            val objectTypeFacet = objectSpec.getFacet(ObjectTypeFacet.class);
-            if(objectTypeFacet instanceof ObjectTypeFacetDerivedFromClassName) {
+            val objectTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
+            if(objectTypeFacet instanceof LogicalTypeFacetDerivedFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

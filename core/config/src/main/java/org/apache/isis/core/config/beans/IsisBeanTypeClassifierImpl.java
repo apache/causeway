@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.util.LogicalTypeNameUtil;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
@@ -97,7 +98,8 @@ implements IsisBeanTypeClassifier {
         val aDomainService = findNearestAnnotation(type, DomainService.class);
         if(aDomainService.isPresent()) {
             return BeanClassification
-                    .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainService.get()));
+                    .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
+                            LogicalTypeNameUtil.logicalTypeName(aDomainService.get()));
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
@@ -115,21 +117,21 @@ implements IsisBeanTypeClassifier {
         val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
 
-            String objectType = null;
+            String logicalTypeName = null;
 
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
-                objectType = aDomainObject.objectType();
+                logicalTypeName = LogicalTypeNameUtil.logicalTypeName(aDomainObject);
             }
 
             // don't trample over the @DomainObject(objectType=..) if present
-            if(_Strings.isEmpty(objectType)) {
+            if(_Strings.isEmpty(logicalTypeName)) {
                 val aTable = findNearestAnnotation(type, Table.class).orElse(null);
                 if(aTable!=null) {
                     val schema = aTable.schema();
                     if(_Strings.isNotEmpty(schema)) {
                         val table = aTable.name();
-                        objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
+                        logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
                                 _Strings.isNotEmpty(table)
                                     ? table
                                     : type.getSimpleName());
@@ -137,9 +139,9 @@ implements IsisBeanTypeClassifier {
                 }
             }
 
-            if(_Strings.isNotEmpty(objectType)) {
+            if(_Strings.isNotEmpty(logicalTypeName)) {
                 BeanClassification.selfManaged(
-                        BeanSort.ENTITY, objectType);
+                        BeanSort.ENTITY, logicalTypeName);
             }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
@@ -148,7 +150,9 @@ implements IsisBeanTypeClassifier {
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
-                return BeanClassification.delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainObject));
+                return BeanClassification.delegated(
+                        BeanSort.MANAGED_BEAN_CONTRIBUTING,
+                        LogicalTypeNameUtil.logicalTypeName(aDomainObject));
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case ENTITY:
@@ -172,26 +176,6 @@ implements IsisBeanTypeClassifier {
     }
 
     // -- HELPER
-
-    private String objectType(DomainService aDomainService) {
-        if(aDomainService!=null) {
-            val objectType = aDomainService.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return objectType;
-            }
-        }
-        return null;
-    }
-
-    private String objectType(DomainObject aDomainObject) {
-        if(aDomainObject!=null) {
-            val objectType = aDomainObject.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return objectType;
-            }
-        }
-        return null;
-    }
 
     //XXX yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
     //either we find a Spring Boot utility class that does this logic for us, or we make it clear with the

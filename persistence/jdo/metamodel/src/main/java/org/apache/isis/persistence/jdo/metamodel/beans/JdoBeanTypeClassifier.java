@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
+import org.apache.isis.core.config.util.LogicalTypeNameUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
@@ -53,21 +54,21 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
 
-            String objectType = null;
+            String logicalTypeName = null;
 
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
-                objectType = aDomainObject.objectType();
+                logicalTypeName = LogicalTypeNameUtil.logicalTypeName(aDomainObject);
             }
 
             // don't trample over the @DomainObject(objectType=..) if present
-            if(_Strings.isEmpty(objectType)) {
+            if(_Strings.isEmpty(logicalTypeName)) {
                 val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
 
                     val table = persistenceCapableAnnot.get().table();
 
-                    objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
+                    logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
                             _Strings.isNotEmpty(table)
                                 ? table
                                 : type.getSimpleName());
@@ -75,9 +76,9 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
             }
 
 
-            if(_Strings.isNotEmpty(objectType)) {
+            if(_Strings.isNotEmpty(logicalTypeName)) {
                 BeanClassification.selfManaged(
-                        BeanSort.ENTITY, objectType);
+                        BeanSort.ENTITY, logicalTypeName);
             }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }

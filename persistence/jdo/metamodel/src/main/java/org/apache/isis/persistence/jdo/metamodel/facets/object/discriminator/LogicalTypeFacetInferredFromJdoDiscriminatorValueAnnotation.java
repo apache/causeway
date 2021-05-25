@@ -16,27 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.objectspecid;
+package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 
-
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
+public class LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation
+extends LogicalTypeFacetAbstract {
 
-/**
- *  Corresponds to the value of {@link DomainObject#objectType()},
- *  that specifies the <i>logical type name</i> of a domain object.
- *  <p>
- *  The <i>logical type name</i> must be unique among non-abstract classes,
- *  but is allowed to be shared with interfaces and abstract classes.
- */
-public interface ObjectTypeFacet extends Facet {
-
-    LogicalType getLogicalType();
-
-    default String value() {
-        return getLogicalType().getLogicalTypeName();
+    public LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
+            final LogicalType logicalType,
+            final FacetHolder holder) {
+        super(logicalType, holder);
     }
 
 }
+

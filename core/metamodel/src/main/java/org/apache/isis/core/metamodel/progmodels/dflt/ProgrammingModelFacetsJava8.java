@@ -65,8 +65,8 @@ import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnno
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.ObjectTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;

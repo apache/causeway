@@ -42,7 +42,7 @@ public interface MetaModelService {
 
     /**
      * Provides a lookup by objectType of a domain class' object type, as defined by
-     * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
+     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Isis'
      * <code>ObjectTypeFacet</code>). Will return an empty result if there is no
      * such non-abstract class registered.
      * (interfaces and abstract types are never added to the lookup table).
@@ -51,7 +51,7 @@ public interface MetaModelService {
 
     /**
      * Provides a lookup by class of a domain class' object type, as defined by
-     * {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis'
+     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Isis'
      * <code>ObjectTypeFacet</code>).
      */
     Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType);

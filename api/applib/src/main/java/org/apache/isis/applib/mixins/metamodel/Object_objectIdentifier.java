@@ -35,7 +35,7 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the internal identifier of the domain
- * object, typically as specified by {@link DomainObject#objectType()}.
+ * object, typically as specified by {@link DomainObject#logicalTypeName()}.
  *
  * <p>
  *     The object identifier is also accessible from the

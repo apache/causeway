@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 
@@ -77,9 +77,9 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ObjectTypeFacetInferredFromJdoDiscriminatorValueAnnotation);
+        assertTrue(facet instanceof LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation);
     }
 
     public void testIfNoEntityAnnotationThenNoFacet() {
@@ -89,7 +89,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
         assertNull(facet);
     }
 
@@ -100,7 +100,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final ObjectTypeFacet discriminatorValueFacet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final LogicalTypeFacet discriminatorValueFacet = facetHolder.getFacet(LogicalTypeFacet.class);
         assertEquals("CUS", discriminatorValueFacet.value());
     }
 

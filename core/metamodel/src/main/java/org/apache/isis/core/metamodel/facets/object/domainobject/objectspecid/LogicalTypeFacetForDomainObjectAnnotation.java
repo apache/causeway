@@ -16,37 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid;
 
-import java.util.Locale;
+package org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.util.LogicalTypeNameUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
-import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class ObjectTypeFacetForTableAnnotation
-extends ObjectTypeFacetAbstract {
+public class LogicalTypeFacetForDomainObjectAnnotation extends LogicalTypeFacetAbstract {
 
-    public static ObjectTypeFacet create(
-            final JpaTableFacetAnnotation tableFacet,
+    public static LogicalTypeFacet create(
+            final Optional<DomainObject> domainObjectIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
-        if(tableFacet.isFallback()) {
-            return null;
-        }
-        final String schema = tableFacet.getSchema();
-        if(_Strings.isNullOrEmpty(schema)) {
-            return null;
-        }
-        final String objectType = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
-        return new ObjectTypeFacetForTableAnnotation(LogicalType.eager(correspondingClass, objectType), holder);
+        return domainObjectIfAny
+                .map(annot->LogicalTypeNameUtil.logicalTypeName(annot))
+                .filter(_Strings::isNotEmpty)
+                .map(logicalTypeName -> new LogicalTypeFacetForDomainObjectAnnotation(
+                        LogicalType.eager(correspondingClass, logicalTypeName),
+                        holder))
+                .orElse(null);
     }
 
-    private ObjectTypeFacetForTableAnnotation(
+    private LogicalTypeFacetForDomainObjectAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
         super(logicalType, holder);

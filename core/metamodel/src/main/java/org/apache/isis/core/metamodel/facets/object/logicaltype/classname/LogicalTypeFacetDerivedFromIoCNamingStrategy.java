@@ -17,15 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
+package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class ObjectTypeFacetOnStandaloneList extends ObjectTypeFacetAbstract {
+/**
+ * @since 2.0
+ */
+public class LogicalTypeFacetDerivedFromIoCNamingStrategy extends LogicalTypeFacetAbstract {
 
-    public ObjectTypeFacetOnStandaloneList(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Derivation.NOT_DERIVED);
+    LogicalTypeFacetDerivedFromIoCNamingStrategy(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder);
     }
+
 }

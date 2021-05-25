@@ -31,7 +31,7 @@ import lombok.NonNull;
  * in support of logical type names.
  *
  * @apiNote only bookmark-able types will be ever registered
- * @see DomainObject#objectType()
+ * @see DomainObject#logicalTypeName()
  *
  * @since 2.0
  */

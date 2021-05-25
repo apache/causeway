@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -263,7 +263,7 @@ implements
 
         // check from @DomainObject(objectType=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = ObjectTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
+        val facet = LogicalTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
 
         // then add
         super.addFacet(facet);

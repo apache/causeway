@@ -24,14 +24,14 @@ import java.util.Locale;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class ObjectTypeFacetForJdoPersistenceCapableAnnotation
-extends ObjectTypeFacetAbstract {
+public class LogicalTypeFacetForJdoPersistenceCapableAnnotation
+extends LogicalTypeFacetAbstract {
 
-    public static ObjectTypeFacet create(
+    public static LogicalTypeFacet create(
             final JdoPersistenceCapableFacet persistenceCapableFacet,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
@@ -44,12 +44,12 @@ extends ObjectTypeFacetAbstract {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new ObjectTypeFacetForJdoPersistenceCapableAnnotation(
+        return new LogicalTypeFacetForJdoPersistenceCapableAnnotation(
                 LogicalType.eager(correspondingClass, objectType),
                 holder);
     }
 
-    private ObjectTypeFacetForJdoPersistenceCapableAnnotation(
+    private LogicalTypeFacetForJdoPersistenceCapableAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
         super(logicalType, holder);

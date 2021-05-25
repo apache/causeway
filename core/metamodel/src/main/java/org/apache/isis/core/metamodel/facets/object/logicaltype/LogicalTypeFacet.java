@@ -16,20 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
-package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+
 
 /**
- * @since 2.0
+ *  Corresponds to the value of {@link DomainObject#logicalTypeName()},
+ *  that specifies the <i>logical type name</i> of a domain object.
+ *  <p>
+ *  The <i>logical type name</i> must be unique among non-abstract classes,
+ *  but is allowed to be shared with interfaces and abstract classes.
  */
-public class ObjectTypeFacetDerivedFromIoCNamingStrategy extends ObjectTypeFacetAbstract {
+public interface LogicalTypeFacet extends Facet {
 
-    ObjectTypeFacetDerivedFromIoCNamingStrategy(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder);
+    LogicalType getLogicalType();
+
+    default String value() {
+        return getLogicalType().getLogicalTypeName();
     }
 
 }

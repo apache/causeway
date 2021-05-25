@@ -1339,7 +1339,7 @@ public class IsisConfiguration {
 
                 /**
                  * Whether to ensure that the object type of all objects (which can be set either explicitly using
-                 * {@link DomainObject#objectType()} or {@link DomainService#objectType()}, or can be inferred
+                 * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}, or can be inferred
                  * implicitly using a variety of mechanisms) must be unique with respect to all other object types.
                  *
                  * <p>
@@ -1380,7 +1380,7 @@ public class IsisConfiguration {
 
                 /**
                  * Whether to ensure that the object type of all objects must be specified explicitly, using either
-                 * {@link DomainObject#objectType()} or {@link DomainService#objectType()}.
+                 * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}.
                  *
                  * <p>
                  *     It is <i>highly advisable</i> to leave this set as enabled (the default).  These object types

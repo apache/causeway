@@ -134,7 +134,7 @@ implements
      * {@link ObjectTypeFacet}.
      *
      * <p>
-     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
+     * This will typically be the value of the {@link DomainObject#logicalTypeName()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
      * bytecode enhancement.

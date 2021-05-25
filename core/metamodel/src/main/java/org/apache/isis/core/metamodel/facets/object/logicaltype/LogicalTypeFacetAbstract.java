@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.objectspecid;
+package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
 import java.util.Map;
 
@@ -29,28 +29,28 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class ObjectTypeFacetAbstract
+public abstract class LogicalTypeFacetAbstract
 extends FacetAbstract
-implements ObjectTypeFacet {
+implements LogicalTypeFacet {
 
     public static Class<? extends Facet> type() {
-        return ObjectTypeFacet.class;
+        return LogicalTypeFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
     private final @NonNull LogicalType logicalType;
 
-    public ObjectTypeFacetAbstract(
+    public LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder) {
         this(logicalType, holder, Derivation.NOT_DERIVED);
     }
 
-    protected ObjectTypeFacetAbstract(
+    protected LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder,
             final Derivation derivation) {
-        super(ObjectTypeFacetAbstract.type(), holder, derivation);
+        super(LogicalTypeFacetAbstract.type(), holder, derivation);
         this.logicalType = logicalType;
     }
 

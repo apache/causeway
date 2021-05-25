@@ -25,8 +25,9 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassName;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectTypeFacetDerivedFromClassNameFactory;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.ObjectTypeFacetDerivedFromClassNameFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -51,10 +52,10 @@ public class ObjectTypeFacetDerivedFromClassNameFactoryTest extends AbstractFace
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(CustomerAsProxiedByDataNucleus.class, facetHolder));
 
-        final ObjectTypeFacet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectTypeFacetDerivedFromClassName, is(true));
+        assertThat(facet instanceof LogicalTypeFacetDerivedFromClassName, is(true));
         assertThat(facet.value(), is(Customer.class.getCanonicalName()));
     }
 

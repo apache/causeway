@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.objectspecid;
+package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -28,12 +28,12 @@ import lombok.val;
 
 /**
  * DomainObjects must have a non-empty namespace,
- * eg. @DomainObject(objectType="Customer") is considered invalid,
- * whereas eg. @DomainObject(objectType="sales.Customer") is valid.
+ * eg. @DomainObject(logicalTypeName="Customer") is considered invalid,
+ * whereas eg. @DomainObject(logicalTypeName="sales.Customer") is valid.
  *
  * @since 2.0
  */
-public class ObjectTypeMalformedValidator
+public class LogicalTypeMalformedValidator
 implements MetaModelRefiner {
 
     @Override
@@ -46,12 +46,12 @@ implements MetaModelRefiner {
                 return;
             }
 
-            val objectTypeFacet = spec.getFacet(ObjectTypeFacet.class);
-            if(objectTypeFacet == null) {
+            val logicalTypeFacet = spec.getFacet(LogicalTypeFacet.class);
+            if(logicalTypeFacet == null) {
                 return;
             }
 
-            val logicalTypeName = objectTypeFacet.value();
+            val logicalTypeName = logicalTypeFacet.value();
 
             val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                     .collect(Can.toCan());
@@ -63,8 +63,8 @@ implements MetaModelRefiner {
                 ValidationFailure.raiseFormatted(
                         spec,
                         "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
-                        + "eg. @DomainObject(objectType=\"Customer\") is considered invalid, "
-                        + "whereas @DomainObject(objectType=\"sales.Customer\") is valid.",
+                        + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
+                        + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid.",
                         spec.getFullIdentifier(),
                         logicalTypeName);
             }

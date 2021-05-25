@@ -25,8 +25,8 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectTypeFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -54,10 +54,10 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
         facetFactory.processObjectType(new ProcessObjectTypeContext(Customer.class, facetHolder));
 
-        final ObjectTypeFacet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectTypeFacetForDomainObjectAnnotation, is(true));
+        assertThat(facet instanceof LogicalTypeFacetForDomainObjectAnnotation, is(true));
         assertThat(facet.value(), is("CUS"));
 
     }

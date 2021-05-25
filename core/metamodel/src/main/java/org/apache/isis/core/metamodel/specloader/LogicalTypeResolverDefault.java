@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -78,7 +78,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     private boolean hasUsableObjectTypeFacet(ObjectSpecification spec) {
         // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
         // don't have an ObjectType; hence the guard.
-        return spec.containsNonFallbackFacet(ObjectTypeFacet.class);
+        return spec.containsNonFallbackFacet(LogicalTypeFacet.class);
     }
 
 }
