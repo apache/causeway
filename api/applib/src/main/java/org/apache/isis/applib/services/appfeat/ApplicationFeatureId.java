@@ -174,18 +174,17 @@ implements
     }
 
     private static void initMember(final ApplicationFeatureId featureId, final @Nullable String memberName) {
-        featureId.memberName = memberNameForSignature(memberName); // just in case
+        featureId.memberName = stripOffParamsIfAny(memberName); // just in case
     }
 
-    // strips off the parameter types
-    private static String memberNameForSignature(final @Nullable String memberSiganture) {
-        if(_Strings.isEmpty(memberSiganture)) {
-            return memberSiganture;
+    private static String stripOffParamsIfAny(final @Nullable String name) {
+        if(_Strings.isEmpty(name)) {
+            return name;
         }
-        final int paramListStartIndex = memberSiganture.indexOf('(');
+        final int paramListStartIndex = name.indexOf('(');
         return paramListStartIndex>-1
-                ? memberSiganture.substring(0, paramListStartIndex)
-                : memberSiganture;
+                ? name.substring(0, paramListStartIndex)
+                : name;
     }
 
     // -- CONSTRUCTOR
