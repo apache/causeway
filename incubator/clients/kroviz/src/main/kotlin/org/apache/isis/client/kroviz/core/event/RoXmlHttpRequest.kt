@@ -34,6 +34,9 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
+    private val CONTENT_TYPE = "Content-Type"
+    private val ACCEPT = "Accept"
+
     fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
         val rs = ResourceSpecification(link.href)
         when {
@@ -65,8 +68,8 @@ class RoXmlHttpRequest {
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
-        xhr.setRequestHeader("Content-Type", "application/$subType;charset=UTF-8")
-        xhr.setRequestHeader("Accept", "application/$subType")
+        xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
+        xhr.setRequestHeader(ACCEPT, "application/$subType")
 
         val body = buildBody(link, aggregator)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
@@ -106,8 +109,8 @@ class RoXmlHttpRequest {
 
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
-        xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
-        xhr.setRequestHeader("Accept", Constants.svgMimeType)
+        xhr.setRequestHeader(CONTENT_TYPE, Constants.stdMimeType)
+        xhr.setRequestHeader(ACCEPT, Constants.svgMimeType)
 
         val body = Utils.argumentsAsList(link)
         xhr.send(body)
@@ -122,8 +125,8 @@ class RoXmlHttpRequest {
 
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
-        xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
-        xhr.setRequestHeader("Accept", Constants.svgMimeType)
+        xhr.setRequestHeader(CONTENT_TYPE, Constants.stdMimeType)
+        xhr.setRequestHeader(ACCEPT, Constants.svgMimeType)
 
         val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode, xhr)
 
@@ -138,8 +141,8 @@ class RoXmlHttpRequest {
             xhr: XMLHttpRequest): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
         xhr.onload = { _ -> handleResult(rs, body, xhr) }
-        xhr.onerror = { _ -> handleError(rs, body, xhr) }
-        xhr.ontimeout = { _ -> handleError(rs, body, xhr) }
+        xhr.onerror = { _ -> handleError(rs, xhr) }
+        xhr.ontimeout = { _ -> handleError(rs, xhr) }
         return rs
     }
 
@@ -149,7 +152,7 @@ class RoXmlHttpRequest {
         if (logEntry != null) getHandlerChain().handle(logEntry)
     }
 
-    private fun handleError(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
+    private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {
         val responseText = xhr.responseText
         EventStore.fault(rs, responseText)
     }
