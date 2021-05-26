@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
@@ -48,7 +48,7 @@ import lombok.val;
 public class ApplicationUser_addRole {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_addRole> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_addRole> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

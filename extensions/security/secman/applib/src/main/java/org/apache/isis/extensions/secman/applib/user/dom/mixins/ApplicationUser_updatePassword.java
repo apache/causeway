@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -50,7 +50,7 @@ import lombok.val;
 public class ApplicationUser_updatePassword {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_updatePassword> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updatePassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available

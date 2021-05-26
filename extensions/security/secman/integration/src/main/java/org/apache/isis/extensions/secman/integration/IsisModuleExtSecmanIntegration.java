@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.integration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
 import org.apache.isis.extensions.secman.integration.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman;
@@ -34,7 +34,7 @@ import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationSer
 @Configuration
 @Import({
         // Module
-        IsisModuleExtSecmanApi.class,
+        IsisModuleExtSecmanApplib.class,
 
         // @Component or @Service
         TenantedAuthorizationPostProcessor.Register.class,

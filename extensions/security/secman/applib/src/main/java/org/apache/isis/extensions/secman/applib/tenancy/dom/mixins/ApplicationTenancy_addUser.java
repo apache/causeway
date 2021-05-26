@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addUser.DomainEvent;
@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationTenancy_addUser {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_addUser> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_addUser> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

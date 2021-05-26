@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -57,7 +57,7 @@ import lombok.val;
 public class ApplicationUser_filterPermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_filterPermissions> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_filterPermissions> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;

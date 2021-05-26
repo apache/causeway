@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateDescription.DomainEvent;
 
@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_updateDescription {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_updateDescription> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_updateDescription> {}
 
     private final ApplicationRole target;
 

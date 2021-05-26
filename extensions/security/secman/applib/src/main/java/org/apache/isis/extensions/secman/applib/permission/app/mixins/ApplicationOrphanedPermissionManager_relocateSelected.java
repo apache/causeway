@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.isis.extensions.secman.applib.permission.app.mixins.ApplicationOrphanedPermissionManager_relocateSelected.DomainEvent;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
@@ -53,7 +53,7 @@ import lombok.val;
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationOrphanedPermissionManager_relocateSelected> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationOrphanedPermissionManager_relocateSelected> {}
 
     @Inject private ApplicationFeatureRepository featureRepository;
 

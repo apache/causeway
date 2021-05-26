@@ -37,7 +37,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 /**
  * @since 2.0 {@index}
@@ -47,7 +47,7 @@ import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
 )
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
 
     public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     public static final String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
@@ -56,9 +56,9 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- DOMAIN EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy> {}
 
 
     // -- MODEL

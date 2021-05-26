@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_removeChild.DomainEvent;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationTenancy_removeChild {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancy_removeChild> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_removeChild> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 

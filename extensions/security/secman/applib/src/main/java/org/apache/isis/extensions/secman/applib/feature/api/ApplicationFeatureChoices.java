@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -121,7 +121,7 @@ public class ApplicationFeatureChoices {
         Comparable<AppFeat>,
         ViewModel {
 
-        public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".AppFeat";
+        public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
 
         @Property
         @Getter

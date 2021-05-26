@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.val;
@@ -84,7 +84,7 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermission";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
 
     public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
     public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
@@ -97,8 +97,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- DOMAIN EVENTS
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
 
 
     // -- MODEL

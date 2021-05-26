@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
@@ -34,10 +34,10 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 )
 public class ApplicationOrphanedPermissionManager {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationOrphanedPermissionManager";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationOrphanedPermissionManager";
 
     public static abstract class CollectionDomainEvent<T>
-            extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}
+            extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 

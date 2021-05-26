@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
@@ -56,7 +56,7 @@ public class ApplicationUserManager_newLocalUser
 extends ApplicationUserManager_newLocalUserAbstract {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

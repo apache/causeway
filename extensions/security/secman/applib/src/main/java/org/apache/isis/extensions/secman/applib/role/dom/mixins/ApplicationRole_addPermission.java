@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -55,7 +55,7 @@ import lombok.experimental.Accessors;
 public class ApplicationRole_addPermission {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_addPermission> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_addPermission> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private ApplicationFeatureChoices applicationFeatureChoices;

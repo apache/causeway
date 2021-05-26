@@ -142,7 +142,7 @@ public class SecmanConfiguration {
             IsisModuleApplib.NAMESPACE_SUDO,
             IsisModuleApplib.NAMESPACE_CONF,
             IsisModuleApplib.NAMESPACE_FEAT,
-            IsisModuleExtSecmanApi.NAMESPACE
+            IsisModuleExtSecmanApplib.NAMESPACE
     };
 
     /**

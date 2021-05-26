@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ import lombok.val;
 public class ApplicationUser_permissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
+            extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;

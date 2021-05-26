@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 
@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_feature {
 
     public static class PropertyDomainEvent
-            extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
+            extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
     final ApplicationPermission target;
 

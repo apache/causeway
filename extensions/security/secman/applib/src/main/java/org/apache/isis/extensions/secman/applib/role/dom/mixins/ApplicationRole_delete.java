@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_delete.DomainEvent;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_delete> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_delete> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_resetPassword.DomainEvent;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_resetPassword {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_resetPassword> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_resetPassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
 

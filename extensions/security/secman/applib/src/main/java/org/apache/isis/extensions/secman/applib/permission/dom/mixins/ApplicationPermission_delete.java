@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete.DomainEvent;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -45,7 +45,7 @@ import lombok.val;
 public class ApplicationPermission_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_delete> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_delete> {}
 
     @Inject private RepositoryService repository;
 

@@ -164,7 +164,7 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
         ApplicationUserManager_newLocalUser.class,
 
 })
-public class IsisModuleExtSecmanApi {
+public class IsisModuleExtSecmanApplib {
 
     public static final String NAMESPACE = "isis.ext.secman";
 

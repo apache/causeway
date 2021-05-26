@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_updateRole.DomainEvent;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_updateRole {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_updateRole> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_updateRole> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

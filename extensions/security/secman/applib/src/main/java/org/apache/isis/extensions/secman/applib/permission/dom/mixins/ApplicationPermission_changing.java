@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.applib.permission.dom.mixins;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_changing.DomainEvent;
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_changing {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission_changing> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_changing> {}
 
     private final ApplicationPermission target;
 

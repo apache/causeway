@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_removePermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole_removePermissions> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removePermissions> {}
 
     @Inject private MessageService messageService;
     @Inject private SecmanConfiguration configBean;
