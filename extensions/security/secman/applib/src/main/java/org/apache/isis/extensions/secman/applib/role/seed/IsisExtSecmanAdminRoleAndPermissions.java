@@ -16,28 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.seed.scripts.other;
+package org.apache.isis.extensions.secman.applib.role.seed;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Provides access to download the JDO metamodel.
+ * Sets up the {@link SecmanConfiguration#getAdminRoleName() secman admin role}
+ * with its initial set of permissions (the union of
+ * {@link SecmanConfiguration#getAdminStickyNamespacePermissions()}
+ * and {@link SecmanConfiguration#getAdminAdditionalNamespacePermissions()}).
+ *
+ * @see SecmanConfiguration
  *
  * @since 2.0 {@index}
  */
-public class IsisPersistenceJdoMetaModelRoleAndPermissions
-extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.persistence.jdo.JdoMetamodelMenu";
+    private final List<String> adminInitialPackagePermissions;
 
-    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
-
-    public IsisPersistenceJdoMetaModelRoleAndPermissions() {
-        super(ROLE_NAME, "Access to download the JDO metamodel");
+    public IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean) {
+        super(configBean.getAdminRoleName(), "Administer security");
+        this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -45,9 +53,8 @@ extends AbstractRoleAndPermissionsFixtureScript {
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.of(
-                        ApplicationFeatureId.newType(SERVICE_LOGICAL_TYPE_NAME)
-                        )
-        );
+                Can.ofCollection(adminInitialPackagePermissions)
+                        .map(ApplicationFeatureId::newNamespace));
     }
+
 }

@@ -16,28 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.seed.scripts.other;
+package org.apache.isis.extensions.secman.applib.role.seed;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Provides access to open up the Swagger UI.
- *
  * @since 2.0 {@index}
  */
-public class IsisViewerRestfulObjectsSwaggerRoleAndPermissions
+public class IsisSudoImpersonateRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.viewer.restfulobjects.SwaggerServiceMenu";
+    public static final String ROLE_NAME = ImpersonateMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
-    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
-
-    public IsisViewerRestfulObjectsSwaggerRoleAndPermissions() {
-        super(ROLE_NAME, "Access to the swagger UI");
+    public IsisSudoImpersonateRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the ImpersonateMenu (ability to impersonate other users, for testing purposes)");
     }
 
     @Override
@@ -46,7 +43,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(SERVICE_LOGICAL_TYPE_NAME)
+                        ApplicationFeatureId.newType(ImpersonateMenu.LOGICAL_TYPE_NAME)
                         )
         );
     }

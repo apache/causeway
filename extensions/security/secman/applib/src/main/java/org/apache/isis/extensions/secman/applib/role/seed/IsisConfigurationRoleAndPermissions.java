@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.seed.scripts.other;
+package org.apache.isis.extensions.secman.applib.role.seed;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.user.ImpersonateMenu;
+import org.apache.isis.applib.services.confview.ConfigurationMenu;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
+import org.apache.isis.applib.services.confview.ConfigurationViewmodel;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
@@ -28,13 +30,13 @@ import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPer
 /**
  * @since 2.0 {@index}
  */
-public class IsisSudoImpersonateRoleAndPermissions
+public class IsisConfigurationRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = ImpersonateMenu.LOGICAL_TYPE_NAME.replace(".","-");
+    public static final String ROLE_NAME = ConfigurationMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
-    public IsisSudoImpersonateRoleAndPermissions() {
-        super(ROLE_NAME, "Access to the ImpersonateMenu (ability to impersonate other users, for testing purposes)");
+    public IsisConfigurationRoleAndPermissions() {
+        super(ROLE_NAME, "Access configuration properties");
     }
 
     @Override
@@ -43,7 +45,9 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(ImpersonateMenu.LOGICAL_TYPE_NAME)
+                        ApplicationFeatureId.newType(ConfigurationMenu.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationProperty.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
                         )
         );
     }
