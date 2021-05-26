@@ -11,8 +11,8 @@ Describes the layout of a single action, broadly corresponding to _org.apache.is
 class ServiceActionLayoutData {
   ServiceActionLayoutData()
   ServiceActionLayoutData(final String logicalTypeName, final String id)
-  String getLogicalTypeName()
-  void setLogicalTypeName(final String logicalTypeName)
+  String getObjectType()
+  void setObjectType(final String objectType)
   String getId()     // <.>
   void setId(String id)
   BookmarkPolicy getBookmarking()

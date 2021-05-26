@@ -324,7 +324,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 
 include::hooks/DomainObject_010-examples-and-usage.adoc[]
 
-include::hooks/DomainObject_021-objectType.adoc[]
+include::hooks/DomainObject_021-logicalTypeName.adoc[]
 
 include::hooks/DomainObject_022-nature.adoc[]
 
