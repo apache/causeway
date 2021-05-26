@@ -26,7 +26,7 @@ import lombok.val;
 
 @Component
 @Named("isis.ext.secman.RegexReplacer")
-public class RegexReplacer implements org.apache.isis.extensions.secman.api.util.RegexReplacer {
+public class RegexReplacer implements org.apache.isis.extensions.secman.applib.util.RegexReplacer {
 
     @Override
     public String asRegex(String str) {

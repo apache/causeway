@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRepositoryAbstract;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepositoryAbstract;
 
 @Repository
 @Named("isis.ext.secman.ApplicationPermissionRepository")

@@ -40,12 +40,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;

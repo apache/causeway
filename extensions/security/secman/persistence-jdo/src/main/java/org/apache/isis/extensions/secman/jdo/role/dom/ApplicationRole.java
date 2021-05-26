@@ -39,7 +39,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 
 @PersistenceCapable(
@@ -56,12 +56,12 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 })
 @Queries({
     @Query(
-            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name == :name"),
     @Query(
-            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name.matches(:regex) ")
@@ -76,7 +76,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-    extends org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
+    extends org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 

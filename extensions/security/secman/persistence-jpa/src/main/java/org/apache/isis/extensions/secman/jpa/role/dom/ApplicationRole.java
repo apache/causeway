@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 @Entity
@@ -52,12 +52,12 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name LIKE :regex"),
@@ -73,7 +73,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole
-    extends org.apache.isis.extensions.secman.api.role.dom.ApplicationRole {
+    extends org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole {
 
     @Id
     @GeneratedValue

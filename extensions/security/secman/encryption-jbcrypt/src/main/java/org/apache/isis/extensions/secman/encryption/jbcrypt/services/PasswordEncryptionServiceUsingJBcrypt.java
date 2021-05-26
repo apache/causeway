@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 /**
  * @since 2.0 {@index}

@@ -1,0 +1,54 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.isis.extensions.secman.applib.role.seed;
+
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.confview.ConfigurationMenu;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
+import org.apache.isis.applib.services.confview.ConfigurationViewmodel;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+
+/**
+ * @since 2.0 {@index}
+ */
+public class IsisConfigurationRoleAndPermissions
+extends AbstractRoleAndPermissionsFixtureScript {
+
+    public static final String ROLE_NAME = ConfigurationMenu.LOGICAL_TYPE_NAME.replace(".","-");
+
+    public IsisConfigurationRoleAndPermissions() {
+        super(ROLE_NAME, "Access configuration properties");
+    }
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        newPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.CHANGING,
+                Can.of(
+                        ApplicationFeatureId.newType(ConfigurationMenu.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationProperty.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
+                        )
+        );
+    }
+}

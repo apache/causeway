@@ -30,7 +30,7 @@ import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandRepl
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
     IsisModuleSecurityShiro.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanModel.class,
+    IsisModuleExtSecmanIntegration.class,
     IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 
