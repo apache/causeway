@@ -47,6 +47,33 @@ The _Wicket Viewer_ was migrated from using _Bootstrap 3_ to _Bootstrap 4_, whic
 
 === SecMan
 
+Following SecMan artifacts have been renamed:
+[source,xml]
+----
+<artifactId>isis-extensions-secman-model</artifactId> <!-- old --> 
+<artifactId>isis-extensions-secman-integration</artifactId> <!-- new -->
+
+<artifactId>isis-extensions-secman-api</artifactId> <!-- old -->
+<artifactId>isis-extensions-secman-applib</artifactId> <!-- new -->
+----
+
+Following SecMan packages have been renamed:
+[source,java]
+----
+org.apache.isis.extensions.secman.api.*; // old
+org.apache.isis.extensions.secman.applib.*; // new
+
+org.apache.isis.extensions.secman.model.*; // old
+org.apache.isis.extensions.secman.integration.*; // new
+----
+
+Following SecMan modules have been renamed:
+[source]
+----
+IsisModuleExtSecmanApi -> IsisModuleExtSecmanApplib
+IsisModuleExtSecmanModel -> IsisModuleExtSecmanIntegration
+----
+
 Following menu actions for User Management have been removed:
 
 [source,xml]
