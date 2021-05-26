@@ -41,7 +41,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;

@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model;
+package org.apache.isis.extensions.secman.integration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationPostProcessor;
-import org.apache.isis.extensions.secman.model.seed.SeedSecurityModuleService;
-import org.apache.isis.extensions.secman.model.spiimpl.ImpersonateMenuAdvisorForSecman;
-import org.apache.isis.extensions.secman.model.spiimpl.TableColumnVisibilityServiceForSecman;
-import org.apache.isis.extensions.secman.model.userreg.UserRegistrationServiceForSecman;
+import org.apache.isis.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
+import org.apache.isis.extensions.secman.integration.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman;
+import org.apache.isis.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman;
+import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationServiceForSecman;
 
 /**
  * @since 2.0 {@index}

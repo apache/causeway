@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.secman.model.spiimpl;
+package org.apache.isis.extensions.secman.integration.spiimpl;
 
 import javax.inject.Inject;
 import javax.inject.Named;

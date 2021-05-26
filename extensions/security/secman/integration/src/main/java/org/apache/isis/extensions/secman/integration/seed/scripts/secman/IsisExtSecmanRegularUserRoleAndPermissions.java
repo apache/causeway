@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts.secman;
+package org.apache.isis.extensions.secman.integration.seed.scripts.secman;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -29,7 +29,7 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.menu.MeService;
-import org.apache.isis.extensions.secman.model.seed.scripts.other.IsisConfigurationRoleAndPermissions;
+import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisConfigurationRoleAndPermissions;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 import lombok.val;
@@ -47,10 +47,10 @@ import lombok.val;
  * <p>
  * That said, it does <i>not</i> include the ability to impersonate other users
  * (for this, grant the
- * {@link org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
+ * {@link org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
  * role), and also does <i>not</i> include the ability to access the
  * configuration properties (for this, grant the
- * {@link org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
+ * {@link org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions}
  * role).
  * </p>
  *
@@ -59,7 +59,7 @@ import lombok.val;
  * the {@link MeService}, and for viewing and maintaining their user details.
  * </p>
  *
- * @see org.apache.isis.extensions.secman.model.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions
+ * @see org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions
  * @see IsisConfigurationRoleAndPermissions
  *
  * @since 2.0 {@index}

@@ -30,7 +30,7 @@ import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepos
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.util.RegexReplacer;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}

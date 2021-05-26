@@ -16,28 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts.other;
+package org.apache.isis.extensions.secman.integration.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 /**
- * Access to the h2 console UI.
- *
  * @since 2.0 {@index}
  */
-public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisSudoImpersonateRoleAndPermissions
+extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.ext.h2Console";
+    public static final String ROLE_NAME = ImpersonateMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
-    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
-
-    public IsisExtH2ConsoleRoleAndPermissions() {
-        super(ROLE_NAME, String.format("Access to the H2 console UI", IsisModuleTestingFixturesApplib.NAMESPACE));
+    public IsisSudoImpersonateRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the ImpersonateMenu (ability to impersonate other users, for testing purposes)");
     }
 
     @Override
@@ -45,8 +42,9 @@ public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissio
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofSingleton(
-                        ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE)));
-
+                Can.of(
+                        ApplicationFeatureId.newType(ImpersonateMenu.LOGICAL_TYPE_NAME)
+                        )
+        );
     }
 }

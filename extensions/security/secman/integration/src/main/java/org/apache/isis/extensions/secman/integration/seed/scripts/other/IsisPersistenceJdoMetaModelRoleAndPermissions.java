@@ -16,29 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.seed.scripts.other;
+package org.apache.isis.extensions.secman.integration.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Provides access to open up the Swagger UI.
+ * Provides access to download the JDO metamodel.
  *
  * @since 2.0 {@index}
  */
-public class IsisViewerRestfulObjectsSwaggerRoleAndPermissions
+public class IsisPersistenceJdoMetaModelRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.viewer.restfulobjects.SwaggerServiceMenu";
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.persistence.jdo.JdoMetamodelMenu";
 
     public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
 
-    public IsisViewerRestfulObjectsSwaggerRoleAndPermissions() {
-        super(ROLE_NAME, "Access to the swagger UI");
+    public IsisPersistenceJdoMetaModelRoleAndPermissions() {
+        super(ROLE_NAME, "Access to download the JDO metamodel");
     }
 
     @Override

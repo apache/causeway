@@ -41,15 +41,15 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
-                Configuration_usingJdoAndShiro.class, 
+        classes = {
+                Configuration_usingJdoAndShiro.class,
         })
 @Import({
     // Security Manager Extension (secman)
@@ -68,7 +68,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
     void beforeEach() {
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
     }
-    
+
     @AfterEach
     void afterEach() {
         tearDownShiro();
@@ -80,7 +80,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         val secMan = getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
@@ -102,7 +102,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
@@ -124,7 +124,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
-        val subject = SecurityUtils.getSubject(); 
+        val subject = SecurityUtils.getSubject();
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 

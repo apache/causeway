@@ -31,7 +31,7 @@ import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepos
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.util.RegexReplacer;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}
