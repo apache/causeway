@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.shiro;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.jupiter.api.AfterEach;
@@ -40,8 +39,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
+import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 
@@ -53,7 +52,7 @@ import lombok.val;
         })
 @Import({
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanModel.class,
+    IsisModuleExtSecmanIntegration.class,
     IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
@@ -84,7 +83,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 securityConfig.getAdminUserName(),
                 securityConfig.getAdminPassword());
 
@@ -106,7 +105,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 securityConfig.getAdminUserName(),
                 "invalid-pass");
 
@@ -128,7 +127,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val token = (AuthenticationToken) new UsernamePasswordToken(
+        val token = new UsernamePasswordToken(
                 "non-existent-user",
                 "invalid-pass");
 
