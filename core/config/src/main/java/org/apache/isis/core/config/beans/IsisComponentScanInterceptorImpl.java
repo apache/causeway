@@ -84,7 +84,7 @@ implements IsisComponentScanInterceptor {
         val delegated = classification.isDelegateLifecycleManagement();
         typeMeta.setInjectable(delegated);
         if(delegated) {
-            typeMeta.setBeanNameOverride(classification.getExplicitObjectType());
+            typeMeta.setBeanNameOverride(classification.getExplicitLogicalTypeName());
         }
 
         val beanSort = classification.getBeanSort();

@@ -1338,18 +1338,6 @@ public class IsisConfiguration {
                 private boolean allowDeprecated = true;
 
                 /**
-                 * Whether to ensure that the object type of all objects (which can be set either explicitly using
-                 * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}, or can be inferred
-                 * implicitly using a variety of mechanisms) must be unique with respect to all other object types.
-                 *
-                 * <p>
-                 *     It is <i>highly advisable</i> to leave this set as enabled (the default), and to also use
-                 *     explicit types (see {@link #isExplicitObjectType()}.
-                 * </p>
-                 */
-                private boolean ensureUniqueObjectTypes = true;
-
-                /**
                  * If set, then checks that the supports <code>hideXxx</code> and <code>disableXxx</code> methods for
                  * actions do not have take parameters.
                  *
@@ -1379,16 +1367,15 @@ public class IsisConfiguration {
                 private boolean actionCollectionParameterChoices = true;
 
                 /**
-                 * Whether to ensure that the object type of all objects must be specified explicitly, using either
+                 * Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either
                  * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}.
                  *
                  * <p>
-                 *     It is <i>highly advisable</i> to leave this set as enabled (the default).  These object types
-                 *     should also (of course) be unique - that can be checked by setting the
-                 *     {@link #isEnsureUniqueObjectTypes()} config property.
+                 *     It is <i>highly advisable</i> to leave this set as enabled (the default). These logical-type-names
+                 *     should also (of course) be unique - among non-abstract types.
                  * </p>
                  */
-                private boolean explicitObjectType = false;
+                private boolean explicitLogicalTypeNames = false;
 
                 private final JaxbViewModel jaxbViewModel = new JaxbViewModel();
                 @Data

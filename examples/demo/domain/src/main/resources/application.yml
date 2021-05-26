@@ -54,7 +54,7 @@ isis:
       validator:
         allow-deprecated: false
         no-params-only: true
-        explicit-object-type: true
+        explicit-logical-type-names: true
         service-actions-only: true
         mixins-only: true
       introspector:

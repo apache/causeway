@@ -33,22 +33,10 @@ If not allowed, then metamodel validation errors will be flagged.
 
 Note that this settings has no effect if the programming model has been configured to ignore deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
 
-
 |
-[[isis.core.meta-model.validator.ensure-unique-object-types]]
+[[isis.core.meta-model.validator.explicit-logical-type-names]]
 isis.core.meta-model.validator. +
-ensure-unique-object-types
-
-|  true
-| Whether to ensure that the object type of all objects (which can be set either explicitly using ``DomainObject#logicalTypeName()`` or ``DomainService#logicalTypeName()``, or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
-
-It is _highly advisable_ to leave this set as enabled (the default), and to also use explicit types (see ``#isExplicitObjectType()``.
-
-
-|
-[[isis.core.meta-model.validator.explicit-object-type]]
-isis.core.meta-model.validator. +
-explicit-object-type
+explicit-logical-type-names
 
 | 
 | Whether to ensure that the object type of all objects must be specified explicitly, using either ``DomainObject#logicalTypeName()`` or ``DomainService#logicalTypeName()``.

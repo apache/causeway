@@ -69,21 +69,21 @@ public interface IsisBeanTypeClassifier {
     public static class BeanClassification {
 
         BeanSort beanSort;
-        String explicitObjectType;
+        String explicitLogicalTypeName;
         boolean delegateLifecycleManagement;
 
         // -- FACTORIES
 
-        public static BeanClassification delegated(BeanSort beanSort, String explicitObjectType) {
-            return of(beanSort, explicitObjectType, true);
+        public static BeanClassification delegated(BeanSort beanSort, String explicitLogicalTypeName) {
+            return of(beanSort, explicitLogicalTypeName, true);
         }
 
         public static BeanClassification delegated(BeanSort beanSort) {
             return delegated(beanSort, null);
         }
 
-        public static BeanClassification selfManaged(BeanSort beanSort, String explicitObjectType) {
-            return of(beanSort, explicitObjectType, false);
+        public static BeanClassification selfManaged(BeanSort beanSort, String explicitLogicalTypeName) {
+            return of(beanSort, explicitLogicalTypeName, false);
         }
 
         public static BeanClassification selfManaged(BeanSort beanSort) {

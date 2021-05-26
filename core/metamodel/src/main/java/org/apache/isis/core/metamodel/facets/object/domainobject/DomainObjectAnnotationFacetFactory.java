@@ -491,9 +491,7 @@ implements
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        if(getConfiguration().getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
-            addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
-        }
+        addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
     }
 
     private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {

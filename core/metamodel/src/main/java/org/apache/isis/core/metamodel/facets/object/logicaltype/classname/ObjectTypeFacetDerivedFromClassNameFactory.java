@@ -109,7 +109,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitObjectType();
+        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
         if(!shouldCheck) {
             return;
         }
@@ -131,7 +131,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
                                 + "Use @Discriminator, @DomainObject(logicalTypeName=...) or "
                                 + "@PersistenceCapable(schema=...) to specify explicitly.",
                         objectSpec.getFullIdentifier(),
-                        "isis.core.meta-model.validator.explicit-object-type");
+                        "isis.core.meta-model.validator.explicit-logical-type-names");
             }
 
             });

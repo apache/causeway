@@ -47,13 +47,13 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingValidDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
-                "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
+                "isis.core.meta-model.validator.explicit-logical-type-names=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
     IsisPresets.SilenceMetaModel,
@@ -63,33 +63,33 @@ import lombok.extern.log4j.Log4j2;
 //XXX not a real test, just for performance tuning
 @Log4j2
 class SpecloaderPerformanceTest {
-    
+
     @Inject private IsisConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
-    
+
     private final _Lazy<Set<String>> referenceMetamodelSummary = _Lazy.threadSafe(()->
-        MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications())); 
-    
+        MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications()));
+
     @BeforeEach
     void setup() {
         config.getCore().getMetaModel().getIntrospector().setParallelize(false);
         referenceMetamodelSummary.get(); // memoize
         config.getCore().getMetaModel().getIntrospector().setParallelize(true);
-        
+
         _Probe.errOut("========================== SETUP DONE ===================================");
-        
+
     }
-    
+
     static long ITERATIONS = 100; /* should typically run in ~10s */
     static long EXPECTED_MILLIS_PER_ITERATION = 100;
-    
+
     @Test
     void concurrentSpecloading_shouldYieldSameMetamodelAsSequential() {
         _Annotations.clearCache();
         specificationLoader.disposeMetaModel();
         specificationLoader.createMetaModel();
         val mmSummary = MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications());
-        
+
         val missingFeatures = _Sets.minus(referenceMetamodelSummary.get(), mmSummary);
         if(!missingFeatures.isEmpty()) {
             System.err.println(String.format("%d missing features", missingFeatures.size()));
@@ -99,29 +99,29 @@ class SpecloaderPerformanceTest {
         }
         assertEquals(Collections.<String>emptySet(), missingFeatures);
     }
-    
+
     @Test @Tag("LongRunning")
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {
-        
-        
-        
+
+
+
         val timeOutMillis = ITERATIONS * EXPECTED_MILLIS_PER_ITERATION;
         val goodUntilMillis = System.currentTimeMillis() + timeOutMillis;
-        
+
         val repeatedRun = (Runnable)()->{
-        
+
             for(int i=0; i<ITERATIONS; ++i) {
                 _Annotations.clearCache();
                 specificationLoader.disposeMetaModel();
                 specificationLoader.createMetaModel();
-           
+
                 if(System.currentTimeMillis() > goodUntilMillis) {
                     fail("timed out");
                 }
             }
-            
+
         };
-        
+
         _Timing.runVerbose(log, "Repeated Concurrent Specloading", repeatedRun);
     }
 

@@ -33,6 +33,17 @@ there is no counterpart for _Collection_
 
 |===
 
+== Configuration
+
+Following configuration options changed:
+[source,java]
+----
+isis.core.meta-model.validator.ensure-unique-object-types // removed
+
+isis.core.meta-model.validator.explicit-object-type // renamed to ...
+isis.core.meta-model.validator.explicit-logical-type-names 
+----
+
 == Other Changes
 
 Module `IsisModuleExtCorsImpl` was renamed to `IsisModuleExtCors`. 
