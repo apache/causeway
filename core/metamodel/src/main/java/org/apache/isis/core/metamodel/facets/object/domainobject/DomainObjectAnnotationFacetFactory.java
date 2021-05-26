@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -289,18 +290,28 @@ implements
         if(recreatableObjectFacet != null) {
             // handle with least priority
             FacetUtil.addIfNotAlreadyPresent(recreatableObjectFacet);
-        } else {
-
-            val mixinDomainObjectIfAny =
-                    domainObjectIfAny
-                    .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
-
-            val mixinFacet = MixinFacetForDomainObjectAnnotation
-                    .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
-
-            super.addFacet(mixinFacet);
+            return;
         }
+
+        if(cls.isInterface()
+                || Modifier.isAbstract(cls.getModifiers())) {
+
+            // entirely ignore abstract types
+            // there is no reason for these to be recognized as mixins,
+            // as only concrete mixins will ever contribute to the domain
+            return;
+        }
+
+        val mixinDomainObjectIfAny =
+                domainObjectIfAny
+                .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+                .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
+
+        val mixinFacet = MixinFacetForDomainObjectAnnotation
+                .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
+
+        super.addFacet(mixinFacet);
+
 
     }
 

@@ -50,6 +50,10 @@ extends MetaModelVisitingValidatorAbstract {
             return; // continue
         }
 
+        if(spec.isAbstract()) {
+            return; // continue - we don't care about abstract types
+        }
+
         val potentialOrphans = ((ObjectSpecificationAbstract) spec).getPotentialOrphans();
         if(potentialOrphans.isEmpty()) {
             return; // continue
