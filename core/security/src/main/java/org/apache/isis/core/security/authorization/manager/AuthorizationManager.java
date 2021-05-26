@@ -56,6 +56,7 @@ public class AuthorizationManager {
     @Inject
     public AuthorizationManager(
             final List<Authorizor> authorizors,
+            // TODO: elsewhere we inject an Optional<X>, should use the same technique throughout...
             @org.springframework.lang.Nullable final AuthorizorChooser authorizorChooser) {
         this.authorizors = authorizors;
         val authorizorPrecedenceChooserToUse = authorizorChooser != null
