@@ -69,8 +69,8 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Inject private GridService gridService;
 
     @Override
-    public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String objectType) {
-        return specificationLoader.specForLogicalTypeName(objectType)
+    public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String logicalTypeName) {
+        return specificationLoader.specForLogicalTypeName(logicalTypeName)
                 .map(ObjectSpecification::getLogicalType);
     }
 

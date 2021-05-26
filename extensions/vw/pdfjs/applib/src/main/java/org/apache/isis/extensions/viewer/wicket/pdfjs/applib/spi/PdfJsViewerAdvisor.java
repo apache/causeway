@@ -56,11 +56,11 @@ public interface PdfJsViewerAdvisor {
         private final String identifier;
 
         public InstanceKey(
-                final String objectType,
+                final String logicalTypeName,
                 final String identifier,
                 final String propertyId,
                 final String userName) {
-            this.typeKey = new TypeKey(objectType, propertyId, userName);
+            this.typeKey = new TypeKey(logicalTypeName, propertyId, userName);
             this.identifier = identifier;
         }
 

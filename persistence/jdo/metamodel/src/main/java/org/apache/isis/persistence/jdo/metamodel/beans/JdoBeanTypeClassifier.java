@@ -61,7 +61,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 logicalTypeName = LogicalTypeNameUtil.logicalTypeName(aDomainObject);
             }
 
-            // don't trample over the @DomainObject(objectType=..) if present
+            // don't trample over the @DomainObject(logicalTypeName=..) if present
             if(_Strings.isEmpty(logicalTypeName)) {
                 val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {

@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public interface ObjectTypeFacetFactory extends FacetFactory {
 
-    // -- process objectType
+    // -- process logicalTypeName
 
     public static class ProcessObjectTypeContext
     extends AbstractProcessWithClsContext<FacetHolder> {

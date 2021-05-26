@@ -261,7 +261,7 @@ implements
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        // check from @DomainObject(objectType=...)
+        // check from @DomainObject(logicalTypeName=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         val facet = LogicalTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
 
@@ -496,11 +496,11 @@ implements
                     @Override
                     public void validate(ObjectSpecification objSpec) {
 
-                        // @DomainObject(objectType=...) must be unique among non-abstract types
+                        // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
                         // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
-                        // that have the same @DomainObject(objectType=...) should be allowed.
+                        // that have the same @DomainObject(logicalTypeName=...) should be allowed.
                         // A hard constraint that applies, is that there cannot be multiple bookmark-able
-                        // types that share the same @DomainObject(objectType=...).
+                        // types that share the same @DomainObject(logicalTypeName=...).
                         // This must be guaranteed by MM validation.
                         // - see also LogicalTypeResolver.register(...)
 

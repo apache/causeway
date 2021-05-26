@@ -35,11 +35,11 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
 
         final boolean granted = specificationLoader.specForType(elementType)
             .map(ObjectSpecification::getLogicalTypeName)
-            .map(objectType->{
-                val featureId = ApplicationFeatureId.newMember(objectType, memberId);
+            .map(logicalTypeName->{
+                val featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
                 return permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
             })
-            .orElse(false); // do not grant if elementType has no objectType
+            .orElse(false); // do not grant if elementType has no logicalTypeName
 
         return !granted;
 

@@ -72,8 +72,8 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         if(substitute.isNeverIntrospect()) {
             return;
         }
-        val objectTypeFacet = createObjectTypeFacet(facetHolder, substitute.apply(cls));
-        FacetUtil.addFacet(objectTypeFacet);
+        val logicalTypeFacet = createLogicalTypeFacet(facetHolder, substitute.apply(cls));
+        FacetUtil.addFacet(logicalTypeFacet);
     }
 
     @Override
@@ -81,7 +81,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         // now a no-op.
     }
 
-    private static LogicalTypeFacet createObjectTypeFacet(
+    private static LogicalTypeFacet createLogicalTypeFacet(
             final FacetHolder facetHolder,
             final Class<?> substitutedClass) {
 
@@ -120,15 +120,15 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
                 return;
             }
 
-            val objectTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
-            if(objectTypeFacet instanceof LogicalTypeFacetDerivedFromClassName) {
+            val logicalTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
+            if(logicalTypeFacet instanceof LogicalTypeFacetDerivedFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "
                                 + "Defaulting the object type from the package/class/package name can lead "
                                 + "to data migration issues for apps deployed to production (if the class is "
                                 + "subsequently refactored). "
-                                + "Use @Discriminator, @DomainObject(objectType=...) or "
+                                + "Use @Discriminator, @DomainObject(logicalTypeName=...) or "
                                 + "@PersistenceCapable(schema=...) to specify explicitly.",
                         objectSpec.getFullIdentifier(),
                         "isis.core.meta-model.validator.explicit-object-type");

@@ -222,11 +222,11 @@ implements ObjectSpecification {
     }
 
     private LogicalType lookupLogicalType() {
-        val objectTypeFacet = getFacet(LogicalTypeFacet.class);
-        if(objectTypeFacet == null) {
+        val logicalTypeFacet = getFacet(LogicalTypeFacet.class);
+        if(logicalTypeFacet == null) {
             throw new IllegalStateException("could not find an ObjectTypeFacet for " + this.getFullIdentifier());
         }
-        return objectTypeFacet.getLogicalType();
+        return logicalTypeFacet.getLogicalType();
     }
 
     /**

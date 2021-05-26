@@ -22,17 +22,17 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -44,7 +44,7 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     }
 
     @Test
-    public void objectTypeAnnotationPickedUpOnClass() {
+    public void logicalTypeNameAnnotationPickedUpOnClass() {
 
         @DomainObject(logicalTypeName = "CUS")
         class Customer {
