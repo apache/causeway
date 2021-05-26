@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.secman.applib.authorizor.AuthorizorSecman;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.applib.feature.contributions.ApplicationFeatureViewModel_permissions;
 import org.apache.isis.extensions.secman.applib.permission.app.ApplicationOrphanedPermissionManager;
@@ -82,8 +81,6 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
 @Configuration
 @Import({
         ApplicationFeatureChoices.class,
-
-        AuthorizorSecman.class,
 
         // @DomainService
         ApplicationOrphanedPermissionManager.class,
