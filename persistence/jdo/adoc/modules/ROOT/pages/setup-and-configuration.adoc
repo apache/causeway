@@ -60,7 +60,7 @@ It is also possible to programmatically define a `DataSource`; see the link:http
 == Create Schema
 
 It's good practice to use link:https://crate.io/docs/sql-99/en/latest/chapters/17.html#create-schema-statement[SQL schemas] as a way to organise database tables into groups.
-We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] also follows the same pattern.
+We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] also follows the same pattern.
 
 For example:
 
@@ -71,7 +71,7 @@ For example:
     schema="SIMPLE",                                // <.>
     ...
 )
-@DomainObject(objectType = "simple.SimpleObject")   // <.>
+@DomainObject(logicalTypeName = "simple.SimpleObject")   // <.>
 ...
 public class SimpleObject ... {
 

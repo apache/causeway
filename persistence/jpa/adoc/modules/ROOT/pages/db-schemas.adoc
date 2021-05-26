@@ -7,7 +7,7 @@
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 (For more on database schemas, see for example link:https://crate.io/docs/sql-99/en/latest/chapters/17.html#create-schema-statement[here]).
 
-We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] also follows the same pattern.
+We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] also follows the same pattern.
 
 For example, xref:security:secman:about.adoc[SecMan]' JPA implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
 Its `ApplicationUser` entity is defined as:

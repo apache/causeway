@@ -7,7 +7,7 @@
 .ConfigurationProperty.java
 ----
 class ConfigurationProperty {
-  public static final String OBJECT_TYPE;
+  public static final String LOGICAL_TYPE_NAME;
   ConfigurationProperty(final String key, final String value)
   int compareTo(final ConfigurationProperty other)
 }

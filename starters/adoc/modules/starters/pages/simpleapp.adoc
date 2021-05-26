@@ -93,7 +93,7 @@ This is a view model annotated with xref:refguide:applib:index/annotation/HomePa
 ----
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "domainapp.HomePageViewModel"
+        logicalTypeName = "domainapp.HomePageViewModel"
         )
 @HomePage
 public class HomePageViewModel {

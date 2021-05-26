@@ -28,6 +28,13 @@ Stringified version of the ID of the domain object instance this Oid is represen
 <.> xref:#getObjectType__[getObjectType()]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#getLogicalTypeName()_
+====
+
 Alias for _#getLogicalTypeName()_ .
 --
 <.> xref:#stringify__[stringify()]
@@ -50,6 +57,13 @@ Stringified version of the ID of the domain object instance this Oid is represen
 
 [#getObjectType__]
 === getObjectType()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#getLogicalTypeName()_
+====
 
 Alias for _#getLogicalTypeName()_ .
 

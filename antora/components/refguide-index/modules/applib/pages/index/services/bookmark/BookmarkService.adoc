@@ -10,7 +10,7 @@ This service provides a serializable 'bookmark' for any entity, and conversely t
 ----
 interface BookmarkService {
   Optional<Bookmark> bookmarkFor(Object domainObject)     // <.>
-  Optional<Bookmark> bookmarkFor(Class<?> cls, String identifier)     // <.>
+  Optional<Bookmark> bookmarkFor(Class<?> type, String identifier)     // <.>
   Optional<Object> lookup(BookmarkHolder bookmarkHolder)     // <.>
   Optional<Object> lookup(Bookmark bookmark)     // <.>
   Optional<T> lookup(Bookmark bookmark, Class<T> cls)     // <.>
@@ -58,6 +58,8 @@ Optionally returns the xref:refguide:applib:index/services/bookmark/Bookmark.ado
 === bookmarkFor(Class, String)
 
 Optionally returns a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] created from the constituent parts, based on whether can create a bookmark from these.
+
+With constituent parts a _type_ and an _identifier_ that uniquely identifies an instance of this type.
 
 [#lookup__BookmarkHolder]
 === lookup(BookmarkHolder)

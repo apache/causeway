@@ -12,18 +12,16 @@ All of the actions provided here are restricted to PROTOTYPE mode only; this fea
 ----
 class ImpersonateMenu {
   // deliberately not part of isis.applib
-public static final String OBJECT_TYPE;
+public static final String LOGICAL_TYPE_NAME;
   void impersonate(final String userName)     // <.>
   boolean hideImpersonate()
   String disableImpersonate()
-  void impersonateWithRoles(final String userName, final boolean useUsersRoles, final List<String> roleNames)     // <.>
+  void impersonateWithRoles(final String userName, final List<String> roleNames)     // <.>
   boolean hideImpersonateWithRoles()
   String disableImpersonateWithRoles()
   List<String> choices0ImpersonateWithRoles()
-  boolean default1ImpersonateWithRoles()
-  boolean hide2ImpersonateWithRoles(final String userName, boolean useUsersRoles)
-  List<String> choices2ImpersonateWithRoles(final String userName, boolean useUsersRoles)
-  List<String> default2ImpersonateWithRoles(final String userName, boolean useUsersRoles)
+  List<String> choices1ImpersonateWithRoles(final String userName)
+  List<String> default1ImpersonateWithRoles(final String userName)
   void stopImpersonating()
   boolean hideStopImpersonating()
   String disableStopImpersonating()
@@ -35,7 +33,7 @@ public static final String OBJECT_TYPE;
 --
 Simple implementation that is surfaced if there is no advisor.
 --
-<.> xref:#impersonateWithRoles__String_boolean_List[impersonateWithRoles(String, boolean, List)]
+<.> xref:#impersonateWithRoles__String_List[impersonateWithRoles(String, List)]
 +
 --
 Impersonate a selected user, either using their current roles or with a specific set of roles.
@@ -48,8 +46,8 @@ Impersonate a selected user, either using their current roles or with a specific
 
 Simple implementation that is surfaced if there is no advisor.
 
-[#impersonateWithRoles__String_boolean_List]
-=== impersonateWithRoles(String, boolean, List)
+[#impersonateWithRoles__String_List]
+=== impersonateWithRoles(String, List)
 
 Impersonate a selected user, either using their current roles or with a specific set of roles.
 

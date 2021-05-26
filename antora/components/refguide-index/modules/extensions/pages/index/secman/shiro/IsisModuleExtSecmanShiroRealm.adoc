@@ -8,7 +8,6 @@
 ----
 class IsisModuleExtSecmanShiroRealm {
   IsisModuleExtSecmanShiroRealm()     // <.>
-  EnumSet<SecurityRealmCharacteristic> getCharacteristics()
   V execute(final Supplier<V> closure)
   V doExecute(final Supplier<V> closure)
 }

@@ -10,8 +10,10 @@ class IsisModuleApplib {
   public static final String NAMESPACE;
   // for configuration; to minimize the risk of granting perms accidentally
 public static final String NAMESPACE_CONF;
-  // for configuration; to minimize the risk of granting perms accidentally
+  // for impersonation
 public static final String NAMESPACE_SUDO;
+  // for app features
+public static final String NAMESPACE_FEAT;
 }
 ----
 

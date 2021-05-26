@@ -52,7 +52,7 @@ Add `@XmlAccessorType(XmlAccessType.FIELD)` to your domain entity:
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.NATIVE, column = "id")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
-@DomainObject(objectType = "ServiceName", bounded = true)
+@DomainObject(logicalTypeName = "ServiceName", bounded = true)
 @DomainObjectLayout(cssClassFa = "tag", describedAs = "")
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings("javadoc")

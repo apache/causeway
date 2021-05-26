@@ -124,7 +124,7 @@ The `actionDto` and `propertyDto` are the concrete subtypes:
 <1> the `memberDto` is an abstract type.
 Its primary responsibility is simply to identify the member (action or property).
 <2> the formal identifier (fully qualified class name + member name) of the member being interacted with (action or property).
-<3> the "logical" formal identifier (object type, as per `@DomainObject(objectType=)`, + member name) of the member being interacted with (action or property).
+<3> the "logical" formal identifier (object type, as per `@DomainObject(logicalTypeName=)`, + member name) of the member being interacted with (action or property).
 <4> the `interactionType` attribute indicates whether the member is an action or a property.
 <5> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to invoke the action.
 The `paramsDto` type is defined xref:refguide:schema:cmd/ancillary.adoc[below].

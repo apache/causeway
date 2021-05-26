@@ -7,7 +7,7 @@
 .SwaggerServiceMenu.java
 ----
 class SwaggerServiceMenu {
-  public static final String OBJECT_TYPE;
+  public static final String LOGICAL_TYPE_NAME;
   SwaggerServiceMenu(final SwaggerService swaggerService, final ServiceRegistry serviceRegistry, final RestEasyConfiguration restEasyConfiguration)
   LocalResourcePath openSwaggerUi()
   String disableOpenSwaggerUi()

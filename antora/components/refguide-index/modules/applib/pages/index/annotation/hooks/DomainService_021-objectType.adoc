@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The xref:refguide:applib:index/annotation/DomainService.adoc#objectType[objectType()] element is used to provide a unique alias for the domain service's class name.
+The xref:refguide:applib:index/annotation/DomainService.adoc#logicalTypeName[logicalTypeName()] element is used to provide a unique alias for the domain service's class name.
 
 This value is used internally to generate a string representation of an service identity (the `Oid`).
 This can appear in several contexts, including:
@@ -22,7 +22,7 @@ For example:
 [source,java]
 ----
 @DomainService(
-    objectType="orders.OrderMenu"
+    logicalTypeName="orders.OrderMenu"
 )
 public class OrderMenu {
     ...
@@ -33,7 +33,7 @@ public class OrderMenu {
 
 The rules of precedence are:
 
-1. `@DomainService#objectType`
+1. `@DomainService#logicalTypeName`
 2. xref:refguide:applib-methods:ui-hints.adoc#getId[getId()]
 3. The fully qualified class name.
 

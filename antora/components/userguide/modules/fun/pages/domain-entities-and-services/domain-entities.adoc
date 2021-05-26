@@ -60,7 +60,7 @@ With the xref:pjdo:ROOT:about.adoc[JDO API], entities are flagged as being "pers
         column="version"
 )
 @DomainObject(                                                          // <.>
-        objectType = "simple.SimpleObject"
+        logicalTypeName = "simple.SimpleObject"
 )
 public class SimpleObject { /* ... */ }
 ----
@@ -82,7 +82,7 @@ A common strategy is to allow the database to assign the id, for example using a
 
 <.> The `@DomainObject` annotation identifies the domain object to Apache Isis (not DataNucleus).
 It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
-In particular, its strongly recommended that the `objectType` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
+In particular, its strongly recommended that the `logicalTypeName` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
 
 
 === Key Properties (JDO)

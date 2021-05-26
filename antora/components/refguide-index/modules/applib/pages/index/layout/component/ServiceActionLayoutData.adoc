@@ -10,9 +10,9 @@ Describes the layout of a single action, broadly corresponding to _org.apache.is
 ----
 class ServiceActionLayoutData {
   ServiceActionLayoutData()
-  ServiceActionLayoutData(final String objectType, final String id)
-  String getObjectType()
-  void setObjectType(final String objectType)
+  ServiceActionLayoutData(final String logicalTypeName, final String id)
+  String getLogicalTypeName()
+  void setLogicalTypeName(final String logicalTypeName)
   String getId()     // <.>
   void setId(String id)
   BookmarkPolicy getBookmarking()
@@ -33,7 +33,7 @@ class ServiceActionLayoutData {
   void setMetadataError(final String metadataError)
   Link getLink()     // <.>
   void setLink(final Link link)
-  String getObjectTypeAndId()
+  String getLogicalTypeNameAndId()
   String toString()
 }
 ----

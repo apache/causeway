@@ -1,0 +1,68 @@
+= ApplicationFeatureViewModel
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+View model identified by xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] and backed by an xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature] .
+
+== API
+
+[source,java]
+.ApplicationFeatureViewModel.java
+----
+class ApplicationFeatureViewModel {
+  public static final String LOGICAL_TYPE_NAME;
+  ApplicationFeatureViewModel()
+  ApplicationFeatureViewModel(final ApplicationFeatureId featureId)
+  ApplicationFeatureViewModel newViewModel(final ApplicationFeatureId featureId, final ApplicationFeatureRepository applicationFeatureRepository, final FactoryService factoryService)
+  String title()     // <.>
+  String iconName()
+  String viewModelMemento()
+  void viewModelInit(final String encodedMemento)
+  ApplicationFeature getFeature()
+  String getFullyQualifiedName()
+  ApplicationFeatureSort getSort()
+  String getNamespaceName()
+  String getTypeSimpleName()
+  boolean hideTypeSimpleName()
+  String getMemberName()     // <.>
+  boolean hideMemberName()
+  ApplicationFeatureViewModel getParent()
+  ApplicationFeatureViewModel getParentNamespace()     // <.>
+  boolean equals(final Object obj)
+  int hashCode()
+  String toString()
+  Function<ApplicationFeatureId, T> factory(final ApplicationFeatureRepository featureRepository, final FactoryService factory, final Class<T> viewModelType)
+}
+----
+
+<.> xref:#title__[title()]
++
+--
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+--
+<.> xref:#getMemberName__[getMemberName()]
++
+--
+For packages and class names, will be null.
+--
+<.> xref:#getParentNamespace__[getParentNamespace()]
++
+--
+The parent package feature of this class or package.
+--
+
+== Members
+
+[#title__]
+=== title()
+
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+
+[#getMemberName__]
+=== getMemberName()
+
+For packages and class names, will be null.
+
+[#getParentNamespace__]
+=== getParentNamespace()
+
+The parent package feature of this class or package.

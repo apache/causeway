@@ -9,7 +9,7 @@ This service provides a formal API into the framework's metamodel.
 .MetaModelService.java
 ----
 interface MetaModelService {
-  Optional<LogicalType> lookupLogicalTypeByName(final String objectType)     // <.>
+  Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName)     // <.>
   Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType)     // <.>
   void rebuild(final Class<?> domainType)     // <.>
   DomainModel getDomainModel()     // <.>
@@ -23,12 +23,12 @@ interface MetaModelService {
 <.> xref:#lookupLogicalTypeByName__String[lookupLogicalTypeByName(String)]
 +
 --
-Provides a lookup by objectType of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 --
 <.> xref:#lookupLogicalTypeByClass__Class[lookupLogicalTypeByClass(Class)]
 +
 --
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 --
 <.> xref:#rebuild__Class[rebuild(Class)]
 +
@@ -66,12 +66,12 @@ Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 [#lookupLogicalTypeByName__String]
 === lookupLogicalTypeByName(String)
 
-Provides a lookup by objectType of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 
 [#lookupLogicalTypeByClass__Class]
 === lookupLogicalTypeByClass(Class)
 
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 
 [#rebuild__Class]
 === rebuild(Class)

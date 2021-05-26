@@ -23,7 +23,7 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 * Metamodel
 ** xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml]
 ** xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel]
-** xref:refguide:applib:index/mixins/metamodel/Object_objectType.adoc[Object_objectType] (property)
+** xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName] (property)
 ** xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier] (property)
 
 * Wicket viewer:

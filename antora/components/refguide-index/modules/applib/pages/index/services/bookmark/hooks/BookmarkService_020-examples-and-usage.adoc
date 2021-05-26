@@ -19,7 +19,7 @@ Either of these can be suppressed, if required, using a xref:userguide:btb:hints
 
 == Examples
 
-For example, a `Customer` object with an xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] of "custmgmt.Customer" and an id of 123 would correspond to a xref:BookmarkService.adoc#bookmark[Bookmark] with a string representation of "custmgmt.Customer|123".
+For example, a `Customer` object with an xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] of "custmgmt.Customer" and an id of 123 would correspond to a xref:BookmarkService.adoc#bookmark[Bookmark] with a string representation of "custmgmt.Customer|123".
 
 Bookmarks are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
 

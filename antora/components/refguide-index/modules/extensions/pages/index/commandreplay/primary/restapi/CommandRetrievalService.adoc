@@ -7,7 +7,7 @@
 .CommandRetrievalService.java
 ----
 class CommandRetrievalService {
-  public static final String OBJECT_TYPE;
+  public static final String LOGICAL_TYPE_NAME;
   List<? extends CommandModel> findCommandsOnPrimaryFrom(final UUID interactionId, final Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
 }

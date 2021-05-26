@@ -12,6 +12,7 @@ class Object_impersonate {
   Object act(final String userName)
   boolean hideAct()
   String disableAct()
+  String default0Act()
 }
 ----
 

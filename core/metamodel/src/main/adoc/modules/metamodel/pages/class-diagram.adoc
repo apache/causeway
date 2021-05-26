@@ -96,7 +96,7 @@ Oid -right-> Object\nSpecId
 where in the `metamodel` package:
 
 `ObjectSpecification`:: is equivalent to `java.lang.Class`
-`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#objectType` or `@DomainService#objectType` attribute
+`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#logicalTypeName` or `@DomainService#logicalTypeName` attribute
 `OneToOneAssociation`:: represents a scalar property
 `OneToManyAssociation`:: represents a collection
 `ObjectAction`:: represents an action (with multiple parameters, either scalar or list)

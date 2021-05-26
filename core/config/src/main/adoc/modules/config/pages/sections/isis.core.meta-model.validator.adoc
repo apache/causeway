@@ -40,7 +40,7 @@ isis.core.meta-model.validator. +
 ensure-unique-object-types
 
 |  true
-| Whether to ensure that the object type of all objects (which can be set either explicitly using ``DomainObject#objectType()`` or ``DomainService#objectType()``, or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
+| Whether to ensure that the object type of all objects (which can be set either explicitly using ``DomainObject#logicalTypeName()`` or ``DomainService#logicalTypeName()``, or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
 
 It is _highly advisable_ to leave this set as enabled (the default), and to also use explicit types (see ``#isExplicitObjectType()``.
 
@@ -51,7 +51,7 @@ isis.core.meta-model.validator. +
 explicit-object-type
 
 | 
-| Whether to ensure that the object type of all objects must be specified explicitly, using either ``DomainObject#objectType()`` or ``DomainService#objectType()``.
+| Whether to ensure that the object type of all objects must be specified explicitly, using either ``DomainObject#logicalTypeName()`` or ``DomainService#logicalTypeName()``.
 
 It is _highly advisable_ to leave this set as enabled (the default). These object types should also (of course) be unique - that can be checked by setting the ``#isEnsureUniqueObjectTypes()`` config property.
 

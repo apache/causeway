@@ -17,7 +17,7 @@ My view model parameter would look like
 ----
 @DomainObject(
     nature = Nature.VIEW_MODEL,
-    objectType = "OfferTemplateFilter"
+    logicalTypeName = "OfferTemplateFilter"
 )
 @XmlRootElement(name = "OfferTemplateFilter")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -35,7 +35,7 @@ My REST domain service would be someting like
 
 @DomainService(
     nature = NatureOfService.VIEW_REST_ONLY,
-    objectType = "OfferRestService"
+    logicalTypeName = "OfferRestService"
 )
 public class OfferRestService {
 

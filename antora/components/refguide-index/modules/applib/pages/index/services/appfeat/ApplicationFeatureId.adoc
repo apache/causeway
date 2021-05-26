@@ -3,7 +3,11 @@
 
 Value type representing a namespace, type or member.
 
-This value is _Comparable_ , the implementation of which considers _#getSort() (feature) sort_ , _#getNamespace() namespace_ , _#getTypeSimpleName() type simple name_ and _#getMemberName() member name_ .
+This value is _Comparable_ , the implementation of which considers _#getSort() (feature) sort_ , _#getNamespace() namespace_ , _#getTypeSimpleName() type simple name_ and _#getLogicalMemberName() member-logical-name_ .
+
+If the represented member is an _action_ , then _#getLogicalMemberName() member-logical-name_ must *not* include any parameter list or parentheses. Consequently method overloading is not supported.
+
+If there is a member name clash involving an _action_ and an _association_ , then consequently any permissions defined automatically apply to both and one cannot separate these.
 
 == API
 
@@ -17,7 +21,7 @@ class ApplicationFeatureId {
   ApplicationFeatureId newFeature(final String namespace, final String logicalTypeSimpleName, final String memberName)
   ApplicationFeatureId newNamespace(final String namespace)
   ApplicationFeatureId newType(final String logicalTypeName)
-  ApplicationFeatureId newMember(final String logicalTypeName, final String memberName)
+  ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName)
   ApplicationFeatureId newMember(String fullyQualifiedName)
   String title()     // <.>
   ApplicationFeatureId getParentTypeFeatureId()     // <.>

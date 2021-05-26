@@ -36,11 +36,11 @@ for example `myapp.customer.CustomerAddress#zipCode`
 * next up is an object feature representing an entire type
 +
 for example `myapp.customer.CustomerAddress`.
-This is usually specified using xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[@DomainObject#objectType()]
+This is usually specified using xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[@DomainObject#logicalTypeName()]
 
 * most general is an object feature representing a namespace
 +
-These consist of the portion of the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] up to but excluding the local type name, for example `myapp.customer`.
+These consist of the portion of the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] up to but excluding the local type name, for example `myapp.customer`.
 
 Permissions are inferred: a permission granted at the type level implies a permission to all the object members of the type, and a permission granted to a namespace implies a permission to all the object members of all the object types within that namespace.
 

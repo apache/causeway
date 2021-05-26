@@ -7,7 +7,7 @@
 .CommandReplayOnSecondaryService.java
 ----
 class CommandReplayOnSecondaryService {
-  public static final String OBJECT_TYPE;
+  public static final String LOGICAL_TYPE_NAME;
   CommandModel findMostRecentReplayed()
   void uploadCommands(final Clob commandsDtoAsXml)
 }
