@@ -29,6 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.links.Link;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Describes the layout of a single action, broadly corresponding to
  * {@link org.apache.isis.applib.annotation.ActionLayout}.
@@ -65,18 +68,18 @@ public class ServiceActionLayoutData implements Serializable {
         this.id = id;
     }
 
-
+    @XmlTransient // meant to replace 'objectType'
+    @Getter @Setter
     private String logicalTypeName;
 
+    // objectType is deprecated with applib, but the schema was not yet updated
     @XmlAttribute(required = true)
-    public String getLogicalTypeName() {
-        return logicalTypeName;
+    public String getObjectType() {
+        return getLogicalTypeName();
     }
-
-    public void setLogicalTypeName(final String logicalTypeName) {
-        this.logicalTypeName = logicalTypeName;
+    public void setObjectType(final String objectType) {
+        setLogicalTypeName(objectType);
     }
-
 
 
     private String id;
