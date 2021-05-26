@@ -20,9 +20,9 @@ package org.apache.isis.extensions.secman.integration.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
  * Provides access to open up the Swagger UI.

@@ -41,18 +41,9 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-
-import lombok.val;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -72,22 +63,22 @@ import lombok.val;
 })
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username == :username"),
     @Query(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE emailAddress == :emailAddress"),
     @Query(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE atPath == :atPath"),
     @Query(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username.matches(:regex)"
@@ -105,7 +96,7 @@ import lombok.val;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 public class ApplicationUser
-    extends org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+    extends org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
 
@@ -239,15 +230,15 @@ public class ApplicationUser
     // -- ACCOUNT TYPE
 
     @Column(allowsNull = "false")
-    private org.apache.isis.extensions.secman.api.user.dom.AccountType accountType;
+    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
 
     @AccountType
     @Override
-    public org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType() {
+    public org.apache.isis.extensions.secman.applib.user.dom.AccountType getAccountType() {
         return accountType;
     }
     @Override
-    public void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType) {
+    public void setAccountType(org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
         this.accountType = accountType;
     }
 

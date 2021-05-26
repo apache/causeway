@@ -23,11 +23,11 @@ import java.util.HashSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;

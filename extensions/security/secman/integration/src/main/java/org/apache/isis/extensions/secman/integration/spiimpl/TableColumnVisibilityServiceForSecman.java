@@ -12,8 +12,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.user.menu.MeService;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.user.menu.MeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

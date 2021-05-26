@@ -24,7 +24,6 @@ import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -52,17 +51,17 @@ import org.apache.isis.commons.internal.base._Casts;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.path = :path"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name LIKE :regex "
@@ -77,7 +76,7 @@ import org.apache.isis.commons.internal.base._Casts;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationTenancy
-    extends org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy {
+    extends org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
 
     @Version
@@ -125,11 +124,11 @@ public class ApplicationTenancy
 
     @Parent
     @Override
-    public org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy getParent() {
+    public org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy getParent() {
         return parent;
     }
     @Override
-    public void setParent(org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy parent) {
+    public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
@@ -141,14 +140,14 @@ public class ApplicationTenancy
 
     @Children
     @Override
-    public Set<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> getChildren() {
+    public Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
         return _Casts.uncheckedCast(children);
     }
-    public void setChildren(SortedSet<org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy> children) {
+    public void setChildren(SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }
     // necessary for integration tests
-    public void removeFromChildren(final org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy applicationTenancy) {
+    public void removeFromChildren(final org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
     }
 

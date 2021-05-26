@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.jpa.user.dom;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,32 +35,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
-
-import lombok.val;
 
 @Entity
 @Table(
@@ -74,22 +57,22 @@ import lombok.val;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username = :username"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.atPath = :atPath"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.user.dom.ApplicationUser.NAMED_QUERY_FIND,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username LIKE :regex"
@@ -108,7 +91,7 @@ import lombok.val;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationUser
-    extends org.apache.isis.extensions.secman.api.user.dom.ApplicationUser {
+    extends org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser {
 
 
     @Id
@@ -249,15 +232,15 @@ public class ApplicationUser
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private org.apache.isis.extensions.secman.api.user.dom.AccountType accountType;
+    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
 
     @AccountType
     @Override
-    public org.apache.isis.extensions.secman.api.user.dom.AccountType getAccountType() {
+    public org.apache.isis.extensions.secman.applib.user.dom.AccountType getAccountType() {
         return accountType;
     }
     @Override
-    public void setAccountType(org.apache.isis.extensions.secman.api.user.dom.AccountType accountType) {
+    public void setAccountType(org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
         this.accountType = accountType;
     }
 

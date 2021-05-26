@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.integration.seed.scripts;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.integration.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisConfigurationRoleAndPermissions;
 import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisExtH2ConsoleRoleAndPermissions;

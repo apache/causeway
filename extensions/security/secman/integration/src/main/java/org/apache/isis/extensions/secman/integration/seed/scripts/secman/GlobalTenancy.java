@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.integration.seed.scripts.secman;
 
-import org.apache.isis.extensions.secman.api.tenancy.fixtures.AbstractTenancyFixtureScript;
+import org.apache.isis.extensions.secman.applib.tenancy.fixtures.AbstractTenancyFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**

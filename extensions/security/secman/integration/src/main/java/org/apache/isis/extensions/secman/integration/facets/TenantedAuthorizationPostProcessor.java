@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.extensions.secman.api.tenancy.spi.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.val;
 

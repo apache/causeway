@@ -28,11 +28,11 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.api.user.dom.AccountType;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.AccessLevel;
 import lombok.Getter;

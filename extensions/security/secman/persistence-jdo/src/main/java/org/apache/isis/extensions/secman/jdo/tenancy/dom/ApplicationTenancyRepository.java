@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancyRepositoryAbstract;
+import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 
 @Repository
 @Named("isis.ext.secman.ApplicationTenancyRepository")

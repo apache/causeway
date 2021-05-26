@@ -19,9 +19,9 @@
 package org.apache.isis.extensions.secman.integration.seed.scripts.secman;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.user.dom.AccountType;
-import org.apache.isis.extensions.secman.api.user.fixtures.AbstractUserAndRolesFixtureScript;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
+import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
 
 /**
  * Sets up a user, as defined in

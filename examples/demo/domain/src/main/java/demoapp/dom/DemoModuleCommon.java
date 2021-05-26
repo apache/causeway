@@ -27,9 +27,9 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;
+import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration

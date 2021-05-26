@@ -39,9 +39,9 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 @Entity
@@ -55,12 +55,12 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
             query = "SELECT p "
                   + "  FROM ApplicationPermission p "
                   + " WHERE p.role = :role"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
             //TODO this query returns empty result
             query = "SELECT p "
                   + "FROM ApplicationPermission p "
@@ -68,13 +68,13 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
                   + "WHERE u.username = :username"
                   + "  AND p.role MEMBER OF u.roles"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             query = "SELECT p "
                   + "  FROM ApplicationPermission p "
                   + " WHERE p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
             query = "SELECT p "
                   + "  FROM ApplicationPermission p "
                   + " WHERE p.role = :role "
@@ -82,7 +82,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
                   + "   AND p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
             query = "SELECT p "
                   + "  FROM ApplicationPermission p "
                   + " WHERE p.role = :role "
@@ -97,7 +97,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
         bookmarking = BookmarkPolicy.AS_CHILD
 )
 public class ApplicationPermission
-    extends org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermission {
+    extends org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission {
 
 
     @Id

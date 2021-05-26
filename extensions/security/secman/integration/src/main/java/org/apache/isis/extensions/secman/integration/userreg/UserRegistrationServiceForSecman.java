@@ -33,10 +33,10 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.secman.api.role.dom.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

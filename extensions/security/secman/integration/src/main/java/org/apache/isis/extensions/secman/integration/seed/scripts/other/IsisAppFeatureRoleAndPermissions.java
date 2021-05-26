@@ -28,9 +28,9 @@ import org.apache.isis.applib.services.appfeatui.ApplicationTypeCollection;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
  * @since 2.0 {@index}
