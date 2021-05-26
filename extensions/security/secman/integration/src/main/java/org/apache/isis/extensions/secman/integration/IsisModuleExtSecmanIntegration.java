@@ -45,6 +45,6 @@ import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationSer
         SeedSecurityModuleService.class,
 
 })
-public class IsisModuleExtSecmanModel {
+public class IsisModuleExtSecmanIntegration {
 
 }

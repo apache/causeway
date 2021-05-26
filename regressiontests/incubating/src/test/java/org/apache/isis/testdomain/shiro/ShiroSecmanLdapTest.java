@@ -45,7 +45,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanE
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
