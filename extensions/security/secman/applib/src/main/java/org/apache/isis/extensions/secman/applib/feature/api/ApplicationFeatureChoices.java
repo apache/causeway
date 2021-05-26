@@ -70,13 +70,13 @@ public class ApplicationFeatureChoices {
 
         if(search.startsWith("n:")) {
             searchRefine = ApplicationFeatureChoices::isNamespace;
-            searchTerm = search.substring(6).trim();
+            searchTerm = search.substring(2).trim();
         } else if(search.startsWith("t:")) {
             searchRefine = ApplicationFeatureChoices::isType;
-            searchTerm = search.substring(6).trim();
+            searchTerm = search.substring(2).trim();
         } else if(search.startsWith("m:")) {
             searchRefine = ApplicationFeatureChoices::isMember;
-            searchTerm = search.substring(6).trim();
+            searchTerm = search.substring(2).trim();
         } else {
             searchRefine = _Predicates.alwaysTrue();
             searchTerm = search.trim();
