@@ -16,26 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.seed.scripts.secman;
+package org.apache.isis.extensions.secman.applib.seed.scripts.secman;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
-import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
+import org.apache.isis.extensions.secman.applib.tenancy.fixtures.AbstractTenancyFixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
- * Sets up a user, as defined in
  * @since 2.0 {@index}
  */
-public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
+public class GlobalTenancy extends AbstractTenancyFixtureScript {
 
-    public IsisExtSecmanAdminUser(SecmanConfiguration configBean) {
-        super(
-                configBean.getAdminUserName(),
-                configBean.getAdminPassword(),
-                null,
-                GlobalTenancy.TENANCY_PATH,
-                AccountType.LOCAL,
-                Can.of(configBean.getAdminRoleName()));
+    public static final String TENANCY_NAME = "Global";
+    public static final String TENANCY_PATH = "/";
+
+    @Override
+    protected void execute(FixtureScript.ExecutionContext executionContext) {
+        create(TENANCY_NAME, TENANCY_PATH, null, executionContext);
     }
+
 }

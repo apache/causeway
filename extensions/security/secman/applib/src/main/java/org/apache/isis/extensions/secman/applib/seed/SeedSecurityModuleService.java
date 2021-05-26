@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.seed;
+package org.apache.isis.extensions.secman.applib.seed;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.extensions.secman.integration.seed.scripts.SeedUsersAndRolesFixtureScript;
+import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.extern.log4j.Log4j2;

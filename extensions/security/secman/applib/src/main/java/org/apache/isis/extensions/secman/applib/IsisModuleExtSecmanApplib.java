@@ -41,6 +41,7 @@ import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateDescription;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateName;
 import org.apache.isis.extensions.secman.applib.role.menu.ApplicationRoleMenu;
+import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addChild;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addUser;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_delete;
@@ -159,6 +160,9 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
         ApplicationUserManager_allUsers.class,
         ApplicationUserManager_newDelegateUser.class,
         ApplicationUserManager_newLocalUser.class,
+
+        // other @Services
+        SeedSecurityModuleService.class,
 
 })
 public class IsisModuleExtSecmanApplib {

@@ -16,28 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.seed.scripts.other;
+package org.apache.isis.extensions.secman.applib.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.confview.ConfigurationMenu;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
+import org.apache.isis.applib.services.confview.ConfigurationViewmodel;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 /**
- * Access to the h2 console UI.
- *
  * @since 2.0 {@index}
  */
-public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisConfigurationRoleAndPermissions
+extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.ext.h2Console";
+    public static final String ROLE_NAME = ConfigurationMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
-    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
-
-    public IsisExtH2ConsoleRoleAndPermissions() {
-        super(ROLE_NAME, String.format("Access to the H2 console UI", IsisModuleTestingFixturesApplib.NAMESPACE));
+    public IsisConfigurationRoleAndPermissions() {
+        super(ROLE_NAME, "Access configuration properties");
     }
 
     @Override
@@ -45,8 +44,11 @@ public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissio
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofSingleton(
-                        ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE)));
-
+                Can.of(
+                        ApplicationFeatureId.newType(ConfigurationMenu.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationProperty.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
+                        )
+        );
     }
 }

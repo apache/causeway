@@ -16,36 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.seed.scripts.secman;
-
-import java.util.List;
-import java.util.stream.Collectors;
+package org.apache.isis.extensions.secman.applib.seed.scripts.other;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Sets up the {@link SecmanConfiguration#getAdminRoleName() secman admin role}
- * with its initial set of permissions (the union of
- * {@link SecmanConfiguration#getAdminStickyNamespacePermissions()}
- * and {@link SecmanConfiguration#getAdminAdditionalNamespacePermissions()}).
- *
- * @see SecmanConfiguration
+ * Provides access to open up the Swagger UI.
  *
  * @since 2.0 {@index}
  */
-public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisViewerRestfulObjectsSwaggerRoleAndPermissions
+extends AbstractRoleAndPermissionsFixtureScript {
 
-    private final List<String> adminInitialPackagePermissions;
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.viewer.restfulobjects.SwaggerServiceMenu";
 
-    public IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getAdminRoleName(), "Administer security");
-        this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
-                .collect(Collectors.toList());
+    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
+
+    public IsisViewerRestfulObjectsSwaggerRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the swagger UI");
     }
 
     @Override
@@ -53,8 +45,9 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofCollection(adminInitialPackagePermissions)
-                        .map(ApplicationFeatureId::newNamespace));
+                Can.of(
+                        ApplicationFeatureId.newType(SERVICE_LOGICAL_TYPE_NAME)
+                        )
+        );
     }
-
 }

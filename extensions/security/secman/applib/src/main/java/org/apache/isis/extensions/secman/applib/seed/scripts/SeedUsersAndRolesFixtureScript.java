@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.seed.scripts;
+package org.apache.isis.extensions.secman.applib.seed.scripts;
 
 import javax.inject.Inject;
 
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.integration.seed.SeedSecurityModuleService;
-import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisConfigurationRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisExtH2ConsoleRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisPersistenceJdoMetaModelRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.other.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.secman.GlobalTenancy;
-import org.apache.isis.extensions.secman.integration.seed.scripts.secman.IsisExtSecmanAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.integration.seed.scripts.secman.IsisExtSecmanAdminUser;
-import org.apache.isis.extensions.secman.integration.seed.scripts.secman.IsisExtSecmanRegularUserRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.applib.seed.scripts.other.IsisConfigurationRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.other.IsisExtH2ConsoleRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.other.IsisPersistenceJdoMetaModelRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.other.IsisSudoImpersonateRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.other.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.secman.GlobalTenancy;
+import org.apache.isis.extensions.secman.applib.seed.scripts.secman.IsisExtSecmanAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.scripts.secman.IsisExtSecmanAdminUser;
+import org.apache.isis.extensions.secman.applib.seed.scripts.secman.IsisExtSecmanRegularUserRoleAndPermissions;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**

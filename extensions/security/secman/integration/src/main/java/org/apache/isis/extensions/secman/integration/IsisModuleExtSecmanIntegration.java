@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.integration.authorizor.AuthorizorSecman;
 import org.apache.isis.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
-import org.apache.isis.extensions.secman.integration.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman;
 import org.apache.isis.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman;
 import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationServiceForSecman;
@@ -43,8 +43,6 @@ import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationSer
         TableColumnVisibilityServiceForSecman.class,
         ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
         UserRegistrationServiceForSecman.class,
-
-        SeedSecurityModuleService.class,
 
 })
 public class IsisModuleExtSecmanIntegration {
