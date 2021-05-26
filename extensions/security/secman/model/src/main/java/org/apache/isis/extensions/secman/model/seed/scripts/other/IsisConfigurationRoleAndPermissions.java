@@ -34,7 +34,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 public class IsisConfigurationRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = ConfigurationMenu.OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = ConfigurationMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisConfigurationRoleAndPermissions() {
         super(ROLE_NAME, "Access configuration properties");
@@ -46,9 +46,9 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(ConfigurationMenu.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ConfigurationProperty.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ConfigurationViewmodel.OBJECT_TYPE)
+                        ApplicationFeatureId.newType(ConfigurationMenu.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationProperty.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
                         )
         );
     }

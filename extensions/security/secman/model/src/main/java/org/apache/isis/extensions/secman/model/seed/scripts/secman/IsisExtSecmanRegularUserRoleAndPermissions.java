@@ -82,36 +82,36 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
                 ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE),
 
                 // also the ability to logout (!)
-                ApplicationFeatureId.newType(LogoutMenu.OBJECT_TYPE),
+                ApplicationFeatureId.newType(LogoutMenu.LOGICAL_TYPE_NAME),
 
                 // remaining permissions give access to the user to maintain their details
-                ApplicationFeatureId.newType(MeService.OBJECT_TYPE),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateName"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updatePassword"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateEmailAddress"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updatePhoneNumber"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "updateFaxNumber")
+                ApplicationFeatureId.newType(MeService.LOGICAL_TYPE_NAME),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateName"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updatePassword"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateEmailAddress"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updatePhoneNumber"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateFaxNumber")
 
         );
 
         val allowViewing = Can.of(
                 // we also allow the user to see the roles they are in
                 // (but nothing more than that)
-                ApplicationFeatureId.newType(ApplicationUser.OBJECT_TYPE),
-                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "name"),
-                ApplicationFeatureId.newMember(ApplicationRole.OBJECT_TYPE, "description")
+                ApplicationFeatureId.newType(ApplicationUser.LOGICAL_TYPE_NAME),
+                ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "name"),
+                ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "description")
                 );
 
         val vetoViewing = Can.of(
                 // we explicitly ensure that the user cannot grant themselves
                 // additional privileges or see stuff that they shouldn't
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "permissions"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "filterPermissions"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "resetPassword"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "lock"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "unlock"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "addRole"),
-                ApplicationFeatureId.newMember(ApplicationUser.OBJECT_TYPE, "removeRoles")
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "permissions"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "filterPermissions"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "resetPassword"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "lock"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "unlock"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "addRole"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "removeRoles")
         );
 
         newPermissions(

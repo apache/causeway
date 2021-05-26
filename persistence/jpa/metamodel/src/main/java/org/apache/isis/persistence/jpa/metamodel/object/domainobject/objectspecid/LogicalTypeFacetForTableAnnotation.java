@@ -42,8 +42,8 @@ extends LogicalTypeFacetAbstract {
         if(_Strings.isNullOrEmpty(schema)) {
             return null;
         }
-        final String objectType = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
-        return new LogicalTypeFacetForTableAnnotation(LogicalType.eager(correspondingClass, objectType), holder);
+        final String logicalTypeName = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
+        return new LogicalTypeFacetForTableAnnotation(LogicalType.eager(correspondingClass, logicalTypeName), holder);
     }
 
     private LogicalTypeFacetForTableAnnotation(

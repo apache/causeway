@@ -202,10 +202,10 @@ implements IRequestListener {
         val model = getModel();
         val propertyId = model.getIdentifier();
         val bookmark = model.getParentUiModel().asBookmarkIfSupported();
-        val objectType = bookmark.getObjectType();
+        val logicalTypeName = bookmark.getLogicalTypeName();
         val identifier = bookmark.getIdentifier();
 
-        return new PdfJsViewerAdvisor.InstanceKey(objectType, identifier, propertyId, userName);
+        return new PdfJsViewerAdvisor.InstanceKey(logicalTypeName, identifier, propertyId, userName);
     }
 
 

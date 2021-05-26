@@ -337,7 +337,7 @@ class Generation {
 
         final String serviceModelDefinition = serviceId + "Repr";
 
-        final String tag = tagForObjectType(serviceId, "> services");
+        final String tag = tagForlogicalTypeName(serviceId, "> services");
         path.get(
                 newOperation("object")
                 .tag(tag)
@@ -359,12 +359,12 @@ class Generation {
 
     ModelImpl appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
 
-        final String objectType = objectTypeFor(objectSpec);
+        final String logicalTypeName = logicalTypeNameFor(objectSpec);
 
         final Path path = new Path();
-        swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
+        swagger.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
 
-        final String tag = tagForObjectType(objectType, null);
+        final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation operation = newOperation("object");
         path.get(operation);
         operation
@@ -378,7 +378,7 @@ class Generation {
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
         // modelled representations per path and response code;
         // in particular cannot associate representation/model with Accept header ('produces(...) method)
-        final String restfulObjectsModelDefinition = objectType + "RestfulObjectsRepr";
+        final String restfulObjectsModelDefinition = logicalTypeName + "RestfulObjectsRepr";
         if (false) {
             operation.response(200,
                     newResponse(Caching.TRANSACTIONAL)
@@ -386,19 +386,19 @@ class Generation {
                     .schema(newRefProperty(restfulObjectsModelDefinition)));
 
             final ModelImpl roSpecModel =
-                    newModel(Util.roSpec("14.4") + ": representation of " + objectType)
+                    newModel(Util.roSpec("14.4") + ": representation of " + logicalTypeName)
                     .property("title", stringProperty())
-                    .property("domainType", stringProperty()._default(objectType))
+                    .property("domainType", stringProperty()._default(logicalTypeName))
                     .property("instanceId", stringProperty())
                     .property("members", new ObjectProperty());
             swagger.addDefinition(restfulObjectsModelDefinition, roSpecModel);
         }
 
-        final String isisModelDefinition = objectType + "Repr";
+        final String isisModelDefinition = logicalTypeName + "Repr";
         operation
         .response(200,
                 newResponse(Caching.TRANSACTIONAL)
-                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
+                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(newRefProperty(isisModelDefinition)));
 
         final ModelImpl isisModel = new ModelImpl();
@@ -439,7 +439,7 @@ class Generation {
         final Path path = new Path();
         swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
-        final String tag = tagForObjectType(serviceId, "> services");
+        final String tag = tagForlogicalTypeName(serviceId, "> services");
         final Operation invokeOperation =
                 newOperation("object", "action-result")
                 .tag(tag)
@@ -512,17 +512,17 @@ class Generation {
             final ObjectSpecification objectSpec,
             final OneToManyAssociation collection) {
 
-        final String objectType = objectTypeFor(objectSpec);
+        final String logicalTypeName = logicalTypeNameFor(objectSpec);
         final String collectionId = collection.getId();
 
         final Path path = new Path();
-        swagger.path(String.format("/objects/%s/{objectId}/collections/%s", objectType, collectionId), path);
+        swagger.path(String.format("/objects/%s/{objectId}/collections/%s", logicalTypeName, collectionId), path);
 
-        final String tag = tagForObjectType(objectType, null);
+        final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation collectionOperation =
                 newOperation("object-collection")
                 .tag(tag)
-                .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
+                .description(Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
@@ -532,7 +532,7 @@ class Generation {
         collectionOperation
         .response(
                 200, new Response()
-                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
+                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
                 .schema(modelFor(collection))
                 );
     }
@@ -541,18 +541,18 @@ class Generation {
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction) {
 
-        final String objectType = objectTypeFor(objectSpec);
+        final String logicalTypeName = logicalTypeNameFor(objectSpec);
         final String actionId = objectAction.getId();
 
         val parameters = objectAction.getParameters();
         final Path path = new Path();
-        swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", objectType, actionId), path);
+        swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
 
-        final String tag = tagForObjectType(objectType, null);
+        final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation invokeOperation =
                 newOperation("action-result")
                 .tag(tag)
-                .description(Util.roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
+                .description(Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
@@ -613,7 +613,7 @@ class Generation {
         invokeOperation
         .response(
                 200, new Response()
-                .description(objectType + "#" + actionId)
+                .description(logicalTypeName + "#" + actionId)
                 .schema(actionReturnTypeFor(objectAction))
                 );
     }
@@ -647,7 +647,7 @@ class Generation {
         final ArrayProperty arrayProperty = new ArrayProperty();
         if(objectSpecification != null && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
-            .description("List of " + objectTypeFor(objectSpecification))
+            .description("List of " + logicalTypeNameFor(objectSpecification))
             .items(modelFor(objectSpecification));
         } else {
             arrayProperty.items(new ObjectProperty());
@@ -688,7 +688,7 @@ class Generation {
         if(specification.getCorrespondingClass() == java.lang.Enum.class) {
             return new StringProperty();
         }
-        return newRefProperty(objectTypeFor(specification) + "Repr");
+        return newRefProperty(logicalTypeNameFor(specification) + "Repr");
     }
 
     void updateObjectModel(
@@ -697,12 +697,12 @@ class Generation {
             final List<OneToOneAssociation> objectProperties,
             final List<OneToManyAssociation> objectCollections) {
 
-        final String objectType = objectTypeFor(objectSpecification);
+        final String logicalTypeName = logicalTypeNameFor(objectSpecification);
         final String className = objectSpecification.getFullIdentifier();
 
         model
         .type("object")
-        .description(String.format("%s (%s)", objectType, className));
+        .description(String.format("%s (%s)", logicalTypeName, className));
 
         for (OneToOneAssociation objectProperty : objectProperties) {
             model.property(
@@ -760,7 +760,7 @@ class Generation {
         return ServiceUtil.idOfSpec(serviceSpec);
     }
 
-    static String objectTypeFor(final ObjectSpecification objectSpec) {
+    static String logicalTypeNameFor(final ObjectSpecification objectSpec) {
         return objectSpec.getFacet(LogicalTypeFacet.class).value();
     }
 
@@ -798,8 +798,8 @@ class Generation {
         return Util.withCachingHeaders(new Response(), caching);
     }
 
-    String tagForObjectType(final String objectType, final String fallback) {
-        return tagger.tagForObjectType(objectType, fallback);
+    String tagForlogicalTypeName(final String logicalTypeName, final String fallback) {
+        return tagger.tagForLogicalTypeName(logicalTypeName, fallback);
     }
 
     private Property newRefProperty(final String model) {

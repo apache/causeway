@@ -23,6 +23,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface Tagger {
 
     @Programmatic
-    String tagForObjectType(String objType, String fallback);
+    String tagForLogicalTypeName(String logicalTypeName, String fallback);
 
 }

@@ -42,7 +42,7 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = FixtureResult.OBJECT_TYPE
+        logicalTypeName = FixtureResult.LOGICAL_TYPE_NAME
         )
 @DomainObjectLayout(paged=500)
 @XmlRootElement(name = "fixtureResult")
@@ -57,7 +57,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
 
-    public static final String OBJECT_TYPE = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureResult"; // secman seeding
+    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureResult"; // secman seeding
 
     @PropertyLayout(named="Fixture script")
     @Property(optionality = Optionality.OPTIONAL)

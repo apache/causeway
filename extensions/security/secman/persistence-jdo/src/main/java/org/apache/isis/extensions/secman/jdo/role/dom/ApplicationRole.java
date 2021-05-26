@@ -68,7 +68,7 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
 })
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        objectType = ApplicationRole.OBJECT_TYPE,
+        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteAction = "findMatching"
         )

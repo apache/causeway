@@ -50,11 +50,11 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUser;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ApplicationRole.OBJECT_TYPE
+        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME
 )
 public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRole";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRole";
 
     public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
     public static final String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";

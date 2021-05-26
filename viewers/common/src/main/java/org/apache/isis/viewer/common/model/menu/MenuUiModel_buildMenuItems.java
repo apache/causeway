@@ -56,7 +56,7 @@ final class MenuUiModel_buildMenuItems {
                 itemsPerSectionCounter.reset();
 
                 for (val actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceBeanName = actionLayoutData.getObjectType();
+                    val serviceBeanName = actionLayoutData.getLogicalTypeName();
 
                     val serviceAdapter = commonContext.lookupServiceAdapterById(serviceBeanName);
                     if(serviceAdapter == null) {

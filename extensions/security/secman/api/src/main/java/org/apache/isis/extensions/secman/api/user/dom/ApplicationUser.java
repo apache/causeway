@@ -64,12 +64,12 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ApplicationUser.OBJECT_TYPE
+        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME
 )
 public abstract class ApplicationUser
         implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUser";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUser";
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;

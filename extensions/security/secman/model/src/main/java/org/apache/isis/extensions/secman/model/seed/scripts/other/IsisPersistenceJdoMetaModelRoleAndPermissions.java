@@ -32,9 +32,9 @@ import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermis
 public class IsisPersistenceJdoMetaModelRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_OBJECT_TYPE = "isis.persistence.jdo.JdoMetamodelMenu";
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.persistence.jdo.JdoMetamodelMenu";
 
-    public static final String ROLE_NAME = SERVICE_OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisPersistenceJdoMetaModelRoleAndPermissions() {
         super(ROLE_NAME, "Access to download the JDO metamodel");
@@ -46,7 +46,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(SERVICE_OBJECT_TYPE)
+                        ApplicationFeatureId.newType(SERVICE_LOGICAL_TYPE_NAME)
                         )
         );
     }

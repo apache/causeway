@@ -228,7 +228,7 @@ import lombok.val;
 */
 @Entity
 @DomainObject(
-        objectType = CommandJpa.OBJECT_TYPE,
+        logicalTypeName = CommandJpa.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
@@ -245,7 +245,7 @@ implements
     CommandModel,
     DomainChangeRecord {
 
-    public final static String OBJECT_TYPE = IsisModuleExtCommandLogJpa.NAMESPACE + ".Command";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJpa.NAMESPACE + ".Command";
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jpa.entities.CommandJpa";
 
     /**

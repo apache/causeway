@@ -46,11 +46,11 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ExcelFixture2.OBJECT_TYPE
+        logicalTypeName = ExcelFixture2.LOGICAL_TYPE_NAME
 )
 public class ExcelFixture2 extends FixtureScript {
 
-    public final static String OBJECT_TYPE = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture2";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture2";
 
     /**
      * Input, optional: defines the name of the resource.

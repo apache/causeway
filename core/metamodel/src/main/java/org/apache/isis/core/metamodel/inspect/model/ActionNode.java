@@ -38,14 +38,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = ActionNode.OBJECT_TYPE
+        logicalTypeName = ActionNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class ActionNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".ActionNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ActionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;

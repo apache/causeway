@@ -80,11 +80,11 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ApplicationPermission.OBJECT_TYPE
+        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
 )
 public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermission";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermission";
 
     public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
     public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";

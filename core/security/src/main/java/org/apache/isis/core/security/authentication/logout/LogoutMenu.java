@@ -42,13 +42,13 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named(LogoutMenu.OBJECT_TYPE)
-@DomainService(objectType = LogoutMenu.OBJECT_TYPE)
+@Named(LogoutMenu.LOGICAL_TYPE_NAME)
+@DomainService(logicalTypeName = LogoutMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
+    public static final String LOGICAL_TYPE_NAME = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
 
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
@@ -90,9 +90,9 @@ public class LogoutMenu {
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
             nature = Nature.VIEW_MODEL,
-            objectType = LoginRedirect.OBJECT_TYPE)
+            logicalTypeName = LoginRedirect.LOGICAL_TYPE_NAME)
     public static class LoginRedirect {
-        public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
+        public final static String LOGICAL_TYPE_NAME = "isis.security.LoginRedirect";
     }
 
     private LocalResourcePath createLogoutRedirect() {

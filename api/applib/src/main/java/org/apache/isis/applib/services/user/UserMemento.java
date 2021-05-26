@@ -48,10 +48,10 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(objectType = UserMemento.OBJECT_TYPE)
+@DomainObject(logicalTypeName = UserMemento.LOGICAL_TYPE_NAME)
 public final class UserMemento implements Serializable {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".UserMemento";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMemento";
 
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system");

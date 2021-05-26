@@ -41,7 +41,7 @@ import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermis
 public class IsisAppFeatureRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = ApplicationFeatureMenu.OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = ApplicationFeatureMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisAppFeatureRoleAndPermissions() {
         super(ROLE_NAME, "Access application features");
@@ -53,14 +53,14 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(ApplicationFeatureMenu.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationFeatureViewModel.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationNamespace.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationType.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationTypeMember.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationTypeAction.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationTypeProperty.OBJECT_TYPE),
-                        ApplicationFeatureId.newType(ApplicationTypeCollection.OBJECT_TYPE)
+                        ApplicationFeatureId.newType(ApplicationFeatureMenu.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationFeatureViewModel.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationNamespace.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationType.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationTypeMember.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationTypeAction.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationTypeProperty.LOGICAL_TYPE_NAME),
+                        ApplicationFeatureId.newType(ApplicationTypeCollection.LOGICAL_TYPE_NAME)
                         )
         );
     }

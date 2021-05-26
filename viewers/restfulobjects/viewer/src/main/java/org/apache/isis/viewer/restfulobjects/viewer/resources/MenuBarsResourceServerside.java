@@ -91,10 +91,10 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         return new MenuBars.Visitor() {
             @Override
             public void visit(final ServiceActionLayoutData actionLayoutData) {
-                final String objectType = actionLayoutData.getObjectType();
+                final String logicalTypeName = actionLayoutData.getLogicalTypeName();
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
-                        objectType, SERVICE_IDENTIFIER, actionLayoutData.getId());
+                        logicalTypeName, SERVICE_IDENTIFIER, actionLayoutData.getId());
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,

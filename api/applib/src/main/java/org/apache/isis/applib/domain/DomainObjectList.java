@@ -67,7 +67,7 @@ import lombok.Getter;
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        objectType = DomainObjectList.OBJECT_TYPE,
+        logicalTypeName = DomainObjectList.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED,
         nature = Nature.VIEW_MODEL
         )
@@ -79,7 +79,7 @@ import lombok.Getter;
         )
 public class DomainObjectList {
 
-    public static final String OBJECT_TYPE = "isis.applib.DomainObjectList";
+    public static final String LOGICAL_TYPE_NAME = "isis.applib.DomainObjectList";
 
     // -- ui event classes
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<DomainObjectList>{  }

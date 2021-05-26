@@ -58,11 +58,11 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ExcelFixture.OBJECT_TYPE
+        logicalTypeName = ExcelFixture.LOGICAL_TYPE_NAME
 )
 public class ExcelFixture extends FixtureScript {
 
-    public final static String OBJECT_TYPE = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture";
 
     @Inject SpecificationLoader specLoader;
 

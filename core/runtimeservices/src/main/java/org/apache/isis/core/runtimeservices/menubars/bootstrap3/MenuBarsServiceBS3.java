@@ -135,8 +135,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             BS3MenuSection section = null;
 
             for (val serviceActionLayout : menuSection.getServiceActions()) {
-                val objectTypeAndId = serviceActionLayout.getObjectTypeAndId();
-                val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId);
+                val logicalTypeNameAndId = serviceActionLayout.getLogicalTypeNameAndId();
+                val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(logicalTypeNameAndId);
 
                 if (isReferencedAction) {
                     continue; // check next
@@ -283,8 +283,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 }
 
                 ObjectAction objectAction = serviceAndAction.getObjectAction();
-                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
-                ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
+                final String logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
+                ServiceActionLayoutData action = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getServiceActions().add(action);
             }

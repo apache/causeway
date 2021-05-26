@@ -37,14 +37,14 @@ import lombok.val;
  * @since 2.x  {@index}
  */
 @DomainObject(
-        objectType = ApplicationTypeProperty.OBJECT_TYPE
+        logicalTypeName = ApplicationTypeProperty.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         paged = 100
 )
 public class ApplicationTypeProperty extends ApplicationTypeMember {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeProperty";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeProperty";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeProperty, T> {}
 

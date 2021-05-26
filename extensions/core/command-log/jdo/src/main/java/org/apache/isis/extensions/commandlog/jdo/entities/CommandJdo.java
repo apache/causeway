@@ -242,7 +242,7 @@ import lombok.val;
 //        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
 @DomainObject(
-        objectType = CommandJdo.OBJECT_TYPE,
+        logicalTypeName = CommandJdo.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
@@ -259,7 +259,7 @@ implements
     CommandModel,
     DomainChangeRecord {
 
-    public final static String OBJECT_TYPE = IsisModuleExtCommandLogJdo.NAMESPACE + ".Command";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".Command";
 
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
 

@@ -24,11 +24,11 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = ApplicationUserManager.OBJECT_TYPE
+        logicalTypeName = ApplicationUserManager.LOGICAL_TYPE_NAME
 )
 public class ApplicationUserManager {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserManager";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserManager";
 
     public String title() {
         return "Application User Manager";

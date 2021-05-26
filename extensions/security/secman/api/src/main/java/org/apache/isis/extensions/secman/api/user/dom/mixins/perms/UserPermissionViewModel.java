@@ -70,14 +70,14 @@ import lombok.val;
  */
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = UserPermissionViewModel.OBJECT_TYPE
+        logicalTypeName = UserPermissionViewModel.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 public class UserPermissionViewModel implements ViewModel {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".UserPermissionViewModel";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".UserPermissionViewModel";
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<UserPermissionViewModel, T> {}
 

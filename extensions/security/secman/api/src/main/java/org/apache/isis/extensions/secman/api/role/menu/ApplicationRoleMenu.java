@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ApplicationRoleMenu.OBJECT_TYPE
+        logicalTypeName = ApplicationRoleMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         named = "Security",
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationRoleMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRoleMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationRoleMenu";
 
     // -- domain event classes
     public static class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRoleMenu, T> {}

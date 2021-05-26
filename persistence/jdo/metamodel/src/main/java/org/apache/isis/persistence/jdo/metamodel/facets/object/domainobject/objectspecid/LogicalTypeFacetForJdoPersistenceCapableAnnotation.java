@@ -43,9 +43,9 @@ extends LogicalTypeFacetAbstract {
         if(_Strings.isNullOrEmpty(schema)) {
             return null;
         }
-        final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
+        final String logicalTypeName = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
         return new LogicalTypeFacetForJdoPersistenceCapableAnnotation(
-                LogicalType.eager(correspondingClass, objectType),
+                LogicalType.eager(correspondingClass, logicalTypeName),
                 holder);
     }
 

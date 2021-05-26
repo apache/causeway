@@ -65,7 +65,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        objectType = ApplicationRole.OBJECT_TYPE,
+        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteAction = "findMatching"
         )

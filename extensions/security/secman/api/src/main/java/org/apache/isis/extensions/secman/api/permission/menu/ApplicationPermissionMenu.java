@@ -37,7 +37,7 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ApplicationPermissionMenu.OBJECT_TYPE
+        logicalTypeName = ApplicationPermissionMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
@@ -45,7 +45,7 @@ import org.apache.isis.extensions.secman.api.permission.dom.ApplicationPermissio
 )
 public class ApplicationPermissionMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermissionMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationPermissionMenu";
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermissionMenu, T> {}

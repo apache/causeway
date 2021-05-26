@@ -54,20 +54,20 @@ import lombok.RequiredArgsConstructor;
  */
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = CommandServiceMenu.OBJECT_TYPE
+    logicalTypeName = CommandServiceMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Service
-@Named(CommandServiceMenu.OBJECT_TYPE)
+@Named(CommandServiceMenu.LOGICAL_TYPE_NAME)
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandServiceMenu {
 
-    public final static String OBJECT_TYPE = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandServiceMenu";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandServiceMenu";
 
     public static abstract class PropertyDomainEvent<T>
             extends IsisModuleExtCommandLogJdo.PropertyDomainEvent<CommandServiceMenu, T> { }

@@ -31,15 +31,15 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@Named(TranslationServicePoMenu.OBJECT_TYPE)
-@DomainService(objectType = TranslationServicePoMenu.OBJECT_TYPE)
+@Named(TranslationServicePoMenu.LOGICAL_TYPE_NAME)
+@DomainService(logicalTypeName = TranslationServicePoMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class TranslationServicePoMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
 
     @Inject private TranslationServicePo translationService;
 

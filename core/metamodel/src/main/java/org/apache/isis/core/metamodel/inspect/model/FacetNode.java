@@ -39,14 +39,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = FacetNode.OBJECT_TYPE
+        logicalTypeName = FacetNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class FacetNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".FacetNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".FacetNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Facet facet;

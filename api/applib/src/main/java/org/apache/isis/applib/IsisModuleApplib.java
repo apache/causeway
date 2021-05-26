@@ -29,7 +29,7 @@ import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
-import org.apache.isis.applib.mixins.metamodel.Object_objectType;
+import org.apache.isis.applib.mixins.metamodel.Object_logicalTypeName;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureMenu;
 import org.apache.isis.applib.services.appfeatui.ApplicationNamespace;
 import org.apache.isis.applib.services.appfeatui.ApplicationType;
@@ -72,7 +72,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         Object_downloadLayoutXml.class,
         Object_downloadMetamodelXml.class,
         Object_objectIdentifier.class,
-        Object_objectType.class,
+        Object_logicalTypeName.class,
         Object_openRestApi.class,
         Object_rebuildMetamodel.class,
 

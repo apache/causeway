@@ -38,37 +38,37 @@ public class TaggerTest {
 
         @Test
         public void fullyQualifiedClass() throws Exception {
-            String tag = taggerDefault.tagForObjectType("foo.bar.Abc", null);
+            String tag = taggerDefault.tagForLogicalTypeName("foo.bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void jaxb() throws Exception {
-            String tag = taggerDefault.tagForObjectType("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
+            String tag = taggerDefault.tagForLogicalTypeName("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
             assertThat(tag, is(equalTo("todoitem")));
         }
 
         @Test
         public void schemaClass() throws Exception {
-            String tag = taggerDefault.tagForObjectType("bar.Abc", null);
+            String tag = taggerDefault.tagForLogicalTypeName("bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void noPackage() throws Exception {
-            String tag = taggerDefault.tagForObjectType("Abc", null);
+            String tag = taggerDefault.tagForLogicalTypeName("Abc", null);
             assertThat(tag, is(equalTo("Abc")));
         }
 
         @Test
         public void internals() throws Exception {
-            String tag = taggerDefault.tagForObjectType("org.apache.isis.Xxx", null);
+            String tag = taggerDefault.tagForLogicalTypeName("org.apache.isis.Xxx", null);
             assertThat(tag, is(equalTo(". apache isis internals")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = taggerDefault.tagForObjectType("isis.conf.ConfigurationServiceMenu", null);
+            String tag = taggerDefault.tagForLogicalTypeName("isis.conf.ConfigurationServiceMenu", null);
             assertThat(tag, is(equalTo(". apache isis conf")));
         }
 

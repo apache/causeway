@@ -42,15 +42,15 @@ import org.apache.isis.commons.internal.base._Strings;
  *
  * @since 1.x {@index}
  */
-@Named(LayoutServiceMenu.OBJECT_TYPE)
-@DomainService(objectType = LayoutServiceMenu.OBJECT_TYPE)
+@Named(LayoutServiceMenu.LOGICAL_TYPE_NAME)
+@DomainService(logicalTypeName = LayoutServiceMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class LayoutServiceMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".LayoutServiceMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".LayoutServiceMenu";
 
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<LayoutServiceMenu> {}

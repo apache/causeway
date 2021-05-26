@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = HsqlDbManagerMenu.OBJECT_TYPE
+        logicalTypeName = HsqlDbManagerMenu.LOGICAL_TYPE_NAME
         )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HsqlDbManagerMenu {
 
-    public final static String OBJECT_TYPE = IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu";
 
     private final String url;
 

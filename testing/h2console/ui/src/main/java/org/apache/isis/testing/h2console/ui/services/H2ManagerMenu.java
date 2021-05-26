@@ -37,7 +37,7 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = H2ManagerMenu.OBJECT_TYPE
+        logicalTypeName = H2ManagerMenu.LOGICAL_TYPE_NAME
         )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -45,7 +45,7 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
         )
 public class H2ManagerMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu";
 
     private final WebModuleH2Console webModule;
 

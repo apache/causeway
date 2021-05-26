@@ -38,14 +38,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = ParameterNode.OBJECT_TYPE
+        logicalTypeName = ParameterNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class ParameterNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".ParameterNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ParameterNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Param parameter;

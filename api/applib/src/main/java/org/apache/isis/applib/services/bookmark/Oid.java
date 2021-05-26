@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @since 1.x revised for 2.0 {@index}
  */
 public interface Oid extends Serializable {
-    
+
     static final String SEPARATOR = ":";
 
     /**
@@ -34,21 +34,23 @@ public interface Oid extends Serializable {
     String getLogicalTypeName();
 
     /**
-     * Stringified version of the ID of the domain object instance this Oid is representing. 
+     * Stringified version of the ID of the domain object instance this Oid is representing.
      */
     String getIdentifier();
-    
+
     /**
      * Alias for {@link #getLogicalTypeName()}.
+     * @deprecated use {@link #getLogicalTypeName()}
      */
+    @Deprecated
     default String getObjectType() {
         return getLogicalTypeName();
     }
 
     /**
-     * The canonical form of the {@link Bookmark}, that is 
+     * The canonical form of the {@link Bookmark}, that is
      * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
      */
     String stringify();
-    
+
 }

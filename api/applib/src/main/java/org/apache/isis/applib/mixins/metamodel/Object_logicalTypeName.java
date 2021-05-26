@@ -57,7 +57,7 @@ import lombok.val;
         sequence = "700.1"
 )
 @RequiredArgsConstructor
-public class Object_objectType {
+public class Object_logicalTypeName {
 
     @Inject BookmarkService bookmarkService;
     @Inject MetaModelService metaModelService;
@@ -65,7 +65,7 @@ public class Object_objectType {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectType> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_logicalTypeName> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)

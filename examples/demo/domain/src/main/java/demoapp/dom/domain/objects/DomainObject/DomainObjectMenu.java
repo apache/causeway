@@ -117,10 +117,10 @@ public class DomainObjectMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-circle", describedAs = "Explicitly specify the object type alias")
-    public void objectType() {
+    @ActionLayout(cssClassFa="fa-circle", describedAs = "Explicitly specify the logical type name")
+    public void logicalTypeName() {
     }
-    public String disableObjectType(){
+    public String disableLogicalTypeName(){
         return "Explicitly specify the object type alias" +
                  " (not yet implemented in demo)";
     }

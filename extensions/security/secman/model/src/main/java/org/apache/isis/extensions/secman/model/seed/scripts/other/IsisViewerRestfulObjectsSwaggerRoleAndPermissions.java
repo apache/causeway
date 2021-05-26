@@ -33,9 +33,9 @@ import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermis
 public class IsisViewerRestfulObjectsSwaggerRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_OBJECT_TYPE = "isis.viewer.restfulobjects.SwaggerServiceMenu";
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.viewer.restfulobjects.SwaggerServiceMenu";
 
-    public static final String ROLE_NAME = SERVICE_OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisViewerRestfulObjectsSwaggerRoleAndPermissions() {
         super(ROLE_NAME, "Access to the swagger UI");
@@ -47,7 +47,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(SERVICE_OBJECT_TYPE)
+                        ApplicationFeatureId.newType(SERVICE_LOGICAL_TYPE_NAME)
                         )
         );
     }

@@ -40,56 +40,56 @@ public class TaggerDefault implements Tagger {
 
     @Override
     @Programmatic
-    public String tagForObjectType(final String objType, final String fallback) {
+    public String tagForLogicalTypeName(final String logicalTypeName, final String fallback) {
 
-        if (objType.startsWith("org.apache.isis.")) {
+        if (logicalTypeName.startsWith("org.apache.isis.")) {
             return ". apache isis internals";
         }
-        if (objType.startsWith("isis.applib.")) {
+        if (logicalTypeName.startsWith("isis.applib.")) {
             return ". apache isis applib";
         }
-        if (objType.startsWith("isis.conf.")) {
+        if (logicalTypeName.startsWith("isis.conf.")) {
             return ". apache isis conf";
         }
-        if (objType.startsWith("isis.sudo.")) {
+        if (logicalTypeName.startsWith("isis.sudo.")) {
             return ". apache isis sudo";
         }
-        if (objType.startsWith("isis.persistence.")) {
-            return ". apache isis persistence - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("isis.persistence.")) {
+            return ". apache isis persistence - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        if (objType.startsWith("isis.security.")) {
+        if (logicalTypeName.startsWith("isis.security.")) {
             return ". apache isis security";
         }
-        if (objType.startsWith("isis.ext.")) {
-            return ". apache isis extensions - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("isis.ext.")) {
+            return ". apache isis extensions - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        if (objType.startsWith("isis.sub.")) {
-            return ". apache isis subdomains - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("isis.sub.")) {
+            return ". apache isis subdomains - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        if (objType.startsWith("org.springframework.")) {
-            return "> spring framework " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("org.springframework.")) {
+            return "> spring framework " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
 
         Matcher matcher;
-        matcher = tagPatternForJaxbDto.matcher(objType);
+        matcher = tagPatternForJaxbDto.matcher(logicalTypeName);
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        matcher = tagPatternForFqcn.matcher(objType);
+        matcher = tagPatternForFqcn.matcher(logicalTypeName);
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        matcher = tagPatternForTwoParts.matcher(objType);
+        matcher = tagPatternForTwoParts.matcher(logicalTypeName);
         if (matcher.matches()) {
             return matcher.group(1);
         }
 
-        return fallback != null? fallback: objType;
+        return fallback != null? fallback: logicalTypeName;
     }
 
 
-    private static Stream<String> partsOf(final String objType) {
-        return _Strings.splitThenStream(objType, ".");
+    private static Stream<String> partsOf(final String logicalTypeName) {
+        return _Strings.splitThenStream(logicalTypeName, ".");
     }
 
 }

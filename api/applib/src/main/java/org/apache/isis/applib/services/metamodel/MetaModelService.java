@@ -41,13 +41,13 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 public interface MetaModelService {
 
     /**
-     * Provides a lookup by objectType of a domain class' object type, as defined by
+     * Provides a lookup by logicalTypeName of a domain class' object type, as defined by
      * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Isis'
      * <code>ObjectTypeFacet</code>). Will return an empty result if there is no
      * such non-abstract class registered.
      * (interfaces and abstract types are never added to the lookup table).
      */
-    Optional<LogicalType> lookupLogicalTypeByName(final String objectType);
+    Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName);
 
     /**
      * Provides a lookup by class of a domain class' object type, as defined by

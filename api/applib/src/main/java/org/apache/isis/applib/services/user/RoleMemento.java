@@ -32,11 +32,11 @@ import lombok.Value;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(objectType = RoleMemento.OBJECT_TYPE)
+@DomainObject(logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME)
 @Value
 public class RoleMemento implements Serializable {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".RoleMemento";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".RoleMemento";
 
     private static final long serialVersionUID = -3876856609238378274L;
 

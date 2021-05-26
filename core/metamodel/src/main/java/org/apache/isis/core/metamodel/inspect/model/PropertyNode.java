@@ -37,14 +37,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = PropertyNode.OBJECT_TYPE
+        logicalTypeName = PropertyNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class PropertyNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".PropertyNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".PropertyNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;

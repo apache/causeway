@@ -44,7 +44,7 @@ import lombok.val;
  * </p>
  *
  * @see DomainObject
- * @see org.apache.isis.applib.mixins.metamodel.Object_objectType
+ * @see org.apache.isis.applib.mixins.metamodel.Object_logicalTypeName
  * @see org.apache.isis.applib.services.bookmark.Bookmark
  * @see org.apache.isis.applib.services.bookmark.BookmarkService
  *

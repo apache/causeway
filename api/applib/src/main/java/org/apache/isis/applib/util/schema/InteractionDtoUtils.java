@@ -298,10 +298,10 @@ public final class InteractionDtoUtils {
     }
 
     static String deriveLogicalMemberId(final Bookmark bookmark, final String memberId) {
-        String objectType = bookmark.getObjectType();
+        String logicalTypeName = bookmark.getObjectType();
         int hashAt = memberId.lastIndexOf("#");
         String localMemberId = hashAt >= 0 && hashAt < memberId.length() ? memberId.substring(hashAt + 1) : memberId;
-        return objectType + "#" + localMemberId;
+        return logicalTypeName + "#" + localMemberId;
     }
 
 

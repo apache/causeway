@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
  * @since 2.x  {@index}
  */
 @DomainObject(
-        objectType = ApplicationType.OBJECT_TYPE
+        logicalTypeName = ApplicationType.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT,
@@ -45,7 +45,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 )
 public class ApplicationType extends ApplicationFeatureViewModel {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationType";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationType";
 
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}

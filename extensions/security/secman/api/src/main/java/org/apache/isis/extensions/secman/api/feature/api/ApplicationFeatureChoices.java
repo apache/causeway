@@ -113,7 +113,7 @@ public class ApplicationFeatureChoices {
      */
     @DomainObject(
             nature = Nature.VIEW_MODEL,
-            objectType = AppFeat.OBJECT_TYPE
+            logicalTypeName = AppFeat.LOGICAL_TYPE_NAME
     )
     @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
     public static class AppFeat
@@ -121,7 +121,7 @@ public class ApplicationFeatureChoices {
         Comparable<AppFeat>,
         ViewModel {
 
-        public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".AppFeat";
+        public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".AppFeat";
 
         @Property
         @Getter

@@ -75,7 +75,7 @@ import org.apache.isis.commons.internal.base._Casts;
                     + "FROM " + ApplicationTenancy.FQCN
                     + " WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
-        objectType = ApplicationTenancy.OBJECT_TYPE,
+        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
 )

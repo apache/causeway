@@ -32,9 +32,9 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
  */
 public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_OBJECT_TYPE = "isis.ext.h2Console";
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.ext.h2Console";
 
-    public static final String ROLE_NAME = SERVICE_OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisExtH2ConsoleRoleAndPermissions() {
         super(ROLE_NAME, String.format("Access to the H2 console UI", IsisModuleTestingFixturesApplib.NAMESPACE));

@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ApplicationFeatureMenu.OBJECT_TYPE
+        logicalTypeName = ApplicationFeatureMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 )
 public class ApplicationFeatureMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
 
     public static abstract class PropertyDomainEvent<T>
     extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeatureMenu, T> {}

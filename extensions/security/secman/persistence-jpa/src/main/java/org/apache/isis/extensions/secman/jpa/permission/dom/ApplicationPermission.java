@@ -91,7 +91,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-        objectType = ApplicationPermission.OBJECT_TYPE
+        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD

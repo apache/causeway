@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  * @since 2.x  {@index}
  */
 @DomainObject(
-        objectType = ApplicationTypeMember.OBJECT_TYPE
+        logicalTypeName = ApplicationTypeMember.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
@@ -45,7 +45,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeMember";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeMember";
 
     public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
 

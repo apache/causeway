@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single action, broadly corresponding to 
+ * Describes the layout of a single action, broadly corresponding to
  * {@link org.apache.isis.applib.annotation.ActionLayout}.
  *
  * @since 1.x {@index}
@@ -41,7 +41,7 @@ import org.apache.isis.applib.layout.links.Link;
 @XmlType(
         name = "serviceAction"
         , propOrder = {
-                "objectType"
+                "logicalTypeName"
                 , "id"
                 , "named"
                 , "namedEscaped"
@@ -60,21 +60,21 @@ public class ServiceActionLayoutData implements Serializable {
 
     public ServiceActionLayoutData() {
     }
-    public ServiceActionLayoutData(final String objectType, final String id) {
-        this.objectType = objectType;
+    public ServiceActionLayoutData(final String logicalTypeName, final String id) {
+        this.logicalTypeName = logicalTypeName;
         this.id = id;
     }
 
 
-    private String objectType;
+    private String logicalTypeName;
 
     @XmlAttribute(required = true)
-    public String getObjectType() {
-        return objectType;
+    public String getLogicalTypeName() {
+        return logicalTypeName;
     }
 
-    public void setObjectType(final String objectType) {
-        this.objectType = objectType;
+    public void setLogicalTypeName(final String logicalTypeName) {
+        this.logicalTypeName = logicalTypeName;
     }
 
 
@@ -230,15 +230,15 @@ public class ServiceActionLayoutData implements Serializable {
 
 
     @XmlTransient
-    public String getObjectTypeAndId() {
-        return getObjectType() + "#" + getId();
+    public String getLogicalTypeNameAndId() {
+        return getLogicalTypeName() + "#" + getId();
     }
 
 
     @Override
     public String toString() {
         return "ServiceActionLayoutData{" +
-                "objectType='" + objectType + '\'' +
+                "logicalTypeName='" + logicalTypeName + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

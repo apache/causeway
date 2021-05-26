@@ -39,9 +39,9 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
-@Named(JdoMetamodelMenu.OBJECT_TYPE)
+@Named(JdoMetamodelMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        objectType = JdoMetamodelMenu.OBJECT_TYPE
+        logicalTypeName = JdoMetamodelMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
@@ -49,7 +49,7 @@ import lombok.val;
 )
 public class JdoMetamodelMenu {
 
-    public final static String OBJECT_TYPE = IsisModuleJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
 
     @Inject private JdoSupportService jdoSupport;
     @Inject private JdoFacetContext jdoFacetContext;

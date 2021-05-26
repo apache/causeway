@@ -48,14 +48,14 @@ import lombok.Setter;
 )
 @DomainObject(
         editing = Editing.DISABLED,
-        objectType = ConfigurationProperty.OBJECT_TYPE
+        logicalTypeName = ConfigurationProperty.LOGICAL_TYPE_NAME
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)
 @NoArgsConstructor
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
 
     public ConfigurationProperty(final String key, final String value){
         this.key = key;

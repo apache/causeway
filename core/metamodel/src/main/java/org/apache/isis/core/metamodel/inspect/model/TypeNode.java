@@ -39,14 +39,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = TypeNode.OBJECT_TYPE
+        logicalTypeName = TypeNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class TypeNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".TypeNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TypeNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private DomainClassDto domainClassDto;

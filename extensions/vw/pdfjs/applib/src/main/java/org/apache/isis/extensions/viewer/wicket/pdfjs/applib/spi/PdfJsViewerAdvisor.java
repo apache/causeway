@@ -73,7 +73,7 @@ public interface PdfJsViewerAdvisor {
          * The identifier of the object being rendered.
          *
          * <p>
-         *     The {@link TypeKey#getObjectType()} and {@link #getIdentifier()} together constitute the object's
+         *     The {@link TypeKey#getType()} and {@link #getIdentifier()} together constitute the object's
          *     identity (in effect, its {@link Bookmark}).
          * </p>
          */
@@ -84,7 +84,7 @@ public interface PdfJsViewerAdvisor {
 
         @Programmatic
         public Bookmark asBookmark() {
-            return Bookmark.forLogicalTypeNameAndIdentifier(typeKey.objectType, identifier);
+            return Bookmark.forLogicalTypeNameAndIdentifier(typeKey.logicalTypeName, identifier);
         }
 
         @Override
@@ -127,15 +127,15 @@ public interface PdfJsViewerAdvisor {
 
             private static final long serialVersionUID = 1L;
 
-            private final String objectType;
+            private final String logicalTypeName;
             private final String propertyId;
             private final String userName;
 
             public TypeKey(
-                    final String objectType,
+                    final String logicalTypeName,
                     final String propertyId,
                     final String userName) {
-                this.objectType = objectType;
+                this.logicalTypeName = logicalTypeName;
                 this.propertyId = propertyId;
                 this.userName = userName;
             }
@@ -144,8 +144,8 @@ public interface PdfJsViewerAdvisor {
              * The object type of the object being rendered.
              */
             @Programmatic
-            public String getObjectType() {
-                return objectType;
+            public String getType() {
+                return logicalTypeName;
             }
 
             /**
@@ -173,7 +173,7 @@ public interface PdfJsViewerAdvisor {
 
                 final TypeKey typeKey = (TypeKey) o;
 
-                if (objectType != null ? !objectType.equals(typeKey.objectType) : typeKey.objectType != null)
+                if (logicalTypeName != null ? !logicalTypeName.equals(typeKey.logicalTypeName) : typeKey.logicalTypeName != null)
                     return false;
                 if (propertyId != null ? !propertyId.equals(typeKey.propertyId) : typeKey.propertyId != null)
                     return false;
@@ -181,7 +181,7 @@ public interface PdfJsViewerAdvisor {
             }
 
             @Override public int hashCode() {
-                int result = objectType != null ? objectType.hashCode() : 0;
+                int result = logicalTypeName != null ? logicalTypeName.hashCode() : 0;
                 result = 31 * result + (propertyId != null ? propertyId.hashCode() : 0);
                 result = 31 * result + (userName != null ? userName.hashCode() : 0);
                 return result;
@@ -190,7 +190,7 @@ public interface PdfJsViewerAdvisor {
             @Override
             public String toString() {
                 return "TypeKey{" +
-                        "objectType='" + objectType + '\'' +
+                        "logicalTypeName='" + logicalTypeName + '\'' +
                         ", propertyId='" + propertyId + '\'' +
                         ", userName='" + userName + '\'' +
                         '}';

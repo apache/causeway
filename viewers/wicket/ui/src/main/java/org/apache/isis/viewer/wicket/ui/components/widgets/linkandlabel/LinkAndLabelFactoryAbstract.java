@@ -242,7 +242,7 @@ implements Serializable {
                     Optional.ofNullable(actionModel.getObject())
                     .ifPresent(actionResultAdapter->{
                         val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
-                        if(LoginRedirect.OBJECT_TYPE.equals(actionResultObjectType)) {
+                        if(LoginRedirect.LOGICAL_TYPE_NAME.equals(actionResultObjectType)) {
                             val commonContext = targetEntityModel.getCommonContext();
                             val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
                             val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);

@@ -42,7 +42,7 @@ import lombok.experimental.Accessors;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ImpersonateMenu.OBJECT_TYPE
+        logicalTypeName = ImpersonateMenu.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         named = "Security",
@@ -51,7 +51,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
 
     final UserService userService;
     final MessageService messageService;

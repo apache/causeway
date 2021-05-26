@@ -38,14 +38,14 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = CollectionNode.OBJECT_TYPE
+        logicalTypeName = CollectionNode.LOGICAL_TYPE_NAME
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 public class CollectionNode extends MMNode {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".CollectionNode";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".CollectionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Collection collection;

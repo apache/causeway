@@ -43,11 +43,11 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
  * @since 2.0 {@index}
  */
 @DomainObject(
-        objectType = ApplicationTenancy.OBJECT_TYPE
+        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME
 )
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationTenancy";
 
     public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     public static final String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";

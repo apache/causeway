@@ -61,7 +61,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
         visit(serviceActionLayoutData -> {
             serviceActionsByObjectTypeAndId
-            .put(serviceActionLayoutData.getObjectTypeAndId(), serviceActionLayoutData);
+            .put(serviceActionLayoutData.getLogicalTypeNameAndId(), serviceActionLayoutData);
         });
 
         return serviceActionsByObjectTypeAndId;

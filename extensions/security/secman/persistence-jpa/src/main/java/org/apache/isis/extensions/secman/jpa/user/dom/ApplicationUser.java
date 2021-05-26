@@ -100,7 +100,7 @@ import lombok.val;
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-        objectType = ApplicationUser.OBJECT_TYPE,
+        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteAction = "findMatching"
         )

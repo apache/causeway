@@ -93,7 +93,7 @@ import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
             members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @DomainObject(
-        objectType = ApplicationPermission.OBJECT_TYPE
+        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD

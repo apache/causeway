@@ -39,14 +39,14 @@ import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
  */
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = MeService.OBJECT_TYPE
+        logicalTypeName = MeService.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
 public class MeService {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".MeService";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".MeService";
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<MeService, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<MeService, T> {}

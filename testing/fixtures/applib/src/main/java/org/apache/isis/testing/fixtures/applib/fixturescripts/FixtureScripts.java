@@ -66,7 +66,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = FixtureScripts.OBJECT_TYPE
+        logicalTypeName = FixtureScripts.LOGICAL_TYPE_NAME
 )
 @DomainServiceLayout(
         named="Prototyping",
@@ -74,7 +74,7 @@ import lombok.val;
 )
 public class FixtureScripts {
 
-    public static final String OBJECT_TYPE = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
+    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;

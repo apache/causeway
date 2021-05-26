@@ -31,7 +31,7 @@ import org.apache.isis.extensions.secman.api.role.fixtures.AbstractRoleAndPermis
 public class IsisSudoImpersonateRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = ImpersonateMenu.OBJECT_TYPE.replace(".","-");
+    public static final String ROLE_NAME = ImpersonateMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
     public IsisSudoImpersonateRoleAndPermissions() {
         super(ROLE_NAME, "Access to the ImpersonateMenu (ability to impersonate other users, for testing purposes)");
@@ -43,7 +43,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(ImpersonateMenu.OBJECT_TYPE)
+                        ApplicationFeatureId.newType(ImpersonateMenu.LOGICAL_TYPE_NAME)
                         )
         );
     }

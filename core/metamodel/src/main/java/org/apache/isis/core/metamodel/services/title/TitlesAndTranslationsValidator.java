@@ -56,12 +56,12 @@ extends MetaModelValidatorAbstract {
 
             val serviceInstanceIfAny = managedBeanAdapter.getInstance().getFirst();
             val domainService = serviceInstanceIfAny.orElse(null);
-            val objectType = managedBeanAdapter.getId();
+            val logicalTypeName = managedBeanAdapter.getId();
 
             if(domainService == null) {
 
                 val deficiencyOrigin = Identifier.classIdentifier(
-                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
                         specificationLoader,
@@ -83,7 +83,7 @@ extends MetaModelValidatorAbstract {
                 e.printStackTrace();
 
                 val deficiencyOrigin = Identifier.classIdentifier(
-                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
                         specificationLoader,

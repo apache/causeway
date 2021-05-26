@@ -30,10 +30,10 @@ import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = ConfigurationViewmodel.OBJECT_TYPE)
+        logicalTypeName = ConfigurationViewmodel.LOGICAL_TYPE_NAME)
 public class ConfigurationViewmodel {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
 
     @Autowired(required = false)
     private ConfigurationViewService configurationService;

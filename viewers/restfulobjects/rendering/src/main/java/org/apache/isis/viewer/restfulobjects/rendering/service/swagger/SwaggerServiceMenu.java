@@ -45,15 +45,15 @@ import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsR
 /**
  * @since 1.x {@index}
  */
-@Named(SwaggerServiceMenu.OBJECT_TYPE)
-@DomainService(objectType = SwaggerServiceMenu.OBJECT_TYPE)
+@Named(SwaggerServiceMenu.LOGICAL_TYPE_NAME)
+@DomainService(logicalTypeName = SwaggerServiceMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class SwaggerServiceMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;

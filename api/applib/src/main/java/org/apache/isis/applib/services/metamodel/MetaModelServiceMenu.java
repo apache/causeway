@@ -53,15 +53,15 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
  *
  * @since 2.0 {@index}
  */
-@Named(MetaModelServiceMenu.OBJECT_TYPE)
-@DomainService(objectType = MetaModelServiceMenu.OBJECT_TYPE)
+@Named(MetaModelServiceMenu.LOGICAL_TYPE_NAME)
+@DomainService(logicalTypeName = MetaModelServiceMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class MetaModelServiceMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 

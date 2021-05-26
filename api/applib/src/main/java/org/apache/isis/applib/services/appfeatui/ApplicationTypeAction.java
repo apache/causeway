@@ -35,14 +35,14 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
  * @since 2.x  {@index}
  */
 @DomainObject(
-        objectType = ApplicationTypeAction.OBJECT_TYPE
+        logicalTypeName = ApplicationTypeAction.LOGICAL_TYPE_NAME
 )
 @DomainObjectLayout(
         paged = 100
 )
 public class ApplicationTypeAction extends ApplicationTypeMember {
 
-    public static final String OBJECT_TYPE = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 

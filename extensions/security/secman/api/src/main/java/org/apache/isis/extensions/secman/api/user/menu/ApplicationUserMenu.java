@@ -40,7 +40,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = ApplicationUserMenu.OBJECT_TYPE
+        logicalTypeName = ApplicationUserMenu.LOGICAL_TYPE_NAME
         )
 @DomainServiceLayout(
         named = "Security",
@@ -49,7 +49,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationUserMenu {
 
-    public static final String OBJECT_TYPE = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserMenu";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApi.NAMESPACE + ".ApplicationUserMenu";
 
     public static abstract class ActionDomainEvent
         extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUserMenu> { }
