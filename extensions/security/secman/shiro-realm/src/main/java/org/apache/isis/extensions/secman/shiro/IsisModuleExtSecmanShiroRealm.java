@@ -45,7 +45,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.dom.AccountType;
 import org.apache.isis.extensions.secman.api.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;

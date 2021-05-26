@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.encryption;
+package org.apache.isis.extensions.secman.api.user.spi;
 
 import org.apache.isis.applib.annotation.Programmatic;
 

@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.user.dom.mixins.ApplicationUser_lock;
