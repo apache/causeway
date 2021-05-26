@@ -83,7 +83,7 @@
     </dependencies>
 
     <modules>
-    	<module>api</module>
+    	<module>applib</module>
     	<module>integration</module>
     	<module>encryption-jbcrypt</module>
     	<module>persistence-jdo</module>
