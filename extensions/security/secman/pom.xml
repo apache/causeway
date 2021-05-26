@@ -30,7 +30,7 @@
     <artifactId>isis-extensions-secman</artifactId>
     <name>Apache Isis Ext - Sec Man</name>
     <description></description>
-    
+
     <packaging>pom</packaging>
 
     <properties>
@@ -69,12 +69,12 @@
     </dependencyManagement>
 
     <dependencies>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-security</artifactId>
@@ -84,7 +84,7 @@
 
     <modules>
     	<module>api</module>
-    	<module>model</module>
+    	<module>integration</module>
     	<module>encryption-jbcrypt</module>
     	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>

@@ -27,7 +27,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-model</artifactId>
+    <artifactId>isis-extensions-secman-integration</artifactId>
     <name>Apache Isis Ext - Sec Man Model</name>
     <description></description>
 
@@ -37,13 +37,13 @@
     </properties>
 
     <dependencies>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-api</artifactId>
