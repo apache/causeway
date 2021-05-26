@@ -44,13 +44,13 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -429,17 +429,17 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- Factory
 
-    public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(
+    public static Function<ApplicationFeatureId, UserPermissionViewModel> asViewModel(
             final ApplicationUser user,
             final FactoryService factoryService) {
 
-        return (final ApplicationFeature feature) -> {
+        return (final ApplicationFeatureId featureId) -> {
             val permissionSet = user.getPermissionSet();
-            val changingEvaluation = permissionSet.evaluate(feature.getFeatureId(), ApplicationPermissionMode.CHANGING);
-            val viewingEvaluation = permissionSet.evaluate(feature.getFeatureId(), ApplicationPermissionMode.VIEWING);
+            val changingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.CHANGING);
+            val viewingEvaluation = permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING);
             return UserPermissionViewModel
                     .newViewModel(
-                            feature.getFeatureId(),
+                            featureId,
                             user,
                             viewingEvaluation,
                             changingEvaluation,

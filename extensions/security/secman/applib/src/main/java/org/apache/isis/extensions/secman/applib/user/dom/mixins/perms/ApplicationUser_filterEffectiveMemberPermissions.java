@@ -18,10 +18,8 @@
  */
 package org.apache.isis.extensions.secman.applib.user.dom.mixins.perms;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -33,37 +31,34 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
-        domainEvent = ApplicationUser_filterPermissions.DomainEvent.class,
+        domainEvent = ApplicationUser_filterEffectiveMemberPermissions.DomainEvent.class,
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
-        associateWith = "permissions",
+        associateWith = "effectiveMemberPermissions",
         promptStyle = PromptStyle.DIALOG_MODAL,
         sequence = "1"
 )
 @RequiredArgsConstructor
-public class ApplicationUser_filterPermissions {
+public class ApplicationUser_filterEffectiveMemberPermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_filterPermissions> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_filterEffectiveMemberPermissions> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationFeatureChoices applicationFeatureChoices;
 
-    private final ApplicationUser target;
+    private final ApplicationUser user;
 
     @MemberSupport
     public List<UserPermissionViewModel> act(
@@ -73,44 +68,19 @@ public class ApplicationUser_filterPermissions {
             )
             final ApplicationFeatureChoices.AppFeat feature) {
 
-        val featureId = feature.getFeatureId();
-
-        final String namespace = featureId.getNamespace();
-        final String typeSimpleName = featureId.getTypeSimpleName();
-
-        val allMembers = featureRepository.allMembers();
-        val filtered = _Lists.filter(allMembers, within(namespace, typeSimpleName));
-        return asViewModels(filtered);
+        return featureRepository
+            .allMembers()
+            .stream()
+            .map(ApplicationFeature::getFeatureId)
+            .filter(feature.getFeatureId()::contains)
+            .map(UserPermissionViewModel.asViewModel(user, factory))
+            .collect(Collectors.toList());
     }
 
     @MemberSupport
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
             final @MinLength(3) String search) {
         return applicationFeatureChoices.autoCompleteFeature(search);
-    }
-
-    // -- HELPER XXX left over from refactoring, could be simplified ..
-
-    private static Predicate<ApplicationFeature> within(final String namespace, final String logicalTypeSimpleName) {
-        return (ApplicationFeature input) -> {
-            final ApplicationFeatureId inputFeatureId = input.getFeatureId();
-
-            // recursive match on package
-            val namespaceId = ApplicationFeatureId.newNamespace(namespace);
-            if(!inputFeatureId.getPathIds().contains(namespaceId)) {
-                return false;
-            }
-
-            // match on class (if specified)
-            return logicalTypeSimpleName == null
-                    || Objects.equals(inputFeatureId.getTypeSimpleName(), logicalTypeSimpleName);
-        };
-    }
-
-    private List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
-        return _Lists.map(
-                features,
-                UserPermissionViewModel.asViewModel(target, factory));
     }
 
 

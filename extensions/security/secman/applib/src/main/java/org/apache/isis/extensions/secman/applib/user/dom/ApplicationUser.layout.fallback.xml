@@ -72,7 +72,7 @@ under the License.
 		        		<bs3:tab name="Permissions">
 		        			<bs3:row>
 		        				<bs3:col span="12">
-		        					<cpt:collection id="permissions"/>
+		        					<cpt:collection id="effectiveMemberPermissions"/>
 		        				</bs3:col>
 		        			</bs3:row>
 		        		</bs3:tab>

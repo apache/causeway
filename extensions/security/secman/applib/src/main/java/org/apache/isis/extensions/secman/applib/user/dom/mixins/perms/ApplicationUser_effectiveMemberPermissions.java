@@ -20,45 +20,46 @@ package org.apache.isis.extensions.secman.applib.user.dom.mixins.perms;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Collection(
-        domainEvent = ApplicationUser_permissions.DomainEvent.class)
+        domainEvent = ApplicationUser_effectiveMemberPermissions.DomainEvent.class)
 @CollectionLayout(
         paged=50,
         defaultView = "table"
         )
 @RequiredArgsConstructor
-public class ApplicationUser_permissions {
+public class ApplicationUser_effectiveMemberPermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
+            extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser_effectiveMemberPermissions, UserPermissionViewModel> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;
 
-    private final ApplicationUser target;
+    private final ApplicationUser user;
 
     @MemberSupport
     public List<UserPermissionViewModel> coll() {
-        val allMembers = applicationFeatureRepository.allMembers();
-        return _Lists.map(
-                allMembers,
-                UserPermissionViewModel.asViewModel(target, factory)
-        );
+        return applicationFeatureRepository
+                .allMembers()
+                .stream()
+                .map(ApplicationFeature::getFeatureId)
+                .map(UserPermissionViewModel.asViewModel(user, factory))
+                .collect(Collectors.toList());
     }
 
 

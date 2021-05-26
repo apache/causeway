@@ -70,8 +70,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePhoneNumber;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateUsername;
-import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_filterPermissions;
-import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_permissions;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_filterEffectiveMemberPermissions;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_effectiveMemberPermissions;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
@@ -135,9 +135,9 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
         ApplicationUser_addRole.class,
         ApplicationUser_delete.class,
         ApplicationUser_duplicate.class,
-        ApplicationUser_filterPermissions.class,
+        ApplicationUser_filterEffectiveMemberPermissions.class,
         ApplicationUser_lock.class,
-        ApplicationUser_permissions.class,
+        ApplicationUser_effectiveMemberPermissions.class,
         ApplicationUser_removeRoles.class,
         ApplicationUser_resetPassword.class,
         ApplicationUser_unlock.class,

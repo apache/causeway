@@ -357,6 +357,12 @@ implements
         }
     }
 
+    public boolean contains(final @NonNull ApplicationFeatureId otherFeatureId) {
+        // be aware of this seemingly inverted semantics eg.:
+        // 'isis' contains 'isis.xxx'
+        return otherFeatureId.getPathIds().contains(this);
+    }
+
     // -- OBJECT CONTRACT
 
     private static final Comparator<ApplicationFeatureId> bySort =
