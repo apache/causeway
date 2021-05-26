@@ -34,24 +34,24 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.encryption.jbcrypt</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/extensions/secman/encryption/jbcrypt</git-plugin.propertiesDir>
-        
+
         <jbcrypt.version>0.4</jbcrypt.version>
     </properties>
 
     <dependencies>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-api</artifactId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>

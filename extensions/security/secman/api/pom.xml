@@ -27,7 +27,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-api</artifactId>
+    <artifactId>isis-extensions-secman-applib</artifactId>
     <name>Apache Isis Ext - Sec Man API</name>
     <description></description>
 
