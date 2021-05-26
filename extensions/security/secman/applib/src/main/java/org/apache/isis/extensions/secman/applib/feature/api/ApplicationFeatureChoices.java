@@ -57,9 +57,10 @@ public class ApplicationFeatureChoices {
 
     final ApplicationFeatureRepository featureRepository;
 
-    public static final String DESCRIBED_AS = "To refine the search by feature-sort (namespace, type, member), "
+    public static final String DESCRIBED_AS =
+            "To refine the search by feature-sort (namespace, type, member), "
             + "use one of "
-            + "sort:n sort:t sort:m.";
+            + "n: t: m:";
 
     public Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final @MinLength(3) String search) {
@@ -67,13 +68,13 @@ public class ApplicationFeatureChoices {
         final Predicate<ApplicationFeatureId> searchRefine;
         final String searchTerm;
 
-        if(search.startsWith("sort:n")) {
+        if(search.startsWith("n:")) {
             searchRefine = ApplicationFeatureChoices::isNamespace;
             searchTerm = search.substring(6).trim();
-        } else if(search.startsWith("sort:t")) {
+        } else if(search.startsWith("t:")) {
             searchRefine = ApplicationFeatureChoices::isType;
             searchTerm = search.substring(6).trim();
-        } else if(search.startsWith("sort:m")) {
+        } else if(search.startsWith("m:")) {
             searchRefine = ApplicationFeatureChoices::isMember;
             searchTerm = search.substring(6).trim();
         } else {
