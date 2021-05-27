@@ -16,22 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing;
+package demoapp.dom.domain.properties.Property.projecting.persistence;
 
-import javax.inject.Inject;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import org.springframework.stereotype.Service;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
+@DomainObject(
+        logicalTypeName = "demo.PropertyProjectingChildEntity" // shared permissions with concrete sub class
+)
+public abstract class PropertyProjectingChildEntity
+implements
+    HasAsciiDocDescription,
+    ValueHolder<String> {
 
-@Service
-public class PropertyExecutionPublishingSeeding
-extends SeedServiceAbstract {
-
-    @Inject
-    public PropertyExecutionPublishingSeeding(ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> entities) {
-        super(entities);
+    @Override
+    public String value() {
+        return getName();
     }
 
+    public abstract String getName();
+    protected abstract void setName(String value);
+
 }
+

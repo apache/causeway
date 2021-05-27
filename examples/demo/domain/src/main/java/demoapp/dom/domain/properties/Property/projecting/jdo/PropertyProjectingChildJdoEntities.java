@@ -18,34 +18,23 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.jdo;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
-
+@Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class PropertyProjectingChildJdoEntities {
+public class PropertyProjectingChildJdoEntities
+extends ValueHolderRepository<String, PropertyProjectingChildJdo> {
 
-    final RepositoryService repositoryService;
-
-    public Optional<PropertyProjectingChildJdo> find(final String value) {
-        return repositoryService.firstMatch(PropertyProjectingChildJdo.class, x -> Objects.equals(x.getName(), value));
+    protected PropertyProjectingChildJdoEntities() {
+        super(PropertyProjectingChildJdo.class);
     }
 
-    public List<PropertyProjectingChildJdo> all() {
-        return repositoryService.allInstances(PropertyProjectingChildJdo.class);
-    }
-
-    public PropertyProjectingChildJdo first() {
-        return all().stream().findFirst().get();
+    @Override
+    protected PropertyProjectingChildJdo newDetachedEntity(String value) {
+        return new PropertyProjectingChildJdo(value);
     }
 
 }

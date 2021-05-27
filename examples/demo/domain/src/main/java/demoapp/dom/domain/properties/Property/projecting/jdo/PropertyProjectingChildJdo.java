@@ -24,6 +24,8 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
@@ -31,20 +33,23 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
+
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyProjectingChildJdo"
+        , logicalTypeName = "demo.PropertyProjectingChildEntity"
         , editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public class PropertyProjectingChildJdo implements HasAsciiDocDescription {
+public class PropertyProjectingChildJdo
+        extends PropertyProjectingChildEntity {
     // ...
 //end::class[]
 

@@ -16,61 +16,62 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.projecting.child;
+package demoapp.dom.domain.properties.Property.projecting.jpa;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Projecting;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 
+@Profile("demo-jpa")
 //tag::class[]
-@XmlRootElement(name = "child")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyProjectingChildVm"
+@Entity
+@Table(
+    schema = "demo",
+    name = "PropertyProjectingChildJpa"
 )
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(
+    logicalTypeName = "demo.PropertyProjectingChildEntity"
+    , editing = Editing.DISABLED
+)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor
-public class PropertyProjectingChildVm implements HasAsciiDocDescription {
-
+public class PropertyProjectingChildJpa
+        extends PropertyProjectingChildEntity {
+    // ...
 //end::class[]
-    public PropertyProjectingChildVm(final PropertyProjectingChildEntity backingEntity) {
-        this.backingEntity = backingEntity;
+
+    public PropertyProjectingChildJpa(String initialValue) {
+        this.name = initialValue;
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
 //tag::class[]
-    @Title
+    @Title(prepend = "Entity: ")
     @PropertyLayout(fieldSetId = "properties", sequence = "1")
-    public String getProperty() {
-        return getBackingEntity().getName();
-    }
-
-//tag::projecting[]
-    @Property(
-        projecting = Projecting.PROJECTED   // <.>
-        , hidden = Where.EVERYWHERE         // <.>
-    )
-    @XmlElement(required = true)
     @Getter @Setter
-    private PropertyProjectingChildEntity backingEntity;
-//end::projecting[]
+    private String name;
 
 }
 //end::class[]

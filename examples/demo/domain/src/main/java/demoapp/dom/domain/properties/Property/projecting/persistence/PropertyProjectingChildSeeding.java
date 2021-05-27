@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing;
+package demoapp.dom.domain.properties.Property.projecting.persistence;
 
 import javax.inject.Inject;
 
@@ -26,11 +26,11 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class PropertyExecutionPublishingSeeding
+public class PropertyProjectingChildSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public PropertyExecutionPublishingSeeding(ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> entities) {
+    public PropertyProjectingChildSeeding(ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> entities) {
         super(entities);
     }
 

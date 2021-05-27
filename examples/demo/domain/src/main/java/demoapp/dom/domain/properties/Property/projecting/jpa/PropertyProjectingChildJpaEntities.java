@@ -16,22 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing;
+package demoapp.dom.domain.properties.Property.projecting.jpa;
 
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jpa")
 @Service
-public class PropertyExecutionPublishingSeeding
-extends SeedServiceAbstract {
+public class PropertyProjectingChildJpaEntities
+extends ValueHolderRepository<String, PropertyProjectingChildJpa> {
 
-    @Inject
-    public PropertyExecutionPublishingSeeding(ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> entities) {
-        super(entities);
+    protected PropertyProjectingChildJpaEntities() {
+        super(PropertyProjectingChildJpa.class);
+    }
+
+    @Override
+    protected PropertyProjectingChildJpa newDetachedEntity(String value) {
+        return new PropertyProjectingChildJpa(value);
     }
 
 }

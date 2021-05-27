@@ -46,7 +46,7 @@ import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyVm;
 import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityVm;
 import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingVm;
 import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
-import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities;
+import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
@@ -58,7 +58,7 @@ public class PropertyMenu {
 
     final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandPublishingEntities;
     final ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> propertyExecutionPublishingEntities;
-    final PropertyProjectingChildJdoEntities propertyProjectingChildJdoEntities;
+    final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
 
@@ -156,8 +156,8 @@ public class PropertyMenu {
     public PropertyProjectingVm projecting(){
         val vm = new PropertyProjectingVm();
 
-        propertyProjectingChildJdoEntities.all().forEach(jdoEntity -> {
-            val childVm = new PropertyProjectingChildVm(jdoEntity);
+        propertyProjectingChildEntities.all().forEach(childEntity -> {
+            val childVm = new PropertyProjectingChildVm(childEntity);
             vm.getChildren().add(childVm);
         });
 

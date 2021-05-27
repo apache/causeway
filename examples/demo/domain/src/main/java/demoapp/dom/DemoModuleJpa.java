@@ -30,6 +30,7 @@ import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPubl
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
+import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
 import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
@@ -129,6 +130,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         ActionExecutionPublishingJpa.class,
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,
+        PropertyProjectingChildJpa.class,
 
 })
 public class DemoModuleJpa {
