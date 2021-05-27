@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.hidden;
+package org.apache.isis.core.metamodel.facets.members.hiddenmember;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacetDerivedFromAuthorization;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-public interface HiddenObjectFacet extends HiddenInstanceFacet {
+/**
+ * Hide a property, collection or action based <i>not</i> on the object
+ * instance itself, but at the &quot;type&quot; level, eg based on the
+ * permissions for the end-user accessing the object.
+ *
+ * <p>
+ * Used by {@link HiddenTypeFacetDerivedFromAuthorization}
+ * to determine if the type overall should be hidden from the end-user:
+ * if all members are hidden, then (all instanes of) the type should be also.
+ * </p>
+ */
+public interface HiddenMemberFacet extends Facet, HidingInteractionAdvisor {
 
-    /**
-     * Clone this facet onto another {@link FacetHolder}.
-     *
-     * <p>
-     * Introduced to allow this facet to be installed onto the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public void copyOnto(FacetHolder holder);
 
 }

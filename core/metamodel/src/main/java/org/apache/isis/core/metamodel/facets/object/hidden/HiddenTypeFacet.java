@@ -19,23 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-public interface HiddenObjectFacet extends HiddenInstanceFacet {
-
-    /**
-     * Clone this facet onto another {@link FacetHolder}.
-     *
-     * <p>
-     * Introduced to allow this facet to be installed onto the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public void copyOnto(FacetHolder holder);
+public interface HiddenTypeFacet extends HiddenInstanceFacet {
 
 }
