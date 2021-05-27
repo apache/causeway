@@ -32,6 +32,8 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
+import lombok.val;
+
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
  * {@link MessageBroker#addMessage(String)}, {@link MessageBroker#addWarning(String)},
@@ -56,8 +58,9 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     @Override
     protected void respond(AjaxRequestTarget target) {
 
+        val configuration = getCommonContext().getConfiguration();
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{
-            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
             if(!_Strings.isNullOrEmpty(feedbackMsg)) {
                 target.appendJavaScript(feedbackMsg);
             }
@@ -76,9 +79,10 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
                 JavaScriptHeaderItem
                 .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
 
+        val configuration = getCommonContext().getConfiguration();
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{
 
-            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
             if(_Strings.isNotEmpty(feedbackMsg)) {
                 response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
             }

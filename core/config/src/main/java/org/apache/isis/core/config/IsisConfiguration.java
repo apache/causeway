@@ -21,6 +21,8 @@ package org.apache.isis.core.config;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,6 +50,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.convert.DurationUnit;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
@@ -2445,6 +2448,75 @@ public class IsisConfiguration {
                  */
                 private String text;
             }
+
+            private final MessagePopups messagePopups = new MessagePopups();
+            @Data
+            public static class MessagePopups {
+
+                /**
+                 * How long the info popup should display before disappearing.
+                 *
+                 * <p>
+                 *     A value of 0 means do not disappear automatically.
+                 * </p>
+                 */
+                Duration infoDelay = Duration.ofMillis(3500);
+
+                /**
+                 * How long the warning popup should display before disappearing.
+                 *
+                 * <p>
+                 *     A value of 0 (the default) means do not disappear automatically.
+                 * </p>
+                 */
+                Duration warningDelay = Duration.ofMillis(0);
+
+                /**
+                 * How long the error popup should display before disappearing.
+                 *
+                 * <p>
+                 *     A value of 0 (the default) means do not disappear automatically.
+                 * </p>
+                 */
+                Duration errorDelay = Duration.ofMillis(0);
+
+                /**
+                 * How far in from the edge the popup should display
+                 */
+                int offset = 100;
+
+                private final Placement placement = new Placement();
+                @Data
+                public static class Placement {
+
+                    public static enum Vertical {
+                        TOP, BOTTOM
+                    }
+
+                    public static enum Horizontal {
+                        LEFT, RIGHT
+                    }
+
+                    /**
+                     * Whether to display popups at the top or the bottom of the page.
+                     *
+                     * <p>
+                     * The default is to show them at the top.
+                     * </p>
+                     */
+                    Vertical vertical = Vertical.TOP;
+
+                    /**
+                     * Whether to display popups aligned ot the left or right of the page.
+                     *
+                     * <p>
+                     * The default is to show them aligned to the right
+                     * </p>
+                     */
+                    Horizontal horizontal = Horizontal.RIGHT;
+                }
+            }
+
         }
     }
 

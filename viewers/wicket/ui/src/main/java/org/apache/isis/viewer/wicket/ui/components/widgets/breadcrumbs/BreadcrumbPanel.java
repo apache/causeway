@@ -42,6 +42,8 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import lombok.val;
+
 public class BreadcrumbPanel
 extends PanelAbstract<Void, IModel<Void>> {
 
@@ -129,10 +131,11 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
+                            val configuration = getCommonContext().getConfiguration();
                             getCommonContext().getMessageBroker()
                             .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");
-                                String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+                                String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
                                 target.appendJavaScript(feedbackMsg);
                             });
                             breadcrumbModel.remove(oidStr);
