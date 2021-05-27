@@ -16,12 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
+package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
@@ -30,19 +29,31 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Profile("demo-jdo")
-//tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(bounding = Bounding.BOUNDED)
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public class ChildJdo {
+import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefEntity;
 
-    public ChildJdo(String name) {
+@Profile("demo-jpa")
+//tag::class[]
+@Entity
+@Table(
+    schema = "demo",
+    name = "JaxbRefJpa"
+)
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(
+        bounding = Bounding.BOUNDED
+        , logicalTypeName = "demo.JaxbRefEntity")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@NoArgsConstructor
+public class JaxbRefJpa
+        extends JaxbRefEntity {
+
+    public JaxbRefJpa(String name) {
         this.name = name;
     }
 

@@ -41,10 +41,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -59,7 +61,7 @@ import lombok.val;
 public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     @XmlTransient @Inject
-    private ChildJdoEntities childJdoEntities;
+    private ValueHolderRepository<String, ? extends JaxbRefEntity> childEntities;
 
     public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());
@@ -73,16 +75,16 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    private ChildJdo favoriteChild = null;
+    private JaxbRefEntity favoriteChild = null;
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "favoriteChild", sequence = "1")
-    public StatefulVmJaxbRefsEntity changeFavoriteChild(ChildJdo newFavorite) {
+    public StatefulVmJaxbRefsEntity changeFavoriteChild(JaxbRefEntity newFavorite) {
         favoriteChild = newFavorite;
         return this;
     }
-    public List<ChildJdo> choices0ChangeFavoriteChild() {
-        List<ChildJdo> children = new ArrayList<>(getChildren());
+    public List<JaxbRefEntity> choices0ChangeFavoriteChild() {
+        List<JaxbRefEntity> children = new ArrayList<>(getChildren());
         children.remove(getFavoriteChild());
         return children;
     }
@@ -98,8 +100,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     //XXX[ISIS-2384] potentially fails with NPE
     @Action(choicesFrom = "children")
-    public StatefulVmJaxbRefsEntity suffixSelected(List<ChildJdo> children) {
-        for(ChildJdo child : children) {
+    public StatefulVmJaxbRefsEntity suffixSelected(List<JaxbRefEntity> children) {
+        for(JaxbRefEntity child : children) {
             child.setName(child.getName() + ", Jr");
         }
         return this;
@@ -109,16 +111,16 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(associateWith = "children", sequence = "2")
     public StatefulVmJaxbRefsEntity addAll() {
-        Objects.requireNonNull(childJdoEntities,
+        Objects.requireNonNull(childEntities,
                 "ViewModel must have its injections points resolved, before any actions can be invoked.");
-        val all = childJdoEntities.all();
+        val all = childEntities.all();
         getChildren().clear();
         getChildren().addAll(all);
         return this;
     }
 
     //XXX[ISIS-2383] in support of an editable property ...
-    public List<ChildJdo> choicesFavoriteChild() {
+    public List<JaxbRefEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }
     public String disableFavoriteChild() {
@@ -130,11 +132,11 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @Collection
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
-    private List<ChildJdo> children = new ArrayList<>();
+    private List<JaxbRefEntity> children = new ArrayList<>();
 
     @Action(choicesFrom = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(sequence = "1")
-    public StatefulVmJaxbRefsEntity addChild(final ChildJdo child) {
+    public StatefulVmJaxbRefsEntity addChild(final JaxbRefEntity child) {
         children.add(child);
         if(children.size() == 1) {
             setFavoriteChild(child);
@@ -144,11 +146,11 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     @Action(choicesFrom = "children", semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(sequence = "2")
-    public StatefulVmJaxbRefsEntity removeChild(final ChildJdo child) {
+    public StatefulVmJaxbRefsEntity removeChild(final JaxbRefEntity child) {
         children.remove(child);
         return this;
     }
-    public List<ChildJdo> choices0RemoveChild() { return getChildren(); }
+    public List<JaxbRefEntity> choices0RemoveChild() { return getChildren(); }
     public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }

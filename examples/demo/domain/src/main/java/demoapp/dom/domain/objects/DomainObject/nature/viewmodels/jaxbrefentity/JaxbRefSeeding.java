@@ -18,27 +18,20 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class ChildJdoEntities {
-
-    public Optional<ChildJdo> find(final String name) {
-        return repositoryService.firstMatch(ChildJdo.class, x -> x.getName().equals(name));
-    }
-
-    public List<ChildJdo> all() {
-        return repositoryService.allInstances(ChildJdo.class);
-    }
+public class JaxbRefSeeding
+extends SeedServiceAbstract {
 
     @Inject
-    RepositoryService repositoryService;
+    public JaxbRefSeeding(ValueHolderRepository<String, ? extends JaxbRefEntity> entities) {
+        super(entities);
+    }
 
 }

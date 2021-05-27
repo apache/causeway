@@ -28,6 +28,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
+import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
@@ -131,6 +132,8 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
+
+        JaxbRefJpa.class,
 
 })
 public class DemoModuleJpa {
