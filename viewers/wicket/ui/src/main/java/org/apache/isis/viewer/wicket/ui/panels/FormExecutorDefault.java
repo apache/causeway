@@ -174,8 +174,9 @@ implements FormExecutor {
                 // also in this branch we also know that there *is* an ajax target to use
                 addComponentsToRedraw(targetIfAny);
 
+                val configuration = getCommonContext().getConfiguration();
                 currentMessageBroker().ifPresent(messageBorker->{
-                    final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker);
+                    final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker, configuration);
                     targetIfAny.appendJavaScript(jGrowlCalls);
                 });
 
