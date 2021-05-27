@@ -30,10 +30,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import demoapp.dom._infra.samples.NameSamples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingJdo;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingJdoEntities;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdo;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdoEntities;
@@ -47,7 +47,7 @@ import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ActionCommandPublishingJdoEntities actionCommandJdoEntities;
+    final ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> actionCommandEntities;
     final ActionExecutionPublishingJdoEntities actionPublishingJdoEntities;
     final NameSamples samples;
 
@@ -71,8 +71,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandPublishingJdo commandPublishing(){
-        return actionCommandJdoEntities.first();
+    public ActionCommandPublishingEntity commandPublishing(){
+        return actionCommandEntities.first().orElse(null);
     }
 
 

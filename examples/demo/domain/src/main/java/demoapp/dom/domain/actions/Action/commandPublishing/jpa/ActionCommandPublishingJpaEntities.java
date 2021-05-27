@@ -16,34 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.commandPublishing;
+package demoapp.dom.domain.actions.Action.commandPublishing.jpa;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jpa")
 @Service
-public class ActionCommandPublishingJdoEntities {
+public class ActionCommandPublishingJpaEntities
+extends ValueHolderRepository<String, ActionCommandPublishingJpa> {
 
-    public Optional<ActionCommandPublishingJdo> find(final String value) {
-        return repositoryService.firstMatch(ActionCommandPublishingJdo.class, x -> Objects.equals(x.getProperty(), value));
+    protected ActionCommandPublishingJpaEntities() {
+        super(ActionCommandPublishingJpa.class);
     }
 
-    public List<ActionCommandPublishingJdo> all() {
-        return repositoryService.allInstances(ActionCommandPublishingJdo.class);
+    @Override
+    protected ActionCommandPublishingJpa newDetachedEntity(String value) {
+        return new ActionCommandPublishingJpa(value);
     }
-
-    public ActionCommandPublishingJdo first() {
-        return all().stream().findFirst().get();
-    }
-
-    @Inject
-    RepositoryService repositoryService;
 
 }

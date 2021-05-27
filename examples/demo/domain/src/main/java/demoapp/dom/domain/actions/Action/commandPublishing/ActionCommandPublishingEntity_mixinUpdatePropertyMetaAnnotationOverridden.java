@@ -26,29 +26,32 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
+@ActionCommandPublishingDisabledMetaAnnotation        // <.>
 @Action(
-    commandPublishing = Publishing.DISABLED       // <.>
+    commandPublishing = Publishing.ENABLED            // <.>
     , semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
     named = "Mixin Update Property"
-    , describedAs = "@Action(command = DISABLED)"
-    , associateWith = "propertyCommandDisabled"
+    , describedAs =
+        "@ActionCommandDisabledMetaAnnotation " +
+        "@Action(command = ENABLED)"
+    , associateWith = "propertyMetaAnnotatedOverridden"
     , sequence = "2"
 )
 @RequiredArgsConstructor
-public class ActionCommandPublishingJdo_mixinUpdatePropertyCommandDisabled {
+public class ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden {
     // ...
 //end::class[]
 
-    private final ActionCommandPublishingJdo actionCommandJdo;
+    private final ActionCommandPublishingEntity actionCommandEntity;
 
-    public ActionCommandPublishingJdo act(final String value) {
-        actionCommandJdo.setPropertyCommandDisabled(value);
-        return actionCommandJdo;
+    public ActionCommandPublishingEntity act(final String value) {
+        actionCommandEntity.setPropertyMetaAnnotatedOverridden(value);
+        return actionCommandEntity;
     }
     public String default0Act() {
-        return actionCommandJdo.getPropertyCommandDisabled();
+        return actionCommandEntity.getPropertyMetaAnnotatedOverridden();
     }
 //tag::class[]
 }

@@ -36,18 +36,18 @@ import lombok.RequiredArgsConstructor;
     , sequence = "2"
 )
 @RequiredArgsConstructor
-public class ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotation {
+public class ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotation {
     // ...
 //end::class[]
 
-    private final ActionCommandPublishingJdo actionCommandJdo;
+    private final ActionCommandPublishingEntity actionCommandEntity;
 
-    public ActionCommandPublishingJdo act(final String value) {
-        actionCommandJdo.setPropertyMetaAnnotated(value);
-        return actionCommandJdo;
+    public ActionCommandPublishingEntity act(final String value) {
+        actionCommandEntity.setPropertyMetaAnnotated(value);
+        return actionCommandEntity;
     }
     public String default0Act() {
-        return actionCommandJdo.getPropertyMetaAnnotated();
+        return actionCommandEntity.getPropertyMetaAnnotated();
     }
 //tag::class[]
 }

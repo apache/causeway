@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.commandPublishing;
+package demoapp.dom.domain.actions.Action.commandPublishing.jdo;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -33,21 +35,24 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingDisabledMetaAnnotation;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEnabledMetaAnnotation;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.ActionCommandJdo"
+        , logicalTypeName = "demo.ActionCommandPublishingEntity"
         , editing = Editing.DISABLED
 )
 public class ActionCommandPublishingJdo
-        implements HasAsciiDocDescription, ExposePersistedCommands {
+        extends ActionCommandPublishingEntity {
     // ...
 //end::class[]
 

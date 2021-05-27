@@ -25,7 +25,7 @@ The `command` element can be specified explicitly using an annotation through `@
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo.java[tags=annotation]
+include::ActionCommandPublishingJpa.java[tags=annotation]
 ----
 <.> explicitly specifies that invoking the action should be reified .
 
@@ -33,7 +33,7 @@ include::ActionCommandPublishingJdo.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo_mixinUpdateProperty.java[tags=class]
+include::../ActionCommandPublishingEntity_mixinUpdateProperty.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should be reified.
 
@@ -43,7 +43,7 @@ The command reification can also be disabled:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo.java[tags=annotation-2]
+include::ActionCommandPublishingJpa.java[tags=annotation-2]
 ----
 <.> explicitly specifies that invoking the action should not be reified.
 
@@ -51,7 +51,7 @@ include::ActionCommandPublishingJdo.java[tags=annotation-2]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo_mixinUpdatePropertyCommandDisabled.java[tags=class]
+include::../ActionCommandPublishingEntity_mixinUpdatePropertyCommandDisabled.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should not be reified.
 
@@ -64,7 +64,7 @@ The `command` element can also be specified using a custom meta-annotation:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingEnabledMetaAnnotation.java[tags=class]
+include::../ActionCommandPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for an action
 <.> annotation can be applied to an action method or to a mixin
@@ -73,7 +73,7 @@ include::ActionCommandPublishingEnabledMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo.java[tags=meta-annotation]
+include::ActionCommandPublishingJpa.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -81,7 +81,7 @@ include::ActionCommandPublishingJdo.java[tags=meta-annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+include::../ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotation.java[tags=class]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -94,7 +94,7 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo.java[tags=meta-annotation-overridden]
+include::ActionCommandPublishingJpa.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
@@ -103,7 +103,7 @@ include::ActionCommandPublishingJdo.java[tags=meta-annotation-overridden]
 +
 [source,java,indent=0]
 ----
-include::ActionCommandPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+include::../ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
