@@ -16,48 +16,63 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing;
+package demoapp.dom.domain.properties.Property.executionPublishing.jpa;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingDisabledMetaAnnotation;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEnabledMetaAnnotation;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyPublishingJdo"
-        , editing = Editing.ENABLED
+@Entity
+@Table(
+      schema = "demo",
+      name = "PropertyExecutionPublishingJpa"
 )
-public class PropertyExecutionPublishingJdo
-        implements HasAsciiDocDescription, ExposeCapturedInteractions {
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(
+      logicalTypeName = "demo.PropertyExecutionPublishingEntity"
+      , editing = Editing.ENABLED
+)
+@NoArgsConstructor
+public class PropertyExecutionPublishingJpa
+        extends PropertyExecutionPublishingEntity {
     // ...
 //end::class[]
 
-    public PropertyExecutionPublishingJdo(String initialValue) {
-        this.propertyUsingAnnotation = initialValue;
-        this.propertyUsingMetaAnnotation = initialValue;
-        this.propertyUsingMetaAnnotationButOverridden = initialValue;
+    public PropertyExecutionPublishingJpa(String initialValue) {
+        this.property = initialValue;
+        this.propertyMetaAnnotated = initialValue;
+        this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
     public String title() {
-        return "Property#publishing";
+        return "Property#executionPublishing (JDO)";
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
 //tag::annotation[]
     @Property(
@@ -65,10 +80,10 @@ public class PropertyExecutionPublishingJdo
     )
     @PropertyLayout(
         describedAs =
-            "@Property(publishing = ENABLED)",
+            "@Property(executionPublishing = ENABLED)",
         fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String property;
 //end::annotation[]
 
 //tag::meta-annotated[]
@@ -79,7 +94,7 @@ public class PropertyExecutionPublishingJdo
         fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
+    private String propertyMetaAnnotated;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
@@ -90,11 +105,11 @@ public class PropertyExecutionPublishingJdo
     @PropertyLayout(
         describedAs =
             "@PropertyPublishingDisabledMetaAnnotation " +
-            "@Property(publishing = ENABLED)",
+            "@Property(executionPublishing = ENABLED)",
         fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
+    private String propertyMetaAnnotatedOverridden;
 //end::meta-annotated-overridden[]
 
 //tag::class[]

@@ -26,12 +26,13 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingJdo;
 import demoapp.dom.types.Samples;
 
 @Service
-public class PropertyExecutionPublishingJdoSeedService extends SeedServiceAbstract {
+public class PropertyExecutionPublishingSeeding extends SeedServiceAbstract {
 
-    public PropertyExecutionPublishingJdoSeedService() {
+    public PropertyExecutionPublishingSeeding() {
         super(PropertyPublishingJdoEntityFixture::new);
     }
 

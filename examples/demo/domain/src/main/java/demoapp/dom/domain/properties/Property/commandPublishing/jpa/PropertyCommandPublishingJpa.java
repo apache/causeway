@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
@@ -44,12 +45,13 @@ import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandP
 //tag::class[]
 @Entity
 @Table(
-schema = "demo",
-name = "PropertyCommandPublishingJpa"
+        schema = "demo",
+        name = "PropertyCommandPublishingJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-logicalTypeName = "demo.PropertyCommandPublishingEntity"
+        logicalTypeName = "demo.PropertyCommandPublishingEntity"
+        , editing = Editing.ENABLED
 )
 @NoArgsConstructor
 public class PropertyCommandPublishingJpa

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
@@ -53,6 +54,7 @@ import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishi
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
     logicalTypeName = "demo.ActionCommandPublishingEntity"
+    , editing = Editing.DISABLED
 )
 @NoArgsConstructor
 public class ActionCommandPublishingJpa

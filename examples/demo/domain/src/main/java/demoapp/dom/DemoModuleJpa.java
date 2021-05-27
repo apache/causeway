@@ -29,6 +29,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
+import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
 import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
@@ -127,6 +128,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         ActionCommandPublishingJpa.class,
         ActionExecutionPublishingJpa.class,
         PropertyCommandPublishingJpa.class,
+        PropertyExecutionPublishingJpa.class,
 
 })
 public class DemoModuleJpa {

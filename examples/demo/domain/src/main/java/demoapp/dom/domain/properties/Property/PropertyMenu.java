@@ -37,8 +37,7 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingVm;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingJdo;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingJdoEntities;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptVm;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
 import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
@@ -57,16 +56,16 @@ import demoapp.dom.types.Samples;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandEntities;
+    final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandPublishingEntities;
+    final ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> propertyExecutionPublishingEntities;
     final PropertyProjectingChildJdoEntities propertyProjectingChildJdoEntities;
-    final PropertyExecutionPublishingJdoEntities propertyPublishingJdoEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
     public PropertyCommandPublishingEntity commandPublishing(){
-        return propertyCommandEntities.first().orElse(null);
+        return propertyCommandPublishingEntities.first().orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -88,8 +87,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyExecutionPublishingJdo executionPublishing(){
-        return propertyPublishingJdoEntities.first();
+    public PropertyExecutionPublishingEntity executionPublishing(){
+        return propertyExecutionPublishingEntities.first().orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

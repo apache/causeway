@@ -1,8 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO publishing was renamed to executionPublishing
-
-The `publishing` element specifies that the editing of an object property should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI].
+The `executionPublishing` element specifies that the editing of an object property should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M5/applib-svc/ExecutionSubscriber.html#spi[`ExecutionSubscriber` SPI].
 
 This is performed _after_ the property has been changed.
 
@@ -17,11 +15,11 @@ NOTE: The demo shows publishing of entities, as this is much more common use cas
 
 == Annotated
 
-The `publisher` element can be specified explicitly using an annotation through `@Property#publishing()`:
+The `executionPublishing` element can be specified explicitly using an annotation through `@Property#executionPublishing()`:
 
 [source,java,indent=0]
 ----
-include::PropertyExecutionPublishingJdo.java[tags=annotation]
+include::PropertyExecutionPublishingJpa.java[tags=annotation]
 ----
 <.> explicitly specifies that modifying the property should be published.
 
@@ -29,13 +27,13 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-The `publishing` element can also be specified using a custom meta-annotation:
+The `executionPublishing` element can also be specified using a custom meta-annotation:
 
 * the meta-annotation is defined as:
 +
 [source,java]
 ----
-include::PropertyExecutionPublishingEnabledMetaAnnotation.java[tags=class]
+include::../PropertyExecutionPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for a property
 <.> annotation can be applied to a property (either its getter or the field directly)
@@ -44,7 +42,7 @@ include::PropertyExecutionPublishingEnabledMetaAnnotation.java[tags=class]
 +
 [source,java,indent=0]
 ----
-include::PropertyExecutionPublishingJdo.java[tags=meta-annotated]
+include::PropertyExecutionPublishingJpa.java[tags=meta-annotated]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -58,13 +56,13 @@ The meta-annotation can itself be overridden:
 +
 [source,java,indent=0]
 ----
-include::PropertyExecutionPublishingJdo.java[tags=meta-annotated-overridden]
+include::PropertyExecutionPublishingJpa.java[tags=meta-annotated-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Property` annotation
 
 
-== PublisherService
+== ExecutionSubscriber
 
 The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
 
