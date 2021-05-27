@@ -51,7 +51,8 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
         "@DomainObjectAuditingDisabledMetaAnnotation " +
         "@DomainObject(publishing=ENABLED)"
 )
-public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo implements DomainObjectEntityChangePublishingJdo {
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo
+        implements DomainObjectEntityChangePublishingJdo {
     // ...
 //end::class[]
 

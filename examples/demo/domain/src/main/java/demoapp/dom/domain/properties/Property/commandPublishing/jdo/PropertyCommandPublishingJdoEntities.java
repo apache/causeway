@@ -16,37 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.commandPublishing;
+package demoapp.dom.domain.properties.Property.commandPublishing.jdo;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
-
+@Profile("demo-jdo")
 @Service
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class PropertyCommandPublishingJdoEntities {
+public class PropertyCommandPublishingJdoEntities
+extends ValueHolderRepository<String, PropertyCommandPublishingJdo> {
 
-    final RepositoryService repositoryService;
-
-    public Optional<PropertyCommandPublishingJdo> find(final String value) {
-        return repositoryService.firstMatch(PropertyCommandPublishingJdo.class, x -> Objects.equals(x.getProperty(), value));
+    protected PropertyCommandPublishingJdoEntities() {
+        super(PropertyCommandPublishingJdo.class);
     }
 
-    public List<PropertyCommandPublishingJdo> all() {
-        return repositoryService.allInstances(PropertyCommandPublishingJdo.class);
+    @Override
+    protected PropertyCommandPublishingJdo newDetachedEntity(String value) {
+        return new PropertyCommandPublishingJdo(value);
     }
-
-    public PropertyCommandPublishingJdo first() {
-        return all().stream().findFirst().get();
-    }
-
 
 }

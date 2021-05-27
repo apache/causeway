@@ -33,8 +33,8 @@ import org.apache.isis.applib.value.Clob;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingJdo;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingVm;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingJdo;
@@ -57,7 +57,7 @@ import demoapp.dom.types.Samples;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final PropertyCommandPublishingJdoEntities propertyCommandJdoEntities;
+    final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandEntities;
     final PropertyProjectingChildJdoEntities propertyProjectingChildJdoEntities;
     final PropertyExecutionPublishingJdoEntities propertyPublishingJdoEntities;
     final Samples<Blob> blobSamples;
@@ -65,8 +65,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandPublishingJdo commandPublishing(){
-        return propertyCommandJdoEntities.first();
+    public PropertyCommandPublishingEntity commandPublishing(){
+        return propertyCommandEntities.first().orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

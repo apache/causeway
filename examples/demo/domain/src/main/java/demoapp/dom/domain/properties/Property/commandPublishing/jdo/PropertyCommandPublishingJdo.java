@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.commandPublishing;
+package demoapp.dom.domain.properties.Property.commandPublishing.jdo;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -30,33 +32,36 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingDisabledMetaAnnotation;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEnabledMetaAnnotation;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
+
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyCommandJdo"
+        , logicalTypeName = "demo.PropertyCommandPublishingEntity"
         , editing = Editing.ENABLED
 )
 public class PropertyCommandPublishingJdo
-        implements HasAsciiDocDescription, ExposePersistedCommands {
+        extends PropertyCommandPublishingEntity {
     // ...
 //end::class[]
 
     public PropertyCommandPublishingJdo(String initialValue) {
         this.property = initialValue;
-        this.propertyCommandDispatchDisabled = initialValue;
+        this.propertyCommandPublishingDisabled = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
     public String title() {
-        return "Property#command";
+        return "Property#commandPublishing (JDO)";
     }
 
 //tag::annotation[]
@@ -64,7 +69,7 @@ public class PropertyCommandPublishingJdo
         commandPublishing = Publishing.ENABLED                  // <.>
     )
     @PropertyLayout(
-        describedAs = "@Property(command = ENABLED)",
+        describedAs = "@Property(commandPublishing = ENABLED)",
         fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
@@ -75,10 +80,10 @@ public class PropertyCommandPublishingJdo
         commandPublishing = Publishing.DISABLED                 // <.>
     )
     @PropertyLayout(
-        describedAs = "@Property(command = DISABLED)",
+        describedAs = "@Property(commandPublishing = DISABLED)",
         fieldSetId = "annotation", sequence = "2")
     @Getter @Setter
-    private String propertyCommandDispatchDisabled;
+    private String propertyCommandPublishingDisabled;
 //end::annotation-2[]
 
 //tag::meta-annotation[]
@@ -92,11 +97,11 @@ public class PropertyCommandPublishingJdo
 
 //tag::meta-annotation-overridden[]
     @PropertyCommandPublishingDisabledMetaAnnotation              // <.>
-    @Property(commandPublishing = Publishing.ENABLED)           // <.>
+    @Property(commandPublishing = Publishing.ENABLED)             // <.>
     @PropertyLayout(
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +
-            "@Property(command = ENABLED)",
+            "@Property(commandPublishing = ENABLED)",
             fieldSetId = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
