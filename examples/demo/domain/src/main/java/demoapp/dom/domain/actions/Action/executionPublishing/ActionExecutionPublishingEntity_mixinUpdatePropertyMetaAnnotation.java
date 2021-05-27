@@ -22,6 +22,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdo;
+
 //tag::class[]
 @ActionExecutionPublishingEnabledMetaAnnotation     // <.>
 @Action(
@@ -33,23 +35,23 @@ import org.apache.isis.applib.annotation.SemanticsOf;
     , associateWith = "propertyMetaAnnotated"
     , sequence = "2"
 )
-public class ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotation {
+public class ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotation {
     // ...
 //end::class[]
 
-    private final ActionExecutionPublishingJdo actionPublishingJdo;
+    private final ActionExecutionPublishingEntity actionPublishingEntity;
 
-    public ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotation(ActionExecutionPublishingJdo actionPublishingJdo) {
-        this.actionPublishingJdo = actionPublishingJdo;
+    public ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotation(ActionExecutionPublishingJdo actionPublishingJdo) {
+        this.actionPublishingEntity = actionPublishingJdo;
     }
 
 //tag::class[]
-    public ActionExecutionPublishingJdo act(final String value) {
-        actionPublishingJdo.setPropertyMetaAnnotated(value);
-        return actionPublishingJdo;
+    public ActionExecutionPublishingEntity act(final String value) {
+        actionPublishingEntity.setPropertyMetaAnnotated(value);
+        return actionPublishingEntity;
     }
     public String default0Act() {
-        return actionPublishingJdo.getPropertyMetaAnnotated();
+        return actionPublishingEntity.getPropertyMetaAnnotated();
     }
 }
 //end::class[]

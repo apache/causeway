@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.commandPublishing;
+package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
+import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
 
 @DomainObject(
-        logicalTypeName = "demo.ActionCommandPublishingEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.ActionExecutionPublishingEntity" // shared permissions with concrete sub class
 )
-public abstract class ActionCommandPublishingEntity
+public abstract class ActionExecutionPublishingEntity
 implements
     HasAsciiDocDescription,
-    ExposePersistedCommands,
+    ExposeCapturedInteractions,
     ValueHolder<String> {
 
     @Override
@@ -40,9 +40,6 @@ implements
 
     protected abstract String getProperty();
     protected abstract void setProperty(String value);
-
-    protected abstract String getPropertyCommandDisabled();
-    protected abstract void setPropertyCommandDisabled(String value);
 
     protected abstract String getPropertyMetaAnnotated();
     protected abstract void setPropertyMetaAnnotated(String value);

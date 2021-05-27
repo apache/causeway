@@ -23,37 +23,36 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdo;
+
 //tag::class[]
-@ActionExecutionPublishingDisabledMetaAnnotation     // <.>
 @Action(
-    executionPublishing = Publishing.ENABLED       // <.>
+    executionPublishing = Publishing.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
     named = "Mixin Update Property"
-    , describedAs =
-        "@ActionPublishingDisabledMetaAnnotation " +
-        "@Action(publishing = ENABLED)"
-    , associateWith = "propertyMetaAnnotatedOverridden"
+    , describedAs = "@Action(publishing = ENABLED)"
+    , associateWith = "property"
     , sequence = "2"
 )
-public class ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden {
+public class ActionExecutionPublishingEntity_mixinUpdateProperty {
     // ...
 //end::class[]
 
-    private final ActionExecutionPublishingJdo actionPublishingJdo;
+    private final ActionExecutionPublishingEntity actionPublishingEntity;
 
-    public ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden(ActionExecutionPublishingJdo actionPublishingJdo) {
-        this.actionPublishingJdo = actionPublishingJdo;
+    public ActionExecutionPublishingEntity_mixinUpdateProperty(ActionExecutionPublishingJdo actionPublishingJdo) {
+        this.actionPublishingEntity = actionPublishingJdo;
     }
 
 //tag::class[]
-    public ActionExecutionPublishingJdo act(final String value) {
-        actionPublishingJdo.setPropertyMetaAnnotatedOverridden(value);
-        return actionPublishingJdo;
+    public ActionExecutionPublishingEntity act(final String value) {
+        actionPublishingEntity.setProperty(value);
+        return actionPublishingEntity;
     }
     public String default0Act() {
-        return actionPublishingJdo.getPropertyMetaAnnotatedOverridden();
+        return actionPublishingEntity.getProperty();
     }
 }
 //end::class[]

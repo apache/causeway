@@ -16,50 +16,63 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.executionPublishing;
+package demoapp.dom.domain.actions.Action.executionPublishing.jpa;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingDisabledMetaAnnotation;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEnabledMetaAnnotation;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
+
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        nature=Nature.ENTITY
-        , logicalTypeName = "demo.ActionPublishingJdo"
-        , editing = Editing.DISABLED
+@Entity
+@Table(
+  schema = "demo",
+  name = "ActionExecutionPublishingJpa"
 )
-public class ActionExecutionPublishingJdo
-        implements HasAsciiDocDescription, ExposeCapturedInteractions {
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(
+  logicalTypeName = "demo.ActionExecutionPublishingEntity"
+)
+@NoArgsConstructor
+public class ActionExecutionPublishingJpa
+        extends ActionExecutionPublishingEntity {
     // ...
 //end::class[]
 
-    public ActionExecutionPublishingJdo(String initialValue) {
+    public ActionExecutionPublishingJpa(String initialValue) {
         this.property = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
     public String title() {
-        return "Action#publishing";
+        return "Action#executionPublishing (JPA)";
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
 //tag::property[]
     @Property()
@@ -89,7 +102,7 @@ public class ActionExecutionPublishingJdo
         , associateWith = "property"
         , sequence = "1"
     )
-    public ActionExecutionPublishingJdo updatePropertyUsingAnnotation(final String value) {
+    public ActionExecutionPublishingJpa updatePropertyUsingAnnotation(final String value) {
         setProperty(value);
         return this;
     }
@@ -110,7 +123,7 @@ public class ActionExecutionPublishingJdo
         , associateWith = "propertyMetaAnnotated"
         , sequence = "1"
     )
-    public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
+    public ActionExecutionPublishingJpa updatePropertyUsingMetaAnnotation(final String value) {
         setPropertyMetaAnnotated(value);
         return this;
     }
@@ -133,7 +146,7 @@ public class ActionExecutionPublishingJdo
         , associateWith = "propertyMetaAnnotatedOverridden"
         , sequence = "1"
     )
-    public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
+    public ActionExecutionPublishingJpa updatePropertyUsingMetaAnnotationButOverridden(final String value) {
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }

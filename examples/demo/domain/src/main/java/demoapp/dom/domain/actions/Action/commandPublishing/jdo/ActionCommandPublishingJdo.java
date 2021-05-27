@@ -64,7 +64,7 @@ public class ActionCommandPublishingJdo
     }
 
     public String title() {
-        return "Action#command";
+        return "Action#commandPublishing (JDO)";
     }
 
 //tag::property[]

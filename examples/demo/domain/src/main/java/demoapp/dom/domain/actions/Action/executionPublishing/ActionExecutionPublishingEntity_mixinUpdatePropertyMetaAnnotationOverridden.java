@@ -23,34 +23,39 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdo;
+
 //tag::class[]
+@ActionExecutionPublishingDisabledMetaAnnotation     // <.>
 @Action(
     executionPublishing = Publishing.ENABLED         // <.>
     , semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
     named = "Mixin Update Property"
-    , describedAs = "@Action(publishing = ENABLED)"
-    , associateWith = "property"
+    , describedAs =
+        "@ActionPublishingDisabledMetaAnnotation " +
+        "@Action(publishing = ENABLED)"
+    , associateWith = "propertyMetaAnnotatedOverridden"
     , sequence = "2"
 )
-public class ActionExecutionPublishingJdo_mixinUpdateProperty {
+public class ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden {
     // ...
 //end::class[]
 
-    private final ActionExecutionPublishingJdo actionPublishingJdo;
+    private final ActionExecutionPublishingEntity actionPublishingEntity;
 
-    public ActionExecutionPublishingJdo_mixinUpdateProperty(ActionExecutionPublishingJdo actionPublishingJdo) {
-        this.actionPublishingJdo = actionPublishingJdo;
+    public ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden(ActionExecutionPublishingJdo actionPublishingJdo) {
+        this.actionPublishingEntity = actionPublishingJdo;
     }
 
 //tag::class[]
-    public ActionExecutionPublishingJdo act(final String value) {
-        actionPublishingJdo.setProperty(value);
-        return actionPublishingJdo;
+    public ActionExecutionPublishingEntity act(final String value) {
+        actionPublishingEntity.setPropertyMetaAnnotatedOverridden(value);
+        return actionPublishingEntity;
     }
     public String default0Act() {
-        return actionPublishingJdo.getProperty();
+        return actionPublishingEntity.getPropertyMetaAnnotatedOverridden();
     }
 }
 //end::class[]

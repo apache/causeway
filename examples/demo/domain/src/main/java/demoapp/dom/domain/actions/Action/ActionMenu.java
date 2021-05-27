@@ -35,8 +35,7 @@ import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdo;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdoEntities;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
 import demoapp.dom.domain.actions.Action.hidden.ActionHiddenVm;
 import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
@@ -48,7 +47,7 @@ import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 public class ActionMenu {
 
     final ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> actionCommandEntities;
-    final ActionExecutionPublishingJdoEntities actionPublishingJdoEntities;
+    final ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> actionPublishingEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -84,8 +83,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionPublishingJdo executionPublishing(){
-        return actionPublishingJdoEntities.first();
+    public ActionExecutionPublishingEntity executionPublishing(){
+        return actionPublishingEntities.first().orElse(null);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

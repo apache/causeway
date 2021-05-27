@@ -30,7 +30,7 @@ include::ActionExecutionPublishingJdo.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionExecutionPublishingJdo_mixinUpdateProperty.java[tags=class]
+include::../ActionExecutionPublishingEntity_mixinUpdateProperty.java[tags=class]
 ----
 <.> explicitly specifies that invoking the mixin action should be published.
 
@@ -43,7 +43,7 @@ The `publishing` element can also be specified using a custom meta-annotation:
 +
 [source,java,indent=0]
 ----
-include::ActionExecutionPublishingEnabledMetaAnnotation.java[tags=class]
+include::../ActionExecutionPublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for an action
 <.> annotation can be applied to an action method or to a mixin
@@ -60,7 +60,7 @@ include::ActionExecutionPublishingJdo.java[tags=meta-annotation]
 +
 [source,java,indent=0]
 ----
-include::ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotation.java[tags=class]
+include::../ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotation.java[tags=class]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -82,7 +82,7 @@ include::ActionExecutionPublishingJdo.java[tags=meta-annotation-overridden]
 +
 [source,java,indent=0]
 ----
-include::ActionExecutionPublishingJdo_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
+include::../ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden.java[tags=class]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Action` annotation
