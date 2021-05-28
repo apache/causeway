@@ -17,24 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hiddenmember;
+package org.apache.isis.core.metamodel.facets.members.navigation;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacetDerivedFromAuthorization;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+
+import lombok.val;
 
 /**
- * Hide a property, collection or action based <i>not</i> on the object
- * instance itself, but at the &quot;type&quot; level, eg based on the
- * permissions for the end-user accessing the object.
- *
- * <p>
- * Used by {@link HiddenTypeFacetDerivedFromAuthorization}
- * to determine if the type overall should be hidden from the end-user:
- * if all members are hidden, then (all instanes of) the type should be also.
- * </p>
+ * Hides object members that would allow navigation to a domain type that is
+ * {@link HiddenTypeFacet hidden} (typically due to security permissions).
  */
-public interface HiddenMemberFacet extends Facet, HidingInteractionAdvisor {
+public interface NavigationFacet extends Facet, HidingInteractionAdvisor {
 
 
 }

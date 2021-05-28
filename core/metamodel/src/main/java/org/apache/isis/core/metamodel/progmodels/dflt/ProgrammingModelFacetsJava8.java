@@ -146,6 +146,7 @@ import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTy
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
@@ -278,6 +279,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
 
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HiddenTypeFacetDerivedFromAuthorizationFactory.class);
 
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
@@ -348,8 +350,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ZonedDateTimeValueFacetUsingSemanticsProviderFactory.class);
 
-        addFactory(FacetProcessingOrder.Z0_BEFORE_FINALLY, HiddenTypeFacetDerivedFromAuthorizationFactory.class);
-
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
@@ -383,6 +383,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveNavigationFacetFromHiddenTypePostProcessor.class);
 
         // must be after all named facets and description facets have been installed
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, TranslationPostProcessor.class);
