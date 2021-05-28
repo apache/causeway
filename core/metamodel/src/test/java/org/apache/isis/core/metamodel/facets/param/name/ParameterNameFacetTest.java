@@ -58,13 +58,12 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
         val metaModelContext = MetaModelContext_forTesting.builder().build();
 
-        ((ProgrammingModelAbstract)programmingModel)
-        .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
+        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         super.setUpFacetedMethodAndParameter();
 
         // verify that
-        assertEquals(117, programmingModel.streamFactories().count());
+        assertEquals(118, programmingModel.streamFactories().count());
     }
 
     @Override
