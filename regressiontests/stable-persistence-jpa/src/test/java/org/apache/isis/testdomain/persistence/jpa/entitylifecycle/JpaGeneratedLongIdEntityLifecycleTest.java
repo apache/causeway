@@ -132,7 +132,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         repository.remove(entity.getPojo());
 
-     // expected post-condition (after removal)
+        // expected post-condition (after removal)
         assertEquals(
                 EntityState.PERSISTABLE_DESTROYED,
                 ManagedObjects.EntityUtil.getEntityState(entity));

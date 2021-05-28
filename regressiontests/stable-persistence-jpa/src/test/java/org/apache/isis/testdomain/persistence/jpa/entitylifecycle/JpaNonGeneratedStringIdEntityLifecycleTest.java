@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -76,14 +75,12 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         entityRef = null;
     }
 
-    @Disabled("TODO: ISIS-2706")
     @Test @Order(0) @Commit
     void cleanup_justInCase() {
         // cleanup just in case
         repository.removeAll(JpaEntityNonGeneratedStringId.class);
     }
 
-    @Disabled("TODO: ISIS-2706")
     @Test @Order(1) @Commit
     void detached_shouldBeProperlyDetected() {
 
@@ -98,7 +95,6 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         entityRef.set(entity);
     }
 
-    @Disabled("TODO: ISIS-2706")
     @Test @Order(2) @Commit
     void attached_shouldBeProperlyDetected() {
 
@@ -113,7 +109,6 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
     }
 
-    @Disabled("TODO: ISIS-2706")
     @Test @Order(3) @Commit
     void removed_shouldBeProperlyDetected() {
 
@@ -137,25 +132,28 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         repository.remove(entity.getPojo());
 
-     // expected post-condition (after removal)
-        assertEquals(
-                EntityState.PERSISTABLE_DESTROYED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+        // expected post-condition (after removal)
+        assertDetachedOrDeleted(entity);
 
         entityRef.set(entity);
     }
 
-    @Disabled("TODO: ISIS-2706")
     @Test @Order(4) @Commit
     void postCondition_shouldBe_anEmptyRepository() {
 
         val entity = entityRef.get();
 
-        assertEquals(
-                EntityState.PERSISTABLE_DESTROYED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+        assertDetachedOrDeleted(entity);
         assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
+    }
+
+    // -- HELPER
+
+    public static void assertDetachedOrDeleted(final ManagedObject entity) {
+        assertEquals(
+                EntityState.PERSISTABLE_DETACHED, // if undecidable we currently return PERSISTABLE_DETACHED;
+                ManagedObjects.EntityUtil.getEntityState(entity));
     }
 
 
