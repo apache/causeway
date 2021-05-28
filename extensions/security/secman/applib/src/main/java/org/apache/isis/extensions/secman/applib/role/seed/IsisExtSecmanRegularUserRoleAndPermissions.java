@@ -104,8 +104,8 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
         val vetoViewing = Can.of(
                 // we explicitly ensure that the user cannot grant themselves
                 // additional privileges or see stuff that they shouldn't
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "permissions"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "filterPermissions"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "effectiveMemberPermissions"),
+                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "filterEffectiveMemberPermissions"),
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "resetPassword"),
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "lock"),
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "unlock"),

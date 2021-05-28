@@ -23,7 +23,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 /**
  * Access to the h2 console UI.
@@ -32,12 +31,12 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
  */
 public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "isis.ext.h2Console";
+    public static final String NAMESPACE = "isis.ext.h2Console";
 
-    public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
+    public static final String ROLE_NAME = NAMESPACE.replace(".","-");
 
     public IsisExtH2ConsoleRoleAndPermissions() {
-        super(ROLE_NAME, String.format("Access to the H2 console UI", IsisModuleTestingFixturesApplib.NAMESPACE));
+        super(ROLE_NAME, "Access to the H2 console UI");
     }
 
     @Override
@@ -46,7 +45,7 @@ public class IsisExtH2ConsoleRoleAndPermissions extends AbstractRoleAndPermissio
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.ofSingleton(
-                        ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE)));
+                        ApplicationFeatureId.newNamespace(NAMESPACE)));
 
     }
 }

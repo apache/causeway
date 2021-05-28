@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.applib.role.seed;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
@@ -45,10 +46,8 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newType(ConfigurationMenu.LOGICAL_TYPE_NAME),
-                        ApplicationFeatureId.newType(ConfigurationProperty.LOGICAL_TYPE_NAME),
-                        ApplicationFeatureId.newType(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
-                        )
+                        ApplicationFeatureId.newNamespace(IsisModuleApplib.NAMESPACE_CONF)
+                )
         );
     }
 }

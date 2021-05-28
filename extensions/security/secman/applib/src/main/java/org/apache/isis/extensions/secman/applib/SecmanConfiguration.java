@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -142,6 +143,7 @@ public class SecmanConfiguration {
             IsisModuleApplib.NAMESPACE_SUDO,
             IsisModuleApplib.NAMESPACE_CONF,
             IsisModuleApplib.NAMESPACE_FEAT,
+            IsisExtH2ConsoleRoleAndPermissions.NAMESPACE,
             IsisModuleExtSecmanApplib.NAMESPACE
     };
 
