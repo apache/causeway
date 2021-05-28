@@ -19,23 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-public interface HiddenObjectFacet extends HiddenInstanceFacet {
+/**
+ * Installs the {@link HiddenTypeFacetDerivedFromAuthorization} on the
+ * {@link ObjectSpecification}.
+ */
+public class HiddenTypeFacetDerivedFromAuthorizationFactory extends FacetFactoryAbstract {
 
-    /**
-     * Clone this facet onto another {@link FacetHolder}.
-     *
-     * <p>
-     * Introduced to allow this facet to be installed onto the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public void copyOnto(FacetHolder holder);
+    public HiddenTypeFacetDerivedFromAuthorizationFactory() {
+        super(FeatureType.OBJECTS_ONLY);
+    }
+
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        FacetUtil.addFacet(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
+    }
 
 }
