@@ -104,7 +104,7 @@
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
 		<datanucleus-api-jdo.version>5.2.7</datanucleus-api-jdo.version>
-		<datanucleus-core.version>5.2.7</datanucleus-core.version>
+		<datanucleus-core.version>5.2.8</datanucleus-core.version>
 		<datanucleus-jdo-api.version>3.2.0-m13</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
