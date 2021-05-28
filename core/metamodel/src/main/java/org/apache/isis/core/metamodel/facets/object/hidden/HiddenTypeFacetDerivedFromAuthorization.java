@@ -22,9 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.hidden;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.CollectionVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -45,53 +42,39 @@ public class HiddenTypeFacetDerivedFromAuthorization extends FacetAbstract imple
     @Override
     public String hides(final VisibilityContext vc) {
         val specification = (ObjectSpecification) getFacetHolder();
-        val beanSort = specification.getBeanSort();
-        switch (beanSort) {
-            case ABSTRACT:
-            case VIEW_MODEL:
-            case ENTITY:
-                val allPropsHidden = specification.streamProperties(MixedIn.INCLUDED)
-                        .map(x -> {
-                            final AuthorizationFacet facet = x.getFacet(AuthorizationFacet.class);
-                            val avc = new PropertyVisibilityContext(vc.getHead(), x.getIdentifier(), vc.getInitiatedBy(), vc.getWhere());
-                            return facet != null && facet.hides(avc) != null;
-                        })
-                        .reduce(true, (prev, next) -> prev && next);
-                if (!allPropsHidden) {
-                    return null;
-                }
 
-                val allCollsHidden = specification.streamCollections(MixedIn.INCLUDED)
-                        .map(x -> {
-                            final AuthorizationFacet facet = x.getFacet(AuthorizationFacet.class);
-                            val avc = new CollectionVisibilityContext(vc.getHead(), x.getIdentifier(), vc.getInitiatedBy(), vc.getWhere());
-                            return facet != null && facet.hides(avc) != null;
-                        })
-                        .reduce(true, (prev, next) -> prev && next);
-                if (!allCollsHidden) {
-                    return null;
-                }
-
-                //noinspection ConstantConditions
-                if (false) {
-                    // not sure that we need to check that all actions
-                    // are hidden before inferring that the type overall is hidden.
-                    val allActsHidden = specification.streamAnyActions(MixedIn.INCLUDED)
-                            .map(x -> {
-                                final AuthorizationFacet facet = x.getFacet(AuthorizationFacet.class);
-                                val avc = new ActionVisibilityContext(vc.getHead(), x, x.getIdentifier(), vc.getInitiatedBy(), vc.getWhere());
-                                return facet != null && facet.hides(avc) != null;
-                            })
-                            .reduce(true, (prev, next) -> prev && next);
-                    if (!allActsHidden) {
-                        return null;
-                    }
-                }
-
-                return "All properties and collections are hidden";
-            default:
-                return null;
+        if(!specification.isEntityOrViewModelOrAbstract()) {
+            return null;
         }
+
+        val hasVisisbleProperty = specification.streamProperties(MixedIn.INCLUDED)
+                .anyMatch(prop ->!AuthorizationFacet.hidesProperty(prop, vc));
+
+        if (hasVisisbleProperty) {
+            return null;
+        }
+
+        val hasVisibleCollection = specification.streamCollections(MixedIn.INCLUDED)
+                .anyMatch(coll ->!AuthorizationFacet.hidesCollection(coll, vc));
+
+        if (hasVisibleCollection) {
+            return null;
+        }
+
+        //noinspection ConstantConditions
+        if (false) {
+            // not sure that we need to check that all actions
+            // are hidden before inferring that the type overall is hidden.
+            val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
+                    .anyMatch(act ->!AuthorizationFacet.hidesAction(act, vc));
+
+            if (hasVisibleCollection) {
+                return null;
+            }
+        }
+
+        return "All properties and collections are hidden";
+
     }
 
 }

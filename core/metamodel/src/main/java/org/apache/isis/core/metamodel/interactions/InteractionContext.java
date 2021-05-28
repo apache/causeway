@@ -91,7 +91,7 @@ public abstract class InteractionContext {
     @Getter private final Identifier identifier;
 
     /**
-     * Model that holds the object involved with the interaction.
+     * Model that holds the objects involved with the interaction.
      */
     @Getter private final InteractionHead head;
 

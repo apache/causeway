@@ -20,13 +20,66 @@
 package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.CollectionVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.NonNull;
 
 /**
  * Optionally hide or disable an object, property, collection or action
  * depending on the authorization.
  */
-public interface AuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+public interface AuthorizationFacet
+extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+
+    public static boolean hidesProperty(
+            final @NonNull OneToOneAssociation property,
+            final @NonNull VisibilityContext vc) {
+
+        return property.lookupFacet(AuthorizationFacet.class)
+                .map(facet->facet.hides(
+                        new PropertyVisibilityContext(
+                                vc.getHead(),
+                                property.getIdentifier(),
+                                vc.getInitiatedBy(),
+                                vc.getWhere())) != null)
+                .orElse(false);
+    }
+
+    public static boolean hidesCollection(
+            final @NonNull OneToManyAssociation collection,
+            final @NonNull VisibilityContext vc) {
+
+        return collection.lookupFacet(AuthorizationFacet.class)
+                .map(facet->facet.hides(
+                        new CollectionVisibilityContext(
+                                vc.getHead(),
+                                collection.getIdentifier(),
+                                vc.getInitiatedBy(),
+                                vc.getWhere())) != null)
+                .orElse(false);
+    }
+
+    public static boolean hidesAction(
+            final @NonNull ObjectAction action,
+            final @NonNull VisibilityContext vc) {
+
+        return action.lookupFacet(AuthorizationFacet.class)
+                .map(facet->facet.hides(
+                        new ActionVisibilityContext(
+                                vc.getHead(),
+                                action,
+                                action.getIdentifier(),
+                                vc.getInitiatedBy(),
+                                vc.getWhere())) != null)
+                .orElse(false);
+    }
 
 }
