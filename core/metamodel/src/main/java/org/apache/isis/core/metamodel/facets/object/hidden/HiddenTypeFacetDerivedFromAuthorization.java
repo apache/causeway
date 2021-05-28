@@ -47,15 +47,15 @@ public class HiddenTypeFacetDerivedFromAuthorization extends FacetAbstract imple
             return null;
         }
 
-        val hasVisisbleProperty = specification.streamProperties(MixedIn.INCLUDED)
-                .anyMatch(prop ->!AuthorizationFacet.hidesProperty(prop, vc));
+        val hasVisibleProperty = specification.streamProperties(MixedIn.INCLUDED)
+                .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));
 
-        if (hasVisisbleProperty) {
+        if (hasVisibleProperty) {
             return null;
         }
 
         val hasVisibleCollection = specification.streamCollections(MixedIn.INCLUDED)
-                .anyMatch(coll ->!AuthorizationFacet.hidesCollection(coll, vc));
+                .anyMatch(coll -> !AuthorizationFacet.hidesCollection(coll, vc));
 
         if (hasVisibleCollection) {
             return null;
@@ -66,7 +66,7 @@ public class HiddenTypeFacetDerivedFromAuthorization extends FacetAbstract imple
             // not sure that we need to check that all actions
             // are hidden before inferring that the type overall is hidden.
             val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
-                    .anyMatch(act ->!AuthorizationFacet.hidesAction(act, vc));
+                    .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
 
             if (hasVisibleCollection) {
                 return null;
