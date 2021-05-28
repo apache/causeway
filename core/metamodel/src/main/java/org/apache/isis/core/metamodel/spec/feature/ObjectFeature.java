@@ -73,7 +73,7 @@ public interface ObjectFeature extends Specification {
      * <li>for an {@link ObjectAction action}, will always return <tt>null</tt>.
      * See instead {@link ObjectAction#getReturnType()} and
      * {@link ObjectAction#getParameterTypes()}.
-     * <li>for a {@link ObjectActionParameter action}, will return the type of
+     * <li>for an {@link ObjectActionParameter action parameter}, will return the type of
      * the parameter}.
      * </ul>
      */

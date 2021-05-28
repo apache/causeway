@@ -51,7 +51,7 @@ extends HiddenObjectFacetAbstract {
             return null;
         }
         final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invoke(method, target);
-        return isHidden.booleanValue() ? "Hidden" : null;
+        return isHidden ? "Hidden" : null;
     }
 
     @Override

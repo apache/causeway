@@ -26,7 +26,6 @@ import javax.inject.Provider;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
@@ -107,7 +106,6 @@ public class TenantedAuthorizationPostProcessor
     }
 
     @Inject ServiceRegistry serviceRegistry;
-    @Inject ServiceInjector serviceInjector;
     @Inject UserService userService;
     @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;

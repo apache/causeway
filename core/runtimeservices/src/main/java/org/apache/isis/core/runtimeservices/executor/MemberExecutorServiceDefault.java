@@ -260,7 +260,7 @@ implements MemberExecutorService {
         }
 
         val entityState = ManagedObjects.EntityUtil.getEntityState(resultAdapter);
-        if(entityState.isDetached()) {
+        if(entityState.isDetached())   {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
