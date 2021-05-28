@@ -24,16 +24,18 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 
+import lombok.RequiredArgsConstructor;
+
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 @Collection()
+@RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotOverriddenEntities {
 
+    @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    public DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotOverriddenEntities(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
-    }
 
     public List<DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo> coll() {
         return publishingEnabledJdoEntities.all();

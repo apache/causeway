@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -33,22 +35,23 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingJdo;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledEntity;
 
+@Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
     nature=Nature.ENTITY
-    , logicalTypeName = "demo.DomainObjectAuditingEnabledJdo"
+    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity"
     , entityChangePublishing = Publishing.ENABLED            // <.>
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-    describedAs = "@DomainObject(publishing=ENABLED)"
+    describedAs = "@DomainObject(entityChangePublishing=ENABLED)"
 )
 public class DomainObjectEntityChangePublishingEnabledJdo
-                implements DomainObjectEntityChangePublishingJdo {
+                extends DomainObjectEntityChangePublishingEnabledEntity {
     // ...
 //end::class[]
 

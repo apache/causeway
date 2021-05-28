@@ -18,26 +18,32 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain._changes.ExposeCapturedChanges;
 
+@DomainObject(
+        logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity" // shared permissions with concrete sub class
+)
 //tag::class[]
-public interface DomainObjectEntityChangePublishingJdo
-        extends HasAsciiDocDescription, ExposeCapturedChanges {
+public abstract class DomainObjectEntityChangePublishingEntity
+implements
+    HasAsciiDocDescription,
+    ExposeCapturedChanges,
+    ValueHolder<String> {
 
-    @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSetId = "property", sequence = "1")
-    String getProperty();
-    void setProperty(String value);
+    @Override
+    public String value() {
+        return getProperty();
+    }
 
-    @Property(editing = Editing.DISABLED)
-    @PropertyLayout(fieldSetId = "action", sequence = "1")
-    String getPropertyUpdatedByAction();
-    void setPropertyUpdatedByAction(String value);
+    public abstract String getProperty();
+    public abstract void setProperty(String value);
+
+    public abstract String getPropertyUpdatedByAction();
+    public abstract void setPropertyUpdatedByAction(String value);
 
 }
 //end::class[]

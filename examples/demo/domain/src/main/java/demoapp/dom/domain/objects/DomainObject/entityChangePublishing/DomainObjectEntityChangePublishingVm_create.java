@@ -25,10 +25,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
@@ -51,16 +52,16 @@ public class DomainObjectEntityChangePublishingVm_create {
             , boolean publishingEnabledMetaAnnotOverridden
     ) {
         if(publishingEnabled) {
-            publishingEnabledJdoEntities.create(newValue);
+            publishingEnabledEntities.create(newValue);
         }
         if(publishingDisabled) {
-            publishingDisabledJdoEntities.create(newValue);
+            publishingDisabledEntities.create(newValue);
         }
         if(publishingEnabledMetaAnnotated) {
-            publishingEnabledMetaAnnotatedJdoEntities.create(newValue);
+            publishingEnabledMetaAnnotatedEntities.create(newValue);
         }
         if(publishingEnabledMetaAnnotOverridden) {
-            publishingEnabledMetaAnnotOverriddenJdoEntities.create(newValue);
+            publishingEnabledMetaAnnotOverriddenEntities.create(newValue);
         }
         return domainObjectAuditingVm;
     }
@@ -81,16 +82,16 @@ public class DomainObjectEntityChangePublishingVm_create {
     }
 
     @Inject
-    DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledEntity> publishingEnabledEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
 
     @Inject
     NameSamples nameSamples;

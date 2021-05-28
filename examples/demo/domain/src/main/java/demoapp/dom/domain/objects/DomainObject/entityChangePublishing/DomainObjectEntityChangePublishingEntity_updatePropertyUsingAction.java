@@ -29,22 +29,23 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
     semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     associateWith = "propertyUpdatedByAction")
-public class DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction implements HasAsciiDocDescription {
+public class DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction
+        implements HasAsciiDocDescription {
     // ...
 //end::class[]
-    private final DomainObjectEntityChangePublishingJdo domainObjectAuditingJdo;
+    private final DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity;
 
-    public DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction(DomainObjectEntityChangePublishingJdo domainObjectAuditingJdo) {
-        this.domainObjectAuditingJdo = domainObjectAuditingJdo;
+    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction(DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity) {
+        this.domainObjectAuditingEntity = domainObjectAuditingEntity;
     }
 
 //tag::class[]
-    public DomainObjectEntityChangePublishingJdo_updatePropertyUsingAction updateProperty(final String value) {
-        domainObjectAuditingJdo.setPropertyUpdatedByAction(value);
+    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction updateProperty(final String value) {
+        domainObjectAuditingEntity.setPropertyUpdatedByAction(value);
         return this;
     }
     public String default0UpdateProperty() {
-        return domainObjectAuditingJdo.getPropertyUpdatedByAction();
+        return domainObjectAuditingEntity.getPropertyUpdatedByAction();
     }
 
 }

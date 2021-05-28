@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled;
 
 import java.util.List;
 
@@ -27,20 +27,20 @@ import org.apache.isis.applib.annotation.Collection;
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdo;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdoEntities;
 
 @Collection()
 @RequiredArgsConstructor
-public class DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotatedEntities {
+public class DomainObjectEntityChangePublishingVm_publishingEnabledAnnotatedEntities {
 
     @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    public List<DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo> coll() {
+    public List<DomainObjectEntityChangePublishingEnabledJdo> coll() {
         return publishingEnabledJdoEntities.all();
     }
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledJdoEntities;
+    DomainObjectEntityChangePublishingEnabledJdoEntities publishingEnabledJdoEntities;
 }

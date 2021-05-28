@@ -27,10 +27,11 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 
-import demoapp.dom.types.Samples;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
@@ -58,6 +59,15 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
         return all().stream().findFirst();
     }
 
+    public void remove(Object entity) {
+        repositoryService.removeAndFlush(entity);
+    }
+
+    public E create(T value) {
+        return repositoryService.persistAndFlush(newDetachedEntity(value));
+    }
+
+
     // -- SEEDING SUPPORT
 
     @Inject protected Samples<T> samples;
@@ -70,5 +80,7 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
                 .peek(repositoryService::persist)
                 .forEach(onSamplePersisted);
     }
+
+
 
 }

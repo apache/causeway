@@ -27,11 +27,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -51,16 +53,16 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
     ) {
 
         if(publishingEnabled) {
-            renumber((List)publishingEnabledJdoEntities.all());
+            renumber((List)publishingEnabledEntities.all());
         }
         if(publishingDisabled) {
-            renumber((List)publishingDisabledJdoEntities.all());
+            renumber((List)publishingDisabledEntities.all());
         }
         if(publishingEnabledMetaAnnotated) {
-            renumber((List)publishingEnabledMetaAnnotatedJdoEntities.all());
+            renumber((List)publishingEnabledMetaAnnotatedEntities.all());
         }
         if(publishingEnabledMetaAnnotOverridden) {
-            renumber((List)publishingEnabledMetaAnnotOverriddenJdoEntities.all());
+            renumber((List)publishingEnabledMetaAnnotOverriddenEntities.all());
         }
 
         return domainObjectAuditingVm;
@@ -79,20 +81,21 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
     }
 
     final static AtomicInteger counter = new AtomicInteger(0);
-    private static void renumber(List<DomainObjectEntityChangePublishingJdo> all) {
+    private static void renumber(List<DomainObjectEntityChangePublishingEntity> all) {
         all.forEach(x -> x.setPropertyUpdatedByAction("Object #" + counter.incrementAndGet()));
     }
 
     @Inject
-    DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledEntity> publishingEnabledEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
+
 }
 //end::class[]

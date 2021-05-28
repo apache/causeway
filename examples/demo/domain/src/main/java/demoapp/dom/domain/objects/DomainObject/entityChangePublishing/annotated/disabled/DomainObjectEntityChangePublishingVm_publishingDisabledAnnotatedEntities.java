@@ -24,16 +24,18 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 
+import lombok.RequiredArgsConstructor;
+
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdo;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities;
 
 @Collection()
+@RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_publishingDisabledAnnotatedEntities {
 
+    @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    public DomainObjectEntityChangePublishingVm_publishingDisabledAnnotatedEntities(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
-    }
 
     public List<DomainObjectEntityChangePublishingDisabledJdo> coll() {
         return publishingDisabledJdoEntities.all();

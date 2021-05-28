@@ -25,14 +25,11 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -47,48 +44,56 @@ public class DomainObjectEntityChangePublishingVm_delete {
     }
 
     public DomainObjectEntityChangePublishingVm act(
-            @Nullable DomainObjectEntityChangePublishingEnabledJdo enabledJdo
-            , @Nullable DomainObjectEntityChangePublishingDisabledJdo disabledJdo
-            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo metaAnnotatedJdo
-            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo metaAnnotOverriddenJdo
+            @Nullable DomainObjectEntityChangePublishingEnabledEntity enabledEntity
+            , @Nullable DomainObjectEntityChangePublishingDisabledEntity disabledEntity
+            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity metaAnnotatedEntity
+            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity metaAnnotOverriddenEntity
             ) {
-        if(enabledJdo != null) {
-            publishingEnabledJdoEntities.remove(enabledJdo);
+        if(enabledEntity != null) {
+            publishingEnabledEntities.remove(enabledEntity);
         }
-        if(disabledJdo != null) {
-            publishingDisabledJdoEntities.remove(disabledJdo);
+        if(disabledEntity != null) {
+            publishingDisabledEntities.remove(disabledEntity);
         }
-        if(metaAnnotatedJdo != null) {
-            publishingEnabledMetaAnnotatedJdoEntities.remove(metaAnnotatedJdo);
+        if(metaAnnotatedEntity != null) {
+            publishingEnabledMetaAnnotatedEntities.remove(metaAnnotatedEntity);
         }
-        if(metaAnnotOverriddenJdo != null) {
-            publishingEnabledMetaAnnotOverriddenJdoEntities.remove(metaAnnotOverriddenJdo);
+        if(metaAnnotOverriddenEntity != null) {
+            publishingEnabledMetaAnnotOverriddenEntities.remove(metaAnnotOverriddenEntity);
         }
         return domainObjectAuditingVm;
     }
-    public DomainObjectEntityChangePublishingEnabledJdo default0Act() {
-        return publishingEnabledJdoEntities.first().get();
+    public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
+        return publishingEnabledEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingDisabledJdo default1Act() {
-        return publishingDisabledJdoEntities.first().get();
+    public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
+        return publishingDisabledEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo default2Act() {
-        return publishingEnabledMetaAnnotatedJdoEntities.first().get();
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
+        return publishingEnabledMetaAnnotatedEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo default3Act() {
-        return publishingEnabledMetaAnnotOverriddenJdoEntities.first().get();
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
+        return publishingEnabledMetaAnnotOverriddenEntities.first().orElse(null);
     }
     public String disableAct() {
-        if(!publishingEnabledJdoEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
-        if(!publishingDisabledJdoEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
-        if(!publishingEnabledMetaAnnotatedJdoEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }
-        if(!publishingEnabledMetaAnnotOverriddenJdoEntities.first().isPresent()) { return "No MetaAnnotated But Overridden to delete"; }
+        if(!publishingEnabledEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
+        if(!publishingDisabledEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
+        if(!publishingEnabledMetaAnnotatedEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }
+        if(!publishingEnabledMetaAnnotOverriddenEntities.first().isPresent()) { return "No MetaAnnotated But Overridden to delete"; }
         return null;
     }
 
-    @Inject DomainObjectAuditingEnabledJdoEntities publishingEnabledJdoEntities;
-    @Inject DomainObjectEntityChangePublishingDisabledJdoEntities publishingDisabledJdoEntities;
-    @Inject DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledMetaAnnotatedJdoEntities;
-    @Inject DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledMetaAnnotOverriddenJdoEntities;
+    @Inject
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledEntity> publishingEnabledEntities;
+
+    @Inject
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
+
+    @Inject
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
+
+    @Inject
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
+
 }
 //end::class[]

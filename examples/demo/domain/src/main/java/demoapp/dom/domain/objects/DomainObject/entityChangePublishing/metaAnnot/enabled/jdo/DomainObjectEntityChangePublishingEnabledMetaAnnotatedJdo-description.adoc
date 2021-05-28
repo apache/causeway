@@ -4,13 +4,11 @@ WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublish
 
 The `entityChangePublishing` element can also be specified using a custom meta-annotation:
 
-:examples/demo/domain/src/main/java/demoapp/dom/annotDomain/DomainObject/publishing/metaAnnotOverridden/enabled/DomainObjectPublishingEnabledMetaAnnotOverriddenJdo-description.adoc
-
 * the meta-annotation is defined as:
 +
 [source,java]
 ----
-include::../DomainObjectEntityChangePublishingDisabledMetaAnnotation.java[tags=class]
+include::../../DomainObjectEntityChangePublishingEnabledMetaAnnotation.java[tags=class]
 ----
 <.> annotated for a domain object
 <.> annotation can be applied to the type or a further meta-annotation type only
@@ -19,6 +17,6 @@ include::../DomainObjectEntityChangePublishingDisabledMetaAnnotation.java[tags=c
 +
 [source,java,indent=0]
 ----
-include::DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo.java[tags=class]
+include::DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo.java[tags=class]
 ----
 <.> semantic is inherited from the meta-annotation
