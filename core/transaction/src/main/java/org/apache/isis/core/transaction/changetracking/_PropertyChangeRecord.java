@@ -73,7 +73,7 @@ final class _PropertyChangeRecord {
     }
 
     void updatePostValue() {
-        preAndPostValue = EntityUtil.isDestroyed(entity)
+        preAndPostValue = EntityUtil.isRemoved(entity)
                 // don't touch the object!!!
                 // JDO, for example, will complain otherwise...
                 ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)

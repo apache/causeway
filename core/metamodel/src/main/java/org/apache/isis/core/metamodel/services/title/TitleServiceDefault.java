@@ -63,8 +63,8 @@ public class TitleServiceDefault implements TitleService {
             return "[UNSPECIFIED]";
         }
 
-        if(EntityUtil.isDestroyed(objectAdapter)) {
-            return "[DELETED]";
+        if(EntityUtil.isDetachedOrRemoved(objectAdapter)) {
+            return "[DETACHED]";
         } else {
             return objectAdapter.getSpecification().getTitle(null, objectAdapter);
         }

@@ -48,7 +48,7 @@ public enum EntityState {
      * Object with this state is an entity that has been removed from the
      * database. Objects in this state may no longer be interacted with.
      */
-    PERSISTABLE_DESTROYED,
+    PERSISTABLE_REMOVED,
     ;
 
     /**
@@ -76,9 +76,22 @@ public enum EntityState {
     /**
      * Object with this state is an entity that has been removed from the
      * database.  Objects in this state may no longer be interacted with.
+     * <p>
+     * Only supported by JDO. Will always return false with JPA.
      */
-    public boolean isDestroyed() {
-        return this == PERSISTABLE_DESTROYED;
+    public boolean isRemoved() {
+        return this == PERSISTABLE_REMOVED;
     }
+
+    public boolean isDetachedOrRemoved() {
+        return this == PERSISTABLE_REMOVED
+                || this == PERSISTABLE_DETACHED;
+    }
+
+    public boolean isAttachedOrRemoved() {
+        return this == PERSISTABLE_REMOVED
+                || this == PERSISTABLE_REMOVED;
+    }
+
 
 }

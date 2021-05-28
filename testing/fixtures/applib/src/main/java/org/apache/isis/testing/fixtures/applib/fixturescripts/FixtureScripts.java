@@ -79,8 +79,8 @@ public class FixtureScripts {
     //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;
     @Inject private JaxbService jaxbService;
-    //  @Inject private BookmarkService bookmarkService;
-    @Inject private ServiceRegistry serviceRegistry;
+    // @Inject private BookmarkService bookmarkService;
+    // @Inject private ServiceRegistry serviceRegistry;
     @Inject private ServiceInjector serviceInjector;
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
@@ -205,7 +205,7 @@ public class FixtureScripts {
             final ServiceRegistry serviceRegistry) {
 
         this.specification = fixtureScriptsSpecificationProvider.orElse(() -> FixtureScriptsSpecification.builder(PACKAGE_PREFIX).build()).getSpecification();
-        this.serviceRegistry = serviceRegistry;
+        // this.serviceRegistry = serviceRegistry;
 
         val packagePrefix = specification.getPackagePrefix();
         fixtureScriptByFriendlyName =
@@ -466,7 +466,9 @@ public class FixtureScripts {
         if(object == null) {
             return null;
         }
-        if (object instanceof ViewModel || repositoryService.isPersistent(object)) {
+
+        if (object instanceof ViewModel
+                || repositoryService.getEntityState(object).isAttachedOrRemoved()) {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {
@@ -512,6 +514,7 @@ public class FixtureScripts {
         };
 
     }
+
 
     // -- DEPRECATIONS
 

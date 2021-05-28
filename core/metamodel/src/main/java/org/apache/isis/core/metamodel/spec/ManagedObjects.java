@@ -525,12 +525,13 @@ public final class ManagedObjects {
             return EntityUtil.getEntityState(adapter).isAttached();
         }
 
-        public static boolean isDetached(@Nullable ManagedObject adapter) {
-            return EntityUtil.getEntityState(adapter).isDetached();
+        public static boolean isDetachedOrRemoved(@Nullable ManagedObject adapter) {
+            return EntityUtil.getEntityState(adapter).isDetachedOrRemoved();
         }
 
-        public static boolean isDestroyed(@Nullable ManagedObject adapter) {
-            return EntityUtil.getEntityState(adapter).isDestroyed();
+        /** only supported by JDO - always false with JPA */
+        public static boolean isRemoved(@Nullable ManagedObject adapter) {
+            return EntityUtil.getEntityState(adapter).isRemoved();
         }
 
     }
@@ -602,7 +603,7 @@ public final class ManagedObjects {
             }
             val spec = adapter.getSpecification();
             if(spec.isEntity()) {
-                if(EntityUtil.isDestroyed(adapter)) {
+                if(EntityUtil.isDetachedOrRemoved(adapter)) {
                     return false;
                 }
             }

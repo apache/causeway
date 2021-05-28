@@ -30,7 +30,6 @@ import org.apache.isis.applib.query.QueryRange;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Collects together methods for creating, persisting and searching for
@@ -416,40 +415,40 @@ public interface RepositoryService {
         return detachedEntity(ofType);
     }
 
-    /**
-     * Determines if the specified object is persistent (that it is stored
-     * permanently outside of the virtual machine
-     * in the object store).
-     *
-     * <p>
-     *     This method can also return <code>true</code> if the object has been
-     *     {@link #isDeleted(Object) deleted} from the object store.
-     * </p>
-     *
-     * @deprecated due to ambiguous semantic, use
-     *             {@link #getEntityState(Object)} instead
-     *
-     * @see #getEntityState(Object)
-     */
-    @Deprecated
-    default boolean isPersistent(Object domainObject) {
-        val entityState = getEntityState(domainObject);
-        return entityState.isAttached() || entityState.isDestroyed();
-    }
-
-    /**
-     * Determines if the specified object has been deleted from the object store.
-     *
-     * @deprecated due to ambiguous semantic, use
-     *             {@link #getEntityState(Object)} instead
-     *
-     * @see #getEntityState(Object)
-     */
-    @Deprecated
-    default boolean isDeleted(Object domainObject) {
-        val entityState = getEntityState(domainObject);
-        return entityState.isDestroyed();
-    }
+//    /**
+//     * Determines if the specified object is persistent (that it is stored
+//     * permanently outside of the virtual machine
+//     * in the object store).
+//     *
+//     * <p>
+//     *     This method can also return <code>true</code> if the object has been
+//     *     {@link #isDeleted(Object) deleted} from the object store.
+//     * </p>
+//     *
+//     * @deprecated due to ambiguous semantic, use
+//     *             {@link #getEntityState(Object)} instead
+//     *
+//     * @see #getEntityState(Object)
+//     */
+//    @Deprecated
+//    default boolean isPersistent(Object domainObject) {
+//        val entityState = getEntityState(domainObject);
+//        return entityState.isAttached() || entityState.isDestroyed();
+//    }
+//
+//    /**
+//     * Determines if the specified object has been deleted from the object store.
+//     *
+//     * @deprecated due to ambiguous semantic, use
+//     *             {@link #getEntityState(Object)} instead
+//     *
+//     * @see #getEntityState(Object)
+//     */
+//    @Deprecated
+//    default boolean isDeleted(Object domainObject) {
+//        val entityState = getEntityState(domainObject);
+//        return entityState.isDestroyed();
+//    }
 
 
 }

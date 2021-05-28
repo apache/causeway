@@ -147,7 +147,7 @@ implements FormExecutor {
                     // should circuit the redirect check later on; there's no need to reset the adapter
                     // (this also provides a workaround for view models wrapping now-deleted entities)
                     targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
-                } else if(EntityUtil.isDestroyed(targetAdapter)) {
+                } else if(EntityUtil.isDetachedOrRemoved(targetAdapter)) {
                     // if this was an entity delete action
                     // then we don't re-fetch / re-create the targetAdapter
                     targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
@@ -175,7 +175,7 @@ implements FormExecutor {
                     targetEntityModel.setObject(resultAdapter);
                     targetAdapter = targetEntityModel.getManagedObject();
                 }
-                if(!EntityUtil.isDestroyed(targetAdapter)) {
+                if(!EntityUtil.isDetachedOrRemoved(targetAdapter)) {
                     targetEntityModel.resetPropertyModels();
                 }
 
@@ -284,7 +284,7 @@ implements FormExecutor {
             }
 
             private boolean isUnchanging(final IsisBlobOrClobPanelAbstract<?> object) {
-                final ScalarModel scalarModel = (ScalarModel) object.getModel();
+                final ScalarModel scalarModel = object.getModel();
                 final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
                 return unchangingFacet != null && unchangingFacet.value();
             }
