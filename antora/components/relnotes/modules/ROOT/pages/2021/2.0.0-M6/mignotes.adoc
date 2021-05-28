@@ -52,6 +52,14 @@ Module `IsisModuleExtModelAnnotation` was removed and is no longer required.
 
 Service `BookmarkService` has been improved, such that its methods return `Optional<?>` instead of nullable objects. 
 
+Service `RepositoryService.isPersistent(Object domainObject)` has been removed. Use `getEntityState(Object domainObject)` instead.
+
+Service `RepositoryService.isDeleted(Object domainObject)` has been removed. Use `getEntityState(Object domainObject)` instead.
+
+Enum `EntityState.PERSISTABLE_DESTROYED` and `isDestroyed()` were renamed to `PERSISTABLE_REMOVED` and `isRemoved()`. Also note: the `removed` entity life-cycle state is only supported by _JDO_, 
+whereas _JPA_ is indifferent to whether an entity instance was `removed` or is `detached`. The framework's JPA integration will always report `detached`.    
+
+
 The _Wicket Viewer_ was migrated from using _Bootstrap 3_ to _Bootstrap 4_, which might have more or less severe implications on (your) customized _CSS_ and _JavaScript_ and _Wicket_ components. 
 
 == Extensions
