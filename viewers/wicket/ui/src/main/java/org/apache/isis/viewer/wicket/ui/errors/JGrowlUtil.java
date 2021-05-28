@@ -31,26 +31,23 @@ public class JGrowlUtil {
 
     private JGrowlUtil(){}
 
-    @RequiredArgsConstructor @Getter
     static enum MessageSeverity {
-        INFO(3500) {
+        INFO {
             @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getInfoDelay().toMillis();
             }
         },
-        WARNING(0) {
+        WARNING {
             @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getWarningDelay().toMillis();
             }
         }, // sticky
-        DANGER(0){
+        DANGER{
             @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getErrorDelay().toMillis();
             }
         } // sticky
         ;
-
-        private final int delayMillis;
 
         public String cssClassSuffix() {
             return name().toLowerCase();
