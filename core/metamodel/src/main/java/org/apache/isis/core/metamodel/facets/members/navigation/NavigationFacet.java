@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.hidden;
+package org.apache.isis.core.metamodel.facets.members.navigation;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
-public interface HiddenObjectFacet extends HiddenInstanceFacet {
+import lombok.val;
 
-    /**
-     * Clone this facet onto another {@link FacetHolder}.
-     *
-     * <p>
-     * Introduced to allow this facet to be installed onto the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public void copyOnto(FacetHolder holder);
+/**
+ * Hides object members that would allow navigation to a domain type that is
+ * {@link HiddenTypeFacet hidden} (typically due to security permissions).
+ */
+public interface NavigationFacet extends Facet, HidingInteractionAdvisor {
+
 
 }
