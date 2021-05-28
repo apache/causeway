@@ -45,6 +45,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         associateWith = "effectiveMemberPermissions",
+        named = "Filter",
         promptStyle = PromptStyle.DIALOG_MODAL,
         sequence = "1"
 )
