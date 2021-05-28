@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.MessageBroker;
 
 import lombok.Getter;
@@ -30,41 +31,54 @@ public class JGrowlUtil {
 
     private JGrowlUtil(){}
 
-    @RequiredArgsConstructor @Getter
     static enum MessageSeverity {
-        INFO(3500),
-        WARNING(0), // sticky
-        DANGER(0) // sticky
+        INFO {
+            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+                return messagePopups.getInfoDelay().toMillis();
+            }
+        },
+        WARNING {
+            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+                return messagePopups.getWarningDelay().toMillis();
+            }
+        }, // sticky
+        DANGER{
+            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+                return messagePopups.getErrorDelay().toMillis();
+            }
+        } // sticky
         ;
-
-        private final int delayMillis;
 
         public String cssClassSuffix() {
             return name().toLowerCase();
         }
+
+        abstract long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups);
     }
 
-    public static String asJGrowlCalls(final MessageBroker messageBroker) {
+    public static String asJGrowlCalls(final MessageBroker messageBroker, IsisConfiguration configuration) {
         val buf = new StringBuilder();
 
+        val messagePopups = configuration.getViewer().getWicket().getMessagePopups();
         for (String info : messageBroker.drainMessages()) {
-            addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, buf);
+            addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, messagePopups, buf);
         }
 
         for (String warning : messageBroker.drainWarnings()) {
-            addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, buf);
+            addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, messagePopups, buf);
         }
 
         messageBroker.drainApplicationError()
         .ifPresent(error->
-            addJGrowlCall(error, MessageSeverity.DANGER, buf));
+            addJGrowlCall(error, MessageSeverity.DANGER, messagePopups, buf));
 
         return buf.toString();
     }
 
-    public static void addJGrowlCall(
+    private static void addJGrowlCall(
             final String origMsg,
             final MessageSeverity severity,
+            final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups,
             final StringBuilder buf) {
 
         final CharSequence escapedMsg = escape(origMsg);
@@ -74,9 +88,9 @@ public class JGrowlUtil {
         .append('"');
         buf.append(", {");
         buf.append("type: \"").append(severity.cssClassSuffix()).append('"');
-        buf.append(", delay: " + severity.delayMillis);
-        buf.append(", placement: { from: 'top', align: 'right' }");
-        buf.append(", offset: 50");
+        buf.append(String.format(", delay: %d", severity.delay(messagePopups)));
+        buf.append(String.format(", placement: { from: '%s', align: '%s' }", messagePopups.getPlacement().getVertical().name().toLowerCase(), messagePopups.getPlacement().getHorizontal().name().toLowerCase()));
+        buf.append(String.format(", offset: %d", messagePopups.getOffset()));
         buf.append('}');
         buf.append(");\n");
     }
