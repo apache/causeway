@@ -16,55 +16,71 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.DomainObjectEntityChangePublishingEnabledMetaAnnotation;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
 @Entity
 @Table(
     schema = "demo",
-    name = "JaxbRefJpa"
+    name = "DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa"
 )
 @EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObjectEntityChangePublishingEnabledMetaAnnotation                    // <.>
 @DomainObject(
-        bounding = Bounding.BOUNDED
-        , logicalTypeName = "demo.JaxbRefEntity")
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    nature=Nature.ENTITY
+    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity"
+    , bounding = Bounding.BOUNDED
+)
+@DomainObjectLayout(
+    describedAs = "@DomainObjectAuditingEnabledMetaAnnotation"
+)
 @NoArgsConstructor
-public class JaxbRefJpa
-        extends JaxbRefEntity {
 
-    public JaxbRefJpa(String name) {
-        this.name = name;
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa
+                extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity {
+    // ...
+//end::class[]
+
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa(String initialValue) {
+        this.property = initialValue;
+        this.propertyUpdatedByAction = initialValue;
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Title
+    @Title(sequence = "1.0")
     @Getter @Setter
-    private String name;
+    private String property;
+
+    @Getter @Setter
+    @Title(sequence = "2.0", prepend = " / ")
+    private String propertyUpdatedByAction;
+
+//tag::class[]
 }
 //end::class[]

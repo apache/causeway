@@ -26,9 +26,8 @@ import org.apache.isis.applib.annotation.Collection;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
 
 @Collection()
 @RequiredArgsConstructor
@@ -37,10 +36,11 @@ public class DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotated
     @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    public List<DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo> coll() {
-        return publishingEnabledJdoEntities.all();
+    public List<? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> coll() {
+        return publishingEnabledMetaAnnotatedEntities.all();
     }
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities publishingEnabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
+
 }

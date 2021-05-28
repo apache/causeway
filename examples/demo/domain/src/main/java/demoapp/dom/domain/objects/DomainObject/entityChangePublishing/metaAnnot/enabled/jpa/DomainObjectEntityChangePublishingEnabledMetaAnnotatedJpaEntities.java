@@ -16,31 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.Collection;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 
-@Collection()
-@RequiredArgsConstructor
-public class DomainObjectEntityChangePublishingVm_publishingDisabledAnnotatedEntities {
+@Profile("demo-jpa")
+@Service
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities
+extends ValueHolderRepository<String, DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa> {
 
-    @SuppressWarnings("unused")
-    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    public List<? extends DomainObjectEntityChangePublishingDisabledEntity> coll() {
-        return publishingDisabledEntities.all();
+    protected DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities() {
+        super(DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa.class);
     }
 
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
+    @Override
+    protected DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa newDetachedEntity(String value) {
+        return new DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa(value);
+    }
 
 }

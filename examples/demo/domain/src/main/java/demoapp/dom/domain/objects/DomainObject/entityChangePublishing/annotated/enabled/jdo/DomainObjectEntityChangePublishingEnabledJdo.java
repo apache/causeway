@@ -43,7 +43,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
     nature=Nature.ENTITY
-    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity"
+    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledEntity"
     , entityChangePublishing = Publishing.ENABLED            // <.>
     , bounding = Bounding.BOUNDED
 )

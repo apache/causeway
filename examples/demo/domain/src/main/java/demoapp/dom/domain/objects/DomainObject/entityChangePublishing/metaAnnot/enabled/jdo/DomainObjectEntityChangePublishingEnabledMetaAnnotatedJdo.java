@@ -44,7 +44,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.
 @DomainObjectEntityChangePublishingEnabledMetaAnnotation                    // <.>
 @DomainObject(
     nature=Nature.ENTITY
-    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity"
+    , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity"
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(

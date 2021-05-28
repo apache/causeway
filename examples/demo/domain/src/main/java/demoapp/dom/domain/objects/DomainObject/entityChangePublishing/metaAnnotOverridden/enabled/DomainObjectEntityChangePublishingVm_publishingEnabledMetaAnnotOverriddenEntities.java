@@ -26,9 +26,8 @@ import org.apache.isis.applib.annotation.Collection;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
 
 @Collection()
 @RequiredArgsConstructor
@@ -37,10 +36,11 @@ public class DomainObjectEntityChangePublishingVm_publishingEnabledMetaAnnotOver
     @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    public List<DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo> coll() {
-        return publishingEnabledJdoEntities.all();
+    public List<? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> coll() {
+        return publishingEnabledMetaAnnotOverriddenEntities.all();
     }
 
     @Inject
-    DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities publishingEnabledJdoEntities;
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
+
 }

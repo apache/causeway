@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 
 @DomainObject(
-        logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledEntity" // shared permissions with concrete sub class
 )
 public abstract class DomainObjectEntityChangePublishingEnabledEntity
 extends DomainObjectEntityChangePublishingEntity {

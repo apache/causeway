@@ -16,16 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-@DomainObject(
-        logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity" // shared permissions with concrete sub class
-)
-public abstract class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity
-extends DomainObjectEntityChangePublishingEntity {
+@Profile("demo-jpa")
+@Service
+public class DomainObjectEntityChangePublishingDisabledJpaEntities
+extends ValueHolderRepository<String, DomainObjectEntityChangePublishingDisabledJpa> {
+
+    protected DomainObjectEntityChangePublishingDisabledJpaEntities() {
+        super(DomainObjectEntityChangePublishingDisabledJpa.class);
+    }
+
+    @Override
+    protected DomainObjectEntityChangePublishingDisabledJpa newDetachedEntity(String value) {
+        return new DomainObjectEntityChangePublishingDisabledJpa(value);
+    }
 
 }

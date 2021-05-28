@@ -25,7 +25,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain._changes.ExposeCapturedChanges;
 
 @DomainObject(
-        logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity" // shared permissions with concrete sub class
+        logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity"
 )
 //tag::class[]
 public abstract class DomainObjectEntityChangePublishingEntity

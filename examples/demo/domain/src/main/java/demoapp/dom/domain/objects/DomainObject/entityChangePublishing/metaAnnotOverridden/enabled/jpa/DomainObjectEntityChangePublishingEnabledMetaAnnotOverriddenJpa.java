@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
@@ -31,17 +32,23 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.DomainObjectEntityChangePublishingDisabledMetaAnnotation;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
 
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Entity
+@Table(
+    schema = "demo",
+    name = "DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa"
+)
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
 @DomainObject(
         nature=Nature.ENTITY
@@ -54,15 +61,20 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
         "@DomainObjectAuditingDisabledMetaAnnotation " +
         "@DomainObject(entityChangePublishing=ENABLED)"
 )
-public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo
+@NoArgsConstructor
+public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa
         extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity {
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo(String initialValue) {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa(String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @Title(sequence = "1.0")
     @Getter @Setter
