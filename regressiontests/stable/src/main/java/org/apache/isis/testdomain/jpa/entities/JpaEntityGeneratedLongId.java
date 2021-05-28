@@ -18,23 +18,16 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
-import java.util.SortedSet;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Title;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,36 +35,22 @@ import lombok.ToString;
 
 @Entity
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.Inventory",
-        entityChangePublishing = Publishing.ENABLED)
-@NamedQuery(
-        name = "JpaInventory.findAffordableProducts",
-        query = "SELECT p FROM JpaInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+        logicalTypeName = "testdomain.jpa.GeneratedLongId",
+        entityChangePublishing = Publishing.DISABLED)
+@NoArgsConstructor
 @ToString
-public class JpaInventory {
+public class JpaEntityGeneratedLongId {
 
-    public JpaInventory(String name, SortedSet<JpaProduct> products) {
-        super();
+    public JpaEntityGeneratedLongId(String name) {
         this.name = name;
-        this.products = products;
-    }
-
-    public String title() {
-        return toString();
     }
 
     @Id
     @GeneratedValue
-    private Long id;
+    private @Getter Long id;
 
-    @Property
+    @Property @Title
     @Column(nullable = true)
     private @Getter @Setter String name;
 
-    // 1:n relation
-    @Collection
-    @OneToMany(cascade = CascadeType.PERSIST) @JoinColumn(nullable = true)
-    private @Getter @Setter java.util.Collection<JpaProduct> products;
 }
-
