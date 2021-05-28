@@ -136,7 +136,7 @@ implements ApplicationTenancyRepository {
             if(parent != null) {
                 parent.getChildren().add(tenancy);
             }
-            repository.persist(tenancy);
+            repository.persistAndFlush(tenancy);
         }
         return tenancy;
     }

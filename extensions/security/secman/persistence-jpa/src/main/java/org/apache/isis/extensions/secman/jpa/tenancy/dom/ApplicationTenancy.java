@@ -24,6 +24,7 @@ import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -79,6 +80,11 @@ public class ApplicationTenancy
     extends org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
 
+    // TODO: ISIS-2706: revert this (and make atPath the @Id instead)
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @Version
     private Long version;
 
@@ -101,7 +107,7 @@ public class ApplicationTenancy
 
     // -- PATH
 
-    @Id
+//    @Id
     @Column(nullable = false, length = Path.MAX_LENGTH)
     private String path;
 
