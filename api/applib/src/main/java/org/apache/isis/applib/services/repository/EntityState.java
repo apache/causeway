@@ -83,13 +83,19 @@ public enum EntityState {
         return this == PERSISTABLE_REMOVED;
     }
 
+    /**
+     * @apiNote 'removed' is only supported by JDO.
+     */
     public boolean isDetachedOrRemoved() {
         return this == PERSISTABLE_REMOVED
                 || this == PERSISTABLE_DETACHED;
     }
 
+    /**
+     * @apiNote 'removed' is only supported by JDO.
+     */
     public boolean isAttachedOrRemoved() {
-        return this == PERSISTABLE_REMOVED
+        return this == PERSISTABLE_ATTACHED
                 || this == PERSISTABLE_REMOVED;
     }
 
