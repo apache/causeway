@@ -68,7 +68,7 @@ public class HiddenTypeFacetDerivedFromAuthorization extends FacetAbstract imple
             val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
                     .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
 
-            if (hasVisibleCollection) {
+            if (hasVisibleAction) {
                 return null;
             }
         }
