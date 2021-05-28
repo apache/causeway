@@ -122,7 +122,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         val entity = objectManager.adapt(
                 repository.firstMatch(
                         JpaEntityNonGeneratedStringId.class,
-                        entity->Objects.equals(entity.getName(), id))
+                        entityPojo->Objects.equals(entityPojo.getName(), id))
                 .orElseThrow(_Exceptions::noSuchElement));
 
         // expected pre-condition (before removal)

@@ -122,7 +122,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         val entity = objectManager.adapt(
                 repository.firstMatch(
                         JpaEntityGeneratedLongId.class,
-                        entity->Objects.equals(entity.getId(), id))
+                        entityPojo->Objects.equals(entityPojo.getId(), id))
                 .orElseThrow(_Exceptions::noSuchElement));
 
         // expected pre-condition (before removal)
