@@ -131,11 +131,23 @@ implements FormExecutor {
             //
             val resultAdapter = obtainResultAdapter();
 
-            // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
+            val redirectFacet =  model instanceof ActionModel
+                ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
+                : null;
+
             if(commonContext.getInteractionTracker().isInInteraction()) {
+
+                // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
                 commonContext.getTransactionService().flushTransaction();
 
-                if(EntityUtil.isDestroyed(targetAdapter)) {
+                // TODO: REVIEW: I wonder why this next block is only performed within the outer if block?
+                //  my guess is that the if block is always evaluated, in which case this is always run.
+
+                if(willDefinitelyRedirect(redirectFacet)) {
+                    // should circuit the redirect check later on; there's no need to reset the adapter
+                    // (this also provides a workaround for view models wrapping now-deleted entities)
+                    targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
+                } else if(EntityUtil.isDestroyed(targetAdapter)) {
                     // if this was an entity delete action
                     // then we don't re-fetch / re-create the targetAdapter
                     targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
@@ -148,10 +160,6 @@ implements FormExecutor {
 
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
-
-            val redirectFacet =  model instanceof ActionModel
-                ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
-                : null;
 
             if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
                     || hasBlobsOrClobs(page)
@@ -210,6 +218,16 @@ implements FormExecutor {
             final ManagedObject resultAdapter,
             final RedirectFacet redirectFacet) {
 
+        if(willDefinitelyRedirect(redirectFacet)) {
+            return true;
+        }
+
+        return differs(targetAdapter, resultAdapter);
+    }
+
+    private boolean willDefinitelyRedirect(
+            final RedirectFacet redirectFacet) {
+
         if(redirectFacet == null) {
             return getSettings().isRedirectEvenIfSameObject();
         }
@@ -228,7 +246,7 @@ implements FormExecutor {
             // fall through to...
 
         case ONLY_IF_DIFFERS:
-            return differs(targetAdapter, resultAdapter);
+            return false;
         }
     }
 
