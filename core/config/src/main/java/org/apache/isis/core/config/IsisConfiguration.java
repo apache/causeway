@@ -3052,7 +3052,7 @@ public class IsisConfiguration {
                      * </p>
                      *
                      * <p>
-                     * The password for this user is set in {@link #getAdminPassword()}.
+                     * The password for this user is set in {@link Admin#getPassword()}.
                      * </p>
                      *
                      * @see #getPassword()
@@ -3115,7 +3115,7 @@ public class IsisConfiguration {
                          * {@link NamespacePermissions#getAdditional()}.
                          * </p>
                          *
-                         * @see #getAdminAdditionalNamespacePermissions()
+                         * @see NamespacePermissions#getAdditional()
                          */
                         private List<String> sticky = ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT;
 
