@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.applib;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -70,8 +71,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePhoneNumber;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateUsername;
-import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_filterEffectiveMemberPermissions;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_effectiveMemberPermissions;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_filterEffectiveMemberPermissions;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
@@ -163,8 +164,10 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
 
         // other @Services
         SeedSecurityModuleService.class,
+//        SecmanAutoConfiguration.class,
 
 })
+//@EnableAutoConfiguration()
 public class IsisModuleExtSecmanApplib {
 
     public static final String NAMESPACE = "isis.ext.secman";
@@ -177,4 +180,5 @@ public class IsisModuleExtSecmanApplib {
 
     public abstract static class PropertyDomainEvent<S, T>
     extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S, T> {}
+
 }

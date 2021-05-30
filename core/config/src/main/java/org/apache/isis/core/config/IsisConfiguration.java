@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,7 @@ import org.springframework.boot.convert.DurationUnit;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -75,8 +77,12 @@ import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitCon
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.Singular;
 import lombok.Value;
 import lombok.val;
 
@@ -3009,6 +3015,173 @@ public class IsisConfiguration {
         private final Secman secman = new Secman();
         @Data
         public static class Secman {
+
+            private final Seed seed = new Seed();
+            public static class Seed {
+
+                public static final String ADMIN_USER_NAME_DEFAULT = "secman-admin";
+                public static final String ADMIN_PASSWORD_DEFAULT = "pass";
+                public static final String ADMIN_ROLE_NAME_DEFAULT = "isis-ext-secman-admin";
+                public static final List<String> ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT =
+                        Collections.unmodifiableList(listOf(
+                                IsisModuleApplib.NAMESPACE,
+                                IsisModuleApplib.NAMESPACE_SUDO,
+                                IsisModuleApplib.NAMESPACE_CONF,
+                                IsisModuleApplib.NAMESPACE_FEAT,
+                                "isis.security",
+                                "isis.ext.h2Console",
+                                "isis.ext.secman"
+                        ));
+                public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
+                        Collections.unmodifiableList(listOf());
+                public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "isis-ext-secman-user";
+                public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
+
+                @Getter @Setter
+                private final Admin admin = new Admin();
+                @Data
+                public static class Admin {
+
+                    /**
+                     * The name of the security super user.
+                     *
+                     * <p>
+                     * This user is automatically made a member of the
+                     * {@link #getRoleName() admin role}, from which it is granted
+                     * permissions to administer other users.
+                     * </p>
+                     *
+                     * <p>
+                     * The password for this user is set in {@link #getAdminPassword()}.
+                     * </p>
+                     *
+                     * @see #getPassword()
+                     * @see #getRoleName()
+                     */
+                    private String userName = ADMIN_USER_NAME_DEFAULT;
+
+
+                    // sonar-ignore-on (detects potential security risk, which we are aware of)
+                    /**
+                     * The corresponding password for {@link #getUserName() admin user}.
+                     *
+                     * @see #getUserName()
+                     */
+                    private String password = ADMIN_PASSWORD_DEFAULT;
+                    // sonar-ignore-off
+
+                    /**
+                     * The name of security admin role.
+                     *
+                     * <p>
+                     * Users with this role (in particular, the default
+                     * {@link Admin#getUserName() admin user} are granted access to a set of
+                     * namespaces ({@link NamespacePermissions#getSticky()} and
+                     * {@link NamespacePermissions#getAdditional()}) which are intended to
+                     * be sufficient to allow users with this admin role to be able to
+                     * administer the security module itself, for example to manage users and
+                     * roles.
+                     * </p>
+                     *
+                     * @see Admin#getUserName()
+                     * @see NamespacePermissions#getSticky()
+                     * @see NamespacePermissions#getAdditional()
+                     */
+                    private String roleName = ADMIN_ROLE_NAME_DEFAULT;
+
+                    private final NamespacePermissions namespacePermissions = new NamespacePermissions();
+                    @Data
+                    public static class NamespacePermissions {
+
+                        /**
+                         * The set of namespaces to which the {@link Admin#getRoleName() admin role}
+                         * is granted.
+                         *
+                         * <p>
+                         * These namespaces are intended to be sufficient to allow users with
+                         * this admin role to be able to administer the security module itself,
+                         * for example to manage users and roles.  The security user is not
+                         * necessarily able to use the main business logic within the domain
+                         * application itself, though.
+                         * </p>
+                         *
+                         * <p>
+                         * These roles cannot be removed via user interface
+                         * </p>
+                         *
+                         * <p>
+                         * WARNING: normally these should not be overridden.  Instead, specify
+                         * additional namespaces using
+                         * {@link NamespacePermissions#getAdditional()}.
+                         * </p>
+                         *
+                         * @see #getAdminAdditionalNamespacePermissions()
+                         */
+                        private List<String> sticky = ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT;
+
+
+                        /**
+                         * An (optional) additional set of namespaces that the
+                         * {@link Admin#getRoleName() admin role} is granted.
+                         *
+                         * <p>
+                         * These are in addition to the main
+                         * {@link NamespacePermissions#getSticky() namespaces} granted.
+                         * </p>
+                         *
+                         * @see NamespacePermissions#getSticky()
+                         */
+                        @Getter @Setter
+                        private List<String> additional = ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS;
+
+                    }
+
+                }
+
+                @Getter @Setter
+                private final RegularUser regularUser = new RegularUser();
+                @Data
+                public static class RegularUser {
+
+                    /**
+                     * The role name for regular users of the application, granting them access
+                     * to basic security features.
+                     *
+                     * <p>
+                     *     The exact set of permissions is hard-wired in the
+                     *     <code>IsisExtSecmanRegularUserRoleAndPermissions</code> fixture.
+                     * </p>
+                     */
+                    private String roleName = REGULAR_USER_ROLE_NAME_DEFAULT;
+
+                }
+
+            }
+
+            private final DelegatedUsers delegatedUsers = new DelegatedUsers();
+
+            @Data
+            public static class DelegatedUsers {
+
+                public enum AutoCreatePolicy {
+                    AUTO_CREATE_AS_LOCKED,
+                    AUTO_CREATE_AS_UNLOCKED,
+                    // NO_AUTO_CREATE
+                }
+
+                /**
+                 * Whether delegated users should be autocreated as locked (the default) or unlocked.
+                 *
+                 * <p>
+                 * BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that
+                 * they are given should be highly restricted !!!
+                 * </p>
+                 */
+                @Getter @Setter
+                private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
+
+            }
+
 
             private final UserRegistration userRegistration = new UserRegistration();
             @Data
