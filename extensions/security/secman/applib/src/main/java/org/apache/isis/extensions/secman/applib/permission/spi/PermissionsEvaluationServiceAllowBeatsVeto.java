@@ -27,7 +27,10 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
  *
  * @since 2.0 {@index}
+ *
+ * @deprecated - use <code>application.yml</code> config properties instead.
  */
+@Deprecated
 public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvaluationServiceAbstract {
 
     private static final long serialVersionUID = 1L;

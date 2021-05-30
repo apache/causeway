@@ -61,7 +61,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getUserName()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -74,7 +74,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getPassword()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -86,7 +86,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getRoleName()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -97,7 +97,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions#getSticky()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -108,7 +108,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions#getAdditional()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -122,7 +122,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.Seed.RegularUser#getRoleName()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter
@@ -133,7 +133,7 @@ public class SecmanConfiguration {
     /**
      * @see IsisConfiguration.Extensions.Secman.DelegatedUsers#getAutoCreatePolicy()
      *
-     * @deprecated
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
     @Deprecated
     @Getter

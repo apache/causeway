@@ -3182,6 +3182,20 @@ public class IsisConfiguration {
 
             }
 
+            public enum PermissionsEvaluationPolicy {
+                ALLOW_BEATS_VETO,
+                VETO_BEATS_ALLOW
+            }
+
+            /**
+             * If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines
+             * whether to prefer to allow the permission or to veto it.
+             *
+             * <p>
+             *     This is only used if a {@link org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService} has not been declared explicitly.
+             * </p>
+             */
+            private PermissionsEvaluationPolicy permissionsEvaluationPolicy = PermissionsEvaluationPolicy.ALLOW_BEATS_VETO;
 
             private final UserRegistration userRegistration = new UserRegistration();
             @Data

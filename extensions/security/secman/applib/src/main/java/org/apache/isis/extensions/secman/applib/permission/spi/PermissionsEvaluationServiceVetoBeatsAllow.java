@@ -31,7 +31,10 @@ import lombok.val;
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
  *
  * @since 2.0 {@index}
+ *
+ * @deprecated - use <code>application.yml</code> config properties instead.
  */
+@Deprecated
 public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvaluationServiceAbstract {
 
     private static final long serialVersionUID = 1L;
