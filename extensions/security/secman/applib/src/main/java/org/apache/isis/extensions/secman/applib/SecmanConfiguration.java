@@ -18,13 +18,14 @@
  */
 package org.apache.isis.extensions.secman.applib;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.security.IsisModuleCoreSecurity;
-import org.apache.isis.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -47,156 +48,97 @@ import lombok.Singular;
  * provides reasonable defaults.
  * </p>
  *
+ * @deprecated - use <code>application.yml</code> config properties instead.
+ *
  * @since 2.0 {@index}
  */
+@Deprecated
 @Builder
 public class SecmanConfiguration {
 
     // -- ADMIN
 
     /**
-     * The name of the security super user.
+     * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getUserName()
      *
-     * <p>
-     * This user is automatically made a member of the
-     * {@link #getAdminRoleName() admin role}, from which it is granted
-     * permissions to administer other users.
-     * </p>
-     *
-     * <p>
-     * The password for this user is set in {@link #getAdminPassword()}.
-     * </p>
-     *
-     * @see #getAdminPassword()
-     * @see #getAdminRoleName()
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
     @NonNull
-    final String adminUserName = "secman-admin";
+    final String adminUserName = IsisConfiguration.Extensions.Secman.Seed.ADMIN_USER_NAME_DEFAULT;
 
     // sonar-ignore-on (detects potential security risk, which we are aware of)
+
     /**
-     * The corresponding password for {@link #getAdminUserName() admin user}.
+     * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getPassword()
      *
-     * @see #getAdminUserName()
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
     @NonNull
-    final String adminPassword = "pass";
+    final String adminPassword = IsisConfiguration.Extensions.Secman.Seed.ADMIN_PASSWORD_DEFAULT;
     // sonar-ignore-off
 
     /**
-     * The name of security admin role.
+     * @see IsisConfiguration.Extensions.Secman.Seed.Admin#getRoleName()
      *
-     * <p>
-     * Users with this role (in particular, the default
-     * {@link #getAdminUserName() admin user} are granted access to a set of
-     * namespaces ({@link #getAdminStickyNamespacePermissions()} and
-     * {@link #getAdminAdditionalNamespacePermissions()}) which are intended to
-     * be sufficient to allow users with this admin role to be able to
-     * administer the security module itself, for example to manage users and
-     * roles.
-     * </p>
-     *
-     * @see #getAdminUserName()
-     * @see #getAdminStickyNamespacePermissions()
-     * @see #getAdminAdditionalNamespacePermissions()
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
     @NonNull
-    final String adminRoleName = ADMIN_ROLE_DEFAULT_NAME;
-
-    public static String ADMIN_ROLE_DEFAULT_NAME = "isis-ext-secman-admin";
+    final String adminRoleName = IsisConfiguration.Extensions.Secman.Seed.ADMIN_ROLE_NAME_DEFAULT;
 
     /**
-     * The set of namespaces to which the {@link #getAdminRoleName() admin role}
-     * is granted.
+     * @see IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions#getSticky()
      *
-     * <p>
-     * These namespaces are intended to be sufficient to allow users with
-     * this admin role to be able to administer the security module itself,
-     * for example to manage users and roles.  The security user is not
-     * necessarily able to use the main business logic within the domain
-     * application itself, though.
-     * </p>
-     *
-     * <p>
-     * These roles cannot be removed via user interface
-     * </p>
-     *
-     * <p>
-     * WARNING: normally these should not be overridden.  Instead, specify
-     * additional namespaces using
-     * {@link #getAdminAdditionalNamespacePermissions()}.
-     * </p>
-     *
-     * @see #getAdminAdditionalNamespacePermissions()
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
     @NonNull
-    final String[] adminStickyNamespacePermissions = new String[]{
-            IsisModuleCoreSecurity.NAMESPACE,
-            IsisModuleApplib.NAMESPACE_SUDO,
-            IsisModuleApplib.NAMESPACE_CONF,
-            IsisModuleApplib.NAMESPACE_FEAT,
-            IsisExtH2ConsoleRoleAndPermissions.NAMESPACE,
-            IsisModuleExtSecmanApplib.NAMESPACE
-    };
+    final String[] adminStickyNamespacePermissions = arrayOf(IsisConfiguration.Extensions.Secman.Seed.ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT);
 
     /**
-     * An (optional) additional set of namespaces that the
-     * {@link #getAdminRoleName() admin role} is granted.
+     * @see IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions#getAdditional()
      *
-     * <p>
-     * These are in addition to the main
-     * {@link #getAdminStickyNamespacePermissions() namespaces} granted.
-     * </p>
-     *
-     * @see #getAdminStickyNamespacePermissions()
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Singular
     final Set<String> adminAdditionalNamespacePermissions;
 
 
+
     // -- REGULAR USER
 
     /**
-     * The role name for regular users of the application, granting them access
-     * to basic security features.
+     * @see IsisConfiguration.Extensions.Secman.Seed.RegularUser#getRoleName()
      *
-     * <p>
-     *     The exact set of permissions is hard-wired in the
-     *     <code>IsisExtSecmanRegularUserRoleAndPermissions</code> fixture.
-     * </p>
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
     @NonNull
-    final String regularUserRoleName = REGULAR_USER_ROLE_DEFAULT_NAME;
-
-    public static String REGULAR_USER_ROLE_DEFAULT_NAME = "isis-ext-secman-user";
-
+    final String regularUserRoleName = IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT;
 
     /**
-     * Delegated users, on first successful logon, are auto-created but locked (by default).
-     * <p>
-     * This option allows to override this behavior, such that authenticated
-     * users are also auto-unlocked.
-     * <p>
+     * @see IsisConfiguration.Extensions.Secman.DelegatedUsers#getAutoCreatePolicy()
      *
-     * <p>
-     * BE AWARE THAT if any users are auto-created unlocked, then the set of roles that
-     * they are given should be highly restricted !!!
-     * </p>
+     * @deprecated - use <code>application.yml</code> config properties instead.
      */
+    @Deprecated
     @Getter
     @Builder.Default
-    final boolean autoUnlockIfDelegatedAndAuthenticated = false;
+    final boolean autoUnlockIfDelegatedAndAuthenticated = IsisConfiguration.Extensions.Secman.Seed.AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT;
 
 
     // -- UTILITIES
@@ -210,6 +152,13 @@ public class SecmanConfiguration {
     public boolean isStickyAdminNamespace(String featureFqn) {
         return _NullSafe.stream(adminStickyNamespacePermissions)
                 .anyMatch(stickyPackage -> stickyPackage.equals(featureFqn));
+    }
+
+    private static Set<String> setOf(Collection<String> coll) {
+        return _Sets.newTreeSet(coll);
+    }
+    private static String[] arrayOf(List<String> list) {
+        return list.toArray(new String[]{});
     }
 
 }

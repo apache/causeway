@@ -96,59 +96,8 @@ Ensure that no other `IsisModuleSecurityXxx` module is imported.
 <.> fixture script support
 
 
-[#configure-services]
-=== Configure Services
-
-It is also necessary to configure some aspects of SecMan.
-This is most easily done using `Bean` definitions within the `AppManifest`:
-
-[source,java]
-.AppManifest.java
-----
-//...
-public class AppManifest {
-
-    @Bean
-    public SecmanConfiguration secmanConfiguration() {
-        return SecmanConfiguration.builder()
-                .adminUserName("sven").adminPassword("pass")     // <.>
-                // .adminRoleName("isis-ext-secman-admin")       // <.>
-                // .regularUserRoleName("isis-ext-secman-user")  // <.>
-                .build();
-    }
-
-    @Bean
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();    // <.>
-    }
-
-    @Bean
-    public SecurityRealmService securityRealmService() {
-        return new SecurityRealmService() {
-            @Override
-            public SecurityRealm getCurrentRealm() {
-                return () ->
-                    EnumSet.noneOf(SecurityRealmCharacteristic.class); // <.>
-            }
-        };
-    }
-}
-----
-
-<.> indicates the security super-user and password
-<.> indicates the name of the role granted to this security super-user.
-This can be any name; if not overridden will default to `SecmanConfiguration.DEFAULT_ADMIN_ROLE_NAME`
-
-<.> indicates the name of the role that should be granted to regular users of the application.
-This can be any name; if not overridden will default to `SecmanConfiguration.DEFAULT_REGULAR_USER_ROLE_NAME`
-+
-IMPORTANT: This role grants regular users the ability to logout (among other things).
-<.> indicates that only local users are supported (no delegate realm is in used).
-+
-See <<delegate-realms,below>> to configure for a delegate realm.
-
-
-== Configuration
+[#configure-properties]
+== Configuration Properties
 
 Add the database schema used by the SecMan entities to the configuration file:
 
@@ -161,6 +110,46 @@ isis:
       auto-create-schemas: isisExtensionsSecman
 ----
 
+Optionally, modify the configuration properties for Secman itself:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  extensions:
+    secman:
+      seed:
+        admin:
+          user-name: "secman-admin"                     <.>
+          password: "pass"                              <1>
+          role-name: "isis-ext-secman-admin"            <.>
+          namespace-permissions:
+            sticky: ...                                 <.>
+            additional: ...                             <.>
+        regular-user:
+          role-name: "isis-ext-secman-user"             <.>
+      permissionsEvaluationPolicy: ALLOW_BEATS_VETO     <.>
+      delegated-users:
+        auto-create-policy: AUTO_CREATE_AS_LOCKED       <.>
+      user-registration:
+        initial-role-names: ...                         <.>
+----
+
+<.> indicates the security super-user and password
+<.> indicates the name of the role granted to this security super-user.
+This can be any name.
+<.> the "sticky" namespace permissions granted to the admin role.
+These cannot be removed (through the UI).
+<.> any additional namespace permissions to be granted to the admin role.
+These can be removed (through the UI).
+<.> indicates the name of the role that should be granted to regular users of the application.
+<.> if there are conflicted (allow vs veto) permissions at the same scope, then whether the allow wins or the veto wins
+<.> indicates that only local users are supported (no delegate realm is in used).
++
+See <<delegate-realms,below>> to configure for a delegate realm.
+<.> if self-user registration is enabled in the viewer, this defines the set of roles to be granted to said user.
++
+This is discussed in more detail <<user-registration-aka-sign-up,below>>.
 
 [#default-roles]
 == Default Roles
@@ -171,13 +160,13 @@ These are summarised here:
 
 * Available in both production and prototype mode
 
-** `SecmanConfiguration#getAdminRoleName()`
+** Admin role (as defined in the configuration, see <<configure-properties,above>>)
 +
 Admin permissions for Secman itself.
 This is the role granted to the security super-user, and whose exact name is configured using .
 This role should therefore be extremely tightly locked down.
 
-** `SecmanConfiguration#getRegularUserRoleName()`
+** Regular user role (as defined in the configuration, see <<configure-properties,above>>)
 +
 Regular user permissions for Secman.
 This should be granted to all users (in particular, it includes the ability to logout!)
@@ -384,11 +373,11 @@ The exact roles to setup are specified using configuration property:
 .application.yaml
 ----
 isis:
-    extensions:
-        secman:
-            user-registration:
-                initial-roles:
-                    - "self-registered-user-role"
-                    - "regular-user-role"
+  extensions:
+    secman:
+      user-registration:
+        initial-roles:
+          - "self-registered-user-role"
+          - "regular-user-role"
 ----
 
