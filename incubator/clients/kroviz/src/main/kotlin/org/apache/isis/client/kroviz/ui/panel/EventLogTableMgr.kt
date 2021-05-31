@@ -19,44 +19,50 @@
 
 package org.apache.isis.client.kroviz.ui.panel
 
+import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
-import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
-import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.SequenceDiagram
+import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
+import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 
 class EventLogTableMgr {
-    private class UIAction(val label: String, val action: dynamic) {}
 
     fun buildTableMenu(table: EventLogTable): dynamic {
-        val menu = mutableListOf<UIAction>()
+        val menu = mutableListOf<dynamic>()
 
-        val a1 = UIAction(buildLabel("Hierarchy", "Event Diagram"), {
-            this.eventDiagram()
-        })
+        val a1 = buildMenuEntry("Hierarchy", "Event Diagram",
+                { this.eventDiagram() })
         menu.add(a1)
 
-        val a2 = UIAction(buildLabel("Export", "Export Events ..."), {
+        val a2 = buildMenuEntry("Export", "Export Events ...", {
             EventExportDialog().open()
         })
         menu.add(a2)
 
-        val a3 = UIAction(buildLabel("Tabulator Download", "Tabulator Download"), {
+        val a3 = buildMenuEntry("Tabulator Download", "Tabulator Download", {
             this.downLoadCsv(table)
         })
         menu.add(a3)
 
         val title = "Chart"
-        val a4 = UIAction(buildLabel(title, title), {
+        val a4 = buildMenuEntry(title, title, {
             UiManager.add(title, ChartFactory().build(EventStore.log))
         })
         menu.add(a4)
 
-
         return menu.toTypedArray().asDynamic()
+    }
+
+    private fun buildMenuEntry(icon: String, title: String, act: dynamic): dynamic {
+        val iconName = IconManager.find(icon)
+        val l = "<i class='$iconName'></i> $title"
+        return obj {
+            label = l
+            action = act
+        }
     }
 
     private fun eventDiagram() {
@@ -66,11 +72,6 @@ class EventLogTableMgr {
 
     private fun downLoadCsv(table: EventLogTable) {
         table.tabulator.downloadCSV("data.csv")
-    }
-
-    private fun buildLabel(icon: String, title: String): String {
-        val iconName = IconManager.find(icon)
-        return "<i class='$iconName'></i> $title"
     }
 
 }
