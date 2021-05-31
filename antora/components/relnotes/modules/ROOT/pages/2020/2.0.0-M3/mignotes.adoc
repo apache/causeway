@@ -924,7 +924,7 @@ Note: Currently does not implement a Table Tree View but just a Tree View.
 public API is:
 
 * `TreeAdapter` (provides the parent/child relationship information between pojos to derive a tree-structure)
-* `TreeNode` (with `LazyTreeNode` as the default implementation)
+* `TreeNode`
 * `TreePath` (represents a coordinate-system to navigate any tree-structure)
 
 [source,java]

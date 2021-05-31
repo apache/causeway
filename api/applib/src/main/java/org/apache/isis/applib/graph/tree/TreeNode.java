@@ -19,77 +19,134 @@
 package org.apache.isis.applib.graph.tree;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.graph.Edge;
 import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.Vertex;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * Fundamental building block of Tree structures. 
- * 
+ * Fundamental building block of Tree structures.
+ *
  * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this node
  */
-public interface TreeNode<T> extends Vertex<T> {
+@Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
+public class TreeNode<T> implements Vertex<T> {
+
+    private final TreeState sharedState;
+    private final T value;
+    private final Class<? extends TreeAdapter<T>> treeAdapterClass;
+    private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
+    private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
+
+    public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+        return new TreeNode<T>(value, treeAdapterClass, sharedState);
+    }
+
+    protected TreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+        this.value = Objects.requireNonNull(value);
+        this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
+        this.sharedState = sharedState;
+    }
+
+    @Override
+    public T getValue() {
+        return value;
+    }
+
 
     // -- VERTEX - IMPLEMENTATION
-    
-    default int getIncomingCount() {
+
+    @Override
+    public int getIncomingCount() {
         return isRoot() ? 0 : 1;
     }
-    default int getOutgoingCount() {
+    @Override
+    public int getOutgoingCount() {
         return getChildCount();
     }
-    default Stream<Edge<T>> streamIncoming() {
+    @Override
+    public Stream<Edge<T>> streamIncoming() {
         return isRoot() ? Stream.empty() : Stream.of(SimpleEdge.<T>of(getParentIfAny(), this));
     }
-    default Stream<Edge<T>> streamOutgoing() {
+    @Override
+    public Stream<Edge<T>> streamOutgoing() {
         return streamChildren()
                 .map(to->SimpleEdge.<T>of(this, to));
     }
-    
+
     // -- PARENT
 
-    public @Nullable TreeNode<T> getParentIfAny();
+    public @Nullable TreeNode<T> getParentIfAny() {
+        return treeAdapter().parentOf(getValue())
+                .map(this::toTreeNode)
+                .orElse(null);
+    }
+
+
 
     // -- CHILDREN
 
-    public int getChildCount();
+    public int getChildCount() {
+        return treeAdapter().childCountOf(value);
+    }
 
-    public Stream<TreeNode<T>> streamChildren();
+    public Stream<TreeNode<T>> streamChildren() {
+        if(isLeaf()) {
+            return Stream.empty();
+        }
+        return treeAdapter().childrenOf(value)
+                .map(this::toTreeNode);
+    }
+
+
+
 
     // -- BASIC PREDICATES
 
-    public default boolean isRoot() {
+    public boolean isRoot() {
         return getParentIfAny() == null;
     }
 
-    public default boolean isLeaf() {
+    public boolean isLeaf() {
         return getChildCount() == 0;
     }
 
     // -- PATH INFO
 
-    public TreePath getPositionAsPath();
+
+    public TreePath getPositionAsPath() {
+        return treePath.get();
+    }
+
+
 
     // -- COLLAPSE/EXPAND
 
     /**
      * @return this tree's shared state object, holding e.g. the collapse/expand state
      */
-    public TreeState getTreeState();
+    public TreeState getTreeState() {
+        return sharedState;
+    }
 
-    public default boolean isExpanded(TreePath treePath) {
+
+    public boolean isExpanded(TreePath treePath) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         return expandedPaths.contains(treePath);
     }
@@ -99,7 +156,7 @@ public interface TreeNode<T> extends Vertex<T> {
      * @param treePaths
      */
     @Programmatic
-    public default void expand(TreePath ... treePaths) {
+    public void expand(TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::add);
     }
@@ -108,7 +165,7 @@ public interface TreeNode<T> extends Vertex<T> {
      * Expands this node and all its parents.
      */
     @Programmatic
-    public default void expand() {
+    public void expand() {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         streamHierarchyUp()
             .map(TreeNode::getPositionAsPath)
@@ -120,7 +177,7 @@ public interface TreeNode<T> extends Vertex<T> {
      * @param treePaths
      */
     @Programmatic
-    public default void collapse(TreePath ... treePaths) {
+    public void collapse(TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
     }
@@ -134,18 +191,18 @@ public interface TreeNode<T> extends Vertex<T> {
      * @return new LazyTreeNode
      */
     public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
-        return LazyTreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
+        return TreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
     }
 
     // -- PARENT NODE ITERATION
 
-    public default Iterator<TreeNode<T>> iteratorHierarchyUp(){
+    public Iterator<TreeNode<T>> iteratorHierarchyUp(){
         return new TreeNode_iteratorHierarchyUp<>(this);
     }
 
     // -- PARENT NODE STREAMING
 
-    public default Stream<TreeNode<T>> streamHierarchyUp(){
+    public Stream<TreeNode<T>> streamHierarchyUp(){
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(iteratorHierarchyUp(), Spliterator.ORDERED),
                 false); // not parallel
@@ -153,23 +210,23 @@ public interface TreeNode<T> extends Vertex<T> {
 
     // -- CHILD NODE ITERATION
 
-    public default Iterator<TreeNode<T>> iteratorDepthFirst(){
+    public Iterator<TreeNode<T>> iteratorDepthFirst(){
         return new TreeNode_iteratorDepthFirst<>(this);
     }
 
-    public default Iterator<TreeNode<T>> iteratorBreadthFirst(){
+    public Iterator<TreeNode<T>> iteratorBreadthFirst(){
         return new TreeNode_iteratorBreadthFirst<>(this);
     }
 
     // -- CHILD NODE STREAMING
 
-    public default Stream<TreeNode<T>> streamDepthFirst(){
+    public Stream<TreeNode<T>> streamDepthFirst(){
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(iteratorDepthFirst(), Spliterator.ORDERED),
                 false); // not parallel
     }
 
-    public default Stream<TreeNode<T>> streamBreadthFirst(){
+    public Stream<TreeNode<T>> streamBreadthFirst(){
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(iteratorBreadthFirst(), Spliterator.ORDERED),
                 false); // not parallel
@@ -181,7 +238,62 @@ public interface TreeNode<T> extends Vertex<T> {
      * @apiNote a class rather than an instance, because otherwise
      * the adapter would need to be serializable for Wicket's trees to work correctly.
      */
-    public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
+    public Class<? extends TreeAdapter<T>> getTreeAdapterClass() {
+        return treeAdapterClass;
+    }
 
+
+
+
+    // -- HELPER
+
+    private TreeAdapter<T> newTreeAdapter() {
+        try {
+            return treeAdapterClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalArgumentException(
+                    String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
+        }
+    }
+
+    private TreeAdapter<T> treeAdapter() {
+        return treeAdapter.get();
+    }
+
+    private TreeNode<T> toTreeNode(T value){
+        return of(value, getTreeAdapterClass(), sharedState);
+    }
+
+    private TreePath resolveTreePath() {
+        final TreeNode<T> parent = getParentIfAny();
+        if(parent==null) {
+            return TreePath.root();
+        }
+        return parent.getPositionAsPath().append(indexWithinSiblings(parent));
+    }
+
+    /*
+     * @return zero based index
+     */
+    private int indexWithinSiblings(TreeNode<T> parent) {
+        final LongAdder indexOneBased = new LongAdder();
+
+        boolean found = parent.streamChildren()
+                .peek(__->indexOneBased.increment())
+                .anyMatch(this::isEqualTo);
+
+        if(!found) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+
+        return indexOneBased.intValue()-1;
+    }
+
+    private boolean isEqualTo(TreeNode<T> other) {
+        if(other==null) {
+            return false;
+        }
+        return Objects.equals(this.getValue(), other.getValue());
+    }
 
 }
