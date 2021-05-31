@@ -20,7 +20,7 @@ public class SecmanAutoConfiguration {
     /**
      * Provides a default implementation of {@link SecmanConfiguration} based on configuration properties.
      */
-    @Bean
+    @Bean("isis.ext.secman.SecmanConfiguration")
     @ConditionalOnMissingBean(SecmanConfiguration.class)
     public SecmanConfiguration secmanConfiguration(final IsisConfiguration isisConfiguration) {
         val secman = isisConfiguration.getExtensions().getSecman();

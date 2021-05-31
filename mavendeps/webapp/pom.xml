@@ -117,12 +117,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-shiro</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-keycloak</artifactId>
 		</dependency>
+
+		<!--
+		we no longer include isis-security-shiro in order to reduce the
+		3rd party dependencies.  If only simple user/password authentication
+		is required, Secman can now be used independently of Shiro.
+
+		<dependency>
+			<groupId>org.apache.isis.security</groupId>
+			<artifactId>isis-security-shiro</artifactId>
+		</dependency>
+		-->
 
 		<!--
 		we deliberately do NOT include isis-security-spring, because it

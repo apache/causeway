@@ -1,0 +1,141 @@
+= Setting up with Shiro
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This section describes how to setup and configure SecMan with framework's xref:security:shiro:about.adoc[Shiro integration] being used for primary authentication.
+
+The primary use case this enables is for authentication to be performed through an external mechanism, for example LDAP.
+
+If delegate authentication has been set up, this means that authentication may pass for a user that Secman knows nothing about.
+In this case Secman will automatically create an `ApplicationUser` for this externally delegated authenticated user, with its `type` set to "DELEGATED".
+
+The integration _does_ still allow for local logins (`type` set to "LOCAL")  of ``ApplicationUser``s if required.
+
+== Dependencies
+
+In addition to the xref:setting-up.adoc#dependencies[regular dependencies] required by Secman, also add in Secman's Shiro Realm implementation:
+
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-persistence-XXX</artifactId> <!--.-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-secman-shiro-realm</artifactId>
+        </dependency>
+</dependencies>
+----
+<.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+<.> provides an implementation of `PasswordEncryptionService`
+
+
+
+
+[[_update-appmanifest]]
+== Update AppManifest
+
+In addition to the xref:setting-up.adoc#_update-appmanifest[other modules] that Secman requires to be added to your  application's `AppManifest`, also add:
+You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleExtSecmanRealmShiro.class,    // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+
+<.> enables Shiro integration (so that Shiro delegates to Secman for authentication).
++
+This brings in a transitive dependency on the `IsisModuleSecurityShiro` module.
+
+Ensure that no other `IsisModuleSecurityXxx` module is imported into the AppManifest.
+
+
+
+
+[#delegate-realms]
+== Shiro (Delegate) Realm
+
+SecMan's Shiro realm is configured using the `shiro.ini` file.
+The following sets up Shiro _without_ delegation:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+
+authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
+
+securityManager.authenticator.authenticationStrategy = $authenticationStrategy
+securityManager.realms = $isisModuleSecurityRealm
+
+[users]
+[roles]
+----
+
+The `[users]` and `[roles]` sections are required but are unused.
+
+
+
+The main point of introducing Shiro though is to introduce support for authentication by external mechanisms such as LDAP.
+In this case we configure Shiro to use the external realm as the primary realm, with Secman's Shiro realm set up as a "delegate" realm.
+We specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the Secman realm.
+
+For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+
+...
+ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
+ldapRealm.xxx=...                                                            #<.>
+ldapRealm.yyy=...
+
+isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+
+...
+----
+<.> instantiate the LDAP realm
+<.> configure the LDAP realm as required
+<.> specify the LDAP realm as the delegate realm for SecMan's own realm.
+
+
+
+[#configure-properties]
+== Configuration Properties
+
+As mentioned in the introduction, if delegate authentication has been set up, this means that authentication may pass for a user that Secman knows nothing about.
+In this case Secman will automatically create an `ApplicationUser` for this externally delegated authenticated user, with the type set to "DELEGATED".
+
+We can configure whether such automatically created accounts should be unlocked or locked by default:
+
+[source,yaml]
+.application.yml
+----
+isis:
+  extensions:
+    secman:
+      delegated-users:
+        auto-create-policy: AUTO_CREATE_AS_LOCKED
+----
+
+

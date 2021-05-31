@@ -33,7 +33,9 @@ For convenience, it includes all of the current components available:
 
 * Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (xref:core:runtime-services:about.adoc[Runtime Services])
 
-* All the security implementations (xref:security:bypass:about.adoc[Bypass],xref:security:shiro:about.adoc[Shiro] and  xref:security:keycloak:about.adoc[Keycloak])
+* Two of the security implementations (xref:security:bypass:about.adoc[Bypass] and  xref:security:keycloak:about.adoc[Keycloak])
++
+The xref:security:shiro:about.adoc[Shiro] and xref:security:spring:about.adoc[Spring] implementations are omitted, as each of these have additional third-party dependencies.
 
 * All the viewer implementations (xref:vw:ROOT:about.adoc[Wicket], xref:vro:ROOT:about.adoc[Restful Objects])
 

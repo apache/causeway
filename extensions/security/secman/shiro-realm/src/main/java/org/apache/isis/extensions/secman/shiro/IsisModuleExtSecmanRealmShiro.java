@@ -21,11 +21,14 @@ package org.apache.isis.extensions.secman.shiro;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
+
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
+        IsisModuleSecurityShiro.class
 })
 public class IsisModuleExtSecmanRealmShiro {
 

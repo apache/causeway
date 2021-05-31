@@ -3,7 +3,13 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This section describes how to setup and configure SecMan for use in your Apache Isis application.
+This section describes how to setup and configure SecMan for use in your Apache Isis application, for both authentication (`Authenticator` SPI) and authorization (`Authorizor` SPI).
+
+It is also possible to use SecMan in conjunction with the framework's xref:security:shiro:about.adoc[integration with Shiro], where Shiro takes primary responsibility for authentication, while still using Secman for authorization.
+This mode allows a separate authentication mechanism such as LDAP to be used.
+For more details, see xref:setting-up-with-shiro.adoc[setting up with Shiro].
+
+
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
@@ -25,6 +31,7 @@ In addition, add a section for secman's own BOM:
 </dependencyManagement>
 ----
 
+[#dependencies]
 == Dependencies
 
 In the webapp module of your application, add the following dependency:
@@ -35,33 +42,21 @@ In the webapp module of your application, add the following dependency:
 <dependencies>
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-secman-persistence-XXX</artifactId> <!--.-->
         </dependency>
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-shiro-realm</artifactId>
+            <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
         </dependency>
 </dependencies>
 ----
 <.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+<.> provides an implementation of `PasswordEncryptionService`
 
 
 [[_update-appmanifest]]
 == Update AppManifest
 
-=== Import modules
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the SecMan modules.
 You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
@@ -72,10 +67,7 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 @Configuration
 @Import({
         ...
-        IsisModuleSecurityShiro.class,                  // <.>
-        ...
         IsisModuleExtSecmanPersistenceXxx.class,        // <.>
-        IsisModuleExtSecmanRealmShiro.class,            // <.>
         IsisModuleExtSecmanEncryptionJbcrypt.class,     // <.>
 
         IsisModuleTestingFixturesApplib.class,          // <.>
@@ -85,14 +77,8 @@ public class AppManifest {
 }
 ----
 
-<.> enable Shiro for security.
-+
-Ensure that no other `IsisModuleSecurityXxx` module is imported.
-
 <.> specify either `IsisModuleExtSecmanPersistenceJdo` or `IsisModuleExtSecmanPersistenceJpa`, as required
-<.> enable Shiro integration (so that Shiro delegates to Secman for authentication)
-<.> use Jbcrypt to encrypt locally-held password
-
+<.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
 
@@ -129,8 +115,6 @@ isis:
         regular-user:
           role-name: "isis-ext-secman-user"             <.>
       permissionsEvaluationPolicy: ALLOW_BEATS_VETO     <.>
-      delegated-users:
-        auto-create-policy: AUTO_CREATE_AS_LOCKED       <.>
       user-registration:
         initial-role-names: ...                         <.>
 ----
@@ -144,9 +128,6 @@ These cannot be removed (through the UI).
 These can be removed (through the UI).
 <.> indicates the name of the role that should be granted to regular users of the application.
 <.> if there are conflicted (allow vs veto) permissions at the same scope, then whether the allow wins or the veto wins
-<.> indicates that only local users are supported (no delegate realm is in used).
-+
-See <<delegate-realms,below>> to configure for a delegate realm.
 <.> if self-user registration is enabled in the viewer, this defines the set of roles to be granted to said user.
 +
 This is discussed in more detail <<user-registration-aka-sign-up,below>>.
@@ -154,7 +135,7 @@ This is discussed in more detail <<user-registration-aka-sign-up,below>>.
 [#default-roles]
 == Default Roles
 
-With SecMan enabled, it will automatically set up a security super-user (as described <<configure-services,above>>) and a regular role.
+With SecMan enabled, it will automatically seed a security super-user and a regular role.
 It also defines a number of other roles to provide access to specific features of the framework (or its extensions).
 These are summarised here:
 
@@ -202,10 +183,11 @@ The full list can be found by searching for subclasses of `AbstractRoleAndPermis
 
 == Creating Users
 
-Creating regular applications users in production use can be done manually by the security super-user, or can be done programmatically through xref:refguide:extensions:index/secman/api/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository].
-This will return an xref:refguide:extensions:index/secman/api/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/api/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
+Creating regular applications users in production use can be done manually by the security super-user, or can be done programmatically through xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository].
+This will return an xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
 
-== Seed Users and Roles
+
+== Fixture scripts to setup users and roles
 
 If prototyping with an in-memory database then you will most likely want to set up some fixture scripts to automatically set up application users.
 
@@ -289,75 +271,12 @@ public class UserToRole__joe_UserRw_but_NoDelete
 <.> username and password
 <.> email address
 <.> application tenancy
-<.> local account (rather than delegated, see <<delegate-realms,below>>)
+<.> local account (rather than delegated, see xref:setting-up-with-shiro.adoc[])
 <.> application-specific roles
 <.> regular user access (always required)
 <.> specific access to framework features, see <<default-roles,above>>
 
 
-== Shiro Realm
-
-SecMan's Shiro realm is configured using the `shiro.ini` file:
-
-[source,ini]
-.shiro.ini
-----
-[main]
-
-authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
-isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
-
-securityManager.authenticator.authenticationStrategy = $authenticationStrategy
-securityManager.realms = $isisModuleSecurityRealm
-
-[users]
-[roles]
-----
-
-The `[users]` and `[roles]` sections are required but are unused.
-
-[#delegate-realms]
-== Delegate Realms
-
-If a delegate realm is to be used, then there are two changes required.
-
-* first, in the `AppManifest`:
-+
-[source,java]
-.AppManifest.java
-----
-@Bean
-public SecurityRealmService securityRealmService() {
-    return new SecurityRealmService() {
-        @Override
-        public SecurityRealm getCurrentRealm() {
-            return () -> EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
-        }
-    };
-}
-----
-
-* second, specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the Secman realm.
-+
-For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
-+
-[source,ini]
-.shiro.ini
-----
-[main]
-
-...
-ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
-ldapRealm.xxx=...                                                            #<.>
-ldapRealm.yyy=...
-
-isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
-
-...
-----
-<.> instantiate the LDAP realm
-<.> configure the LDAP realm as required
-<.> specify the LDAP realm as the delegate realm for SecMan's own realm.
 
 
 [#user-registration-aka-sign-up]

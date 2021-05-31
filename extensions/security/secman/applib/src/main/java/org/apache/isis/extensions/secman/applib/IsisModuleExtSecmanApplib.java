@@ -174,7 +174,6 @@ import lombok.val;
 
         // other @Services
         SeedSecurityModuleService.class,
-//        SecmanAutoConfiguration.class,
 
 })
 public class IsisModuleExtSecmanApplib {

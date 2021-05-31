@@ -34,12 +34,14 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * @since 2.0 {@index}
  */
 @Service
 @Named("isis.ext.secman.AuthorizorSecman")
-@Order(OrderPrecedence.EARLY - 10) // before shiro
+@Order(OrderPrecedence.EARLY - 10)
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 
