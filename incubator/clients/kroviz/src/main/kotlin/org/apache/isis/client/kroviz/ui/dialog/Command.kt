@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.to.Link
 
 abstract class Command {
 
-    open fun execute() {
+    open fun execute(action: String? = null) {
         // subclass responsibility
     }
 

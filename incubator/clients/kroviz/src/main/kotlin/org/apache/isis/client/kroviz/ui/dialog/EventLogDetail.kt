@@ -31,6 +31,8 @@ import org.apache.isis.client.kroviz.utils.XmlHelper
 
 class EventLogDetail(val logEntry: LogEntry) : Command() {
 
+    private val LOG: String = "log"
+
     fun open() {
         val formItems = mutableListOf<FormItem>()
 
@@ -50,6 +52,8 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         }
         formItems.add(FormItem("Aggregators", ValueType.TEXT_AREA, aggtStr, 5))
 
+        formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
+
         RoDialog(
                 caption = "Details :" + logEntry.title,
                 items = formItems,
@@ -58,7 +62,20 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 widthPerc = 60).open()
     }
 
-    override fun execute() {
+    override fun execute(action: String?) {
+        when {
+            action.isNullOrEmpty() -> defaultAction()
+            action == LOG -> {
+                console.log(logEntry)
+            }
+            else -> {
+                console.log(logEntry)
+                console.log("Action not defined yet: " + action)
+            }
+        }
+    }
+
+    private fun defaultAction() {
         val str = logEntry.response
         val pumlCode = when {
             str.startsWith("<") -> {
@@ -69,8 +86,6 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 JsonDiagram.build(str)
             else -> "{}"
         }
-        console.log("[ELD.execute]")
-        console.log(pumlCode)
         DiagramDialog("Response Diagram", pumlCode).open()
     }
 

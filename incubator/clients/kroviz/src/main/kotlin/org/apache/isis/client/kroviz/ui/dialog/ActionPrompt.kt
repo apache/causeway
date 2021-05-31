@@ -43,7 +43,7 @@ class ActionPrompt(val action: Action) : Command() {
         form.open(at)
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         val l = extractUserInput()
         invoke(l)
     }

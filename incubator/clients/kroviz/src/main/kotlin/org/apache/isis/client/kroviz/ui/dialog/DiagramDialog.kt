@@ -55,7 +55,7 @@ class DiagramDialog(
         )
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         pin()
     }
 

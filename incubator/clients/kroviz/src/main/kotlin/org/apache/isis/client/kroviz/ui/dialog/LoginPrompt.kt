@@ -46,7 +46,7 @@ class LoginPrompt : Command() {
         form.open(at)
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         extractUserInput()
         UiManager.login(url, username, password)
         val link = Link(href = url + "restful/")

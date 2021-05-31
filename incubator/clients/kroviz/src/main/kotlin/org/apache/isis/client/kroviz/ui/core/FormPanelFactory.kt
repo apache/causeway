@@ -33,6 +33,7 @@ import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
 import io.kvision.form.time.DateTime
 import io.kvision.form.time.dateTime
+import io.kvision.html.Button
 import io.kvision.html.Div
 import io.kvision.html.Iframe
 import io.kvision.html.Image
@@ -42,8 +43,11 @@ import io.kvision.utils.auto
 import io.kvision.utils.perc
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.dialog.Command
+import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DateHelper
+import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.UUID
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
@@ -70,9 +74,20 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.IFRAME -> add(createIFrame(fi))
                     ValueType.SVG_INLINE -> add(createSvgInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
+                    ValueType.BUTTON -> add(createButton(fi))
                 }
             }
         }
+    }
+
+    private fun createButton(fi: FormItem): Button {
+        val item = Button(text = fi.label, icon = IconManager.find(fi.label))
+        val obj = fi.callBack!! as Command
+        val action = fi.callBackAction
+        item.onClick {
+            obj.execute(action)
+        }
+        return item
     }
 
     private fun createBoolean(fi: FormItem): Component {

@@ -47,7 +47,7 @@ class EventExportDialog() : Command() {
         }
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         val filter = extractUserInput("Filter")
         var fileName = ""
         when (filter) {
