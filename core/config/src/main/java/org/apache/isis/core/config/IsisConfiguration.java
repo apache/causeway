@@ -3037,7 +3037,7 @@ public class IsisConfiguration {
                 public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "isis-ext-secman-user";
                 public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
 
-                @Getter @Setter
+                @Getter
                 private final Admin admin = new Admin();
                 @Data
                 public static class Admin {
@@ -3138,7 +3138,7 @@ public class IsisConfiguration {
 
                 }
 
-                @Getter @Setter
+                @Getter
                 private final RegularUser regularUser = new RegularUser();
                 @Data
                 public static class RegularUser {
