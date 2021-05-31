@@ -204,14 +204,15 @@ public class MetaModelServiceMenu {
     }
 
     private static String header() {
-        return "classType,packageName,className,memberType,memberName,numParams,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
+        return "classType,logicalTypeName,className,packageName,memberType,memberName,numParams,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
     }
 
     private static String asTextCsv(final DomainMember row) {
         return Stream.of(
                 row.getClassType(),
-                row.getPackageName(),
+                row.getLogicalTypeName(),
                 row.getClassName(),
+                row.getPackageName(),
                 row.getType(),
                 row.getMemberName(),
                 row.getNumParams(),
