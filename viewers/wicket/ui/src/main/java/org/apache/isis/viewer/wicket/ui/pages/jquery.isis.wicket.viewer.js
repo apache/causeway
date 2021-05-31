@@ -105,8 +105,13 @@ $(function() {
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {
-            $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,div.cbx').filter(':visible:first').focus();
-            $('#'+elementId).find('.inputFormTable.parameters').find('select').filter(':visible:first').select2('open').select2('close');
+            let el = $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,div.cbx,select').filter(':visible:first');
+            let x = $(el).prop('nodeName').toLowerCase()
+            if(x === 'input') {
+                el.focus();
+            } else {
+                el.select2('open').select2('close');
+            }
         }, 0);
     });
 
