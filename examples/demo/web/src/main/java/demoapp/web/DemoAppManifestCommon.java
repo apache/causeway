@@ -31,18 +31,17 @@ import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandRe
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
-import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
 import demoapp.web.replay.DemoReplayController;
 import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -55,12 +54,8 @@ import lombok.extern.log4j.Log4j2;
     IsisModuleExtCommandReplayPrimary.class,
     IsisModuleExtCommandReplaySecondary.class,
 
-    // SECURITY
-    IsisModuleSecurityShiro.class,
-
     // Security Manager Extension (secman)
     IsisModuleExtSecmanIntegration.class,
-    IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 
     // REST
