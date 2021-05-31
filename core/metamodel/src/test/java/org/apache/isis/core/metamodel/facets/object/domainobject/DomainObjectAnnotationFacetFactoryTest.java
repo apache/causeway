@@ -238,7 +238,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public String autoComplete(final String x) { return null; }
         }
 
-        @DomainObject(autoCompleteRepository = CustomerRepository.class, autoCompleteAction = "lookup")
+        @DomainObject(autoCompleteRepository = CustomerRepository.class, autoCompleteMethod = "lookup")
         class CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction {
         }
 

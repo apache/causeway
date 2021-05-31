@@ -101,7 +101,7 @@ To save having to define an `autoCompleteNXxx(...)` method everywhere that a ref
 ----
 @DomainObject(
     autoCompleteRepository=ProductRepository.class          // <.>
-    autoCompleteAction="find"                               // <.>
+    autoCompleteMethod="find"                               // <.>
 )
 public class Product ... {
     ...

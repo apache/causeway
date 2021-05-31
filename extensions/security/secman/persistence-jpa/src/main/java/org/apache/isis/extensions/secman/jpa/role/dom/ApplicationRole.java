@@ -67,7 +67,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
         bounding = Bounding.BOUNDED,
         logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
-        autoCompleteAction = "findMatching"
+        autoCompleteMethod = "findMatching"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT

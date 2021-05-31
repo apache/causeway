@@ -77,7 +77,7 @@ import org.apache.isis.commons.internal.base._Casts;
 @DomainObject(
         logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
-        autoCompleteAction = "findMatching"
+        autoCompleteMethod = "findMatching"
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT

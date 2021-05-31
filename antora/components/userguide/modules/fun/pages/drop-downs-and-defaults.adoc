@@ -142,7 +142,7 @@ For example:
 ----
 @DomainObject(
     autoCompleteRepository = Customers.class,
-    autoCompleteAction = "findByReferenceOrName"
+    autoCompleteMethod = "findByReferenceOrName"
 )
 public class Customer { /* ... */ }
 ----
