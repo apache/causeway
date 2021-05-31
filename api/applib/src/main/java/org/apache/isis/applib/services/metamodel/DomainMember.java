@@ -19,13 +19,14 @@
 package org.apache.isis.applib.services.metamodel;
 
 /**
- * 
+ *
  * @since 1.x {@index}
  */
 public interface DomainMember extends Comparable<DomainMember> {
 
     String getClassType();
 
+    String getLogicalTypeName();
     String getClassName();
     String getPackageName();
 
