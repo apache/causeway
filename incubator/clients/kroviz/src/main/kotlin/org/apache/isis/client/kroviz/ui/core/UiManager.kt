@@ -91,6 +91,13 @@ object UiManager {
      * is added as attribute to the tab in order to being able to recreate it on refresh.
      */
     fun addSvg(title: String, svgCode: String) {
+        fun buildSvgPanel(uuid: UUID): FormPanelFactory {
+            val formItems = mutableListOf<FormItem>()
+            val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = uuid)
+            formItems.add(newFi)
+            return FormPanelFactory(formItems)
+        }
+
         val uuid = UUID()
         DomUtil.appendTo(uuid, svgCode)
 
@@ -103,13 +110,6 @@ object UiManager {
 
         val aggregator: BaseAggregator = UndefinedDispatcher()
         EventStore.addView(title, aggregator, panel)
-    }
-
-    private fun buildSvgPanel(uuid: UUID): FormPanelFactory {
-        val formItems = mutableListOf<FormItem>()
-        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = uuid)
-        formItems.add(newFi)
-        return FormPanelFactory(formItems)
     }
 
     fun closeView(tab: SimplePanel) {
@@ -133,7 +133,7 @@ object UiManager {
         RoStatusBar.updateUser(user)
     }
 
-    fun openListView(aggregator: BaseAggregator) {
+    fun openCollectionView(aggregator: BaseAggregator) {
         val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)

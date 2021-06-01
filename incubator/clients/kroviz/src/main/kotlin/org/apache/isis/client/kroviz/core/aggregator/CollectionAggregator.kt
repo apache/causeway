@@ -58,7 +58,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
             if (parent == null) {
                 if (dpm.canBeDisplayed()) {
-                    UiManager.openListView(this)
+                    UiManager.openCollectionView(this)
                 }
             } else {
                 console.log("[CA.opdate] can be displayed / parent = OA")
