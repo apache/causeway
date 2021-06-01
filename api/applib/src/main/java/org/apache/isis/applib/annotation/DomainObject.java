@@ -72,22 +72,23 @@ public @interface DomainObject {
      * <p>
      * It is sufficient to specify an interface rather than a concrete type.
      *
-     * @see DomainObject#autoCompleteAction()
+     * @see DomainObject#autoCompleteMethod()
      */
     Class<?> autoCompleteRepository()
             default Object.class;
 
     /**
-     * The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search
+     * The method to use in order to perform the auto-complete search
      * (defaults to &quot;autoComplete&quot;).
      *
      * <p>
-     * The method is required to accept a single string parameter, and must return a list of the domain type.
+     * The method is required to accept a single string parameter, and must
+     * return a list of the domain type.
      * </p>
      *
      * @see DomainObject#autoCompleteRepository()
      */
-    String autoCompleteAction()
+    String autoCompleteMethod()
             default "autoComplete";
 
     /**

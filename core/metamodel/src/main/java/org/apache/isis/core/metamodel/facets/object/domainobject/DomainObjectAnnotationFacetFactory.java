@@ -156,34 +156,8 @@ implements
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(autoCompleteRepository=...)
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = createFor(domainObjectIfAny, facetHolder, cls);
-
-        // then add
-        super.addFacet(facet);
-    }
-
-    private static final class AnnotHelper {
-        AnnotHelper(DomainObject domainObject) {
-            this.autoCompleteRepository = domainObject.autoCompleteRepository();
-            this.autoCompleteAction = domainObject.autoCompleteAction();
-        }
-        final Class<?> autoCompleteRepository;
-        final String autoCompleteAction;
-        Method repositoryMethod;
-    }
-
-    private AutoCompleteFacet createFor(
-            final Optional<DomainObject> domainObjectIfAny,
-            final FacetHolder facetHolder,
-            final Class<?> cls) {
-
-        if(!domainObjectIfAny.isPresent()) {
-            return null;
-        }
-
-        return domainObjectIfAny
-                .map(domainObject -> new AnnotHelper(domainObject))
+        processClassContext.synthesizeOnType(DomainObject.class)
+                .map(AnnotHelper::new)
                 .filter(a -> a.autoCompleteRepository != Object.class)
                 .filter(a -> {
                     a.repositoryMethod = findRepositoryMethod(
@@ -191,13 +165,24 @@ implements
                             cls,
                             "@DomainObject",
                             a.autoCompleteRepository,
-                            a.autoCompleteAction);
+                            a.autoCompleteMethod);
 
                     return a.repositoryMethod != null;
                 })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod))
-                .orElse(null);
+                .ifPresent(super::addFacet);
+
+    }
+
+    private static final class AnnotHelper {
+        AnnotHelper(DomainObject domainObject) {
+            this.autoCompleteRepository = domainObject.autoCompleteRepository();
+            this.autoCompleteMethod = domainObject.autoCompleteMethod();
+        }
+        final Class<?> autoCompleteRepository;
+        final String autoCompleteMethod;
+        Method repositoryMethod;
     }
 
     private Method findRepositoryMethod(

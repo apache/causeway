@@ -90,7 +90,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 @DomainObject(
         logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteAction = "findMatching"
+        autoCompleteMethod = "findMatching"
 )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
