@@ -97,6 +97,9 @@ class MetaModelServiceDefaultTest {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue("mocked"));
 
+                allowing(mockSpec).getLogicalTypeName();
+                will(returnValue("logicalType"));
+
                 allowing(mockSpec).subclasses(Hierarchical.Depth.DIRECT);
                 will(returnValue(Can.empty()));
 
