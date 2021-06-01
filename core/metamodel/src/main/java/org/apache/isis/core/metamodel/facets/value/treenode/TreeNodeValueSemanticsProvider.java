@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.value.treenode;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.graph.tree.LazyTreeNode;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -105,7 +104,7 @@ implements TreeNodeValueFacet {
     @Override
     protected TreeNode<?> doRestore(final String input) {
         final Memento memento = parseMemento(input);
-        return LazyTreeNode.of(
+        return TreeNode.of(
                 memento.get("primaryValue", Object.class),
                 memento.get("adapterClass", Class.class),
                 memento.get("treeState", TreeState.class));

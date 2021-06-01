@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.graph.SimpleEdge;
-import org.apache.isis.applib.graph.tree.LazyTreeNode;
+import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureDefault;
@@ -46,7 +46,7 @@ public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
 
                     // these are not yet part of the schema (do not map onto any value-types there)
                     ValueTypeDefinition.of(SimpleEdge.class, ValueType.STRING),
-                    ValueTypeDefinition.of(LazyTreeNode.class, ValueType.STRING),
+                    ValueTypeDefinition.of(TreeNode.class, ValueType.STRING),
 
                     ValueTypeDefinition.of(ApplicationFeatureDefault.class, ValueType.STRING)
 
