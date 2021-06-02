@@ -23,7 +23,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.Authenticator;
@@ -39,7 +38,6 @@ public class AuthenticatorSecmanAutoConfiguration  {
 
     @Bean("isis.ext.secman.AuthenticatorSecman")
     @ConditionalOnMissingBean(Authenticator.class)
-    @Transactional
     @Qualifier("Secman")
     public Authenticator authenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
