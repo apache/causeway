@@ -24,14 +24,15 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StandardAuthenticationManager_AuthenticationTest {
 
@@ -39,9 +40,10 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
     @Before
     public void setUp() throws Exception {
-        
+
         authenticationManager = new AuthenticationManager(
-                Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()), 
+                Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()),
+                AnonymousInteractionFactory.forTesting(),
                 new RandomCodeGeneratorDefault());
     }
 
@@ -52,7 +54,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
         assertThat(authenticationManager.isSessionValid(authentication), is(true));
     }
-    
+
     @Test
     public void newlyCreatedAuthentication_whenUnauthorizedUser_shouldBeRejected() throws Exception {
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword("me", "pass");

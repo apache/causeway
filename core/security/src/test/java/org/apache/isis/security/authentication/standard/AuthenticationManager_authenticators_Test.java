@@ -23,15 +23,16 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -43,7 +44,8 @@ public class AuthenticationManager_authenticators_Test {
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
 
         authenticationManager = new AuthenticationManager(
-                Collections.emptyList(), 
+                Collections.emptyList(),
+                AnonymousInteractionFactory.forTesting(),
                 new RandomCodeGeneratorDefault());
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
@@ -52,9 +54,10 @@ public class AuthenticationManager_authenticators_Test {
     public void shouldBeAbleToUseAuthenticators() throws Exception {
 
         val auth = AuthenticatorsForTesting.authenticatorAllwaysValid();
-        
+
         authenticationManager = new AuthenticationManager(
-                Collections.singletonList(auth), 
+                Collections.singletonList(auth),
+                AnonymousInteractionFactory.forTesting(),
                 new RandomCodeGeneratorDefault());
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
         assertThat(authenticationManager.getAuthenticators().getElseFail(0), is(sameInstance(auth)));

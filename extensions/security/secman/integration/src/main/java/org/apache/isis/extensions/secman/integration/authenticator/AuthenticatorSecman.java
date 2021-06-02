@@ -18,43 +18,30 @@
  */
 package org.apache.isis.extensions.secman.integration.authenticator;
 
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
-import org.apache.isis.core.security.authorization.Authorizor;
-import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * {@link Authenticator} implementation that authenticates the
  * {@link ApplicationUser}, first that the user exists and secondly that the
  * provided password matches the
- * {@link ApplicationUser#getEncryptedPassword() encypted password} of the user.
+ * {@link ApplicationUser#getEncryptedPassword() encrypted password} of the user.
  *
  * <p>
  *     This Authenticator is a fallback and is only used if there is no other

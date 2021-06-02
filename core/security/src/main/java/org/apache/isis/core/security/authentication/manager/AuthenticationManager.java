@@ -27,9 +27,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
@@ -44,6 +46,7 @@ import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator
 import org.apache.isis.core.security.authentication.standard.Registrar;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 @Service
@@ -53,16 +56,20 @@ import lombok.val;
 @Qualifier("Default")
 public class AuthenticationManager {
 
-    @Getter private final Can<Authenticator> authenticators;
+    @Getter private final @NonNull Can<Authenticator> authenticators;
 
     private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
-    private final RandomCodeGenerator randomCodeGenerator;
-    private final Can<Registrar> registrars;
+    private final @NonNull AnonymousInteractionFactory anonymousInteractionFactory;
+    private final @NonNull RandomCodeGenerator randomCodeGenerator;
+    private final @NonNull Can<Registrar> registrars;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
+            // needs @Lazy due to circular provisioning dependency
+            final @Lazy AnonymousInteractionFactory anonymousInteractionFactory,
             final RandomCodeGenerator randomCodeGenerator) {
+        this.anonymousInteractionFactory = anonymousInteractionFactory;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
         if (this.authenticators.isEmpty()) {
@@ -75,7 +82,9 @@ public class AuthenticationManager {
 
     // -- SESSION MANAGEMENT (including authenticate)
 
-    public final Authentication authenticate(AuthenticationRequest request) {
+    @Transactional(readOnly = true) // let Spring handle the transactional context for this method
+    // cannot use final here, as Spring provides a transaction aware proxy for this type
+    public /*final*/ Authentication authenticate(AuthenticationRequest request) {
 
         if (request == null) {
             return null;
@@ -89,15 +98,22 @@ public class AuthenticationManager {
                     "No authenticator available for processing " + request.getClass().getName());
         }
 
-        for (val authenticator : compatibleAuthenticators) {
-            val authentication = authenticator.authenticate(request, getUnusedRandomCode());
-            if (authentication != null) {
-                userByValidationCode.put(authentication.getValidationCode(), authentication.getUserName());
-                return authentication;
-            }
-        }
+        // open a new anonymous interaction for this loop to run in
+        // we simply participate with the current transaction
+        return anonymousInteractionFactory.callAnonymous(()->{
 
-        return null;
+            for (val authenticator : compatibleAuthenticators) {
+                val authentication = authenticator.authenticate(request, getUnusedRandomCode());
+                if (authentication != null) {
+                    userByValidationCode.put(authentication.getValidationCode(), authentication.getUserName());
+                    return authentication;
+                }
+            }
+
+            return null;
+
+        });
+
     }
 
     private String getUnusedRandomCode() {
@@ -120,7 +136,8 @@ public class AuthenticationManager {
     }
 
 
-    public final boolean isSessionValid(final @Nullable Authentication authentication) {
+    // cannot use final here, as Spring provides a transaction aware proxy for this type
+    public /*final*/ boolean isSessionValid(final @Nullable Authentication authentication) {
         if(authentication==null) {
             return false;
         }

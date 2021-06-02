@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 
 import lombok.NonNull;
 
@@ -36,12 +37,13 @@ import lombok.NonNull;
  * </p>
  *
  * <p>
- * @apiNote : this service is not currently formal API.
+ * @apiNote This is a framework internal class and so does not constitute a formal API.
  * </p>
  *
  * @since 2.0 {@index}
  */
-public interface InteractionFactory {
+public interface InteractionFactory
+extends AnonymousInteractionFactory {
 
     /**
      * If present, reuses the current top level {@link AuthenticationLayer}, otherwise creates a new
@@ -111,6 +113,7 @@ public interface InteractionFactory {
      * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
      * @param runnable (non-null)
      */
+    @Override
     void runAnonymous(@NonNull ThrowingRunnable runnable);
 
     /**
