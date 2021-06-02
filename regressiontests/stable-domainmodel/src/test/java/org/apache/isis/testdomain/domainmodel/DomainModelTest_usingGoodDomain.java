@@ -103,7 +103,7 @@ class DomainModelTest_usingGoodDomain {
 //              .withIgnoreBuiltInValueTypes()
 //              .withIgnoreInterfaces()
                 //.withPackagePrefix("*")
-                .withPackagePrefix("org.apache.isis.testdomain.")
+                .withNamespacePrefix("org.apache.isis.testdomain.")
                 ;
 
         System.out.println("=== listing MM");
