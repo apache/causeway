@@ -24,6 +24,8 @@ import java.util.StringTokenizer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
@@ -37,10 +39,11 @@ import lombok.val;
 
 /**
  * String representation of any persistable or re-creatable object managed by the framework.
- * 
+ *
  * @since 1.x revised for 2.0 {@index}
  */
 @org.apache.isis.applib.annotation.Value
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 
@@ -50,40 +53,40 @@ public final class Bookmark implements Oid {
     @Getter(onMethod_ = {@Override}) private final String identifier;
     @Getter private final @Nullable String hintId;
     private final int hashCode;
-    
+
     // -- FACTORIES
 
     public static Bookmark forLogicalTypeNameAndIdentifier(
             final @NonNull String logicalTypeName,
             final @NonNull String identifier) {
         return new Bookmark(
-                logicalTypeName, 
-                identifier, 
+                logicalTypeName,
+                identifier,
                 /*hintId*/null);
     }
-    
+
     public static Bookmark forLogicalTypeAndIdentifier(
-            final @NonNull LogicalType logicalType, 
+            final @NonNull LogicalType logicalType,
             final @NonNull String identifier) {
         return Bookmark.forLogicalTypeNameAndIdentifier(
-                logicalType.getLogicalTypeName(), 
+                logicalType.getLogicalTypeName(),
                 identifier);
     }
-    
+
     public static Bookmark forOidDto(final @NonNull OidDto oidDto) {
         return Bookmark.forLogicalTypeNameAndIdentifier(
-                oidDto.getType(), 
+                oidDto.getType(),
                 oidDto.getId());
     }
 
     public Bookmark withHintId(final @Nullable String hintId) {
-        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId); 
+        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId);
     }
-    
+
     // -- CONSTRUCTOR
-    
+
     private Bookmark(
-            final String logicalTypeName, 
+            final String logicalTypeName,
             final String identifier,
             final String hintId) {
 
@@ -92,9 +95,9 @@ public final class Bookmark implements Oid {
         this.hintId = hintId;
         this.hashCode = Objects.hash(logicalTypeName, identifier);
     }
-    
+
     // -- PARSE
-    
+
     /**
      * Round-trip with {@link #stringify()} representation.
      */
@@ -107,23 +110,23 @@ public final class Bookmark implements Oid {
         int tokenCount = tokenizer.countTokens();
         if(tokenCount==2) {
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
-                    tokenizer.nextToken(), 
+                    tokenizer.nextToken(),
                     tokenizer.nextToken()));
         }
         if(tokenCount>2) {
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
-                    tokenizer.nextToken(), 
+                    tokenizer.nextToken(),
                     tokenizer.nextToken("").substring(1)));
         }
         return Optional.empty();
     }
-    
+
     public static Optional<Bookmark> parseUrlEncoded(@Nullable String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()
                 : parse(_UrlDecoderUtil.urlDecode(urlEncodedStr));
     }
-    
+
     // -- TO DTO
 
     public OidDto toOidDto() {
@@ -134,14 +137,14 @@ public final class Bookmark implements Oid {
     }
 
     // -- STRINGIFY
-    
+
     @Override
     public String stringify() {
         return stringify(identifier);
     }
-    
+
     // -- OBJECT CONTRACT // not considering any hintId
-    
+
     @Override
     public boolean equals(final Object other) {
         if (other == null) {
@@ -157,7 +160,7 @@ public final class Bookmark implements Oid {
     }
 
     public boolean equals(final Bookmark other) {
-        return Objects.equals(logicalTypeName, other.getLogicalTypeName()) 
+        return Objects.equals(logicalTypeName, other.getLogicalTypeName())
                 && Objects.equals(identifier, other.getIdentifier());
     }
 
@@ -165,15 +168,15 @@ public final class Bookmark implements Oid {
     public int hashCode() {
         return hashCode;
     }
-    
+
     @Override
     public String toString() {
         return stringify();
     }
-    
+
     /**
-     * Analogous to {@link #stringify()}, but replaces the {@code identifier} string with 
-     * the {@code hintId} if present and not empty. 
+     * Analogous to {@link #stringify()}, but replaces the {@code identifier} string with
+     * the {@code hintId} if present and not empty.
      */
     public String stringifyHonoringHintIfAny() {
         return _Strings.isNotEmpty(hintId)
@@ -182,11 +185,11 @@ public final class Bookmark implements Oid {
     }
 
     // -- HELPER
-    
+
     private String stringify(String id) {
         return logicalTypeName + SEPARATOR + id;
     }
 
-    
+
 
 }

@@ -25,6 +25,8 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Value;
 
 /**
@@ -34,6 +36,7 @@ import org.apache.isis.applib.annotation.Value;
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
 @XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Password")
 // @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
 @lombok.Value
 public class Password implements Serializable {

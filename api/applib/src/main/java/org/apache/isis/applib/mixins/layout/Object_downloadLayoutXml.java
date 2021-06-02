@@ -20,8 +20,10 @@ package org.apache.isis.applib.mixins.layout;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
@@ -55,6 +57,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.1"
 )
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.layout.Object_downloadLayoutXml")
 @RequiredArgsConstructor
 public class Object_downloadLayoutXml {
 

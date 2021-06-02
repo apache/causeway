@@ -23,8 +23,10 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -56,6 +58,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2.1"
 )
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + "mixins.metamodel.Object_inspectMetamodel")
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 

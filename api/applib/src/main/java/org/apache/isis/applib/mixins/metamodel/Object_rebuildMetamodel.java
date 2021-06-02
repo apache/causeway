@@ -20,8 +20,10 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -51,6 +53,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.1"
 )
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_rebuildMetamodel")
 @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
 

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.swagger;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -30,6 +31,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
  *
  * @since 1.x {@index}
  */
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.swagger.Visibility")
 public enum Visibility {
 
     /**
