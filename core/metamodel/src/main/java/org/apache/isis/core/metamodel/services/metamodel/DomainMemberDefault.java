@@ -114,6 +114,11 @@ public class DomainMemberDefault implements DomainMember {
         return spec.getLogicalTypeName();
     }
 
+    @Override
+    public String getNamespace() {
+        return spec.getLogicalType().getNamespace();
+    }
+
     @XmlElement @Override
     public String getClassName() {
         final String fullIdentifier = spec.getFullIdentifier();
