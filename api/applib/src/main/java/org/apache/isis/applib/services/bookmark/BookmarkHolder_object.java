@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.bookmark;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
         domainEvent = BookmarkHolder_object.PropertyDomainEvent.class
 )
 @RequiredArgsConstructor
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.bookmark.BookmarkHolder_object")
 public class BookmarkHolder_object {
 
     private final BookmarkHolder bookmarkHolder;

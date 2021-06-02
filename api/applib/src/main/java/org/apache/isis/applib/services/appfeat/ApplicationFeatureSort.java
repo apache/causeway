@@ -18,25 +18,29 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
+
 /**
- * 
+ *
  * @since 1.x revised for 2.0 {@index}
  */
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
 public enum ApplicationFeatureSort {
-    
-    /** 
+
+    /**
      * logical namespace
      */
     NAMESPACE,
-    
-    /** 
-     * {@code namespace + "." + typeSimpleName} 
+
+    /**
+     * {@code namespace + "." + typeSimpleName}
      * makes up the fully qualified logical type
      */
     TYPE,
-    
-    /** 
-     * {@code namespace + "." + typeSimpleName + "." + memberName} 
+
+    /**
+     * {@code namespace + "." + typeSimpleName + "." + memberName}
      * makes up the fully qualified logical member
      */
     MEMBER;
@@ -44,11 +48,11 @@ public enum ApplicationFeatureSort {
     public boolean isNamespace() {
         return this == ApplicationFeatureSort.NAMESPACE;
     }
-    
+
     public boolean isType() {
         return this == ApplicationFeatureSort.TYPE;
     }
-    
+
     public boolean isMember() {
         return this == ApplicationFeatureSort.MEMBER;
     }
@@ -57,6 +61,6 @@ public enum ApplicationFeatureSort {
     public String toString() {
         return name();
     }
-    
+
 
 }

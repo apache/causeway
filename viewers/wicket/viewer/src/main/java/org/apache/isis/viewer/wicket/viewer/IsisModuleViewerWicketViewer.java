@@ -69,4 +69,5 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 })
 public class IsisModuleViewerWicketViewer {
 
+    public static final String NAMESPACE = "isis.viewer.wicket";
 }
