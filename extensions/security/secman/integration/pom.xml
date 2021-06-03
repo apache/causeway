@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-integration</artifactId>
-    <name>Apache Isis Ext - Sec Man Model</name>
+    <name>Apache Isis Ext - Sec Man Integration</name>
     <description></description>
 
     <properties>

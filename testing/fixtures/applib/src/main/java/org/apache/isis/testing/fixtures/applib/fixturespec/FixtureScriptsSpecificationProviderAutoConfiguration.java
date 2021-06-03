@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.authenticator;
+package org.apache.isis.testing.fixtures.applib.fixturespec;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -25,24 +25,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
-/**
- * @since 2.0 {@index}
- */
 @AutoConfigureOrder(OrderPrecedence.LATE)
 @Configuration
-public class AuthenticatorSecmanAutoConfiguration  {
+public class FixtureScriptsSpecificationProviderAutoConfiguration  {
 
-    @Bean("isis.ext.secman.AuthenticatorSecman")
-    @ConditionalOnMissingBean(Authenticator.class)
-    @Qualifier("Secman")
-    public Authenticator authenticatorSecman(
-            final ApplicationUserRepository applicationUserRepository,
-            final PasswordEncryptionService passwordEncryptionService) {
-        return new AuthenticatorSecman(applicationUserRepository, passwordEncryptionService);
+    @Bean("isis.ext.fixtures.FixtureScriptsSpecificationProviderDefault")
+    @ConditionalOnMissingBean(FixtureScriptsSpecificationProvider.class)
+    @Qualifier("Default")
+    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final IsisConfiguration isisConfiguration) {
+        return new FixtureScriptsSpecificationProvider() {
+
+            @Override
+            public FixtureScriptsSpecification getSpecification() {
+                return new FixtureScriptsSpecification()
+
+                        .w;
+            }
+        };
     }
 
 }

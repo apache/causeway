@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-secman-applib</artifactId>
-    <name>Apache Isis Ext - Sec Man API</name>
+    <name>Apache Isis Ext - Sec Man Applib</name>
     <description></description>
 
     <properties>

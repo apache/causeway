@@ -20,6 +20,7 @@ package org.apache.isis.testing.fixtures.applib.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+@FunctionalInterface
 public interface FixtureScriptsSpecificationProvider {
 
     @Programmatic
