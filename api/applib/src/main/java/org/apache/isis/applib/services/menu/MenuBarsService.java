@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.menu;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
 /**
@@ -34,6 +36,7 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
  */
 public interface MenuBarsService {
 
+    @DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
     enum Type {
 
         /**

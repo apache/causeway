@@ -20,8 +20,10 @@ package org.apache.isis.applib.mixins.dto;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -52,6 +54,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-download",
         sequence = "500.1")
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.dto.Dto_downloadXml")
 @RequiredArgsConstructor
 public class Dto_downloadXml {
 

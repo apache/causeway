@@ -18,12 +18,14 @@
  */
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.util.Enums;
 
 /**
  * @since 1.x {@index}
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
 public enum SemanticsOf {
 
     /**

@@ -23,26 +23,29 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 /**
- * 
+ *
  * @since 1.x revised for 2.0 {@index}
  */
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
 public interface ApplicationFeature {
 
     ApplicationFeatureId getFeatureId();
-    
+
     default String getFullyQualifiedName() {
         return getFeatureId().getFullyQualifiedName();
     }
 
     /**
-     * Returns optionally the member sort, based on whether this feature is of sort 
+     * Returns optionally the member sort, based on whether this feature is of sort
      * {@link ApplicationFeatureSort#MEMBER}.
      */
     Optional<ApplicationMemberSort> getMemberSort();
-    
+
     default SortedSet<ApplicationFeatureId> getMembersOfSort(final ApplicationMemberSort memberSort) {
         switch (memberSort) {
         case PROPERTY:
@@ -55,33 +58,33 @@ public interface ApplicationFeature {
             return Collections.emptySortedSet();
         }
     }
-    
+
     /**
      * Returns optionally the action's return type, based on
      * whether this feature is of sorts
-     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationFeatureSort#MEMBER member} and
      * {@link ApplicationMemberSort#ACTION action}.
      */
     Optional<Class<?>> getActionReturnType();
-    
+
     /**
      * Returns optionally the action's semantics, based on
      * whether this feature is of sorts
-     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationFeatureSort#MEMBER member} and
      * {@link ApplicationMemberSort#ACTION action}.
      */
     Optional<SemanticsOf> getActionSemantics();
 
-    /** 
-     * Returns whether the property or collection feature is derived.  
-     * @return always {@code false} when not a property or collection 
+    /**
+     * Returns whether the property or collection feature is derived.
+     * @return always {@code false} when not a property or collection
      */
     boolean isPropertyOrCollectionDerived();
 
     /**
      * Returns optionally the property's semantics, based on
      * whether this feature is of sorts
-     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationFeatureSort#MEMBER member} and
      * {@link ApplicationMemberSort#PROPERTY property}.
      */
     OptionalInt getPropertyTypicalLength();
@@ -89,11 +92,11 @@ public interface ApplicationFeature {
     /**
      * Returns optionally the property's max-length constraint, based on
      * whether this feature is of sorts
-     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationFeatureSort#MEMBER member} and
      * {@link ApplicationMemberSort#PROPERTY property}.
      */
     OptionalInt getPropertyMaxLength();
-    
+
     SortedSet<ApplicationFeatureId> getContents();
 
     SortedSet<ApplicationFeatureId> getProperties();
@@ -101,5 +104,5 @@ public interface ApplicationFeature {
     SortedSet<ApplicationFeatureId> getCollections();
 
     SortedSet<ApplicationFeatureId> getActions();
-    
+
 }

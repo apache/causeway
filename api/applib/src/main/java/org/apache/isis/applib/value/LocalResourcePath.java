@@ -27,6 +27,8 @@ import javax.annotation.Nullable;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Value;
 
 import lombok.Getter;
@@ -51,6 +53,7 @@ import lombok.NonNull;
  */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath")
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
 

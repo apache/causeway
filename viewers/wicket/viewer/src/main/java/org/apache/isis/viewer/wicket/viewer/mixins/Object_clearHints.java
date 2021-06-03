@@ -20,13 +20,16 @@ package org.apache.isis.viewer.wicket.viewer.mixins;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +74,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "400.1"
 )
+@DomainObject(logicalTypeName = IsisModuleViewerWicketViewer.NAMESPACE + ".mixins.Object_clearHints")
 @RequiredArgsConstructor
 public class Object_clearHints {
 

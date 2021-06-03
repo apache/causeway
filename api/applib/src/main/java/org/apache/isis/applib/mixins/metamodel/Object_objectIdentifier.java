@@ -20,6 +20,7 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
@@ -56,6 +57,7 @@ import lombok.val;
         fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2"
 )
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_objectIdentifier")
 @RequiredArgsConstructor
 public class Object_objectIdentifier {
 

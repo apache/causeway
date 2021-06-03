@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
@@ -50,6 +52,7 @@ import lombok.Setter;
  * </p>
  */
 @Value
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + "services.appfeat.ApplicationFeature")
 public class ApplicationFeatureDefault
 implements
 ApplicationFeature,

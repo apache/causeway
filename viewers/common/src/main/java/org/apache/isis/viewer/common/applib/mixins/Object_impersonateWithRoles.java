@@ -22,8 +22,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
@@ -56,6 +58,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "850.2"
 )
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_impersonateWithRoles")
 @RequiredArgsConstructor
 public class Object_impersonateWithRoles {
 
