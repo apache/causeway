@@ -41,9 +41,7 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
 
             @Override
             public FixtureScriptsSpecification getSpecification() {
-                return new FixtureScriptsSpecification()
-
-                        .w;
+                return new FixtureScriptsSpecification();
             }
         };
     }
