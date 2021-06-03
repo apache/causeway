@@ -162,13 +162,9 @@ For example:
 
 [source,ini]
 ----
-user_role = *:ToDoItems:*:*,\
-            *:ToDoItem:*:*,\
-            *:TodoAppDashboard:*:*
-analysis_role = *:ToDoItemAnalysis:*:*,\
-            *:ToDoItemsByCategoryViewModel:*:*,\
-            *:ToDoItemsByDateRangeViewModel:*:*
-self-install_role = *:ToDoItemsFixturesService:install:*
+user_role = myapp.*,\
+            isis.security:*,\
+            isis.applib:*
 admin_role = *
 ----
 
@@ -177,41 +173,82 @@ The format is:
 
 [source,ini]
 ----
-packageName:className:memberName:r,w
+logicalTypeNamespace:logicalTypeSimpleName:memberName:r,w
 ----
 
 where:
+
+* `logicalTypeNamespace` is the namespace portion of the domain object's logical type name ...
+
+* \... and `logicalTypeSimpleName` is the last portion of hte domain object's logical type name.
++
+For example, if `@DomainObject(logicalTypeName = "myapp.customer.Customer")`, then the the namespace is "myapp.customer" and the simple type name is "Customer".
 
 * `memberName` is the property, collection or action name.
 * `r` indicates that the member is visible
 * `w` indicates that the member is usable (editable or invokable)
 
-and where each of the parts of the permission string can be wildcarded using `*`.
+Note that:
 
-Because these are wildcards, a '*' can be used at any level.
-Additionally, missing levels assume wildcards.
+* each part of the permission string can be wildcarded using `*`.
+* The namespace can also be wildcarded at any level (for example `myapp.*`).
+* Missing levels assume wildcards.
 
 Thus:
 
 [source,ini]
 ----
-com.mycompany.myapp:Customer:firstName:r,w   # view or edit customer's firstName
-com.mycompany.myapp:Customer:lastName:r      # view customer's lastName only
-com.mycompany.myapp:Customer:placeOrder:*    # view and invoke placeOrder action
-com.mycompany.myapp:Customer:placeOrder      # ditto
-com.mycompany.myapp:Customer:*:r             # view all customer class members
-com.mycompany.myapp:*:*:r                    # view-only access for all classes in myapp package
-com.mycompany.myapp:*:*:*                    # view/edit for all classes in myapp package
-com.mycompany.myapp:*:*                      # ditto
-com.mycompany.myapp:*                        # ditto
-com.mycompany.myapp                          # ditto
-*                                            # view/edit access to everything
+myapp.customer:Customer:firstName:r,w   # view or edit customer's firstName
+myapp.customer:Customer:lastName:r      # view customer's lastName only
+myapp.customer:Customer:placeOrder:*    # view and invoke placeOrder action
+myapp.customer:Customer:placeOrder      # ditto
+myapp.customer:Customer:*:r             # view all customer class members
+myapp.customer:*:*:r                    # view-only access for myapp.customer namespace
+myapp.customer:*:*:*                    # view/edit for myapp.customer namespace
+myapp:*:*                               # view/edit for myapp namespace
+myapp:*                                 # ditto
+myapp                                   # ditto
+*                                       # view/edit access to everything
 ----
 
 [TIP]
 ====
 The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:security:shiro:about.adoc#enhanced-wildcard-permission[here].
 ====
+
+
+== Providing permissions to Framework-provided Features
+
+Some features of the framework are exposed as actions that must be provided as permissions.
+In particular, permission to the features in `isis.security` must be granted in order that end-users can logout.
+
+The snippet below defines a role for each framework feature:
+
+[source,ini]
+.shiro.ini
+----
+[roles]
+default_role   = isis.applib,\
+                 isis.security
+fixtures_role  = isis.ext.fixtures
+features_role  = isis.feat
+metamodel_role = isis.metamodel
+h2_role        = isis.ext.h2Console
+jdo_role       = isis.persistence.jdo
+swagger_role   = isis.viewer.restfulobjects
+conf_role      = isis.conf
+sudo_role      = isis.sudo
+----
+
+Notes:
+
+* all users should be granted the `default_role`.
+* `conf_role` provides access to the configuration menu (in production mode), which is potentially sensitive
+* `sudo_role` provides the ability to impersonate any user, so is _extremely_ sensitive; however it is prototype mode only
+
+Most of the features protected by these roles are only available in prototype mode.
+The exceptions are those under `default_role` and `conf_role`.
+
 
 === Externalized IniRealm
 
@@ -269,17 +306,17 @@ For example:
 
 [source,ini]
 ----
-user_role   = !reg/com.mycompany.myapp.api,\
-              !reg/com.mycompany.myapp.webapp.services.admin,\
+user_role   = !reg/myapp.api,\
+              !reg/myapp.webapp.services.admin,\
               reg/* ; \
-api_role    = com.mycompany.myapp.api ;\
+api_role    = myapp.api ;\
 admin_role = adm/*
 ----
 
 sets up:
 
-* the `user_role` with access to all permissions except those in `com.mycompany.myapp.api` and `com.mycompany.myapp.webapp.services.admin`
-* the `api_role` with access to all permissions in `com.mycompany.myapp.api`
+* the `user_role` with access to all permissions except those with a logical type's namespace of `myapp.api` or `myapp.webapp.services.admin`
+* the `api_role` with access to all permissions to logical types under the namespace `myapp.api`
 * the `admin_role` with access to everything.
 
 The permission group concept is required to scope the applicability of any veto permission.
