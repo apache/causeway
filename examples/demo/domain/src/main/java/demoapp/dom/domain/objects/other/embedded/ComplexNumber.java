@@ -18,23 +18,28 @@
  */
 package demoapp.dom.domain.objects.other.embedded;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.factory.FactoryService;
+import lombok.Value;
 
-import lombok.RequiredArgsConstructor;
+public interface ComplexNumber {
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.EmbeddedTypeMenu")
-@RequiredArgsConstructor
-public class EmbeddedTypeMenu {
+    double getRe();
+    double getIm();
 
-    private final FactoryService factoryService;
-
-    @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
-    public EmbeddedTypeVm embeddedTypes(){
-        return factoryService.viewModel(new EmbeddedTypeVm());
+    // used for seeding
+    public static SimpleNamedComplexNumber named(
+            final String name,
+            final double re,
+            final double im) {
+        return new SimpleNamedComplexNumber(name, re, im);
     }
+
+    // helper type used for seeding
+    @Value
+    static class SimpleNamedComplexNumber
+    implements ComplexNumber {
+        final String name;
+        final double re;
+        final double im;
+    }
+
 }

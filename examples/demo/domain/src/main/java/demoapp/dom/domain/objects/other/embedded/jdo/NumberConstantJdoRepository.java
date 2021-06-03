@@ -16,42 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
-
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+package demoapp.dom.domain.objects.other.embedded.jdo;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 import lombok.val;
 
 @Profile("demo-jdo")
-@Repository
-@Named("demo.numberConstantRepository")
-public class NumberConstantJdoRepository {
+@Service
+public class NumberConstantJdoRepository
+extends ValueHolderRepository<ComplexNumber, NumberConstantJdo> {
 
-    @Inject private RepositoryService repository;
-    @Inject private FactoryService factory;
-
-    public List<NumberConstantJdo> listAll(){
-        return repository.allInstances(NumberConstantJdo.class);
+    protected NumberConstantJdoRepository() {
+        super(NumberConstantJdo.class);
     }
 
-    public void add(String name, ComplexNumberJdo number) {
-        val numConst = factory.detachedEntity(new NumberConstantJdo());
-        numConst.setName(name);
-        numConst.setNumber(number);
-        add(numConst);
-    }
-
-    public void add(NumberConstantJdo entry) {
-        repository.persist(entry);
+    @Override
+    protected NumberConstantJdo newDetachedEntity(ComplexNumber value) {
+        val numConst = repositoryService.detachedEntity(new NumberConstantJdo());
+        numConst.setName(((ComplexNumber.SimpleNamedComplexNumber)value).getName());
+        numConst.setNumber(ComplexNumberJdo.of(value.getRe(), value.getIm()));
+        return numConst;
     }
 
 }

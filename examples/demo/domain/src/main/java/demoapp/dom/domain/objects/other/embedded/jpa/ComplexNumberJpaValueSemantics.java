@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.jpa;
 
 import java.util.stream.Collectors;
 
@@ -30,35 +30,35 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.val;
 
 // tag::class[]
-public class ComplexNumberJdoValueSemantics
-        implements ValueSemanticsProvider<ComplexNumberJdo>{
+public class ComplexNumberJpaValueSemantics
+        implements ValueSemanticsProvider<ComplexNumberJpa>{
 
 // end::class[]
 // tag::getParser[]
     @Override
-    public Parser<ComplexNumberJdo> getParser() {
+    public Parser<ComplexNumberJpa> getParser() {
 // end::getParser[]
         // ...
 // tag::getParser[]
-        return new Parser<ComplexNumberJdo>() {
+        return new Parser<ComplexNumberJpa>() {
             @Override
-            public ComplexNumberJdo parseTextEntry(Object contextPojo, String entry) {
-                return ComplexNumberJdo.parse(entry).orElse(null);
+            public ComplexNumberJpa parseTextEntry(Object contextPojo, String entry) {
+                return ComplexNumberJpa.parse(entry).orElse(null);
             }
             @Override
             public int typicalLength() {
                 return 30;
             }
             @Override
-            public String displayTitleOf(ComplexNumberJdo object) {
+            public String displayTitleOf(ComplexNumberJpa object) {
                 return object!=null ? object.title() : "NaN";
             }
             @Override
-            public String displayTitleOf(ComplexNumberJdo object, String usingMask) {
+            public String displayTitleOf(ComplexNumberJpa object, String usingMask) {
                 return displayTitleOf(object);
             }
             @Override
-            public String parseableTitleOf(ComplexNumberJdo existing) {
+            public String parseableTitleOf(ComplexNumberJpa existing) {
                 return displayTitleOf(existing);
             }
         };
@@ -67,13 +67,13 @@ public class ComplexNumberJdoValueSemantics
 
 // tag::getEncoderDecoder[]
     @Override
-    public EncoderDecoder<ComplexNumberJdo> getEncoderDecoder() {
+    public EncoderDecoder<ComplexNumberJpa> getEncoderDecoder() {
 // end::getEncoderDecoder[]
         // ...
 // tag::getEncoderDecoder[]
-        return new EncoderDecoder<ComplexNumberJdo>() {
+        return new EncoderDecoder<ComplexNumberJpa>() {
             @Override
-            public String toEncodedString(ComplexNumberJdo cn) {
+            public String toEncodedString(ComplexNumberJpa cn) {
                 if(cn==null) {
                     return null;
                 }
@@ -83,7 +83,7 @@ public class ComplexNumberJdoValueSemantics
                         Long.toHexString(re), Long.toHexString(im));
             }
             @Override
-            public ComplexNumberJdo fromEncodedString(String str) {
+            public ComplexNumberJpa fromEncodedString(String str) {
                 if(_NullSafe.isEmpty(str)) {
                     return null;
                 }
@@ -95,7 +95,7 @@ public class ComplexNumberJdoValueSemantics
                 }
                 val re = Double.longBitsToDouble(Long.parseLong(chunks.get(0), 16));
                 val im = Double.longBitsToDouble(Long.parseLong(chunks.get(1), 16));
-                return ComplexNumberJdo.of(re, im);
+                return ComplexNumberJpa.of(re, im);
             }
         };
     }
@@ -103,11 +103,11 @@ public class ComplexNumberJdoValueSemantics
 
 // tag::getDefaultsProvider[]
     @Override
-    public DefaultsProvider<ComplexNumberJdo> getDefaultsProvider() {
+    public DefaultsProvider<ComplexNumberJpa> getDefaultsProvider() {
 // end::getDefaultsProvider[]
         // ...
 // tag::getDefaultsProvider[]
-        return ()-> ComplexNumberJdo.of(0, 0);
+        return ()-> ComplexNumberJpa.of(0, 0);
     }
 // end::getDefaultsProvider[]
 // tag::class[]

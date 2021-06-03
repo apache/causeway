@@ -27,6 +27,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 
 // tag::class[]
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EmbeddedTypeVm")
@@ -34,7 +36,7 @@ public class EmbeddedTypeVm implements HasAsciiDocDescription {
 
     // ...
 // end::class[]
-    @Inject private NumberConstantJdoRepository numberConstantRepo;
+    @Inject private ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> numberConstantRepo;
 
     public String title() {
         return "Embedded Types";
@@ -42,8 +44,8 @@ public class EmbeddedTypeVm implements HasAsciiDocDescription {
 
 // tag::class[]
     @Collection
-    public List<NumberConstantJdo> getAllConstants(){
-        return numberConstantRepo.listAll();
+    public List<? extends NumberConstantEntity> getAllConstants(){
+        return numberConstantRepo.all();
     }
 }
 // end::class[]

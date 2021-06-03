@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.jdo;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Value;
 
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 import lombok.AccessLevel;
 import lombok.val;
 
@@ -34,7 +35,8 @@ import lombok.val;
 @lombok.Getter                                                          // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                     // <.>
 @lombok.AllArgsConstructor(staticName = "of")
-public class ComplexNumberJdo {
+public class ComplexNumberJdo
+        implements ComplexNumber{
 
     @javax.jdo.annotations.Column(allowsNull = "false")
     private double re;

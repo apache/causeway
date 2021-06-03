@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.jpa;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -24,22 +26,23 @@ import org.apache.isis.applib.annotation.PromptStyle;
 
 import lombok.RequiredArgsConstructor;
 
+@Profile("demo-jpa")
 // tag::class[]
 @Action()
 @ActionLayout(
         promptStyle = PromptStyle.DIALOG_SIDEBAR
         , associateWith = "number")
 @RequiredArgsConstructor
-public class NumberConstantJdo_updateNumber {
+public class NumberConstantJpa_updateNumber {
 
-    private final NumberConstantJdo numberConstantJdo;
+    private final NumberConstantJpa numberConstantJdo;
 
-    public NumberConstantJdo act(ComplexNumberJdo complexNumberJdo) {
+    public NumberConstantJpa act(ComplexNumberJpa complexNumberJdo) {
         numberConstantJdo.setNumber(complexNumberJdo);
         return numberConstantJdo;
     }
 
-    public ComplexNumberJdo default0Act() {
+    public ComplexNumberJpa default0Act() {
         return numberConstantJdo.getNumber();
     }
 }

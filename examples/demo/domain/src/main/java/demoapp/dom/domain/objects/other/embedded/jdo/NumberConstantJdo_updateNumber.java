@@ -16,25 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.jdo;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.annotation.PromptStyle;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.EmbeddedTypeMenu")
+@Profile("demo-jdo")
+// tag::class[]
+@Action()
+@ActionLayout(
+        promptStyle = PromptStyle.DIALOG_SIDEBAR
+        , associateWith = "number")
 @RequiredArgsConstructor
-public class EmbeddedTypeMenu {
+public class NumberConstantJdo_updateNumber {
 
-    private final FactoryService factoryService;
+    private final NumberConstantJdo numberConstantJdo;
 
-    @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
-    public EmbeddedTypeVm embeddedTypes(){
-        return factoryService.viewModel(new EmbeddedTypeVm());
+    public NumberConstantJdo act(ComplexNumberJdo complexNumberJdo) {
+        numberConstantJdo.setNumber(complexNumberJdo);
+        return numberConstantJdo;
+    }
+
+    public ComplexNumberJdo default0Act() {
+        return numberConstantJdo.getNumber();
     }
 }
+// end::class[]

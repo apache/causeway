@@ -16,32 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.jpa;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 //tag::class[]
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject
-public class NumberConstantJdo implements HasAsciiDocDescription {
+@Entity
+@Table(
+      schema = "demo",
+      name = "NumberConstantJpa"
+)
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+@DomainObject(logicalTypeName = "demo.NumberConstantEntity")
+@NoArgsConstructor
+public class NumberConstantJpa
+        extends NumberConstantEntity {
 
     // ...
 
@@ -50,18 +57,24 @@ public class NumberConstantJdo implements HasAsciiDocDescription {
         return getName();
     }
 
+    @Override
+    public ComplexNumber value() {
+        return getNumber();
+    }
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
 //tag::class[]
     @javax.jdo.annotations.Column(allowsNull = "false")
     @Property
     @Getter @Setter
     private String name;
 
-    @javax.jdo.annotations.Embedded(members={                           // <.>
-            @Persistent(name="re", columns=@Column(name="number_re")),  // <.>
-            @Persistent(name="im", columns=@Column(name="number_im"))   // <.>
-    })
+    @javax.persistence.Embedded
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
-    private ComplexNumberJdo number;
+    private ComplexNumberJpa number;
 }
 //end::class[]

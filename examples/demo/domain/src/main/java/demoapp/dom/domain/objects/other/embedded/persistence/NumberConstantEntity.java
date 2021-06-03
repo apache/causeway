@@ -16,25 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.embedded;
+package demoapp.dom.domain.objects.other.embedded.persistence;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.annotation.DomainObject;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.EmbeddedTypeMenu")
-@RequiredArgsConstructor
-public class EmbeddedTypeMenu {
+@DomainObject(
+        logicalTypeName = "demo.NumberConstantEntity" // shared permissions with concrete sub class
+)
+public abstract class NumberConstantEntity
+implements
+    HasAsciiDocDescription,
+    ValueHolder<ComplexNumber> {
 
-    private final FactoryService factoryService;
-
-    @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
-    public EmbeddedTypeVm embeddedTypes(){
-        return factoryService.viewModel(new EmbeddedTypeVm());
-    }
 }

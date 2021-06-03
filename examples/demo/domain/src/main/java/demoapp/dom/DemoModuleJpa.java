@@ -33,6 +33,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
+import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
@@ -142,6 +143,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         PropertyProjectingChildJpa.class,
 
         JaxbRefJpa.class,
+        NumberConstantJpa.class,
 
 })
 public class DemoModuleJpa {
