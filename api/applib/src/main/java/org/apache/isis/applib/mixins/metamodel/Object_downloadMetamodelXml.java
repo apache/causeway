@@ -19,6 +19,7 @@
 package org.apache.isis.applib.mixins.metamodel;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -29,9 +30,11 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
@@ -75,7 +78,13 @@ public class Object_downloadMetamodelXml {
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-        val pkg = holder.getClass().getPackage().getName();
+
+        final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(holder.getClass());
+        if(!logicalTypeIfAny.isPresent()) {
+            messageService.warnUser("Unknown class, unable to export");
+            return null;
+        }
+        final String namespace = logicalTypeIfAny.get().getNamespace();
 
         val config =
                 new Config()
@@ -83,7 +92,7 @@ public class Object_downloadMetamodelXml {
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
                 .withIgnoreBuiltInValueTypes()
-                .withPackagePrefix(pkg);
+                .withNamespacePrefix(namespace);
 
         val metamodelDto = metaModelService.exportMetaModel(config);
 
@@ -108,8 +117,8 @@ public class Object_downloadMetamodelXml {
 
 
     @Inject MetaModelService metaModelService;
+    @Inject MessageService messageService;
     @Inject JaxbService jaxbService;
-    @Inject MetaModelServiceMenu metaModelServiceMenu;
 
 
 

@@ -122,8 +122,8 @@ public class MetaModelServiceMenu {
             @ParameterLayout(named = ".xml file name")
             final String fileName,
             @ParameterLayout(named = "Packages",
-            describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
-            final List<String> packages,
+            describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
+            final List<String> namespaces,
             @ParameterLayout(named = "Ignore Interfaces")
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
@@ -135,8 +135,8 @@ public class MetaModelServiceMenu {
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
                 .withIgnoreBuiltInValueTypes();
-        for (final String pkg : packages) {
-            config = config.withPackagePrefix(pkg);
+        for (final String namespace : namespaces) {
+            config = config.withNamespacePrefix(namespace);
         }
         if(ignoreInterfaces) {
             config = config.withIgnoreInterfaces();
@@ -166,20 +166,20 @@ public class MetaModelServiceMenu {
     public List<String> choices1DownloadMetaModelXml() {
         final DomainModel domainModel = metaModelService.getDomainModel();
         final List<DomainMember> export = domainModel.getDomainMembers();
-        final SortedSet<String> packages = _Sets.newTreeSet();
+        final SortedSet<String> namespaces = _Sets.newTreeSet();
         for (final DomainMember domainMember : export) {
-            final String packageName = domainMember.getPackageName();
-            final String[] split = packageName.split("[.]");
+            final String namespace = domainMember.getNamespace();
+            final String[] split = namespace.split("[.]");
             final StringBuilder buf = new StringBuilder();
             for (final String part : split) {
                 if(buf.length() > 0) {
                     buf.append(".");
                 }
                 buf.append(part);
-                packages.add(buf.toString());
+                namespaces.add(buf.toString());
             }
         }
-        return new ArrayList<>(packages);
+        return new ArrayList<>(namespaces);
     }
 
     public boolean default2DownloadMetaModelXml() {

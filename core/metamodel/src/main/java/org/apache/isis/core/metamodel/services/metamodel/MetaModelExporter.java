@@ -82,7 +82,7 @@ class MetaModelExporter {
         // these are added into a map for lookups in phase 2
         final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.snapshotSpecifications()) {
-            DomainClassDto domainClassType = asXsdType(specification, config);
+            DomainClassDto domainClassType = asXsdType(specification);
             domainClassByObjectSpec.put(specification, domainClassType);
         }
 
@@ -135,7 +135,7 @@ class MetaModelExporter {
     }
 
     private boolean shouldIgnore(final Config config, final ObjectSpecification specification) {
-        return notInPackagePrefixes(specification, config) ||
+        return notInNamespacePrefixes(specification, config) ||
                 config.isIgnoreMixins() && specification.isMixin() ||
                 config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
                 config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
@@ -148,27 +148,27 @@ class MetaModelExporter {
         return x;
     }
 
-    private boolean notInPackagePrefixes(
+    private boolean notInNamespacePrefixes(
             final ObjectSpecification specification, final Config config) {
-        return !inPackagePrefixes(specification, config);
+        return !inNamespacePrefixes(specification, config);
     }
 
-    private boolean inPackagePrefixes(
+    private boolean inNamespacePrefixes(
             final ObjectSpecification specification,
             final Config config) {
 
-        val prefixes = config.getPackagePrefixes();
-        if(prefixes.isEmpty()) {
+        val namespacePrefixes = config.getNamespacePrefixes();
+        if(namespacePrefixes.isEmpty()) {
             return false; // export none
         }
 
-        if(config.isPackagePrefixAny()) {
+        if(config.isNamespacePrefixAny()) {
             return true; // export all
         }
 
-        val canonicalName = specification.getCorrespondingClass().getCanonicalName();
-        for (val prefix : prefixes) {
-            if(canonicalName.startsWith(prefix)) {
+        val logicalTypeName = specification.getLogicalTypeName();
+        for (val prefix : namespacePrefixes) {
+            if(logicalTypeName.startsWith(prefix)) {
                 return true;
             }
         }
@@ -176,8 +176,7 @@ class MetaModelExporter {
     }
 
     private DomainClassDto asXsdType(
-            final ObjectSpecification specification,
-            final Config config) {
+            final ObjectSpecification specification) {
 
         final DomainClassDto domainClass = new DomainClassDto();
 
@@ -334,7 +333,7 @@ class MetaModelExporter {
             final Config config) {
         DomainClassDto value = domainClassByObjectSpec.get(specification);
         if(value == null) {
-            final DomainClassDto domainClass = asXsdType(specification, config);
+            final DomainClassDto domainClass = asXsdType(specification);
             domainClassByObjectSpec.put(specification, domainClass);
             value = domainClass;
         }

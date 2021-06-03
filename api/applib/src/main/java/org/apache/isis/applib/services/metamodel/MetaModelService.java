@@ -128,7 +128,7 @@ public interface MetaModelService {
      * <p>
      *     The {@link Config} parameter can be used to restrict/filter the
      *     export to some subset of the metamodel; in particular to specific
-     *     {@link Config#getPackagePrefixes() package prefixes}.
+     *     {@link Config#getNamespacePrefixes() namespace prefixes}.
      * </p>
      *
      * @param config - restricts/filters to a subsets of the metamodel.

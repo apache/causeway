@@ -47,29 +47,29 @@ public class MetaModelService_Config_Test {
     }
 
     @Test
-    public void packages_prefixes() throws Exception {
+    public void namespace_prefixes() throws Exception {
 
         // when
         Config config = new Config();
         // then
-        assertThat(config.getPackagePrefixes(), is(emptyCollectionOf(String.class)));
+        assertThat(config.getNamespacePrefixes(), is(emptyCollectionOf(String.class)));
 
         // and when
-        Config config2 = config.withPackagePrefix("org.foo");
+        Config config2 = config.withNamespacePrefix("org.foo");
 
         // then
         assertNotSame(config, config2);
-        assertThat(config2.getPackagePrefixes().size(), is(equalTo(1)));
-        assertThat(config2.getPackagePrefixes().iterator().next(), is(equalTo("org.foo")));
+        assertThat(config2.getNamespacePrefixes().size(), is(equalTo(1)));
+        assertThat(config2.getNamespacePrefixes().iterator().next(), is(equalTo("org.foo")));
 
         // and when
-        Config config3 = config2.withPackagePrefix("org.bar");
+        Config config3 = config2.withNamespacePrefix("org.bar");
 
         // then
         assertNotSame(config, config3);
         assertNotSame(config2, config3);
-        assertThat(config3.getPackagePrefixes().size(), is(equalTo(2)));
-        assertTrue(config3.getPackagePrefixes().contains("org.foo"));
-        assertTrue(config3.getPackagePrefixes().contains("org.bar"));
+        assertThat(config3.getNamespacePrefixes().size(), is(equalTo(2)));
+        assertTrue(config3.getNamespacePrefixes().contains("org.foo"));
+        assertTrue(config3.getNamespacePrefixes().contains("org.bar"));
     }
 }

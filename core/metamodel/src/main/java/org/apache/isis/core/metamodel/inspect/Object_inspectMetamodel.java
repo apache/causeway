@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.inspect;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -29,7 +30,10 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -55,8 +59,6 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
-    @Inject private MetaModelService metaModelService;
-    //@Inject private SpecificationLoader specificationLoader;
 
     private final Object holder;
 
@@ -65,7 +67,12 @@ public class Object_inspectMetamodel {
 
     public Object act() {
 
-        val pkg = holder.getClass().getPackage().getName();
+        final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(holder.getClass());
+        if(!logicalTypeIfAny.isPresent()) {
+            messageService.warnUser("Unknown class, unable to export");
+            return null;
+        }
+        final String namespace = logicalTypeIfAny.get().getNamespace();
 
         val config =
                 new Config()
@@ -73,7 +80,7 @@ public class Object_inspectMetamodel {
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
                 .withIgnoreBuiltInValueTypes()
-                .withPackagePrefix(pkg);
+                .withNamespacePrefix(namespace);
 
         val metamodelDto = metaModelService.exportMetaModel(config);
 
@@ -99,5 +106,7 @@ public class Object_inspectMetamodel {
         return tree;
     }
 
+    @Inject private MetaModelService metaModelService;
+    @Inject MessageService messageService;
 
 }

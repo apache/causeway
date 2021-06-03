@@ -44,19 +44,19 @@ public class Config {
 
     private final int mask;
 
-    private final Set<String> packagePrefixes = _Sets.newHashSet();
+    private final Set<String> namespacePrefixes = _Sets.newHashSet();
 
     public Config() {
         this(0, Collections.emptyList());
     }
 
-    private Config(final int mask, final Collection<String> packagePrefixes) {
+    private Config(final int mask, final Collection<String> namespacePrefixes) {
         this.mask = mask;
-        this.packagePrefixes.addAll(packagePrefixes);
+        this.namespacePrefixes.addAll(namespacePrefixes);
     }
 
-    public Set<String> getPackagePrefixes() {
-        return Collections.unmodifiableSet(packagePrefixes);
+    public Set<String> getNamespacePrefixes() {
+        return Collections.unmodifiableSet(namespacePrefixes);
     }
 
     public Config withIgnoreNoop() {
@@ -80,28 +80,22 @@ public class Config {
     }
 
     private Config newConfigWith(final int x) {
-        return new Config(mask | x, packagePrefixes);
+        return new Config(mask | x, namespacePrefixes);
     }
 
-    public Config withPackagePrefixAny() {
-        val newPrefixes = _Sets.<String>newHashSet();
-        newPrefixes.add(WILDCARD);
-        return new Config(mask, newPrefixes);
-    }
-
-    public boolean isPackagePrefixAny() {
-        return packagePrefixes.contains(WILDCARD);
+    public boolean isNamespacePrefixAny() {
+        return namespacePrefixes.contains(WILDCARD);
     }
 
     /**
      * Returns a new {@code Config} with given {@code packagePrefix} added to the set of
      * this {@code Config}'s packagePrefixes.
      *
-     * @param packagePrefix - prefix to be added
+     * @param namespacePrefix - prefix to be added
      */
-    public Config withPackagePrefix(final String packagePrefix) {
-        val newPrefixes = _Sets.newHashSet(this.packagePrefixes);
-        newPrefixes.add(packagePrefix);
+    public Config withNamespacePrefix(final String namespacePrefix) {
+        val newPrefixes = _Sets.newHashSet(this.namespacePrefixes);
+        newPrefixes.add(namespacePrefix);
         return new Config(mask, newPrefixes);
     }
 

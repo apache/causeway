@@ -87,7 +87,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         specificationLoader.reloadSpecification(domainType);
     }
 
-    // //////////////////////////////////////
 
 
 
@@ -143,7 +142,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         return className.startsWith("java") || className.startsWith("org.joda");
     }
 
-    // //////////////////////////////////////
+
 
     @Override
     public BeanSort sortOf(

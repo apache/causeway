@@ -27,6 +27,7 @@ public interface DomainMember extends Comparable<DomainMember> {
     String getClassType();
 
     String getLogicalTypeName();
+    String getNamespace();
     String getClassName();
     String getPackageName();
 

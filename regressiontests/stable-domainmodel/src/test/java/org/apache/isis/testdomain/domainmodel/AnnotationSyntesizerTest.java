@@ -88,7 +88,7 @@ class AnnotationSyntesizerTest {
                 //            .withIgnoreBuiltInValueTypes()
                 //            .withIgnoreInterfaces()
                 //.withPackagePrefix("*")
-                .withPackagePrefix("org.apache.isis.testdomain.model.")
+                .withNamespacePrefix("org.apache.isis.testdomain.model.")
                 ;
 
         System.out.println("!!! listing MM");
