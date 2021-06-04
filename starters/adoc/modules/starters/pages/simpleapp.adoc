@@ -627,7 +627,6 @@ src/main/java/
         fixture/
           scenarios/                                            <.>
             DomainAppDemo.java                                  <.>
-            DomainAppFixtureScriptsSpecificationProvider.java   <.>
         services/
           health/
             HealthCheckServiceImpl.java                         <.>
@@ -652,10 +651,6 @@ src/main/java/
 Used for prototyping and also integration testing.
 
 <.> The `DomainAppDemo` is the fixture that was run xref:#fixtures[earlier on].
-
-<.> The `DomainAppFixtureScriptsSpecificationProvider` is used to configure the run fixture script menu item shown on the "Prototyping" menu.
-+
-NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import]ed, typically in the top-level `AppManifest`.
 
 <.> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].

@@ -23,8 +23,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import lombok.Getter;
 
 /**
- *
- * @since 2.0
+ * @since 2.x {@index}
  *
  * @param <T>
  */

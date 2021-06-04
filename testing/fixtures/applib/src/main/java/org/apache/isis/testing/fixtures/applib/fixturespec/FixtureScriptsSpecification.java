@@ -25,7 +25,12 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
- * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.
+ * Specifies the behaviour of the
+ * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts#runFixtureScript(String, String) runFixtureScript}
+ * menu action and the execution characteristics of (graphs of)
+ * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript fixture script}s.
+ *
+ * @since 1.x {@index}
  */
 public class FixtureScriptsSpecification {
 

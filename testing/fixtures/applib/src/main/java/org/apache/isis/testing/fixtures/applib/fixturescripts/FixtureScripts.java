@@ -64,6 +64,9 @@ import lombok.Setter;
 import lombok.val;
 
 
+/**
+ * @since 1.x {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         logicalTypeName = FixtureScripts.LOGICAL_TYPE_NAME

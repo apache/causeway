@@ -31,6 +31,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ * @since 2.x {@index}
+ */
 @Programmatic
 public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
 

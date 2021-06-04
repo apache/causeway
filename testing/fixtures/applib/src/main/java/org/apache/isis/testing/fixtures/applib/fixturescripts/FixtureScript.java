@@ -58,6 +58,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 1.x {@index}
+ */
 @Log4j2
 public abstract class FixtureScript {
 
@@ -136,6 +139,9 @@ public abstract class FixtureScript {
 
     // -- ExecutionContext
 
+    /**
+     * @since 1.x {@index}
+     */
     public static class ExecutionContext {
 
         /**

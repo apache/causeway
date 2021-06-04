@@ -4,6 +4,8 @@
 :page-partial:
 
 
+CAUTION: TODO: this needs to be converted into a hook for refguide-index, and x-ref config properties as the preferred approach.
+
 
 The `FixtureScriptsSpecificationProvider` configures the xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScripts] domain service, providing the location to search for fixture scripts and other settings.
 

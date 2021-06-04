@@ -35,6 +35,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+/**
+ * @since 2.x {@index}
+ */
 public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstract {
 
     protected void run(final FixtureScript... fixtureScriptList) {

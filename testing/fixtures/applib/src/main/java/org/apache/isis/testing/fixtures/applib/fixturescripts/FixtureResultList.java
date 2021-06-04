@@ -32,6 +32,8 @@ import org.apache.isis.commons.internal.collections._Maps;
  *
  * <p>
  * Instantiate using {@link FixtureScripts#newExecutionContext(String)}
+ *
+ * @since 1.x {@index}
  */
 public class FixtureResultList {
 

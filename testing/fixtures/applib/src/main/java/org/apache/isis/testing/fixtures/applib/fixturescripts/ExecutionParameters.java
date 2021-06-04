@@ -34,6 +34,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ExecutionParameters {
 
     private static final Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");

@@ -37,6 +37,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  * insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
  * need refinement in the future).
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.test.FixtureExecutionParametersService")

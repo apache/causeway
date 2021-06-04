@@ -4,7 +4,7 @@
 :page-partial:
 
 
-This guide describes how to secure your Apache Isis application by configuring an appropriate implementation of its authentication and authorization SPIIs.
+This guide describes how to secure your Apache Isis application by configuring an appropriate implementation of its authentication and authorization SPIs.
 
 
 == Security Architecture

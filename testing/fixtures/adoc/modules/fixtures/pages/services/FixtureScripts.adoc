@@ -5,11 +5,11 @@
 :page-partial:
 
 
+CAUTION: TODO: this needs to be converted into a hook for refguide-index
 
 The `FixtureScripts` service provides the ability to execute xref:fixtures:ROOT:about.adoc#api-and-usage[fixture scripts].
 
-The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider] to obtain a `FixtureScriptsSpecification`.
-This configures this service, for example telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.
+The service is typically configured using the `isis.testing.fixtures.fixture-scripts-specification` configuration properties, for example telling it which package to search for xref:refguide:testing:index/ classes, how to execute those classes, and hints that influence the UI.
 
 
 
@@ -57,6 +57,3 @@ This are listened to by the xref:refguide:applib:index/services/queryresultscach
 |===
 
 
-=== Related Services
-
-The default implementation of this domain service interacts with xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider].

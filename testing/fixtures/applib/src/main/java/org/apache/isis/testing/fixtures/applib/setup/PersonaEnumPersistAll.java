@@ -28,6 +28,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstr
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+/**
+ * @since 2.x {@index}
+ */
 @Programmatic
 public class PersonaEnumPersistAll<
 E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>,

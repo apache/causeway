@@ -20,7 +20,14 @@ package org.apache.isis.testing.fixtures.applib.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * SPI to provide an implementation of
+ * {@link org.apache.isis.core.config.IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification}.
+ *
+ * @deprecated - use <code>isis.testing.fixture.fixture-scripts-specification</code> configuration properties instead.
+ */
 @FunctionalInterface
+@Deprecated
 public interface FixtureScriptsSpecificationProvider {
 
     @Programmatic

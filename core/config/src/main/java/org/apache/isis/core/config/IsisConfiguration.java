@@ -2837,6 +2837,146 @@ public class IsisConfiguration {
              */
             @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
             private Class<?> initialScript = null;
+
+            private final FixtureScriptsSpecification fixtureScriptsSpecification = new FixtureScriptsSpecification();
+            @Data
+            public static class FixtureScriptsSpecification {
+                /**
+                 * Specifies the base package from which to search for fixture scripts.
+                 *
+                 * <p>
+                 *     Either this or {@link #getPackagePrefix() packagePrefix} must be specified.  This property is
+                 *     used by preference.
+                 * </p>
+                 *
+                 * @see #getPackagePrefix()
+                 */
+                private Class<?> contextClass = null;
+                /**
+                 * Specifies the base package from which to search for fixture scripts.
+                 *
+                 * <p>
+                 *     Either this or {@link #getContextClass()} must be specified; {@link #getContextClass()} is
+                 *     used by preference.
+                 * </p>
+                 *
+                 * @see #getContextClass()
+                 */
+                private String packagePrefix = null;
+
+
+                /**
+                 * How to handle objects that are to be
+                 * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
+                 * into a {@link FixtureResult} but which are not yet persisted.
+                 */
+                public enum NonPersistedObjectsStrategy {
+                    PERSIST,
+                    IGNORE
+                }
+
+                /**
+                 * How to handle fixture scripts that are submitted to be executed more than once.
+                 *
+                 * <p>
+                 *     Note that this is a {@link FixtureScripts#getMultipleExecutionStrategy() global setting} of the
+                 *     {@link FixtureScripts} service; there isn't (currently) any way to mix-and-match fixture scripts that are
+                 *     written with differing semantics in mind.  Ideally it should be the responsibility of the fixture script
+                 *     itself to determine whether it should be run.  As a partial solution to this, the
+                 *
+                 * </p>
+                 */
+                public enum MultipleExecutionStrategy {
+                    /**
+                     * Any given fixture script (or more precisely, any fixture script instance for a particular fixture script
+                     * class) can only be run once.
+                     *
+                     * <p>
+                     *     This strategy represents the original design of fixture scripts service.  Specifically, it allows an
+                     *     arbitrary graph of fixture scripts (eg A -> B -> C, A -> B -> D, A -> C -> D) to be created each
+                     *     specifying its dependencies, and without having to worry or co-ordinate whether those prerequisite
+                     *     fixture scripts have already been run.
+                     * </p>
+                     * <p>
+                     *     The most obvious example is a global teardown script; every fixture script can require this to be
+                     *     called, but it will only be run once.
+                     * </p>
+                     * <p>
+                     *     Note that this strategy treats fixture scripts as combining both the 'how' (which business action(s) to
+                     *     call) and the also the 'what' (what the arguments are to those actions).
+                     * </p>
+                     */
+                    EXECUTE_ONCE_BY_CLASS,
+                    /**
+                     * Any given fixture script can only be run once, where the check to determine if a fixture script has already
+                     * been run is performed using value semantics.
+                     *
+                     * <p>
+                     *     This strategy is a half-way house between the {@link #EXECUTE_ONCE_BY_VALUE} and {@link #EXECUTE}
+                     *     strategies, where we want to prevent a fixture from running more than once, where by "fixture" we mean
+                     *     the 'what' - the data to be loaded up; the 'how' is unimportant.
+                     * </p>
+                     *
+                     * <p>
+                     *     This strategy was introduced in order to better support the <tt>ExcelFixture</tt> fixture script
+                     *     (provided by the (non-ASF) Isis Addons'
+                     *     <a href="https://github.com/isisaddons/isis-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
+                     *     takes an Excel spreadsheet as the 'what' and loads up each row.  So the 'how' is re-usable (therefore
+                     *     the {@link #EXECUTE_ONCE_BY_CLASS} doesn't apply) on the other hand we don't want the 'what' to be
+                     *     loaded more than once (so the {@link #EXECUTE} strategy doesn't apply either).  The solution is for
+                     *     <tt>ExcelFixture</tt> to have value semantics (a digest of the spreadsheet argument).
+                     * </p>
+                     */
+                    EXECUTE_ONCE_BY_VALUE,
+                    /**
+                     * Allow fixture scripts to run as requested.
+                     *
+                     * <p>
+                     *     This strategy is conceptually the simplest; all fixtures are run as requested.  However, it is then
+                     *     the responsibility of the programmer to ensure that fixtures do not interfere with each other.  For
+                     *     example, if fixture A calls fixture B which calls teardown, and fixture A also calls fixture C that
+                     *     itself calls teardown, then fixture B's setup will get removed.
+                     * </p>
+                     * <p>
+                     *     The workaround to the teardown issue is of course to call the teardown fixture only once in the test
+                     *     itself; however even then this strategy cannot cope with arbitrary graphs of fixtures.  The solution
+                     *     is for the fixture list to be flat, one level high.
+                     * </p>
+                     */
+                    EXECUTE;
+                }
+
+
+                /**
+                 * Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same
+                 * class) is encountered more than once in a graph of dependencies, it should be executed again or
+                 * skipped.
+                 *
+                 * <p>
+                 *     The default is to fixture scripts are executed only once per class.
+                 * </p>
+                 *
+                 * <p>
+                 * Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements
+                 * {@link FixtureScriptWithExecutionStrategy}.
+                 * </p>
+                 */
+                private MultipleExecutionStrategy multipleExecutionStrategy = MultipleExecutionStrategy.EXECUTE_ONCE_BY_CLASS;
+
+                /**
+                 * Indicates whether objects that are returned as a fixture result should be automatically persisted
+                 * if required (the default) or not.
+                 */
+                private NonPersistedObjectsStrategy nonPersistedObjectsStrategy = NonPersistedObjectsStrategy.PERSIST;
+
+                @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+                private Class<?> recreate = null;
+
+                @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+                private Class<?> runScriptDefault = null;
+
+            }
+
         }
     }
 
