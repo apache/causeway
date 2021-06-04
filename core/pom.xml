@@ -183,7 +183,7 @@
 
 		<togglz.version>2.9.8</togglz.version>
 
-		<vaadin.version>20.0.0</vaadin.version>
+		<vaadin.version>20.0.1</vaadin.version>
 
 		<wicket.version>8.12.0</wicket.version>
 		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
