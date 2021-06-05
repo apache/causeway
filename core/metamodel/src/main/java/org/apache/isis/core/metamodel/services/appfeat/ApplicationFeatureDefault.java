@@ -52,7 +52,7 @@ import lombok.Setter;
  * </p>
  */
 @Value
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + "services.appfeat.ApplicationFeature")
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.appfeat.ApplicationFeature")
 public class ApplicationFeatureDefault
 implements
 ApplicationFeature,

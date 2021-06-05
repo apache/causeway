@@ -34,7 +34,6 @@ import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
-import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -58,7 +57,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2.1"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + "mixins.metamodel.Object_inspectMetamodel")
+@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_inspectMetamodel")
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
