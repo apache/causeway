@@ -119,5 +119,17 @@ Use the new User Manager View Model instead:
 <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager">
     <cpt:named>User Manager</cpt:named>
 </mb3:serviceAction>
-----                
+----      
+
+DB schema changes:
+
+[source,sql]
+.ApplicationUser 
+----
+-- mariadb/mysql syntax - adapt to your specific vendor, schema names omitted
+UPDATE ApplicationUser set `status`='UNLOCKED' where `status` like 'ENABLED';
+UPDATE ApplicationUser set `status`='LOCKED' where `status` like 'DISABLED';
+----
+
+          
                 
