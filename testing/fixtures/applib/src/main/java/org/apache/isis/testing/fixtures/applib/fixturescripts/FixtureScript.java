@@ -49,7 +49,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
@@ -59,6 +58,9 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Responsible for setting up the system (or more likely a part of the system)
+ * for the purpose of prototyping/demos or for integraton testing.
+ *
  * @since 1.x {@index}
  */
 @Log4j2
@@ -104,8 +106,6 @@ public abstract class FixtureScript {
 
 
 
-    // -- qualifiedName
-
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
@@ -135,14 +135,32 @@ public abstract class FixtureScript {
 
 
 
-
-
     // -- ExecutionContext
 
     /**
+     * Provides an execution context to each {@link FixtureScript} execution,
+     * the primary use case being to allow the fixture script to execute
+     * child fixture scripts (to set up smaller parts of the system).
+     *
+     * <p>
+     *     The execution context also orovides access to parameters that can
+     *     influence how a fixture script executes (for example, specifying how
+     *     many demo objects to set up) and also holds the results of the
+     *     fixture scripts.   Fixture scripts are expected to know how the
+     *     parameter name/key.
+     * </p>
+     *
+     * <p>
+     *     The execution context is also a mechanism by which the results of
+     *     the fixture script (and any children fixture scripts it may have
+     *     executed) can be collected together.  These are rendered to the UI
+     *     by the {@link FixtureScripts} domain service, primarily as a
+     *     convenience for prototyping/demoing.
+     * </p>
+     *
      * @since 1.x {@index}
      */
-    public static class ExecutionContext {
+    public static class ExecutionContext implements ExecutionParameters {
 
         /**
          * Null implementation, to assist with unit testing of {@link FixtureScript}s.
@@ -169,190 +187,229 @@ public abstract class FixtureScript {
         private final FixtureResultList fixtureResultList;
 
         public ExecutionContext(final String parameters, final FixtureScripts fixtureScripts) {
-            this(new ExecutionParameters(parameters), fixtureScripts);
+            this(new ExecutionParametersDefault(parameters), fixtureScripts);
         }
 
         @Programmatic
-        public static ExecutionContext create(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts) {
+        public static ExecutionContext create(
+                final ExecutionParameters executionParameters,
+                final FixtureScripts fixtureScripts) {
             return new ExecutionContext(executionParameters, fixtureScripts);
         }
 
-        private ExecutionContext(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts) {
+        private ExecutionContext(
+                final ExecutionParameters executionParameters,
+                final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
-            fixtureResultList = new FixtureResultList(fixtureScripts, this);
             this.executionParameters = executionParameters;
+            this.fixtureResultList = new FixtureResultList(fixtureScripts, this);
         }
 
+        @Override
         @Programmatic
         public String getParameters() {
             return executionParameters.getParameters();
         }
 
+        @Override
         @Programmatic
         public Map<String,String> getParameterMap() {
             return executionParameters.getParameterMap();
         }
 
+        @Override
         @Programmatic
         public String getParameter(final String parameterName) {
             return executionParameters.getParameter(parameterName);
         }
 
+        @Override
         @Programmatic
         public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
             return executionParameters.getParameterAsT(parameterName,cls);
         }
 
+        @Override
         @Programmatic
         public Boolean getParameterAsBoolean(final String parameterName) {
             return executionParameters.getParameterAsBoolean(parameterName);
         }
 
+        @Override
         @Programmatic
         public Byte getParameterAsByte(final String parameterName) {
             return executionParameters.getParameterAsByte(parameterName);
         }
 
+        @Override
         @Programmatic
         public Short getParameterAsShort(final String parameterName) {
             return executionParameters.getParameterAsShort(parameterName);
         }
 
+        @Override
         @Programmatic
         public Integer getParameterAsInteger(final String parameterName) {
             return executionParameters.getParameterAsInteger(parameterName);
         }
 
+        @Override
         @Programmatic
         public Long getParameterAsLong(final String parameterName) {
             return executionParameters.getParameterAsLong(parameterName);
         }
 
+        @Override
         @Programmatic
         public Float getParameterAsFloat(final String parameterName) {
             return executionParameters.getParameterAsFloat(parameterName);
         }
 
+        @Override
         @Programmatic
         public Double getParameterAsDouble(final String parameterName) {
             return executionParameters.getParameterAsDouble(parameterName);
         }
 
+        @Override
         @Programmatic
         public Character getParameterAsCharacter(final String parameterName) {
             return executionParameters.getParameterAsCharacter(parameterName);
         }
 
+        @Override
         @Programmatic
         public BigInteger getParameterAsBigInteger(final String parameterName) {
             return executionParameters.getParameterAsBigInteger(parameterName);
         }
 
+        @Override
         @Programmatic
         public BigDecimal getParameterAsBigDecimal(final String parameterName) {
             return executionParameters.getParameterAsBigDecimal(parameterName);
         }
 
+        @Override
         @Programmatic
         public LocalDate getParameterAsLocalDate(final String parameterName) {
             return executionParameters.getParameterAsLocalDate(parameterName);
         }
 
+        @Override
         @Programmatic
         public LocalDateTime getParameterAsLocalDateTime(final String parameterName) {
             return executionParameters.getParameterAsLocalDateTime(parameterName);
         }
 
+        @Override
         @Programmatic
         public <T extends Enum<T>> T getParameterAsEnum(final String parameterName, final Class<T> enumClass) {
             return executionParameters.getParameterAsEnum(parameterName, enumClass);
         }
 
+        @Override
         @Programmatic
         public void setParameterIfNotPresent(final String parameterName, final String parameterValue) {
             executionParameters.setParameterIfNotPresent(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Boolean parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Byte parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Short parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Integer parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Long parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Float parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Double parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Character parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final BigInteger parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final java.util.Date parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final java.sql.Date parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final LocalDate parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final LocalDateTime parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final org.joda.time.DateTime parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final BigDecimal parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final Enum<?> parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 
+        @Override
         @Programmatic
         public void setParameter(final String parameterName, final String parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);

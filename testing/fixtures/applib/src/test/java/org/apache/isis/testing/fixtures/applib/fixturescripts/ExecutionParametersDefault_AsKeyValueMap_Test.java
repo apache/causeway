@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ExecutionParameters_AsKeyValueMap_Test extends ExecutionContextTest {
+public class ExecutionParametersDefault_AsKeyValueMap_Test extends ExecutionContext_Test {
 
     @Test
     public void happyCase() throws Exception {
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap("foo=bar\nbop=baz");
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap("foo=bar\nbop=baz");
         assertThat(map.size(), is(2));
 
         assertThat(map.get("foo"), is("bar"));
@@ -39,20 +39,20 @@ public class ExecutionParameters_AsKeyValueMap_Test extends ExecutionContextTest
 
     @Test
     public void givenNull() throws Exception {
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap(null);
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap(null);
         assertThat(map.size(), is(0));
     }
 
     @Test
     public void givenEmpty() throws Exception {
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap("");
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap("");
         assertThat(map.size(), is(0));
     }
 
     @Test
     public void trim() throws Exception {
 
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap(" foo=bar\nbop=baz \n bip = bap ");
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap(" foo=bar\nbop=baz \n bip = bap ");
         assertThat(map.size(), is(3));
 
         assertThat(map.get("foo"), is("bar"));
@@ -62,13 +62,13 @@ public class ExecutionParameters_AsKeyValueMap_Test extends ExecutionContextTest
 
     @Test
     public void malformed() throws Exception {
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap("abcde");
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap("abcde");
         assertThat(map.size(), is(0));
     }
 
     @Test
     public void partiallyMalformed() throws Exception {
-        final Map<String, String> map = ExecutionParameters.asKeyValueMap("foo=bar\nabcde\nbop=baz");
+        final Map<String, String> map = ExecutionParametersDefault.asKeyValueMap("foo=bar\nabcde\nbop=baz");
         assertThat(map.size(), is(2));
 
         assertThat(map.get("foo"), is("bar"));

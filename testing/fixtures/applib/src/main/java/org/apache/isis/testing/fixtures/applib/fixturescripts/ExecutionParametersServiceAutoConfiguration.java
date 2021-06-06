@@ -21,6 +21,8 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -29,19 +31,30 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 
 
 /**
- * Acts as a factory by the {@link FixtureScripts} when
- * instantiating the {@link FixtureScript.ExecutionContext}, to return an
- * object able to parse any parameters provided through the UI parameter.
+ * Provides a fallback implementation of {@link ExecutionParametersService} if
+ * none has been provided explicitly by the application itself.
  *
- * <p>
- * Factoring this out as a service potentially allows for extensions to parsing.
- * </p>
- *
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
-@FunctionalInterface
-public interface ExecutionParametersService {
+public class ExecutionParametersServiceAutoConfiguration {
 
-    ExecutionParameters newExecutionParameters(final String parameters);
+
+    /**
+     * Returns an implementation of {@link ExecutionParametersService} that
+     * simply instantiates {@link ExecutionParameters} with the provided
+     * parameters (so that the latter parses the parameters and presents them
+     * to {@link FixtureScripts} for inclusion within {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext}.
+     *
+     * @return
+     */
+    @Bean
+    @Named("isis.testing.fixtures.ExecutionParametersServiceDefault")
+    @Order(OrderPrecedence.LATE)
+    @Primary
+    @Qualifier("Default")
+    @ConditionalOnMissingBean(ExecutionParametersService.class)
+    public ExecutionParametersService executionParametersService() {
+        return ExecutionParametersDefault::new;
+    }
 
 }

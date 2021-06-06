@@ -26,9 +26,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ExecutionContextTest {
+public class ExecutionContext_Test {
 
-    public static class GetParameter extends ExecutionContextTest {
+    public static class GetParameter extends ExecutionContext_Test {
 
         @Test
         public void happyCase() throws Exception {
@@ -103,7 +103,7 @@ public class ExecutionContextTest {
         }
 
     }
-    public static class SetParameterIfNotPresent extends ExecutionContextTest {
+    public static class SetParameterIfNotPresent extends ExecutionContext_Test {
 
         @Test
         public void whenNotPresent() throws Exception {

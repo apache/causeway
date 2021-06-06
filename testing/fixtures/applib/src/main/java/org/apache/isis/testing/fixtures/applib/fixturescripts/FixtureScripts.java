@@ -65,6 +65,9 @@ import lombok.val;
 
 
 /**
+ * Provides the mechanism to execute {@link FixtureScript}s from the UI of
+ * a domain app; and can also be used within integration testing.
+ *
  * @since 1.x {@index}
  */
 @DomainService(
@@ -79,11 +82,8 @@ public class FixtureScripts {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
-    //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;
     @Inject private JaxbService jaxbService;
-    // @Inject private BookmarkService bookmarkService;
-    // @Inject private ServiceRegistry serviceRegistry;
     @Inject private ServiceInjector serviceInjector;
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
@@ -99,6 +99,8 @@ public class FixtureScripts {
      * How to handle objects that are to be
      * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
      * into a {@link FixtureResult} but which are not yet persisted.
+     *
+     * @since 1.x {@index}
      */
     public enum NonPersistedObjectsStrategy {
         PERSIST,
@@ -113,8 +115,9 @@ public class FixtureScripts {
      *     {@link FixtureScripts} service; there isn't (currently) any way to mix-and-match fixture scripts that are
      *     written with differing semantics in mind.  Ideally it should be the responsibility of the fixture script
      *     itself to determine whether it should be run.  As a partial solution to this, the
-     *
      * </p>
+     *
+     * @since 1.x {@index}
      */
     public enum MultipleExecutionStrategy {
         /**
@@ -204,11 +207,10 @@ public class FixtureScripts {
     private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
 
     public FixtureScripts(
-            final Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider,
+            final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
             final ServiceRegistry serviceRegistry) {
 
-        this.specification = fixtureScriptsSpecificationProvider.orElse(() -> FixtureScriptsSpecification.builder(PACKAGE_PREFIX).build()).getSpecification();
-        // this.serviceRegistry = serviceRegistry;
+        this.specification = fixtureScriptsSpecificationProvider.getSpecification();
 
         val packagePrefix = specification.getPackagePrefix();
         fixtureScriptByFriendlyName =
@@ -216,7 +218,7 @@ public class FixtureScripts {
                 .filter(Objects::nonNull)
                 .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
                 .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
-                        (v1,v2) ->{ throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));},
+                        (v1,v2) ->{ throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));},
                         TreeMap::new));
     }
 
@@ -434,11 +436,8 @@ public class FixtureScripts {
 
     @Programmatic
     public FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
-        final ExecutionParameters executionParameters =
-                executionParametersService != null
-                ? executionParametersService.newExecutionParameters(parameters)
-                        : new ExecutionParameters(parameters);
-                return FixtureScript.ExecutionContext.create(executionParameters, this);
+        val executionParameters = executionParametersService.newExecutionParameters(parameters);
+        return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
 

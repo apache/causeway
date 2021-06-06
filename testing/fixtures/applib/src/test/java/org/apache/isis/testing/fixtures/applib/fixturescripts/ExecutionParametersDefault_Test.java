@@ -29,13 +29,13 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ExecutionParameters_Test {
+public class ExecutionParametersDefault_Test {
 
     private ExecutionParameters executionParameters;
 
     @BeforeEach
     public void setUp() throws Exception {
-        executionParameters = new ExecutionParameters("");
+        executionParameters = new ExecutionParametersDefault("");
     }
 
     @Test
