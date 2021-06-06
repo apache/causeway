@@ -1,0 +1,49 @@
+= ExecutionParameters
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.ExecutionParameters.java
+----
+class ExecutionParameters {
+  ExecutionParameters(final String parameters)
+  Map<String, String> asKeyValueMap(final String parameters)
+  String getParameters()
+  String getParameter(final String parameterName)
+  T getParameterAsT(final String parameterName, final Class<T> cls)
+  Boolean getParameterAsBoolean(final String parameterName)
+  Byte getParameterAsByte(final String parameterName)
+  Short getParameterAsShort(final String parameterName)
+  Integer getParameterAsInteger(final String parameterName)
+  Long getParameterAsLong(final String parameterName)
+  Float getParameterAsFloat(final String parameterName)
+  Double getParameterAsDouble(final String parameterName)
+  Character getParameterAsCharacter(final String parameterName)
+  BigInteger getParameterAsBigInteger(final String parameterName)
+  BigDecimal getParameterAsBigDecimal(final String parameterName)
+  LocalDate getParameterAsLocalDate(final String parameterName)
+  LocalDateTime getParameterAsLocalDateTime(final String parameterName)
+  T getParameterAsEnum(final String parameterName, final Class<T> enumClass)
+  Map<String, String> getParameterMap()
+  void setParameterIfNotPresent(final String parameterName, final String parameterValue)
+  void setParameter(final String parameterName, final Boolean parameterValue)
+  void setParameter(final String parameterName, final Byte parameterValue)
+  void setParameter(final String parameterName, final Short parameterValue)
+  void setParameter(final String parameterName, final Integer parameterValue)
+  void setParameter(final String parameterName, final Long parameterValue)
+  void setParameter(final String parameterName, final Float parameterValue)
+  void setParameter(final String parameterName, final Double parameterValue)
+  void setParameter(final String parameterName, final Character parameterValue)
+  void setParameter(final String parameterName, final BigInteger parameterValue)
+  void setParameter(final String parameterName, final java.util.Date parameterValue)
+  void setParameter(final String parameterName, final java.sql.Date parameterValue)
+  void setParameter(final String parameterName, final LocalDate parameterValue)
+  void setParameter(final String parameterName, final LocalDateTime parameterValue)
+  void setParameter(final String parameterName, final DateTime parameterValue)
+  void setParameter(final String parameterName, final BigDecimal parameterValue)
+  void setParameter(final String parameterName, final Enum<?> parameterValue)
+  void setParameter(final String parameterName, final String parameterValue)
+}
+----
+

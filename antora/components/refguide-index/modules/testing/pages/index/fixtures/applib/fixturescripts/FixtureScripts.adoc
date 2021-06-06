@@ -1,0 +1,142 @@
+= FixtureScripts
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.FixtureScripts.java
+----
+class FixtureScripts {
+  // secman seeding
+public static final String LOGICAL_TYPE_NAME;
+  public static final String PACKAGE_PREFIX;     // <.>
+  FixtureScripts(final Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider, final ServiceRegistry serviceRegistry)
+  NonPersistedObjectsStrategy getNonPersistedObjectsStrategy()
+  MultipleExecutionStrategy getMultipleExecutionStrategy()     // <.>
+  List<FixtureResult> runFixtureScript(final String fixtureScriptName, final String parameters)
+  List<FixtureResult> runFixtureScript(final FixtureScript fixtureScript, final String parameters)
+  String disableRunFixtureScript()
+  String default0RunFixtureScript()
+  Set<String> choices0RunFixtureScript()
+  String validateRunFixtureScript(final String fixtureScriptName, final String parameters)
+  Object recreateObjectsAndReturnFirst()
+  boolean hideRecreateObjectsAndReturnFirst()
+  void run(final FixtureScript... fixtureScriptList)
+  void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
+  T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona)
+  T runBuilder(final BuilderScriptAbstract<T> builderScript)     // <.>
+  T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript)     // <.>
+  String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass)
+  FixtureScript.ExecutionContext newExecutionContext(final String parameters)
+  String mementoFor(final FixtureScript fs)
+  void initOf(final String xml, final FixtureScript fs)
+  FixtureResult newFixtureResult(final FixtureScript script, final String subkey, final Object object, final boolean firstTime)
+  String titleOf(final FixtureResult fixtureResult)
+  T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona)     // <.>
+  void runFixtureScript(final FixtureScript... fixtureScriptList)     // <.>
+  T runBuilderScript(final BuilderScriptAbstract<T> builderScript)     // <.>
+}
+----
+
+<.> xref:#PACKAGE_PREFIX[PACKAGE_PREFIX]
++
+--
+The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
+--
+<.> xref:#getMultipleExecutionStrategy__[getMultipleExecutionStrategy()]
++
+--
+Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
+--
+<.> xref:#runBuilder__BuilderScriptAbstract[runBuilder(BuilderScriptAbstract)]
++
+--
+Runs the builderScript within its own transactional boundary.
+--
+<.> xref:#runBuilderScriptNonTransactional__BuilderScriptAbstract[runBuilderScriptNonTransactional(BuilderScriptAbstract)]
++
+--
+Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
+--
+<.> xref:#fixtureScript__PersonaWithBuilderScript[fixtureScript(PersonaWithBuilderScript)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#runPersona(PersonaWithBuilderScript)_
+====
+--
+<.> xref:#runFixtureScript__FixtureScript[runFixtureScript(FixtureScript)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#run(FixtureScript...)_
+====
+--
+<.> xref:#runBuilderScript__BuilderScriptAbstract[runBuilderScript(BuilderScriptAbstract)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#runBuilder(BuilderScriptAbstract)_
+====
+--
+
+== Members
+
+[#PACKAGE_PREFIX]
+=== PACKAGE_PREFIX
+
+The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
+
+[#getMultipleExecutionStrategy__]
+=== getMultipleExecutionStrategy()
+
+Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
+
+[#runBuilder__BuilderScriptAbstract]
+=== runBuilder(BuilderScriptAbstract)
+
+Runs the builderScript within its own transactional boundary.
+
+[#runBuilderScriptNonTransactional__BuilderScriptAbstract]
+=== runBuilderScriptNonTransactional(BuilderScriptAbstract)
+
+Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
+
+[#fixtureScript__PersonaWithBuilderScript]
+=== fixtureScript(PersonaWithBuilderScript)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#runPersona(PersonaWithBuilderScript)_
+====
+
+[#runFixtureScript__FixtureScript]
+=== runFixtureScript(FixtureScript)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#run(FixtureScript...)_
+====
+
+[#runBuilderScript__BuilderScriptAbstract]
+=== runBuilderScript(BuilderScriptAbstract)
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+renamed to _#runBuilder(BuilderScriptAbstract)_
+====
