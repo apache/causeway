@@ -13,7 +13,7 @@ class MetaModelServiceMenu {
   MetaModelServiceMenu()
   Clob downloadMetaModelCsv(final String csvFileName)
   String default0DownloadMetaModelCsv()
-  Clob downloadMetaModelXml(final String fileName, final List<String> packages, final boolean ignoreInterfaces)
+  Clob downloadMetaModelXml(final String fileName, final List<String> namespaces, final boolean ignoreInterfaces)
   String validateDownloadMetaModelXml(final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces)
   String default0DownloadMetaModelXml()
   List<String> choices1DownloadMetaModelXml()

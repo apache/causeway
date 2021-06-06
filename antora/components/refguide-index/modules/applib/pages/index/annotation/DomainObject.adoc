@@ -10,7 +10,7 @@ Domain semantics for domain objects (entities and view models; for services see 
 ----
 @interface DomainObject {
   Class<?> autoCompleteRepository() default Object.class;     // <.>
-  String autoCompleteAction() default "autoComplete";     // <.>
+  String autoCompleteMethod() default "autoComplete";     // <.>
   Bounding bounding() default Bounding.NOT_SPECIFIED;     // <.>
   Editing editing() default Editing.NOT_SPECIFIED;     // <.>
   String editingDisabledReason() default "Disabled";     // <.>
@@ -37,10 +37,10 @@ Domain semantics for domain objects (entities and view models; for services see 
 --
 The class of the domain service that provides an `autoComplete(String)` method.
 --
-<.> xref:#autoCompleteAction[autoCompleteAction]
+<.> xref:#autoCompleteMethod[autoCompleteMethod]
 +
 --
-The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search (defaults to "autoComplete").
+The method to use in order to perform the auto-complete search (defaults to "autoComplete").
 --
 <.> xref:#bounding[bounding]
 +
@@ -149,10 +149,10 @@ The class of the domain service that provides an `autoComplete(String)` method.
 
 It is sufficient to specify an interface rather than a concrete type.
 
-[#autoCompleteAction]
-=== autoCompleteAction
+[#autoCompleteMethod]
+=== autoCompleteMethod
 
-The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search (defaults to "autoComplete").
+The method to use in order to perform the auto-complete search (defaults to "autoComplete").
 
 The method is required to accept a single string parameter, and must return a list of the domain type.
 

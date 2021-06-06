@@ -10,15 +10,14 @@ Describes what to include in the export from _MetaModelService#exportMetaModel(C
 ----
 class Config {
   Config()
-  Set<String> getPackagePrefixes()
+  Set<String> getNamespacePrefixes()
   Config withIgnoreNoop()
   Config withIgnoreInterfaces()
   Config withIgnoreAbstractClasses()
   Config withIgnoreBuiltInValueTypes()
   Config withIgnoreMixins()
-  Config withPackagePrefixAny()
-  boolean isPackagePrefixAny()
-  Config withPackagePrefix(final String packagePrefix)     // <.>
+  boolean isNamespacePrefixAny()
+  Config withNamespacePrefix(final String namespacePrefix)     // <.>
   boolean isIgnoreNoop()
   boolean isIgnoreInterfaces()
   boolean isIgnoreAbstractClasses()
@@ -27,7 +26,7 @@ class Config {
 }
 ----
 
-<.> xref:#withPackagePrefix__String[withPackagePrefix(String)]
+<.> xref:#withNamespacePrefix__String[withNamespacePrefix(String)]
 +
 --
 Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.
@@ -35,7 +34,7 @@ Returns a new _Config_ with given _packagePrefix_ added to the set of this _Conf
 
 == Members
 
-[#withPackagePrefix__String]
-=== withPackagePrefix(String)
+[#withNamespacePrefix__String]
+=== withNamespacePrefix(String)
 
 Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.

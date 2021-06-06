@@ -12,11 +12,13 @@ enum EntityState {
   NOT_PERSISTABLE     // <.>
   PERSISTABLE_ATTACHED     // <.>
   PERSISTABLE_DETACHED     // <.>
-  PERSISTABLE_DESTROYED     // <.>
+  PERSISTABLE_REMOVED     // <.>
   boolean isPersistable()     // <.>
   boolean isAttached()     // <.>
   boolean isDetached()     // <.>
-  boolean isDestroyed()     // <.>
+  boolean isRemoved()     // <.>
+  boolean isDetachedOrRemoved()     // <.>
+  boolean isAttachedOrRemoved()     // <.>
 }
 ----
 
@@ -35,7 +37,7 @@ Object with this state is an entity that is attached to a persistence session, i
 --
 Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
 --
-<.> xref:#PERSISTABLE_DESTROYED[PERSISTABLE_DESTROYED]
+<.> xref:#PERSISTABLE_REMOVED[PERSISTABLE_REMOVED]
 +
 --
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
@@ -55,11 +57,13 @@ Object with this state is an entity that is attached to a persistence session, i
 --
 Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
 --
-<.> xref:#isDestroyed__[isDestroyed()]
+<.> xref:#isRemoved__[isRemoved()]
 +
 --
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
 --
+<.> xref:#isDetachedOrRemoved__[isDetachedOrRemoved()]
+<.> xref:#isAttachedOrRemoved__[isAttachedOrRemoved()]
 
 == Members
 
@@ -78,8 +82,8 @@ Object with this state is an entity that is attached to a persistence session, i
 
 Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
 
-[#PERSISTABLE_DESTROYED]
-=== PERSISTABLE_DESTROYED
+[#PERSISTABLE_REMOVED]
+=== PERSISTABLE_REMOVED
 
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
 
@@ -98,7 +102,15 @@ Object with this state is an entity that is attached to a persistence session, i
 
 Object with this state is an entity but that is detached from a persistence session, in other words changes to the entity will _not_ be flushed back to the database.
 
-[#isDestroyed__]
-=== isDestroyed()
+[#isRemoved__]
+=== isRemoved()
 
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
+
+Only supported by JDO. Will always return false with JPA.
+
+[#isDetachedOrRemoved__]
+=== isDetachedOrRemoved()
+
+[#isAttachedOrRemoved__]
+=== isAttachedOrRemoved()

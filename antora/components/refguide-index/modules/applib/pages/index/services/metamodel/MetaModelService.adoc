@@ -109,7 +109,7 @@ This is used by framework-provided implementations of _org.apache.isis.applib.se
 
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
-The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getPackagePrefixes() package prefixes_ .
+The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getNamespacePrefixes() namespace prefixes_ .
 
 include::hooks/MetaModelService_010-implementation.adoc[]
 

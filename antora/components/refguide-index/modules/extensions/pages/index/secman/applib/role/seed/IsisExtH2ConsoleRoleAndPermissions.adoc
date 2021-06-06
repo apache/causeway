@@ -9,6 +9,7 @@ Access to the h2 console UI.
 .IsisExtH2ConsoleRoleAndPermissions.java
 ----
 class IsisExtH2ConsoleRoleAndPermissions {
+  public static final String NAMESPACE;
   public static final String ROLE_NAME;
   IsisExtH2ConsoleRoleAndPermissions()
 }
