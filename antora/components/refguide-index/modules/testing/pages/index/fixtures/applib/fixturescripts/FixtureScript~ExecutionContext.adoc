@@ -1,6 +1,12 @@
 = FixtureScript.ExecutionContext
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Provides an execution context to each xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] execution, the primary use case being to allow the fixture script to execute child fixture scripts (to set up smaller parts of the system).
+
+The execution context also orovides access to parameters that can influence how a fixture script executes (for example, specifying how many demo objects to set up) and also holds the results of the fixture scripts. Fixture scripts are expected to know how the parameter name/key.
+
+The execution context is also a mechanism by which the results of the fixture script (and any children fixture scripts it may have executed) can be collected together. These are rendered to the UI by the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service, primarily as a convenience for prototyping/demoing.
+
 == API
 
 [source,java]
