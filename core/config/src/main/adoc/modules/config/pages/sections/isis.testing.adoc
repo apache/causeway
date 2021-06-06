@@ -12,6 +12,78 @@ include::../section-hooks/isis.testing~pre.adoc[]
 |Default
 |Description
 |
+[[isis.testing.fixtures.fixture-scripts-specification.context-class]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+context-class
+
+| 
+| Specifies the base package from which to search for fixture scripts.
+
+Either this or packagePrefix must be specified. This property is used by preference.
+
+@see #getPackagePrefix()
+
+
+|
+[[isis.testing.fixtures.fixture-scripts-specification.multiple-execution-strategy]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+multiple-execution-strategy
+
+| 
+| Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same class) is encountered more than once in a graph of dependencies, it should be executed again or skipped.
+
+The default is to fixture scripts are executed only once per class.
+
+Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements ``FixtureScriptWithExecutionStrategy``.
+
+
+|
+[[isis.testing.fixtures.fixture-scripts-specification.non-persisted-objects-strategy]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+non-persisted-objects-strategy
+
+| 
+| Indicates whether objects that are returned as a fixture result should be automatically persisted if required (the default) or not.
+
+
+|
+[[isis.testing.fixtures.fixture-scripts-specification.package-prefix]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+package-prefix
+
+| 
+| Specifies the base package from which to search for fixture scripts.
+
+Either this or ``#getContextClass()`` must be specified; ``#getContextClass()`` is used by preference.
+
+@see #getContextClass()
+
+
+|
+[[isis.testing.fixtures.fixture-scripts-specification.recreate]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+recreate
+
+| 
+| null
+
+
+|
+[[isis.testing.fixtures.fixture-scripts-specification.run-script-default]]
+isis.testing.fixtures. +
+fixture-scripts-specification. +
+run-script-default
+
+| 
+| null
+
+
+|
 [[isis.testing.fixtures.initial-script]]
 isis.testing.fixtures. +
 initial-script
