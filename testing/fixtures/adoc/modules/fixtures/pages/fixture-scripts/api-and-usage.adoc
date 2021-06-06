@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-There are two main parts to using fixture scripts: the `FixtureScripts` domain service class, and the `FixtureScript` view model class:
+There are two main parts to using fixture scripts: the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service class, and the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] view model class:
 
 * The role of the `FixtureScripts` domain service is to locate all fixture scripts from the classpath and to let them be invoked, either from an integration test/BDD spec or from the UI of your Isis app.
 
@@ -14,8 +14,8 @@ Let's look at `FixtureScripts` domain service in more detail first.
 
 == `FixtureScripts`
 
-The framework provides a default implementation of `FixtureScripts` domain service, namely the xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScriptsDefault] domain service.
-This is annotated to be rendered on the secondary "Prototyping" menu.
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service.
+This is annotated to be part of on the secondary "Prototyping" menu.
 
 The behaviour of this domain menu service can be configured using the `isis.testing.fixtures.fixture-script-specification` configuration properties.
 For example, here's the configuration used by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps:
@@ -87,8 +87,9 @@ Let's now look at the `FixtureScript` class, where there's a bit more going on.
 [#fixturescript]
 == `FixtureScript`
 
-A fixture script is ultimately just a block of code that can be executed, so it's up to you how you implement it to set up the system.
-However, we strongly recommend that you use it to invoke actions on business objects, in essence to replay what a real-life user would have done.
+A xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] is responsible for setting up the system (or more likely, one small part of the overall system) into a known state, either for prototyping or for integration testing.
+
+The normal idiom is for the fixture script to invoke actions on business objects, in essence to replay what a real-life user would have done.
 That way, the fixture script will remain valid even if the underlying implementation of the system changes in the future.
 
 For example, here's a fixture script called `RecreateSimpleObjects`.
@@ -101,37 +102,39 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Accessors(chain = true)
-public class RecreateSimpleObjects extends FixtureScript {                   // <1>
+public class RecreateSimpleObjects extends FixtureScript {       // <.>
 
-    public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
+    public final List<String> NAMES =
+        Collections.unmodifiableList(Arrays.asList(
             "Foo", "Bar", "Baz", "Frodo", "Froyo",
-            "Fizz", "Bip", "Bop", "Bang", "Boo"));                           // <2>
+            "Fizz", "Bip", "Bop", "Bang", "Boo"));               // <.>
     public RecreateSimpleObjects() {
-        withDiscoverability(Discoverability.DISCOVERABLE);                   // <3>
+        withDiscoverability(Discoverability.DISCOVERABLE);       // <.>
     }
 
     @Getter @Setter
-    private Integer number;                                                  // <4>
+    private Integer number;                                      // <.>
 
     @Getter
-    private final List<SimpleObject> simpleObjects = Lists.newArrayList();   // <5>
+    private final List<SimpleObject> simpleObjects =
+                                        Lists.newArrayList();    // <.>
 
     @Override
-    protected void execute(final ExecutionContext ec) {          // <6>
+    protected void execute(final ExecutionContext ec) {          // <.>
         // defaults
-        final int number = defaultParam("number", ec, 3);        // <7>
+        final int number = defaultParam("number", ec, 3);        // <.>
         // validate
         if(number < 0 || number > NAMES.size()) {
             throw new IllegalArgumentException(
                 String.format("number must be in range [0,%d)", NAMES.size()));
         }
         // execute
-        ec.executeChild(this, new SimpleObjectsTearDown());      // <8>
+        ec.executeChild(this, new SimpleObjectsTearDown());      // <.>
         for (int i = 0; i < number; i++) {
             final SimpleObjectCreate fs =
                 new SimpleObjectCreate().setName(NAMES.get(i));
-            ec.executeChild(this, fs.getName(), fs);             // <9>
-            simpleObjects.add(fs.getSimpleObject());             // <10>
+            ec.executeChild(this, fs.getName(), fs);             // <.>
+            simpleObjects.add(fs.getSimpleObject());             // <.>
         }
     }
 }
