@@ -33,7 +33,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="objectType"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="logicalTypeName"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
             </mb3:section>

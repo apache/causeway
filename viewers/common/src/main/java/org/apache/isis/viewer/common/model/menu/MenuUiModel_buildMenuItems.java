@@ -68,7 +68,9 @@ final class MenuUiModel_buildMenuItems {
                             .lookupAction(serviceAdapter, actionLayoutData.getId(), Where.EVERYWHERE)
                             .orElse(null);
                     if (managedAction == null) {
-                        log.warn("No such action {}", actionLayoutData.getId());
+                        log.warn("No such action: bean-name '{}' action-id '{}'",
+                                serviceBeanName,
+                                actionLayoutData.getId());
                         continue;
                     }
 
