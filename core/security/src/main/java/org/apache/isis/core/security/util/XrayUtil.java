@@ -73,7 +73,7 @@ public final class XrayUtil {
             return Optional.empty();
         }
 
-        final int authStackSize = authContext.getAuthenticationLayerCount();
+        final int authStackSize = authContext.getInteractionLayerCount();
         val interactionId = iaContext.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
 
         val handle = SequenceHandle.builder()

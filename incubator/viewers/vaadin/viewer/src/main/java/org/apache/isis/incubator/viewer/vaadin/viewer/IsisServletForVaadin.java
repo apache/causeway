@@ -80,7 +80,7 @@ extends SpringServlet {
         log.debug("request was successfully serviced (authentication={})", authentication);
 
         if(isisInteractionFactory.isInInteraction()) {
-            isisInteractionFactory.closeSessionStack();
+            isisInteractionFactory.closeInteractionLayers();
             log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }
 

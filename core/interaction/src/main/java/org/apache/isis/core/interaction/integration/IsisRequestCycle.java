@@ -56,7 +56,7 @@ public class IsisRequestCycle {
 
     public void onEndRequest() {
 
-        isisInteractionFactory.closeSessionStack();
+        isisInteractionFactory.closeInteractionLayers();
 
     }
 

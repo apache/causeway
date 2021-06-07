@@ -406,7 +406,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             }
 
         } finally {
-            isisInteractionFactory.closeSessionStack();
+            isisInteractionFactory.closeInteractionLayers();
         }
 
     }

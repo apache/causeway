@@ -38,7 +38,7 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
         _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(InteractionFactory::closeSessionStack);
+        .ifPresent(InteractionFactory::closeInteractionLayers);
     }
 
 

@@ -28,6 +28,11 @@ import org.apache.isis.applib.services.user.UserMemento;
 /**
  * An immutable, serializable value type, that holds details about a user's authentication.
  *
+ * <p>
+ *     This is really little more than a thin wrapper around {@link ExecutionContext},
+ *     surfaces a number of the security-specific attributes of that field.
+ * </p>
+ *
  * @apiNote This is a framework internal class and so does not constitute a formal API.
  *
  * @since 2.0 {@index}

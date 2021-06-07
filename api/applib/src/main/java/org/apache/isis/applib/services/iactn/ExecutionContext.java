@@ -77,7 +77,12 @@ public class ExecutionContext implements Serializable {
      */
     public static ExecutionContext ofUserWithSystemDefaults(
             final @NonNull UserMemento user) {
-        return new ExecutionContext(user, VirtualClock.system(), Locale.getDefault(), TimeZone.getDefault());
+        return ExecutionContext.builder()
+                .user(user)
+                .clock(VirtualClock.system())
+                .locale(Locale.getDefault())
+                .timeZone(TimeZone.getDefault())
+                .build();
     }
 
 }

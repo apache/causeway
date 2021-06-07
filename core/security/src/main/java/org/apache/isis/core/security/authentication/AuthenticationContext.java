@@ -49,6 +49,6 @@ public interface AuthenticationContext {
     }
 
     /** authentication-layer-stack size */
-    int getAuthenticationLayerCount();
+    int getInteractionLayerCount();
 
 }

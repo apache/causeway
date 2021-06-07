@@ -55,16 +55,14 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.core.interaction.session.AuthenticationLayer;
+import org.apache.isis.core.interaction.session.InteractionLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
@@ -95,8 +93,6 @@ implements
     @Inject AuthenticationManager authenticationManager;
     @Inject MetamodelEventService runtimeEventService;
     @Inject SpecificationLoader specificationLoader;
-    @Inject MetaModelContext metaModelContext;
-    @Inject IsisConfiguration configuration;
     @Inject ServiceInjector serviceInjector;
 
     @Inject InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
@@ -150,25 +146,25 @@ implements
 
     }
 
-    private final ThreadLocal<Stack<AuthenticationLayer>> authenticationStack =
+    private final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack =
             ThreadLocal.withInitial(Stack::new);
 
     @Override
-    public int getAuthenticationLayerCount() {
-        return authenticationStack.get().size();
+    public int getInteractionLayerCount() {
+        return interactionLayerStack.get().size();
     }
 
     @Override
-    public AuthenticationLayer openInteraction() {
-        return currentAuthenticationLayer()
+    public InteractionLayer openInteraction() {
+        return currentInteractionLayer()
                 // or else create an anonymous authentication layer
-                .orElseGet(()->openInteraction(new AnonymousSession()));
+                .orElseGet(()-> openInteraction(new AnonymousSession()));
     }
 
     @Override
-    public AuthenticationLayer openInteraction(final @NonNull Authentication authToUse) {
+    public InteractionLayer openInteraction(final @NonNull Authentication authToUse) {
 
-        val interactionSession = getOrCreateInteractionSession();
+        val isisInteraction = getOrCreateIsisInteraction();
 
         // check whether we should reuse any current authenticationLayer,
         // that is, if current authentication and authToUse are equal
@@ -179,51 +175,51 @@ implements
 
         if(reuseCurrentLayer) {
             // we are done, just return the stack's top
-            return authenticationStack.get().peek();
+            return interactionLayerStack.get().peek();
         }
 
-        val authenticationLayer = new AuthenticationLayer(interactionSession, authToUse);
+        val authenticationLayer = new InteractionLayer(isisInteraction, authToUse);
 
-        authenticationStack.get().push(authenticationLayer);
+        interactionLayerStack.get().push(authenticationLayer);
 
         if(isInBaseLayer()) {
-        	postSessionOpened(interactionSession);
+        	postSessionOpened(isisInteraction);
         }
 
         if(log.isDebugEnabled()) {
-            log.debug("new authentication layer created (conversation-id={}, total-layers-on-stack={}, {})",
+            log.debug("new interaction layer created (conversation-id={}, total-layers-on-stack={}, {})",
                     interactionId.get(),
-                    authenticationStack.get().size(),
+                    interactionLayerStack.get().size(),
                     _Probe.currentThreadId());
         }
 
         if(XrayUi.isXrayEnabled()) {
-            _Xray.newAuthenticationLayer(authenticationStack.get());
+            _Xray.newInteractionLayer(interactionLayerStack.get());
         }
 
         return authenticationLayer;
     }
 
-    private IsisInteraction getOrCreateInteractionSession() {
+    private IsisInteraction getOrCreateIsisInteraction() {
 
-    	return authenticationStack.get().isEmpty()
+    	return interactionLayerStack.get().isEmpty()
     			? new IsisInteraction(UUID.randomUUID())
-				: authenticationStack.get().firstElement().getInteraction();
+				: interactionLayerStack.get().firstElement().getInteraction();
     }
 
     @Override
-    public void closeSessionStack() {
+    public void closeInteractionLayers() {
         log.debug("about to close the authentication stack (conversation-id={}, total-layers-on-stack={}, {})",
                 interactionId.get(),
-                authenticationStack.get().size(),
+                interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
-        closeSessionStackDownToStackSize(0);
+        closeInteractionLayerStackDownToStackSize(0);
     }
 
 	@Override
-    public Optional<AuthenticationLayer> currentAuthenticationLayer() {
-    	val stack = authenticationStack.get();
+    public Optional<InteractionLayer> currentInteractionLayer() {
+    	val stack = interactionLayerStack.get();
     	return stack.isEmpty()
     	        ? Optional.empty()
                 : Optional.of(stack.lastElement());
@@ -231,7 +227,7 @@ implements
 
     @Override
     public boolean isInInteraction() {
-        return !authenticationStack.get().isEmpty();
+        return !interactionLayerStack.get().isEmpty();
     }
 
     // -- AUTHENTICATED EXECUTION
@@ -242,14 +238,14 @@ implements
             @NonNull final Authentication authentication,
             @NonNull final Callable<R> callable) {
 
-        final int stackSizeWhenEntering = authenticationStack.get().size();
+        final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(authentication);
 
         try {
             serviceInjector.injectServicesInto(callable);
             return callable.call();
         } finally {
-            closeSessionStackDownToStackSize(stackSizeWhenEntering);
+            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
 
     }
@@ -260,14 +256,14 @@ implements
             @NonNull final Authentication authentication,
             @NonNull final ThrowingRunnable runnable) {
 
-        final int stackSizeWhenEntering = authenticationStack.get().size();
+        final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(authentication);
 
         try {
             serviceInjector.injectServicesInto(runnable);
             runnable.run();
         } finally {
-            closeSessionStackDownToStackSize(stackSizeWhenEntering);
+            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
 
     }
@@ -311,7 +307,7 @@ implements
     // -- HELPER
 
     private boolean isInBaseLayer() {
-    	return authenticationStack.get().size()==1;
+    	return interactionLayerStack.get().size()==1;
     }
 
     private void postSessionOpened(IsisInteraction interaction) {
@@ -333,26 +329,26 @@ implements
         interaction.close(); // do this last
     }
 
-    private void closeSessionStackDownToStackSize(int downToStackSize) {
+    private void closeInteractionLayerStackDownToStackSize(int downToStackSize) {
 
         log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 interactionId.get(),
-                authenticationStack.get().size(),
+                interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
-        val stack = authenticationStack.get();
+        val stack = interactionLayerStack.get();
         while(stack.size()>downToStackSize) {
         	if(isInBaseLayer()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
         		preSessionClosed(stack.peek().getInteraction());
         	}
-        	_Xray.closeAuthenticationLayer(stack);
+        	_Xray.closeInteractionLayer(stack);
             stack.pop();
         }
         if(downToStackSize == 0) {
             // cleanup thread-local
-            authenticationStack.remove();
+            interactionLayerStack.remove();
             interactionId.remove();
         }
     }

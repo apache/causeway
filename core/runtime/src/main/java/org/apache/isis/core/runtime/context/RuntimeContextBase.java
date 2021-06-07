@@ -89,7 +89,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         .ifPresent(authentication->{
 
             authenticationManager.closeSession(authentication);
-            interactionFactory.closeSessionStack();
+            interactionFactory.closeInteractionLayers();
 
         });
 

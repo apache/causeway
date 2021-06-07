@@ -32,12 +32,12 @@ import lombok.NonNull;
  * @since 2.0
  *
  */
-public class AuthenticationLayer {
+public class InteractionLayer {
 
 	@Getter private final IsisInteraction interaction;
 	@Getter private final Authentication authentication;
 
-	public AuthenticationLayer(
+	public InteractionLayer(
 			final @NonNull IsisInteraction interaction,
 			final @NonNull Authentication authentication) {
 
