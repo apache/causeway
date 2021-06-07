@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -514,8 +513,8 @@ implements
                                 collidingSpecs.forEach(spec->{
                                     ValidationFailure.raiseFormatted(
                                             spec,
-                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes,"
-                                            + " that do not all share the same type hierarchy:\n %s",
+                                            "Logical type name '%s' mapped to multiple non-abstract classes:\n"
+                                            + "%s",
                                             logicalTypeName,
                                             csv);
                                 });
@@ -534,7 +533,8 @@ implements
                     private String asCsv(final List<ObjectSpecification> specList) {
                         return stream(specList)
                                 .map(ObjectSpecification::getFullIdentifier)
-                                .collect(Collectors.joining(","));
+                                .sorted()
+                                .collect(Collectors.joining(", "));
                     }
 
                 };

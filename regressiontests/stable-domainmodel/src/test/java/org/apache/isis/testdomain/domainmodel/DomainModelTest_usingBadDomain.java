@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.lang.annotation.Annotation;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -32,6 +33,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -41,6 +45,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
@@ -58,8 +63,7 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -157,15 +161,25 @@ class DomainModelTest_usingBadDomain {
 
     @Test
     void logicalTypeNameClash_shouldFail() {
-        assertTrue(
-            validator.anyMatchesContaining(
-                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantA.class)),
-                    "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes")
-            || validator.anyMatchesContaining(
-                    Identifier.classIdentifier(LogicalType.fqcn(InvalidLogicalTypeNameClash.VariantB.class)),
-                    "Logical-type-name (aka. object-type) 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                    + "mapped to multiple classes"));
+        assertLogicalTypeNameClashesAmong(Can.of(
+                InvalidLogicalTypeNameClash.VariantA.class,
+                InvalidLogicalTypeNameClash.VariantB.class,
+                InvalidLogicalTypeNameClash.VariantC.class));
+    }
+
+    void assertLogicalTypeNameClashesAmong(Can<Class<?>> types) {
+
+        val typeLiteralList = types.stream()
+                .map(t->t.getName())
+                .collect(Collectors.joining(", "));
+
+        assertTrue(types.stream()
+                .anyMatch(t->
+                    validator.anyMatchesContaining(
+                            Identifier.classIdentifier(LogicalType.fqcn(t)),
+                            "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                                    + "mapped to multiple non-abstract classes:\n"
+                                    + typeLiteralList)));
     }
 
 
