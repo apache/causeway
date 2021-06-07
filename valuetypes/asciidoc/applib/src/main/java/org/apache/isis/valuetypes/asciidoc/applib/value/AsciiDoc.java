@@ -23,7 +23,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
@@ -32,8 +31,9 @@ import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
  *
  * @since 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueSemanticsProvider")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
+@org.apache.isis.applib.annotation.Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc",
+        semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueSemanticsProvider")
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public class AsciiDoc implements HasHtml, Serializable {
 

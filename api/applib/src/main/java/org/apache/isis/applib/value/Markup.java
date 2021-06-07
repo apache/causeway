@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 
@@ -37,9 +36,10 @@ import org.apache.isis.commons.internal.base._Strings;
  *
  * @since 2.0 {@index}
  */
-@Value(semanticsProviderName =
+@Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup",
+        semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Markup implements HasHtml, Serializable {
 
@@ -55,6 +55,7 @@ public final class Markup implements HasHtml, Serializable {
         this.html = html!=null ? html : "";
     }
 
+    @Override
     public String asHtml() {
         return html;
     }

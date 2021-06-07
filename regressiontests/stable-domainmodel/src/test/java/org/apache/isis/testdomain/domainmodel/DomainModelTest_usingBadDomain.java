@@ -55,6 +55,7 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
+import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
@@ -167,7 +168,7 @@ class DomainModelTest_usingBadDomain {
                 InvalidLogicalTypeNameClash.VariantC.class));
     }
 
-    void assertLogicalTypeNameClashesAmong(Can<Class<?>> types) {
+    private void assertLogicalTypeNameClashesAmong(Can<Class<?>> types) {
 
         val typeLiteralList = types.stream()
                 .map(t->t.getName())
@@ -182,6 +183,13 @@ class DomainModelTest_usingBadDomain {
                                     + typeLiteralList)));
     }
 
+    @Test
+    void contradictingTypeSemantics_shouldFailValidation() {
+        validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidContradictingTypeSemantics.class)),
+                "Cannot use @DomainObject and @Value on the same type: "
+                + InvalidContradictingTypeSemantics.class.getName());
+    }
 
     @ParameterizedTest
     @MethodSource("provideAmbiguousMixins")

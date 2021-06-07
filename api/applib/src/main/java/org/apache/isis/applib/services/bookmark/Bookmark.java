@@ -25,7 +25,6 @@ import java.util.StringTokenizer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
@@ -42,8 +41,8 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
+@org.apache.isis.applib.annotation.Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 

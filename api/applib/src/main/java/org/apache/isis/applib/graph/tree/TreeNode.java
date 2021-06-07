@@ -30,7 +30,6 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.graph.Edge;
@@ -47,8 +46,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  *
  * @param <T> type constraint for values contained by this node
  */
-@Value(semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
+@Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode",
+        semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
 public class TreeNode<T> implements Vertex<T> {
 
     private final TreeState sharedState;

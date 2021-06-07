@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
@@ -63,9 +62,10 @@ import lombok.extern.log4j.Log4j2;
  * @see Clob
  * @since 1.x {@index}
  */
-@Value(semanticsProviderName =
+@Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Blob",
+        semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Blob")
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
 @Log4j2
 public final class Blob implements NamedWithMimeType {

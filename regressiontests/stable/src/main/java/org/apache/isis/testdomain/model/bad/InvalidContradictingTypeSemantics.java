@@ -18,43 +18,12 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Value;
 
-public class InvalidLogicalTypeNameClash {
-
-    // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL,
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantA {
-
-        @Action
-        public boolean anAction() {
-            return false;
-        }
-
-    }
-
-    // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL,
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantB {
-
-        @Action
-        public boolean anAction() {
-            return false;
-        }
-
-    }
-
-    // logical type name clash: should fail validation
-    @Value(
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantC {
-
-    }
-
+// mix of semantics not allowed: should fail validation
+@Value
+@DomainObject
+public class InvalidContradictingTypeSemantics {
 
 }

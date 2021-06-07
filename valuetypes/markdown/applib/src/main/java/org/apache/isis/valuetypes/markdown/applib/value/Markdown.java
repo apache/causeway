@@ -23,7 +23,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
@@ -32,8 +31,8 @@ import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
  *
  */
 @org.apache.isis.applib.annotation.Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown",
         semanticsProviderName = "org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueSemanticsProvider")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown")
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
 public class Markdown implements HasHtml, Serializable {
 
