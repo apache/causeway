@@ -21,8 +21,10 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  *
  * @since 2.0 {@index}
  */
+@AutoConfigureOrder(OrderPrecedence.LATE)
+@Configuration
 public class ExecutionParametersServiceAutoConfiguration {
 
 
