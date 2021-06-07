@@ -18,7 +18,8 @@
  */
 package org.datanucleus.testing.dom;
 
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectTypeFacetDerivedFromClassNameFactoryTest;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetDerivedFromClassNameFactoryTest;
 
-public class CustomerAsProxiedByDataNucleus extends ObjectTypeFacetDerivedFromClassNameFactoryTest.Customer {
+public class CustomerAsProxiedByDataNucleus
+extends LogicalTypeFacetDerivedFromClassNameFactoryTest.Customer {
 }

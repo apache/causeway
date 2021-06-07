@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnno
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.ObjectTypeFacetDerivedFromClassNameFactory;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
@@ -98,6 +98,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyL
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.value.annotation.ValueAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacetUsingSemanticsProviderFactory;
@@ -146,8 +147,8 @@ import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTy
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
@@ -180,8 +181,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
 
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ObjectTypeFacetDerivedFromClassNameFactory.class);
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, LogicalTypeFacetDerivedFromClassNameFactory.class);
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, DomainServiceFacetAnnotationFactory.class);
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ValueAnnotationFacetFactory.class);
 
         addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, IteratorFilteringFacetFactory.class);
 

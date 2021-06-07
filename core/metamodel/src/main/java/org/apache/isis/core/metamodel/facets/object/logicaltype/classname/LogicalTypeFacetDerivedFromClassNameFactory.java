@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class ObjectTypeFacetDerivedFromClassNameFactory
+public class LogicalTypeFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner, ObjectTypeFacetFactory {
 
@@ -52,10 +52,10 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
             new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault()));
 
 
-    public ObjectTypeFacetDerivedFromClassNameFactory() {
+    public LogicalTypeFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
-    public ObjectTypeFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
+    public LogicalTypeFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
         this();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
     }

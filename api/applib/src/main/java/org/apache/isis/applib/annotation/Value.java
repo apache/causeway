@@ -61,6 +61,20 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 public @interface Value {
 
     /**
+     * The logical name of this value's type, that uniquely and fully qualifies it.
+     * The logical name is analogous to - but independent of - the actual fully qualified class name.
+     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
+     * <p>
+     * If not specified, the fully qualified class name is used instead.
+     * </p>
+     *
+     * @see DomainObject#logicalTypeName()
+     * @see DomainService#logicalTypeName()
+     */
+    String logicalTypeName()
+            default "";
+
+    /**
      * The fully qualified name of a class that implements the
      * {@link ValueSemanticsProvider} interface.
      *

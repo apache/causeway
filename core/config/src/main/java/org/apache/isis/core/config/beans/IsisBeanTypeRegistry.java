@@ -36,7 +36,7 @@ public interface IsisBeanTypeRegistry {
     Set<Class<?>> getEntityTypes();
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
-    /** discovered per {@code @Value} annotation (vs. registered using ValueTypeResgistry)*/
+    /** discovered per {@code @Value} annotation (vs. registered using ValueTypeRegistry)*/
     Set<Class<?>> getDiscoveredValueTypes();
 
     // -- LOOKUPS
