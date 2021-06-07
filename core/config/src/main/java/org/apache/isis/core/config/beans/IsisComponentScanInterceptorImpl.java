@@ -79,7 +79,7 @@ implements IsisComponentScanInterceptor {
         }
 
         val type = classOrFailure.getUnderlyingClass();
-        val classification = isisBeanTypeClassifier.classify(type);
+        val classification = isisBeanTypeClassifier.classify(type, /*BeanClassificationContext*/null);
 
         val delegated = classification.isDelegateLifecycleManagement();
         typeMeta.setInjectable(delegated);

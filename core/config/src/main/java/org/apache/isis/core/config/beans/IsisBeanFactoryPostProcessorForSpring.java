@@ -67,8 +67,7 @@ implements
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        val environment = applicationContext.getEnvironment();
-        isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance(environment);
+        isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance(applicationContext);
         isisComponentScanInterceptor = IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
     }
 

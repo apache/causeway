@@ -62,6 +62,14 @@ public final class _Predicates {
     }
 
     /**
+    *
+    * @return a Predicate that always tests false
+    */
+   public static <T> Predicate<T> alwaysFalse() {
+       return __->false;
+   }
+
+    /**
      * @return a Predicate that tests for the operand to be not null
      */
     public static <T> Predicate<T> isPresent() {

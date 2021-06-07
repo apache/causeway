@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
+import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -54,7 +55,9 @@ implements IsisBeanTypeClassifier {
     private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
 
     @Override
-    public BeanClassification classify(final @NonNull Class<?> type) {
+    public BeanClassification classify(
+            final @NonNull Class<?> type,
+            final @Nullable BeanClassificationContext beanClassificationContext) {
 
         // handle arbitrary types ...
 
@@ -80,7 +83,7 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.delegated(BeanSort.ABSTRACT);
         }
 
-        // handle actual bean types ...
+        // handle vetoing ...
 
         if(findNearestAnnotation(type, Vetoed.class).isPresent()
                 || findNearestAnnotation(type, Programmatic.class).isPresent()) {
@@ -95,6 +98,21 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.selfManaged(BeanSort.VETOED); // reject
         }
 
+        // handle value types ...
+
+        if(beanClassificationContext!=null
+                && beanClassificationContext.getIsRegisteredValueType().test(type)) {
+            return BeanClassification.delegated(BeanSort.VALUE);
+        }
+
+        val aValue = findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class)
+                .orElse(null);
+        if(aValue!=null) {
+            return BeanClassification.delegated(BeanSort.VALUE);
+        }
+
+        // handle actual bean types ...
+
         val aDomainService = findNearestAnnotation(type, DomainService.class);
         if(aDomainService.isPresent()) {
             return BeanClassification
@@ -104,7 +122,7 @@ implements IsisBeanTypeClassifier {
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
         for(val classifier : classifierPlugins) {
-            val classification = classifier.classify(type);
+            val classification = classifier.classify(type, beanClassificationContext);
             if(classification!=null) {
                 return classification;
             }

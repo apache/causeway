@@ -20,12 +20,15 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -49,6 +52,7 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
@@ -114,6 +118,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final IsisBeanTypeRegistry isisBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final ValueTypeRegistry valueTypeRegistry;
+    private final IsisBeanTypeClassifier.BeanClassificationContext beanClassificationContext;
 
     private final ProgrammingModel programmingModel;
     private final PostProcessor postProcessor;
@@ -171,6 +176,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;
         this.valueTypeRegistry = valueTypeRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
+        this.beanClassificationContext = IsisBeanTypeClassifier
+                .newContext(valueTypeRegistry
+                        .streamRegisteredClasses()
+                        .collect(Collectors.toCollection(HashSet::new)));
     }
 
     /** JUnit Test Support */
@@ -230,18 +239,21 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         // (an optimization, not strictly required)
         loadSpecifications(ApplicationFeatureSort.class/*, ...*/);
 
-        log.info(" - adding types from ValueTypeProviders");
+        log.info(" - adding value types from from class-path scan and ValueTypeProviders");
 
-        val valueTypeSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val valueTypeSpecs = _Maps.<Class<?>, ObjectSpecification>newHashMap();
 
-        valueTypeRegistry.streamRegisteredClasses()
-        .forEach(cls -> {
-            val spec = loadSpecification(cls, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) {
-                knownSpecs.add(spec);
-                valueTypeSpecs.add(spec);
-            }
-        });
+        Stream
+            .concat(
+                isisBeanTypeRegistry.getDiscoveredValueTypes().stream(),
+                valueTypeRegistry.streamRegisteredClasses())
+            .forEach(valueType -> {
+                val valueSpec = loadSpecification(valueType, IntrospectionState.NOT_INTROSPECTED);
+                if(valueSpec!=null) {
+                    knownSpecs.add(valueSpec);
+                    valueTypeSpecs.put(valueType, valueSpec);
+                }
+            });
 
         log.info(" - categorizing types from class-path scan");
 
@@ -278,12 +290,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
 
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
-        introspect(Can.ofCollection(valueTypeSpecs), IntrospectionState.FULLY_INTROSPECTED);
+        introspect(Can.ofCollection(valueTypeSpecs.values()), IntrospectionState.FULLY_INTROSPECTED);
 
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
-        log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
+        log.info(" - introspecting {} managed beans contributing (domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
 //        log.info(" - introspecting {}/{} entities (JDO/JPA)",
 //                isisBeanTypeRegistry.getEntityTypesJdo().size(),
 //                isisBeanTypeRegistry.getEntityTypesJpa().size());
@@ -378,7 +390,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 __->isisBeanTypeRegistry
                     .lookupIntrospectableType(type)
                     .map(IsisBeanMetaData::getBeanSort)
-                    .orElseGet(()->isisBeanTypeClassifier.classify(type).getBeanSort()),
+                    .orElseGet(()->isisBeanTypeClassifier.classify(type, beanClassificationContext)
+                            .getBeanSort()),
                 upTo);
     }
 
@@ -557,8 +570,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(isMetamodelFullyIntrospected()
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val category = isisBeanTypeClassifier.classify(cls);
-            val sort = category.getBeanSort();
+            val sort = isisBeanTypeClassifier
+                    .classify(cls, beanClassificationContext)
+                    .getBeanSort();
 
 //          ISIS-2256:
 //            throw _Exceptions.illegalState(

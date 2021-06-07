@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -40,7 +41,9 @@ import lombok.val;
 public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
     @Override
-    public BeanClassification classify(Class<?> type) {
+    public BeanClassification classify(
+            final Class<?> type,
+            final @Nullable BeanClassificationContext context) {
 
         val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
@@ -85,5 +88,6 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
         return null; // we don't feel responsible to classify given type
     }
+
 
 }

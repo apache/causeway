@@ -36,7 +36,6 @@ import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents a character large object.
@@ -64,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
         "org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider")
 @DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Clob")
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
-@Log4j2
+//@Log4j2
 public final class Clob implements NamedWithMimeType {
 
     /**

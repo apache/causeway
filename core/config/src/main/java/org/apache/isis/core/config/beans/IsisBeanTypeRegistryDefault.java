@@ -63,6 +63,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
+    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> discoveredValueTypes = new HashSet<>();
 
     // -- LOOKUPS
 
@@ -108,6 +109,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
             case VALUE:
+                discoveredValueTypes.add(cls);
             case ABSTRACT: // <-- unexpected code reach
             case VETOED:
             case UNKNOWN:

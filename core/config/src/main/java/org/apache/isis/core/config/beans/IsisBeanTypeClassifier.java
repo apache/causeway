@@ -18,7 +18,12 @@
  */
 package org.apache.isis.core.config.beans;
 
-import org.springframework.core.env.Environment;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
+import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
@@ -39,10 +44,11 @@ public interface IsisBeanTypeClassifier {
      * Returns the bean classification for given {@code type}.
      *
      * @apiNote Initially used to collect all concrete types that are considered by Spring
-     * for type inspection, but later used by the {@code SpecificationLoader} to also
+     * for type inspection, most likely without any {@code context} yet being available,
+     * but later used by the {@code SpecificationLoader} to also
      * classify non-concrete types (interfaces and abstract classes).
      */
-    BeanClassification classify(Class<?> type);
+    BeanClassification classify(Class<?> type, @Nullable BeanClassificationContext context);
 
     // -- FACTORY
 
@@ -53,14 +59,26 @@ public interface IsisBeanTypeClassifier {
         return new IsisBeanTypeClassifierImpl(Can.empty());
     }
 
-    static IsisBeanTypeClassifier createInstance(final @NonNull Environment environment) {
-        return new IsisBeanTypeClassifierImpl(Can.ofArray(environment.getActiveProfiles()));
+    static IsisBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
+        return new IsisBeanTypeClassifierImpl(
+                Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
     }
 
     // -- LOOKUP
 
     public static Can<IsisBeanTypeClassifier> get() {
         return Can.ofCollection(_Plugin.loadAll(IsisBeanTypeClassifier.class));
+    }
+
+    // -- BEAN CLASSIFICATION CONTEXT
+
+    @Value
+    public static class BeanClassificationContext {
+        private final @NonNull Predicate<Class<?>> isRegisteredValueType;
+    }
+
+    static BeanClassificationContext newContext(final Set<Class<?>> registeredValueTypes) {
+        return new BeanClassificationContext(registeredValueTypes::contains);
     }
 
     // -- BEAN CLASSIFICATION RESULT
@@ -91,5 +109,9 @@ public interface IsisBeanTypeClassifier {
         }
 
     }
+
+
+
+
 
 }
