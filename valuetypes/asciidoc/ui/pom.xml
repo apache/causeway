@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-constants</artifactId>
-			<version>0.10.1</version>
+			<version>0.10.2</version>
 		</dependency>
 		<!-- END OF ASCII-DOC -->
 		
