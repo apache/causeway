@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.testing.fixtures.applib.personas;
 
 import org.apache.isis.applib.annotation.Programmatic;
-
-import lombok.Getter;
 
 /**
  * A specialization of {@link BuilderScriptAbstract} which expects there to be

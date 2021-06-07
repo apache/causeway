@@ -21,7 +21,6 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -53,7 +52,8 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecification;
@@ -245,6 +245,17 @@ public class FixtureScripts {
 
     // -- runFixtureScript (using choices as the drop-down policy)
 
+    /**
+     * Main action - as exposed in the UI - to execute the specified fixture script.
+     *
+     * <p>
+     *     Also allows arbitrary parameters to be specified for said fixture script.
+     * </p>
+     *
+     * @param fixtureScriptName
+     * @param parameters
+     * @return
+     */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -330,6 +341,13 @@ public class FixtureScripts {
 
     // -- recreateObjectsAndReturnFirst
 
+    /**
+     * Convenience action - exposed through the UI - to execute the specified
+     * &quot;recreate&quot; {@link FixtureScript fixture script} and
+     * return/show the first object returned by that fixture script.
+     *
+     * @return
+     */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )

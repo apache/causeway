@@ -16,28 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.api;
-
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
+package org.apache.isis.testing.fixtures.applib.personas;
 
 /**
- * Intended for persona enums to implement, to provide an instance of a {@link BuilderScriptAbstract} in order to
- * instantiate an instance of the persona (normally in the form of a domain entity or set of related domain entities).
+ * A specialization of {@link BuilderScriptAbstract} which returns no
+ * top-level object, and so removes a little of the boilerplate that would otherwise be required.
  *
- * <p>
- *     ({@link BuilderScriptAbstract} is a specialization of
- *     {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript}).
- * </p>
- *
- * @see PersonaWithFinder
  * @since 2.x {@index}
  */
-public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
+public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
 
     /**
-     * Returns a {@link BuilderScriptAbstract} to use to instantiate this persona.
+     * Simply returns null.
      */
-    T builder();
+    @Override
+    public final Object getObject() {
+        return null;
+    }
 
 }
-

@@ -16,16 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.testing.fixtures.applib.personas;
 
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithFinder;
-import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 
@@ -69,7 +68,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
             final FixtureScript parentFixtureScript,
             final ExecutionContext executionContext) {
 
-        parentFixtureScript.serviceInjector.injectServicesInto(this);
+        parentFixtureScript.getServiceInjector().injectServicesInto(this);
 
         execPrereqs(executionContext);
 

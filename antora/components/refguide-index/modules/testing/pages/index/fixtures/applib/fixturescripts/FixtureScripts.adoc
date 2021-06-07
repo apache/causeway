@@ -15,13 +15,13 @@ public static final String LOGICAL_TYPE_NAME;
   FixtureScripts(final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider, final ServiceRegistry serviceRegistry)
   NonPersistedObjectsStrategy getNonPersistedObjectsStrategy()
   MultipleExecutionStrategy getMultipleExecutionStrategy()     // <.>
-  List<FixtureResult> runFixtureScript(final String fixtureScriptName, final String parameters)
+  List<FixtureResult> runFixtureScript(final String fixtureScriptName, final String parameters)     // <.>
   List<FixtureResult> runFixtureScript(final FixtureScript fixtureScript, final String parameters)
   String disableRunFixtureScript()
   String default0RunFixtureScript()
   Set<String> choices0RunFixtureScript()
   String validateRunFixtureScript(final String fixtureScriptName, final String parameters)
-  Object recreateObjectsAndReturnFirst()
+  Object recreateObjectsAndReturnFirst()     // <.>
   boolean hideRecreateObjectsAndReturnFirst()
   void run(final FixtureScript... fixtureScriptList)
   void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
@@ -49,6 +49,16 @@ The package prefix to search for fixture scripts. This default value will result
 +
 --
 Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
+--
+<.> xref:#runFixtureScript__String_String[runFixtureScript(String, String)]
++
+--
+Main action - as exposed in the UI - to execute the specified fixture script.
+--
+<.> xref:#recreateObjectsAndReturnFirst__[recreateObjectsAndReturnFirst()]
++
+--
+Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 --
 <.> xref:#runBuilder__BuilderScriptAbstract[runBuilder(BuilderScriptAbstract)]
 +
@@ -102,6 +112,18 @@ The package prefix to search for fixture scripts. This default value will result
 === getMultipleExecutionStrategy()
 
 Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
+
+[#runFixtureScript__String_String]
+=== runFixtureScript(String, String)
+
+Main action - as exposed in the UI - to execute the specified fixture script.
+
+Also allows arbitrary parameters to be specified for said fixture script.
+
+[#recreateObjectsAndReturnFirst__]
+=== recreateObjectsAndReturnFirst()
+
+Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 
 [#runBuilder__BuilderScriptAbstract]
 === runBuilder(BuilderScriptAbstract)

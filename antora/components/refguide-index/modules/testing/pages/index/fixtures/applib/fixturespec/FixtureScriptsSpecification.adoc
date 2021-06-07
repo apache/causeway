@@ -28,7 +28,7 @@ Typically preferable to use the create using the _FixtureScriptsSpecification.Bu
 <.> xref:#getMultipleExecutionStrategy__[getMultipleExecutionStrategy()]
 +
 --
-Note that this can be overridden on a fixture-by-fixture basis if the fixture implements _FixtureScriptWithExecutionStrategy_ .
+Note that this can be overridden on a fixture-by-fixture basis if the fixture implements xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy] .
 --
 
 == Members
@@ -41,4 +41,4 @@ Typically preferable to use the create using the _FixtureScriptsSpecification.Bu
 [#getMultipleExecutionStrategy__]
 === getMultipleExecutionStrategy()
 
-Note that this can be overridden on a fixture-by-fixture basis if the fixture implements _FixtureScriptWithExecutionStrategy_ .
+Note that this can be overridden on a fixture-by-fixture basis if the fixture implements xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy] .

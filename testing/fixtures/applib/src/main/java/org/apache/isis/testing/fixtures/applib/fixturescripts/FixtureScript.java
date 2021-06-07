@@ -49,9 +49,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.personas.WithPrereqs;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -781,10 +781,10 @@ public abstract class FixtureScript {
      * service to call.
      *
      * <p>
-     *     Package-visibility only, not public API.
+     *     Protected-visibility only, not public API.
      * </p>
      */
-    final List<FixtureResult> run(
+    protected final List<FixtureResult> run(
             final String parameters,
             final FixtureScripts fixtureScripts) {
         try {
@@ -910,7 +910,7 @@ public abstract class FixtureScript {
 
     @Inject protected FactoryService factoryService;
     @Inject protected ServiceRegistry serviceRegistry;
-    @Inject protected ServiceInjector serviceInjector;
+    @Inject @Getter @Programmatic protected ServiceInjector serviceInjector;
     @Inject protected RepositoryService repositoryService;
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;

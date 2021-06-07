@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.api;
+package org.apache.isis.testing.fixtures.applib.personas;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
 
 /**
  * Intended for persona enums to implement, to obtain an instance of the corresponding top-level entity representing

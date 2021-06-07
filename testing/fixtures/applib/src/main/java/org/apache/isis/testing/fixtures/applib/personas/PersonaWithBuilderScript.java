@@ -16,31 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.api;
-
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+package org.apache.isis.testing.fixtures.applib.personas;
 
 /**
- * Provides a mechanism for {@link FixtureScript}s to specify prerequisites
- * to be executed first.
+ * Intended for persona enums to implement, to provide an instance of a {@link BuilderScriptAbstract} in order to
+ * instantiate an instance of the persona (normally in the form of a domain entity or set of related domain entities).
  *
  * <p>
- *     Most commonly used to chain {@link BuilderScriptAbstract}s in conjunction
- *     with personas.
+ *     ({@link BuilderScriptAbstract} is a specialization of
+ *     {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript}).
  * </p>
  *
+ * @see PersonaWithFinder
  * @since 2.x {@index}
  */
-public interface WithPrereqs<T> {
+public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
 
-    BuilderScriptAbstract<T> addPrereq(Block<T> prereq);
-
-    void execPrereqs(FixtureScript.ExecutionContext executionContext);
-
-    interface Block<T> {
-        void execute(BuilderScriptAbstract<T> onFixture, FixtureScript.ExecutionContext executionContext);
-    }
+    /**
+     * Returns a {@link BuilderScriptAbstract} to use to instantiate this persona.
+     */
+    T builder();
 
 }
 

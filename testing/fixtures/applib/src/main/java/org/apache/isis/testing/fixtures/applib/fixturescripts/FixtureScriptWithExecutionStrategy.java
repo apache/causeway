@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.api;
+package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;

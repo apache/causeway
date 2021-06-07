@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.clock.fixture;
+package org.apache.isis.testing.fixtures.applib.clock;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -24,11 +24,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.FixtureClock;
 
 @Programmatic
 class ClockFixture extends FixtureScript implements FixtureScriptWithExecutionStrategy {

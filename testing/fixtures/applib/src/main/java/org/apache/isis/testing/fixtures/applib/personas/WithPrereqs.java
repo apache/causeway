@@ -16,22 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.testing.fixtures.applib.personas;
+
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
- * A specialization of {@link BuilderScriptAbstract} which returns no
- * top-level object, and so removes a little of the boilerplate that would otherwise be required.
+ * Provides a mechanism for {@link FixtureScript}s to specify prerequisites
+ * to be executed first.
+ *
+ * <p>
+ *     Most commonly used to chain {@link BuilderScriptAbstract}s in conjunction
+ *     with personas.
+ * </p>
  *
  * @since 2.x {@index}
  */
-public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
+public interface WithPrereqs<T> {
 
-    /**
-     * Simply returns null.
-     */
-    @Override
-    public final Object getObject() {
-        return null;
+    BuilderScriptAbstract<T> addPrereq(Block<T> prereq);
+
+    void execPrereqs(FixtureScript.ExecutionContext executionContext);
+
+    interface Block<T> {
+        void execute(BuilderScriptAbstract<T> onFixture, FixtureScript.ExecutionContext executionContext);
     }
 
 }
+

@@ -25,11 +25,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
-import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.clock.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.TickingFixtureClock;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;

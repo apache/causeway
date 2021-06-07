@@ -13,7 +13,6 @@ class FixtureScript {
   FixtureScript()     // <.>
   FixtureScript(final String friendlyName, final String localName)     // <.>
   String getQualifiedName()
-  List<FixtureResult> run(final String parameters, final FixtureScripts fixtureScripts)     // <.>
   String validateRun(final String parameters)     // <.>
   String pathWith(final String subkey)
 }
@@ -28,11 +27,6 @@ Initializes a fixture, with _#getFriendlyName()_ and _#getLocalName()_ derived f
 +
 --
 Initializes a fixture.
---
-<.> xref:#run__String_FixtureScripts[run(String, FixtureScripts)]
-+
---
-Entry point for xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] service to call.
 --
 <.> xref:#validateRun__String[validateRun(String)]
 +
@@ -51,13 +45,6 @@ Initializes a fixture, with _#getFriendlyName()_ and _#getLocalName()_ derived f
 === FixtureScript(String, String)
 
 Initializes a fixture.
-
-[#run__String_FixtureScripts]
-=== run(String, FixtureScripts)
-
-Entry point for xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] service to call.
-
-Package-visibility only, not public API.
 
 [#validateRun__String]
 === validateRun(String)

@@ -93,7 +93,7 @@ This can be fine-tuned using `menubars.layout.xml`:
 </mb3:section>
 ----
 
-Let's now look at the `FixtureScript` class, where there's a bit more going on.
+Let's now look at the `FixtureScript` class, where there's a bit more to discuss.
 
 [#fixturescript]
 == `FixtureScript`
@@ -132,13 +132,16 @@ public class RecreateSimpleObjects extends FixtureScript {       // <.>
 
     @Override
     protected void execute(final ExecutionContext ec) {          // <.>
+
         // defaults
         final int number = defaultParam("number", ec, 3);        // <.>
+
         // validate
         if(number < 0 || number > NAMES.size()) {
             throw new IllegalArgumentException(
                 String.format("number must be in range [0,%d)", NAMES.size()));
         }
+
         // execute
         ec.executeChild(this, new SimpleObjectsTearDown());      // <.>
         for (int i = 0; i < number; i++) {
@@ -157,11 +160,12 @@ Note that the xref:testing:fakedata:about.adoc[Fakedata] testing module could al
 <.> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
 <.> output property: the generated list of objects, for the calling test to grab
-<.> the mandatory execute(...) API
+<.> the mandatory `execute(...)` API.
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext] parameter is discussed in more detail in the <<executioncontext,next section>>.
 <.> the `defaultParam(...)` (inherited from `FixtureScript`) will default the `number` property (using Java's Reflection API) if none was specified
-<.> call another fixture script (`SimpleObjectsTearDown`) using the provided `ExecutionContext`.
+<.> call another fixture script (`SimpleObjectsTearDown`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext].
 There's no need to instantiate using the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
-<.> calling another fixture script (`SimpleObjectCreate`) using the provided `ExecutionContext`
+<.> calling another fixture script (`SimpleObjectCreate`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext]
 <.> adding the created object to the list, for the calling object to use.
 
 Because this script has exposed a "number" property, it's possible to set this from within the UI.
@@ -173,6 +177,21 @@ When this is executed, the framework will parse the text and attempt to reflecti
 So, in this case, when the fixture script is executed we actually get 6 objects created.
 
 
+[#executioncontext]
+== ExecutionContext
+
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext] is passed to each `FixtureScript` as it is executed.
+It supports two main use cases:
+
+* to allow child fixture scripts to be executed, using xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc#executeChildT__FixtureScript_T[executeChild(...)] and its brethren.
++
+This was demonstrated in the <<fixturescript, previous section>>
+
+* to read parameters obtained when the fixture script was first executed by the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service, discussed <<fixturescripts, above>>.
+
+The latter use case is much less frequently used, but can be helpful for example in demos, where the number of objects can be specified in the `parameters` parameter of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc#runFixtureScript__String_String[run fixture script] action.
+
+
 == Personas and Builders
 
 Good integration tests are probably the best way to understand the behaviour of the domain model: better, even, than reading the code itself.
@@ -182,9 +201,9 @@ At the same time, "Persona" instances of entity classes help the developer becom
 For example, "Steve Single" the Customer might be 21, single and no kids, whereas vs "Meghan Married-Mum" the Customer might be married 35 with 2 kids.
 Using "Steve" vs "Meghan" immediately informs the developer about the particular scenario being explored.
 
-The xref:refguide:testing:index/fixtures/applib/fixturescripts/
-
-`PersonaWithBuilderScript` and `PersonaWithFinder` interfaces are intended to be implemented typically by "persona" enums, where each enum instance captures the essential data of some persona.
+The xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] and
+xref:refguide:testing:index/fixtures/applib/personas/PersonaWithFinder.adoc[PersonaWithFinder]
+ interfaces are intended to be implemented typically by "persona" enums, where each enum instance captures the essential data of some persona.
 So, going back to the previous example, we might have:
 
 [source,xml]
@@ -198,7 +217,7 @@ public enum Customer_persona
 }
 ----
 
-The `PersonaWithBuilderScript` interface means that this enum is able to act as a factory for a `BuilderScriptAbstract`.
+The xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript] interface means that this enum is able to act as a factory for a xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract].
 This is a specialization of `FixtureScript` that is used to actually create the entity (customer, or whatever), using the data taken out of the enum instance:
 
 [source,xml]
@@ -208,7 +227,7 @@ public interface PersonaWithBuilderScript<T, F extends BuilderScriptAbstract<T,F
 }
 ----
 
-The `PersonaWithFinder` interface meanwhile indicates that the enum can "lookup" its corresponding entity from the appropriate repository domain service:
+The xref:refguide:testing:index/fixtures/applib/personas/PersonaWithFinder.adoc[PersonaWithFinder] interface meanwhile indicates that the enum can "lookup" its corresponding entity from the appropriate repository domain service:
 
 [source,xml]
 ----
@@ -328,11 +347,11 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
 Put together, the persona enums provide the "what" - hard-coded values for certain key data that the developer becomes very familiar with - while the builder provides the "how-to".
 
-These builder scripts (`BuilderScriptAbstract` implementations) can be used independently of the enum personas.
+These builder scripts (xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] implementations) can be used independently of the enum personas.
 And for more complex entity -where there might be many potential values that need to be provided
 - the builder script can automatically default some or even all of these values.
 
-For example, for a customer's date of birth, the buider could default to a date making the customer an adult, aged between 18 and 65, say.
+For example, for a customer's date of birth, the builder could default to a date making the customer an adult, aged between 18 and 65, say.
 For an email address or postal address, or an image, or some "lorem ipsum" text, the xref:testing:fakedata:about.adoc[Fakedata] testing module could provide randomised values.
 
 The benefit of an intelligent builder is that it further simplifies the test.

@@ -19,7 +19,7 @@
 package org.apache.isis.testing.fixtures.applib.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;

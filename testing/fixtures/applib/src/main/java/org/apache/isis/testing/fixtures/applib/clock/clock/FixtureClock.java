@@ -16,17 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.clock;
+package org.apache.isis.testing.fixtures.applib.clock.clock;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+
 /**
+ * This clock, for use by fixtures, can be set to specific time.
+ *
+ * <p>
+ * If not set it will provide the time provided by the system clock.
+ *
+ * <p>
+ * Note that - by design - it does not provide any mechanism to advance the time
+ * (eg automatic ticking of the clock). That is, the time returned is always
+ * explicitly under the control of the programmer (it can be moved forward or
+ * back as required).
+ *
  * @since 2.x {@index}
  */
-public class TickingFixtureClock extends Clock {
+public class FixtureClock extends Clock {
     private static final TimeZone UTC_TIME_ZONE;
 
     static {
@@ -36,9 +47,6 @@ public class TickingFixtureClock extends Clock {
         }
         UTC_TIME_ZONE = tempTimeZone;
     }
-
-
-    static Clock existingInstance;
 
     /**
      * Configures the system to use a FixtureClock rather than the in-built
@@ -51,48 +59,41 @@ public class TickingFixtureClock extends Clock {
      *             if Clock singleton already initialized with some other
      *             implementation.
      */
-    public synchronized static TickingFixtureClock replaceExisting() {
-        final Clock instance = getInstance();
-        if (instance instanceof TickingFixtureClock) {
-            return (TickingFixtureClock) instance;
+    public synchronized static FixtureClock initialize() {
+        if (!isInitialized() || !(getInstance() instanceof FixtureClock)) {
+            // installs the FixtureClock as the Clock singleton via the Clock's
+            // constructor
+            // if was initialized, then will replace.
+            // (if non-replaceable, then superclass will throw exception for us.
+            new FixtureClock();
         }
-
-        final long time = Clock.getEpochMillis();
-        existingInstance = Clock.instance;
-
-        // installs as the singleton
-        Clock.remove();
-
-        return new TickingFixtureClock(time);
+        return (FixtureClock) getInstance();
     }
 
     /**
      * Makes {@link Clock#remove()} visible.
      */
-    public static boolean reinstateExisting() {
-        Clock.instance = existingInstance;
-        return true;
+    public static boolean remove() {
+        return Clock.remove();
     }
 
+    // //////////////////////////////////////////////////
+    // Constructor
+    // //////////////////////////////////////////////////
 
+    // if non-null, then indicates that the time has been explicitly set.
+    // Otherwise returns the system time.
+    private Calendar calendar = null;
 
-    private final Calendar calendar = Calendar.getInstance();
-    private long t0 = 0L;
-
-    private TickingFixtureClock(final long time) {
-        calendar.setTimeZone(UTC_TIME_ZONE);
-        calendar.setTimeInMillis(time);
-
-        t0 = System.currentTimeMillis();
+    private FixtureClock() {
     }
 
-    private long getOffset() {
-        return System.currentTimeMillis() - t0;
-    }
-
+    // //////////////////////////////////////////////////
+    // hook
+    // //////////////////////////////////////////////////
 
     /**
-     * Access via {@link Clock#getTime()}.
+     * Access via {@link Clock#getInstance()}.
      *
      * <p>
      * Will just return the system time until {@link #setDate(int, int, int)} or
@@ -100,12 +101,28 @@ public class TickingFixtureClock extends Clock {
      */
     @Override
     protected Instant now() {
-        return Instant.ofEpochMilli(calendar.getTime().getTime() + getOffset());
+        if (calendar == null) {
+            return Instant.now();
+        }
+        return calendar.toInstant();
     }
 
     // //////////////////////////////////////////////////
     // setting/adjusting time
     // //////////////////////////////////////////////////
+
+    /**
+     * Sets the clock to epoch, that is midnight, 1 Jan 1970 UTC.
+     *
+     * <p>
+     * This is typically called before either {@link #setDate(int, int, int)}
+     * (so that time is set to midnight) and/or {@link #setTime(int, int)} (so
+     * that date is set to a well known value).
+     */
+    public void clear() {
+        setupCalendarIfRequired();
+        calendar.clear();
+    }
 
     /**
      * Sets the hours and minutes as specified, and sets the seconds and
@@ -115,20 +132,11 @@ public class TickingFixtureClock extends Clock {
      * @see #addTime(int, int)
      */
     public void setTime(final int hour, final int min) {
+        setupCalendarIfRequired();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        t0 = System.currentTimeMillis();
-    }
-
-    public void setTime(final Timestamp timestamp) {
-        setTime(timestamp.getTime());
-    }
-
-    public void setTime(final long millis) {
-        calendar.setTimeInMillis(millis);
-        t0 = System.currentTimeMillis();
     }
 
     /**
@@ -138,11 +146,10 @@ public class TickingFixtureClock extends Clock {
      * @see #addDate(int, int, int)
      */
     public void setDate(final int year, final int month, final int day) {
+        setupCalendarIfRequired();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.DAY_OF_MONTH, day);
-
-        t0 = System.currentTimeMillis();
     }
 
     /**
@@ -155,6 +162,7 @@ public class TickingFixtureClock extends Clock {
      * @see #addDate(int, int, int)
      */
     public void addTime(final int hours, final int minutes) {
+        setupCalendarIfRequired();
         calendar.add(Calendar.HOUR_OF_DAY, hours);
         calendar.add(Calendar.MINUTE, minutes);
     }
@@ -169,16 +177,38 @@ public class TickingFixtureClock extends Clock {
      * @see #addTime(int, int)
      */
     public void addDate(final int years, final int months, final int days) {
+        setupCalendarIfRequired();
         calendar.add(Calendar.YEAR, years);
         calendar.add(Calendar.MONTH, months);
         calendar.add(Calendar.DAY_OF_MONTH, days);
     }
 
+    private void setupCalendarIfRequired() {
+        if (calendar != null) {
+            return;
+        }
+        calendar = Calendar.getInstance();
+        calendar.setTimeZone(UTC_TIME_ZONE);
+    }
 
+    // //////////////////////////////////////////////////
+    // reset
+    // //////////////////////////////////////////////////
+
+    /**
+     * Go back to just returning the system's time.
+     */
+    public void reset() {
+        calendar = null;
+    }
+
+    // //////////////////////////////////////////////////
+    // toString
+    // //////////////////////////////////////////////////
 
     @Override
     public String toString() {
-        return Clock.getTimeAsOffsetDateTime().toString();
+        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsOffsetDateTime().toString();
     }
 
 }
