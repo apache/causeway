@@ -104,12 +104,13 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             case VIEW_MODEL:
                 viewModelTypes.add(cls);
                 return;
+            case VALUE:
+                discoveredValueTypes.add(cls);
+                return;
 
             // skip introspection for these
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
-            case VALUE:
-                discoveredValueTypes.add(cls);
             case ABSTRACT: // <-- unexpected code reach
             case VETOED:
             case UNKNOWN:
