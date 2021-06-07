@@ -30,6 +30,13 @@ import org.apache.isis.testing.fixtures.applib.api.WithPrereqs;
 import lombok.Getter;
 
 /**
+ * A specialization of {@link FixtureScript} that is intended to be used to
+ * setup the state of a {@link PersonaWithBuilderScript persona}.
+ *
+ * <p>
+ *     The {@link PersonaWithBuilderScript persona} represents the &quot;what&quot;, in other words the raw data,
+ *     while the {@link BuilderScriptAbstract build script} represents the &quot;how-to&quot;.
+ * </p>
  * @since 2.x {@index}
  */
 public abstract class BuilderScriptAbstract<T>
@@ -98,7 +105,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     private final List<WithPrereqs.Block<T>> prereqs = _Lists.newArrayList();
 
     @Override
-    public BuilderScriptAbstract<T> setPrereq(WithPrereqs.Block<T> prereq) {
+    public BuilderScriptAbstract<T> addPrereq(WithPrereqs.Block<T> prereq) {
         prereqs.add(prereq);
         return this;
     }

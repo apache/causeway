@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Maps;
  *     The class is instantiated by the {@link ExecutionParametersService}.
  * </p>
  *
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
 public class ExecutionParametersDefault implements ExecutionParameters {
 

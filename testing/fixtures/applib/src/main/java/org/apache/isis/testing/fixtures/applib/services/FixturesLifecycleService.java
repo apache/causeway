@@ -42,6 +42,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.test.FixturesLifecycleService")
 @Order(OrderPrecedence.MIDPOINT)

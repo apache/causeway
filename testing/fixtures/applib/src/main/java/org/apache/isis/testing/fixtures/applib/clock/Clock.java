@@ -45,6 +45,8 @@ import lombok.val;
  * uses the system's own clock. Alternate implementations can be created via
  * suitable subclasses, but this must be done <b><i>before</i></b> the first
  * call to {@link #getInstance()}.
+ *
+ * @since 2.x {@index}
  */
 public abstract class Clock {
 

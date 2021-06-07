@@ -19,9 +19,31 @@
 package org.apache.isis.testing.fixtures.applib.api;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
 
+/**
+ * Intended for persona enums to implement, to obtain an instance of the corresponding top-level entity representing
+ * the persona.
+ *
+ * @see PersonaWithBuilderScript
+ *
+ * @since 2.x {@index}
+ */
 public interface PersonaWithFinder<T> {
 
+    /**
+     * Looks up the top-level domain entity representing the persona, with the provided {@link ServiceRegistry}
+     * parameter providing access to all domain services available.
+     *
+     * <p>
+     *     Typically the implementation looks up the appropriate domain-specific repository domain service (or could
+     *     just use the generic {@link org.apache.isis.applib.services.repository.RepositoryService} in order to
+     *     find by key.
+     * </p>
+     *
+     * @param serviceRegistry
+     * @return
+     */
     T findUsing(final ServiceRegistry serviceRegistry);
 
 }

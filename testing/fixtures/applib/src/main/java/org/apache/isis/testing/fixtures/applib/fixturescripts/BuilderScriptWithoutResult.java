@@ -19,12 +19,18 @@
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 /**
+ * A specialization of {@link BuilderScriptAbstract} which returns no
+ * top-level object, and so removes a little of the boilerplate that would otherwise be required.
+ *
  * @since 2.x {@index}
  */
 public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
 
+    /**
+     * Simply returns null.
+     */
     @Override
-    public Object getObject() {
+    public final Object getObject() {
         return null;
     }
 

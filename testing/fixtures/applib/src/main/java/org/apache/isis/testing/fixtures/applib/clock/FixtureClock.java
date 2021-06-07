@@ -34,6 +34,8 @@ import java.util.TimeZone;
  * (eg automatic ticking of the clock). That is, the time returned is always
  * explicitly under the control of the programmer (it can be moved forward or
  * back as required).
+ *
+ * @since 2.x {@index}
  */
 public class FixtureClock extends Clock {
     private static final TimeZone UTC_TIME_ZONE;

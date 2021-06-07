@@ -31,6 +31,9 @@ import org.apache.isis.testing.fixtures.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
 
+/**
+ * @since 2.x {@index}
+ */
 @Programmatic
 public class TickingClockFixture
 extends FixtureScript

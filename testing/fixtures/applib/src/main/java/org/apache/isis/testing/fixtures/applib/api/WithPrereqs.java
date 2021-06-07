@@ -21,9 +21,20 @@ package org.apache.isis.testing.fixtures.applib.api;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ * Provides a mechanism for {@link FixtureScript}s to specify prerequisites
+ * to be executed first.
+ *
+ * <p>
+ *     Most commonly used to chain {@link BuilderScriptAbstract}s in conjunction
+ *     with personas.
+ * </p>
+ *
+ * @since 2.x {@index}
+ */
 public interface WithPrereqs<T> {
 
-    BuilderScriptAbstract<T> setPrereq(Block<T> prereq);
+    BuilderScriptAbstract<T> addPrereq(Block<T> prereq);
 
     void execPrereqs(FixtureScript.ExecutionContext executionContext);
 

@@ -20,8 +20,23 @@ package org.apache.isis.testing.fixtures.applib.api;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
 
+/**
+ * Intended for persona enums to implement, to provide an instance of a {@link BuilderScriptAbstract} in order to
+ * instantiate an instance of the persona (normally in the form of a domain entity or set of related domain entities).
+ *
+ * <p>
+ *     ({@link BuilderScriptAbstract} is a specialization of
+ *     {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript}).
+ * </p>
+ *
+ * @see PersonaWithFinder
+ * @since 2.x {@index}
+ */
 public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
 
+    /**
+     * Returns a {@link BuilderScriptAbstract} to use to instantiate this persona.
+     */
     T builder();
 
 }

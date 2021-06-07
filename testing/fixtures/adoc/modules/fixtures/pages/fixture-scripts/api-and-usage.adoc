@@ -3,19 +3,51 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-There are two main parts to using fixture scripts: the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service class, and the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] view model class:
+Fixture scripts are used to set up the system into a known state, which almost always means to populate the database.
+The most common use case is for integration testing, but they are also useful while prototyping/demo'ing.
+In both cases the system is almost always running against an in-memory database, meaning that the entire state of the system needs to be setup.
+As it wouldn't be scalable to have one huge fixture script for this purpose, fixture scripts are usually organised hierarchically, with higher-level fixture scripts calling child fixture scripts that set up the
+individual parts the system (eg rows into a specific entity).
 
-* The role of the `FixtureScripts` domain service is to locate all fixture scripts from the classpath and to let them be invoked, either from an integration test/BDD spec or from the UI of your Isis app.
+Fixture scripts are usually implemented by calling the business logic of the domain application.
+This is preferable to, for example, ``INSERT``ing rows directly into database tables, because they are robust to implementation changes over time.
 
-* The role of `FixtureScript` meanwhile is to subclass for each of the scenarios that you want to define.
-You can also subclass from `FixtureScript` to create helpers; more on this below.
+Fixture scripts are implemented by subclassing from the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] abstract class.
+In most cases you'll want to use one of the variants provided by the framework; these are described in more detail <<fixturescript, below>>.
 
-Let's look at `FixtureScripts` domain service in more detail first.
+Fixture scripts are executed using the  xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service class.
+This provides menu actions in the UI of your application (when running in prototype mode).
+Typically it will only make sense for a small subset of the available fixture scripts to be exposed through the UI, for example those representing scenarios to be explored/demo'ed.
+The behaviour of the `FixtureScripts` domain service and the discovery of scenario fixture scripts is managed by configuration properties.
 
+Let's look at `FixtureScripts` domain service in more detail <<fixturescripts,first>>, <<fixturescript, then>> move onto exploring `FixtureScript`.
+
+[#fixturescripts]
 == `FixtureScripts`
 
 The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service.
 This is annotated to be part of on the secondary "Prototyping" menu.
+
+
+Here's how the domain service looks like in the UI:
+
+image::prototyping-menu.png[width="700px"]
+
+and here's what the `runFixtureScript` action prompt looks like:
+
+image::prompt.png[width="700px"]
+
+
+when this is executed, the resultant objects (actually, instances of FixtureResult`) are shown in the UI:
+
+image::result-list.png[width="700px"]
+
+
+The `FixtureScripts` domain service also provides the `recreateObjectsAndReturnFirst` action.
+This is a convenience, saving a few clicks: it will run a nominated fixture script and return the first object created by that fixture script.
+
+
+=== Configuration Properties
 
 The behaviour of this domain menu service can be configured using the `isis.testing.fixtures.fixture-script-specification` configuration properties.
 For example, here's the configuration used by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps:
@@ -39,47 +71,26 @@ isis:
 <.> specify the fixture script class to provide as the default for the service's "run fixture script" action
 <.> if present, enables a "recreate objects and return first" action to be displayed in the UI
 
-
-Here's how the domain service looks like in the UI:
-
-image::prototyping-menu.png[width="700px"]
-
-and here's what the `runFixtureScript` action prompt looks like:
-
-image::prompt.png[width="700px"]
+For more details, see xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.fixture-scripts-specification.context-class[isis.testing.fixtures.fixture-scripts-specification] config properties in the configuration guide.
 
 
-when this is executed, the resultant objects (actually, instances of FixtureResult`) are shown in the UI:
+=== Menubars
 
-image::result-list.png[width="700px"]
+The actions of ``FixtureScripts`` domain service are automatically placed on the "Prototyping" menu.
+This can be fine-tuned using `menubars.layout.xml`:
 
-
-
-If you had defined many fixture scripts then a drop-down might become unwieldy, in which case your code would probably override the `autoComplete...())` instead:
-
-[source,java]
+[source,xml]
+.menubars.layout.xml
 ----
-    @Override
-    public List<FixtureScript> autoComplete0RunFixtureScript(final @MinLength(1) String searchArg) {
-        return super.autoComplete0RunFixtureScript(searchArg);
-    }
-
-----
-
-You are free, of course, to add additional "convenience" actions into it if you wish for the most commonly used/demo'd setups ; you'll find that the xref:docs:starters:simpleapp.adoc[SimpleApp archetype] adds this additional action:
-
-[source,java]
-----
-    @Action(
-            restrictTo = RestrictTo.PROTOTYPING
-    )
-    @ActionLayout(
-            cssClassFa="fa fa-sync"
-    )
-    public Object recreateObjectsAndReturnFirst() {
-        final List<FixtureResult> run = findFixtureScriptFor(RecreateSimpleObjects.class).run(null);
-        return run.get(0).getObject();
-    }
+<mb3:section>
+    <mb3:named>Fixtures</mb3:named>
+    <mb3:serviceAction
+        objectType="isis.testing.fixtures.FixtureScripts"
+        id="runFixtureScript"/>
+    <mb3:serviceAction
+        objectType="isis.testing.fixtures.FixtureScripts"
+        id="recreateObjectsAndReturnFirst"/>
+</mb3:section>
 ----
 
 Let's now look at the `FixtureScript` class, where there's a bit more going on.
@@ -139,19 +150,19 @@ public class RecreateSimpleObjects extends FixtureScript {       // <.>
     }
 }
 ----
-<1> inherit from `org.apache.isis.applib.fixturescripts.FixtureScript`
-<2> a hard-coded list of values for the names.
+<.> inherit from xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript]
+<.> a hard-coded list of values for the names.
 Note that the xref:testing:fakedata:about.adoc[Fakedata] testing module could also have been used
-<3> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the `FixtureScripts` service
-<4> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
+<.> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service
+<.> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
-<5> output property: the generated list of objects, for the calling test to grab
-<6> the mandatory execute(...) API
-<7> the `defaultParam(...)` (inherited from `FixtureScript`) will default the `number` property (using Java's Reflection API) if none was specified
-<8> call another fixture script (`SimpleObjectsTearDown`) using the provided `ExecutionContext`.
-Note that although the fixture script is a view model, it's fine to simply instantiate it (rather than using `FactoryService#create(...)`).
-<9> calling another fixture script (`SimpleObjectCreate`) using the provided `ExecutionContext`
-<10> adding the created object to the list, for the calling object to use.
+<.> output property: the generated list of objects, for the calling test to grab
+<.> the mandatory execute(...) API
+<.> the `defaultParam(...)` (inherited from `FixtureScript`) will default the `number` property (using Java's Reflection API) if none was specified
+<.> call another fixture script (`SimpleObjectsTearDown`) using the provided `ExecutionContext`.
+There's no need to instantiate using the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
+<.> calling another fixture script (`SimpleObjectCreate`) using the provided `ExecutionContext`
+<.> adding the created object to the list, for the calling object to use.
 
 Because this script has exposed a "number" property, it's possible to set this from within the UI.
 For example:
@@ -161,48 +172,6 @@ image::prompt-specifying-number.png[width="700px"]
 When this is executed, the framework will parse the text and attempt to reflectively set the corresponding properties on the fixture result.
 So, in this case, when the fixture script is executed we actually get 6 objects created.
 
-== Using within Tests
-
-Fixture scripts can be called from integration tests just the same way that fixture scripts can call one another.
-
-For example, here's an integration test from the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
-
-// TODO: v2: this will be out of date, no doubt.
-
-[source,java]
-----
-public class SimpleObjectIntegTest extends SimpleAppIntegTest {
-    SimpleObject simpleObjectWrapped;
-    @Before
-    public void setUp() throws Exception {
-        // given
-        RecreateSimpleObjects fs =
-             new RecreateSimpleObjects().setNumber(1);  // <1>
-        fixtureScripts.runFixtureScript(fs, null);      // <2>
-
-        SimpleObject simpleObjectPojo =
-            fs.getSimpleObjects().get(0);               // <3>
-        assertThat(simpleObjectPojo).isNotNull();
-
-        simpleObjectWrapped = wrap(simpleObjectPojo);   // <4>
-    }
-    @Test
-    public void accessible() throws Exception {
-        // when
-        final String name = simpleObjectWrapped.getName();
-        // then
-        assertThat(name).isEqualTo(fs.NAMES.get(0));
-    }
-    ...
-    @Inject
-    FixtureScripts fixtureScripts;                      // <5>
-}
-----
-<1> instantiate the fixture script for this test, and configure
-<2> execute the fixture script
-<3> obtain the object under test from the fixture
-<4> wrap the object (to simulate being interacted with through the UI)
-<5> inject the `FixtureScripts` domain service (just like any other domain service)
 
 == Personas and Builders
 
@@ -213,7 +182,9 @@ At the same time, "Persona" instances of entity classes help the developer becom
 For example, "Steve Single" the Customer might be 21, single and no kids, whereas vs "Meghan Married-Mum" the Customer might be married 35 with 2 kids.
 Using "Steve" vs "Meghan" immediately informs the developer about the particular scenario being explored.
 
-The `PersonaWithBuilderScript` and `PersonaWithFinder` interfaces are intended to be implemented typically by "persona" enums, where each enum instance captures the essential data of some persona.
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/
+
+`PersonaWithBuilderScript` and `PersonaWithFinder` interfaces are intended to be implemented typically by "persona" enums, where each enum instance captures the essential data of some persona.
 So, going back to the previous example, we might have:
 
 [source,xml]
@@ -316,31 +287,44 @@ public class SimpleObjectBuilder
 <3> the created entity is provided as an output
 
 
-This simplifies the integration tests considerably:
+== Using within Tests
+
+Fixture scripts can be called from integration tests just the same way that fixture scripts can call one another.
+
+For example, here's part of an integration test from the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
 
 [source,java]
+.SimpleObject_IntegTest.java
 ----
+@Transactional
 public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
     SimpleObject simpleObject;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // given
-        simpleObject = fixtureScripts.runBuilderScript(SimpleObject_persona.FOO.builder());
+        simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO); // <.>
     }
 
-    @Test
-    public void accessible() {
-        // when
-        final String name = wrap(simpleObject).getName();
+    public static class updateName extends SimpleObject_IntegTest {
 
-        // then
-        assertThat(name).isEqualTo(simpleObject.getName());
+        @Test
+        public void can_be_updated_directly() {
+
+            // when
+            wrap(simpleObject).updateName("new name");
+            transactionService.flushTransaction();
+
+            // then
+            assertThat(wrap(simpleObject).getName()).isEqualTo("new name");
+        }
+
+        // ...
     }
-    ...
 }
 ----
+<.> runs a persona fixture script and stores the resultant domain object for testing.
 
 Put together, the persona enums provide the "what" - hard-coded values for certain key data that the developer becomes very familiar with - while the builder provides the "how-to".
 
