@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -49,6 +51,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -200,43 +203,87 @@ public class FixtureScripts {
     public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
 
 
+    /**
+     * Used to configure the UI menu actions, namely {@link #runFixtureScript(String, String)} and
+     * {@link #recreateObjectsAndReturnFirst()}.
+     *
+     * <p>
+     *     May be <code>null</code> if no {@link FixtureScriptsSpecificationProvider} was provided either explicitly
+     *     or implicitly by way of configuring the <code>isis.testing.fixtures.fixture-scripts-specification</code>
+     *     configuration properties.
+     * </p>
+     *
+     * @see #getFixtureScriptByFriendlyName()
+     * @see #getMultipleExecutionStrategy()
+     * @see #getNonPersistedObjectsStrategy()
+     */
     @Getter
     private final FixtureScriptsSpecification specification;
 
-    @Getter
-    private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
-
-    public FixtureScripts(
-            final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
-            final ServiceRegistry serviceRegistry) {
-
-        this.specification = fixtureScriptsSpecificationProvider.getSpecification();
-
-        val packagePrefix = specification.getPackagePrefix();
-        fixtureScriptByFriendlyName =
-                serviceRegistry.select(FixtureScript.class).stream()
-                .filter(Objects::nonNull)
-                .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
-                .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
-                        (v1,v2) ->{ throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));},
-                        TreeMap::new));
-    }
-
-
-
-    // -- packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
-
-    public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
-        return specification.getNonPersistedObjectsStrategy();
-    }
+    /**
+     * Global setting as to how to handle returned entities from fixture scripts that
+     * are still transient (not yet persisted).
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
+     */
+    @Getter(onMethod_ = {@Programmatic})
+    private final NonPersistedObjectsStrategy nonPersistedObjectsStrategy;
 
     /**
      * Global setting as to how to handle fixture scripts that are executed more than once.  See
      * {@link MultipleExecutionStrategy} for more details.
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
      */
-    @Programmatic
-    public MultipleExecutionStrategy getMultipleExecutionStrategy() {
-        return specification.getMultipleExecutionStrategy();
+    @Getter(onMethod_ = {@Programmatic})
+    private final MultipleExecutionStrategy multipleExecutionStrategy;
+
+    /**
+     * Maps all discovered {@link FixtureScript}s to a friendly name for display in the UI (that is, for the
+     * {@link #runFixtureScript(String, String)} menu action parameters).
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
+     */
+    @Getter
+    private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
+
+
+    public FixtureScripts(
+            @Nullable final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
+            final ServiceRegistry serviceRegistry) {
+
+        if(fixtureScriptsSpecificationProvider != null) {
+            this.specification = fixtureScriptsSpecificationProvider.getSpecification();
+            this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
+            this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
+
+            val packagePrefix = specification.getPackagePrefix();
+            this.fixtureScriptByFriendlyName =
+                    serviceRegistry.select(FixtureScript.class).stream()
+                    .filter(Objects::nonNull)
+                    .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
+                    .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
+                            (v1,v2) ->{ throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));},
+                            TreeMap::new));
+
+        } else {
+            this.specification = null;
+            this.nonPersistedObjectsStrategy = null;
+            this.multipleExecutionStrategy = null;
+            fixtureScriptByFriendlyName = _Maps.newTreeMap();
+        }
     }
 
 
@@ -293,10 +340,14 @@ public class FixtureScripts {
         }
     }
 
+    public boolean hideRunFixtureScript() {
+        return specification == null;
+    }
 
     public String disableRunFixtureScript() {
-        return getFixtureScriptByFriendlyName().isEmpty()? "No fixture scripts found under package '" + specification
-                .getPackagePrefix() + "'": null;
+        return getFixtureScriptByFriendlyName().isEmpty()
+                ? String.format("No fixture scripts found under package '%s'", specification.getPackagePrefix())
+                : null;
     }
 
     public String default0RunFixtureScript() {
@@ -311,7 +362,7 @@ public class FixtureScripts {
     }
 
     private String defaultFromFixtureScriptsSpecification() {
-        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
+        Class<? extends FixtureScript> defaultScript = specification.getRunScriptDefaultScriptClass();
         return defaultScript != null
                 ? findFixtureScriptNameFor(defaultScript)
                 : null;
@@ -368,7 +419,7 @@ public class FixtureScripts {
     }
 
     public boolean hideRecreateObjectsAndReturnFirst() {
-        return getSpecification().getRecreateScriptClass() == null;
+        return specification == null || specification.getRecreateScriptClass() == null;
     }
 
 
