@@ -40,7 +40,7 @@ implements DomainServiceFacet {
     public DomainServiceFacetAbstract(
             final FacetHolder facetHolder,
             final NatureOfService natureOfService) {
-        super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(DomainServiceFacetAbstract.type(), facetHolder);
         this.natureOfService = natureOfService;
     }
 

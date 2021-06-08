@@ -41,7 +41,7 @@ implements ParseableFacet {
             final Class<?> candidateParserClass,
             final FacetHolder holder) {
 
-        super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
+        super(ParseableFacet.class, holder);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         this.parseableFacetUsingParser = isValid()?

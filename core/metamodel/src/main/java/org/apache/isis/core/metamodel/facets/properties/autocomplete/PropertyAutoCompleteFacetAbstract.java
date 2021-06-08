@@ -30,7 +30,7 @@ public abstract class PropertyAutoCompleteFacetAbstract extends FacetAbstract im
     }
 
     public PropertyAutoCompleteFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override

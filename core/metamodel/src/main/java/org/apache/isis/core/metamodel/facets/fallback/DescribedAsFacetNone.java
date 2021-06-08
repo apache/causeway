@@ -28,12 +28,8 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbs
 public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
 
     public DescribedAsFacetNone(final FacetHolder holder) {
-        super("", holder);
+        super("", holder, Precedence.FALLBACK);
     }
 
-    @Override
-    public boolean isFallback() {
-        return true;
-    }
 
 }

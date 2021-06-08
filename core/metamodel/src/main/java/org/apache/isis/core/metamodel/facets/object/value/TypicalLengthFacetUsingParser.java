@@ -29,7 +29,7 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     private final Parser<?> parser;
 
     public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
-        super(TypicalLengthFacet.class, holder, Derivation.NOT_DERIVED);
+        super(TypicalLengthFacet.class, holder);
         this.parser = parser;
     }
 

@@ -33,4 +33,8 @@ public abstract class HelpFacetAbstract extends SingleStringValueFacetAbstract i
         super(type(), holder, value);
     }
 
+    public HelpFacetAbstract(final String value, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, value, precedence);
+    }
+
 }

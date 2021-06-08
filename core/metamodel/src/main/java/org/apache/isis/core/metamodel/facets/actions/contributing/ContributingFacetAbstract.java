@@ -38,14 +38,7 @@ implements ContributingFacet {
     public ContributingFacetAbstract(
             final Contributing contributing,
             final FacetHolder holder) {
-        this(contributing, holder, Derivation.NOT_DERIVED);
-    }
-
-    public ContributingFacetAbstract(
-            final Contributing contributing,
-            final FacetHolder holder,
-            final Derivation derivation) {
-        super(type(), holder, derivation);
+        super(type(), holder);
         this.contributing = contributing;
     }
 

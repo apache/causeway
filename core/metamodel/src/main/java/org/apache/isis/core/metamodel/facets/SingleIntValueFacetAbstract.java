@@ -30,7 +30,12 @@ public abstract class SingleIntValueFacetAbstract extends FacetAbstract implemen
     private final int value;
 
     public SingleIntValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final int value) {
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        super(facetType, holder);
+        this.value = value;
+    }
+
+    public SingleIntValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final int value, final Facet.Precedence precedence) {
+        super(facetType, holder, precedence);
         this.value = value;
     }
 

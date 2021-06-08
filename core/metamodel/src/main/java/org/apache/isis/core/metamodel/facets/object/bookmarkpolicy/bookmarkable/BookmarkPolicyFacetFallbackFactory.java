@@ -59,15 +59,18 @@ implements MetaModelRefiner {
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(objectAction->{
                 final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
-                if(bookmarkFacet == null || bookmarkFacet.isFallback() ||
-                        bookmarkFacet.value() == BookmarkPolicy.NEVER) {
+                if(bookmarkFacet == null
+                        || bookmarkFacet.getPrecedence().isFallback()
+                        || bookmarkFacet.value() == BookmarkPolicy.NEVER) {
                     return false;
                 }
                 return true;
             })
             .forEach(objectAction->{
                 final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
-                if(semanticsFacet == null || semanticsFacet.isFallback() || !semanticsFacet.value().isSafeInNature()) {
+                if(semanticsFacet == null
+                        || semanticsFacet.getPrecedence().isFallback()
+                        || !semanticsFacet.value().isSafeInNature()) {
                     ValidationFailure.raiseFormatted(
                             objectAction,
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +

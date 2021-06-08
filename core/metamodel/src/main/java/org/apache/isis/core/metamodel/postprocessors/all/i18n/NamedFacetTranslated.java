@@ -37,7 +37,7 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
             final TranslationContext context, final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder, Derivation.NOT_DERIVED);
+        super(NamedFacet.class, facetHolder);
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;

@@ -572,7 +572,7 @@ implements ObjectSpecification {
             if(facet==null) {
                 return false;
             }
-            if(!facet.isFallback()) {
+            if(!facet.getPrecedence().isFallback()) {
                 return true;
             }
             if(noopFacet == null) {

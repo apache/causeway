@@ -30,7 +30,7 @@ public abstract class NavigableParentFacetAbstract extends FacetAbstract impleme
     }
 
     public NavigableParentFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
 }

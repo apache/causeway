@@ -27,7 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 
-public class DescribedAsFacetTranslated extends FacetAbstract implements DescribedAsFacet {
+public class DescribedAsFacetTranslated
+extends FacetAbstract
+implements DescribedAsFacet {
 
     private final TranslationContext context;
     private final String originalText;
@@ -37,7 +39,7 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
             final TranslationContext context, final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder holder) {
-        super(DescribedAsFacet.class, holder, Derivation.NOT_DERIVED);
+        super(DescribedAsFacet.class, holder);
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;

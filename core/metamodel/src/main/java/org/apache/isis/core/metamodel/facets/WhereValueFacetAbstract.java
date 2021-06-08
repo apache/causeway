@@ -28,7 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
 
-public abstract class WhereValueFacetAbstract extends FacetAbstract implements WhereValueFacet {
+public abstract class WhereValueFacetAbstract
+extends FacetAbstract
+implements WhereValueFacet {
 
     private final @NonNull Where where;
 
@@ -37,7 +39,17 @@ public abstract class WhereValueFacetAbstract extends FacetAbstract implements W
             final @NonNull FacetHolder holder,
             final @NonNull Where where) {
 
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        super(facetType, holder);
+        this.where = where;
+    }
+
+    public WhereValueFacetAbstract(
+            final @NonNull Class<? extends Facet> facetType,
+            final @NonNull FacetHolder holder,
+            final @NonNull Where where,
+            final @NonNull Facet.Precedence precedence) {
+
+        super(facetType, holder, precedence);
         this.where = where;
     }
 

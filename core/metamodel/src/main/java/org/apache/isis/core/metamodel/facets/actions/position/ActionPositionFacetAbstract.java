@@ -35,7 +35,7 @@ public abstract class ActionPositionFacetAbstract extends FacetAbstract implemen
     private final ActionLayout.Position position;
 
     public ActionPositionFacetAbstract(final ActionLayout.Position position, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.position = position;
     }
 

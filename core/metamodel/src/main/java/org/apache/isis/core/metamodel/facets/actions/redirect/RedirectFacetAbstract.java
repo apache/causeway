@@ -37,14 +37,15 @@ public abstract class RedirectFacetAbstract extends FacetAbstract implements Red
     protected RedirectFacetAbstract(
             final Redirect redirect,
             final FacetHolder holder) {
-        this(redirect, holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+        this.redirect = redirect;
     }
 
     protected RedirectFacetAbstract(
             final Redirect redirect,
             final FacetHolder holder,
-            final Derivation derivation) {
-        super(type(), holder, derivation);
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
         this.redirect = redirect;
     }
 

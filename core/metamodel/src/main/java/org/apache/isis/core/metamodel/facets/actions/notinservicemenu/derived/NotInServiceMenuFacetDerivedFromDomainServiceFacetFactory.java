@@ -43,7 +43,8 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
         final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        if(domainServiceFacet == null || domainServiceFacet.isFallback()) {
+        if(domainServiceFacet == null
+                || domainServiceFacet.getPrecedence().isFallback()) {
             return;
         }
 

@@ -23,14 +23,16 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class CssClassFacetAbstract2 extends FacetAbstract implements CssClassFacet {
+public abstract class CssClassFacetAbstract2
+extends FacetAbstract
+implements CssClassFacet {
 
     public static Class<? extends Facet> type() {
         return CssClassFacet.class;
     }
 
     public CssClassFacetAbstract2(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
 }

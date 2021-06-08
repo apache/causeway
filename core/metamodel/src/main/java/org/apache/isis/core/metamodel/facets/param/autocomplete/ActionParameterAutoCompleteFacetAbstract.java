@@ -32,7 +32,7 @@ implements ActionParameterAutoCompleteFacet {
     }
 
     public ActionParameterAutoCompleteFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
 
     public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder);
+        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
     }
 
     /**
@@ -35,11 +35,6 @@ public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
     @Override
     public String invalidates(final ValidityContext context) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

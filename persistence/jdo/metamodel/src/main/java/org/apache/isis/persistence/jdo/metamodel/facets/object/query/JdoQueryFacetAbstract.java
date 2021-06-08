@@ -49,7 +49,7 @@ implements JdoQueryFacet {
             final @NonNull FacetHolder holder,
             final @NonNull Can<Query> jdoNamedQueries) {
 
-        super(JdoQueryFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super(JdoQueryFacetAbstract.type(), holder);
 
         val objSpec = (ObjectSpecification) getFacetHolder();
         this.namedQueries = jdoNamedQueries.map(jdoNamedQuery->new JdoNamedQuery(jdoNamedQuery, objSpec));

@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -36,6 +37,14 @@ implements LayoutGroupFacet {
             final GroupIdAndName groupIdAndName,
             final FacetHolder holder) {
         super(LayoutGroupFacet.class, holder);
+        this.groupIdAndName = groupIdAndName;
+    }
+
+    protected LayoutGroupFacetAbstract(
+            final GroupIdAndName groupIdAndName,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(LayoutGroupFacet.class, holder, precedence);
         this.groupIdAndName = groupIdAndName;
     }
 

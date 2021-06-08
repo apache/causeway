@@ -35,8 +35,13 @@ public abstract class NamedFacetAbstract extends FacetAbstract implements NamedF
     }
 
     public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+        this.value = value;
+        this.escaped = escaped;
+    }
 
+    public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
         this.value = value;
         this.escaped = escaped;
     }

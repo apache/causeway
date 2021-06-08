@@ -33,12 +33,7 @@ public class NamedFacetNone extends NamedFacetAbstract {
     public static final boolean ESCAPED = true;
 
     public NamedFacetNone(final FacetHolder holder) {
-        super(null, ESCAPED, holder);
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
+        super(null, ESCAPED, holder, Precedence.FALLBACK);
     }
 
 }

@@ -35,7 +35,7 @@ implements JpaTableFacetAnnotation {
             final String tableOrTypeName,
             final FacetHolder holder) {
 
-        super(JpaTableFacetAnnotation.class, holder, Derivation.NOT_DERIVED);
+        super(JpaTableFacetAnnotation.class, holder);
         this.schema = schemaName;
         this.tableOrTypeName = tableOrTypeName;
     }

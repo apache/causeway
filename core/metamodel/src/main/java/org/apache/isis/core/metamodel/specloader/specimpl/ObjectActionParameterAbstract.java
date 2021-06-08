@@ -241,7 +241,7 @@ implements ObjectActionParameter, HasFacetHolder {
 
         val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null && !defaultsFacet.isFallback()) {
+        if (defaultsFacet != null && !defaultsFacet.getPrecedence().isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
             return ManagedObjects.emptyToDefault(
                     !isOptional(),

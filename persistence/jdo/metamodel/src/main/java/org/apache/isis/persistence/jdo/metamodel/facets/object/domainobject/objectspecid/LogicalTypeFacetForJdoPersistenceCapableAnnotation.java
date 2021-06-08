@@ -36,7 +36,7 @@ extends LogicalTypeFacetAbstract {
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
-        if(persistenceCapableFacet.isFallback()) {
+        if(persistenceCapableFacet.getPrecedence().isFallback()) {
             return null;
         }
         final String schema = persistenceCapableFacet.getSchema();

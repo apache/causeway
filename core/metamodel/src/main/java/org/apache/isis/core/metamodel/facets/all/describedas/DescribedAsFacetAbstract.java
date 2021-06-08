@@ -23,7 +23,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-public abstract class DescribedAsFacetAbstract extends SingleStringValueFacetAbstract implements DescribedAsFacet {
+public abstract class DescribedAsFacetAbstract
+extends SingleStringValueFacetAbstract
+implements DescribedAsFacet {
 
     public static Class<? extends Facet> type() {
         return DescribedAsFacet.class;
@@ -31,6 +33,10 @@ public abstract class DescribedAsFacetAbstract extends SingleStringValueFacetAbs
 
     public DescribedAsFacetAbstract(final String value, final FacetHolder holder) {
         super(type(), holder, value);
+    }
+
+    public DescribedAsFacetAbstract(final String value, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, value, precedence);
     }
 
 }

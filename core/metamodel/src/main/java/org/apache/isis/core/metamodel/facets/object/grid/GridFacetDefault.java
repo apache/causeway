@@ -64,7 +64,7 @@ implements GridFacet {
     private GridFacetDefault(
             final FacetHolder facetHolder,
             final GridService gridService) {
-        super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(GridFacetDefault.type(), facetHolder);
         this.gridService = gridService;
     }
 

@@ -48,8 +48,7 @@ public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryA
         val declaringClass = method.getDeclaringClass();
         val spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        val mixinFacet = spec.getFacet(MixinFacet.class);
-        if(mixinFacet == null || mixinFacet.isFallback()) {
+        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent()) {
             return;
         }
 

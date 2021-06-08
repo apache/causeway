@@ -33,12 +33,15 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * For base subclasses or, more likely, to help write tests.
  */
+@Log4j2
 public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
@@ -57,7 +60,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Override
     public void addFacet(Facet facet) {
         synchronized($lock) {
-            val changed = addFacetOrKeepExisting(facetsByType, facet);
+            val changed = addFacetOrKeepExistingBasedOnPrecedence(facetsByType, facet);
             if(changed) {
                 snapshot.clear(); //invalidate
             }
@@ -123,22 +126,26 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
 
     private void collectChildren(AliasMap<Class<? extends Facet>, Facet> target, Facet parentFacet) {
         parentFacet.forEachContributedFacet(child->{
-            val added = addFacetOrKeepExisting(target, child);
+            val added = addFacetOrKeepExistingBasedOnPrecedence(target, child);
             if(added) {
                 collectChildren(target, child);
             }
         });
     }
 
-    private boolean addFacetOrKeepExisting(
-            Map<Class<? extends Facet>, Facet> facetsByType,
-            Facet facet) {
+    private boolean addFacetOrKeepExistingBasedOnPrecedence(
+            final @NonNull Map<Class<? extends Facet>, Facet> facetsByType,
+            final @NonNull Facet newFacet) {
 
-        val existingFacet = facetsByType.get(facet.facetType());
+        val existingFacet = facetsByType.get(newFacet.facetType());
+        if(existingFacet==null) {
+            facetsByType.put(newFacet.facetType(), newFacet);
+            return true;
+        }
 
-        val addOrKeep = whichPrecedesTheOther(existingFacet, facet);
-        if(addOrKeep==facet) {
-            facetsByType.put(facet.facetType(), facet);
+        val preferredFacet = getPreferredOf(existingFacet, newFacet);
+        if(newFacet==preferredFacet) {
+            facetsByType.put(preferredFacet.facetType(), preferredFacet);
             return true;
         }
         return false;
@@ -149,19 +156,25 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         facetsByType.remove(topLevelFacet.facetType());
     }
 
-    // also has side-effects (not really suggested by the naming)
-    private Facet whichPrecedesTheOther(Facet existingFacet, Facet facet) {
-        if (existingFacet == null || existingFacet.isFallback()) {
-            return facet;
+    // on equal precedence returns b
+    private Facet getPreferredOf(final @NonNull Facet a, final @NonNull Facet b) {
+
+        // guard against args being the same object
+        if(a==b) {
+            return a;
         }
-        if (!facet.alwaysReplace()) {
-            return existingFacet; //eg. ValueSemanticsProviderAndFacetAbstract is alwaysReplace=false
+
+        if(a.getPrecedence() == b.getPrecedence()) {
+            log.warn("Facets {} and {} have same precedence. Undecidable, which to use. "
+                    + "Arbitrarily chosing the latter.",
+                    a.getClass().getName(),
+                    b.getClass().getName());
+            return b;
         }
-        if (facet.isDerived() && !existingFacet.isDerived()) {
-            return existingFacet;
-        }
-        facet.setUnderlyingFacet(existingFacet);
-        return facet;
+
+        return a.getPrecedence().ordinal() < b.getPrecedence().ordinal()
+                ? b
+                : a;
     }
 
 }

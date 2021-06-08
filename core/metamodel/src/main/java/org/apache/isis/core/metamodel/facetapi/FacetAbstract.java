@@ -31,16 +31,13 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
 
 public abstract class FacetAbstract implements Facet, HasMetaModelContext {
-
-    public enum Derivation {
-        DERIVED,
-        NOT_DERIVED
-    }
 
     private Facet underlyingFacet;
 
@@ -48,7 +45,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     @Setter private Class<? extends Facet> facetAliasType;
     private Set<Facet> contributedFacets; // lazy init
 
-    private final boolean derived;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
     private FacetHolder holder;
 
     /**
@@ -63,18 +60,18 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     public FacetAbstract(
             Class<? extends Facet> facetType,
             FacetHolder holder,
-            Derivation derivation) {
+            Facet.Precedence precedence) {
 
         this.facetType = requires(facetType, "facetType");
         setFacetHolder(holder);
-        this.derived = (derivation == Derivation.DERIVED);
+        this.precedence = precedence;
     }
 
     protected FacetAbstract(
             Class<? extends Facet> facetType,
             FacetHolder holder) {
 
-        this(facetType, holder, Derivation.NOT_DERIVED);
+        this(facetType, holder, Facet.Precedence.DEFAULT);
     }
 
     @Override
@@ -97,11 +94,6 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
         return holder.getMetaModelContext();
     }
 
-    @Override
-    public boolean isDerived() {
-        return derived;
-    }
-
     /**
      * Convenience method that returns {@link #getFacetHolder()} downcast to
      * {@link IdentifiedHolder} if the implementation does indeed inherit from
@@ -119,62 +111,16 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     @Override
     public void setUnderlyingFacet(final Facet underlyingFacet) {
         if(underlyingFacet != null) {
-//            if(underlyingFacet instanceof MultiTypedFacet) {
-//                val multiTypedFacet = (MultiTypedFacet) underlyingFacet;
-//                val matches = compatible(multiTypedFacet);
-//                if(!matches) {
-//                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
-//                }
-//            } else {
-
-                val underlyingFacetType = underlyingFacet.facetType();
-                if(!Objects.equals(underlyingFacetType, facetType)) {
-                    val msg = String.format(
-                            "type-missmatch: underlying facet's type '%s' "
-                            + "must match this facet's type '%s'",
-                            underlyingFacetType, facetType);
-                    throw _Exceptions.unrecoverable(msg);
-                }
-
- //           }
+            val underlyingFacetType = underlyingFacet.facetType();
+            if(!Objects.equals(underlyingFacetType, facetType)) {
+                val msg = String.format(
+                        "type-missmatch: underlying facet's type '%s' "
+                        + "must match this facet's type '%s'",
+                        underlyingFacetType, facetType);
+                throw _Exceptions.unrecoverable(msg);
+            }
         }
         this.underlyingFacet = underlyingFacet;
-    }
-
-//    private boolean compatible(final MultiTypedFacet multiTypedFacet) {
-//
-//        if (!(this instanceof MultiTypedFacet)) {
-//            return multiTypedFacet.containsFacetTypeOf(this.facetType);
-//        }
-//
-//        val thisAsMultiTyped = (MultiTypedFacet) this;
-//
-//        return thisAsMultiTyped.facetTypes()
-//                .anyMatch(multiTypedFacet::containsFacetTypeOf);
-//    }
-
-    /**
-     * Assume implementation is <i>not</i> a no-op.
-     *
-     * <p>
-     * No-op implementations should override and return <tt>true</tt>.
-     */
-    @Override
-    public boolean isFallback() {
-        return false;
-    }
-
-    /**
-     * Default implementation of this method that returns <tt>true</tt>, ie
-     * should replace (none {@link #isFallback() no-op} implementations.
-     *
-     * <p>
-     * Implementations that don't wish to replace none no-op implementations
-     * should override and return <tt>false</tt>.
-     */
-    @Override
-    public boolean alwaysReplace() {
-        return true;
     }
 
     @Override
@@ -231,13 +177,8 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 
     @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        if(derived) {
-            attributeMap.put("derived", derived);
-        }
+        attributeMap.put("precedence", getPrecedence().name());
         attributeMap.put("underlyingFacet", underlyingFacet);
-        if(isFallback()) {
-            attributeMap.put("noop", isFallback());
-        }
         if(isHiding()) {
             attributeMap.put("hiding", isHiding());
         }

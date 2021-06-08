@@ -23,14 +23,20 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class TypicalLengthFacetAbstract extends FacetAbstract implements TypicalLengthFacet {
+public abstract class TypicalLengthFacetAbstract
+extends FacetAbstract
+implements TypicalLengthFacet {
 
     public static Class<? extends Facet> type() {
         return TypicalLengthFacet.class;
     }
 
-    public TypicalLengthFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super(type(), holder, derivation);
+    public TypicalLengthFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
+
+    public TypicalLengthFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
     @Override

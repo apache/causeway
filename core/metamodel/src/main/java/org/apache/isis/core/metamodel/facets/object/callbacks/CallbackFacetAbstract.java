@@ -26,10 +26,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 /**
  * Adapter superclass for {@link Facet}s for {@link CallbackFacet}.
  */
-public abstract class CallbackFacetAbstract extends FacetAbstract implements CallbackFacet {
+public abstract class CallbackFacetAbstract
+extends FacetAbstract
+implements CallbackFacet {
 
     public CallbackFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        super(facetType, holder);
     }
 
 }

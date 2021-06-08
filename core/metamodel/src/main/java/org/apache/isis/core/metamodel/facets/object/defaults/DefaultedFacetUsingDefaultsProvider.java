@@ -23,12 +23,14 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
+public class DefaultedFacetUsingDefaultsProvider
+extends FacetAbstract
+implements DefaultedFacet {
 
     private final DefaultsProvider<?> defaultsProvider;
 
     public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder) {
-        super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
+        super(DefaultedFacet.class, holder);
         this.defaultsProvider = parser;
     }
 

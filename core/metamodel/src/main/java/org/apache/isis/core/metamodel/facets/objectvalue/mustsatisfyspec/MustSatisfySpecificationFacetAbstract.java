@@ -58,7 +58,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
     public MustSatisfySpecificationFacetAbstract(
             final List<Specification> specifications,
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
 
         this.specifications = specifications;
 

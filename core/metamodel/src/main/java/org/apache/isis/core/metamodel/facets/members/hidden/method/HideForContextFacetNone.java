@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-public class HideForContextFacetNone extends HideForContextFacetAbstract {
+public class HideForContextFacetNone
+extends HideForContextFacetAbstract {
 
     public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     /**
@@ -34,11 +35,6 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
     @Override
     public String hides(final VisibilityContext ic) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

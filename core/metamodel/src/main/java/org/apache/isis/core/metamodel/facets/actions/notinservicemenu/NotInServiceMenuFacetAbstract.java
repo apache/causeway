@@ -30,11 +30,11 @@ public abstract class NotInServiceMenuFacetAbstract extends FacetAbstract implem
     }
 
     public NotInServiceMenuFacetAbstract(final FacetHolder holder) {
-        this(holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
-    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super(type(), holder, derivation);
+    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

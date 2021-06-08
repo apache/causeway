@@ -41,8 +41,10 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         // don't overwrite any defaults that might already picked up
-        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder().getFacet(PropertyDefaultFacet.class);
-        if (existingDefaultFacet != null && !existingDefaultFacet.isFallback()) {
+        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder()
+                .lookupNonFallbackFacet(PropertyDefaultFacet.class)
+                .orElse(null);
+        if (existingDefaultFacet != null) {
             return;
         }
 

@@ -69,7 +69,7 @@ implements CssClassFacet {
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
 
-        super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super(CssClassFacetAbstract.type(), holder);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }

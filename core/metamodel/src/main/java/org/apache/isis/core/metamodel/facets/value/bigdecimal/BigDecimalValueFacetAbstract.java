@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class BigDecimalValueFacetAbstract extends FacetAbstract implements BigDecimalValueFacet {
 
-    public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder, Derivation derivation) {
-        super(facetType, holder, derivation);
+    public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder) {
+        super(facetType, holder);
     }
 
     @Override

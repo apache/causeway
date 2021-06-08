@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
     public ActionParameterChoicesFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     @Override
@@ -40,11 +40,6 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return Can.empty();
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

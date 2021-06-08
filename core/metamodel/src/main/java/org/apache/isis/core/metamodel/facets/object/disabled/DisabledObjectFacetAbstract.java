@@ -26,14 +26,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class DisabledObjectFacetAbstract extends FacetAbstract implements DisabledObjectFacet {
+public abstract class DisabledObjectFacetAbstract
+extends FacetAbstract
+implements DisabledObjectFacet {
 
     public static Class<? extends Facet> type() {
         return DisabledObjectFacet.class;
     }
 
     public DisabledObjectFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override

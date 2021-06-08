@@ -39,7 +39,7 @@ implements PropertyOrCollectionAccessorFacet {
     public PropertyOrCollectionAccessorFacetAbstract(
             final ObjectSpecification onType,
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.onType = onType;
     }
 

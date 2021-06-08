@@ -25,14 +25,15 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
-import junit.framework.TestCase;
 import lombok.val;
+
+import junit.framework.TestCase;
 
 public class InteractionUtils_isA_Test extends TestCase {
 
     public class FooSuperFacet extends FacetAbstract {
         public FooSuperFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
-            super(facetType, holder, Derivation.NOT_DERIVED);
+            super(facetType, holder);
         }
     }
 
@@ -50,7 +51,7 @@ public class InteractionUtils_isA_Test extends TestCase {
 
     public class BarFacet extends FacetAbstract {
         public BarFacet(final FacetHolder holder) {
-            super(BarFacet.class, holder, Derivation.NOT_DERIVED);
+            super(BarFacet.class, holder);
         }
     }
 

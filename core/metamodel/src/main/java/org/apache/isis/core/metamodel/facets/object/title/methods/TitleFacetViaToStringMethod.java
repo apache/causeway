@@ -34,7 +34,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     private final Method method;
 
     public TitleFacetViaToStringMethod(final Method method, final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
         this.method = method;
     }
 
@@ -58,11 +58,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     }
 
     @Override
-    public boolean isFallback() {
-        return true;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

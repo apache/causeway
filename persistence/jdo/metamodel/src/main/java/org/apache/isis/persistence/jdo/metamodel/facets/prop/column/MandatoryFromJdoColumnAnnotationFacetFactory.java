@@ -97,7 +97,8 @@ implements MetaModelRefiner {
         // however, if a @Column was explicitly provided, and the underlying facet
         // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
         // then don't chain, simply replace.
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
+        if(facet instanceof MandatoryFacetDerivedFromJdoColumn
+                && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
             facet.setUnderlyingFacet(null);
         }
     }
@@ -148,14 +149,15 @@ implements MetaModelRefiner {
 
         if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
-            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+            if(underlying.getSemantics() == facet.getSemantics()) {
                 return;
             }
 
-            if(underlying.isInvertedSemantics()) {
+            if(underlying.getSemantics().isOptional()) {
                 // ie @Optional
                 ValidationFailure.raiseFormatted(
                         association,
+                        //TODO @Optional is history
                         "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                         association.getIdentifier().getFullIdentityString());
             } else {
@@ -168,13 +170,14 @@ implements MetaModelRefiner {
 
         if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
 
-            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+            if(underlying.getSemantics() == facet.getSemantics()) {
                 return;
             }
-            if(underlying.isInvertedSemantics()) {
+            if(underlying.getSemantics().isOptional()) {
                 // ie @Optional
                 ValidationFailure.raiseFormatted(
                         association,
+                        //TODO @Optional is history
                         "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                         association.getIdentifier().getFullIdentityString());
             } else {

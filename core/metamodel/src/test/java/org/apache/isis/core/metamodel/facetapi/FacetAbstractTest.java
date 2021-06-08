@@ -31,7 +31,7 @@ public class FacetAbstractTest extends TestCase {
 
     public static class ConcreteFacet extends FacetAbstract {
         public ConcreteFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
-            super(facetType, holder, Derivation.NOT_DERIVED);
+            super(facetType, holder);
         }
 
     }

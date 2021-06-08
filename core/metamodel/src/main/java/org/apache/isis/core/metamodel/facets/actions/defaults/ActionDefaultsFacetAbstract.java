@@ -23,14 +23,20 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ActionDefaultsFacetAbstract extends FacetAbstract implements ActionDefaultsFacet {
+public abstract class ActionDefaultsFacetAbstract
+extends FacetAbstract
+implements ActionDefaultsFacet {
 
     public static Class<? extends Facet> type() {
         return ActionDefaultsFacet.class;
     }
 
-    public ActionDefaultsFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super(type(), holder, derivation);
+    public ActionDefaultsFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
+
+    public ActionDefaultsFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

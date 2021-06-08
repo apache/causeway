@@ -35,7 +35,7 @@ public class PluralFacetTranslated extends FacetAbstract implements PluralFacet 
     private String originalText;
 
     public PluralFacetTranslated(final NamedFacetTranslated facet, final FacetHolder facetHolder) {
-        super(PluralFacet.class, facetHolder, Derivation.DERIVED);
+        super(PluralFacet.class, facetHolder, Precedence.DERIVED);
         this.translationService = facet.translationService;
         this.context = facet.context;
         this.originalText = facet.originalText;

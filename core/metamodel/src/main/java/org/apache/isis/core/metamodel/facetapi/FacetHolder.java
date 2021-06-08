@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
@@ -58,7 +57,7 @@ public interface FacetHolder extends HasMetaModelContext {
 
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             @NonNull final Class<T> facetType) {
-        return lookupFacet(facetType, _Predicates.not(Facet::isFallback));
+        return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
     }
 
     // -- CONTAINS
@@ -70,23 +69,26 @@ public interface FacetHolder extends HasMetaModelContext {
 
     /**
      * Whether there is a facet registered of the specified type that is not a
-     * {@link Facet#isFallback() fallback} .
+     * {@link Facet.Precedence#isFallback() fallback} .
      * <p>
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
      * <tt>null</tt> and not a fallback.
      */
     default boolean containsNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isFallback();
+        return facet != null
+                && !facet.getPrecedence().isFallback();
     }
 
     /**
      * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
-     * facet is <i>explicit</i>, not {@link Facet#isDerived() derived}.
+     * facet is <i>explicit</i>, not {@link Facet.Precedence#isDerived() derived}.
      */
     default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isFallback() && !facet.isDerived();
+        return facet != null
+                && !facet.getPrecedence().isFallback()
+                && !facet.getPrecedence().isDerived();
     }
 
     Stream<Facet> streamFacets();
@@ -102,9 +104,7 @@ public interface FacetHolder extends HasMetaModelContext {
      *
      * <p>
      * If there are any facet of the same type, they will be overwritten
-     * <i>provided</i> that either the {@link Facet} specifies to
-     * {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isFallback() no-op}.
+     * <i>provided</i> that given {@link Facet} has higher precedence.
      */
     void addFacet(Facet facet);
 
@@ -114,7 +114,9 @@ public interface FacetHolder extends HasMetaModelContext {
      *
      * @param facet
      * @since 2.0
+     * @deprecated underlying facets are deprecated
      */
+    @Deprecated
     void addOrReplaceFacet(Facet facet);
 
 }

@@ -34,7 +34,11 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
     }
 
     public PropertyValidateFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+    }
+
+    public PropertyValidateFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
     @Override

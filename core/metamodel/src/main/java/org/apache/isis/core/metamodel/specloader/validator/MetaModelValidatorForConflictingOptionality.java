@@ -57,7 +57,8 @@ public class MetaModelValidatorForConflictingOptionality {
             return false;
         }
         final boolean conflicting =
-                underlyingFacet != null && facet.isInvertedSemantics() != underlyingFacet.isInvertedSemantics();
+                underlyingFacet != null
+                && facet.getSemantics() != underlyingFacet.getSemantics();
         return conflicting;
     }
 

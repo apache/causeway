@@ -32,7 +32,6 @@ import org.apache.isis.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -80,7 +79,14 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
             final EqualByContent equalByContent,
             final T defaultValue) {
 
-        super(adapterFacetType, holder, Derivation.NOT_DERIVED);
+        /*
+         * precedence = LATE
+         * We don't replace any (none no-op) facets.
+         *
+         * For example, if there is already a {@link PropertyDefaultFacet} then we
+         * shouldn't replace it.
+         */
+        super(adapterFacetType, holder, Facet.Precedence.LATE);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
         this.maxLength = maxLength;
@@ -106,18 +112,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      */
     public final Class<T> getAdaptedClass() {
         return adaptedClass;
-    }
-
-    /**
-     * We don't replace any (none no-op) facets.
-     *
-     * <p>
-     * For example, if there is already a {@link PropertyDefaultFacet} then we
-     * shouldn't replace it.
-     */
-    @Override
-    public boolean alwaysReplace() {
-        return false;
     }
 
     // ///////////////////////////////////////////////////////////////////////////

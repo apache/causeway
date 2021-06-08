@@ -30,7 +30,7 @@ public abstract class PropertyChoicesFacetAbstract extends FacetAbstract impleme
     }
 
     public PropertyChoicesFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
 }

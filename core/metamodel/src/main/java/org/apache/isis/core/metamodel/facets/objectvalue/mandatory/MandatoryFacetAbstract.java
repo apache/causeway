@@ -33,27 +33,28 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
+import lombok.Getter;
 import lombok.val;
 
-public abstract class MandatoryFacetAbstract extends FacetAbstract implements MandatoryFacet {
+public abstract class MandatoryFacetAbstract
+extends FacetAbstract
+implements MandatoryFacet {
 
     public static Class<? extends Facet> type() {
         return MandatoryFacet.class;
     }
 
-    public enum Semantics {
-        REQUIRED,
-        OPTIONAL;
-
-        public static Semantics of(boolean required) {
-            return required ? REQUIRED: OPTIONAL;
-        }
-    }
-
+    @Getter(onMethod_ = {@Override})
     private Semantics semantics;
 
     public MandatoryFacetAbstract(final FacetHolder holder, final Semantics semantics) {
         super(type(), holder);
+        this.semantics = semantics;
+    }
+
+    public MandatoryFacetAbstract(
+            final FacetHolder holder, final Semantics semantics, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
         this.semantics = semantics;
     }
 
@@ -62,7 +63,7 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
      */
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
-        if(!isInvertedSemantics()) {
+        if(getSemantics().isRequired()) {
             val pojo = UnwrapUtil.single(adapter);
 
             // special case string handling.
@@ -74,11 +75,6 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
         } else {
             return false; // policy is not enforced
         }
-    }
-
-    @Override
-    public boolean isInvertedSemantics() {
-        return this.semantics == Semantics.OPTIONAL;
     }
 
     @Override
@@ -102,9 +98,9 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
         return name != null? "'" + name + "' is mandatory":"Mandatory";
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("semantics", semantics);
-        attributeMap.put("inverted", isInvertedSemantics());
     }
 }

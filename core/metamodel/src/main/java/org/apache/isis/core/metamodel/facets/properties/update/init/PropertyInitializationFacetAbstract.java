@@ -30,6 +30,6 @@ public abstract class PropertyInitializationFacetAbstract extends FacetAbstract 
     }
 
     public PropertyInitializationFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 }

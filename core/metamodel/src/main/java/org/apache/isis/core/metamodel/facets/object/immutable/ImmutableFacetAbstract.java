@@ -32,7 +32,7 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
     }
 
     public ImmutableFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     /**

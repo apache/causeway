@@ -34,7 +34,7 @@ extends NotInServiceMenuFacetAbstract {
 
     public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
-        super(holder, Derivation.DERIVED);
+        super(holder);
         this.natureOfService = natureOfService;
     }
 
@@ -47,7 +47,8 @@ extends NotInServiceMenuFacetAbstract {
         return natureOfService;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("natureOfService", natureOfService);
     }

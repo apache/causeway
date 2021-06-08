@@ -36,7 +36,7 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extend
     }
 
     public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation.type(), holder, Derivation.NOT_DERIVED);
+        super(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation.type(), holder);
         this.precision = precision;
         this.scale = scale;
     }

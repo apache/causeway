@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
 
     public ActionChoicesFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     @Override
@@ -36,11 +36,6 @@ public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
             final ManagedObject inObject,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return CanVector.empty();
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

@@ -36,7 +36,7 @@ public class HiddenTypeFacetDerivedFromAuthorization extends FacetAbstract imple
     }
 
     public HiddenTypeFacetDerivedFromAuthorization(final FacetHolder holder) {
-        super(type(), holder, Derivation.DERIVED);
+        super(type(), holder);
     }
 
     @Override

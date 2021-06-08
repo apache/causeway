@@ -48,6 +48,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.val;
+
 public class ObjectAssociationAbstractTest_alwaysHidden {
 
     @Rule
@@ -213,15 +215,16 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             final Where where,
             final FacetedMethod holder,
             final boolean noop) {
-        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder) {
+
+        val precedence = noop
+                ? Facet.Precedence.FALLBACK
+                : Facet.Precedence.DEFAULT;
+
+        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder, precedence) {
+
             @Override
             protected String hiddenReason(final ManagedObject target, final Where whereContext) {
                 return null;
-            }
-
-            @Override
-            public boolean isFallback() {
-                return noop;
             }
         };
         FacetUtil.addFacet(facet);

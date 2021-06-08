@@ -59,7 +59,7 @@ implements AutoCompleteFacet {
             final Class<?> repositoryClass,
             final Method repositoryMethod) {
 
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
 
         this.repositoryClass = repositoryClass;
         this.repositoryMethod = repositoryMethod;

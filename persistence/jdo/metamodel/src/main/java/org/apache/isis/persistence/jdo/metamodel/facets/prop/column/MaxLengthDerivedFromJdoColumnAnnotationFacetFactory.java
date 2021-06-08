@@ -81,7 +81,7 @@ implements MetaModelRefiner {
 
         final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(jdoColumnAnnotation.length(), holder);
 
-        if(!existingFacet.isFallback()) {
+        if(!existingFacet.getPrecedence().isFallback()) {
             // will raise violation later
             facet.setUnderlyingFacet(existingFacet);
         }

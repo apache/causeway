@@ -36,7 +36,7 @@ implements BookmarkPolicyFacet {
     private final BookmarkPolicy bookmarkPolicy;
 
     public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
-        super(BookmarkPolicyFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(BookmarkPolicyFacetAbstract.type(), facetHolder);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 

@@ -80,7 +80,7 @@ implements ValueFacet {
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder) {
 
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;

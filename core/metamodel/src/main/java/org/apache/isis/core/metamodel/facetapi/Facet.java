@@ -26,12 +26,58 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 public interface Facet extends FacetWithAttributes {
 
     /**
+     * @implSpec Ordinal dictates precedence
+     * (corresponding to the ascending order of appearance).
+     */
+    public static enum Precedence {
+
+        /**
+         * Whether this facet implementation is a fallback. Meaning it is treated
+         * with lowest priority, always overruled by any other facet of same type.
+         */
+        FALLBACK,
+
+        /**
+         * Whether this facet implementation is derived (as opposed to explicit);
+         * <p>
+         * For example, we might derive the typical length of a property based on
+         * its type; but if the typical length has been explicitly specified using
+         * an annotation then that should take precedence.
+         */
+        DERIVED,
+
+        /**
+         * Lower priority than {@link #DEFAULT}.
+         */
+        LATE,
+
+        /**
+         * The default as used with {@link FacetAbstract}, if not specified otherwise.
+         */
+        DEFAULT,
+
+        /**
+         * Higher priority than {@link #DEFAULT}.
+         */
+        EARLY;
+
+        public boolean isFallback() {
+            return this == FALLBACK;
+        }
+
+        public boolean isDerived() {
+            return this == DERIVED;
+        }
+
+    }
+
+    /**
      * The {@link FacetHolder holder} of this facet.
      */
     FacetHolder getFacetHolder();
 
     /**
-     * Allows reparenting of Facet.
+     * Allows re-parenting of Facet.
      *
      * <p>
      * Used by Facet decorators.
@@ -42,7 +88,9 @@ public interface Facet extends FacetWithAttributes {
 
     /**
      * Underlying {@link Facet} of the same {@link #facetType() type}, if any.
+     * @deprecated
      */
+    @Deprecated
     public Facet getUnderlyingFacet();
 
     /**
@@ -50,7 +98,9 @@ public interface Facet extends FacetWithAttributes {
      *
      * <p>
      * Must be of the same {@link #facetType() type}.
+     * @deprecated
      */
+    @Deprecated
     public void setUnderlyingFacet(Facet underlyingFacet);
 
     /**
@@ -73,27 +123,10 @@ public interface Facet extends FacetWithAttributes {
     Class<? extends Facet> facetType();
 
     /**
-     * Whether this facet implementation is derived (as opposed to explicit);
-     * used to determine precedence.
-     *
-     * <p>
-     * For example, we might derive the typical length of a property based on
-     * its type; but if the typical length has been explicitly specified using
-     * an annotation then that should take precedence.
+     * Facets with higher precedence override facets with lower precedence.
+     * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
-    public boolean isDerived();
-
-    /**
-     * Whether this facet implementation is a fallback. Meaning it is treated
-     * with lowest priority, always overruled by any other facet of same type.
-     */
-    public boolean isFallback();
-
-    /**
-     * Whether this facet implementation should replace existing (none-fallback)
-     * implementations.
-     */
-    public boolean alwaysReplace();
+    public Precedence getPrecedence();
 
     // -- FACET ALIAS SUPPORT
 

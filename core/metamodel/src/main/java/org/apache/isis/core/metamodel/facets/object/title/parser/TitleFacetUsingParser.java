@@ -31,7 +31,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     private final Parser<?> parser;
 
     public TitleFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
-        super(TitleFacet.class, holder, Derivation.NOT_DERIVED);
+        super(TitleFacet.class, holder);
         this.parser = parser;
     }
 

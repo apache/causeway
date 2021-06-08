@@ -374,7 +374,8 @@ public class LayoutFacetUtil {
     // -- HELPER
 
     private static boolean isDoOp(final Facet facet) {
-        return facet != null && !facet.isFallback();
+        return facet != null
+                && !facet.getPrecedence().isFallback();
     }
 
 }

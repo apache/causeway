@@ -424,7 +424,7 @@ implements ObjectAction {
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
 
         val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
-        if (!actionDefaultsFacet.isFallback()) {
+        if (!actionDefaultsFacet.getPrecedence().isFallback()) {
 
             // use the old defaultXxx approach
 
@@ -478,7 +478,7 @@ implements ObjectAction {
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
 
-        if (!facet.isFallback()) {
+        if (!facet.getPrecedence().isFallback()) {
             // using the old choicesXxx() approach
             paramChoicesVector = facet.getChoices(target,
                     interactionInitiatedBy);
@@ -502,7 +502,7 @@ implements ObjectAction {
                 val paramSpec = param.getSpecification();
                 val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
-                if (paramFacet != null && !paramFacet.isFallback()) {
+                if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
 
                     val visibleChoices = paramFacet.getChoices(
                             paramSpec,

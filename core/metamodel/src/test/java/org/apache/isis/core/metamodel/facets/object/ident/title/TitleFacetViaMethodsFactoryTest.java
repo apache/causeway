@@ -95,7 +95,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
      * a none no-op implementation.
      */
     public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
-        assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).isFallback());
+        assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).getPrecedence().isFallback());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

@@ -23,19 +23,21 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class LayoutFacetAbstract extends FacetAbstract implements LayoutFacet {
+public abstract class LayoutFacetAbstract
+extends FacetAbstract implements LayoutFacet {
 
     public static Class<? extends Facet> type() {
         return LayoutFacet.class;
     }
 
     protected LayoutFacetAbstract(final FacetHolder holder) {
-        this(holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
+
     protected LayoutFacetAbstract(
             final FacetHolder holder,
-            final Derivation derivation) {
-        super(type(), holder, derivation);
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

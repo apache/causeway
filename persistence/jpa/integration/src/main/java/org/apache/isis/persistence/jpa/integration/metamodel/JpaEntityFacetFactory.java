@@ -43,6 +43,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -95,14 +96,10 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 final Class<?> entityClass,
                 final @NonNull ServiceRegistry serviceRegistry) {
 
-            super(EntityFacet.class, holder);
+            super(EntityFacet.class, holder, Facet.Precedence.EARLY);
             this.entityClass = entityClass;
             this.serviceRegistry = serviceRegistry;
         }
-
-        @Override public boolean isDerived() { return false;}
-        @Override public boolean isFallback() { return false;}
-        @Override public boolean alwaysReplace() { return true;}
 
         // -- ENTITY FACET
 

@@ -40,6 +40,11 @@ implements MultiLineFacet {
         this.numberOfLines = numberOfLines;
     }
 
+    public MultiLineFacetAbstract(final int numberOfLines, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.numberOfLines = numberOfLines;
+    }
+
     @Override
     public int numberOfLines() {
         return numberOfLines;

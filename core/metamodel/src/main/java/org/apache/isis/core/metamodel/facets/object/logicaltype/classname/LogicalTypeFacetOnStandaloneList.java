@@ -26,6 +26,6 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 public class LogicalTypeFacetOnStandaloneList extends LogicalTypeFacetAbstract {
 
     public LogicalTypeFacetOnStandaloneList(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Derivation.NOT_DERIVED);
+        super(logicalType, holder);
     }
 }

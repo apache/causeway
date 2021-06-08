@@ -56,6 +56,17 @@ implements HiddenFacet {
         super.setFacetAliasType(HiddenFacet.class);
     }
 
+    public HiddenFacetAbstract(
+            Class<? extends Facet> facetType,
+            Where where,
+            FacetHolder holder,
+            final Facet.Precedence precedence) {
+
+        super(facetType, holder, where, precedence);
+        super.setFacetAliasType(HiddenFacet.class);
+    }
+
+
     // to instantiate contributed facets
     private HiddenFacetAbstract(HiddenFacetAbstract toplevelFacet) {
         super(HiddenFacet.class, toplevelFacet.getFacetHolder(), toplevelFacet.where());

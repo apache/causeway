@@ -219,11 +219,12 @@ implements OneToOneAssociation {
     // -- defaults
     @Override
     public ManagedObject getDefault(final ManagedObject ownerAdapter) {
-        PropertyDefaultFacet propertyDefaultFacet = getFacet(PropertyDefaultFacet.class);
+        PropertyDefaultFacet propertyDefaultFacet = lookupNonFallbackFacet(PropertyDefaultFacet.class)
+                .orElse(null);
         // if no default on the association, attempt to find a default on the
         // specification (eg an int should
         // default to 0).
-        if (propertyDefaultFacet == null || propertyDefaultFacet.isFallback()) {
+        if (propertyDefaultFacet == null) {
             propertyDefaultFacet = this.getSpecification().getFacet(PropertyDefaultFacet.class);
         }
         if (propertyDefaultFacet == null) {

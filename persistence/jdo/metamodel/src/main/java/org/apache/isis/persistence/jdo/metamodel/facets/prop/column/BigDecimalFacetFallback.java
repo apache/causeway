@@ -32,7 +32,7 @@ public class BigDecimalFacetFallback extends BigDecimalValueFacetAbstract {
     }
 
     public BigDecimalFacetFallback(final FacetHolder holder) {
-        super(BigDecimalFacetFallback.type(), holder, Derivation.NOT_DERIVED);
+        super(BigDecimalFacetFallback.type(), holder);
     }
 
     @Override

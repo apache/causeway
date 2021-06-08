@@ -41,7 +41,7 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
     private final Class<? extends FacetFactory>[] facetFactories;
 
     public FacetsFacetAbstract(final String[] names, final Class<?>[] classes, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         final List<Class<? extends FacetFactory>> facetFactories = new ArrayList<Class<? extends FacetFactory>>();
         for (final String name : names) {
             final Class<? extends FacetFactory> facetFactory = facetFactoryOrNull(name);

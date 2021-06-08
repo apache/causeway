@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.mandatory.dflt;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -46,11 +46,10 @@ public class MandatoryFacetOnParametersDefaultFactory extends FacetFactoryAbstra
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        super.addFacet(create(processParameterContext.getFacetHolder()));
+        FacetUtil.addFacet(
+                MandatoryFacetDefault
+                .required(processParameterContext.getFacetHolder()));
     }
 
-    private MandatoryFacet create(final FacetHolder holder) {
-        return new MandatoryFacetDefault(holder);
-    }
 
 }

@@ -33,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
+public class ActionDefaultsFacetViaMethod
+extends ActionDefaultsFacetAbstract
+implements ImperativeFacet {
 
     private final Method method;
 
@@ -41,7 +43,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     private final Method actionMethod;
 
     public ActionDefaultsFacetViaMethod(final Method method, final FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
+        super(holder);
         this.method = method;
         this.actionMethod = determineActionMethod(holder);
     }

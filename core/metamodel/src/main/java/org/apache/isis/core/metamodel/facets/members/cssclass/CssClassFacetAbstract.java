@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class CssClassFacetAbstract extends FacetAbstract implements CssClassFacet {
+public abstract class CssClassFacetAbstract
+extends FacetAbstract
+implements CssClassFacet {
 
     public static Class<? extends Facet> type() {
         return CssClassFacet.class;
@@ -35,7 +37,7 @@ public abstract class CssClassFacetAbstract extends FacetAbstract implements Css
     private final String cssClass;
 
     public CssClassFacetAbstract(final String cssClass, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.cssClass = cssClass;
     }
 
@@ -44,7 +46,8 @@ public abstract class CssClassFacetAbstract extends FacetAbstract implements Css
         return cssClass;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("cssClass", cssClass);
     }

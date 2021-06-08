@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
 public class HelpFacetNone extends HelpFacetAbstract {
 
     public HelpFacetNone(final FacetHolder holder) {
-        super(null, holder);
+        super(null, holder, Precedence.FALLBACK);
     }
 
     @Override
@@ -36,9 +36,5 @@ public class HelpFacetNone extends HelpFacetAbstract {
         return "No help available";
     }
 
-    @Override
-    public boolean isFallback() {
-        return true;
-    }
 
 }

@@ -23,7 +23,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ProjectingFacetAbstract extends FacetAbstract
+public abstract class ProjectingFacetAbstract
+extends FacetAbstract
 implements ProjectingFacet {
 
     public static Class<? extends Facet> type() {
@@ -31,11 +32,7 @@ implements ProjectingFacet {
     }
 
     protected ProjectingFacetAbstract(final FacetHolder holder) {
-        this( holder, Derivation.NOT_DERIVED);
-    }
-
-    protected ProjectingFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super( type(), holder, derivation);
+        super( type(), holder);
     }
 
 }

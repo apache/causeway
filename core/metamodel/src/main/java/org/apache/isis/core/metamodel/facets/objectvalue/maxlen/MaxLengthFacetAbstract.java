@@ -29,7 +29,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
 
-public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {
+public abstract class MaxLengthFacetAbstract
+extends SingleIntValueFacetAbstract
+implements MaxLengthFacet {
 
     public static Class<? extends Facet> type() {
         return MaxLengthFacet.class;
@@ -37,6 +39,10 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
 
     public MaxLengthFacetAbstract(final int value, final FacetHolder holder) {
         super(type(), holder, value);
+    }
+
+    public MaxLengthFacetAbstract(final int value, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, value, precedence);
     }
 
     /**

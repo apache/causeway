@@ -32,11 +32,11 @@ implements PromptStyleFacet {
     }
 
     protected PromptStyleFacetAbstract(final FacetHolder holder) {
-        this( holder, Derivation.NOT_DERIVED);
+        super( type(), holder);
     }
 
-    protected PromptStyleFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super( type(), holder, derivation);
+    protected PromptStyleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super( type(), holder, precedence);
     }
 
 }

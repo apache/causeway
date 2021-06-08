@@ -53,11 +53,6 @@ implements ImageValueFacet {
     }
 
     @Override
-    public boolean alwaysReplace() {
-        return false;
-    }
-
-    @Override
     public Facet getUnderlyingFacet() {
         return null;
     }
@@ -68,11 +63,6 @@ implements ImageValueFacet {
     @Override
     public void setUnderlyingFacet(final Facet underlyingFacet) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isDerived() {
-        return false;
     }
 
     @Override

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import java.util.Map;
 
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
@@ -40,7 +39,7 @@ public class TypicalLengthFacetForPropertyXml extends TypicalLengthFacetAbstract
     private final int value;
 
     private TypicalLengthFacetForPropertyXml(int value, FacetHolder holder) {
-        super(holder, FacetAbstract.Derivation.NOT_DERIVED);
+        super(holder);
         this.value = value;
     }
 

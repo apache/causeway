@@ -30,7 +30,11 @@ public abstract class PropertyDefaultFacetAbstract extends FacetAbstract impleme
     }
 
     public PropertyDefaultFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+    }
+
+    public PropertyDefaultFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

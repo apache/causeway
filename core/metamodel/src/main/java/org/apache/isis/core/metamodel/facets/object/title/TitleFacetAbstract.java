@@ -30,7 +30,11 @@ public abstract class TitleFacetAbstract extends FacetAbstract implements TitleF
     }
 
     public TitleFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+    }
+
+    public TitleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

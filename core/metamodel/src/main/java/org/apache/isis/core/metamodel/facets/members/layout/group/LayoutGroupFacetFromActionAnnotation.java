@@ -37,12 +37,8 @@ extends LayoutGroupFacetAbstract {
     }
 
     private LayoutGroupFacetFromActionAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
-        super(groupIdAndName, holder);
+        super(groupIdAndName, holder, Precedence.FALLBACK);
     }
 
-    @Override
-    public boolean isFallback() {
-        return true;
-    }
 
 }

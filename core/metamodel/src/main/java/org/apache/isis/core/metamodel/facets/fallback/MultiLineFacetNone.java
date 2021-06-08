@@ -25,12 +25,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
     public MultiLineFacetNone(final FacetHolder holder) {
-        super(1, holder);
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
+        super(1, holder, Precedence.FALLBACK);
     }
 
 }

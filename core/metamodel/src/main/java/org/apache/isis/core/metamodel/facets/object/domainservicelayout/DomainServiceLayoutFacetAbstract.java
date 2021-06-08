@@ -38,7 +38,7 @@ implements DomainServiceLayoutFacet {
     private final DomainServiceLayout.MenuBar menuBar;
 
     public DomainServiceLayoutFacetAbstract(final FacetHolder facetHolder, final DomainServiceLayout.MenuBar menuBar) {
-        super(DomainServiceLayoutFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(DomainServiceLayoutFacetAbstract.type(), facetHolder);
         this.menuBar = menuBar;
     }
 

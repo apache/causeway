@@ -33,7 +33,7 @@ public abstract class ValidateObjectFacetAbstract extends FacetAbstract implemen
     }
 
     public ValidateObjectFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override

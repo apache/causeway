@@ -30,8 +30,11 @@ public abstract class DisableForContextFacetAbstract extends FacetAbstract imple
     }
 
     public DisableForContextFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
+    public DisableForContextFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+    }
 
 }

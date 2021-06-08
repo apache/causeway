@@ -32,7 +32,7 @@ extends LogicalTypeFacetAbstract {
     }
 
     public LogicalTypeFacetDerivedFromClassName(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Derivation.DERIVED);
+        super(logicalType, holder, Precedence.DERIVED);
     }
 
 }

@@ -25,15 +25,21 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class SingleStringValueFacetAbstract extends FacetAbstract implements SingleStringValueFacet {
+public abstract class SingleStringValueFacetAbstract
+extends FacetAbstract
+implements SingleStringValueFacet {
+
     private final String value;
 
-    public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final String value) {
-        this(facetType, holder, value, Derivation.NOT_DERIVED);
+    public SingleStringValueFacetAbstract(
+            final Class<? extends Facet> type, final FacetHolder holder, final String value) {
+        super(type, holder);
+        this.value = value;
     }
 
-    public SingleStringValueFacetAbstract(final Class<? extends Facet> type, final FacetHolder holder, final String value, final Derivation derivation) {
-        super(type, holder, derivation);
+    public SingleStringValueFacetAbstract(
+            final Class<? extends Facet> type, final FacetHolder holder, final String value, final Facet.Precedence precedence) {
+        super(type, holder, precedence);
         this.value = value;
     }
 

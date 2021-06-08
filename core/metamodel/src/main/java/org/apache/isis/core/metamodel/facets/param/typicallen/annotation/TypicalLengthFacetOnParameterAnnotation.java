@@ -33,7 +33,7 @@ public class TypicalLengthFacetOnParameterAnnotation extends TypicalLengthFacetA
     private final int value;
 
     public TypicalLengthFacetOnParameterAnnotation(final int value, final FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
+        super(holder);
         this.value = value;
     }
 

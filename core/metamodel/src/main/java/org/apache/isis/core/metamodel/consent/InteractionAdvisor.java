@@ -46,11 +46,6 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public boolean alwaysReplace() {
-            return false;
-        }
-
-        @Override
         public Class<? extends Facet> facetType() {
             return null;
         }
@@ -58,11 +53,6 @@ public interface InteractionAdvisor {
         @Override
         public FacetHolder getFacetHolder() {
             return null;
-        }
-
-        @Override
-        public boolean isFallback() {
-            return true;
         }
 
         @Override
@@ -80,11 +70,6 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public boolean isDerived() {
-            return false;
-        }
-
-        @Override
         public void addContributedFacet(Facet contributedFacet) {
             throw _Exceptions.unsupportedOperation();
         }
@@ -97,6 +82,11 @@ public interface InteractionAdvisor {
         @Override
         public Class<? extends Facet> facetAliasType() {
             return null;
+        }
+
+        @Override
+        public Precedence getPrecedence() {
+            return Facet.Precedence.FALLBACK;
         }
 
     };

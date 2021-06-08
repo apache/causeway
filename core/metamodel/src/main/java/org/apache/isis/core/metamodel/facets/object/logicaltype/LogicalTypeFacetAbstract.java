@@ -40,17 +40,18 @@ implements LogicalTypeFacet {
     @Getter(onMethod_ = {@Override})
     private final @NonNull LogicalType logicalType;
 
-    public LogicalTypeFacetAbstract(
+    protected LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        this(logicalType, holder, Derivation.NOT_DERIVED);
+        super(LogicalTypeFacetAbstract.type(), holder);
+        this.logicalType = logicalType;
     }
 
     protected LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder,
-            final Derivation derivation) {
-        super(LogicalTypeFacetAbstract.type(), holder, derivation);
+            final Facet.Precedence precedence) {
+        super(LogicalTypeFacetAbstract.type(), holder, precedence);
         this.logicalType = logicalType;
     }
 

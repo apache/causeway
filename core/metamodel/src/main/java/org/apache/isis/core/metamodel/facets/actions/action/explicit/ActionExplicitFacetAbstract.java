@@ -26,9 +26,7 @@ public abstract class ActionExplicitFacetAbstract
 extends FacetAbstract
 implements ActionExplicitFacet {
 
-    public ActionExplicitFacetAbstract(
-            final FacetHolder holder) {
-
-        super(ActionExplicitFacet.class, holder, Derivation.NOT_DERIVED);
+    public ActionExplicitFacetAbstract(final FacetHolder holder) {
+        super(ActionExplicitFacet.class, holder);
     }
 }

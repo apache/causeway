@@ -29,7 +29,9 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet {
+public class CssClassFacetMethod
+extends FacetAbstract
+implements CssClassFacet {
 
     public static Class<? extends Facet> type() {
         return CssClassFacet.class;
@@ -39,7 +41,7 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
 
 
     public CssClassFacetMethod(final Method method, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.method = method;
     }
 

@@ -31,7 +31,7 @@ implements EntityChangePublishingFacet {
     }
 
     public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder) {
-        super(EntityChangePublishingFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(EntityChangePublishingFacetAbstract.type(), facetHolder);
     }
 
 }

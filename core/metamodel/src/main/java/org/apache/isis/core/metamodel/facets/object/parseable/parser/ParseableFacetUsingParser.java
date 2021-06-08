@@ -52,7 +52,7 @@ implements ParseableFacet {
             final Parser<?> parser,
             final FacetHolder holder) {
 
-        super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
+        super(ParseableFacet.class, holder);
         this.parser = parser;
     }
 

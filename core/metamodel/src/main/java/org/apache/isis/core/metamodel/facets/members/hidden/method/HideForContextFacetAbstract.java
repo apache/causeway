@@ -30,8 +30,11 @@ public abstract class HideForContextFacetAbstract extends FacetAbstract implemen
     }
 
     public HideForContextFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
+    public HideForContextFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+    }
 
 }

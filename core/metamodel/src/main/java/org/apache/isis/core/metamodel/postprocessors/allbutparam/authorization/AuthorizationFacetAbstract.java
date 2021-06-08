@@ -44,7 +44,7 @@ implements AuthorizationFacet {
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.authorizationManager = getAuthorizationManager();
         this.interactionProvider = getInteractionProvider();
     }

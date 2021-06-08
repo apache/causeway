@@ -30,6 +30,6 @@ public abstract class PropertyClearFacetAbstract extends FacetAbstract implement
     }
 
     public PropertyClearFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 }

@@ -34,7 +34,7 @@ public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implem
     private final int adjustBy;
 
     public RenderedAdjustedFacetAbstract(int adjustBy, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.adjustBy = adjustBy;
     }
 

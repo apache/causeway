@@ -49,8 +49,9 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
         return objectSpecification.streamProperties(MixedIn.EXCLUDED)
         .filter(propertySpec -> {
-            val projectingFacet = propertySpec.getFacet(ProjectingFacet.class);
-            return projectingFacet != null && !projectingFacet.isFallback()
+            val projectingFacet = propertySpec.lookupNonFallbackFacet(ProjectingFacet.class)
+                    .orElse(null);
+            return projectingFacet != null
                     && projectingFacet.value() == Projecting.PROJECTED;
         })
         .findFirst()

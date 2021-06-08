@@ -27,7 +27,9 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class DefaultedFacetAbstract extends FacetAbstract implements DefaultedFacet {
+public abstract class DefaultedFacetAbstract
+extends FacetAbstract
+implements DefaultedFacet {
 
     private final Class<?> defaultsProviderClass;
 
@@ -39,7 +41,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
             final Class<?> candidateEncoderDecoderClass,
             final FacetHolder holder) {
 
-        super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
+        super(DefaultedFacet.class, holder);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         if (isValid()) {

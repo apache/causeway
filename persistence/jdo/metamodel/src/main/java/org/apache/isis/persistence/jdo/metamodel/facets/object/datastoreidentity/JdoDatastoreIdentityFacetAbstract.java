@@ -39,7 +39,7 @@ JdoDatastoreIdentityFacet {
     private final IdGeneratorStrategy strategy;
 
     public JdoDatastoreIdentityFacetAbstract(IdGeneratorStrategy strategy, FacetHolder facetHolder) {
-        super(JdoDatastoreIdentityFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(JdoDatastoreIdentityFacetAbstract.type(), facetHolder);
         this.strategy = strategy;
     }
 

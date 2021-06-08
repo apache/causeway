@@ -32,7 +32,7 @@ public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements
     }
 
     public HiddenObjectFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override

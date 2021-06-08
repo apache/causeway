@@ -30,7 +30,7 @@ public abstract class IconFacetAbstract extends FacetAbstract implements IconFac
     }
 
     public IconFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
 }

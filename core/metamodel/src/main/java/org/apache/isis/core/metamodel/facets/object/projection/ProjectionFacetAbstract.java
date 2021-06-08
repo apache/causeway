@@ -32,11 +32,7 @@ implements ProjectionFacet {
     }
 
     protected ProjectionFacetAbstract(final FacetHolder holder) {
-        this( holder, Derivation.NOT_DERIVED);
-    }
-
-    protected ProjectionFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super( type(), holder, derivation);
+        super( type(), holder);
     }
 
 }

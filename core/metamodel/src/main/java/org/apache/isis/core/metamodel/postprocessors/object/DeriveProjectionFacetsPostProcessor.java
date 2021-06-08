@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.postprocessors.object;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -77,8 +79,10 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
     }
 
-    private static boolean canOverwrite(final Facet facet) {
-        return facet == null || facet.isFallback() || facet.isDerived();
+    private static boolean canOverwrite(final @Nullable Facet existingFacet) {
+        return existingFacet == null
+                || existingFacet.getPrecedence().isFallback()
+                || existingFacet.getPrecedence().isDerived();
     }
 
 

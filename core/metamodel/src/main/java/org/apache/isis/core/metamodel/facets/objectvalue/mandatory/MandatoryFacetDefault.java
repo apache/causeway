@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
@@ -28,16 +29,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
  * For a mandatory property, the object cannot be saved/updated without the
  * value being provided. For a mandatory parameter, the action cannot be invoked
  * without the value being provided.
- *
- * <p>
- * In the standard Apache Isis Programming Model, specify mandatory by
- * <i>omitting</i> the <tt>@Optional</tt> annotation.
  */
 public class MandatoryFacetDefault extends MandatoryFacetAbstract {
 
-    public MandatoryFacetDefault(final FacetHolder holder) {
-        super(holder, Semantics.REQUIRED);
+    public static MandatoryFacetDefault required(final FacetHolder holder) {
+        return new MandatoryFacetDefault(holder, Semantics.REQUIRED);
     }
 
+    private MandatoryFacetDefault(final FacetHolder holder, final Semantics semantics) {
+        // unconditionally created, hence acting as a fallback
+        super(holder, semantics, Facet.Precedence.FALLBACK);
+    }
 
 }

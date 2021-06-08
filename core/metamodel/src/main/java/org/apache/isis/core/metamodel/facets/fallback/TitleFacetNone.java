@@ -26,17 +26,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class TitleFacetNone extends TitleFacetAbstract {
 
     public TitleFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     @Override
     public String title(final ManagedObject object) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

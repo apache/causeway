@@ -43,7 +43,7 @@ public class TypicalLengthFacetForParameterLayoutAnnotation extends TypicalLengt
     private final int value;
 
     public TypicalLengthFacetForParameterLayoutAnnotation(int typicalLength, FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
+        super(holder);
         this.value = typicalLength;
     }
 

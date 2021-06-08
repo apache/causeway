@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.promptStyle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class PromptStyleFacetFallBackToInline extends PromptStyleFacetAbstract {
+public class PromptStyleFacetFallBackToInline
+extends PromptStyleFacetAbstract {
 
     public PromptStyleFacetFallBackToInline(final FacetHolder holder) {
-        super(holder, Derivation.DERIVED);
+        super(holder, Precedence.DERIVED);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     public PropertyDefaultFacetDerivedFromDefaultedFacet(
             final DefaultedFacet typeFacet, final FacetHolder holder) {
 
-        super(PropertyDefaultFacet.class, holder, Derivation.NOT_DERIVED);
+        super(PropertyDefaultFacet.class, holder);
         this.typeFacet = typeFacet;
     }
 
