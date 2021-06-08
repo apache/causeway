@@ -26,47 +26,37 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 
+import lombok.NonNull;
+
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
     public ValueFacetAnnotation(
-            IsisConfiguration config,
-            Class<?> annotatedClass,
-            FacetHolder holder) {
+            final @NonNull Value value,
+            final @NonNull IsisConfiguration config,
+            final @NonNull Class<?> annotatedClass,
+            final @NonNull FacetHolder holder) {
 
         super(ValueSemanticsProviderUtil
                 .valueSemanticsProviderOrNull(
-                        semanticsProviderClass(annotatedClass),
-                        semanticsProviderName(config, annotatedClass)),
+                        value.semanticsProviderClass(),
+                        semanticsProviderName(value, config, annotatedClass)),
                 AddFacetsIfInvalidStrategy.DO_ADD,
                 holder);
     }
 
-    /**
-     * Always valid, even if the specified semanticsProviderName might have been
-     * wrong.
-     */
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
     // -- HELPER
 
-    private static String semanticsProviderName(IsisConfiguration config, Class<?> annotatedClass) {
+    private static String semanticsProviderName(
+            final Value value,
+            final IsisConfiguration config,
+            final Class<?> annotatedClass) {
 
-        final Value annotation = annotatedClass.getAnnotation(Value.class);
-        final String semanticsProviderName = annotation.semanticsProviderName();
-        if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
+        final String semanticsProviderName = value.semanticsProviderName();
+        if (_Strings.isNotEmpty(semanticsProviderName)) {
             return semanticsProviderName;
         }
         return ValueSemanticsProviderUtil
                 .semanticsProviderNameFromConfiguration(config, annotatedClass);
     }
-
-    private static Class<?> semanticsProviderClass(final Class<?> annotatedClass) {
-        final Value annotation = annotatedClass.getAnnotation(Value.class);
-        return annotation.semanticsProviderClass();
-    }
-
 
 }

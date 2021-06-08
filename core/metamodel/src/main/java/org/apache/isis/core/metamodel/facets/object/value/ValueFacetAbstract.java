@@ -91,7 +91,8 @@ implements ValueFacet {
         // the metamodel.
         // so, we defer until we use the parser.
 
-        if (!isValid() && !addFacetsIfInvalid.shouldAddFacetsIfInvalid()) {
+        if (!hasSemanticsProvider()
+                && !addFacetsIfInvalid.shouldAddFacetsIfInvalid()) {
             return;
         }
 
@@ -147,7 +148,7 @@ implements ValueFacet {
         }
     }
 
-    public boolean isValid() {
+    public boolean hasSemanticsProvider() {
         return this.semanticsProvider != null;
     }
 

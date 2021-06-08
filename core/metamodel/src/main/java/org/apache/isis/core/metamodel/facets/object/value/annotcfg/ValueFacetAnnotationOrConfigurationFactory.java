@@ -23,10 +23,8 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -35,7 +33,6 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 
 import lombok.val;
@@ -75,38 +72,31 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        FacetUtil.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
-    }
-
-    /**
-     * Returns a {@link ValueFacet} implementation.
-     */
-    private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
-
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val valueIfAny = processClassContext.synthesizeOnType(Value.class);
         val config = super.getMetaModelContext().getConfiguration();
 
         // create from annotation, if present
-        final Value annotation = Annotations.getAnnotation(cls, Value.class);
-        if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(config, cls, holder);
-            if (facet.isValid()) {
-                return facet;
-            }
+        if (valueIfAny.isPresent()) {
+            FacetUtil.addFacet(new ValueFacetAnnotation(valueIfAny.get(), config, cls, facetHolder));
+            return;
         }
 
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil
                 .semanticsProviderNameFromConfiguration(config, cls);
 
-        if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder);
-            if (facet.isValid()) {
-                return facet;
+        if (_Strings.isNotEmpty(semanticsProviderName)) {
+            val valueFacet = new ValueFacetFromConfiguration(semanticsProviderName, facetHolder);
+            if (valueFacet.hasSemanticsProvider()) {
+                FacetUtil.addFacet(valueFacet);
+                return;
             }
         }
 
         // otherwise, no value semantic
-        return null;
+
     }
 
 
