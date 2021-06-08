@@ -677,7 +677,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecification",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecification",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },

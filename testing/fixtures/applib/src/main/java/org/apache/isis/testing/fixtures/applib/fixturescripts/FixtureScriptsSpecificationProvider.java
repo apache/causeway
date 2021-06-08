@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturespec;
+package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -24,10 +24,13 @@ import org.apache.isis.applib.annotation.Programmatic;
  * SPI to provide an implementation of
  * {@link org.apache.isis.core.config.IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification}.
  *
- * @deprecated - use <code>isis.testing.fixture.fixture-scripts-specification</code> configuration properties instead.
+ * <p>
+ *     Generally it is easy to just use the <code>isis.testing.fixture.fixture-scripts-specification</code>
+ *     configuration properties rather than providing an implementation of this bean; the framework will
+ *     then auto-configure an appropriate bean instance.
+ * </p>
  */
 @FunctionalInterface
-@Deprecated
 public interface FixtureScriptsSpecificationProvider {
 
     @Programmatic

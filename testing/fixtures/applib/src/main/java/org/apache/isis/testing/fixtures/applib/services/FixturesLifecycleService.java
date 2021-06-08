@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.test.FixturesLifecycleService")
+@Named("isis.testing.fixtures.FixturesLifecycleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

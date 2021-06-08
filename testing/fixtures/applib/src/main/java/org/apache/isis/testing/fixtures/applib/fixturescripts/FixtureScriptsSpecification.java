@@ -16,13 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturespec;
+package org.apache.isis.testing.fixtures.applib.fixturescripts;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
  * Specifies the behaviour of the
@@ -102,7 +100,7 @@ public class FixtureScriptsSpecification {
         public Builder(final Class<?> contextClass) {
             this(contextClass.getPackage().getName());
         }
-        public Builder(final String packagePrefix) {
+        public Builder(@Nullable final String packagePrefix) {
             this.packagePrefix = packagePrefix;
         }
 

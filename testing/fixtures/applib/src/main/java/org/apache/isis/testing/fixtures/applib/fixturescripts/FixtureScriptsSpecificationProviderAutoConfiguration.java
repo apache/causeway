@@ -16,55 +16,58 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturespec;
+package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
+/**
+ * Provides a fallback implementation of {@link FixtureScriptsSpecificationProvider} if none has been provided explicitly by the application itself.
+ *
+ * @since 2.0 {@index}
+ */
 @AutoConfigureOrder(OrderPrecedence.LATE)
 @Configuration
 public class FixtureScriptsSpecificationProviderAutoConfiguration  {
 
+    /**
+     * Returns an implementation of {@link FixtureScriptsSpecificationProvider} that
+     * uses configuration properties under <code>isis.testing.fixtures.fixture-scripts-specification</code>.
+     *
+     * @return
+     */
     @Bean("isis.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
     @ConditionalOnMissingBean(FixtureScriptsSpecificationProvider.class)
     @Qualifier("Default")
-    @Nullable FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final IsisConfiguration isisConfiguration) {
+    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final IsisConfiguration isisConfiguration) {
+
         val fixturesConfig = isisConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
-        val builder = builder(fixturesConfig);
-        if(builder == null) {
-            return null;
-        }
+        val builder = builderFrom(fixturesConfig);
+
         builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.getNonPersistedObjectsStrategy().name()));
         builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.getMultipleExecutionStrategy().name()));
         builder.withRecreate((Class) fixturesConfig.getRecreate());
         builder.withRunScriptDefault((Class) fixturesConfig.getRunScriptDefault());
 
-        return () -> builder.build();
+        return builder::build;
     }
 
-    private FixtureScriptsSpecification.Builder builder(IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
+    private static FixtureScriptsSpecification.Builder builderFrom(IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
         val contextClass = fixturesConfig.getContextClass();
         if(contextClass != null) {
             return FixtureScriptsSpecification.builder(contextClass);
         }
-        val packagePrefix = fixturesConfig.getPackagePrefix();
-        if(packagePrefix != null) {
-            return FixtureScriptsSpecification.builder(packagePrefix);
-        }
-        return null;
+        val packagePrefix = fixturesConfig.getPackagePrefix(); // could be null; this is legitimate
+        return FixtureScriptsSpecification.builder(packagePrefix);
     }
+
 
 }

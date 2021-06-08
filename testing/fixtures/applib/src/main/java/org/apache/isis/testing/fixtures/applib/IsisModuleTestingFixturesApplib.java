@@ -35,7 +35,6 @@ import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
 
         // @Service's
         FixturesLifecycleService.class,
-        ExecutionParametersService.class,
         ModuleWithFixturesService.class,
         QueryResultsCacheControlDefault.class,
 

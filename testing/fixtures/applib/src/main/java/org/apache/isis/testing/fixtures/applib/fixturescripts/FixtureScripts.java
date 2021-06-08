@@ -59,8 +59,6 @@ import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
-import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecification;
-import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecificationProvider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -260,32 +258,28 @@ public class FixtureScripts {
     private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
 
 
+    @Inject
     public FixtureScripts(
-            @Nullable final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
+            final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
             final ServiceRegistry serviceRegistry) {
 
-        if(fixtureScriptsSpecificationProvider != null) {
-            this.specification = fixtureScriptsSpecificationProvider.getSpecification();
-            this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
-            this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
+        this.specification = fixtureScriptsSpecificationProvider.getSpecification();
+        this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
+        this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
 
-            val packagePrefix = specification.getPackagePrefix();
-            this.fixtureScriptByFriendlyName =
-                    serviceRegistry.select(FixtureScript.class).stream()
-                    .filter(Objects::nonNull)
-                    .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
-                    .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
-                            (v1,v2) ->{ throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));},
-                            TreeMap::new));
-
-        } else {
-            this.specification = null;
-            this.nonPersistedObjectsStrategy = null;
-            this.multipleExecutionStrategy = null;
-            fixtureScriptByFriendlyName = _Maps.newTreeMap();
-        }
+        val packagePrefix = specification.getPackagePrefix();
+        this.fixtureScriptByFriendlyName =
+                packagePrefix != null
+                    ? serviceRegistry.select(FixtureScript.class).stream()
+                        .filter(Objects::nonNull)
+                        .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
+                        .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
+                                (v1, v2) -> {
+                                    throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));
+                                },
+                                TreeMap::new))
+                    : _Maps.newTreeMap();
     }
-
 
 
 

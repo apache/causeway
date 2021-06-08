@@ -18,30 +18,24 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import javax.inject.Named;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
 
 
 /**
  * Provides a fallback implementation of {@link ExecutionParametersService} if
  * none has been provided explicitly by the application itself.
  *
- * @since 2.0 {@index}
  */
 @AutoConfigureOrder(OrderPrecedence.LATE)
 @Configuration
 public class ExecutionParametersServiceAutoConfiguration {
-
 
     /**
      * Returns an implementation of {@link ExecutionParametersService} that
@@ -51,13 +45,10 @@ public class ExecutionParametersServiceAutoConfiguration {
      *
      * @return
      */
-    @Bean
-    @Named("isis.testing.fixtures.ExecutionParametersServiceDefault")
-    @Order(OrderPrecedence.LATE)
-    @Primary
-    @Qualifier("Default")
+    @Bean("isis.testing.fixtures.ExecutionParametersServiceDefault")
     @ConditionalOnMissingBean(ExecutionParametersService.class)
-    public ExecutionParametersService executionParametersService() {
+    @Qualifier("Default")
+    ExecutionParametersService executionParametersService() {
         return ExecutionParametersDefault::new;
     }
 
