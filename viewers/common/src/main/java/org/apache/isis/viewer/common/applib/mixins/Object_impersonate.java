@@ -20,10 +20,8 @@ package org.apache.isis.viewer.common.applib.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
@@ -55,7 +53,8 @@ import lombok.RequiredArgsConstructor;
         redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.1"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_impersonate")
+//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
+//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_impersonate")
 @RequiredArgsConstructor
 public class Object_impersonate {
 

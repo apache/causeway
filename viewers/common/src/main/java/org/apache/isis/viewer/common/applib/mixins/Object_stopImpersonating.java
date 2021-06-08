@@ -20,10 +20,8 @@ package org.apache.isis.viewer.common.applib.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
@@ -53,7 +51,8 @@ import lombok.RequiredArgsConstructor;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "850.3"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_stopImpersonating")
+//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
+//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_stopImpersonating")
 @RequiredArgsConstructor
 public class Object_stopImpersonating {
 

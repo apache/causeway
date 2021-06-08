@@ -23,10 +23,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -57,19 +56,20 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2.1"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_inspectMetamodel")
+//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
+//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_inspectMetamodel")
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
-
-    private final Object holder;
+    private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
+    @MemberSupport
     public Object act() {
 
-        final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(holder.getClass());
+        final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainObject.getClass());
         if(!logicalTypeIfAny.isPresent()) {
             messageService.warnUser("Unknown class, unable to export");
             return null;
@@ -86,7 +86,7 @@ public class Object_inspectMetamodel {
 
         val metamodelDto = metaModelService.exportMetaModel(config);
 
-        val className = holder.getClass().getName();
+        val className = domainObject.getClass().getName();
 
         val domainClassDto = metamodelDto.getDomainClassDto()
             .stream()

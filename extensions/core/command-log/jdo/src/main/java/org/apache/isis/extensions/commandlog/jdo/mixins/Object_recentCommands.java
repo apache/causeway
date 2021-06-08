@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -34,6 +35,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * This mixin contributes a <tt>recentCommands</tt> action to any domain object
@@ -54,25 +57,26 @@ import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "900.1"
 )
+@RequiredArgsConstructor
 public class Object_recentCommands {
 
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogJdo.ActionDomainEvent<Object_recentCommands> { }
 
-    private final Object domainObject;
-    public Object_recentCommands(final Object domainObject) {
-        this.domainObject = domainObject;
-    }
+    private final Object domainObject; // mixee
 
+    @MemberSupport
     public List<CommandJdo> act() {
         return bookmarkService.bookmarkFor(domainObject)
         .map(commandServiceRepository::findRecentByTarget)
         .orElse(Collections.emptyList());
     }
+
     /**
-     * Hide if the contributee is itself {@link HasInteractionId}
+     * Hide if the mixee is itself {@link HasInteractionId}
      * (commands don't have commands).
      */
+    @MemberSupport
     public boolean hideAct() {
         return (domainObject instanceof HasInteractionId);
     }

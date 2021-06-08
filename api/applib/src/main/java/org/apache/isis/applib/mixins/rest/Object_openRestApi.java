@@ -22,10 +22,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -56,7 +54,8 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "750.1"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.rest.Object_openRestApi")
+//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
+//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.rest.Object_openRestApi")
 @RequiredArgsConstructor
 public class Object_openRestApi {
 
@@ -68,14 +67,14 @@ public class Object_openRestApi {
     @MemberSupport
     public LocalResourcePath act() {
         val bookmark = bookmarkService.bookmarkForElseFail(holder);
-        val objType = bookmark.getObjectType();
+        val logicalTypeName = bookmark.getLogicalTypeName();
         val objId = bookmark.getIdentifier();
 
         val restfulPathIfAny = restfulPathProvider.getRestfulPath();
 
         final String format = restfulPathIfAny
-                .map(path -> String.format("%s/objects/%s/%s", path, objType, objId))
-                .orElseGet(() -> String.format("/objects/%s/%s", objType, objId));
+                .map(path -> String.format("%s/objects/%s/%s", path, logicalTypeName, objId))
+                .orElseGet(() -> String.format("/objects/%s/%s", logicalTypeName, objId));
         return new LocalResourcePath(format);
     }
 
