@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 public class LogicalTypeFacetDerivedFromIoCNamingStrategy extends LogicalTypeFacetAbstract {
 
     LogicalTypeFacetDerivedFromIoCNamingStrategy(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder);
+        super(logicalType, holder, Precedence.DERIVED);
     }
 
 }

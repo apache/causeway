@@ -32,7 +32,8 @@ public class ValueFacetFromConfiguration extends ValueFacetAbstract {
         super(
                 ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName),
                 AddFacetsIfInvalidStrategy.DONT_ADD,
-                holder);
+                holder,
+                Precedence.LATE);
     }
 
 }

@@ -52,6 +52,6 @@ extends LogicalTypeFacetAbstract {
     private LogicalTypeFacetForJdoPersistenceCapableAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        super(logicalType, holder);
+        super(logicalType, holder, Precedence.DERIVED);
     }
 }

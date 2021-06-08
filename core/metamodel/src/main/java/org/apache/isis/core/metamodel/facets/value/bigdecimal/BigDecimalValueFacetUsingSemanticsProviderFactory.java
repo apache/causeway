@@ -24,7 +24,8 @@ import java.math.BigDecimal;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class BigDecimalValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<BigDecimal> {
+public class BigDecimalValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<BigDecimal> {
 
     public BigDecimalValueFacetUsingSemanticsProviderFactory() {
         super();

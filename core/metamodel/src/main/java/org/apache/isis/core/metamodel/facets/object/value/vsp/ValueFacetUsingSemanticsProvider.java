@@ -29,7 +29,7 @@ public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
             ValueSemanticsProvider<?> adapter,
             FacetHolder holder) {
 
-        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, holder);
+        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, holder, Precedence.DEFAULT);
     }
 
 }

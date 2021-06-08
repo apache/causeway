@@ -23,17 +23,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract {
-
+public abstract class ValueFacetUsingSemanticsProviderFactory<T>
+extends FacetFactoryAbstract {
 
     protected ValueFacetUsingSemanticsProviderFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
-        final ValueFacetUsingSemanticsProvider facet =
-                new ValueFacetUsingSemanticsProvider(adapter, adapter.getFacetHolder());
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(
+                new ValueFacetUsingSemanticsProvider(adapter, adapter.getFacetHolder()));
     }
 
 }

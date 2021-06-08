@@ -33,7 +33,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     private final String reason;
 
     public ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.LATE);
         this.reason = reason;
     }
 
@@ -41,7 +41,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     public String disabledReason(final ManagedObject targetAdapter) {
         return !_Strings.isNullOrEmpty(reason)
                 ? reason
-                        : super.disabledReason(targetAdapter);
+                : super.disabledReason(targetAdapter);
     }
 
     @Override

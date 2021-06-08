@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ImmutableFacetAbstract extends FacetAbstract implements ImmutableFacet {
+public abstract class ImmutableFacetAbstract
+extends FacetAbstract
+implements ImmutableFacet {
 
     public static Class<? extends Facet> type() {
         return ImmutableFacet.class;
@@ -33,6 +35,10 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
 
     public ImmutableFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
+    }
+
+    public ImmutableFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
     /**

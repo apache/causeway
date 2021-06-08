@@ -70,17 +70,19 @@ implements ValueFacet {
     public ValueFacetAbstract(
             final Class<?> semanticsProviderClass,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
 
-        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder);
+        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder, precedence);
     }
 
     public ValueFacetAbstract(
             final ValueSemanticsProvider<?> semanticsProvider,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
 
-        super(type(), holder);
+        super(type(), holder, precedence);
         super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;

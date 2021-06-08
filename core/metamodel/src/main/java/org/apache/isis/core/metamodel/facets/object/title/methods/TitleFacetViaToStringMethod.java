@@ -34,7 +34,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     private final Method method;
 
     public TitleFacetViaToStringMethod(final Method method, final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+        super(holder, Precedence.DERIVED);
         this.method = method;
     }
 

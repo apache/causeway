@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 
 import lombok.NonNull;
 
-public class ValueFacetAnnotation extends ValueFacetAbstract {
+public class ValueFacetAnnotation
+extends ValueFacetAbstract {
 
     public ValueFacetAnnotation(
             final @NonNull Value value,
@@ -41,7 +42,8 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
                         value.semanticsProviderClass(),
                         semanticsProviderName(value, config, annotatedClass)),
                 AddFacetsIfInvalidStrategy.DO_ADD,
-                holder);
+                holder,
+                Precedence.EARLY); // value annotation has final say
     }
 
     // -- HELPER

@@ -40,6 +40,11 @@ implements BookmarkPolicyFacet {
         this.bookmarkPolicy = bookmarkPolicy;
     }
 
+    public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder, final Facet.Precedence precedence) {
+        super(BookmarkPolicyFacetAbstract.type(), facetHolder, precedence);
+        this.bookmarkPolicy = bookmarkPolicy;
+    }
+
     @Override
     public BookmarkPolicy value() {
         return bookmarkPolicy;
